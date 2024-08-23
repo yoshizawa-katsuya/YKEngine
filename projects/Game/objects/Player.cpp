@@ -1,14 +1,14 @@
 #include "Player.h"
 #include "imgui/imgui.h"
 
-void Player::Initialize(Model* model, Camera* camera) {
+void Player::Initialize(Model* model) {
 
 	model_ = model;
-	camera_ = camera;
+	//camera_ = camera;
 
 	//model->SetRotate({ 0.0f, 3.15f, 0.0f });
-	transform_.rotate = { 0.0f, 3.15f, 0.0f };
-	transform_.translate = { 2.0f, 0.0f, 0.0f };
+	//transform_.rotate = { 0.0f, 3.15f, 0.0f };
+	//transform_.translate = { 2.0f, 0.0f, 0.0f };
 }
 
 void Player::Update() {
@@ -26,10 +26,15 @@ void Player::Update() {
 
 }
 
-void Player::Draw() {
+void Player::Draw(Camera* camera) {
 
-	if (model_) {
-		model_->Draw(transform_, camera_);
+	
+	
+	if (animation_) {
+		model_->Draw(transform_, camera, animation_);
+	}
+	else {
+		model_->Draw(transform_, camera);
 	}
 
 }

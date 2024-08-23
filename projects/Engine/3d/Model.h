@@ -9,6 +9,7 @@
 #include <assimp/postprocess.h>
 class ModelPlatform;
 class Camera;
+class Animation;
 
 class Model
 {
@@ -23,7 +24,11 @@ public:
 
 	void Draw(const Transforms& transform, Camera* camera);
 
+	void Draw(const Transforms& transform, Camera* camera, Animation* animation);
+
 	Material& GetMaterialDataAddress() { return *materialData_; }
+
+	const Node& GetRootNode() { return modelData_.rootNode; }
 
 	//Transforms& GetTransformAddress() { return transform_; }
 

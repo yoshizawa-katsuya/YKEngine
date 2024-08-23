@@ -187,3 +187,32 @@ struct LevelData
 {
 	std::list<ObjectData> objects;
 };
+
+struct  Quaternion
+{
+	float x;
+	float y;
+	float z;
+	float w;
+};
+
+template <typename tValue>
+struct  KeyFrame
+{
+	float time;
+	tValue value;
+};
+using KeyframeVector3 = KeyFrame<Vector3>;
+using KeyframeQuaternion = KeyFrame<Quaternion>;
+
+template <typename tValue>
+struct AnimationCurve {
+	std::vector<KeyFrame<tValue>> keyframes;
+};
+
+struct NodeAnimation {
+	AnimationCurve<Vector3> translate;
+	AnimationCurve<Quaternion> rotate;
+	AnimationCurve<Vector3> scale;
+};
+

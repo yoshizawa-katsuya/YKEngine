@@ -1,6 +1,7 @@
 #include "Matrix.h"
 #include <algorithm>
 #include "Vector.h"
+#include "Quaternion.h"
 
 Matrix3x3 MakeTranslateMatrix(Vector2 translate) {
 	Matrix3x3 matrix;
@@ -408,6 +409,46 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 
 }
 
+Matrix4x4 MakeRotateMatrix(Quaternion q)
+{
+
+	Quaternion nq = Normalize(q);
+
+	Matrix4x4 matrix;
+
+	float xx = nq.x * nq.x;
+	float yy = nq.y * nq.y;
+	float zz = nq.z * nq.z;
+	float xy = nq.x * nq.y;
+	float xz = nq.x * nq.z;
+	float yz = nq.y * nq.z;
+	float wx = nq.w * nq.x;
+	float wy = nq.w * nq.y;
+	float wz = nq.w * nq.z;
+
+	matrix.m[0][0] = 1.0f - 2.0f * (yy + zz);
+	matrix.m[0][1] = 2.0f * (xy - wz);
+	matrix.m[0][2] = 2.0f * (xz + wy);
+	matrix.m[0][3] = 0.0f;
+
+	matrix.m[1][0] = 2.0f * (xy + wz);
+	matrix.m[1][1] = 1.0f - 2.0f * (xx + zz);
+	matrix.m[1][2] = 2.0f * (yz - wx);
+	matrix.m[1][3] = 0.0f;
+
+	matrix.m[2][0] = 2.0f * (xz - wy);
+	matrix.m[2][1] = 2.0f * (yz + wx);
+	matrix.m[2][2] = 1.0f - 2.0f * (xx + yy);
+	matrix.m[2][3] = 0.0f;
+
+	matrix.m[3][0] = 0.0f;
+	matrix.m[3][1] = 0.0f;
+	matrix.m[3][2] = 0.0f;
+	matrix.m[3][3] = 1.0f;
+
+	return matrix;
+}
+
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 
 	Matrix4x4 m;
@@ -415,6 +456,23 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 	Matrix4x4 scalematrix = MakeScaleMatrix(scale);
 
 	Matrix4x4 rotatematrix = Multiply(Multiply(MakeRotateXMatrix(rotate.x), MakeRotateYMatrix(rotate.y)), MakeRotateZMatrix(rotate.z));
+
+	Matrix4x4 translatematrix = MakeTranslateMatrix(translate);
+
+	m = Multiply(Multiply(scalematrix, rotatematrix), translatematrix);
+
+	return m;
+
+}
+
+Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const Vector3& translate)
+{
+	
+	Matrix4x4 m;
+	
+	Matrix4x4 scalematrix = MakeScaleMatrix(scale);
+
+	Matrix4x4 rotatematrix = MakeRotateMatrix(rotate);
 
 	Matrix4x4 translatematrix = MakeTranslateMatrix(translate);
 

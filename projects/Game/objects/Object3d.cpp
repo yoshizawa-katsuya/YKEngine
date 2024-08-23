@@ -1,11 +1,11 @@
 #include "Object3d.h"
 #include "imgui/imgui.h"
 
-void Object3d::Initialize(Model* model, Camera* camera)
+void Object3d::Initialize(Model* model)
 {
 
 	model_ = model;
-	camera_ = camera;
+	//camera_ = camera;
 
 }
 
@@ -23,9 +23,9 @@ void Object3d::Update(const std::string& label)
 	ImGui::End();
 }
 
-void Object3d::Draw()
+void Object3d::Draw(Camera* camera)
 {
 	if (model_) {
-		model_->Draw(transform_, camera_);
+		model_->Draw(transform_, camera);
 	}
 }

@@ -106,6 +106,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\3d\Animation.cpp" />
+    <ClCompile Include="Engine\lib\Lerp.cpp" />
+    <ClCompile Include="Engine\lib\Slerp.cpp" />
     <ClCompile Include="Engine\scene\BaseScene.cpp" />
     <ClCompile Include="Engine\3d\DebugCamera.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
@@ -117,7 +120,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\scene\GameScene.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
-    <ClCompile Include="LevelDataLoader.cpp" />
+    <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
     <ClCompile Include="Engine\lib\Vector.cpp" />
@@ -138,6 +141,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\scene\TitleScene.cpp" />
     <ClCompile Include="Engine\scene\SceneManager.cpp" />
     <ClCompile Include="Game\scene\SceneFactory.cpp" />
+    <ClCompile Include="Engine\lib\Quaternion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -158,6 +162,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\3d\Animation.h" />
+    <ClInclude Include="Engine\lib\Lerp.h" />
+    <ClInclude Include="Engine\lib\Slerp.h" />
     <ClInclude Include="Engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\scene\BaseScene.h" />
     <ClInclude Include="Engine\3d\DebugCamera.h" />
@@ -190,7 +197,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\scene\TitleScene.h" />
     <ClInclude Include="Engine\scene\SceneManager.h" />
     <ClInclude Include="Game\scene\SceneFactory.h" />
-    <ClInclude Include="LevelDataLoader.h" />
+    <ClInclude Include="Engine\lib\LevelDataLoader.h" />
+    <ClInclude Include="Engine\lib\Quaternion.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

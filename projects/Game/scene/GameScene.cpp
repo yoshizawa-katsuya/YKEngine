@@ -6,7 +6,7 @@
 #include "LevelDataLoader.h"
 
 GameScene::~GameScene() {
-
+	/*
 	for (auto& model : models_) {
 		delete model.second;
 	}
@@ -14,7 +14,7 @@ GameScene::~GameScene() {
 	for (Object3d* object : objects_) {
 		delete object;
 	}
-
+	*/
 }
 
 void GameScene::Initialize() {
@@ -46,12 +46,15 @@ void GameScene::Initialize() {
 
 	soundData1_ = audio_->SoundLoadWave("./resources/Alarm01.wav");
 
-	/*
+	
 	model_ = std::make_unique<Model>();
 	model_->Initialize(modelPlatform_);
-	model_->CreateFromOBJ("./resources", "plane.obj");
-	*/
+	model_->CreateModel("./resources/AnimatedCube", "AnimatedCube.gltf");
 	
+	animation_ = std::make_unique<Animation>();
+	animation_->LoadAnimationFile("./resources/AnimatedCube", "AnimatedCube.gltf");
+
+	/*
 	Model* newModel = new Model();
 	newModel->Initialize(modelPlatform_);
 	newModel->CreateModel("./resources", "plane.obj");
@@ -81,7 +84,7 @@ void GameScene::Initialize() {
 		//配列に登録
 		objects_.push_back(newObject);
 	}
-
+	*/
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle_[0], spritePlatform_);
 	sprite_->SetPosition({ 100.0f, 100.0f });
@@ -99,11 +102,14 @@ void GameScene::Initialize() {
 		sprite->SetPosition(position);
 		sprites_.push_back(std::move(sprite));
 	}
-	
+	*/
+
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(model_.get(), mainCamera_);
+	player_->Initialize(model_.get());
+	player_->SetAnimation(animation_.get());
 
+	/*
 	//3dオブジェクトの初期化
 	object3d_ = std::make_unique<Object3d>();
 	object3d_->Initialize(modelAxis_.get(), mainCamera_);
@@ -124,7 +130,7 @@ void GameScene::Update() {
 	}
 
 	//プレイヤーの更新
-	//player_->Update();
+	player_->Update();
 
 	//3dオブジェクトの更新
 	//object3d_->Update("teapot");
@@ -236,14 +242,14 @@ void GameScene::Draw() {
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//プレイヤーの描画
-	//player_->Draw();
+	player_->Draw(mainCamera_);
 	//3dオブジェクトの描画
 	//object3d_->Draw();
-
+	/*
 	for (Object3d* object : objects_) {
 		object->Draw();
 	}
-
+	*/
 	//ParticleManager::GetInstance()->Draw();
 
 	//modelの描画
@@ -259,7 +265,7 @@ void GameScene::Draw() {
 		sprite->Draw();
 	}
 	*/
-	sprite_->Draw();
+	//sprite_->Draw();
 
 }
 
