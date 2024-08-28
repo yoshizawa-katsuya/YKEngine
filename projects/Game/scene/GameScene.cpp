@@ -52,6 +52,12 @@ void GameScene::Initialize() {
 	model_->Initialize(modelPlatform_);
 	model_->CreateModel("./resources/simpleSkin", "simpleSkin.gltf");
 	
+	/*
+	sphereModel_ = std::make_unique<Model>();
+	sphereModel_->Initialize(modelPlatform_);
+	sphereModel_->CreateSphere(textureHandle_[1]);
+	*/
+
 	animation_ = std::make_unique<Animation>();
 	animation_->LoadAnimationFile("./resources/simpleSkin", "simpleSkin.gltf");
 
@@ -110,10 +116,11 @@ void GameScene::Initialize() {
 	player_->Initialize(model_.get());
 	player_->SetAnimation(animation_.get());
 
-	/*
+	
 	//3dオブジェクトの初期化
+	/*
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(modelAxis_.get(), mainCamera_);
+	object3d_->Initialize(sphereModel_.get());
 	*/
 	
 
@@ -137,7 +144,7 @@ void GameScene::Update() {
 	player_->Update();
 
 	//3dオブジェクトの更新
-	//object3d_->Update("teapot");
+	//object3d_->Update("Sphere");
 
 	
 
@@ -248,7 +255,7 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 	//3dオブジェクトの描画
-	//object3d_->Draw();
+	//object3d_->Draw(mainCamera_);
 	/*
 	for (Object3d* object : objects_) {
 		object->Draw();

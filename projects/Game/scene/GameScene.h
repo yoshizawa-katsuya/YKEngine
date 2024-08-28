@@ -66,6 +66,7 @@ private:
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
 	std::unique_ptr<Model> model_;
+	//std::unique_ptr<Model> sphereModel_;
 	//std::map<std::string, Model*> models_;
 
 	std::unique_ptr<Animation> animation_;

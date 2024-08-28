@@ -23,6 +23,8 @@ void Model::CreateModel(const std::string& directoryPath, const std::string& fil
 
 	CreateVertexData();
 	
+	CreateIndexData();
+
 	CreateMaterialData();
 
 	CreateTransformData();
@@ -42,12 +44,12 @@ void Model::CreateSphere(uint32_t textureHandle)
 	const float pi = std::numbers::pi_v<float>;
 
 	//VertexResourceを生成
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * (kSubdivision * kSubdivision * 6));
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * (kSubdivision * kSubdivision * 4));
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * (kSubdivision * kSubdivision * 6));
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * (kSubdivision * kSubdivision * 4));
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
@@ -66,7 +68,7 @@ void Model::CreateSphere(uint32_t textureHandle)
 		float lat = -pi / 2.0f + kLatEvery * latIndex;	//θ
 		//経度の方向に分割しながら線を描く
 		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-			uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
+			uint32_t start = (latIndex * kSubdivision + lonIndex) * 4;
 			float lon = lonIndex * kLonEvery;	//φ
 			//頂点にデータを入力する。基準点a
 			vertexData_[start].position.x = cos(lat) * cos(lon);
@@ -78,7 +80,7 @@ void Model::CreateSphere(uint32_t textureHandle)
 			vertexData_[start].normal.x = vertexData_[start].position.x;
 			vertexData_[start].normal.y = vertexData_[start].position.y;
 			vertexData_[start].normal.z = vertexData_[start].position.z;
-			//b1
+			//b
 			uint32_t i = 1;
 			vertexData_[start + i].position.x = cos(lat + kLatEvery) * cos(lon);
 			vertexData_[start + i].position.y = sin(lat + kLatEvery);
@@ -89,7 +91,7 @@ void Model::CreateSphere(uint32_t textureHandle)
 			vertexData_[start + i].normal.x = vertexData_[start + i].position.x;
 			vertexData_[start + i].normal.y = vertexData_[start + i].position.y;
 			vertexData_[start + i].normal.z = vertexData_[start + i].position.z;
-			//c1
+			//c
 			i++;
 			vertexData_[start + i].position.x = cos(lat) * cos(lon + kLonEvery);
 			vertexData_[start + i].position.y = sin(lat);
@@ -100,9 +102,7 @@ void Model::CreateSphere(uint32_t textureHandle)
 			vertexData_[start + i].normal.x = vertexData_[start + i].position.x;
 			vertexData_[start + i].normal.y = vertexData_[start + i].position.y;
 			vertexData_[start + i].normal.z = vertexData_[start + i].position.z;
-			//b2
-			i++;
-			vertexData_[start + i] = vertexData_[start + 1];
+			
 			//d
 			i++;
 			vertexData_[start + i].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
@@ -114,17 +114,46 @@ void Model::CreateSphere(uint32_t textureHandle)
 			vertexData_[start + i].normal.x = vertexData_[start + i].position.x;
 			vertexData_[start + i].normal.y = vertexData_[start + i].position.y;
 			vertexData_[start + i].normal.z = vertexData_[start + i].position.z;
-			//c2
-			i++;
-			vertexData_[start + i] = vertexData_[start + 2];
+			
 
 		}
 	}
 
-	modelData_.vertices.resize(kSubdivision * kSubdivision * 6);
+	modelData_.vertices.resize(kSubdivision * kSubdivision * 4);
 
 
-	
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * (kSubdivision * kSubdivision * 6));
+
+	//リソースの先頭のアドレスから使う
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * (kSubdivision * kSubdivision * 6);
+	//インデックスはuint32_tとする
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+
+	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
+
+			uint32_t index = (latIndex * kSubdivision + lonIndex) * 6;
+			uint32_t index2 = (latIndex * kSubdivision + lonIndex) * 4;
+
+			indexData_[index] = index2;
+			uint32_t i = 1;
+			indexData_[index + i] = index2 + 1;
+			i++;
+			indexData_[index + i] = index2 + 2;
+			i++;
+			indexData_[index + i] = index2 + 1;
+			i++;
+			indexData_[index + i] = index2 + 3;
+			i++;
+			indexData_[index + i] = index2 + 2;
+		}
+	}
+
+	modelData_.indeces.resize(kSubdivision * kSubdivision * 6);
 
 	CreateMaterialData();
 
@@ -152,6 +181,8 @@ void Model::Draw(const EulerTransform& transform, Camera* camera) {
 	transformationMatrixData_->World = worldMatrix;
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	//マテリアルのCBufferの場所を設定
 	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//wvp用のCBufferの場所を設定
@@ -161,7 +192,8 @@ void Model::Draw(const EulerTransform& transform, Camera* camera) {
 
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
 
 
 }
@@ -186,6 +218,8 @@ void Model::Draw(const EulerTransform& transform, Camera* camera, Animation* ani
 	transformationMatrixData_->World = localMatrix * worldMatrix;
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
+	
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	//マテリアルのCBufferの場所を設定
 	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//wvp用のCBufferの場所を設定
@@ -195,8 +229,8 @@ void Model::Draw(const EulerTransform& transform, Camera* camera, Animation* ani
 
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-
+	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
 
 
 }
@@ -275,6 +309,20 @@ void Model::CreateVertexData()
 
 }
 
+void Model::CreateIndexData()
+{
+
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData_.indeces.size());
+
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * modelData_.indeces.size());
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+	std::memcpy(indexData_, modelData_.indeces.data(), sizeof(uint32_t) * modelData_.indeces.size());
+
+}
+
 void Model::CreateMaterialData()
 {
 
@@ -315,28 +363,27 @@ void Model::LoadModelFile(const std::string& directoryPath, const std::string& f
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
+		modelData_.vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
+		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
+			aiVector3D& position = mesh->mVertices[vertexIndex];
+			aiVector3D& normal = mesh->mNormals[vertexIndex];
+			aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
+			//右手系->左手系の変換
+			modelData_.vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
+			modelData_.vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
+			modelData_.vertices[vertexIndex].texcoord = { texcord.x, texcord.y };
+		}
 
-		//ここからMeshの中身(Face)の解析を行っていく
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
 			aiFace& face = mesh->mFaces[faceIndex];
-			assert(face.mNumIndices == 3);	//三角形のみサポート
+			assert(face.mNumIndices == 3);
 
-			//ここからFaceの中身(Vertex)の解析を行っていく
 			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
 				uint32_t vertexIndex = face.mIndices[element];
-				aiVector3D& position = mesh->mVertices[vertexIndex];
-				aiVector3D& normal = mesh->mNormals[vertexIndex];
-				aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
-				VertexData vertex;
-				vertex.position = { position.x, position.y, position.z, 1.0f };
-				vertex.normal = { normal.x, normal.y, normal.z };
-				vertex.texcoord = { texcord.x, texcord.y };
-				//aiProcess_MakeLeftHandedはz*=-1で、右手->左手に変換するので手動で対処
-				vertex.position.x *= -1.0f;
-				vertex.normal.x *= -1.0f;
-				modelData_.vertices.push_back(vertex);
+				modelData_.indeces.push_back(vertexIndex);
 			}
 		}
+
 	}
 
 	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
