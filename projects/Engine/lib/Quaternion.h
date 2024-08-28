@@ -23,3 +23,5 @@ Quaternion operator*(float s, const Quaternion& q);
 Quaternion operator*(const Quaternion& q, float s);
 
 Quaternion operator/(const Quaternion& q, float s);
+
+bool operator==(const Quaternion& q1, const Quaternion& q2);

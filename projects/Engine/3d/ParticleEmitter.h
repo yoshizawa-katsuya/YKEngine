@@ -16,7 +16,7 @@ public:
 private:
 
 	std::string name_;
-	Transforms transform_; //!< エミッタのTransform
+	EulerTransform transform_; //!< エミッタのTransform
 	uint32_t count_;	//!< 発生数
 	float frequency_; //!<　発生頻度
 	float frequencyTime_; //!<頻度用時刻

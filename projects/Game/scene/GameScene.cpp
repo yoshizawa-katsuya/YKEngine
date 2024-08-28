@@ -4,6 +4,7 @@
 #include "imgui/imgui.h"
 #include "ParticleManager.h"
 #include "LevelDataLoader.h"
+#include "Matrix.h"
 
 GameScene::~GameScene() {
 	/*
@@ -49,10 +50,10 @@ void GameScene::Initialize() {
 	
 	model_ = std::make_unique<Model>();
 	model_->Initialize(modelPlatform_);
-	model_->CreateModel("./resources/AnimatedCube", "AnimatedCube.gltf");
+	model_->CreateModel("./resources/simpleSkin", "simpleSkin.gltf");
 	
 	animation_ = std::make_unique<Animation>();
-	animation_->LoadAnimationFile("./resources/AnimatedCube", "AnimatedCube.gltf");
+	animation_->LoadAnimationFile("./resources/simpleSkin", "simpleSkin.gltf");
 
 	/*
 	Model* newModel = new Model();
@@ -128,6 +129,9 @@ void GameScene::Update() {
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
 	}
+
+	//アニメーションの時間を進める
+	animation_->Update();
 
 	//プレイヤーの更新
 	player_->Update();
@@ -267,6 +271,26 @@ void GameScene::Draw() {
 	*/
 	//sprite_->Draw();
 
+
+	modelPlatform_->LinePreDraw();
+
+	player_->BoneDraw(mainCamera_);
+	/*
+	Matrix4x4 WVP1 = MakeIdentity4x4();
+	Matrix4x4 WVP2 = MakeTranslateMatrix({ 2.0f, 0.0f, 0.0f });
+	Matrix4x4 WVP3 = MakeTranslateMatrix({ 0.0f, 2.0f, 0.0f });
+
+	modelPlatform_->LineDraw(WVP1, WVP2, mainCamera_);
+	modelPlatform_->LineDraw(WVP3, WVP2, mainCamera_);
+	*/
+
+	modelPlatform_->SpherePreDraw();
+
+	player_->JointDraw(mainCamera_);
+	/*
+	modelPlatform_->SphereDraw(WVP1, mainCamera_);
+	modelPlatform_->SphereDraw(WVP2, mainCamera_);
+	*/
 }
 
 void GameScene::Finalize()

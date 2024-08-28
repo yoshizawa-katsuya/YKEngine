@@ -7,6 +7,7 @@
 #include "ModelPlatform.h"
 #include "Camera.h"
 #include "Animation.h"
+#include "Struct.h"
 
 void Model::Initialize(ModelPlatform* modelPlatform)
 {
@@ -25,6 +26,8 @@ void Model::CreateModel(const std::string& directoryPath, const std::string& fil
 	CreateMaterialData();
 
 	CreateTransformData();
+
+	CreateSkelton();
 
 	textureHandle_ = TextureManager::GetInstance()->Load(modelData_.material.textureFilePath);
 
@@ -132,7 +135,7 @@ void Model::CreateSphere(uint32_t textureHandle)
 
 }
 
-void Model::Draw(const Transforms& transform, Camera* camera) {
+void Model::Draw(const EulerTransform& transform, Camera* camera) {
 
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	
@@ -163,7 +166,7 @@ void Model::Draw(const Transforms& transform, Camera* camera) {
 
 }
 
-void Model::Draw(const Transforms& transform, Camera* camera, Animation* animation)
+void Model::Draw(const EulerTransform& transform, Camera* camera, Animation* animation)
 {
 
 	Matrix4x4 localMatrix = animation->Reproducing(this);
@@ -196,6 +199,58 @@ void Model::Draw(const Transforms& transform, Camera* camera, Animation* animati
 
 
 
+}
+
+void Model::BoneDraw(const EulerTransform& transform, Camera* camera)
+{
+
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+
+	//全てのJointを更新。親が若いので通常ループで処理可能になっている
+	for (Joint& joint : skeleton_.joints) {
+		if (joint.parent) {	//親がいれば親の行列を掛ける
+
+			Matrix4x4 jointWorldMatrix1, jointWorldMatrix2;
+
+			jointWorldMatrix1 = joint.skeltonSpaceMatrix * worldMatrix;
+			jointWorldMatrix2 = skeleton_.joints[joint.parent.value()].skeltonSpaceMatrix * worldMatrix;
+
+			modelPlatform_->LineDraw(jointWorldMatrix1, jointWorldMatrix2, camera);
+
+		}
+	}
+
+}
+
+void Model::JointDraw(const EulerTransform& transform, Camera* camera)
+{
+
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+
+	//全てのJointを更新。親が若いので通常ループで処理可能になっている
+	for (Joint& joint : skeleton_.joints) {
+		
+		Matrix4x4 jointWorldMatrix;
+
+		jointWorldMatrix = joint.skeltonSpaceMatrix * worldMatrix;
+		
+		modelPlatform_->SphereDraw(jointWorldMatrix, camera);
+	}
+
+}
+
+void Model::ApplyAnimation(Animation* animation)
+{
+	for (Joint& joint : skeleton_.joints) {
+		//対象のJointのAnimationがあれば、値の適用を行う。下記のif文はC++17から可能になった初期化付きif文。
+		if (auto it = animation->GetNodeAnimations().find(joint.name); it != animation->GetNodeAnimations().end()) {
+			const NodeAnimation& rootNodeAnimation = (*it).second;
+			joint.transform.translate = animation->CalculateValue(rootNodeAnimation.translate.keyframes, animation->GetAnimationTime());
+			joint.transform.rotate = animation->CalculateValue(rootNodeAnimation.rotate.keyframes, animation->GetAnimationTime());
+			joint.transform.scale = animation->CalculateValue(rootNodeAnimation.scale.keyframes, animation->GetAnimationTime());
+
+		}
+	}
 }
 
 void Model::CreateVertexData()
@@ -401,6 +456,7 @@ void Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std
 Node Model::ReadNode(aiNode* node)
 {
 	Node result;
+	/*
 	aiMatrix4x4 aiLocalMatrix = node->mTransformation;	//nodeのlocalMatrixを取得
 	aiLocalMatrix.Transpose();	//列ベクトルを行ベクトル形式に転置
 	for (uint32_t i = 0; i < 4; i++) {
@@ -408,6 +464,16 @@ Node Model::ReadNode(aiNode* node)
 			result.localMatrix.m[i][j] = aiLocalMatrix[i][j];	//他の要素も同様に
 		}
 	}
+	*/
+
+	aiVector3D scale, translate;
+	aiQuaternion rotate;
+	node->mTransformation.Decompose(scale, rotate, translate);	//assimpの行列からSRTを抽出する関数を利用
+	result.transform.scale = { scale.x, scale.y, scale.z };	//Scaleはそのまま
+	result.transform.rotate = { rotate.x, -rotate.y, -rotate.z, rotate.w };	//x軸を反転、さらに回転方向が逆なので軸を反転させる
+	result.transform.translate = { -translate.x, translate.y, translate.z };	//x軸を反転
+	result.localMatrix = MakeAffineMatrix(result.transform.scale, result.transform.rotate, result.transform.translate);
+
 	result.name = node->mName.C_Str();	//Node名を格納
 	result.children.resize(node->mNumChildren);	//子供の数だけ確保
 	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
@@ -416,4 +482,54 @@ Node Model::ReadNode(aiNode* node)
 	}
 
 	return result;
+}
+
+void Model::CreateSkelton()
+{
+
+	skeleton_.root = CreateJoint(modelData_.rootNode, {});
+
+	//名前とindexのマッピングを行いアクセスしやすくする
+	for (const Joint& joint : skeleton_.joints) {
+		skeleton_.jointMap.emplace(joint.name, joint.index);
+	}
+
+	SkeletonUpdate();
+
+}
+
+int32_t Model::CreateJoint(const Node& node, const std::optional<int32_t>& parent)
+{
+	
+	Joint joint;
+	joint.name = node.name;
+	joint.localMatrix = node.localMatrix;
+	joint.skeltonSpaceMatrix = MakeIdentity4x4();
+	joint.transform = node.transform;
+	joint.index = int32_t(skeleton_.joints.size());	//現在登録されている数をIndexに
+	joint.parent = parent;
+	skeleton_.joints.push_back(joint);	//SkeletonのJoints列に追加
+	for (const Node& child : node.children) {
+		//子Jointを作成し、そのIndexを登録
+		int32_t childIndex = CreateJoint(child, joint.index);
+		skeleton_.joints[joint.index].children.push_back(childIndex);
+	}
+	//自身のIndexを返す
+	return joint.index;
+}
+
+void Model::SkeletonUpdate()
+{
+
+	//全てのJointを更新。親が若いので通常ループで処理可能になっている
+	for (Joint& joint : skeleton_.joints) {
+		joint.localMatrix = MakeAffineMatrix(joint.transform.scale, joint.transform.rotate, joint.transform.translate);
+		if (joint.parent) {	//親がいれば親の行列を掛ける
+			joint.skeltonSpaceMatrix = joint.localMatrix * skeleton_.joints[*joint.parent].skeltonSpaceMatrix;
+		}
+		else {	//親がいないのでlocalMatrixとskeltonSpaceMatrixは一致する
+			joint.skeltonSpaceMatrix = joint.localMatrix;
+		}
+	}
+
 }

@@ -69,3 +69,11 @@ Quaternion operator/(const Quaternion& q, float s)
 {
 	return Multiply(1.0f / s, q);
 }
+
+bool operator==(const Quaternion& q1, const Quaternion& q2)
+{
+	if (q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w) {
+		return true;
+	}
+	return false;
+}

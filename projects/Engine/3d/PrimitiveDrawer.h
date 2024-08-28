@@ -23,6 +23,10 @@ enum class BlendMode {
 
 	kBlendModeAddParticle,
 
+	kLineMode,
+
+	kSphereMode,
+
 	kCountOfBlendMode,	//利用してはいけない
 };
 

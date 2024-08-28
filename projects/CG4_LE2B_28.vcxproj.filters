@@ -200,6 +200,24 @@
     <FxCompile Include="resources\shader\Particle.VS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
+    <FxCompile Include="resources\shader\Line3D.VS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shader\Line3D.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shader\Line3D.GS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shader\Sphere3D.VS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shader\Sphere3D.GS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shader\Sphere3D.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">
@@ -322,6 +340,12 @@
       <Filter>リソース ファイル\shader</Filter>
     </None>
     <None Include="resources\shader\Particle.hlsli">
+      <Filter>リソース ファイル\shader</Filter>
+    </None>
+    <None Include="resources\shader\Line3D.hlsli">
+      <Filter>リソース ファイル\shader</Filter>
+    </None>
+    <None Include="resources\shader\Sphere3D.hlsli">
       <Filter>リソース ファイル\shader</Filter>
     </None>
   </ItemGroup>

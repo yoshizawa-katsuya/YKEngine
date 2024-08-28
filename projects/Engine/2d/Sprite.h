@@ -44,11 +44,11 @@ public:
 	Vector2& GetTextureSize() { return textureSize_; }
 	const Vector2& GetTextureSize() const { return textureSize_; }
 
-	Transforms GetTransform() { return transform_; }
-	Transforms GetUVTransform() { return uvTransform_; }
+	EulerTransform GetTransform() { return transform_; }
+	EulerTransform GetUVTransform() { return uvTransform_; }
 
-	Transforms& GetTransformAddress() { return transform_; }
-	Transforms& GetUVTransformAddress() { return uvTransform_; }
+	EulerTransform& GetTransformAddress() { return transform_; }
+	EulerTransform& GetUVTransformAddress() { return uvTransform_; }
 
 	void SetSize(const Vector2& size) { size_ = size; }
 
@@ -110,8 +110,8 @@ private:
 	TransformationMatrix* transformationMatrixData_ = nullptr;
 
 	//Sprite用のTransform変数
-	Transforms transform_{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f ,0.0f, 0.0f} };
-	Transforms uvTransform_{
+	EulerTransform transform_{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f ,0.0f, 0.0f} };
+	EulerTransform uvTransform_{
 		{1.0f, 1.0f, 1.0f},
 		{0.0f, 0.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f},

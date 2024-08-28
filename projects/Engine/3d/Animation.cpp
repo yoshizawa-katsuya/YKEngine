@@ -50,11 +50,17 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 
 }
 
+void Animation::Update()
+{
+
+	animationTime_ += 1.0f / 60.0f;	//時刻を進める。1/60で固定してあるが、計測した時間を使って可変フレーム対応する方が望ましい
+	animationTime_ = std::fmod(animationTime_, duration_);	//最後まで行ったら最初からリピート再生。リピートしなくても別に良い
+
+}
+
 Matrix4x4 Animation::Reproducing(Model* model)
 {
 	
-	animationTime_ += 1.0f / 60.0f;	//時刻を進める。1/60で固定してあるが、計測した時間を使って可変フレーム対応する方が望ましい
-	animationTime_ = std::fmod(animationTime_, duration_);	//最後まで行ったら最初からリピート再生。リピートしなくても別に良い
 	NodeAnimation& rootNodeAnimation = nodeAnimations_[model->GetRootNode().name];	//rootNodeのAnimationを取得
 	Vector3 translate = CalculateValue(rootNodeAnimation.translate.keyframes, animationTime_);//指定時刻の値を取得
 	Quaternion rotate = CalculateValue(rootNodeAnimation.rotate.keyframes, animationTime_);

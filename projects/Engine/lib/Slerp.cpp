@@ -51,6 +51,10 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 Quaternion Slerp(const Quaternion& v1, const Quaternion& v2, float t)
 {
 	
+	if (v1 == v2) {
+		return v1;
+	}
+
 	Quaternion v1N = Normalize(v1);
 	Quaternion v2N = Normalize(v2);
 

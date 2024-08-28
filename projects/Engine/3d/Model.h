@@ -22,13 +22,21 @@ public:
 
 	void CreateSphere(uint32_t textureHandle);
 
-	void Draw(const Transforms& transform, Camera* camera);
+	void Draw(const EulerTransform& transform, Camera* camera);
 
-	void Draw(const Transforms& transform, Camera* camera, Animation* animation);
+	void Draw(const EulerTransform& transform, Camera* camera, Animation* animation);
+
+	void BoneDraw(const EulerTransform& transform, Camera* camera);
+
+	void JointDraw(const EulerTransform& transform, Camera* camera);
+
+	void ApplyAnimation(Animation* animation);
 
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
 	const Node& GetRootNode() { return modelData_.rootNode; }
+
+	void SkeletonUpdate();
 
 	//Transforms& GetTransformAddress() { return transform_; }
 
@@ -53,9 +61,15 @@ private:
 
 	Node ReadNode(aiNode* node);
 	
+	void CreateSkelton();
+
+	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent);
+
 	ModelPlatform* modelPlatform_ = nullptr;
 
 	ModelData modelData_;
+
+	Skeleton skeleton_;
 
 	//VertexResourceを生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
