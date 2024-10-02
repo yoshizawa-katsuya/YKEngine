@@ -27,6 +27,8 @@ enum class BlendMode {
 
 	kSphereMode,
 
+	kSkinModelMode,
+
 	kCountOfBlendMode,	//利用してはいけない
 };
 

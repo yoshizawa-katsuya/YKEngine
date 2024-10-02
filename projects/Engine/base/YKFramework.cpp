@@ -11,7 +11,7 @@ void YKFramework::Initialize()
 	dxCommon_->Initialize(winApp_);
 
 	//Audio初期化
-	audio_ = Audio::GetInstance();;
+	audio_ = Audio::GetInstance();
 	audio_->Initialize();
 
 	//SrvHeapManager初期化
@@ -41,7 +41,7 @@ void YKFramework::Initialize()
 
 	//3Dオブジェクト共通部の初期化
 	modelPlatform_ = ModelPlatform::GetInstance();
-	modelPlatform_->Initialize(dxCommon_, primitiveDrawer_);
+	modelPlatform_->Initialize(dxCommon_, primitiveDrawer_, srvHeapManager_);
 
 	//シーンマネージャの生成
 	sceneManager_ = SceneManager::GetInstance();
@@ -111,6 +111,8 @@ void YKFramework::Update()
 
 void YKFramework::EndFrame()
 {
+
+	modelPlatform_->EndFrame();
 
 	//ImGuiの内部コマンドを生成する
 	imGuiManager_->End();

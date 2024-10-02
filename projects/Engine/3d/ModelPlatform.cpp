@@ -18,13 +18,14 @@ void ModelPlatform::Finalize()
 	instance_ = nullptr;
 }
 
-void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer)
+void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
 
 	//引数で受け取ってメンバ変数に記録する
 	dxCommon_ = dxCommon;
 	primitiveDrawer_ = primitiveDrawer;
-	
+	srvHeapManager_ = srvHeapManager;
+
 	//VertexResourceを生成
 	vertexResource_ = dxCommon_->CreateBufferResource(sizeof(Vector4));
 
@@ -69,10 +70,26 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 	*/
 
 	for (uint32_t i = 0; i < resourceNum_; i++) {
-		WVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(Matrix4x4));
-		WVPResources_[i]->Map(0, nullptr, reinterpret_cast<void**>(&WVPDatas_[i]));
-		*WVPDatas_[i] = MakeIdentity4x4();
+		SphereWVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(Matrix4x4));
+		SphereWVPResources_[i]->Map(0, nullptr, reinterpret_cast<void**>(&SphereWVPDatas_[i]));
+		*SphereWVPDatas_[i] = MakeIdentity4x4();
 	}
+
+	for (uint32_t i = 0; i < resourceNum_; i++) {
+		ModelWVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(TransformationMatrix));
+		ModelWVPResources_[i]->Map(0, nullptr, reinterpret_cast<void**>(&ModelWVPDatas_[i]));
+		ModelWVPDatas_[i]->World = MakeIdentity4x4();
+		ModelWVPDatas_[i]->WVP = MakeIdentity4x4();
+	}
+}
+
+void ModelPlatform::EndFrame()
+{
+
+	lineIndex_ = 0;
+	sphereIndex_ = 0;
+	modelIndex_ = 0;
+
 }
 
 void ModelPlatform::PreDraw()
@@ -86,13 +103,36 @@ void ModelPlatform::PreDraw()
 
 }
 
+void ModelPlatform::SkinPreDraw()
+{
+
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSkinModelMode);
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	directionalLight_->Draw();
+
+}
+
+void ModelPlatform::ModelDraw(const Matrix4x4& WVP, const Matrix4x4& World, Camera* camera)
+{
+
+	ModelWVPDatas_[modelIndex_]->WVP = WVP;
+	ModelWVPDatas_[modelIndex_]->World = World;
+	ModelWVPDatas_[modelIndex_]->WorldInverseTranspose = Transpose(Inverse(World));
+
+	//wvp用のCBufferの場所を設定
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, ModelWVPResources_[lineIndex_]->GetGPUVirtualAddress());
+
+	modelIndex_++;
+
+}
+
 void ModelPlatform::LinePreDraw()
 {
 
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kLineMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-	lineIndex_ = 0;
 
 }
 
@@ -133,7 +173,7 @@ void ModelPlatform::SpherePreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSphereMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-	sphereIndex_ = 0;
+	
 }
 
 void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
@@ -148,10 +188,10 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 		worldViewProjectionMatrix = worldMatrix;
 	}
 
-	*WVPDatas_[sphereIndex_] = worldViewProjectionMatrix;
+	*SphereWVPDatas_[sphereIndex_] = worldViewProjectionMatrix;
 
 	//wvp用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, WVPResources_[sphereIndex_]->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, SphereWVPResources_[sphereIndex_]->GetGPUVirtualAddress());
 
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);

@@ -30,6 +30,9 @@ void Player::Update() {
 
 	model_->SkeletonUpdate();
 
+	//SkeltonSpaceの情報を基にSkinClusterのMatrixPaletteを更新する
+	model_->SkinClusterUpdate();
+
 }
 
 void Player::Draw(Camera* camera) {

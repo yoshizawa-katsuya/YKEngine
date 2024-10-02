@@ -26,6 +26,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSphereMode)) = CreateGraphicsPipeline(BlendMode::kSphereMode, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSkinModelMode)) = CreateGraphicsPipeline(BlendMode::kSkinModelMode, dxCommon);
+
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(BlendMode blendMode, DirectXCommon* dxCommon) {
@@ -54,6 +56,13 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
 	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
 
+	D3D12_DESCRIPTOR_RANGE descriptorRangeSkinning[1] = {};
+	if (blendMode == BlendMode::kSkinModelMode) {
+		descriptorRangeSkinning[0].BaseShaderRegister = 0;
+		descriptorRangeSkinning[0].NumDescriptors = 1;	//数は1つ
+		descriptorRangeSkinning[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
+		descriptorRangeSkinning[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+	}
 
 	//RootParameter作成。複数設定できるので配列。
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters = {};
@@ -67,6 +76,36 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	//VSとGSで使う
 		rootParameters[0].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+
+		break;
+
+	case BlendMode::kSkinModelMode:
+
+		rootParameters.resize(5);
+
+		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[0].Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+		
+		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		rootParameters[1].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+		
+
+		rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+
+		rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[3].Descriptor.ShaderRegister = 1;	//レジスタ番号1を使う
+
+		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		rootParameters[4].DescriptorTable.pDescriptorRanges = descriptorRangeSkinning;	//Tableの中身の配列を指定
+		rootParameters[4].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSkinning);	//Tableで利用する数
 
 		break;
 
@@ -167,6 +206,35 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		inputElementDescs[0].SemanticIndex = 0;
 		inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+		break;
+
+	case BlendMode::kSkinModelMode:
+
+		inputElementDescs.resize(5);
+
+		inputElementDescs[0].SemanticName = "POSITION";
+		inputElementDescs[0].SemanticIndex = 0;
+		inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[1].SemanticName = "TEXCOORD";
+		inputElementDescs[1].SemanticIndex = 0;
+		inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+		inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[2].SemanticName = "NORMAL";
+		inputElementDescs[2].SemanticIndex = 0;
+		inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[3].SemanticName = "WEIGHT";
+		inputElementDescs[3].SemanticIndex = 0;
+		inputElementDescs[3].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;	//float32_t4
+		inputElementDescs[3].InputSlot = 1;	//1番目のslotのVBVのことだと伝える
+		inputElementDescs[3].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[4].SemanticName = "INDEX";
+		inputElementDescs[4].SemanticIndex = 0;
+		inputElementDescs[4].Format = DXGI_FORMAT_R32G32B32A32_SINT;	//int32_t4
+		inputElementDescs[4].InputSlot = 1;	//1番目のslotのVBVのことだと伝える
+		inputElementDescs[4].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
 		break;
 
@@ -320,6 +388,19 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		assert(GeometryShaderBlob != nullptr);
 
 		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sphere3D.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+
+	case BlendMode::kSkinModelMode:
+
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/SkinningObject3d.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Object3d.PS.hlsl",
 			L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 

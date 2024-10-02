@@ -29,6 +29,8 @@ public:
 
 	ID3D12DescriptorHeap* GetDescriptorHeap() { return descriptorHeap_.Get(); }
 
+	uint32_t GetDescriptorSize() { return descriptorSize_; }
+
 	/// <summary>
 	/// SRVの指定番号のCPUデスクリプタハンドルを取得
 	/// </summary>
@@ -47,7 +49,7 @@ private:
 	DirectXCommon* dxCommon_ = nullptr;
 
 	
-	//SRV用のデスクリプタサイズ
+	//SRV用のデスクリプタ1個分のサイズ
 	uint32_t descriptorSize_;
 	//SRV用デスクリプタヒープ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;

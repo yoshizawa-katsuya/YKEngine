@@ -3,6 +3,7 @@
 #include "PrimitiveDrawer.h"
 #include "DirectionalLight.h"
 #include <array>
+#include "SrvHeapManager.h"
 class Camera;
 
 class ModelPlatform
@@ -16,10 +17,16 @@ public:
 	void Finalize();
 
 	//初期化
-	void Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer);
+	void Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
+
+	void EndFrame();
 
 	//共通描画設定
 	void PreDraw();
+
+	void SkinPreDraw();
+
+	void ModelDraw(const Matrix4x4& WVP, const Matrix4x4& World, Camera* camera);
 
 	void LinePreDraw();
 
@@ -30,6 +37,8 @@ public:
 	void SphereDraw(const Matrix4x4& worldMatrix, Camera* camera);
 
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
+
+	SrvHeapManager* GetSrvHeapManager() const { return srvHeapManager_; }
 
 	void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
 
@@ -49,6 +58,8 @@ private:
 	ModelPlatform& operator=(ModelPlatform&) = default;
 
 	DirectXCommon* dxCommon_;
+
+	SrvHeapManager* srvHeapManager_;
 
 	PrimitiveDrawer* primitiveDrawer_;
 
@@ -73,13 +84,22 @@ private:
 	uint32_t lineIndex_ = 0;
 
 	//TransformationMatrix用のリソースを作る
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> WVPResources_;
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> SphereWVPResources_;
 	//Microsoft::WRL::ComPtr<ID3D12Resource> WVPResource_;
 	//データを書き込む
-	std::array<Matrix4x4*, resourceNum_> WVPDatas_;
+	std::array<Matrix4x4*, resourceNum_> SphereWVPDatas_;
 	//Matrix4x4* WVPData_ = nullptr;
 
 	uint32_t sphereIndex_ = 0;
+
+	//TransformationMatrix用のリソースを作る
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> ModelWVPResources_;
+	//Microsoft::WRL::ComPtr<ID3D12Resource> WVPResource_;
+	//データを書き込む
+	std::array<TransformationMatrix*, resourceNum_> ModelWVPDatas_;
+	//Matrix4x4* WVPData_ = nullptr;
+
+	uint32_t modelIndex_ = 0;
 
 };
 

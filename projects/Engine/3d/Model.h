@@ -20,6 +20,8 @@ public:
 
 	void CreateModel(const std::string& directoryPath, const std::string& filename);
 
+	void CreateSkinModel(const std::string& directoryPath, const std::string& filename);
+
 	void CreateSphere(uint32_t textureHandle);
 
 	void Draw(const EulerTransform& transform, Camera* camera);
@@ -38,6 +40,10 @@ public:
 
 	void SkeletonUpdate();
 
+	void CreateSkinCluster();
+
+	void SkinClusterUpdate();
+
 	//Transforms& GetTransformAddress() { return transform_; }
 
 	//void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
@@ -52,10 +58,10 @@ private:
 
 	//マテリアルデータ作成
 	void CreateMaterialData();
-
+	/*
 	//座標行列変換データ作成
 	void CreateTransformData();
-
+	*/
 	//objファイルの読み込み
 	void LoadModelFile(const std::string& directoryPath, const std::string& filename);
 
@@ -74,6 +80,8 @@ private:
 
 	Skeleton skeleton_;
 
+	SkinCluster skinCluster_;
+
 	//VertexResourceを生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
 
@@ -91,14 +99,17 @@ private:
 	//マテリアルにデータを書き込む
 	Material* materialData_ = nullptr;
 
+	/*
 	//TransformationMatrix用のリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResource_;
 	//データを書き込む
 	TransformationMatrix* transformationMatrixData_ = nullptr;
-
+	*/
 	
 
 	uint32_t textureHandle_;
+
+	bool isSkinModel_ = false;
 
 };
 

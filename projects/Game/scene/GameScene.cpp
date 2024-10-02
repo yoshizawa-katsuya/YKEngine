@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 	
 	model_ = std::make_unique<Model>();
 	model_->Initialize(modelPlatform_);
-	model_->CreateModel("./resources/simpleSkin", "simpleSkin.gltf");
+	model_->CreateSkinModel("./resources/simpleSkin", "simpleSkin.gltf");
 	
 	/*
 	sphereModel_ = std::make_unique<Model>();
@@ -251,7 +251,7 @@ void GameScene::Draw() {
 	//dxCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, useMonaterBall ? textureSrvHandleGPU2 : textureSrvHandleGPU);
 
 	//Modelの描画前処理
-	modelPlatform_->PreDraw();
+	modelPlatform_->SkinPreDraw();
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 	//3dオブジェクトの描画
