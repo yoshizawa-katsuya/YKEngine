@@ -34,7 +34,7 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 			aiQuatKey& keyAssimp = nodeAnimationAssimp->mRotationKeys[keyIndex];
 			KeyframeQuaternion keyframe;
 			keyframe.time = static_cast<float>(keyAssimp.mTime / animationAssimp->mTicksPerSecond);	//ここも秒に変換
-			keyframe.value = { keyAssimp.mValue.x, -keyAssimp.mValue.y, -keyAssimp.mValue.z, keyAssimp.mValue.w };	//右手→左手
+			keyframe.value = { -keyAssimp.mValue.x, keyAssimp.mValue.y, keyAssimp.mValue.z, keyAssimp.mValue.w };	//右手→左手
 			nodeAnimation.rotate.keyframes.push_back(keyframe);
 		}
 

@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 	
 	model_ = std::make_unique<Model>();
 	model_->Initialize(modelPlatform_);
-	model_->CreateSkinModel("./resources/simpleSkin", "simpleSkin.gltf");
+	model_->CreateSkinModel("./resources/human", "walk.gltf");
 	
 	/*
 	sphereModel_ = std::make_unique<Model>();
@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 	*/
 
 	animation_ = std::make_unique<Animation>();
-	animation_->LoadAnimationFile("./resources/simpleSkin", "simpleSkin.gltf");
+	animation_->LoadAnimationFile("./resources/human", "walk.gltf");
 
 	/*
 	Model* newModel = new Model();
