@@ -98,7 +98,7 @@ void DebugCamera::ViewMatrixUpdate()
 	camera_->SetWorldMatrix(worldmatrix);
 
 	Matrix4x4 viewMatrix = Inverse(worldmatrix);
-	camera_->SetViewMatrix(Inverse(viewMatrix));
+	camera_->SetViewMatrix(viewMatrix);
 
 	camera_->SetviewProjection(Multiply(viewMatrix, camera_->GetProjection()));
 
