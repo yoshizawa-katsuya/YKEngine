@@ -31,8 +31,8 @@ void DebugCamera::Update()
 
 		//カメラ移動ベクトル
 		Vector3 move = { speed, speed, 0 };
-		move.x *= mousevelocity.x;
-		move.y *= -mousevelocity.y;
+		move.x *= -mousevelocity.x;
+		move.y *= mousevelocity.y;
 		move = TransformNormal(move, camera_->GetWorldMatrix());
 
 		camera_->SetTranslate(camera_->GetTranslate() + move);
