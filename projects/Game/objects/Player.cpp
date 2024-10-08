@@ -4,11 +4,9 @@
 void Player::Initialize(Model* model) {
 
 	model_ = model;
-	//camera_ = camera;
-
-	//model->SetRotate({ 0.0f, 3.15f, 0.0f });
+	
 	transform_.rotate = { 0.0f, 3.15f, 0.0f };
-	//transform_.translate = { 2.0f, 0.0f, 0.0f };
+	
 }
 
 void Player::Update() {
@@ -24,14 +22,7 @@ void Player::Update() {
 	}
 	ImGui::End();
 
-	if (animation_) {
-		model_->ApplyAnimation(animation_);
-	}
-
-	model_->SkeletonUpdate();
-
-	//SkeltonSpaceの情報を基にSkinClusterのMatrixPaletteを更新する
-	model_->SkinClusterUpdate();
+	
 
 }
 
@@ -39,26 +30,6 @@ void Player::Draw(Camera* camera) {
 
 	model_->Draw(transform_, camera);
 
-	/*
-	if (animation_) {
-		model_->Draw(transform_, camera, animation_);
-	}
-	else {
-		model_->Draw(transform_, camera);
-	}
-	*/
+	
 }
 
-void Player::BoneDraw(Camera* camera)
-{
-
-	model_->BoneDraw(transform_, camera);
-
-}
-
-void Player::JointDraw(Camera* camera)
-{
-
-	model_->JointDraw(transform_, camera);
-
-}
