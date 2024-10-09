@@ -19,6 +19,7 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "Animation.h"
+#include "MapChipField.h"
 
 class GameScene : public BaseScene
 {
@@ -36,6 +37,9 @@ public:
 
 private:
 
+	//マップの生成
+	void GeneratrBlocks();
+
 	//デバイス
 	DirectXCommon* dxCommon_;
 
@@ -45,9 +49,11 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 
-	int blendMode = static_cast<int>(BlendMode::kBlendModeNone);
-
 	Camera* mainCamera_ = nullptr;
+
+	std::unique_ptr<MapChipField> mapChipField_;
+
+	std::vector<std::vector<std::unique_ptr<EulerTransform>>> worldTransformBlocks_;
 
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;

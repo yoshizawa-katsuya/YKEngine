@@ -23,6 +23,10 @@ void GameScene::Initialize() {
 
 	modelPlatform_->SetDirectionalLight(directionalLight_.get());
 
+	// マップチップフィールドの生成
+	mapChipField_ = std::make_unique<MapChipField>();
+	mapChipField_->LoadMapChipCsv("Resources/csv/blocks.csv");
+
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
 	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
@@ -47,6 +51,7 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(model_.get());
 
+	GeneratrBlocks();
 
 }
 
@@ -115,6 +120,16 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	//ブロックの描画
+	for (std::vector<std::unique_ptr<EulerTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (std::unique_ptr<EulerTransform>& worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock) {
+				continue;
+			}
+			model_->Draw(*worldTransformBlock, mainCamera_);
+		}
+	}
+
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 	
@@ -122,5 +137,32 @@ void GameScene::Draw() {
 
 void GameScene::Finalize()
 {
+
+}
+
+void GameScene::GeneratrBlocks()
+{
+
+
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	//要素数を変更する
+	worldTransformBlocks_.resize(numBlockVirtical);
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		worldTransformBlocks_[i].resize(numBlockHorizontal);
+	}
+
+	// キューブの生成
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+				worldTransformBlocks_[i][j] = std::make_unique<EulerTransform>();
+				worldTransformBlocks_[i][j]->scale = { 1.0f, 1.0f, 1.0f };
+				worldTransformBlocks_[i][j]->translate = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
+
 
 }

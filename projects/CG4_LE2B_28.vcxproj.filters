@@ -76,6 +76,12 @@
     <Filter Include="ヘッダー ファイル\myGame">
       <UniqueIdentifier>{b57f4e00-fd0e-4231-8414-f893d017e1a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\mapChip">
+      <UniqueIdentifier>{34646b66-89ed-4fbc-a84e-f8696d21a86a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\mapChip">
+      <UniqueIdentifier>{5bbce709-2f0a-4301-80b2-e16a28bf9775}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -185,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="Engine\lib\Slerp.cpp">
       <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\mapChip\MapChipField.cpp">
+      <Filter>ソース ファイル\mapChip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -333,6 +342,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\Slerp.h">
       <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\mapChip\MapChipField.h">
+      <Filter>ヘッダー ファイル\mapChip</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

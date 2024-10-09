@@ -121,7 +121,7 @@ void ModelPlatform::ModelDraw(const Matrix4x4& WVP, const Matrix4x4& World, Came
 	ModelWVPDatas_[modelIndex_]->WorldInverseTranspose = Transpose(Inverse(World));
 
 	//wvp用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, ModelWVPResources_[lineIndex_]->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, ModelWVPResources_[modelIndex_]->GetGPUVirtualAddress());
 
 	modelIndex_++;
 
