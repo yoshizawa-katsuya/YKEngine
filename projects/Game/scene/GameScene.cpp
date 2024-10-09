@@ -36,15 +36,11 @@ void GameScene::Initialize() {
 
 	mainCamera_ = camera_.get();
 
-	textureHandle_[0] = TextureManager::GetInstance()->Load("./resources/uvChecker.dds");
-	textureHandle_[1] = TextureManager::GetInstance()->Load("./resources/monsterBall.png");
+	//soundData1_ = audio_->SoundLoadWave("./resources/Alarm01.wav");
 
-	soundData1_ = audio_->SoundLoadWave("./resources/Alarm01.wav");
-
-	
 	model_ = std::make_unique<Model>();
 	model_->Initialize(modelPlatform_);
-	model_->CreateModel("./resources/human", "walk.gltf");
+	model_->CreateModel("./resources/player", "Player.obj");
 	
 	
 	//プレイヤーの初期化
@@ -81,11 +77,11 @@ void GameScene::Update() {
 
 		ImGui::TreePop();
 	}
-
+	/*
 	if (ImGui::Button("SE01")) {
 		audio_->SoundPlawWave(soundData1_);
 	}
-
+	*/
 	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
 		isActiveDebugCamera_ = false;
 

@@ -56,9 +56,7 @@ private:
 
 	bool isActiveDebugCamera_ = false;
 
-	uint32_t textureHandle_[2];
-
-	SoundData soundData1_;
+	//SoundData soundData1_;
 
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
