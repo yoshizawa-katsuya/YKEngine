@@ -464,6 +464,9 @@ void Model::LoadModelFile(const std::string& directoryPath, const std::string& f
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			modelData_.material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
 		}
+		else {
+			modelData_.material.textureFilePath = "./resources/white.png";
+		}
 	}
 
 	modelData_.rootNode = ReadNode(scene->mRootNode);

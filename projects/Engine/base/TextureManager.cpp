@@ -133,7 +133,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 		//ミップマップの作成
 		DirectX::ScratchImage mipImages{};
 		hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-		assert(SUCCEEDED(hr));
+		//assert(SUCCEEDED(hr));
 		if (SUCCEEDED(hr)) {
 			image = std::move(mipImages);
 		}

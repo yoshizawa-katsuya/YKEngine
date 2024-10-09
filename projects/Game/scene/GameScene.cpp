@@ -42,14 +42,17 @@ void GameScene::Initialize() {
 
 	//soundData1_ = audio_->SoundLoadWave("./resources/Alarm01.wav");
 
-	model_ = std::make_unique<Model>();
-	model_->Initialize(modelPlatform_);
-	model_->CreateModel("./resources/player", "Player.obj");
+	modelPlayer_ = std::make_unique<Model>();
+	modelPlayer_->Initialize(modelPlatform_);
+	modelPlayer_->CreateModel("./resources/player", "Player.obj");
 	
+	modelBlock_ = std::make_unique<Model>();
+	modelBlock_->Initialize(modelPlatform_);
+	modelBlock_->CreateModel("./resources/block", "block.obj");
 	
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(model_.get());
+	player_->Initialize(modelPlayer_.get());
 
 	GeneratrBlocks();
 
@@ -126,7 +129,7 @@ void GameScene::Draw() {
 			if (!worldTransformBlock) {
 				continue;
 			}
-			model_->Draw(*worldTransformBlock, mainCamera_);
+			modelBlock_->Draw(*worldTransformBlock, mainCamera_);
 		}
 	}
 

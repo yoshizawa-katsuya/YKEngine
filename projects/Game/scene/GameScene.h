@@ -67,7 +67,8 @@ private:
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
-	std::unique_ptr<Model> model_;
+	std::unique_ptr<Model> modelPlayer_;
+	std::unique_ptr<Model> modelBlock_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
