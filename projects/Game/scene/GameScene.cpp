@@ -69,6 +69,9 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
+#ifdef _DEBUG
+
+
 	ImGui::Begin("Window");
 	if (ImGui::TreeNode("camera")) {
 		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
@@ -77,7 +80,7 @@ void GameScene::Update() {
 
 		ImGui::TreePop();
 	}
-	
+
 	if (ImGui::TreeNode("directionalLight")) {
 		ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
 		ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
@@ -95,7 +98,7 @@ void GameScene::Update() {
 
 		mainCamera_ = camera_.get();
 
-		
+
 
 	}
 	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
@@ -112,6 +115,8 @@ void GameScene::Update() {
 	if (input_->TriggerKey(DIK_1)) {
 		OutputDebugStringA("Hit 1\n");
 	}
+
+#endif // _DEBUG
 
 }
 

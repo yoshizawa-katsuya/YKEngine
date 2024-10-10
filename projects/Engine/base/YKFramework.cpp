@@ -18,9 +18,14 @@ void YKFramework::Initialize()
 	srvHeapManager_ = new SrvHeapManager;
 	srvHeapManager_->Initialize(dxCommon_);
 
+#ifdef _DEBUG
+
 	imGuiManager_ = new ImGuiManager;
 	imGuiManager_->Initialize(dxCommon_, winApp_, srvHeapManager_);
 
+#endif // _DEBUG
+
+	
 	//入力の初期化
 	input_ = Input::GetInstance();
 	input_->Initialize(winApp_);
@@ -72,10 +77,14 @@ void YKFramework::Finalize()
 	//入力開放
 	input_->Finalize();
 
+#ifdef _DEBUG
+
 	//ImGuiの終了処理
 	imGuiManager_->Finalize();
 	delete imGuiManager_;
 	imGuiManager_ = nullptr;
+
+#endif // _DEBUG
 
 	delete srvHeapManager_;
 	srvHeapManager_ = nullptr;
@@ -98,9 +107,14 @@ void YKFramework::Update()
 		isEndReqest_ = true;
 	}
 
+#ifdef _DEBUG
 
 	//imGuiに、フレームが始まる旨を伝える
 	imGuiManager_->Begin();
+
+#endif // _DEBUG
+
+	
 
 	//入力の更新
 	input_->Update();
@@ -114,8 +128,12 @@ void YKFramework::EndFrame()
 
 	modelPlatform_->EndFrame();
 
+#ifdef _DEBUG
+
 	//ImGuiの内部コマンドを生成する
 	imGuiManager_->End();
+
+#endif // _DEBUG
 
 }
 

@@ -74,8 +74,12 @@ void MyGame::Draw()
 	//titleScene_->Draw();
 	sceneManager_->Draw();
 
+#ifdef _DEBUG
+
 	//実際のcommandListのImGuiの描画コマンドを積む
 	imGuiManager_->Draw();
+
+#endif // _DEBUG
 
 	dxCommon_->PostDraw();
 

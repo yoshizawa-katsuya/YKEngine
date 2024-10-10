@@ -11,6 +11,8 @@ void Player::Initialize(Model* model) {
 
 void Player::Update() {
 
+#ifdef _DEBUG
+
 	ImGui::Begin("Player");
 	if (ImGui::TreeNode("Model")) {
 		ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
@@ -22,7 +24,7 @@ void Player::Update() {
 	}
 	ImGui::End();
 
-	
+#endif // _DEBUG	
 
 }
 
