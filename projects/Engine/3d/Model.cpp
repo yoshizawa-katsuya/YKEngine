@@ -240,50 +240,6 @@ void Model::Draw(const EulerTransform& transform, Camera* camera) {
 
 }
 
-void Model::Draw(const EulerTransform& transform, Camera* camera, Animation* animation)
-{
-
-	Matrix4x4 localMatrix = animation->Reproducing(this);
-
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-
-	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
-		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldMatrix, viewProjectionMatrix);
-	}
-	else {
-		worldViewProjectionMatrix = worldMatrix;
-	}
-	/*
-	transformationMatrixData_->WVP = localMatrix * worldViewProjectionMatrix;
-	transformationMatrixData_->World = localMatrix * worldMatrix;
-
-	//wvp用のCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	*/
-
-	worldViewProjectionMatrix = localMatrix * worldViewProjectionMatrix;
-	worldMatrix = localMatrix * worldMatrix;
-
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldMatrix, camera);
-
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-	
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
-
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
-
-
-}
-
 void Model::BoneDraw(const EulerTransform& transform, Camera* camera)
 {
 

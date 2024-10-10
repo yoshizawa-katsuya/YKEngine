@@ -26,8 +26,6 @@ public:
 
 	void Draw(const EulerTransform& transform, Camera* camera);
 
-	void Draw(const EulerTransform& transform, Camera* camera, Animation* animation);
-
 	void BoneDraw(const EulerTransform& transform, Camera* camera);
 
 	void JointDraw(const EulerTransform& transform, Camera* camera);
