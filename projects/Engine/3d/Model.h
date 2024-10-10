@@ -26,6 +26,8 @@ public:
 
 	void Draw(const EulerTransform& transform, Camera* camera);
 
+	void Draw(const EulerTransform& transform, Camera* camera, uint32_t textureHandle);
+
 	void BoneDraw(const EulerTransform& transform, Camera* camera);
 
 	void JointDraw(const EulerTransform& transform, Camera* camera);
