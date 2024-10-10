@@ -72,7 +72,7 @@ private:
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
-	static const uint32_t resourceNum_ = 128;
+	static const uint32_t resourceNum_ = 2048;
 	static const uint32_t resourceNum2_ = 1;
 
 	//TransformationMatrix用のリソースを作る 線分用
