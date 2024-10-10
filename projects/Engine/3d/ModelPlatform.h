@@ -73,26 +73,27 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
 	static const uint32_t resourceNum_ = 128;
+	static const uint32_t resourceNum2_ = 1;
 
 	//TransformationMatrix用のリソースを作る 線分用
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> LineWVPResources_;
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum2_> LineWVPResources_;
 	//Microsoft::WRL::ComPtr<ID3D12Resource> LineWVPResource_;
 	//データを書き込む
-	std::array<LineWVP*, resourceNum_> LineWVPDatas_;
+	std::array<LineWVP*, resourceNum2_> LineWVPDatas_;
 	//LineWVP* LineWVPData_ = nullptr;
 
 	uint32_t lineIndex_ = 0;
 
-	//TransformationMatrix用のリソースを作る
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> SphereWVPResources_;
+	//TransformationMatrix用のリソースを作る。球用
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum2_> SphereWVPResources_;
 	//Microsoft::WRL::ComPtr<ID3D12Resource> WVPResource_;
 	//データを書き込む
-	std::array<Matrix4x4*, resourceNum_> SphereWVPDatas_;
+	std::array<Matrix4x4*, resourceNum2_> SphereWVPDatas_;
 	//Matrix4x4* WVPData_ = nullptr;
 
 	uint32_t sphereIndex_ = 0;
 
-	//TransformationMatrix用のリソースを作る
+	//TransformationMatrix用のリソースを作る。モデル用
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> ModelWVPResources_;
 	//Microsoft::WRL::ComPtr<ID3D12Resource> WVPResource_;
 	//データを書き込む

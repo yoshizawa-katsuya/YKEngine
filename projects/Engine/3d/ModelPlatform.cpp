@@ -53,7 +53,7 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 	LineWVPData_->WVP2 = MakeIdentity4x4();
 	*/
 
-	for (uint32_t i = 0; i < resourceNum_; i++) {
+	for (uint32_t i = 0; i < resourceNum2_; i++) {
 		//transformationMatrixのリソースを作る
 		LineWVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(LineWVP));
 		//書き込むためのアドレスを取得
@@ -69,7 +69,7 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 	*WVPData_ = MakeIdentity4x4();
 	*/
 
-	for (uint32_t i = 0; i < resourceNum_; i++) {
+	for (uint32_t i = 0; i < resourceNum2_; i++) {
 		SphereWVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(Matrix4x4));
 		SphereWVPResources_[i]->Map(0, nullptr, reinterpret_cast<void**>(&SphereWVPDatas_[i]));
 		*SphereWVPDatas_[i] = MakeIdentity4x4();
@@ -138,8 +138,6 @@ void ModelPlatform::LinePreDraw()
 
 void ModelPlatform::LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& worldMatrix2, Camera* camera)
 {
-
-	
 
 	Matrix4x4 worldViewProjectionMatrix1;
 	Matrix4x4 worldViewProjectionMatrix2;
