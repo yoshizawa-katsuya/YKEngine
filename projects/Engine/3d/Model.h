@@ -18,6 +18,7 @@ public:
 	
 	void Initialize(ModelPlatform* modelPlatform);
 
+	//三角面化しているモデルのみ読み込み可能
 	void CreateModel(const std::string& directoryPath, const std::string& filename);
 
 	void CreateSkinModel(const std::string& directoryPath, const std::string& filename);

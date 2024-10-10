@@ -27,21 +27,24 @@ void GameScene::Initialize() {
 	mapChipField_ = std::make_unique<MapChipField>();
 	mapChipField_->LoadMapChipCsv("Resources/csv/blocks.csv");
 
+	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
 	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
 
+	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
 	camera2_->SetRotate({ 0.0f, 0.0f, 0.0f });
 	camera2_->SetTranslate({ 0.0f, 0.0f, -10.0f });
-
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize(camera2_.get(), input_);
 
+	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
 	//soundData1_ = audio_->SoundLoadWave("./resources/Alarm01.wav");
 
+	//モデルの生成
 	modelPlayer_ = std::make_unique<Model>();
 	modelPlayer_->Initialize(modelPlatform_);
 	modelPlayer_->CreateModel("./resources/player", "Player.obj");
@@ -54,12 +57,14 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+	//マップの生成
 	GeneratrBlocks();
 
 }
 
 void GameScene::Update() {
 
+	//カメラの更新
 	camera_->Update();
 
 	if (isActiveDebugCamera_) {
@@ -88,17 +93,11 @@ void GameScene::Update() {
 
 		ImGui::TreePop();
 	}
-	/*
-	if (ImGui::Button("SE01")) {
-		audio_->SoundPlawWave(soundData1_);
-	}
-	*/
+	//メインカメラの切り替え
 	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
 		isActiveDebugCamera_ = false;
 
 		mainCamera_ = camera_.get();
-
-
 
 	}
 	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
@@ -108,13 +107,6 @@ void GameScene::Update() {
 
 	}
 	ImGui::End();
-
-	if (input_->PushKey(DIK_0)) {
-		OutputDebugStringA("Hit 0\n");
-	}
-	if (input_->TriggerKey(DIK_1)) {
-		OutputDebugStringA("Hit 1\n");
-	}
 
 #endif // _DEBUG
 
@@ -138,7 +130,7 @@ void GameScene::Draw() {
 		}
 	}
 
-	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
+	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 	
 }

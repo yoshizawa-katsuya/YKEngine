@@ -5,6 +5,7 @@ void Player::Initialize(Model* model) {
 
 	model_ = model;
 	
+	//手前を向かせている
 	transform_.rotate = { 0.0f, 3.15f, 0.0f };
 	
 }
