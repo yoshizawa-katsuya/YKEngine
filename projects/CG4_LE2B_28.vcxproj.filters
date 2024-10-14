@@ -195,6 +195,9 @@
     <ClCompile Include="Game\mapChip\MapChipField.cpp">
       <Filter>ソース ファイル\mapChip</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\lib\Easing.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -345,6 +348,9 @@
     </ClInclude>
     <ClInclude Include="Game\mapChip\MapChipField.h">
       <Filter>ヘッダー ファイル\mapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Easing.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

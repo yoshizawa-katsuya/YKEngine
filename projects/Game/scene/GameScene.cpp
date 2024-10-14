@@ -56,6 +56,9 @@ void GameScene::Initialize() {
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 8);
+	player_->SetTranslate(playerPosition);
+	player_->SetMapChipField(mapChipField_.get());
 
 	//マップの生成
 	GeneratrBlocks();
