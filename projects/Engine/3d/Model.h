@@ -1,5 +1,5 @@
 #pragma once
-#include "Struct.h"
+#include "WorldTransform.h"
 #include "TextureManager.h"
 #include <Windows.h>
 #include <d3d12.h>
@@ -25,9 +25,9 @@ public:
 
 	void CreateSphere(uint32_t textureHandle);
 
-	void Draw(const EulerTransform& transform, Camera* camera);
+	void Draw(const WorldTransform& worldTransform, Camera* camera);
 
-	void Draw(const EulerTransform& transform, Camera* camera, uint32_t textureHandle);
+	void Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle);
 
 	void BoneDraw(const EulerTransform& transform, Camera* camera);
 

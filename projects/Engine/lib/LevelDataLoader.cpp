@@ -61,13 +61,13 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			//平行移動
-			objectData.transform.translate.x = -static_cast<float>(transform["translation"][0]);
-			objectData.transform.translate.y = static_cast<float>(transform["translation"][2]);
-			objectData.transform.translate.z = -static_cast<float>(transform["translation"][1]);
+			objectData.transform.translation.x = -static_cast<float>(transform["translation"][0]);
+			objectData.transform.translation.y = static_cast<float>(transform["translation"][2]);
+			objectData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
 			//回転角
-			objectData.transform.rotate.x = -static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
-			objectData.transform.rotate.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
-			objectData.transform.rotate.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
+			objectData.transform.rotation.x = -static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
+			objectData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
+			objectData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
 			//スケーリング
 			objectData.transform.scale.x = static_cast<float>(transform["scaling"][0]);
 			objectData.transform.scale.y = static_cast<float>(transform["scaling"][2]);

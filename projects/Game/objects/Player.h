@@ -1,6 +1,6 @@
 #pragma once
 #include "Model.h"
-#include "Animation.h"
+#include "WorldTransform.h"
 class Camera;
 class MapChipField;
 
@@ -60,12 +60,12 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
-	void SetTranslate(Vector3& translate) { transform_.translate = translate; }
+	void SetTranslate(Vector3& translate) { worldTransform_.translation_ = translate; }
 
 private:
 
 	//Transform変数を作る
-	EulerTransform transform_{ {1.0f, 1.0f, 1.0f}, { 0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f, 0.0f } };
+	WorldTransform worldTransform_;
 
 	Model* model_ = nullptr;
 

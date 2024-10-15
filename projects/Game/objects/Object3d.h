@@ -14,12 +14,12 @@ public:
 
 	//void SetCamera(Camera* camera) { camera_ = camera; }
 
-	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
+	void SetTransform(const WorldTransform& transform) { worldTransform_ = transform; }
 
 private:
 
 	//Transform変数を作る
-	EulerTransform transform_{ {1.0f, 1.0f, 1.0f}, { 0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f, 0.0f } };
+	WorldTransform worldTransform_;
 
 	//カメラの変数
 	//Camera* camera_ = nullptr;

@@ -68,17 +68,17 @@ void ParticleManager::Update(Camera* camera)
 
 			//Fieldの範囲内のParticleには加速度を適用する
 			if (useAccelerationField_) {
-				if (IsCollision(accelerationField_.area, particleIterator->transform.translate)) {
+				if (IsCollision(accelerationField_.area, particleIterator->transform.translation)) {
 					particleIterator->velocity += accelerationField_.accerelation * kDeltaTime_;
 				}
 			}
 
-			particleIterator->transform.translate += particleIterator->velocity * kDeltaTime_;
+			particleIterator->transform.translation += particleIterator->velocity * kDeltaTime_;
 			particleIterator->currentTime += kDeltaTime_;	//経過時間を足す
 
 			if (particleGroupIterator->second.numInstance < particleGroupIterator->second.kNumMaxInstance) {
 				Matrix4x4 scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
-				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translate);
+				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
 				//Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
 				Matrix4x4 worldMatrix = scaleMatrix * billboardMatrix * translateMatrix;
 
@@ -216,10 +216,10 @@ Particle ParticleManager::MakeNewParticle(const Vector3& position)
 	Particle particle;
 
 	particle.transform.scale = { 1.0f, 1.0f, 1.0f };
-	particle.transform.rotate = { 0.0f, 0.0f, 0.0f };
+	particle.transform.rotation = { 0.0f, 0.0f, 0.0f };
 	//particle.transform.translate = { index * 0.1f, index * 0.1f, index * 0.1f };
 	Vector3 randomTranslate{ distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
-	particle.transform.translate = position + randomTranslate;
+	particle.transform.translation = position + randomTranslate;
 	//particle.velocity = { 0.0f, 1.0f, 0.0f };
 	particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
 

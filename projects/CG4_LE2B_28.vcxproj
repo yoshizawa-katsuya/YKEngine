@@ -144,6 +144,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\scene\SceneManager.cpp" />
     <ClCompile Include="Game\scene\SceneFactory.cpp" />
     <ClCompile Include="Engine\lib\Quaternion.cpp" />
+    <ClCompile Include="Engine\3d\WorldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Line3D.GS.hlsl">
@@ -249,6 +250,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\scene\SceneFactory.h" />
     <ClInclude Include="Engine\lib\LevelDataLoader.h" />
     <ClInclude Include="Engine\lib\Quaternion.h" />
+    <ClInclude Include="Engine\3d\WorldTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

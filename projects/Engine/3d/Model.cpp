@@ -186,17 +186,15 @@ void Model::CreateSphere(uint32_t textureHandle)
 
 }
 
-void Model::Draw(const EulerTransform& transform, Camera* camera) {
+void Model::Draw(const WorldTransform& worldTransform, Camera* camera) {
 
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-	
 	Matrix4x4 worldViewProjectionMatrix;
 	if (camera) {
 		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldMatrix, viewProjectionMatrix);
+		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
 	}
 	else {
-		worldViewProjectionMatrix = worldMatrix;
+		worldViewProjectionMatrix = worldTransform.worldMatrix_;
 	}
 	/*
 	transformationMatrixData_->WVP = worldViewProjectionMatrix;
@@ -206,7 +204,7 @@ void Model::Draw(const EulerTransform& transform, Camera* camera) {
 	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 	*/
 
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldMatrix, camera);
+	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	if (isSkinModel_) {
 
@@ -240,18 +238,16 @@ void Model::Draw(const EulerTransform& transform, Camera* camera) {
 
 }
 
-void Model::Draw(const EulerTransform& transform, Camera* camera, uint32_t textureHandle)
+void Model::Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle)
 {
-
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 
 	Matrix4x4 worldViewProjectionMatrix;
 	if (camera) {
 		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldMatrix, viewProjectionMatrix);
+		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
 	}
 	else {
-		worldViewProjectionMatrix = worldMatrix;
+		worldViewProjectionMatrix = worldTransform.worldMatrix_;
 	}
 	/*
 	transformationMatrixData_->WVP = worldViewProjectionMatrix;
@@ -261,7 +257,7 @@ void Model::Draw(const EulerTransform& transform, Camera* camera, uint32_t textu
 	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 	*/
 
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldMatrix, camera);
+	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	if (isSkinModel_) {
 
@@ -297,7 +293,7 @@ void Model::Draw(const EulerTransform& transform, Camera* camera, uint32_t textu
 void Model::BoneDraw(const EulerTransform& transform, Camera* camera)
 {
 
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotation, transform.translation);
 
 	//全てのJointを更新。親が若いので通常ループで処理可能になっている
 	for (Joint& joint : skeleton_.joints) {
@@ -318,7 +314,7 @@ void Model::BoneDraw(const EulerTransform& transform, Camera* camera)
 void Model::JointDraw(const EulerTransform& transform, Camera* camera)
 {
 
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotation, transform.translation);
 
 	//全てのJointを更新。親が若いので通常ループで処理可能になっている
 	for (Joint& joint : skeleton_.joints) {
@@ -338,8 +334,8 @@ void Model::ApplyAnimation(Animation* animation)
 		//対象のJointのAnimationがあれば、値の適用を行う。下記のif文はC++17から可能になった初期化付きif文。
 		if (auto it = animation->GetNodeAnimations().find(joint.name); it != animation->GetNodeAnimations().end()) {
 			const NodeAnimation& rootNodeAnimation = (*it).second;
-			joint.transform.translate = animation->CalculateValue(rootNodeAnimation.translate.keyframes, animation->GetAnimationTime());
-			joint.transform.rotate = animation->CalculateValue(rootNodeAnimation.rotate.keyframes, animation->GetAnimationTime());
+			joint.transform.translation = animation->CalculateValue(rootNodeAnimation.translate.keyframes, animation->GetAnimationTime());
+			joint.transform.rotation = animation->CalculateValue(rootNodeAnimation.rotate.keyframes, animation->GetAnimationTime());
 			joint.transform.scale = animation->CalculateValue(rootNodeAnimation.scale.keyframes, animation->GetAnimationTime());
 
 		}
@@ -601,9 +597,9 @@ Node Model::ReadNode(aiNode* node)
 	aiQuaternion rotate;
 	node->mTransformation.Decompose(scale, rotate, translate);	//assimpの行列からSRTを抽出する関数を利用
 	result.transform.scale = { scale.x, scale.y, scale.z };	//Scaleはそのまま
-	result.transform.rotate = { -rotate.x, -rotate.y, -rotate.z, rotate.w };	//x軸を反転、さらに回転方向が逆なので軸を反転させる
-	result.transform.translate = { -translate.x, translate.y, translate.z };	//x軸を反転
-	result.localMatrix = MakeAffineMatrix(result.transform.scale, result.transform.rotate, result.transform.translate);
+	result.transform.rotation = { -rotate.x, -rotate.y, -rotate.z, rotate.w };	//x軸を反転、さらに回転方向が逆なので軸を反転させる
+	result.transform.translation = { -translate.x, translate.y, translate.z };	//x軸を反転
+	result.localMatrix = MakeAffineMatrix(result.transform.scale, result.transform.rotation, result.transform.translation);
 
 	result.name = node->mName.C_Str();	//Node名を格納
 	result.children.resize(node->mNumChildren);	//子供の数だけ確保
@@ -654,7 +650,7 @@ void Model::SkeletonUpdate()
 
 	//全てのJointを更新。親が若いので通常ループで処理可能になっている
 	for (Joint& joint : skeleton_.joints) {
-		joint.localMatrix = MakeAffineMatrix(joint.transform.scale, joint.transform.rotate, joint.transform.translate);
+		joint.localMatrix = MakeAffineMatrix(joint.transform.scale, joint.transform.rotation, joint.transform.translation);
 		if (joint.parent) {	//親がいれば親の行列を掛ける
 			joint.skeletonSpaceMatrix = joint.localMatrix * skeleton_.joints[*joint.parent].skeletonSpaceMatrix;
 		}
