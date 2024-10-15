@@ -113,15 +113,15 @@ struct Box
 struct EulerTransform
 {
 	Vector3 scale;
-	Vector3 rotate;
-	Vector3 translate;
+	Vector3 rotation;
+	Vector3 translation;
 };
 
 struct QuaternionTransform
 {
 	Vector3 scale;
-	Quaternion rotate;
-	Vector3 translate;
+	Quaternion rotation;
+	Vector3 translation;
 };
 
 struct MaterialData

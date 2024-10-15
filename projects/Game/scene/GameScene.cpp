@@ -74,6 +74,16 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 
+	//ブロックの更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock) {
+				continue;
+			}
+			worldTransformBlock->UpdateMatrix();
+		}
+	}
+
 	//プレイヤーの更新
 	player_->Update();
 
@@ -124,8 +134,8 @@ void GameScene::Draw() {
 	player_->Draw(mainCamera_);
 
 	//ブロックの描画
-	for (std::vector<std::unique_ptr<EulerTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (std::unique_ptr<EulerTransform>& worldTransformBlock : worldTransformBlockLine) {
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock) {
 				continue;
 			}
@@ -160,12 +170,11 @@ void GameScene::GeneratrBlocks()
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
-				worldTransformBlocks_[i][j] = std::make_unique<EulerTransform>();
-				worldTransformBlocks_[i][j]->scale = { 1.0f, 1.0f, 1.0f };
-				worldTransformBlocks_[i][j]->translate = mapChipField_->GetMapChipPositionByIndex(j, i);
+				worldTransformBlocks_[i][j] = std::make_unique<WorldTransform>();
+				worldTransformBlocks_[i][j]->Initialize();
+				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
 		}
 	}
-
 
 }

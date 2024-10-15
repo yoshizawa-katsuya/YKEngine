@@ -3,22 +3,17 @@
 #include <memory>
 #include <map>
 #include "BaseScene.h"
-#include "Struct.h"
-#include "DirectXCommon.h"
 #include "Audio.h"
 #include "Input.h"
-#include "TextureManager.h"
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Model.h"
 #include "DirectionalLight.h"
 #include "Sprite.h"
 #include "Player.h"
-#include "Object3d.h"
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
-#include "Animation.h"
 #include "MapChipField.h"
 
 class GameScene : public BaseScene
@@ -53,7 +48,7 @@ private:
 
 	std::unique_ptr<MapChipField> mapChipField_;
 
-	std::vector<std::vector<std::unique_ptr<EulerTransform>>> worldTransformBlocks_;
+	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformBlocks_;
 
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;

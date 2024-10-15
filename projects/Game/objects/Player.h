@@ -1,6 +1,6 @@
 #pragma once
 #include "Model.h"
-#include "Animation.h"
+#include "WorldTransform.h"
 class Camera;
 class MapChipField;
 
@@ -60,12 +60,14 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
-	void SetTranslate(Vector3& translate) { transform_.translate = translate; }
+	void SetTranslate(Vector3& translate) { worldTransform_.translation_ = translate; }
+
+	void ChaeckSpaceKey();
 
 private:
 
 	//Transform変数を作る
-	EulerTransform transform_{ {1.0f, 1.0f, 1.0f}, { 0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f, 0.0f } };
+	WorldTransform worldTransform_;
 
 	Model* model_ = nullptr;
 
@@ -116,6 +118,18 @@ private:
 	const float kBlank = 0.01f;
 	//マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
+
+	// スペースキーを押した時間
+	int kPushTime = 0;
+
+	// スペースキーを押しているか
+	bool isPushSpace = false;
+
+	// 上下移動のクールタイム
+	const int kMoveInterval = 60;
+
+	int kMoveTimer = 0;
+
 
 };
 

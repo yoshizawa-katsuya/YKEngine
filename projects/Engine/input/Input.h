@@ -49,6 +49,8 @@ public:
 
 	Vector2 GetMouseVelocity();
 
+	bool IsPushKeyPre(BYTE keyNumber);
+
 private:
 
 	static Input* instance_;

@@ -18,19 +18,19 @@ public:
 	const Matrix4x4& GetProjection() const { return projectionMatrix_; }
 	const Matrix4x4& GetViewProjection() const { return viewProjectionMatrix_; }
 
-	const Vector3& GetRotate() const { return transform_.rotate; }
-	Vector3& GetRotate() { return transform_.rotate; }
+	const Vector3& GetRotate() const { return transform_.rotation; }
+	Vector3& GetRotate() { return transform_.rotation; }
 
-	const Vector3& GetTranslate() const { return transform_.translate; }
-	Vector3& GetTranslate() { return transform_.translate; }
+	const Vector3& GetTranslate() const { return transform_.translation; }
+	Vector3& GetTranslate() { return transform_.translation; }
 
 	//setter
-	void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
-	void SetRotateX(float x) { transform_.rotate.x = x; }
-	void SetRotateY(float y) { transform_.rotate.y = y; }
-	void SetRotateZ(float z) { transform_.rotate.z = z; }
+	void SetRotate(const Vector3& rotate) { transform_.rotation = rotate; }
+	void SetRotateX(float x) { transform_.rotation.x = x; }
+	void SetRotateY(float y) { transform_.rotation.y = y; }
+	void SetRotateZ(float z) { transform_.rotation.z = z; }
 
-	void SetTranslate(const Vector3& translate) { transform_.translate = translate; }
+	void SetTranslate(const Vector3& translate) { transform_.translation = translate; }
 	void SetFovY(float fovY) { fovY_ = fovY; }
 	void SetAspectRatio(float aspectRatio) { aspectRatio_ = aspectRatio; }
 	void SetNearClip(float nearClip) { nearClip_ = nearClip; }

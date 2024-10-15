@@ -57,11 +57,11 @@ void Sprite::Draw() {
 	vertexData_[3].texcoord = { tex_right, tex_top };
 
 	transform_.scale = { size_.x, size_.y, 1.0f };
-	transform_.translate = { position_.x, position_.y, 0.0f };
-	transform_.rotate = { 0.0f, 0.0f, rotation_ };
+	transform_.translation = { position_.x, position_.y, 0.0f };
+	transform_.rotation = { 0.0f, 0.0f, rotation_ };
 
 	//Sprite用のWorldViewProjectionMatrixを作る
-	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transform_.scale, transform_.rotation, transform_.translation);
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, WinApp::kClientWidth, WinApp::kClientHeight, 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, projectionMatrixSprite));
@@ -69,8 +69,8 @@ void Sprite::Draw() {
 	transformationMatrixData_->World = worldMatrixSprite;
 
 	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransform_.scale);
-	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransform_.rotate.z));
-	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransform_.translate));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransform_.rotation.z));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransform_.translation));
 	materialData_->uvTransform = uvTransformMatrix;
 
 
