@@ -18,6 +18,8 @@ void GameScene::Initialize() {
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
+	//bgm1_ = audio_->SoundLoadWave("./resources/Sound/SE01.wav");
+
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize(dxCommon_);
 
@@ -25,7 +27,7 @@ void GameScene::Initialize() {
 
 	// マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
-	mapChipField_->LoadMapChipCsv("Resources/csv/blocks.csv");
+	mapChipField_->LoadMapChipCsv("./resources/csv/blocks.csv");
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -62,7 +64,7 @@ void GameScene::Initialize() {
 
 	//マップの生成
 	GeneratrBlocks();
-
+	
 }
 
 void GameScene::Update() {

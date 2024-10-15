@@ -21,7 +21,10 @@ public:
 	SoundData SoundLoadWave(const std::string& fileName);
 
 	//音声再生
-	void SoundPlawWave(const SoundData& soundData);
+	void SoundPlayWave(const SoundData& soundData);
+
+	//ループ再生
+	void SoundLoopPlayWave(const SoundData& soundData);
 
 	//音声データ解放
 	void SoundUnload(SoundData* soundData);
