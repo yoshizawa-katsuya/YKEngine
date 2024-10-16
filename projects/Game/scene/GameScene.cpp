@@ -18,7 +18,7 @@ void GameScene::Initialize() {
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
-	//bgm1_ = audio_->SoundLoadWave("./resources/Sound/SE01.wav");
+	bgm1_ = audio_->LoopSoundLoadWave("./resources/Sound/SE01.wav");
 
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize(dxCommon_);
@@ -44,8 +44,6 @@ void GameScene::Initialize() {
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
-	//soundData1_ = audio_->SoundLoadWave("./resources/Alarm01.wav");
-
 	//モデルの生成
 	modelPlayer_ = std::make_unique<Model>();
 	modelPlayer_->Initialize(modelPlatform_);
@@ -65,6 +63,8 @@ void GameScene::Initialize() {
 	//マップの生成
 	GeneratrBlocks();
 	
+	audio_->SoundLoopPlayWave(bgm1_);
+
 }
 
 void GameScene::Update() {
@@ -120,6 +120,9 @@ void GameScene::Update() {
 
 		mainCamera_ = camera2_.get();
 
+	}
+	if (ImGui::Button("BGMstop")) {
+		audio_->SoundStopWave(bgm1_);
 	}
 	ImGui::End();
 

@@ -41,7 +41,7 @@ private:
 	Audio* audio_;
 	Input* input_;
 
-	//SoundData bgm1_;
+	LoopSoundData bgm1_;
 
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;

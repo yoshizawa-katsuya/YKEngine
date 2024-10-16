@@ -20,14 +20,20 @@ public:
 
 	SoundData SoundLoadWave(const std::string& fileName);
 
+	LoopSoundData LoopSoundLoadWave(const std::string& fileName);
+
 	//音声再生
 	void SoundPlayWave(const SoundData& soundData);
 
 	//ループ再生
-	void SoundLoopPlayWave(const SoundData& soundData);
+	void SoundLoopPlayWave(const LoopSoundData& loopSoundData);
+
+	//音楽を止める
+	void SoundStopWave(const LoopSoundData& loopSoundData);
 
 	//音声データ解放
 	void SoundUnload(SoundData* soundData);
+	void SoundUnload(LoopSoundData* loopSoundData);
 
 private:
 

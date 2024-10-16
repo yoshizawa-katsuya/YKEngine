@@ -234,6 +234,14 @@ struct SoundData
 	unsigned int bufferSize;
 };
 
+//音声データ
+struct LoopSoundData
+{
+	SoundData soundData;
+
+	IXAudio2SourceVoice* pSourceVoice = nullptr;
+};
+
 struct ObjectData
 {
 	std::string fileName;

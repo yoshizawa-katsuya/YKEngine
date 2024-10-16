@@ -104,6 +104,20 @@ SoundData Audio::SoundLoadWave(const std::string& fileName)
 
 }
 
+LoopSoundData Audio::LoopSoundLoadWave(const std::string& fileName)
+{
+	
+	LoopSoundData loopSoundData;
+
+	loopSoundData.soundData = SoundLoadWave(fileName);
+
+	//波形フォーマットを元にSoundVoiceの生成
+	HRESULT result;
+	result = xAudio2_->CreateSourceVoice(&loopSoundData.pSourceVoice, &loopSoundData.soundData.wfex);
+
+	return loopSoundData;
+}
+
 void Audio::SoundPlayWave(const SoundData& soundData)
 {
 
@@ -122,29 +136,38 @@ void Audio::SoundPlayWave(const SoundData& soundData)
 	//波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
 	result = pSourceVoice->Start();
+
 }
 
-void Audio::SoundLoopPlayWave(const SoundData& soundData)
+void Audio::SoundLoopPlayWave(const LoopSoundData& loopSoundData)
 {
 
 	HRESULT result;
 
-	//波形フォーマットを元にSoundVoiceの生成
-	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
-
 	//再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundData.pBuffer;
-	buf.AudioBytes = soundData.bufferSize;
+	buf.pAudioData = loopSoundData.soundData.pBuffer;
+	buf.AudioBytes = loopSoundData.soundData.bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 
 	//ループ再生の設定
 	buf.LoopCount = XAUDIO2_LOOP_INFINITE;
 
 	//波形データの再生
-	result = pSourceVoice->SubmitSourceBuffer(&buf);
-	result = pSourceVoice->Start();
+	result = loopSoundData.pSourceVoice->SubmitSourceBuffer(&buf);
+	result = loopSoundData.pSourceVoice->Start();
+}
+
+void Audio::SoundStopWave(const LoopSoundData& loopSoundData)
+{
+
+	if (loopSoundData.pSourceVoice) {
+		//再生を停止
+		loopSoundData.pSourceVoice->Stop(0);
+
+		loopSoundData.pSourceVoice->FlushSourceBuffers();
+	}
+
 }
 
 void Audio::SoundUnload(SoundData* soundData)
@@ -156,5 +179,14 @@ void Audio::SoundUnload(SoundData* soundData)
 	soundData->pBuffer = 0;
 	soundData->bufferSize = 0;
 	soundData->wfex = {};
+
+}
+
+void Audio::SoundUnload(LoopSoundData* loopSoundData)
+{
+
+	delete loopSoundData->pSourceVoice;
+
+	SoundUnload(&loopSoundData->soundData);
 
 }
