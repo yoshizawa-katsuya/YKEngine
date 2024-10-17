@@ -62,6 +62,8 @@ public:
 
 	void SetTranslate(Vector3& translate) { worldTransform_.translation_ = translate; }
 
+	void ChaeckSpaceKey();
+
 private:
 
 	//Transform変数を作る
@@ -116,6 +118,18 @@ private:
 	const float kBlank = 0.01f;
 	//マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
+
+	// スペースキーを押した時間
+	int kPushTime = 0;
+
+	// スペースキーを押しているか
+	bool isPushSpace = false;
+
+	// 上下移動のクールタイム
+	const int kMoveInterval = 60;
+
+	int kMoveTimer = 0;
+
 
 };
 

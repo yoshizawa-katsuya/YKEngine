@@ -124,3 +124,14 @@ Vector2 Input::GetMouseVelocity()
 	return Vector2((float)mouseState_.lX, (float)mouseState_.lY);
 
 }
+
+bool Input::IsPushKeyPre(BYTE keyNumber)
+{
+	if (keyPre_[keyNumber]) {
+		return true;
+	}
+
+	// そうでなければfalseを返す
+	return false;
+}
+
