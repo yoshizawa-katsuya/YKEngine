@@ -26,6 +26,14 @@ void SpritePlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primit
 
 }
 
+void SpritePlatform::PreBackGroundDraw()
+{
+	
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBackGroundSprite);
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+}
+
 void SpritePlatform::PreDraw()
 {
 

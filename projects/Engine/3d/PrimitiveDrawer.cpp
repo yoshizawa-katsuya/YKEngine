@@ -20,6 +20,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNoneSprite)) = CreateGraphicsPipeline(BlendMode::kBlendModeNoneSprite, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBackGroundSprite)) = CreateGraphicsPipeline(BlendMode::kBackGroundSprite, dxCommon);
+
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeAddParticle)) = CreateGraphicsPipeline(BlendMode::kBlendModeAddParticle, dxCommon);
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kLineMode)) = CreateGraphicsPipeline(BlendMode::kLineMode, dxCommon);
@@ -319,6 +321,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	switch (blendMode) {
 	case BlendMode::kBlendModeNoneSprite:
+	case BlendMode::kBackGroundSprite:
 		//裏面（時計回り）を表示する
 		rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 		break;
@@ -431,6 +434,13 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		//Depthの機能を有効化する
 		depthStencilDesc.DepthEnable = true;
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		break;
+
+	case BlendMode::kBackGroundSprite:
+		depthStencilDesc.DepthEnable = FALSE;  // 深度バッファ無効化
+		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;  // 深度への書き込み無効
+		depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+		depthStencilDesc.StencilEnable = FALSE;
 		break;
 	}
 	//比較関数はLessEqual。つまり、近ければ描画される

@@ -20,6 +20,7 @@ enum class BlendMode {
 	kBlendModeScreen,	//スクリーン
 
 	kBlendModeNoneSprite,
+	kBackGroundSprite,
 
 	kBlendModeAddParticle,
 

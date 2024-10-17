@@ -67,6 +67,9 @@ private:
 	std::unique_ptr<Model> modelPlayer_;
 	std::unique_ptr<Model> modelBlock_;
 
+	//uint32_t textureHandle_;
+	//std::unique_ptr<Sprite> sprite_;
+
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 

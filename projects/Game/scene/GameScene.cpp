@@ -53,6 +53,15 @@ void GameScene::Initialize() {
 	modelBlock_->Initialize(modelPlatform_);
 	modelBlock_->CreateModel("./resources/block", "block.obj");
 	
+	/*
+	//テクスチャハンドルの生成
+	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
+
+	//スプライトの生成
+	sprite_ = std::make_unique<Sprite>();
+	sprite_->Initialize(textureHandle_, spritePlatform_);
+	*/
+
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
@@ -134,7 +143,11 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 
-	
+	//Spriteの背景描画前処理
+	spritePlatform_->PreBackGroundDraw();
+
+	//sprite_->Draw();
+
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//プレイヤーの描画
@@ -150,7 +163,7 @@ void GameScene::Draw() {
 		}
 	}
 
-	//Spriteの描画前処理
+	//Spriteの前景描画前処理
 	spritePlatform_->PreDraw();
 	
 }
