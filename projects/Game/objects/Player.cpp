@@ -13,7 +13,11 @@ void Player::Initialize(Model* model) {
 	
 	worldTransform_.Initialize();
 
-	Vector3 startVelocity = { 0.01f,0.0f,0.0f };
+	worldTransform_.translation_.y = 1.0f;
+
+	worldTransform_.UpdateMatrix();
+
+	Vector3 startVelocity = { 0.025f,0.0f,0.0f };
 
 	velocity_ = startVelocity;
 
@@ -21,6 +25,10 @@ void Player::Initialize(Model* model) {
 }
 
 void Player::Update() {
+
+	if (Input::GetInstance()->PushKey(DIK_R)) {
+		worldTransform_.translation_ = { 1.0f,6.5f,0.0f };
+	}
 
 	//移動入力
 	Move();
@@ -156,6 +164,10 @@ void Player::Move()
 
 	ChaeckSpaceKey();
 
+	UpMove();
+
+	DownMove();
+
 }
 
 void Player::MapCollision(CollisionMapInfo& info)
@@ -194,10 +206,23 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 	//右上点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
 		hit = true;
 	}
 
@@ -239,12 +264,26 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 
 	//ブロックにヒット?
 	if (hit) {
@@ -285,10 +324,23 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
 		hit = true;
 	}
 
@@ -330,10 +382,23 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 	// 左下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
 		hit = true;
 	}
 
@@ -464,10 +529,10 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner)
 
 void Player::ChaeckSpaceKey()
 {
-	// 前のフレームと今のフレームでスペースキーを押して居なかったらreturn
-	if (!Input::GetInstance()->PushKey(DIK_SPACE) && !Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
-		return;
-	}
+	//// 前のフレームと今のフレームでスペースキーを押して居なかったらreturn
+	//if (!Input::GetInstance()->PushKey(DIK_SPACE) && !Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
+	//	return;
+	//}
 
 	if (!kMoveTimer == 0) {
    		kMoveTimer--;
@@ -478,7 +543,7 @@ void Player::ChaeckSpaceKey()
 	int borderTime = 18;
 
 	// スペースキーを押して、isPushSpaceがfalseだったら
-	if (Input::GetInstance()->PushKey(DIK_SPACE) && !isPushSpace && kMoveTimer == 0) {
+	if (Input::GetInstance()->PushKey(DIK_SPACE) && !Input::GetInstance()->IsPushKeyPre(DIK_SPACE) && !isPushSpace && kMoveTimer == 0) {
 		isPushSpace = true;
 
 		kPushTime += 1;
@@ -492,6 +557,8 @@ void Player::ChaeckSpaceKey()
 		}
 
 		if (kPushTime == borderTime) {
+
+			isDownMove = true;
 
   			isPushSpace = false;
 
@@ -510,11 +577,34 @@ void Player::ChaeckSpaceKey()
 
 	if (!isPushSpace && !kPushTime == 0) {
 
+		isUpMove = true;
+
   		kPushTime = 0;
 
 		// インターバルをセット
 		kMoveTimer = kMoveInterval;
 	}
 
+}
+
+void Player::UpMove()
+{
+
+	if (isUpMove) {
+		worldTransform_.translation_.y += 3.0f;
+
+		isUpMove = false;
+	}
+
+}
+
+void Player::DownMove()
+{
+
+	if (isDownMove) {
+		worldTransform_.translation_.y -= 3.0f;
+
+		isDownMove = false;
+	}
 }
 
