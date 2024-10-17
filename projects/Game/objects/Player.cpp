@@ -26,6 +26,10 @@ void Player::Initialize(Model* model) {
 
 void Player::Update() {
 
+	if (Input::GetInstance()->PushKey(DIK_R)) {
+		worldTransform_.translation_ = { 1.0f,6.5f,0.0f };
+	}
+
 	//移動入力
 	Move();
 
@@ -202,10 +206,23 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 	//右上点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
 		hit = true;
 	}
 
@@ -247,12 +264,26 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 
 	//ブロックにヒット?
 	if (hit) {
@@ -293,10 +324,23 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
 		hit = true;
 	}
 
@@ -338,10 +382,23 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
+		hit = true;
+	}
+
 	// 左下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// 壁
+
+	if (mapChipType == MapChipType::kWall) {
 		hit = true;
 	}
 

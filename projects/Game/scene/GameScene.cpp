@@ -122,6 +122,8 @@ void GameScene::Update() {
 			if (!worldTransformWall) {
 				continue;
 			}
+			worldTransformWall->scale_.x = 0.5f;
+
 			worldTransformWall->UpdateMatrix();
 		}
 	}
