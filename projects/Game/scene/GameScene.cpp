@@ -63,7 +63,7 @@ void GameScene::Initialize() {
 	//マップの生成
 	GeneratrBlocks();
 	
-	//audio_->SoundLoopPlayWave(bgm1_);
+	//audio_->SoundLoopPlayWave(bgm1_, 0.5f);
 
 }
 

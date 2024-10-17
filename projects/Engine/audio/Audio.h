@@ -22,11 +22,11 @@ public:
 
 	LoopSoundData LoopSoundLoadWave(const std::string& fileName);
 
-	//音声再生
-	void SoundPlayWave(const SoundData& soundData);
+	//音声再生。1.0f = 100%の音量
+	void SoundPlayWave(const SoundData& soundData, float volume = 1.0f);
 
-	//ループ再生
-	void SoundLoopPlayWave(const LoopSoundData& loopSoundData);
+	//ループ再生。1.0f = 100%の音量
+	void SoundLoopPlayWave(const LoopSoundData& loopSoundData, float volume = 1.0f);
 
 	//音楽を止める
 	void SoundStopWave(const LoopSoundData& loopSoundData);

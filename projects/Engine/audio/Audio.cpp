@@ -118,7 +118,7 @@ LoopSoundData Audio::LoopSoundLoadWave(const std::string& fileName)
 	return loopSoundData;
 }
 
-void Audio::SoundPlayWave(const SoundData& soundData)
+void Audio::SoundPlayWave(const SoundData& soundData, float volume)
 {
 
 	HRESULT result;
@@ -135,11 +135,12 @@ void Audio::SoundPlayWave(const SoundData& soundData)
 
 	//波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
+	result = pSourceVoice->SetVolume(volume);
 	result = pSourceVoice->Start();
 
 }
 
-void Audio::SoundLoopPlayWave(const LoopSoundData& loopSoundData)
+void Audio::SoundLoopPlayWave(const LoopSoundData& loopSoundData, float volume)
 {
 
 	HRESULT result;
@@ -155,6 +156,7 @@ void Audio::SoundLoopPlayWave(const LoopSoundData& loopSoundData)
 
 	//波形データの再生
 	result = loopSoundData.pSourceVoice->SubmitSourceBuffer(&buf);
+	result = loopSoundData.pSourceVoice->SetVolume(volume);
 	result = loopSoundData.pSourceVoice->Start();
 }
 
