@@ -27,7 +27,8 @@ void GameScene::Initialize() {
 
 	// マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
-	mapChipField_->LoadMapChipCsv("Resources/csv/demoStage.csv");
+	//mapChipField_->LoadMapChipCsv("Resources/csv/demoStage.csv");
+	mapChipField_->CreateRandomMapChip("stage");
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -78,6 +79,14 @@ void GameScene::Initialize() {
 	player_->SetTranslate(playerPosition);
 	player_->SetMapChipField(mapChipField_.get());
 
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Initialize(modelPlayer_.get());
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(2, 7);
+	enemy_->SetTranslate(enemyPosition);
+	enemy_->SetMapChipField(mapChipField_.get());
+
+	enemys_.push_back(enemy_.get());
+
 	//マップの生成
 	GeneratrBlocks();
 	
@@ -122,12 +131,25 @@ void GameScene::Update() {
 			if (!worldTransformWall) {
 				continue;
 			}
+			worldTransformWall->scale_.x = 0.5f;
+
 			worldTransformWall->UpdateMatrix();
 		}
 	}
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//enemy_->Update();
+
+	for (Enemy* enemy : enemys_) {
+		enemy->Update();
+	}
+
+	CheckCollision();
+
+	player_->SetIsUpMove(false);
+	player_->SetIsDownMove(false);
 
 #ifdef _DEBUG
 
@@ -184,6 +206,11 @@ void GameScene::Draw() {
 	modelPlatform_->PreDraw();
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+	//enemy_->Draw(mainCamera_);
+	for (Enemy* enemy : enemys_) {
+		enemy->Draw(mainCamera_);
+	}
 
 	//ブロックの描画
 	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -301,6 +328,41 @@ void GameScene::GeneratrBlocks() {
 				worldTransformWalls_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformWalls_[i][j]->Initialize();
 				worldTransformWalls_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
+}
+
+void GameScene::CheckCollision()
+{
+	{
+
+		Vector3 playerPosition = player_->GetPosition();
+
+		for (Enemy* enemy : enemys_) {
+
+			Vector3 vector3Diff = enemy->GetPosition() - playerPosition;
+
+			float floatDiff = Length(vector3Diff);
+
+			if (floatDiff < 1.0f) {
+
+				// プレイヤーの
+
+				if (player_->GetIsUpMove() || player_->GetIsDownMove()) {
+
+					//delete enemy;
+
+					player_->SetIsUpMove(false);
+
+					player_->SetIsDownMove(false);
+
+					return;
+				}
+				int i = 0;
+
+				return;
+
 			}
 		}
 	}
