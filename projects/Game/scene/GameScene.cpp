@@ -68,6 +68,10 @@ void GameScene::Initialize() {
 	modelThorn_ = std::make_unique<Model>();
 	modelThorn_->Initialize(modelPlatform_);
 	modelThorn_->CreateModel("./resources/thornPanel", "thornPanel.obj");
+
+	modelWTS_ = std::make_unique<Model>();
+	modelWTS_->Initialize(modelPlatform_);
+	modelWTS_->CreateModel("./resources/sideThormWall", "sideThormWall.obj");
 	
 	/*
 	//テクスチャハンドルの生成
@@ -153,9 +157,20 @@ void GameScene::Update() {
 			if (!worldTransformThorn) {
 				continue;
 			}
-			//worldTransformSpring->scale_ = { 2.0f,2.0f,2.0f };
 
 			worldTransformThorn->UpdateMatrix();
+		}
+	}
+
+	//棘壁( 片方だけver )の更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWTSLine : worldTransformWTSs_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformWTS : worldTransformWTSLine) {
+			if (!worldTransformWTS) {
+				continue;
+			}
+			worldTransformWTS->scale_.x = 0.5f;
+
+			worldTransformWTS->UpdateMatrix();
 		}
 	}
 
@@ -267,6 +282,16 @@ void GameScene::Draw() {
 		}
 	}
 
+	//棘壁( 片方だけver )の描画
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWTSLine : worldTransformWTSs_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformWTS : worldTransformWTSLine) {
+			if (!worldTransformWTS) {
+				continue;
+			}
+			modelWTS_->Draw(*worldTransformWTS, mainCamera_);
+		}
+	}
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 	
@@ -321,12 +346,13 @@ void GameScene::GeneratrBlocks() {
 	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
 	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
 
-	// ブロックと床の配列を初期化
+	// 配列を初期化
 	worldTransformBlocks_.resize(numBlockVirtical);
 	worldTransformFloors_.resize(numBlockVirtical);
 	worldTransformWalls_.resize(numBlockVirtical);
 	worldTransformSprings_.resize(numBlockVirtical);
 	worldTransformThorns_.resize(numBlockVirtical);
+	worldTransformWTSs_.resize(numBlockVirtical);
 
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
@@ -334,6 +360,7 @@ void GameScene::GeneratrBlocks() {
 		worldTransformWalls_[i].resize(numBlockHorizontal);
 		worldTransformSprings_[i].resize(numBlockHorizontal);
 		worldTransformThorns_[i].resize(numBlockHorizontal);
+		worldTransformWTSs_[i].resize(numBlockHorizontal);
 	}
 
 	// キューブと床の生成
@@ -372,6 +399,13 @@ void GameScene::GeneratrBlocks() {
 				worldTransformThorns_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformThorns_[i][j]->Initialize();
 				worldTransformThorns_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+
+			//棘壁( 片方だけver )の生成
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kWallThornSide) {
+				worldTransformWTSs_[i][j] = std::make_unique<WorldTransform>();
+				worldTransformWTSs_[i][j]->Initialize();
+				worldTransformWTSs_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
 		}
 	}

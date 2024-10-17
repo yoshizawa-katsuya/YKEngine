@@ -60,6 +60,8 @@ private:
 	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformWalls_;
 	//棘
 	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformThorns_;
+	//棘の壁( 片方だけver )
+	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformWTSs_;//WTS = WallThornSide
 
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;
@@ -79,6 +81,7 @@ private:
 	std::unique_ptr<Model> modelWall_;
 	std::unique_ptr<Model> modelSpring_;
 	std::unique_ptr<Model> modelThorn_;
+	std::unique_ptr<Model> modelWTS_;//WTS = WallThornSide
 
 	//uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
