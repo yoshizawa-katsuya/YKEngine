@@ -34,7 +34,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     if (gMaterial.enableLighting != 0)
     {
         //textureのα値が0のときにPixelを棄却
-        if (textureColor.a <= 0.5)
+        if (textureColor.a <= 0.0)
         {
             discard;
         }
