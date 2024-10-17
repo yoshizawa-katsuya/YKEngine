@@ -48,7 +48,14 @@ private:
 
 	std::unique_ptr<MapChipField> mapChipField_;
 
+	//壁
 	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformBlocks_;
+	//床
+	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformFloors_;
+	//ばね
+	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformSpring_;
+	//棘
+
 
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;
@@ -64,6 +71,7 @@ private:
 
 	std::unique_ptr<Model> modelPlayer_;
 	std::unique_ptr<Model> modelBlock_;
+	std::unique_ptr<Model> modelFloor_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
