@@ -64,6 +64,10 @@ void GameScene::Initialize() {
 	modelSpring_ = std::make_unique<Model>();
 	modelSpring_->Initialize(modelPlatform_);
 	modelSpring_->CreateModel("./resources/spring", "spring.obj");
+
+	modelThorn_ = std::make_unique<Model>();
+	modelThorn_->Initialize(modelPlatform_);
+	modelThorn_->CreateModel("./resources/thornPanel", "thornPanel.obj");
 	
 	/*
 	//テクスチャハンドルの生成
@@ -140,6 +144,18 @@ void GameScene::Update() {
 			//worldTransformSpring->scale_ = { 2.0f,2.0f,2.0f };
 
 			worldTransformSpring->UpdateMatrix();
+		}
+	}
+
+	//棘の更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformThornLine : worldTransformThorns_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformThorn : worldTransformThornLine) {
+			if (!worldTransformThorn) {
+				continue;
+			}
+			//worldTransformSpring->scale_ = { 2.0f,2.0f,2.0f };
+
+			worldTransformThorn->UpdateMatrix();
 		}
 	}
 
@@ -241,6 +257,16 @@ void GameScene::Draw() {
 		}
 	}
 
+	//棘の描画
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformThornLine : worldTransformThorns_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformThorn : worldTransformThornLine) {
+			if (!worldTransformThorn) {
+				continue;
+			}
+			modelThorn_->Draw(*worldTransformThorn, mainCamera_);
+		}
+	}
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 	
@@ -300,12 +326,14 @@ void GameScene::GeneratrBlocks() {
 	worldTransformFloors_.resize(numBlockVirtical);
 	worldTransformWalls_.resize(numBlockVirtical);
 	worldTransformSprings_.resize(numBlockVirtical);
+	worldTransformThorns_.resize(numBlockVirtical);
 
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
 		worldTransformFloors_[i].resize(numBlockHorizontal);
 		worldTransformWalls_[i].resize(numBlockHorizontal);
 		worldTransformSprings_[i].resize(numBlockHorizontal);
+		worldTransformThorns_[i].resize(numBlockHorizontal);
 	}
 
 	// キューブと床の生成
@@ -337,6 +365,13 @@ void GameScene::GeneratrBlocks() {
 				worldTransformSprings_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformSprings_[i][j]->Initialize();
 				worldTransformSprings_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+
+			//棘の生成
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kThorn) {
+				worldTransformThorns_[i][j] = std::make_unique<WorldTransform>();
+				worldTransformThorns_[i][j]->Initialize();
+				worldTransformThorns_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
 		}
 	}
