@@ -58,6 +58,8 @@ private:
 	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformSprings_;
 	//マップ上の動かない壁
 	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformWalls_;
+	//棘壁
+
 
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;
@@ -75,6 +77,7 @@ private:
 	std::unique_ptr<Model> modelBlock_;
 	std::unique_ptr<Model> modelFloor_;
 	std::unique_ptr<Model> modelWall_;
+	std::unique_ptr<Model> modelSpring_;
 
 	//uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
