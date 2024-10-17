@@ -61,7 +61,7 @@ private:
 	const float kBlockHeight = 1.0f;
 
 	// ブロックの個数
-	const uint32_t kNumBlockVirtical = 6;
+	const uint32_t kNumBlockVirtical = 12;
 	const uint32_t kNumBlockHorizontal = 18;
 
 	MapChipData mapChipData_;

@@ -27,7 +27,7 @@ void GameScene::Initialize() {
 
 	// マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
-	mapChipField_->LoadMapChipCsv("Resources/csv/stage1.csv");
+	mapChipField_->LoadMapChipCsv("Resources/csv/demoStage.csv");
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -56,6 +56,10 @@ void GameScene::Initialize() {
 	modelFloor_ = std::make_unique<Model>();
 	modelFloor_->Initialize(modelPlatform_);
 	modelFloor_->CreateModel("./resources/floor", "floor.obj");
+
+	modelWall_ = std::make_unique<Model>();
+	modelWall_->Initialize(modelPlatform_);
+	modelWall_->CreateModel("./resources/wall", "wall.obj");
 	
 	
 	/*
@@ -100,7 +104,7 @@ void GameScene::Update() {
 		}
 	}
 
-	//ブロックの更新
+	//足場の更新
 	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformFloorLine : worldTransformFloors_) {
 		for (std::unique_ptr<WorldTransform>& worldTransformFloor : worldTransformFloorLine) {
 			if (!worldTransformFloor) {
@@ -110,8 +114,15 @@ void GameScene::Update() {
 		}
 	}
 
-	//ばねの更新
-	
+	//壁の更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallLine : worldTransformWalls_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformWall : worldTransformWallLine) {
+			if (!worldTransformWall) {
+				continue;
+			}
+			worldTransformWall->UpdateMatrix();
+		}
+	}
 
 	//プレイヤーの更新
 	player_->Update();
@@ -190,6 +201,16 @@ void GameScene::Draw() {
 		}
 	}
 
+	//壁の描画
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallLine : worldTransformWalls_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformWall : worldTransformWallLine) {
+			if (!worldTransformWall) {
+				continue;
+			}
+			modelWall_->Draw(*worldTransformWall, mainCamera_);
+		}
+	}
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 	
@@ -247,10 +268,12 @@ void GameScene::GeneratrBlocks() {
 	// ブロックと床の配列を初期化
 	worldTransformBlocks_.resize(numBlockVirtical);
 	worldTransformFloors_.resize(numBlockVirtical);  // この位置に移動
+	worldTransformWalls_.resize(numBlockVirtical);
 
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
 		worldTransformFloors_[i].resize(numBlockHorizontal);  // この位置に移動
+		worldTransformWalls_[i].resize(numBlockHorizontal);
 	}
 
 	// キューブと床の生成
@@ -268,6 +291,13 @@ void GameScene::GeneratrBlocks() {
 				worldTransformFloors_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformFloors_[i][j]->Initialize();
 				worldTransformFloors_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+
+			//壁の生成
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kWall) {
+				worldTransformWalls_[i][j] = std::make_unique<WorldTransform>();
+				worldTransformWalls_[i][j]->Initialize();
+				worldTransformWalls_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
 		}
 	}
