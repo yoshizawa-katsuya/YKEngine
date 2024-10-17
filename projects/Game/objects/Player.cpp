@@ -13,7 +13,11 @@ void Player::Initialize(Model* model) {
 	
 	worldTransform_.Initialize();
 
-	Vector3 startVelocity = { 0.01f,0.0f,0.0f };
+	worldTransform_.translation_.y = 1.0f;
+
+	worldTransform_.UpdateMatrix();
+
+	Vector3 startVelocity = { 0.025f,0.0f,0.0f };
 
 	velocity_ = startVelocity;
 
@@ -155,6 +159,10 @@ void Player::Move()
 	worldTransform_.translation_ += velocity_;
 
 	ChaeckSpaceKey();
+
+	UpMove();
+
+	DownMove();
 
 }
 
@@ -464,10 +472,10 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner)
 
 void Player::ChaeckSpaceKey()
 {
-	// 前のフレームと今のフレームでスペースキーを押して居なかったらreturn
-	if (!Input::GetInstance()->PushKey(DIK_SPACE) && !Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
-		return;
-	}
+	//// 前のフレームと今のフレームでスペースキーを押して居なかったらreturn
+	//if (!Input::GetInstance()->PushKey(DIK_SPACE) && !Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
+	//	return;
+	//}
 
 	if (!kMoveTimer == 0) {
    		kMoveTimer--;
@@ -478,7 +486,7 @@ void Player::ChaeckSpaceKey()
 	int borderTime = 18;
 
 	// スペースキーを押して、isPushSpaceがfalseだったら
-	if (Input::GetInstance()->PushKey(DIK_SPACE) && !isPushSpace && kMoveTimer == 0) {
+	if (Input::GetInstance()->PushKey(DIK_SPACE) && !Input::GetInstance()->IsPushKeyPre(DIK_SPACE) && !isPushSpace && kMoveTimer == 0) {
 		isPushSpace = true;
 
 		kPushTime += 1;
@@ -492,6 +500,8 @@ void Player::ChaeckSpaceKey()
 		}
 
 		if (kPushTime == borderTime) {
+
+			isDownMove = true;
 
   			isPushSpace = false;
 
@@ -510,11 +520,34 @@ void Player::ChaeckSpaceKey()
 
 	if (!isPushSpace && !kPushTime == 0) {
 
+		isUpMove = true;
+
   		kPushTime = 0;
 
 		// インターバルをセット
 		kMoveTimer = kMoveInterval;
 	}
 
+}
+
+void Player::UpMove()
+{
+
+	if (isUpMove) {
+		worldTransform_.translation_.y += 3.0f;
+
+		isUpMove = false;
+	}
+
+}
+
+void Player::DownMove()
+{
+
+	if (isDownMove) {
+		worldTransform_.translation_.y -= 3.0f;
+
+		isDownMove = false;
+	}
 }
 

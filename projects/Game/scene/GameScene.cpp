@@ -83,6 +83,8 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	camera_->SetTranslate({ 8.48f,2.24f,-57.32f });
+
 	//カメラの更新
 	camera_->Update();
 
@@ -140,6 +142,7 @@ void GameScene::Update() {
 		isActiveDebugCamera_ = false;
 
 		mainCamera_ = camera_.get();
+
 
 	}
 	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
