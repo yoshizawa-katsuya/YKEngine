@@ -9,6 +9,11 @@ namespace {
 std::map<std::string, MapChipType> mapChipTable = {
     {"0", MapChipType::kBlank},
     {"1", MapChipType::kBlock},
+	{"2", MapChipType::kFloor},
+	{"3", MapChipType::kThorn},
+	{"4", MapChipType::kSpring},
+	{"5", MapChipType::kWall},
+	{"6", MapChipType::kWallThorn},
 };
 
 }
@@ -36,7 +41,7 @@ void MapChipField::LoadMapChipCsv(const std::string& filePath) {
 	// マップチップCSV
 	std::stringstream mapChipCsv;
 	//ファイルの内容を文字列ストリームにコピー
-	mapChipCsv << file.rdbuf();
+	mapChipCsv << file.rdbuf();	
 	//ファイルを閉じる
 	file.close();
 

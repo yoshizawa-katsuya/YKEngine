@@ -27,7 +27,7 @@ void GameScene::Initialize() {
 
 	// マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
-	mapChipField_->LoadMapChipCsv("./resources/csv/blocks.csv");
+	mapChipField_->LoadMapChipCsv("Resources/csv/stage1.csv");
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -52,6 +52,11 @@ void GameScene::Initialize() {
 	modelBlock_ = std::make_unique<Model>();
 	modelBlock_->Initialize(modelPlatform_);
 	modelBlock_->CreateModel("./resources/block", "block.obj");
+
+	modelFloor_ = std::make_unique<Model>();
+	modelFloor_->Initialize(modelPlatform_);
+	modelFloor_->CreateModel("./resources/floor", "floor.obj");
+	
 	
 	/*
 	//テクスチャハンドルの生成
@@ -65,7 +70,7 @@ void GameScene::Initialize() {
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 8);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 4);
 	player_->SetTranslate(playerPosition);
 	player_->SetMapChipField(mapChipField_.get());
 
@@ -94,6 +99,19 @@ void GameScene::Update() {
 			worldTransformBlock->UpdateMatrix();
 		}
 	}
+
+	//ブロックの更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformFloorLine : worldTransformFloors_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformFloor : worldTransformFloorLine) {
+			if (!worldTransformFloor) {
+				continue;
+			}
+			worldTransformFloor->UpdateMatrix();
+		}
+	}
+
+	//ばねの更新
+	
 
 	//プレイヤーの更新
 	player_->Update();
@@ -163,7 +181,16 @@ void GameScene::Draw() {
 		}
 	}
 
-	//Spriteの前景描画前処理
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformFloorLine : worldTransformFloors_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformFloor : worldTransformFloorLine) {
+			if (!worldTransformFloor) {
+				continue;
+			}
+			modelFloor_->Draw(*worldTransformFloor, mainCamera_);
+		}
+	}
+
+	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 	
 }
@@ -173,28 +200,76 @@ void GameScene::Finalize()
 
 }
 
-void GameScene::GeneratrBlocks()
-{
+//void GameScene::GeneratrBlocks()
+//{
+//
+//
+//	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+//	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+//
+//	//要素数を変更する
+//	worldTransformBlocks_.resize(numBlockVirtical);
+//	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+//		worldTransformBlocks_[i].resize(numBlockHorizontal);
+//		worldTransformFloors_[i].resize(numBlockHorizontal);
+//	}
+//
+//	worldTransformFloors_.resize(numBlockVirtical);
+//	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+//	}
+//
+//	// キューブの生成
+//	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+//		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+//			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+//				worldTransformBlocks_[i][j] = std::make_unique<WorldTransform>();
+//				worldTransformBlocks_[i][j]->Initialize();
+//				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+//			}
+//
+//			//床
+//			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kFloor) {
+//				worldTransformFloors_[i][j] = std::make_unique<WorldTransform>();
+//				worldTransformFloors_[i][j]->Initialize();
+//				worldTransformFloors_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+//			}
+//
+//		}
+//	}
+//
+//
+//}
 
-
+void GameScene::GeneratrBlocks() {
 	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
 	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
 
-	//要素数を変更する
+	// ブロックと床の配列を初期化
 	worldTransformBlocks_.resize(numBlockVirtical);
+	worldTransformFloors_.resize(numBlockVirtical);  // この位置に移動
+
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
+		worldTransformFloors_[i].resize(numBlockHorizontal);  // この位置に移動
 	}
 
-	// キューブの生成
+	// キューブと床の生成
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+			// ブロックの生成
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
 				worldTransformBlocks_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformBlocks_[i][j]->Initialize();
 				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
+
+			// 床の生成
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kFloor) {
+				worldTransformFloors_[i][j] = std::make_unique<WorldTransform>();
+				worldTransformFloors_[i][j]->Initialize();
+				worldTransformFloors_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
 		}
 	}
-
 }
+
