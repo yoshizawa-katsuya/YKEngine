@@ -7,14 +7,6 @@
 
 GameScene::~GameScene() {
 
-	for (auto& model : models_) {
-		delete model.second;
-	}
-
-	for (Object3d* object : objects_) {
-		delete object;
-	}
-
 }
 
 void GameScene::Initialize() {
@@ -46,41 +38,15 @@ void GameScene::Initialize() {
 
 	soundData1_ = audio_->SoundLoadWave("./resources/Alarm01.wav");
 
-	/*
+	
 	model_ = std::make_unique<Model>();
 	model_->Initialize(modelPlatform_);
-	model_->CreateFromOBJ("./resources", "plane.obj");
-	*/
+	model_->CreateModel("./resources", "plane.obj");
 	
-	Model* newModel = new Model();
-	newModel->Initialize(modelPlatform_);
-	newModel->CreateModel("./resources", "plane.obj");
-	models_.insert(std::make_pair("plane", newModel));
-
-	newModel = new Model();
-	newModel->Initialize(modelPlatform_);
-	newModel->CreateModel("./resources", "axis.obj");
-	models_.insert(std::make_pair("axis", newModel));
-
-	LevelData* levelData = LevelDataLoad("./resources/", "levelData", ".json");
-
-	//レベルデータからオブジェクトを生成、配置
-	for (ObjectData& objectData : levelData->objects) {
-		//ファイルから登録済みモデルを検索
-		Model* model = nullptr;
-		decltype(models_)::iterator it = models_.find(objectData.fileName);
-		if (it != models_.end())
-		{
-			model = it->second;
-		}
-		//モデルを指定して3Dオブジェクトを生成
-		Object3d* newObject = new Object3d();
-		newObject->Initialize(model, mainCamera_);
-
-		newObject->SetTransform(objectData.transform);
-		//配列に登録
-		objects_.push_back(newObject);
-	}
+	model2_ = std::make_unique<Model>();
+	model2_->Initialize(modelPlatform_);
+	model2_->CreateModel("./resources", "axis.obj");
+	
 
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle_[0], spritePlatform_);
@@ -99,15 +65,15 @@ void GameScene::Initialize() {
 		sprite->SetPosition(position);
 		sprites_.push_back(std::move(sprite));
 	}
-	
+	*/
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(model_.get(), mainCamera_);
 
 	//3dオブジェクトの初期化
 	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize(modelAxis_.get(), mainCamera_);
-	*/
+	object3d_->Initialize(model2_.get(), mainCamera_);
+	
 	
 
 	//emitter_ = std::make_unique<ParticleEmitter>("circle", 3, 0.5f);
@@ -124,10 +90,10 @@ void GameScene::Update() {
 	}
 
 	//プレイヤーの更新
-	//player_->Update();
+	player_->Update();
 
 	//3dオブジェクトの更新
-	//object3d_->Update("teapot");
+	object3d_->Update("teapot");
 
 	
 
@@ -235,15 +201,12 @@ void GameScene::Draw() {
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
-	//プレイヤーの描画
-	//player_->Draw();
+	
 	//3dオブジェクトの描画
-	//object3d_->Draw();
+	object3d_->Draw();
 
-	for (Object3d* object : objects_) {
-		object->Draw();
-	}
-
+	//プレイヤーの描画
+	player_->Draw();
 	//ParticleManager::GetInstance()->Draw();
 
 	//modelの描画
