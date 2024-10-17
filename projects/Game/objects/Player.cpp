@@ -12,6 +12,12 @@ void Player::Initialize(Model* model) {
 	model_ = model;
 	
 	worldTransform_.Initialize();
+
+	Vector3 startVelocity = { 0.01f,0.0f,0.0f };
+
+	velocity_ = startVelocity;
+
+	kMoveTimer = 0;
 }
 
 void Player::Update() {
@@ -72,74 +78,84 @@ void Player::Draw(Camera* camera) {
 
 	model_->Draw(worldTransform_, camera);
 
-	
 }
 
 void Player::Move()
 {
-	// 移動入力
-	// 接地状態
-	if (onGround_) {
+#pragma region 元のコード
 
-		// 左右移動操作
-		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
+	//// 移動入力
+	//// 接地状態
+	//if (onGround_) {
 
-			// 左右加速
-			Vector3 acceleration = {};
-			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-				// 左移動中の右入力
-				if (velocity_.x < 0.0f) {
-					// 速度と逆方向に入力中は急ブレーキ
-					velocity_.x *= (1.0f - kAttenuation);
-				}
-				acceleration.x += kAcceleration;
-				if (lrDirection_ != LRDirection::kRight) {
-					lrDirection_ = LRDirection::kRight;
-					turnFirstRotationY_ = worldTransform_.rotation_.y;
-					turnTimer_ = 1.0f;
-				}
-			}
-			else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-				// 右入力中の左入力
-				if (velocity_.x > 0.0f) {
-					// 速度と逆方向に入力中は急ブレーキ
-					velocity_.x *= (1.0f - kAttenuation);
-				}
-				acceleration.x -= kAcceleration;
-				if (lrDirection_ != LRDirection::kLeft) {
-					lrDirection_ = LRDirection::kLeft;
-					turnFirstRotationY_ = worldTransform_.rotation_.y;
-					turnTimer_ = 1.0f;
-				}
-			}
-			// 加速/減速
-			velocity_.x += acceleration.x;
+	//	// 左右移動操作
+	//	if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 
-			// 最大速度制限
-			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
+	//		// 左右加速
+	//		Vector3 acceleration = {};
+	//		if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+	//			// 左移動中の右入力
+	//			if (velocity_.x < 0.0f) {
+	//				// 速度と逆方向に入力中は急ブレーキ
+	//				velocity_.x *= (1.0f - kAttenuation);
+	//			}
+	//			acceleration.x += kAcceleration;
+	//			if (lrDirection_ != LRDirection::kRight) {
+	//				lrDirection_ = LRDirection::kRight;
+	//				turnFirstRotationY_ = worldTransform_.rotation_.y;
+	//				turnTimer_ = 1.0f;
+	//			}
+	//		}
+	//		else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+	//			// 右入力中の左入力
+	//			if (velocity_.x > 0.0f) {
+	//				// 速度と逆方向に入力中は急ブレーキ
+	//				velocity_.x *= (1.0f - kAttenuation);
+	//			}
+	//			acceleration.x -= kAcceleration;
+	//			if (lrDirection_ != LRDirection::kLeft) {
+	//				lrDirection_ = LRDirection::kLeft;
+	//				turnFirstRotationY_ = worldTransform_.rotation_.y;
+	//				turnTimer_ = 1.0f;
+	//			}
+	//		}
+	//		// 加速/減速
+	//		velocity_.x += acceleration.x;
 
-		}
-		else {
+	//		// 最大速度制限
+	//		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
 
-			// 非入力時には移動減衰をかける
-			velocity_.x *= (1.0f - kAttenuation);
-		}
+	//	}
+	//	else {
 
-		if (Input::GetInstance()->PushKey(DIK_UP)) {
-			// ジャンプ加速
-			velocity_.y += kJumpAcceleration;
-			onGround_ = false;
-		}
+	//		// 非入力時には移動減衰をかける
+	//		velocity_.x *= (1.0f - kAttenuation);
+	//	}
 
-	}
-	// 空中
-	else {
 
-		// 落下速度
-		velocity_.y += -kGravityAcceleration;
-		// 落下速度制限
-		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
-	}
+
+	//	if (Input::GetInstance()->PushKey(DIK_UP)) {
+	//		// ジャンプ加速
+	//		velocity_.y += kJumpAcceleration;
+	//		onGround_ = false;
+	//	}
+
+	//}
+	//// 空中
+	//else {
+
+	//	// 落下速度
+	//	velocity_.y += -kGravityAcceleration;
+	//	// 落下速度制限
+	//	velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
+	//}
+
+#pragma endregion 元のコード
+
+	worldTransform_.translation_ += velocity_;
+
+	ChaeckSpaceKey();
+
 }
 
 void Player::MapCollision(CollisionMapInfo& info)
@@ -415,10 +431,19 @@ void Player::GroundCollision(const CollisionMapInfo& info)
 void Player::WallCollision(const CollisionMapInfo& info)
 {
 
+#pragma region 元のコード
+
 	//壁接触による減速
+	//if (info.isWallCollision) {
+	//	velocity_.x *= (1.0f - kAttenuationWall);
+	//}
+
+#pragma endregion 元のコード
+
 	if (info.isWallCollision) {
-		velocity_.x *= (1.0f - kAttenuationWall);
+		velocity_.x *= -1.0f;
 	}
+
 }
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner)
@@ -434,6 +459,62 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner)
 	return { center.x + offsetTable[static_cast<uint32_t>(corner)].x,
 			center.y + offsetTable[static_cast<uint32_t>(corner)].y,
 			center.z + offsetTable[static_cast<uint32_t>(corner)].z };
+
+}
+
+void Player::ChaeckSpaceKey()
+{
+	// 前のフレームと今のフレームでスペースキーを押して居なかったらreturn
+	if (!Input::GetInstance()->PushKey(DIK_SPACE) && !Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
+		return;
+	}
+
+	if (!kMoveTimer == 0) {
+   		kMoveTimer--;
+		return;
+	}
+
+	// 上下移動の境界時間
+	int borderTime = 18;
+
+	// スペースキーを押して、isPushSpaceがfalseだったら
+	if (Input::GetInstance()->PushKey(DIK_SPACE) && !isPushSpace && kMoveTimer == 0) {
+		isPushSpace = true;
+
+		kPushTime += 1;
+	}
+
+	if (isPushSpace) {
+
+		// スペースキーを押しっぱなしだったら
+		if (Input::GetInstance()->PushKey(DIK_SPACE) && Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
+			kPushTime += 1;
+		}
+
+		if (kPushTime == borderTime) {
+
+  			isPushSpace = false;
+
+			kPushTime = 0;
+
+			// インターバルをセット
+			kMoveTimer = kMoveInterval;
+		}
+
+		// スペースキーを離した瞬間
+		else if (!Input::GetInstance()->PushKey(DIK_SPACE) && Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
+			isPushSpace = false;
+		}
+
+	}
+
+	if (!isPushSpace && !kPushTime == 0) {
+
+  		kPushTime = 0;
+
+		// インターバルをセット
+		kMoveTimer = kMoveInterval;
+	}
 
 }
 

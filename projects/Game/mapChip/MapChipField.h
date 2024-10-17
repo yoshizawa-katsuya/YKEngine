@@ -6,13 +6,17 @@
 
 enum class MapChipType {
 	kBlank, // 空白
-	kBlock, // ブロック
+	kBlock, // ステージの壁
+	kWall, //動かない壁
+	kSpring, //ばね
+	kThorn, //棘
+	kWallThorn, //棘壁( 元々、壁についてるやつ )
+	kFloor, //床
 };
 
 struct MapChipData {
 	std::vector<std::vector<MapChipType>> data;
 };
-
 
 /// <summary>
 ///マップチップフィールド
@@ -57,8 +61,8 @@ private:
 	const float kBlockHeight = 1.0f;
 
 	// ブロックの個数
-	const uint32_t kNumBlockVirtical = 10;
-	const uint32_t kNumBlockHorizontal = 10;
+	const uint32_t kNumBlockVirtical = 6;
+	const uint32_t kNumBlockHorizontal = 18;
 
 	MapChipData mapChipData_;
 
