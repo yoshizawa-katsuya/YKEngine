@@ -64,6 +64,10 @@ public:
 
 	void ChaeckSpaceKey();
 
+	void UpMove();
+
+	void DownMove();
+
 private:
 
 	//Transform変数を作る
@@ -126,10 +130,12 @@ private:
 	bool isPushSpace = false;
 
 	// 上下移動のクールタイム
-	const int kMoveInterval = 60;
+	const int kMoveInterval = 30;
 
 	int kMoveTimer = 0;
 
+	bool isUpMove = false;
 
+	bool isDownMove = false;
 };
 
