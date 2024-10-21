@@ -27,14 +27,12 @@ void MyGame::Initialize()
 void MyGame::Finalize()
 {
 
-	
 	//解放処理
 	//delete gameScene_;
 	//gameScene_ = nullptr;
 
 
 	YKFramework::Finalize();
-
 
 }
 
