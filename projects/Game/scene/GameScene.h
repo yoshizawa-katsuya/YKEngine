@@ -15,6 +15,7 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "MapChipField.h"
+#include "Enemy.h"
 
 class GameScene : public BaseScene
 {
@@ -34,6 +35,10 @@ private:
 
 	//マップの生成
 	void GeneratrBlocks();
+
+	// プレイヤーと敵の当たり判定
+	void CheckCollision();
+	
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -58,6 +63,8 @@ private:
 	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformSprings_;
 	//マップ上の動かない壁
 	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformWalls_;
+	//棘壁
+
 
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;
@@ -75,6 +82,7 @@ private:
 	std::unique_ptr<Model> modelBlock_;
 	std::unique_ptr<Model> modelFloor_;
 	std::unique_ptr<Model> modelWall_;
+	std::unique_ptr<Model> modelSpring_;
 
 	//uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
@@ -82,5 +90,10 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	std::unique_ptr<Enemy> enemy_;
+
+	std::list<Enemy*> enemys_;
+	
+	//bool IsVerticalMovement_ = false;
 };
 

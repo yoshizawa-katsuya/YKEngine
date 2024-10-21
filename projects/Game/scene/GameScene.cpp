@@ -27,7 +27,8 @@ void GameScene::Initialize() {
 
 	// マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
-	mapChipField_->LoadMapChipCsv("Resources/csv/demoStage.csv");
+	//mapChipField_->LoadMapChipCsv("Resources/csv/demoStage.csv");
+	mapChipField_->CreateRandomMapChip("stage");
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -60,7 +61,10 @@ void GameScene::Initialize() {
 	modelWall_ = std::make_unique<Model>();
 	modelWall_->Initialize(modelPlatform_);
 	modelWall_->CreateModel("./resources/wall", "wall.obj");
-	
+
+	modelSpring_ = std::make_unique<Model>();
+	modelSpring_->Initialize(modelPlatform_);
+	modelSpring_->CreateModel("./resources/spring", "spring.obj");
 	
 	/*
 	//テクスチャハンドルの生成
@@ -77,6 +81,14 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 4);
 	player_->SetTranslate(playerPosition);
 	player_->SetMapChipField(mapChipField_.get());
+
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Initialize(modelPlayer_.get());
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(2, 7);
+	enemy_->SetTranslate(enemyPosition);
+	enemy_->SetMapChipField(mapChipField_.get());
+
+	enemys_.push_back(enemy_.get());
 
 	//マップの生成
 	GeneratrBlocks();
@@ -128,8 +140,31 @@ void GameScene::Update() {
 		}
 	}
 
+	//ばねの更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformSpringLine : worldTransformSprings_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformSpring : worldTransformSpringLine) {
+			if (!worldTransformSpring) {
+				continue;
+			}
+			//worldTransformSpring->scale_ = { 2.0f,2.0f,2.0f };
+
+			worldTransformSpring->UpdateMatrix();
+		}
+	}
+
 	//プレイヤーの更新
 	player_->Update();
+
+	//enemy_->Update();
+
+	for (Enemy* enemy : enemys_) {
+		enemy->Update();
+	}
+
+	CheckCollision();
+
+	player_->SetIsUpMove(false);
+	player_->SetIsDownMove(false);
 
 #ifdef _DEBUG
 
@@ -187,6 +222,11 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	//enemy_->Draw(mainCamera_);
+	for (Enemy* enemy : enemys_) {
+		enemy->Draw(mainCamera_);
+	}
+
 	//ブロックの描画
 	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (std::unique_ptr<WorldTransform>& worldTransformBlock : worldTransformBlockLine) {
@@ -213,6 +253,16 @@ void GameScene::Draw() {
 				continue;
 			}
 			modelWall_->Draw(*worldTransformWall, mainCamera_);
+		}
+	}
+
+	//ばねの描画
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformSpringLine : worldTransformSprings_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformSpring : worldTransformSpringLine) {
+			if (!worldTransformSpring) {
+				continue;
+			}
+			modelSpring_->Draw(*worldTransformSpring, mainCamera_);
 		}
 	}
 
@@ -272,13 +322,15 @@ void GameScene::GeneratrBlocks() {
 
 	// ブロックと床の配列を初期化
 	worldTransformBlocks_.resize(numBlockVirtical);
-	worldTransformFloors_.resize(numBlockVirtical);  // この位置に移動
+	worldTransformFloors_.resize(numBlockVirtical);
 	worldTransformWalls_.resize(numBlockVirtical);
+	worldTransformSprings_.resize(numBlockVirtical);
 
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
-		worldTransformFloors_[i].resize(numBlockHorizontal);  // この位置に移動
+		worldTransformFloors_[i].resize(numBlockHorizontal);
 		worldTransformWalls_[i].resize(numBlockHorizontal);
+		worldTransformSprings_[i].resize(numBlockHorizontal);
 	}
 
 	// キューブと床の生成
@@ -303,6 +355,48 @@ void GameScene::GeneratrBlocks() {
 				worldTransformWalls_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformWalls_[i][j]->Initialize();
 				worldTransformWalls_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+
+			//ばねの生成
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kSpring) {
+				worldTransformSprings_[i][j] = std::make_unique<WorldTransform>();
+				worldTransformSprings_[i][j]->Initialize();
+				worldTransformSprings_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
+}
+
+void GameScene::CheckCollision()
+{
+	{
+
+		Vector3 playerPosition = player_->GetPosition();
+
+		for (Enemy* enemy : enemys_) {
+
+			Vector3 vector3Diff = enemy->GetPosition() - playerPosition;
+
+			float floatDiff = Length(vector3Diff);
+
+			if (floatDiff < 1.0f) {
+
+				// プレイヤーの
+
+				if (player_->GetIsUpMove() || player_->GetIsDownMove()) {
+
+					//delete enemy;
+
+					player_->SetIsUpMove(false);
+
+					player_->SetIsDownMove(false);
+
+					return;
+				}
+				int i = 0;
+
+				return;
+
 			}
 		}
 	}

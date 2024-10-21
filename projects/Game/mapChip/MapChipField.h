@@ -54,6 +54,10 @@ public:
 
 	uint32_t GetNumBlockHorizontal();
 
+	void CreateRandomMapChip(const std::string& baseFilePath);
+
+	void RandomLoadMapChipCsv(const std::string& filePath, int index);
+
 private:
 	
 	// 1ブロックのサイズ
@@ -61,7 +65,7 @@ private:
 	const float kBlockHeight = 1.0f;
 
 	// ブロックの個数
-	const uint32_t kNumBlockVirtical = 12;
+	const uint32_t kNumBlockVirtical = 30;
 	const uint32_t kNumBlockHorizontal = 18;
 
 	MapChipData mapChipData_;

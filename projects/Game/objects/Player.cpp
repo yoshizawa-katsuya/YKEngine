@@ -160,8 +160,6 @@ void Player::Move()
 
 #pragma endregion 元のコード
 
-	worldTransform_.translation_ += velocity_;
-
 	ChaeckSpaceKey();
 
 	UpMove();
@@ -592,10 +590,7 @@ void Player::UpMove()
 
 	if (isUpMove) {
 		worldTransform_.translation_.y += 3.0f;
-
-		isUpMove = false;
 	}
-
 }
 
 void Player::DownMove()
@@ -603,8 +598,16 @@ void Player::DownMove()
 
 	if (isDownMove) {
 		worldTransform_.translation_.y -= 3.0f;
-
-		isDownMove = false;
 	}
+}
+
+void Player::SetIsUpMove(bool flag)
+{
+	isUpMove = flag;
+}
+
+void Player::SetIsDownMove(bool flag)
+{
+	isDownMove = flag;
 }
 
