@@ -113,3 +113,65 @@ MapChipField::IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3&
 uint32_t MapChipField::GetNumBlockVirtical() { return kNumBlockVirtical; }
 
 uint32_t MapChipField::GetNumBlockHorizontal() { return kNumBlockHorizontal; }
+
+void MapChipField::CreateRandomMapChip(const std::string& baseFilePath)
+{
+	ResetMapChipDate();
+
+	unsigned int currenttime = unsigned int(time(nullptr));
+
+	srand(currenttime);
+	// ランダムなcsvファイルパスを作る
+
+	for (int i = 0; i < 5; ++i) {
+
+		int stageNum = rand() % 12 + 1;
+
+		std::string filePath = "Resources/csv/" + baseFilePath + std::to_string(stageNum) + ".csv";
+
+		RandomLoadMapChipCsv(filePath, i);
+
+	}
+}
+
+void MapChipField::RandomLoadMapChipCsv(const std::string& filePath, int index)
+{
+
+	//ResetMapChipDate();
+
+	//ファイルを開く
+	std::ifstream file;
+	file.open(filePath);
+	assert(file.is_open());
+
+	// マップチップCSV
+	std::stringstream mapChipCsv;
+	//ファイルの内容を文字列ストリームにコピー
+	mapChipCsv << file.rdbuf();
+	//ファイルを閉じる
+	file.close();
+
+	std::string line;
+
+	for (uint32_t i = 0; i < 6; ++i) {
+
+		getline(mapChipCsv, line);
+
+		//1行分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+
+		for (uint32_t j = 0; j < 18; ++j) {
+
+			std::string word;
+			getline(line_stream, word, ',');
+
+			if (mapChipTable.contains(word)) {
+				mapChipData_.data[index * 6 + i][j] = mapChipTable[word];
+			}
+
+		}
+
+	}
+
+
+}

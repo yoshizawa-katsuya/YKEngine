@@ -62,11 +62,26 @@ public:
 
 	void SetTranslate(Vector3& translate) { worldTransform_.translation_ = translate; }
 
+
+	// スペースキーを押しているか
 	void ChaeckSpaceKey();
 
+	// 上行動
 	void UpMove();
 
+	// した行動
 	void DownMove();
+
+	// ポジション
+	Vector3 GetPosition() { return worldTransform_.translation_; }
+
+	void SetIsUpMove(bool flag);
+
+	void SetIsDownMove(bool flag);
+
+	bool GetIsUpMove() { return isUpMove; }
+
+	bool GetIsDownMove() { return isDownMove; }
 
 private:
 
