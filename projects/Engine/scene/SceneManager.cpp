@@ -25,6 +25,9 @@ void SceneManager::Finalize()
 void SceneManager::Update()
 {
 
+	//実行中シーンを更新する
+	scene_->Update();
+
 	//次シーンの予約があるなら
 	if (nextScene_) {
 		//旧シーンの終了
@@ -44,9 +47,6 @@ void SceneManager::Update()
 		scene_->Initialize();
 	}
 
-	//実行中シーンを更新する
-	scene_->Update();
-
 }
 
 void SceneManager::Draw()
@@ -64,4 +64,18 @@ void SceneManager::ChengeScene(const std::string& sceneName)
 
 	//次シーンを生成
 	nextScene_ = sceneFactory_->CreateScene(sceneName);
+
+	if (!scene_) {
+
+		//シーン切り替え
+		scene_ = nextScene_;
+		nextScene_ = nullptr;
+
+		//シーンマネージャをセット
+		scene_->SetSceneManager(this);
+
+		//次シーンを初期化する
+		scene_->Initialize();
+
+	}
 }

@@ -31,9 +31,9 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 
-	uint32_t textureHandle_;
+	//uint32_t textureHandle_;
 
-	std::unique_ptr<Sprite> sprite_;
+	//std::unique_ptr<Sprite> sprite_;
 
 
 };
