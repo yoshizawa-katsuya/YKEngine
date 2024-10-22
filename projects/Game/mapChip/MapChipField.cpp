@@ -122,57 +122,121 @@ void MapChipField::CreateRandomMapChip(const std::string& baseFilePath)
 	unsigned int currenttime = unsigned int(time(nullptr));
 
 	srand(currenttime);
-	// ランダムなcsvファイルパスを作る
 
-	for (int i = 0; i < 5; ++i) {
+	RandomLoadMapChipCsv(baseFilePath);
+}
+
+void MapChipField::RandomLoadMapChipCsv(const std::string& baseFilePath)
+{
+
+	for (int index = 0; index < 5; ++index) {
 
 		int stageNum = rand() % 12 + 1;
 
 		std::string filePath = "Resources/csv/" + baseFilePath + std::to_string(stageNum) + ".csv";
 
-		RandomLoadMapChipCsv(filePath, i);
+		if (index < 2) {
 
-	}
-}
+			//ファイルを開く
+			std::ifstream file;
+			file.open(filePath);
+			assert(file.is_open());
 
-void MapChipField::RandomLoadMapChipCsv(const std::string& filePath, int index)
-{
+			// マップチップCSV
+			std::stringstream mapChipCsv;
+			//ファイルの内容を文字列ストリームにコピー
+			mapChipCsv << file.rdbuf();
+			//ファイルを閉じる
+			file.close();
 
-	//ResetMapChipDate();
+			std::string line;
 
-	//ファイルを開く
-	std::ifstream file;
-	file.open(filePath);
-	assert(file.is_open());
+			for (uint32_t i = 0; i < 6; ++i) {
 
-	// マップチップCSV
-	std::stringstream mapChipCsv;
-	//ファイルの内容を文字列ストリームにコピー
-	mapChipCsv << file.rdbuf();
-	//ファイルを閉じる
-	file.close();
+				getline(mapChipCsv, line);
 
-	std::string line;
+				//1行分の文字列をストリームに変換して解析しやすくする
+				std::istringstream line_stream(line);
 
-	for (uint32_t i = 0; i < 6; ++i) {
+				for (uint32_t j = 0; j < 18; ++j) {
 
-		getline(mapChipCsv, line);
+					std::string word;
+					getline(line_stream, word, ',');
 
-		//1行分の文字列をストリームに変換して解析しやすくする
-		std::istringstream line_stream(line);
-
-		for (uint32_t j = 0; j < 18; ++j) {
-
-			std::string word;
-			getline(line_stream, word, ',');
-
-			if (mapChipTable.contains(word)) {
-				mapChipData_.data[index * 6 + i][j] = mapChipTable[word];
+					if (mapChipTable.contains(word)) {
+						mapChipData_.data[index * 6 + i][j] = mapChipTable[word];
+					}
+				}
 			}
-
 		}
+		else if (index == 2) {
 
+			filePath = "Resources/csv/playerSpawn.csv";
+
+			std::ifstream file;
+			file.open(filePath);
+			assert(file.is_open());
+
+			// マップチップCSV
+			std::stringstream mapChipCsv;
+			//ファイルの内容を文字列ストリームにコピー
+			mapChipCsv << file.rdbuf();
+			//ファイルを閉じる
+			file.close();
+
+			std::string line;
+
+			for (uint32_t i = 0; i < 3; ++i) {
+
+				getline(mapChipCsv, line);
+
+				//1行分の文字列をストリームに変換して解析しやすくする
+				std::istringstream line_stream(line);
+
+				for (uint32_t j = 0; j < 18; ++j) {
+
+					std::string word;
+					getline(line_stream, word, ',');
+
+					if (mapChipTable.contains(word)) {
+						mapChipData_.data[index * 6 + i][j] = mapChipTable[word];
+					}
+				}
+			}
+		}
+		else if(index > 2) {
+			
+			//ファイルを開く
+			std::ifstream file;
+			file.open(filePath);
+			assert(file.is_open());
+
+			// マップチップCSV
+			std::stringstream mapChipCsv;
+			//ファイルの内容を文字列ストリームにコピー
+			mapChipCsv << file.rdbuf();
+			//ファイルを閉じる
+			file.close();
+
+			std::string line;
+
+			for (uint32_t i = 0; i < 6; ++i) {
+
+				getline(mapChipCsv, line);
+
+				//1行分の文字列をストリームに変換して解析しやすくする
+				std::istringstream line_stream(line);
+
+				for (uint32_t j = 0; j < 18; ++j) {
+
+					std::string word;
+					getline(line_stream, word, ',');
+
+					if (mapChipTable.contains(word)) {
+						mapChipData_.data[(index * 6) - 3 + i][j] = mapChipTable[word];
+					}
+				}
+			}
+		}
 	}
-
-
 }
