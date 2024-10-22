@@ -55,11 +55,12 @@ void TitleScene::Update()
 
 	ImGui::End();
 	*/
+#endif // _DEBUG
+
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GAMEPLAY");
 	}
-#endif // _DEBUG
 
 }
 
