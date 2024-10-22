@@ -26,20 +26,6 @@ void TitleScene::Update()
 	/*
 	ImGui::Begin("Window");
 
-	if (ImGui::TreeNode("Sprite")) {
-		ImGui::DragFloat2("tranlate", &sprite_->GetPosition().x, 0.01f);
-		ImGui::DragFloat2("size", &sprite_->GetSize().x, 0.01f);
-		ImGui::SliderAngle("rotate", &sprite_->GetRotation());
-		ImGui::ColorEdit4("color", &sprite_->GetColor().x);
-		ImGui::DragFloat2("anchprPoint", &sprite_->GetAnchorPoint().x, 0.01f);
-		ImGui::Checkbox("IsFlipX", &sprite_->GetIsFlipX());
-		ImGui::Checkbox("IsFlipY", &sprite_->GetIsFlipY());
-		ImGui::DragFloat2("textureLeftTop", &sprite_->GetTextureLeftTop().x, 0.01f);
-		ImGui::DragFloat2("textureSize", &sprite_->GetTextureSize().x, 0.01f);
-
-		ImGui::TreePop();
-	}
-
 	ImGui::End();
 	*/
 	if (input_->TriggerKey(DIK_RETURN)) {
