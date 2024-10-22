@@ -204,6 +204,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\lib\Fade.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -372,6 +375,9 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Fade.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

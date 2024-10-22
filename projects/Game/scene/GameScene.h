@@ -16,6 +16,7 @@
 #include "ParticleEmitter.h"
 #include "MapChipField.h"
 #include "Enemy.h"
+#include "Fade.h"
 
 class GameScene : public BaseScene
 {
@@ -39,6 +40,15 @@ private:
 	// プレイヤーと敵の当たり判定
 	void CheckCollision();
 	
+	//ゲームプレイフェーズの更新
+	void PlayPhaseUpdate();
+
+	//シーンのフェーズ
+	enum class Phase {
+		kFadeIn,	//フェードイン
+		kPlay,	//ゲームプレイ
+		kFadoOut,	//フェードアウト
+	};
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -102,5 +112,10 @@ private:
 	std::list<Enemy*> enemys_;
 	
 	//bool IsVerticalMovement_ = false;
+
+	std::unique_ptr<Fade> fade_ = nullptr;
+
+	//現在のフェーズ
+	Phase phase_ = Phase::kFadeIn;
 };
 

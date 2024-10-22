@@ -5,6 +5,7 @@
 #include "ParticleManager.h"
 #include "LevelDataLoader.h"
 #include "Matrix.h"
+#include "SceneManager.h"
 
 GameScene::~GameScene() {
 	
@@ -107,6 +108,9 @@ void GameScene::Initialize() {
 	
 	//audio_->SoundLoopPlayWave(bgm1_, 0.5f);
 
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
 void GameScene::Update() {
@@ -120,98 +124,40 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 
-	//ブロックの更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock) {
-				continue;
-			}
-			worldTransformBlock->UpdateMatrix();
+	switch (phase_) {
+	case GameScene::Phase::kFadeIn:
+
+		fade_->Update();
+
+		PlayPhaseUpdate();
+
+		if (fade_->IsFinished()) {
+			fade_->Stop();
+			phase_ = Phase::kPlay;
 		}
-	}
+		break;
 
-	//足場の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformFloorLine : worldTransformFloors_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformFloor : worldTransformFloorLine) {
-			if (!worldTransformFloor) {
-				continue;
-			}
-			worldTransformFloor->UpdateMatrix();
+	case GameScene::Phase::kPlay:
+
+		PlayPhaseUpdate();
+
+		/*
+		if (input_->TriggerKey(DIK_SPACE)) {
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			phase_ = Phase::kFadoOut;
 		}
-	}
+		*/
+		break;
 
-	//壁の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallLine : worldTransformWalls_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformWall : worldTransformWallLine) {
-			if (!worldTransformWall) {
-				continue;
-			}
-			worldTransformWall->scale_.x = 0.5f;
-
-			worldTransformWall->UpdateMatrix();
+	case GameScene::Phase::kFadoOut:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			//シーン切り替え依頼
+			sceneManager_->ChengeScene("TITLE");
 		}
+		break;
 	}
-
-	//ばねの更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformSpringLine : worldTransformSprings_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformSpring : worldTransformSpringLine) {
-			if (!worldTransformSpring) {
-				continue;
-			}
-			//worldTransformSpring->scale_ = { 2.0f,2.0f,2.0f };
-
-			worldTransformSpring->UpdateMatrix();
-		}
-	}
-
-	//棘の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformThornLine : worldTransformThorns_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformThorn : worldTransformThornLine) {
-			if (!worldTransformThorn) {
-				continue;
-			}
-
-			worldTransformThorn->UpdateMatrix();
-		}
-	}
-
-	//棘壁( 片方だけver )の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWTSLine : worldTransformWTSs_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformWTS : worldTransformWTSLine) {
-			if (!worldTransformWTS) {
-				continue;
-			}
-			worldTransformWTS->scale_.x = 0.5f;
-
-			worldTransformWTS->UpdateMatrix();
-		}
-	}
-
-	//棘壁( 両方ver )の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallThornLine : worldTransformWallThorns_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformWallThorn : worldTransformWallThornLine) {
-			if (!worldTransformWallThorn) {
-				continue;
-			}
-			worldTransformWallThorn->scale_.x = 0.5f;
-
-			worldTransformWallThorn->UpdateMatrix();
-		}
-	}
-
-	//プレイヤーの更新
-	player_->Update();
-
-	//enemy_->Update();
-
-	for (Enemy* enemy : enemys_) {
-		enemy->Update();
-	}
-
-	CheckCollision();
-
-	player_->SetIsUpMove(false);
-	player_->SetIsDownMove(false);
+	
 
 #ifdef _DEBUG
 
@@ -346,6 +292,8 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 	
+	fade_->Draw();
+
 }
 
 void GameScene::Finalize()
@@ -504,5 +452,103 @@ void GameScene::CheckCollision()
 			}
 		}
 	}
+}
+
+void GameScene::PlayPhaseUpdate()
+{
+
+	//ブロックの更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock) {
+				continue;
+			}
+			worldTransformBlock->UpdateMatrix();
+		}
+	}
+
+	//足場の更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformFloorLine : worldTransformFloors_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformFloor : worldTransformFloorLine) {
+			if (!worldTransformFloor) {
+				continue;
+			}
+			worldTransformFloor->UpdateMatrix();
+		}
+	}
+
+	//壁の更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallLine : worldTransformWalls_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformWall : worldTransformWallLine) {
+			if (!worldTransformWall) {
+				continue;
+			}
+			worldTransformWall->scale_.x = 0.5f;
+
+			worldTransformWall->UpdateMatrix();
+		}
+	}
+
+	//ばねの更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformSpringLine : worldTransformSprings_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformSpring : worldTransformSpringLine) {
+			if (!worldTransformSpring) {
+				continue;
+			}
+			//worldTransformSpring->scale_ = { 2.0f,2.0f,2.0f };
+
+			worldTransformSpring->UpdateMatrix();
+		}
+	}
+
+	//棘の更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformThornLine : worldTransformThorns_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformThorn : worldTransformThornLine) {
+			if (!worldTransformThorn) {
+				continue;
+			}
+
+			worldTransformThorn->UpdateMatrix();
+		}
+	}
+
+	//棘壁( 片方だけver )の更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWTSLine : worldTransformWTSs_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformWTS : worldTransformWTSLine) {
+			if (!worldTransformWTS) {
+				continue;
+			}
+			worldTransformWTS->scale_.x = 0.5f;
+
+			worldTransformWTS->UpdateMatrix();
+		}
+	}
+
+	//棘壁( 両方ver )の更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallThornLine : worldTransformWallThorns_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformWallThorn : worldTransformWallThornLine) {
+			if (!worldTransformWallThorn) {
+				continue;
+			}
+			worldTransformWallThorn->scale_.x = 0.5f;
+
+			worldTransformWallThorn->UpdateMatrix();
+		}
+	}
+
+	//プレイヤーの更新
+	player_->Update();
+
+	//enemy_->Update();
+
+	for (Enemy* enemy : enemys_) {
+		enemy->Update();
+	}
+
+	CheckCollision();
+
+	player_->SetIsUpMove(false);
+	player_->SetIsDownMove(false);
+
 }
 

@@ -7,6 +7,7 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Sprite.h"
+#include "Fade.h"
 
 class TitleScene : public BaseScene
 {
@@ -22,6 +23,13 @@ public:
 
 private:
 
+	//シーンのフェーズ
+	enum class Phase {
+		kFadeIn,	//フェードイン
+		kMain,	//メイン部
+		kFadoOut,	//フェードアウト
+	};
+
 	//デバイス
 	DirectXCommon* dxCommon_;
 
@@ -35,6 +43,9 @@ private:
 
 	//std::unique_ptr<Sprite> sprite_;
 
+	std::unique_ptr<Fade> fade_ = nullptr;
 
+	//現在のフェーズ
+	Phase phase_ = Phase::kFadeIn;
 };
 
