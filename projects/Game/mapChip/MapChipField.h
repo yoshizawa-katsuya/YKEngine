@@ -13,6 +13,7 @@ enum class MapChipType {
 	kWallThorn, //棘壁( 元々、壁についてるやつ )
 	kFloor, //床
 	kWallThornSide,//棘壁( 片方だけver)
+	kGoal, //ゴール
 };
 
 struct MapChipData {
