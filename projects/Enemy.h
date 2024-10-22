@@ -58,7 +58,7 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
-	void SetTranslate(Vector3& translate) { worldTransform_.translation_ = translate; }
+	void SetTranslate(Vector3& translate) { worldTransform_.translation_ = { translate.x,translate.y - 0.5f,translate.z }; }
 
 	// ポジション
 	Vector3 GetPosition() { return worldTransform_.translation_; }

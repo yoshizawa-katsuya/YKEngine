@@ -60,7 +60,7 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
-	void SetTranslate(Vector3& translate) { worldTransform_.translation_ = translate; }
+	void SetTranslate(Vector3& translate) { worldTransform_.translation_ = { translate.x,translate.y - 0.5f,translate.z }; }
 
 
 	// スペースキーを押しているか
@@ -74,14 +74,19 @@ public:
 
 	// ポジション
 	Vector3 GetPosition() { return worldTransform_.translation_; }
-
+	
+	// 上下移動フラグのセッター、ゲッター
 	void SetIsUpMove(bool flag);
-
 	void SetIsDownMove(bool flag);
-
 	bool GetIsUpMove() { return isUpMove; }
-
 	bool GetIsDownMove() { return isDownMove; }
+
+	/// <summary>
+	/// 生存フラッグのセッター、ゲッター
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsAlive() { return isAlive_; }
+	void SetIsAlive(bool isAlive) { isAlive_ = isAlive; }
 
 private:
 
@@ -152,5 +157,7 @@ private:
 	bool isUpMove = false;
 
 	bool isDownMove = false;
+
+	bool isAlive_ = true;
 };
 
