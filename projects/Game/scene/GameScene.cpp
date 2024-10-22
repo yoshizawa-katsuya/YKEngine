@@ -5,6 +5,7 @@
 #include "ParticleManager.h"
 #include "LevelDataLoader.h"
 #include "Matrix.h"
+#include "SceneManager.h"
 
 GameScene::~GameScene() {
 	
@@ -111,7 +112,15 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	camera_->SetTranslate({ 8.48f,2.24f,-57.32f });
+	Vector3 pp = player_->GetPosition();
+
+	Vector3 cp = camera_->GetTranslate();
+
+	float diff = pp.y - cp.y;
+
+	float movement = diff * 0.1f;
+
+	camera_->SetTranslate({ 8.48f,cp.y + movement,-57.32f });
 
 	//カメラの更新
 	camera_->Update();
@@ -475,31 +484,46 @@ void GameScene::CheckCollision()
 {
 	{
 
+		// プレイヤーの位置を取得
 		Vector3 playerPosition = player_->GetPosition();
 
+		// 敵が居る分回す
 		for (Enemy* enemy : enemys_) {
 
+			// 敵の位置を取得
 			Vector3 vector3Diff = enemy->GetPosition() - playerPosition;
 
+			// プレイヤーと敵の距離を計算
 			float floatDiff = Length(vector3Diff);
 
 			if (floatDiff < 1.0f) {
 
-				// プレイヤーの
+				// プレイヤーの上下移動のフラグが立っている状態で当たったら
 
-				if (player_->GetIsUpMove() || player_->GetIsDownMove()) {
-
-					//delete enemy;
+				if (player_->GetIsUpMove()) {
 
 					player_->SetIsUpMove(false);
 
-					player_->SetIsDownMove(false);
+					enemys_.remove(enemy);
 
 					return;
 				}
-				int i = 0;
+				else if(player_->GetIsDownMove()){
 
-				return;
+					player_->SetIsDownMove(false);
+
+					enemys_.remove(enemy);
+
+					return;
+				}
+
+				// 上下移動フラグが立っていない状態で当たったら
+
+				player_->SetIsAlive(false);
+
+				if (!player_->GetIsAlive()) {
+					sceneManager_->ChengeScene("GAMEOVER");
+				}
 
 			}
 		}

@@ -57,7 +57,7 @@ public:
 
 	void CreateRandomMapChip(const std::string& baseFilePath);
 
-	void RandomLoadMapChipCsv(const std::string& filePath, int index);
+	void RandomLoadMapChipCsv(const std::string& filePath);
 
 private:
 	
@@ -66,7 +66,7 @@ private:
 	const float kBlockHeight = 1.0f;
 
 	// ブロックの個数
-	const uint32_t kNumBlockVirtical = 30;
+	const uint32_t kNumBlockVirtical = 27;
 	const uint32_t kNumBlockHorizontal = 18;
 
 	MapChipData mapChipData_;
