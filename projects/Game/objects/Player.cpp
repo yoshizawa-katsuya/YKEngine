@@ -13,6 +13,8 @@ void Player::Initialize(Model* model) {
 	
 	worldTransform_.Initialize();
 
+	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
+
 	worldTransform_.translation_.y = 1.0f;
 
 	worldTransform_.UpdateMatrix();
@@ -95,8 +97,7 @@ void Player::Move()
 	//// 接地状態
 	//if (onGround_) {
 
-	//	// 左右移動操作
-	//	if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
+	//	// 左右移動操作()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 
 	//		// 左右加速
 	//		Vector3 acceleration = {};
@@ -109,7 +110,8 @@ void Player::Move()
 	//			acceleration.x += kAcceleration;
 	//			if (lrDirection_ != LRDirection::kRight) {
 	//				lrDirection_ = LRDirection::kRight;
-	//				turnFirstRotationY_ = worldTransform_.rotation_.y;
+	//				turnFirstRotationY_ = worldTransform_.rotatio
+	//	if (Input::GetInstancen_.y;
 	//				turnTimer_ = 1.0f;
 	//			}
 	//		}
