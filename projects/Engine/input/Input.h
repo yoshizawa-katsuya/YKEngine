@@ -46,6 +46,13 @@ public:
 	/// <returns>トリガーか</returns>
 	bool ReleaseKey(BYTE keyNumber);
 
+	/// <summary>
+	/// キーを押しっぱなしにしているかチェック
+	/// </summary>
+	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
+	/// <returns>トリガーか</returns>
+	bool HoldKey(BYTE keyNumber);
+
 	bool PushMouseLeft();
 
 	bool TrigerMouseLeft();

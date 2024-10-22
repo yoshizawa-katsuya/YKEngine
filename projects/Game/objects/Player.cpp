@@ -567,7 +567,7 @@ void Player::ChaeckSpaceKey()
 	if (isPushSpace) {
 
 		// スペースキーを押しっぱなしだったら
-		if (Input::GetInstance()->PushKey(DIK_SPACE) && Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
+		if (Input::GetInstance()->HoldKey(DIK_SPACE)) {
 			kPushTime += 1;
 		}
 

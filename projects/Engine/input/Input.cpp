@@ -99,6 +99,16 @@ bool Input::ReleaseKey(BYTE keyNumber)
 	return false;
 }
 
+bool Input::HoldKey(BYTE keyNumber)
+{
+	//指定キーを押し続けていればtrueを返す
+	if (keyPre_[keyNumber] && key_[keyNumber]) {
+		return true;
+	}
+	//そうでなければfalseを返す
+	return false;
+}
+
 bool Input::PushMouseLeft()
 {
 	if (mouseState_.rgbButtons[0] & 0x80) {
