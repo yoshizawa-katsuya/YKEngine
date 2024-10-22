@@ -13,6 +13,8 @@ void Player::Initialize(Model* model) {
 	
 	worldTransform_.Initialize();
 
+	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
+
 	worldTransform_.translation_.y = 1.0f;
 
 	worldTransform_.UpdateMatrix();
