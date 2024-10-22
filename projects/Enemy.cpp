@@ -55,7 +55,18 @@ void Enemy::Draw(Camera* camera)
 void Enemy::Move()
 {
 
+	// 旋回制御
+	if (turnTimer_ > 0.0f) {
+		turnTimer_ -= 1.0f / 60.0f;
 
+		// 左右の自キャラ角度テーブル
+		float destinationRotationYTable[] = { std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> *3.0f / 2.0f };
+
+		// 状態に応じた角度を取得する
+		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+		// 自キャラの角度を設定する
+		worldTransform_.rotation_.y = turnFirstRotationY_ * EaseOut(turnTimer_) + destinationRotationY * (1 - EaseOut(turnTimer_));
+	}
 
 }
 
@@ -400,7 +411,21 @@ void Enemy::WallCollision(const CollisionMapInfo& info)
 	if (info.isWallCollision) {
 		velocity_.x *= -1.0f;
 	}
+	if (velocity_.x > 0.0f) {
+		if (lrDirection_ != LRDirection::kRight) {
+			lrDirection_ = LRDirection::kRight;
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = 0.5f;
+		}
+	}
 
+	if (velocity_.x < 0.0f) {
+		if (lrDirection_ != LRDirection::kLeft) {
+			lrDirection_ = LRDirection::kLeft;
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = 0.5f;
+		}
+	}
 }
 
 Vector3 Enemy::CornerPosition(const Vector3& center, Corner corner)

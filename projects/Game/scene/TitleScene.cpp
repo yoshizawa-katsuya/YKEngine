@@ -42,7 +42,7 @@ void TitleScene::Update()
 
 	ImGui::End();
 	*/
-	if (input_->TriggerKey(DIK_RETURN)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GAMEPLAY");
 	}

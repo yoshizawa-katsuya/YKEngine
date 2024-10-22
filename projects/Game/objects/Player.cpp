@@ -26,60 +26,59 @@ void Player::Initialize(Model* model) {
 
 void Player::Update() {
 
-	if (Input::GetInstance()->PushKey(DIK_R)) {
-		worldTransform_.translation_ = { 1.0f,6.5f,0.0f };
-	}
+	if (isAlive_) {
 
-	//移動入力
-	Move();
+		//移動入力
+		Move();
 
-	//衝突判定を初期化
-	CollisionMapInfo collisionMapInfo;
-	//移動量に速度の値をコピー
-	collisionMapInfo.move = velocity_;
+		//衝突判定を初期化
+		CollisionMapInfo collisionMapInfo;
+		//移動量に速度の値をコピー
+		collisionMapInfo.move = velocity_;
 
-	//マップ衝突チェック
-	MapCollision(collisionMapInfo);
+		//マップ衝突チェック
+		MapCollision(collisionMapInfo);
 
-	//移動
-	MoveAppli(collisionMapInfo);
+		//移動
+		MoveAppli(collisionMapInfo);
 
-	CeilingCollision(collisionMapInfo);
+		CeilingCollision(collisionMapInfo);
 
-	GroundCollision(collisionMapInfo);
+		GroundCollision(collisionMapInfo);
 
-	WallCollision(collisionMapInfo);
+		WallCollision(collisionMapInfo);
 
-	// 旋回制御
-	if (turnTimer_ > 0.0f) {
-		turnTimer_ -= 1.0f / 60.0f;
+		// 旋回制御
+		if (turnTimer_ > 0.0f) {
+			turnTimer_ -= 1.0f / 60.0f;
 
-		// 左右の自キャラ角度テーブル
-		float destinationRotationYTable[] = { std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> *3.0f / 2.0f };
+			// 左右の自キャラ角度テーブル
+			float destinationRotationYTable[] = { std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> *3.0f / 2.0f };
 
-		// 状態に応じた角度を取得する
-		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-		// 自キャラの角度を設定する
-		worldTransform_.rotation_.y = turnFirstRotationY_ * EaseOut(turnTimer_) + destinationRotationY * (1 - EaseOut(turnTimer_));
-	}
+			// 状態に応じた角度を取得する
+			float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+			// 自キャラの角度を設定する
+			worldTransform_.rotation_.y = turnFirstRotationY_ * EaseOut(turnTimer_) + destinationRotationY * (1 - EaseOut(turnTimer_));
+		}
 
-	worldTransform_.UpdateMatrix();
+		worldTransform_.UpdateMatrix();
 
 #ifdef _DEBUG
 
-	ImGui::Begin("Player");
-	if (ImGui::TreeNode("Model")) {
-		ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
-		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
-		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
-		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
+		ImGui::Begin("Player");
+		if (ImGui::TreeNode("Model")) {
+			ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
+			ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
+			ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
+			ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
 
-		ImGui::TreePop();
-	}
-	ImGui::End();
+			ImGui::TreePop();
+		}
+		ImGui::End();
 
 #endif // _DEBUG	
 
+	}
 }
 
 void Player::Draw(Camera* camera) {
@@ -159,6 +158,7 @@ void Player::Move()
 	//}
 
 #pragma endregion 元のコード
+
 
 	ChaeckSpaceKey();
 
@@ -505,8 +505,23 @@ void Player::WallCollision(const CollisionMapInfo& info)
 
 	if (info.isWallCollision) {
 		velocity_.x *= -1.0f;
-	}
 
+		if (velocity_.x > 0.0f) {
+			if (lrDirection_ != LRDirection::kRight) {
+				lrDirection_ = LRDirection::kRight;
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = 0.5f;
+			}
+		}
+
+		if (velocity_.x < 0.0f) {
+			if (lrDirection_ != LRDirection::kLeft) {
+				lrDirection_ = LRDirection::kLeft;
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = 0.5f;
+			}
+		}
+	}
 }
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner)
