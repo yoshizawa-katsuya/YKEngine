@@ -558,7 +558,7 @@ void Player::ChaeckSpaceKey()
 	int borderTime = 18;
 
 	// スペースキーを押して、isPushSpaceがfalseだったら
-	if (Input::GetInstance()->PushKey(DIK_SPACE) && !Input::GetInstance()->IsPushKeyPre(DIK_SPACE) && !isPushSpace && kMoveTimer == 0) {
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isPushSpace && kMoveTimer == 0) {
 		isPushSpace = true;
 
 		kPushTime += 1;
@@ -584,7 +584,7 @@ void Player::ChaeckSpaceKey()
 		}
 
 		// スペースキーを離した瞬間
-		else if (!Input::GetInstance()->PushKey(DIK_SPACE) && Input::GetInstance()->IsPushKeyPre(DIK_SPACE)) {
+		else if (Input::GetInstance()->ReleaseKey(DIK_SPACE)) {
 			isPushSpace = false;
 		}
 

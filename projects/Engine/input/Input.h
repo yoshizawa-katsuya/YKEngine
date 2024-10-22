@@ -33,11 +33,18 @@ public:
 	bool PushKey(BYTE keyNumber);
 
 	/// <summary>
-	/// キーのトリガーをチェック
+	/// キーの押した瞬間をチェック
 	/// </summary>
 	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
 	/// <returns>トリガーか</returns>
 	bool TriggerKey(BYTE keyNumber);
+
+	/// <summary>
+	/// キーの離した瞬間をチェック
+	/// </summary>
+	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
+	/// <returns>トリガーか</returns>
+	bool ReleaseKey(BYTE keyNumber);
 
 	bool PushMouseLeft();
 

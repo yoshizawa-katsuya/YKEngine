@@ -81,8 +81,18 @@ bool Input::PushKey(BYTE keyNumber)
 
 bool Input::TriggerKey(BYTE keyNumber)
 {
-	//指定キーをトリガーでtrueを返す
+	//指定キーを押した瞬間でtrueを返す
 	if (!keyPre_[keyNumber] && key_[keyNumber]) {
+		return true;
+	}
+	//そうでなければfalseを返す
+	return false;
+}
+
+bool Input::ReleaseKey(BYTE keyNumber)
+{
+	//指定キーを離した瞬間でtrueを返す
+	if (keyPre_[keyNumber] && !key_[keyNumber]) {
 		return true;
 	}
 	//そうでなければfalseを返す
