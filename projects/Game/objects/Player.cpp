@@ -197,6 +197,8 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 	MapChipType mapChipType;
 	//真上の当たり判定を行う
 	bool hit = false;
+	//ばねに当たったかどうか
+	bool springHit = false;
 	//左上点の判定
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
@@ -211,6 +213,11 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 		hit = true;
 	}
 
+	//ばね
+	if (mapChipType == MapChipType::kSpring) {
+		springHit = true;
+	}
+
 	//右上点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -219,9 +226,13 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 	}
 
 	// 壁
-
 	if (mapChipType == MapChipType::kWall) {
 		hit = true;
+	}
+
+	//ばね
+	if (mapChipType == MapChipType::kSpring) {
+		 springHit= true;
 	}
 
 	if (hit) {
@@ -232,6 +243,10 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 		info.move.y = std::max(0.0f, (rect.bottom - worldTransform_.translation_.y) - (kHeight / 2 + kBlank));
 		//天井に当たったことを記録する
 		info.isCeilingCollision = true;
+	}
+
+	if (springHit) {
+		worldTransform_.translation_.y += 6.0f;
 	}
 
 }
@@ -255,6 +270,8 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 	MapChipType mapChipType;
 	// 真下の当たり判定を行う
 	bool hit = false;
+	//ばねに当たったかどうか
+	bool springHit = false;
 	// 左下点の判定
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
@@ -267,6 +284,11 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 
 	if (mapChipType == MapChipType::kWall) {
 		hit = true;
+	}
+
+	//ばね
+	if (mapChipType == MapChipType::kSpring) {
+		springHit = true;
 	}
 
 	// 右下点の判定
@@ -282,6 +304,11 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 		hit = true;
 	}
 
+	//ばね
+	if (mapChipType == MapChipType::kSpring) {
+		springHit = true;
+	}
+
 
 	//ブロックにヒット?
 	if (hit) {
@@ -292,6 +319,10 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 		info.move.y = std::min(0.0f, (rect.top - worldTransform_.translation_.y) + (kHeight / 2 + kBlank));
 		// 地面に当たったことを記録する
 		info.landing = true;
+	}
+
+	if (springHit) {
+		worldTransform_.translation_.y += 6.0f;
 	}
 
 }
@@ -315,6 +346,8 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 	MapChipType mapChipType;
 	// 真右の当たり判定を行う
 	bool hit = false;
+	//ばねに当たったかどうか
+	bool springHit = false;
 	// 右上点の判定
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
@@ -327,6 +360,11 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 
 	if (mapChipType == MapChipType::kWall) {
 		hit = true;
+	}
+
+	//ばね
+	if (mapChipType == MapChipType::kSpring) {
+		springHit = true;
 	}
 
 	// 右下点の判定
@@ -342,6 +380,11 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 		hit = true;
 	}
 
+	//ばね
+	if (mapChipType == MapChipType::kSpring) {
+		springHit = true;
+	}
+
 	// ブロックにヒット?
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
@@ -351,6 +394,10 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 		info.move.x = std::max(0.0f, (rect.left - worldTransform_.translation_.x) - (kWidth / 2 + kBlank));
 		// 地面に当たったことを記録する
 		info.isWallCollision = true;
+	}
+
+	if (springHit) {
+		worldTransform_.translation_.y += 6.0f;
 	}
 
 }
@@ -373,6 +420,8 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 	MapChipType mapChipType;
 	// 真左の当たり判定を行う
 	bool hit = false;
+	//ばねに当たったかどうか
+	bool springHit = false;
 	// 左上点の判定
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
@@ -385,6 +434,11 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 
 	if (mapChipType == MapChipType::kWall) {
 		hit = true;
+	}
+
+	//ばね
+	if (mapChipType == MapChipType::kSpring) {
+		springHit = true;
 	}
 
 	// 左下点の判定
@@ -400,6 +454,11 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 		hit = true;
 	}
 
+	//ばね
+	if (mapChipType == MapChipType::kSpring) {
+		springHit = true;
+	}
+
 	// ブロックにヒット?
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
@@ -409,6 +468,10 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 		info.move.x = std::min(0.0f, (rect.right - worldTransform_.translation_.x) + (kWidth / 2 + kBlank));
 		// 地面に当たったことを記録する
 		info.isWallCollision = true;
+	}
+
+	if (springHit) {
+		worldTransform_.translation_.y += 6.0f;
 	}
 
 }
