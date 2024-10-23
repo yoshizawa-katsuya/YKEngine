@@ -96,6 +96,8 @@ public:
 
 	void Blinking();
 
+	int GetPlyerHP() { return playerHP_; }
+
 private:
 
 	//Transform変数を作る

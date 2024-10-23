@@ -127,6 +127,16 @@ private:
 
 	std::unique_ptr<Sprite> background_ = nullptr;
 
+	uint32_t HP1Sprite_ = 0;
+	uint32_t HP2Sprite_ = 0;
+	uint32_t HP3Sprite_ = 0;
+
+	std::unique_ptr<Sprite> HP1_ = nullptr;
+	std::unique_ptr<Sprite> HP2_ = nullptr;
+	std::unique_ptr<Sprite> HP3_ = nullptr;
+
+	//int playerHp = 0;
+
 	SoundData hitSE01_;
 
 	std::unique_ptr<Fade> fade_;
