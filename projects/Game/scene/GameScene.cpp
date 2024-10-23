@@ -264,10 +264,10 @@ void GameScene::Update() {
 
 		CheckOutGoal();
 
-	CheckIsAlive();
+		CheckIsAlive();
 
-	player_->SetIsUpMove(false);
-	player_->SetIsDownMove(false);
+		player_->SetIsUpMove(false);
+		player_->SetIsDownMove(false);
 
 #ifdef _DEBUG
 
@@ -411,6 +411,11 @@ void GameScene::Draw() {
 				modelGoal_->Draw(*worldTransformGoal, mainCamera_);
 			}
 		}
+	}
+
+	//説明画面
+	if (setumeiCoolTimer_ >= 0) {
+		setumeiSprite_->Draw();
 	}
 
 	//説明画面
