@@ -545,9 +545,9 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 	if (springHit) {
 		worldTransform_.translation_.y += 6.0f;
 
-		if (worldTransform_.translation_.y >= 24.0f) {
+		if (worldTransform_.translation_.y >= 24.5f) {
 
-			worldTransform_.translation_.y = 24.0f;
+			worldTransform_.translation_.y = 24.5f;
 
 		}
 	}
@@ -678,9 +678,9 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 	if (springHit) {
 		worldTransform_.translation_.y += 6.0f;
 
-		if (worldTransform_.translation_.y >= 24.0f) {
+		if (worldTransform_.translation_.y >= 24.5f) {
 
-			worldTransform_.translation_.y = 24.0f;
+			worldTransform_.translation_.y = 24.5f;
 
 		}
 	}
