@@ -14,6 +14,7 @@ enum class MapChipType {
 	kFloor, //床
 	kWallThornSide,//棘壁( 片方だけver)
 	kGoal, //ゴール
+	kSpawnSpace, // 敵の生成空間
 };
 
 struct MapChipData {
