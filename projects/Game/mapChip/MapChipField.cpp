@@ -130,6 +130,9 @@ void MapChipField::CreateRandomMapChip(const std::string& baseFilePath)
 
 void MapChipField::RandomLoadMapChipCsv(const std::string& baseFilePath)
 {
+	for (int i = 0; i < 18; ++i) {
+		mapChipData_.data[0][i] = MapChipType::kBlock;
+	}
 
 	for (int index = 0; index < 5; ++index) {
 
@@ -166,7 +169,7 @@ void MapChipField::RandomLoadMapChipCsv(const std::string& baseFilePath)
 					getline(line_stream, word, ',');
 
 					if (mapChipTable.contains(word)) {
-						mapChipData_.data[index * 6 + i][j] = mapChipTable[word];
+						mapChipData_.data[1 + index * 6 + i][j] = mapChipTable[word];
 					}
 				}
 			}
@@ -201,7 +204,7 @@ void MapChipField::RandomLoadMapChipCsv(const std::string& baseFilePath)
 					getline(line_stream, word, ',');
 
 					if (mapChipTable.contains(word)) {
-						mapChipData_.data[index * 6 + i][j] = mapChipTable[word];
+						mapChipData_.data[1 + index * 6 + i][j] = mapChipTable[word];
 					}
 				}
 			}
@@ -235,10 +238,12 @@ void MapChipField::RandomLoadMapChipCsv(const std::string& baseFilePath)
 					getline(line_stream, word, ',');
 
 					if (mapChipTable.contains(word)) {
-						mapChipData_.data[(index * 6) - 3 + i][j] = mapChipTable[word];
+						mapChipData_.data[(1 + index * 6) - 3 + i][j] = mapChipTable[word];
 					}
 				}
 			}
 		}
+
+
 	}
 }

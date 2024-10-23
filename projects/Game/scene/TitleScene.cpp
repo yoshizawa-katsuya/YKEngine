@@ -56,9 +56,12 @@ void TitleScene::Update()
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
+		if (!isFadeOut) {
 
-		fade_->Start(Fade::Status::FadeOut, 1.0f);
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
 
+		}
+		
 		isFadeOut = true;
 
 	}
