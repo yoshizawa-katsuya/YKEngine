@@ -210,6 +210,9 @@
     <ClCompile Include="GameClearScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -384,6 +387,9 @@
     </ClInclude>
     <ClInclude Include="GameClearScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

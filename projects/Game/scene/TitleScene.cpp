@@ -34,6 +34,9 @@ void TitleScene::Initialize()
 	bgm1_ = audio_->LoopSoundLoadWave("./resources/Sound/BGM_01.wav");
 	audio_->SoundLoopPlayWave(bgm1_, 1.0f);
 
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1000.0f);
 }
 
 void TitleScene::Update()
@@ -47,6 +50,8 @@ void TitleScene::Update()
 	*/
 #endif // _DEBUG
 
+	fade_->Update();
+
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GAMEPLAY");
@@ -58,8 +63,9 @@ void TitleScene::Draw()
 {
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
-	//spritePlatform_->PreDraw();
+	spritePlatform_->PreDraw();
 
+	
 	time--;
 	if (time <= 40) {
 		sprite1_->Draw();
@@ -71,6 +77,7 @@ void TitleScene::Draw()
 		time = 40;
 	}
 
+	fade_->Draw();
 }
 
 void TitleScene::Finalize()
