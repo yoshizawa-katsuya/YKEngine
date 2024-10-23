@@ -78,6 +78,10 @@ void GameScene::Initialize() {
 	modelWallThorn_ = std::make_unique<Model>();
 	modelWallThorn_->Initialize(modelPlatform_);
 	modelWallThorn_->CreateModel("./resources/thormWall", "thormWall.obj");
+
+	modelGoal_ = std::make_unique<Model>();
+	modelGoal_->Initialize(modelPlatform_);
+	modelGoal_->CreateModel("./resources/goal", "goal.obj");
 	
 	/*
 	//テクスチャハンドルの生成
@@ -205,6 +209,18 @@ void GameScene::Update() {
 			worldTransformWallThorn->scale_.x = 0.5f;
 
 			worldTransformWallThorn->UpdateMatrix();
+		}
+	}
+
+	//ゴールの更新
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformGoalLine : worldTransformGoals_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformGoal : worldTransformGoalLine) {
+			if (!worldTransformGoal) {
+				continue;
+			}
+			//worldTransformGoal->scale_.x = 0.5f;
+
+			worldTransformGoal->UpdateMatrix();
 		}
 	}
 
@@ -352,6 +368,16 @@ void GameScene::Draw() {
 		}
 	}
 
+	//ゴール描画
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformGoalLine : worldTransformGoals_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformGoal : worldTransformGoalLine) {
+			if (!worldTransformGoal) {
+				continue;
+			}
+			modelGoal_->Draw(*worldTransformGoal, mainCamera_);
+		}
+	}
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 	
@@ -414,6 +440,7 @@ void GameScene::GeneratrBlocks() {
 	worldTransformThorns_.resize(numBlockVirtical);
 	worldTransformWTSs_.resize(numBlockVirtical);
 	worldTransformWallThorns_.resize(numBlockVirtical);
+	worldTransformGoals_.resize(numBlockVirtical);
 
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
@@ -423,6 +450,7 @@ void GameScene::GeneratrBlocks() {
 		worldTransformThorns_[i].resize(numBlockHorizontal);
 		worldTransformWTSs_[i].resize(numBlockHorizontal);
 		worldTransformWallThorns_[i].resize(numBlockHorizontal);
+		worldTransformGoals_[i].resize(numBlockHorizontal);
 	}
 
 	// キューブと床の生成
@@ -475,6 +503,13 @@ void GameScene::GeneratrBlocks() {
 				worldTransformWallThorns_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformWallThorns_[i][j]->Initialize();
 				worldTransformWallThorns_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+
+			//ゴールの生成
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kGoal) {
+				worldTransformGoals_[i][j] = std::make_unique<WorldTransform>();
+				worldTransformGoals_[i][j]->Initialize();
+				worldTransformGoals_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			}
 		}
 	}
