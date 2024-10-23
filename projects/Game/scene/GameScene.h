@@ -39,6 +39,13 @@ private:
 	// プレイヤーと敵の当たり判定
 	void CheckCollision();
 	
+	void PopEnemyByMapChip();
+
+	void CheckOutGoal();
+
+	void CheckIsGoal();
+
+	void CheckIsAlive();
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -85,6 +92,7 @@ private:
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
 	std::unique_ptr<Model> modelPlayer_;
+	std::unique_ptr<Model> modelEnemy_;
 	std::unique_ptr<Model> modelBlock_;
 	std::unique_ptr<Model> modelFloor_;
 	std::unique_ptr<Model> modelWall_;
@@ -104,6 +112,8 @@ private:
 
 	std::list<Enemy*> enemys_;
 	
+	bool isOutGoal = false;
+
 	//bool IsVerticalMovement_ = false;
 };
 

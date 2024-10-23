@@ -51,6 +51,10 @@ void GameScene::Initialize() {
 	modelPlayer_->Initialize(modelPlatform_);
 	modelPlayer_->CreateModel("./resources/player", "Player.obj");
 	
+	modelEnemy_ = std::make_unique<Model>();
+	modelEnemy_->Initialize(modelPlatform_);
+	modelEnemy_->CreateModel("./resources/enemy", "enemy.obj");
+
 	modelBlock_ = std::make_unique<Model>();
 	modelBlock_->Initialize(modelPlatform_);
 	modelBlock_->CreateModel("./resources/block", "block.obj");
@@ -95,17 +99,19 @@ void GameScene::Initialize() {
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 4);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(12, 13);
 	player_->SetTranslate(playerPosition);
 	player_->SetMapChipField(mapChipField_.get());
 
-	enemy_ = std::make_unique<Enemy>();
+	PopEnemyByMapChip();
+
+	/*enemy_ = std::make_unique<Enemy>();
 	enemy_->Initialize(modelPlayer_.get());
 	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(2, 7);
 	enemy_->SetTranslate(enemyPosition);
 	enemy_->SetMapChipField(mapChipField_.get());
 
-	enemys_.push_back(enemy_.get());
+	enemys_.push_back(enemy_.get());*/
 
 	//マップの生成
 	GeneratrBlocks();
@@ -234,6 +240,10 @@ void GameScene::Update() {
 	}
 
 	CheckCollision();
+
+	CheckOutGoal();
+
+	CheckIsAlive();
 
 	player_->SetIsUpMove(false);
 	player_->SetIsDownMove(false);
@@ -368,13 +378,15 @@ void GameScene::Draw() {
 		}
 	}
 
-	//ゴール描画
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformGoalLine : worldTransformGoals_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformGoal : worldTransformGoalLine) {
-			if (!worldTransformGoal) {
-				continue;
+	if (isOutGoal) {
+		//ゴール描画
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformGoalLine : worldTransformGoals_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformGoal : worldTransformGoalLine) {
+				if (!worldTransformGoal) {
+					continue;
+				}
+				modelGoal_->Draw(*worldTransformGoal, mainCamera_);
 			}
-			modelGoal_->Draw(*worldTransformGoal, mainCamera_);
 		}
 	}
 
@@ -510,6 +522,9 @@ void GameScene::GeneratrBlocks() {
 				worldTransformGoals_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformGoals_[i][j]->Initialize();
 				worldTransformGoals_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+
+				Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(j, i);
+				player_->SetTranslate(playerPosition);
 			}
 		}
 	}
@@ -517,51 +532,104 @@ void GameScene::GeneratrBlocks() {
 
 void GameScene::CheckCollision()
 {
-	{
 
-		// プレイヤーの位置を取得
-		Vector3 playerPosition = player_->GetPosition();
+	if (!player_->GetCanHit()) {
+		return;
+	}
 
-		// 敵が居る分回す
-		for (Enemy* enemy : enemys_) {
+	// プレイヤーの位置を取得
+	Vector3 playerPosition = player_->GetPosition();
 
-			// 敵の位置を取得
-			Vector3 vector3Diff = enemy->GetPosition() - playerPosition;
+	// 敵が居る分回す
+	for (Enemy* enemy : enemys_) {
 
-			// プレイヤーと敵の距離を計算
-			float floatDiff = Length(vector3Diff);
+		// 敵の位置を取得
+		Vector3 vector3Diff = enemy->GetPosition() - playerPosition;
 
-			if (floatDiff < 1.0f) {
+		// プレイヤーと敵の距離を計算
+		float floatDiff = Length(vector3Diff);
 
-				// プレイヤーの上下移動のフラグが立っている状態で当たったら
+		if (floatDiff < 1.0f) {
 
-				if (player_->GetIsUpMove()) {
+			// プレイヤーの上下移動のフラグが立っている状態で当たったら
 
-					player_->SetIsUpMove(false);
+			if (player_->GetIsUpMove()) {
 
-					enemys_.remove(enemy);
+				player_->SetIsUpMove(false);
 
-					return;
-				}
-				else if(player_->GetIsDownMove()){
+				enemys_.remove(enemy);
 
-					player_->SetIsDownMove(false);
-
-					enemys_.remove(enemy);
-
-					return;
-				}
-
-				// 上下移動フラグが立っていない状態で当たったら
-
-				player_->SetIsAlive(false);
-
-				if (!player_->GetIsAlive()) {
-					sceneManager_->ChengeScene("GAMEOVER");
-				}
-
+				return;
 			}
+			else if (player_->GetIsDownMove()) {
+
+				player_->SetIsDownMove(false);
+
+				enemys_.remove(enemy);
+
+				return;
+			}
+
+			// 上下移動フラグが立っていない状態で当たったら
+
+			player_->IsHitEnemy();
 		}
 	}
 }
 
+void GameScene::PopEnemyByMapChip()
+{
+	for (int i = 0; i < int(mapChipField_->GetNumBlockVirtical()); ++i) {
+		for (int j = 0; j < int(mapChipField_->GetNumBlockHorizontal()); ++j) {
+
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kSpawnSpace) {
+
+				/*enemy_ = std::make_unique<Enemy>();
+				enemy_->Initialize(modelEnemy_.get());
+				Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(j, i);
+				enemy_->SetTranslate(enemyPosition);
+				enemy_->SetMapChipField(mapChipField_.get());
+
+				enemys_.push_back(enemy_.get());*/
+
+				Enemy* enemy = new Enemy();
+
+				enemy->Initialize(modelEnemy_.get());
+				Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(j, i);
+				enemy->SetTranslate(enemyPosition);
+				enemy->SetMapChipField(mapChipField_.get());
+
+				enemys_.push_back(enemy);
+			}
+
+		}
+	}
+}
+
+void GameScene::CheckOutGoal()
+{
+
+	if (!enemys_.empty()) {
+		return;
+	}
+
+	isOutGoal = true;
+
+	CheckIsGoal();
+
+}
+
+void GameScene::CheckIsGoal()
+{
+	if (isOutGoal && player_->GetIsGoal()) {
+		sceneManager_->ChengeScene("GAMECLEAR");
+	}
+}
+
+void GameScene::CheckIsAlive()
+{
+	if (!player_->GetIsAlive()) {
+		sceneManager_->ChengeScene("GAMEOVER");
+	}
+
+}
