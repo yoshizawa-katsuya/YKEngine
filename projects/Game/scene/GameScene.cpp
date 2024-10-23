@@ -129,6 +129,24 @@ void GameScene::Initialize() {
 	background_->Initialize(backgroundSprite_, spritePlatform_);
 	background_->SetPosition({ 0.0f, 0.0f });
 	
+	HP1Sprite_ = TextureManager::GetInstance()->Load("./resources/HP1.png");
+	HP2Sprite_ = TextureManager::GetInstance()->Load("./resources/HP2.png");
+	HP3Sprite_ = TextureManager::GetInstance()->Load("./resources/HP3.png");
+
+	HP1_ = std::make_unique<Sprite>();
+	HP1_->Initialize(HP1Sprite_, spritePlatform_);
+	HP1_->SetPosition({ 0.0f, 0.0f });
+
+	HP2_ = std::make_unique<Sprite>();
+	HP2_->Initialize(HP2Sprite_, spritePlatform_);
+	HP2_->SetPosition({ 0.0f, 0.0f });
+
+	HP3_ = std::make_unique<Sprite>();
+	HP3_->Initialize(HP3Sprite_, spritePlatform_);
+	HP3_->SetPosition({ 0.0f, 0.0f });
+
+	
+
 	hitSE01_ = audio_->SoundLoadWave("./resources/Sound/SE_01.wav");
 
 }
@@ -322,12 +340,16 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 
+	
+
 	//Spriteの背景描画前処理
 	spritePlatform_->PreBackGroundDraw();
 
 	//sprite_->Draw();
 
 	background_->Draw();
+
+	
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
@@ -420,7 +442,19 @@ void GameScene::Draw() {
 			}
 		}
 	}
-
+	int playerHp = player_->GetPlyerHP();
+	if (playerHp==3) {
+		HP1_->Draw();
+		HP2_->Draw();
+		HP3_->Draw();
+	}
+	if (playerHp == 2) {
+		HP1_->Draw();
+		HP2_->Draw();
+	}
+	if (playerHp == 1) {
+		HP1_->Draw();
+	}
 	//説明画面
 	if (setumeiCoolTimer_ >= 0) {
 		setumeiSprite_->Draw();
