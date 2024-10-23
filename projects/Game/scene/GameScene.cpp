@@ -6,9 +6,10 @@
 #include "LevelDataLoader.h"
 #include "Matrix.h"
 #include "SceneManager.h"
+#include "Input.h"
 
 GameScene::~GameScene() {
-	
+
 }
 
 void GameScene::Initialize() {
@@ -50,7 +51,11 @@ void GameScene::Initialize() {
 	modelPlayer_ = std::make_unique<Model>();
 	modelPlayer_->Initialize(modelPlatform_);
 	modelPlayer_->CreateModel("./resources/player", "Player.obj");
-	
+
+	modelEnemy_ = std::make_unique<Model>();
+	modelEnemy_->Initialize(modelPlatform_);
+	modelEnemy_->CreateModel("./resources/enemy", "enemy.obj");
+
 	modelBlock_ = std::make_unique<Model>();
 	modelBlock_->Initialize(modelPlatform_);
 	modelBlock_->CreateModel("./resources/block", "block.obj");
@@ -82,7 +87,13 @@ void GameScene::Initialize() {
 	modelGoal_ = std::make_unique<Model>();
 	modelGoal_->Initialize(modelPlatform_);
 	modelGoal_->CreateModel("./resources/goal", "goal.obj");
-	
+
+	//説明画面
+	setumei_ = TextureManager::GetInstance()->Load("./resources/instructions.png");
+	setumeiSprite_ = std::make_unique<Sprite>();
+	setumeiSprite_->Initialize(setumei_, spritePlatform_);
+	setumeiSprite_->SetPosition({ 0.0f,0.0f });
+
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -95,190 +106,211 @@ void GameScene::Initialize() {
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 4);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(12, 13);
 	player_->SetTranslate(playerPosition);
 	player_->SetMapChipField(mapChipField_.get());
 
-	enemy_ = std::make_unique<Enemy>();
+	PopEnemyByMapChip();
+
+	/*enemy_ = std::make_unique<Enemy>();
 	enemy_->Initialize(modelPlayer_.get());
 	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(2, 7);
 	enemy_->SetTranslate(enemyPosition);
 	enemy_->SetMapChipField(mapChipField_.get());
 
-	enemys_.push_back(enemy_.get());
+	enemys_.push_back(enemy_.get());*/
 
 	//マップの生成
 	GeneratrBlocks();
-	
+
 	//audio_->SoundLoopPlayWave(bgm1_, 0.5f);
 
 }
 
 void GameScene::Update() {
 
-	Vector3 pp = player_->GetPosition();
-
-	Vector3 cp = camera_->GetTranslate();
-
-	float diff = pp.y - cp.y;
-
-	float movement = diff * 0.1f;
-
-	camera_->SetTranslate({ 8.48f,cp.y + movement,-57.32f });
-
-	//カメラの更新
-	camera_->Update();
-
-	if (isActiveDebugCamera_) {
-		debugCamera_->Update();
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		//setumeiCoolTimer_--;
+		isDraw_ = false;
 	}
 
-	//ブロックの更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformBlock : worldTransformBlockLine) {
-			if (!worldTransformBlock) {
-				continue;
-			}
-			worldTransformBlock->UpdateMatrix();
+	/*if (setumeiCoolTimer_ <= 0) {
+		setumeiCoolTimer_ = 60;
+	}*/
+
+	if (!isDraw_) {
+		setumeiCoolTimer_--;
+	}
+
+	if (setumeiCoolTimer_ <= 0) {
+		Vector3 pp = player_->GetPosition();
+
+		Vector3 cp = camera_->GetTranslate();
+
+		float diff = pp.y - cp.y;
+
+		float movement = diff * 0.1f;
+
+		camera_->SetTranslate({ 8.48f,cp.y + movement,-57.32f });
+
+		//カメラの更新
+		camera_->Update();
+
+		if (isActiveDebugCamera_) {
+			debugCamera_->Update();
 		}
-	}
 
-	//足場の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformFloorLine : worldTransformFloors_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformFloor : worldTransformFloorLine) {
-			if (!worldTransformFloor) {
-				continue;
+		//ブロックの更新
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformBlock : worldTransformBlockLine) {
+				if (!worldTransformBlock) {
+					continue;
+				}
+				worldTransformBlock->UpdateMatrix();
 			}
-			worldTransformFloor->UpdateMatrix();
 		}
-	}
 
-	//壁の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallLine : worldTransformWalls_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformWall : worldTransformWallLine) {
-			if (!worldTransformWall) {
-				continue;
+		//足場の更新
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformFloorLine : worldTransformFloors_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformFloor : worldTransformFloorLine) {
+				if (!worldTransformFloor) {
+					continue;
+				}
+				worldTransformFloor->UpdateMatrix();
 			}
-			worldTransformWall->scale_.x = 0.5f;
-
-			worldTransformWall->UpdateMatrix();
 		}
-	}
 
-	//ばねの更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformSpringLine : worldTransformSprings_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformSpring : worldTransformSpringLine) {
-			if (!worldTransformSpring) {
-				continue;
+		//壁の更新
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallLine : worldTransformWalls_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformWall : worldTransformWallLine) {
+				if (!worldTransformWall) {
+					continue;
+				}
+				worldTransformWall->scale_.x = 0.5f;
+
+				worldTransformWall->UpdateMatrix();
 			}
-			//worldTransformSpring->scale_ = { 2.0f,2.0f,2.0f };
-
-			worldTransformSpring->UpdateMatrix();
 		}
-	}
 
-	//棘の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformThornLine : worldTransformThorns_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformThorn : worldTransformThornLine) {
-			if (!worldTransformThorn) {
-				continue;
+		//ばねの更新
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformSpringLine : worldTransformSprings_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformSpring : worldTransformSpringLine) {
+				if (!worldTransformSpring) {
+					continue;
+				}
+				//worldTransformSpring->scale_ = { 2.0f,2.0f,2.0f };
+
+				worldTransformSpring->UpdateMatrix();
 			}
-
-			worldTransformThorn->UpdateMatrix();
 		}
-	}
 
-	//棘壁( 片方だけver )の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWTSLine : worldTransformWTSs_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformWTS : worldTransformWTSLine) {
-			if (!worldTransformWTS) {
-				continue;
+		//棘の更新
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformThornLine : worldTransformThorns_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformThorn : worldTransformThornLine) {
+				if (!worldTransformThorn) {
+					continue;
+				}
+
+				worldTransformThorn->UpdateMatrix();
 			}
-			worldTransformWTS->scale_.x = 0.5f;
-
-			worldTransformWTS->UpdateMatrix();
 		}
-	}
 
-	//棘壁( 両方ver )の更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallThornLine : worldTransformWallThorns_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformWallThorn : worldTransformWallThornLine) {
-			if (!worldTransformWallThorn) {
-				continue;
+		//棘壁( 片方だけver )の更新
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWTSLine : worldTransformWTSs_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformWTS : worldTransformWTSLine) {
+				if (!worldTransformWTS) {
+					continue;
+				}
+				worldTransformWTS->scale_.x = 0.5f;
+
+				worldTransformWTS->UpdateMatrix();
 			}
-			worldTransformWallThorn->scale_.x = 0.5f;
-
-			worldTransformWallThorn->UpdateMatrix();
 		}
-	}
 
-	//ゴールの更新
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformGoalLine : worldTransformGoals_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformGoal : worldTransformGoalLine) {
-			if (!worldTransformGoal) {
-				continue;
+		//棘壁( 両方ver )の更新
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformWallThornLine : worldTransformWallThorns_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformWallThorn : worldTransformWallThornLine) {
+				if (!worldTransformWallThorn) {
+					continue;
+				}
+				worldTransformWallThorn->scale_.x = 0.5f;
+
+				worldTransformWallThorn->UpdateMatrix();
 			}
-			//worldTransformGoal->scale_.x = 0.5f;
-
-			worldTransformGoal->UpdateMatrix();
 		}
-	}
 
-	//プレイヤーの更新
-	player_->Update();
+		//ゴールの更新
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformGoalLine : worldTransformGoals_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformGoal : worldTransformGoalLine) {
+				if (!worldTransformGoal) {
+					continue;
+				}
+				//worldTransformGoal->scale_.x = 0.5f;
 
-	//enemy_->Update();
+				worldTransformGoal->UpdateMatrix();
+			}
+		}
 
-	for (Enemy* enemy : enemys_) {
-		enemy->Update();
-	}
+		//プレイヤーの更新
+		player_->Update();
 
-	CheckCollision();
+		//enemy_->Update();
 
-	player_->SetIsUpMove(false);
-	player_->SetIsDownMove(false);
+		for (Enemy* enemy : enemys_) {
+			enemy->Update();
+		}
+
+		CheckCollision();
+
+		CheckOutGoal();
+
+		CheckIsAlive();
+
+		player_->SetIsUpMove(false);
+		player_->SetIsDownMove(false);
 
 #ifdef _DEBUG
 
 
-	ImGui::Begin("Window");
-	if (ImGui::TreeNode("camera")) {
-		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
-		ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
-		//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
+		ImGui::Begin("Window");
+		if (ImGui::TreeNode("camera")) {
+			ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
+			ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
+			//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
 
-		ImGui::TreePop();
-	}
+			ImGui::TreePop();
+		}
 
-	if (ImGui::TreeNode("directionalLight")) {
-		ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
-		ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
-		ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
+		if (ImGui::TreeNode("directionalLight")) {
+			ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
+			ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
+			ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
 
-		ImGui::TreePop();
-	}
-	//メインカメラの切り替え
-	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
-		isActiveDebugCamera_ = false;
+			ImGui::TreePop();
+		}
+		//メインカメラの切り替え
+		if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
+			isActiveDebugCamera_ = false;
 
-		mainCamera_ = camera_.get();
+			mainCamera_ = camera_.get();
 
 
-	}
-	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
-		isActiveDebugCamera_ = true;
+		}
+		if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
+			isActiveDebugCamera_ = true;
 
-		mainCamera_ = camera2_.get();
+			mainCamera_ = camera2_.get();
 
-	}
-	/*
-	if (ImGui::Button("BGMstop")) {
-		audio_->SoundStopWave(bgm1_);
-	}
-	*/
-	ImGui::End();
+		}
+		/*
+		if (ImGui::Button("BGMstop")) {
+			audio_->SoundStopWave(bgm1_);
+		}
+		*/
+		ImGui::End();
 
 #endif // _DEBUG
+	}
 
 }
 
@@ -291,6 +323,7 @@ void GameScene::Draw() {
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
+
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
@@ -368,19 +401,31 @@ void GameScene::Draw() {
 		}
 	}
 
-	//ゴール描画
-	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformGoalLine : worldTransformGoals_) {
-		for (std::unique_ptr<WorldTransform>& worldTransformGoal : worldTransformGoalLine) {
-			if (!worldTransformGoal) {
-				continue;
+	if (isOutGoal) {
+		//ゴール描画
+		for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformGoalLine : worldTransformGoals_) {
+			for (std::unique_ptr<WorldTransform>& worldTransformGoal : worldTransformGoalLine) {
+				if (!worldTransformGoal) {
+					continue;
+				}
+				modelGoal_->Draw(*worldTransformGoal, mainCamera_);
 			}
-			modelGoal_->Draw(*worldTransformGoal, mainCamera_);
 		}
+	}
+
+	//説明画面
+	if (setumeiCoolTimer_ >= 0) {
+		setumeiSprite_->Draw();
+	}
+
+	//説明画面
+	if (setumeiCoolTimer_ >= 0) {
+		setumeiSprite_->Draw();
 	}
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
-	
+
 }
 
 void GameScene::Finalize()
@@ -510,6 +555,9 @@ void GameScene::GeneratrBlocks() {
 				worldTransformGoals_[i][j] = std::make_unique<WorldTransform>();
 				worldTransformGoals_[i][j]->Initialize();
 				worldTransformGoals_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+
+				Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(j, i);
+				player_->SetTranslate(playerPosition);
 			}
 		}
 	}
@@ -517,51 +565,103 @@ void GameScene::GeneratrBlocks() {
 
 void GameScene::CheckCollision()
 {
-	{
 
-		// プレイヤーの位置を取得
-		Vector3 playerPosition = player_->GetPosition();
+	if (!player_->GetCanHit()) {
+		return;
+	}
 
-		// 敵が居る分回す
-		for (Enemy* enemy : enemys_) {
+	// プレイヤーの位置を取得
+	Vector3 playerPosition = player_->GetPosition();
 
-			// 敵の位置を取得
-			Vector3 vector3Diff = enemy->GetPosition() - playerPosition;
+	// 敵が居る分回す
+	for (Enemy* enemy : enemys_) {
 
-			// プレイヤーと敵の距離を計算
-			float floatDiff = Length(vector3Diff);
+		// 敵の位置を取得
+		Vector3 vector3Diff = enemy->GetPosition() - playerPosition;
 
-			if (floatDiff < 1.0f) {
+		// プレイヤーと敵の距離を計算
+		float floatDiff = Length(vector3Diff);
 
-				// プレイヤーの上下移動のフラグが立っている状態で当たったら
+		if (floatDiff < 1.0f) {
 
-				if (player_->GetIsUpMove()) {
+			// プレイヤーの上下移動のフラグが立っている状態で当たったら
 
-					player_->SetIsUpMove(false);
+			if (player_->GetIsUpMove()) {
 
-					enemys_.remove(enemy);
+				player_->SetIsUpMove(false);
 
-					return;
-				}
-				else if(player_->GetIsDownMove()){
+				enemys_.remove(enemy);
 
-					player_->SetIsDownMove(false);
+				return;
+			} else if (player_->GetIsDownMove()) {
 
-					enemys_.remove(enemy);
+				player_->SetIsDownMove(false);
 
-					return;
-				}
+				enemys_.remove(enemy);
 
-				// 上下移動フラグが立っていない状態で当たったら
-
-				player_->SetIsAlive(false);
-
-				if (!player_->GetIsAlive()) {
-					sceneManager_->ChengeScene("GAMEOVER");
-				}
-
+				return;
 			}
+
+			// 上下移動フラグが立っていない状態で当たったら
+
+			player_->IsHitEnemy();
 		}
 	}
 }
 
+void GameScene::PopEnemyByMapChip()
+{
+	for (int i = 0; i < int(mapChipField_->GetNumBlockVirtical()); ++i) {
+		for (int j = 0; j < int(mapChipField_->GetNumBlockHorizontal()); ++j) {
+
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kSpawnSpace) {
+
+				/*enemy_ = std::make_unique<Enemy>();
+				enemy_->Initialize(modelEnemy_.get());
+				Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(j, i);
+				enemy_->SetTranslate(enemyPosition);
+				enemy_->SetMapChipField(mapChipField_.get());
+
+				enemys_.push_back(enemy_.get());*/
+
+				Enemy* enemy = new Enemy();
+
+				enemy->Initialize(modelEnemy_.get());
+				Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(j, i);
+				enemy->SetTranslate(enemyPosition);
+				enemy->SetMapChipField(mapChipField_.get());
+
+				enemys_.push_back(enemy);
+			}
+
+		}
+	}
+}
+
+void GameScene::CheckOutGoal()
+{
+
+	if (!enemys_.empty()) {
+		return;
+	}
+
+	isOutGoal = true;
+
+	CheckIsGoal();
+
+}
+
+void GameScene::CheckIsGoal()
+{
+	if (isOutGoal && player_->GetIsGoal()) {
+		sceneManager_->ChengeScene("GAMECLEAR");
+	}
+}
+
+void GameScene::CheckIsAlive()
+{
+	if (!player_->GetIsAlive()) {
+		sceneManager_->ChengeScene("GAMEOVER");
+	}
+
+}

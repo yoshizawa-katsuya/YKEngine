@@ -88,6 +88,14 @@ public:
 	bool GetIsAlive() { return isAlive_; }
 	void SetIsAlive(bool isAlive) { isAlive_ = isAlive; }
 
+	bool GetIsGoal() { return isGoal; }
+
+	void IsHitEnemy();
+
+	bool GetCanHit() { return canHit; }
+
+	void Blinking();
+
 private:
 
 	//Transform変数を作る
@@ -150,7 +158,7 @@ private:
 	bool isPushSpace = false;
 
 	// 上下移動のクールタイム
-	const int kMoveInterval = 30;
+	const int kMoveInterval = 15;
 
 	int kMoveTimer = 0;
 
@@ -159,5 +167,23 @@ private:
 	bool isDownMove = false;
 
 	bool isAlive_ = true;
+
+	bool isGoal = false;
+
+	int playerHP_ = 3;
+
+	const float kHitInterval_ = 1.0f;
+
+	float kCoolTime_ = 0.0f;
+
+	float kDeltaTiem = 1.0f / 60.0f;
+
+	bool canHit = false;
+
+	bool isDraw = true;
+
+    float kBlinkingTime_ = 0.1f;
+
+
 };
 

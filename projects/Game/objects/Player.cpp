@@ -15,15 +15,19 @@ void Player::Initialize(Model* model) {
 
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
 
-	worldTransform_.translation_.y = 1.0f;
-
 	worldTransform_.UpdateMatrix();
 
-	Vector3 startVelocity = { 0.025f,0.0f,0.0f };
+	Vector3 startVelocity = { 0.075f,0.0f,0.0f };
 
 	velocity_ = startVelocity;
 
+	playerHP_ = 3;
+
 	kMoveTimer = 0;
+
+	lrDirection_ = LRDirection::kRight;
+
+	turnTimer_ = 0.1f;
 }
 
 void Player::Update() {
@@ -85,8 +89,9 @@ void Player::Update() {
 
 void Player::Draw(Camera* camera) {
 
-	model_->Draw(worldTransform_, camera);
-
+	if (isDraw) {
+		model_->Draw(worldTransform_, camera);
+	}
 }
 
 void Player::Move()
@@ -161,6 +166,22 @@ void Player::Move()
 
 #pragma endregion 元のコード
 
+	isGoal = false;
+
+	if (kCoolTime_ > 0.0f) {
+
+		kCoolTime_ -= kDeltaTiem;
+
+		Blinking();
+
+	}
+
+	if (kCoolTime_ <= 0.0f && !canHit) {
+
+		canHit = true;
+
+		isDraw = true;
+	}
 
 	ChaeckSpaceKey();
 
@@ -283,7 +304,10 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 		isAlive_ = false;
 	}
 	if (springHit) {
-		worldTransform_.translation_.y += 6.0f;
+
+		velocity_.y = 6.0f;
+
+		//worldTransform_.translation_.y += 6.0f;
 	}
 
 }
@@ -458,6 +482,11 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 		springHit = true;
 	}
 
+	
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal = true;
+	}
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -486,6 +515,10 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 		springHit = true;
 	}
 
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal = true;
+	}
+
 	// ブロックにヒット?
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
@@ -498,15 +531,25 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 	}
 
 	if (thornWallHit) {
-		isAlive_ = false;
+		if (canHit) {
+			IsHitEnemy();
+		}
 	}
 
 	if (thornHit) {
-		isAlive_ = false;
+		if (canHit) {
+			IsHitEnemy();
+		}
 	}
 
 	if (springHit) {
 		worldTransform_.translation_.y += 6.0f;
+
+		if (worldTransform_.translation_.y >= 24.0f) {
+
+			worldTransform_.translation_.y = 24.0f;
+
+		}
 	}
 
 }
@@ -569,6 +612,10 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 		springHit = true;
 	}
 
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal = true;
+	}
+
 	// 左下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
@@ -597,6 +644,10 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 		springHit = true;
 	}
 
+	if (mapChipType == MapChipType::kGoal) {
+		isGoal = true;
+	}
+
 	// ブロックにヒット?
 	if (hit) {
 		// めり込みを排除する方向に移動量を設定する
@@ -609,15 +660,29 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 	}
 
 	if (thornWallHit) {
-		isAlive_ = false;
+		
+		if (canHit) {
+			IsHitEnemy();
+		}
+
 	}
 
 	if (thornHit) {
-		isAlive_ = false;
+		
+		if (canHit) {
+			IsHitEnemy();
+		}
+
 	}
 
 	if (springHit) {
 		worldTransform_.translation_.y += 6.0f;
+
+		if (worldTransform_.translation_.y >= 24.0f) {
+
+			worldTransform_.translation_.y = 24.0f;
+
+		}
 	}
 
 }
@@ -766,7 +831,7 @@ void Player::ChaeckSpaceKey()
 	}
 
 	// 上下移動の境界時間
-	int borderTime = 18;
+	int borderTime = 12;
 
 	// スペースキーを押して、isPushSpaceがfalseだったら
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isPushSpace && kMoveTimer == 0) {
@@ -817,7 +882,14 @@ void Player::UpMove()
 {
 
 	if (isUpMove) {
+
+		if (worldTransform_.translation_.y >= 24.0f) {
+			return;
+		}
+
 		worldTransform_.translation_.y += 3.0f;
+
+		//velocity_.y = 3.0f;
 	}
 }
 
@@ -825,7 +897,13 @@ void Player::DownMove()
 {
 
 	if (isDownMove) {
+		if (worldTransform_.translation_.y <= 2.0f) {
+			return;
+		}
+
 		worldTransform_.translation_.y -= 3.0f;
+
+		//velocity_.y = -3.0f;
 	}
 }
 
@@ -839,3 +917,34 @@ void Player::SetIsDownMove(bool flag)
 	isDownMove = flag;
 }
 
+void Player::IsHitEnemy()
+{
+	kCoolTime_ = kHitInterval_;
+
+	--playerHP_;
+
+	canHit = false;
+
+	kBlinkingTime_ = 0.1f;
+
+	if (playerHP_ <= 0) {
+
+		isAlive_ = false;
+	}
+}
+
+void Player::Blinking()
+{
+	kBlinkingTime_ -= kDeltaTiem;
+
+	if (kBlinkingTime_ > 0.05f) {
+		isDraw = false;
+	}
+	else if(kBlinkingTime_ < 0.05 && kBlinkingTime_ > 0.0f) {
+		isDraw = true;
+	}
+	else if (kBlinkingTime_ <= 0.0f) {
+		kBlinkingTime_ = 0.1f;
+	}
+
+}
