@@ -21,8 +21,6 @@ void GameScene::Initialize() {
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
-	//bgm1_ = audio_->LoopSoundLoadWave("./resources/Sound/bgm01.wav");
-
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize(dxCommon_);
 
@@ -124,14 +122,14 @@ void GameScene::Initialize() {
 	//マップの生成
 	GeneratrBlocks();
 
-	//audio_->SoundLoopPlayWave(bgm1_, 0.5f);
-
+	
 	backgroundSprite_ = TextureManager::GetInstance()->Load("./resources/back1.png");
 
 	background_ = std::make_unique<Sprite>();
 	background_->Initialize(backgroundSprite_, spritePlatform_);
 	background_->SetPosition({ 0.0f, 0.0f });
 	
+	hitSE01_ = audio_->SoundLoadWave("./resources/Sound/SE_01.wav");
 
 }
 
@@ -602,12 +600,16 @@ void GameScene::CheckCollision()
 
 				enemys_.remove(enemy);
 
+				audio_->SoundPlayWave(hitSE01_);
+
 				return;
 			} else if (player_->GetIsDownMove()) {
 
 				player_->SetIsDownMove(false);
 
 				enemys_.remove(enemy);
+
+				audio_->SoundPlayWave(hitSE01_);
 
 				return;
 			}

@@ -86,8 +86,6 @@ private:
 
 	bool isActiveDebugCamera_ = false;
 
-	//SoundData soundData1_;
-
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
@@ -128,5 +126,6 @@ private:
 
 	std::unique_ptr<Sprite> background_ = nullptr;
 
+	SoundData hitSE01_;
 };
 
