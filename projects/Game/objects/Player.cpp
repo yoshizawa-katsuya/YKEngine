@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "Easing.h"
 #include "MapChipField.h"
+#include "Audio.h"
 
 void Player::Initialize(Model* model) {
 
@@ -28,6 +29,8 @@ void Player::Initialize(Model* model) {
 	lrDirection_ = LRDirection::kRight;
 
 	turnTimer_ = 0.1f;
+
+	jumpSE01_ = Audio::GetInstance()->SoundLoadWave("./resources/Sound/SE_02.wav");
 }
 
 void Player::Update() {
@@ -307,6 +310,7 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 
 		velocity_.y = 6.0f;
 
+		Audio::GetInstance()->SoundPlayWave(jumpSE01_);
 		//worldTransform_.translation_.y += 6.0f;
 	}
 
@@ -418,6 +422,9 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 	}
 	if (springHit) {
 		worldTransform_.translation_.y += 6.0f;
+
+		Audio::GetInstance()->SoundPlayWave(jumpSE01_);
+
 	}
 
 }
@@ -545,11 +552,14 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 	if (springHit) {
 		worldTransform_.translation_.y += 6.0f;
 
-		if (worldTransform_.translation_.y >= 24.0f) {
+		if (worldTransform_.translation_.y >= 24.5f) {
 
-			worldTransform_.translation_.y = 24.0f;
+			worldTransform_.translation_.y = 24.5f;
 
 		}
+
+		Audio::GetInstance()->SoundPlayWave(jumpSE01_);
+
 	}
 
 }
@@ -678,11 +688,14 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 	if (springHit) {
 		worldTransform_.translation_.y += 6.0f;
 
-		if (worldTransform_.translation_.y >= 24.0f) {
+		if (worldTransform_.translation_.y >= 24.5f) {
 
-			worldTransform_.translation_.y = 24.0f;
+			worldTransform_.translation_.y = 24.5f;
 
 		}
+
+		Audio::GetInstance()->SoundPlayWave(jumpSE01_);
+
 	}
 
 }

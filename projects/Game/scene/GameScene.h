@@ -86,8 +86,6 @@ private:
 
 	bool isActiveDebugCamera_ = false;
 
-	//SoundData soundData1_;
-
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
@@ -121,5 +119,13 @@ private:
 	int setumeiCoolTimer_ = 60;
 
 	//bool IsVerticalMovement_ = false;
+
+
+
+	uint32_t backgroundSprite_ = 0;
+
+	std::unique_ptr<Sprite> background_ = nullptr;
+
+	SoundData hitSE01_;
 };
 
