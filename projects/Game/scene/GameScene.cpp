@@ -131,6 +131,8 @@ void GameScene::Initialize() {
 	
 	hitSE01_ = audio_->SoundLoadWave("./resources/Sound/SE_01.wav");
 
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
 }
 
 void GameScene::Update() {
@@ -147,6 +149,8 @@ void GameScene::Update() {
 	if (!isDraw_) {
 		setumeiCoolTimer_--;
 	}
+
+	fade_->Update();
 
 	if (setumeiCoolTimer_ <= 0) {
 		Vector3 pp = player_->GetPosition();
@@ -434,6 +438,8 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
+	//fade_->Draw();
+
 }
 
 void GameScene::Finalize()
@@ -666,7 +672,9 @@ void GameScene::CheckOutGoal()
 void GameScene::CheckIsGoal()
 {
 	if (isOutGoal && player_->GetIsGoal()) {
+
 		sceneManager_->ChengeScene("GAMECLEAR");
+
 	}
 }
 

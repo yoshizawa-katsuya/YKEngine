@@ -16,6 +16,7 @@
 #include "ParticleEmitter.h"
 #include "MapChipField.h"
 #include "Enemy.h"
+#include "Fade.h"
 
 class GameScene : public BaseScene
 {
@@ -127,5 +128,9 @@ private:
 	std::unique_ptr<Sprite> background_ = nullptr;
 
 	SoundData hitSE01_;
+
+	std::unique_ptr<Fade> fade_;
+
+	bool isFadeOut = false;
 };
 

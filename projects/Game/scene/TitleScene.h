@@ -7,6 +7,7 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Sprite.h"
+#include "Fade.h"
 
 class TitleScene : public BaseScene
 {
@@ -44,5 +45,9 @@ private:
 	std::unique_ptr<Sprite> sprite2_ = nullptr;
 
 	int time = 40;
+
+	std::unique_ptr<Fade> fade_;
+
+	bool isFadeOut = false;
 };
 
