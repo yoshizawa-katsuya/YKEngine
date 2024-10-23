@@ -29,4 +29,17 @@ private:
 
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
+
+	uint32_t gameOver1Sprite_ = 0;
+
+	std::unique_ptr<Sprite> gameOver1_ = nullptr;
+
+	uint32_t gameOver2Sprite_ = 0;
+
+	std::unique_ptr<Sprite> gameOver2_ = nullptr;
+
+	int time = 40;
+
+
+
 };
