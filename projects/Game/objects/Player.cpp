@@ -200,6 +200,11 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 	//真上の当たり判定を行う
 	bool hit = false;
 
+	//棘壁との当たり判定を行う
+	bool thornWallHit = false;
+
+
+
 	//棘の当たり判定
 	bool thornHit = false;
 
@@ -217,6 +222,11 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 
 	if (mapChipType == MapChipType::kWall) {
 		hit = true;
+	}
+
+	//棘壁
+	if (mapChipType == MapChipType::kWallThorn) {
+		thornWallHit = true;
 	}
 
 	//棘
@@ -241,6 +251,11 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 		hit = true;
 	}
 
+	//棘壁
+	if (mapChipType == MapChipType::kWallThorn) {
+		thornWallHit = true;
+	}
+
 	//棘
 	if (mapChipType == MapChipType::kThorn) {
 		thornHit = true;
@@ -261,6 +276,9 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 		info.isCeilingCollision = true;
 	}
 
+	if (thornWallHit) {
+		isAlive_ = false;
+	}
 	if (thornHit) {
 		isAlive_ = false;
 	}
@@ -269,8 +287,6 @@ void Player::MapCollisionUp(CollisionMapInfo& info)
 	}
 
 }
-
-
 
 void Player::MapCollisionBottom(CollisionMapInfo& info)
 {
@@ -292,6 +308,11 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 	// 真下の当たり判定を行う
 	bool hit = false;
 
+	//棘壁との当たり判定を行う
+	bool thornWallHit = false;
+
+
+
 	//棘の当たり判定
 	bool thornHit = false;
 
@@ -310,6 +331,11 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 
 	if (mapChipType == MapChipType::kWall) {
 		hit = true;
+	}
+
+	//棘壁
+	if (mapChipType == MapChipType::kWallThorn) {
+		thornWallHit = true;
 	}
 
 	//棘
@@ -335,6 +361,10 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 		hit = true;
 	}
 
+	//棘壁
+	if (mapChipType == MapChipType::kWallThorn) {
+		thornWallHit = true;
+	}
 	//棘
 	if (mapChipType == MapChipType::kThorn) {
 		thornHit = true;
@@ -356,6 +386,9 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 		info.landing = true;
 	}
 
+	if (thornWallHit) {
+		isAlive_ = false;
+	}
 	if (thornHit) {
 		isAlive_ = false;
 	}
@@ -364,7 +397,6 @@ void Player::MapCollisionBottom(CollisionMapInfo& info)
 	}
 
 }
-
 
 void Player::MapCollisionRight(CollisionMapInfo& info)
 {
@@ -386,6 +418,11 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 	// 真右の当たり判定を行う
 	bool hit = false;
 
+	//棘壁との当たり判定を行う
+	bool thornWallHit = false;
+
+
+
 	//棘の当たり判定
 	bool thornHit = false;
 
@@ -404,6 +441,11 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 
 	if (mapChipType == MapChipType::kWall) {
 		hit = true;
+	}
+
+	//棘壁
+	if (mapChipType == MapChipType::kWallThorn) {
+		thornWallHit = true;
 	}
 
 	//棘
@@ -429,6 +471,11 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 		hit = true;
 	}
 
+	//棘壁
+	if (mapChipType == MapChipType::kWallThorn) {
+		thornWallHit = true;
+	}
+
 	//棘
 	if (mapChipType == MapChipType::kThorn) {
 		thornHit = true;
@@ -448,6 +495,10 @@ void Player::MapCollisionRight(CollisionMapInfo& info)
 		info.move.x = std::max(0.0f, (rect.left - worldTransform_.translation_.x) - (kWidth / 2 + kBlank));
 		// 地面に当たったことを記録する
 		info.isWallCollision = true;
+	}
+
+	if (thornWallHit) {
+		isAlive_ = false;
 	}
 
 	if (thornHit) {
@@ -479,6 +530,10 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 	// 真左の当たり判定を行う
 	bool hit = false;
 
+	//棘壁との当たり判定を行う
+	bool thornWallHit = false;
+
+
 	//棘の当たり判定
 	bool thornHit = false;
 
@@ -497,6 +552,11 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 
 	if (mapChipType == MapChipType::kWall) {
 		hit = true;
+	}
+
+	//棘壁
+	if (mapChipType == MapChipType::kWallThorn) {
+		thornWallHit = true;
 	}
 
 	//棘
@@ -522,6 +582,11 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 		hit = true;
 	}
 
+	//棘壁
+	if (mapChipType == MapChipType::kWallThorn) {
+		thornWallHit = true;
+	}
+
 	//棘
 	if (mapChipType == MapChipType::kThorn) {
 		thornHit = true;
@@ -541,6 +606,10 @@ void Player::MapCollisionLeft(CollisionMapInfo& info)
 		info.move.x = std::min(0.0f, (rect.right - worldTransform_.translation_.x) + (kWidth / 2 + kBlank));
 		// 地面に当たったことを記録する
 		info.isWallCollision = true;
+	}
+
+	if (thornWallHit) {
+		isAlive_ = false;
 	}
 
 	if (thornHit) {
@@ -593,6 +662,10 @@ void Player::GroundCollision(const CollisionMapInfo& info)
 			MapChipType mapChipType;
 			// 真下の当たり判定を行う
 			bool hit = false;
+
+			//棘壁との当たり判定を行う
+			bool thornWallHit = false;
+
 			// 左下点の判定
 			MapChipField::IndexSet indexSet;
 			indexSet = mapChipField_->GetMapChipIndexSetByPosition({ positionsNew[kLeftBottom].x, positionsNew[kLeftBottom].y - kBlank * 2, positionsNew[kLeftBottom].z });
