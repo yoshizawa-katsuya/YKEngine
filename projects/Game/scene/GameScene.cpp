@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "GameScene.h"
 #include "Vector.h"
 #include "dx12.h"
 #include "imgui/imgui.h"
@@ -124,6 +125,13 @@ void GameScene::Initialize() {
 	GeneratrBlocks();
 
 	//audio_->SoundLoopPlayWave(bgm1_, 0.5f);
+
+	backgroundSprite_ = TextureManager::GetInstance()->Load("./resources/back1.png");
+
+	background_ = std::make_unique<Sprite>();
+	background_->Initialize(backgroundSprite_, spritePlatform_);
+	background_->SetPosition({ 0.0f, 0.0f });
+	
 
 }
 
@@ -320,6 +328,8 @@ void GameScene::Draw() {
 	spritePlatform_->PreBackGroundDraw();
 
 	//sprite_->Draw();
+
+	background_->Draw();
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();

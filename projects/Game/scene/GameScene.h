@@ -121,5 +121,12 @@ private:
 	int setumeiCoolTimer_ = 60;
 
 	//bool IsVerticalMovement_ = false;
+
+
+
+	uint32_t backgroundSprite_ = 0;
+
+	std::unique_ptr<Sprite> background_ = nullptr;
+
 };
 
