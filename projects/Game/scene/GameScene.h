@@ -108,9 +108,15 @@ private:
 
 	std::unique_ptr<Enemy> enemy_;
 
+	std::unique_ptr<Sprite> setumeiSprite_ = nullptr;
+	uint32_t setumei_ = 0;
+
 	std::list<Enemy*> enemys_;
 	
 	bool isOutGoal = false;
+	bool isDraw_ = true;
+
+	int setumeiCoolTimer_ = 60;
 
 	//bool IsVerticalMovement_ = false;
 };
