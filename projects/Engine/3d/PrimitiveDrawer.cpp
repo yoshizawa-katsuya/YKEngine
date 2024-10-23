@@ -20,6 +20,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNoneSprite)) = CreateGraphicsPipeline(BlendMode::kBlendModeNoneSprite, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormalSprite)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormalSprite, dxCommon);
+
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBackGroundSprite)) = CreateGraphicsPipeline(BlendMode::kBackGroundSprite, dxCommon);
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeAddParticle)) = CreateGraphicsPipeline(BlendMode::kBlendModeAddParticle, dxCommon);
@@ -280,6 +282,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		break;
 
 	case BlendMode::kBlendModeNormal:
+	case BlendMode::kBlendModeNormalSprite:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
@@ -321,6 +324,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	switch (blendMode) {
 	case BlendMode::kBlendModeNoneSprite:
+	case BlendMode::kBlendModeNormalSprite:
 	case BlendMode::kBackGroundSprite:
 		//裏面（時計回り）を表示する
 		rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
@@ -354,6 +358,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		break;
 
 	case BlendMode::kBlendModeNoneSprite:
+	case BlendMode::kBlendModeNormalSprite:
 	case BlendMode::kBackGroundSprite:
 
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sprite.VS.hlsl",
