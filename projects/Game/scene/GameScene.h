@@ -105,5 +105,12 @@ private:
 	std::list<Enemy*> enemys_;
 	
 	//bool IsVerticalMovement_ = false;
+
+
+
+	uint32_t backgroundSprite_ = 0;
+
+	std::unique_ptr<Sprite> background_ = nullptr;
+
 };
 
