@@ -187,5 +187,8 @@ private:
     float kBlinkingTime_ = 0.1f;
 
 	SoundData jumpSE01_;
+
+	SoundData hitSE02_;
+
 };
 

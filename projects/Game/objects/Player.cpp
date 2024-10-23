@@ -31,6 +31,8 @@ void Player::Initialize(Model* model) {
 	turnTimer_ = 0.1f;
 
 	jumpSE01_ = Audio::GetInstance()->SoundLoadWave("./resources/Sound/SE_02.wav");
+
+	hitSE02_ = Audio::GetInstance()->SoundLoadWave("./resources/Sound/SE_03.wav");
 }
 
 void Player::Update() {
@@ -935,7 +937,7 @@ void Player::IsHitEnemy()
 	kCoolTime_ = kHitInterval_;
 
 	--playerHP_;
-
+	Audio::GetInstance()->SoundPlayWave(hitSE02_);
 	canHit = false;
 
 	kBlinkingTime_ = 0.1f;
