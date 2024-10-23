@@ -31,8 +31,6 @@ private:
 
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
-
-	LoopSoundData bgm1_;
 	
 	//uint32_t textureHandle_;
 
@@ -49,5 +47,7 @@ private:
 	int time = 40;
 
 	std::unique_ptr<Fade> fade_;
+
+	bool isFadeOut = false;
 };
 

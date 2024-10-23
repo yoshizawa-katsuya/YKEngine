@@ -15,7 +15,7 @@ void Fade::Initialize()
 void Fade::Start(Status status, float duration)
 {
 
-	sprite_->SetTextureSize(Vector2(720.0f, 500.0f));
+	sprite_->SetSize(Vector2(500.0f, 720.0f));
 	sprite_->SetAnchorPoint(Vector2(0.5f, 0.5f));
 
 
@@ -23,6 +23,7 @@ void Fade::Start(Status status, float duration)
 	status_ = status;
 	duration_ = duration;
 	counter_ = 0.0f;
+	isContinue = true;
 }
 
 void Fade::Update()
@@ -40,6 +41,7 @@ void Fade::Update()
 		// フェード継続時間に達したら打ち止め
 		if (counter_ >= duration_) {
 			counter_ = duration_;
+			isContinue = false;
 		}
 
 		// 0.0fから1.0fの間で、経過時間がフェード継続時間に近づくほどアルファ値を小さくする
@@ -53,6 +55,7 @@ void Fade::Update()
 
 		if (counter_ >= duration_) {
 			counter_ = duration_;
+			isContinue = false;
 		}
 
 		sprite_->SetColor(Vector4(0, 0, 0, std::clamp(counter_ / duration_, 0.0f, 1.0f)));

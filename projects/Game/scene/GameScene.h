@@ -16,6 +16,7 @@
 #include "ParticleEmitter.h"
 #include "MapChipField.h"
 #include "Enemy.h"
+#include "Fade.h"
 
 class GameScene : public BaseScene
 {
@@ -86,8 +87,6 @@ private:
 
 	bool isActiveDebugCamera_ = false;
 
-	//SoundData soundData1_;
-
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
@@ -110,10 +109,28 @@ private:
 
 	std::unique_ptr<Enemy> enemy_;
 
+	std::unique_ptr<Sprite> setumeiSprite_ = nullptr;
+	uint32_t setumei_ = 0;
+
 	std::list<Enemy*> enemys_;
 	
 	bool isOutGoal = false;
+	bool isDraw_ = true;
+
+	int setumeiCoolTimer_ = 60;
 
 	//bool IsVerticalMovement_ = false;
+
+
+
+	uint32_t backgroundSprite_ = 0;
+
+	std::unique_ptr<Sprite> background_ = nullptr;
+
+	SoundData hitSE01_;
+
+	std::unique_ptr<Fade> fade_;
+
+	bool isFadeOut = false;
 };
 

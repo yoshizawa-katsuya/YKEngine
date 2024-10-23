@@ -21,7 +21,7 @@ public:
 
 	void Draw();
 
-
+	bool GetContinue() { return isContinue; }
 private:
 
 	//デバイス
@@ -37,4 +37,6 @@ private:
 	float duration_ = 0.0f;
 
 	float counter_ = 0.0f;
+
+	bool isContinue = false;
 };

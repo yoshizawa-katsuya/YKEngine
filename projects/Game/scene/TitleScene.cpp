@@ -31,12 +31,14 @@ void TitleScene::Initialize()
 
 	time = 40;
 
-	bgm1_ = audio_->LoopSoundLoadWave("./resources/Sound/BGM_01.wav");
-	audio_->SoundLoopPlayWave(bgm1_, 1.0f);
+	//bgm1_ = audio_->LoopSoundLoadWave("./resources/Sound/BGM_01.wav");
+	//audio_->SoundLoopPlayWave(bgm1_, 1.0f);
+
+	isFadeOut = false;
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
-	fade_->Start(Fade::Status::FadeIn, 1000.0f);
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
 void TitleScene::Update()
@@ -54,6 +56,14 @@ void TitleScene::Update()
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
+
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
+
+		isFadeOut = true;
+
+	}
+
+	if (isFadeOut && !fade_->GetContinue()) {
 		sceneManager_->ChengeScene("GAMEPLAY");
 	}
 
