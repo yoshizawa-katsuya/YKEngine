@@ -32,7 +32,7 @@ void TitleScene::Initialize()
 	time = 40;
 
 	bgm1_ = audio_->LoopSoundLoadWave("./resources/Sound/BGM_01.wav");
-	audio_->SoundLoopPlayWave(bgm1_, 0.5f);
+	audio_->SoundLoopPlayWave(bgm1_, 1.0f);
 
 }
 

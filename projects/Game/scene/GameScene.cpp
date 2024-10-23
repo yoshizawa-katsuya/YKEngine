@@ -243,6 +243,8 @@ void GameScene::Update() {
 
 	CheckOutGoal();
 
+	CheckIsAlive();
+
 	player_->SetIsUpMove(false);
 	player_->SetIsDownMove(false);
 
@@ -521,7 +523,7 @@ void GameScene::GeneratrBlocks() {
 				worldTransformGoals_[i][j]->Initialize();
 				worldTransformGoals_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 
-				Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(12, 13);
+				Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(j, i);
 				player_->SetTranslate(playerPosition);
 			}
 		}
@@ -571,11 +573,6 @@ void GameScene::CheckCollision()
 			// 上下移動フラグが立っていない状態で当たったら
 
 			player_->IsHitEnemy();
-
-			if (!player_->GetIsAlive()) {
-				sceneManager_->ChengeScene("GAMEOVER");
-			}
-
 		}
 	}
 }
@@ -627,4 +624,12 @@ void GameScene::CheckIsGoal()
 	if (isOutGoal && player_->GetIsGoal()) {
 		sceneManager_->ChengeScene("GAMECLEAR");
 	}
+}
+
+void GameScene::CheckIsAlive()
+{
+	if (!player_->GetIsAlive()) {
+		sceneManager_->ChengeScene("GAMEOVER");
+	}
+
 }

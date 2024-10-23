@@ -45,6 +45,8 @@ private:
 
 	void CheckIsGoal();
 
+	void CheckIsAlive();
+
 	//デバイス
 	DirectXCommon* dxCommon_;
 
