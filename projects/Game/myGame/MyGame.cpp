@@ -7,24 +7,13 @@ void MyGame::Initialize()
 	//基底クラスの初期化処理
 	YKFramework::Initialize();
 
-	//ゲームシーンの初期化
-	//gameScene_ = new GameScene;
-	//gameScene_->Initialize();
-
-	//最初のシーンの生成
-	//BaseScene* scene = new TitleScene();
-	//シーンマネージャに最初にシーンをセット
-	//sceneManager_->SetNextScene(scene);
-
 	//シーンファクトリを生成し、マネージャにセット
 	sceneFactory_ = new SceneFactory();
 	sceneManager_->SetSceneFactory(sceneFactory_);
 	//シーンマネージャに最初のシーンをセット
-	sceneManager_->ChengeScene("TITLE");
+	sceneManager_->ChengeScene("GameScene");
 
-	bgm1_ = audio_->LoopSoundLoadWave("./resources/Sound/BGM_01.wav");
-	audio_->SoundLoopPlayWave(bgm1_, 1.0f);
-
+	
 }
 
 void MyGame::Finalize()
