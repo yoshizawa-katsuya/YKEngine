@@ -1,11 +1,7 @@
 #include "GameScene.h"
-#include "GameScene.h"
-#include "Vector.h"
 #include "dx12.h"
 #include "imgui/imgui.h"
 #include "ParticleManager.h"
-#include "LevelDataLoader.h"
-#include "Matrix.h"
 #include "SceneManager.h"
 #include "Input.h"
 

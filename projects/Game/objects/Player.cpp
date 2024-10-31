@@ -1,4 +1,3 @@
-#define NOMINMAX
 #include "Player.h"
 #include "imgui/imgui.h"
 
