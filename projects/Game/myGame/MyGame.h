@@ -20,8 +20,6 @@ public:
 
 	
 private:
-
-	LoopSoundData bgm1_;
 	
 	
 };

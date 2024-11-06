@@ -45,10 +45,10 @@ public:
 	static const uint32_t kMaxSrvDescriptors_ = 512;
 
 private:
-	
+
 	DirectXCommon* dxCommon_ = nullptr;
 
-	
+
 	//SRV用のデスクリプタ1個分のサイズ
 	uint32_t descriptorSize_;
 	//SRV用デスクリプタヒープ
@@ -58,4 +58,3 @@ private:
 	uint32_t useIndex = 0;
 
 };
-

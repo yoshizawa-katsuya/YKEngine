@@ -3,6 +3,8 @@
 #include <wrl.h>
 #define DIRECTINPUT_VERSION		0x0800	//DirectInputのバージョン指定
 #include <dinput.h>
+#include <Xinput.h>
+#include <iostream>
 #include "WinApp.h"
 #include "Struct.h"
 
@@ -65,7 +67,52 @@ public:
 
 	bool IsPushKeyPre(BYTE keyNumber);
 
+	//ゲームパッドの状態を得る。毎フレームの最初に一度だけやれば良い
+	bool GamePadUpdate(uint32_t padNo = 0);
+
+	//ゲームパッドのボタンを押しているかチェック
+	bool PushButton(uint32_t xinput);
+
+	//ゲームパッドのボタンを押した瞬間をチェック
+	bool TriggerButton(uint32_t xinput);
+
+	//ゲームパッドのボタンを離した瞬間をチェック
+	bool ReleaseButton(uint32_t xinput);
+
+	//ゲームパッドのボタンを押し続けているかをチェック
+	bool HoldButton(uint32_t xinput);
+
+	//左スティックのX方向の入力。0.0f~1.0fの範囲
+	float GetLeftStickX();
+
+	//左スティックのY方向の入力。0.0f~1.0fの範囲
+	float GetLeftStickY();
+
+	//右スティックのX方向の入力。0.0f~1.0fの範囲
+	float GetRightStickX();
+
+	//右スティックのY方向の入力。0.0f~1.0fの範囲
+	float GetRightStickY();
+
 private:
+
+	/*
+	ゲームパッドのボタン
+	XINPUT_GAMEPAD_DPAD_UP
+	XINPUT_GAMEPAD_DPAD_DOWN
+	XINPUT_GAMEPAD_DPAD_LEFT
+	XINPUT_GAMEPAD_DPAD_RIGHT
+	XINPUT_GAMEPAD_START
+	XINPUT_GAMEPAD_BACK
+	XINPUT_GAMEPAD_LEFT_THUMB
+	XINPUT_GAMEPAD_RIGHT_THUMB
+	XINPUT_GAMEPAD_LEFT_SHOULDER
+	XINPUT_GAMEPAD_RIGHT_SHOULDER
+	XINPUT_GAMEPAD_A
+	XINPUT_GAMEPAD_B
+	XINPUT_GAMEPAD_X
+	XINPUT_GAMEPAD_Y
+	*/
 
 	static Input* instance_;
 
@@ -87,6 +134,10 @@ private:
 
 	DIMOUSESTATE mouseState_;
 	DIMOUSESTATE preMouseState_;
+
+	const int32_t deadZone_ = 8000;
+	XINPUT_STATE gamePadState_;
+	XINPUT_STATE preGamePadState_;
 
 };
 

@@ -155,3 +155,85 @@ bool Input::IsPushKeyPre(BYTE keyNumber)
 	return false;
 }
 
+bool Input::GamePadUpdate(uint32_t padNo)
+{
+
+	preGamePadState_ = gamePadState_;
+	DWORD dwResult = XInputGetState(padNo, &gamePadState_);
+	
+	if (dwResult == ERROR_SUCCESS) {
+
+		if (std::abs(gamePadState_.Gamepad.sThumbLX) < deadZone_) {
+			gamePadState_.Gamepad.sThumbLX = 0;
+		}
+		if (std::abs(gamePadState_.Gamepad.sThumbLY) < deadZone_) {
+			gamePadState_.Gamepad.sThumbLY = 0;
+		}
+		if (std::abs(gamePadState_.Gamepad.sThumbRX) < deadZone_) {
+			gamePadState_.Gamepad.sThumbRX = 0;
+		}
+		if (std::abs(gamePadState_.Gamepad.sThumbRY) < deadZone_) {
+			gamePadState_.Gamepad.sThumbRY = 0;
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::PushButton(uint32_t xinput)
+{
+	if (gamePadState_.Gamepad.wButtons & xinput) {
+		return true;
+	}
+	
+	return false;
+}
+
+bool Input::TriggerButton(uint32_t xinput)
+{
+	if ((gamePadState_.Gamepad.wButtons & xinput) && !(preGamePadState_.Gamepad.wButtons & xinput)) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::ReleaseButton(uint32_t xinput)
+{
+	if (!(gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::HoldButton(uint32_t xinput)
+{
+	if ((gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) {
+		return true;
+	}
+
+	return false;
+}
+
+float Input::GetLeftStickX()
+{
+	return static_cast<float>(gamePadState_.Gamepad.sThumbLX) / SHRT_MAX;
+}
+
+float Input::GetLeftStickY()
+{
+	return static_cast<float>(gamePadState_.Gamepad.sThumbLY) / SHRT_MAX;
+}
+
+float Input::GetRightStickX()
+{
+	return static_cast<float>(gamePadState_.Gamepad.sThumbRX) / SHRT_MAX;
+}
+
+float Input::GetRightStickY()
+{
+	return static_cast<float>(gamePadState_.Gamepad.sThumbRY) / SHRT_MAX;
+}

@@ -62,8 +62,15 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	input_->GamePadUpdate();
 
-	
+	/*
+	input_->PushButton(XINPUT_GAMEPAD_A);
+	input_->TriggerButton(XINPUT_GAMEPAD_B);
+	input_->ReleaseButton(XINPUT_GAMEPAD_X);
+	input_->HoldButton(XINPUT_GAMEPAD_Y);
+	input_->GetLeftStickX();
+	*/
 
 	//カメラの更新
 	camera_->Update();
