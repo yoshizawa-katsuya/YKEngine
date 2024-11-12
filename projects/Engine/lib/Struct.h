@@ -12,14 +12,6 @@
 #include <Windows.h>
 #include <d3d12.h>
 
-//static const int kRowHeight = 20;
-//static const int kColumnWidth = 60;
-
-struct intVector2 {
-	int x;
-	int y;
-};
-
 struct Vector2 {
 	float x;
 	float y;
