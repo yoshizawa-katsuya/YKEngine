@@ -3,20 +3,15 @@
 #include <cassert>
 #include "dx12.h"
 
-TextureManager* TextureManager::instance_ = nullptr;
-
 TextureManager* TextureManager::GetInstance()
 {
-	if (instance_ == nullptr) {
-		instance_ = new TextureManager;
-	}
-	return instance_;
+	static TextureManager instance;
+	return &instance;
 }
 
 void TextureManager::Finalize()
 {
-	delete instance_;
-	instance_ = nullptr;
+	
 }
 
 void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager) {

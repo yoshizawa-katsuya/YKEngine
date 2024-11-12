@@ -6,6 +6,8 @@ class WinApp
 {
 public:
 
+	~WinApp();
+
 	//ウィンドウプロシージャ
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
@@ -15,8 +17,6 @@ public:
 	//メッセージの処理
 	bool ProcessMessage();
 
-	//ゲームウィンドウの破棄
-	void TerminateGameWindow();
 
 	HWND GetHwnd() const { return hwnd_; }
 
@@ -30,6 +30,9 @@ private:
 
 	//ゲームウィンドウの作成
 	void CreateGameWindow();
+
+	//ゲームウィンドウの破棄
+	void TerminateGameWindow();
 
 	//ウィンドウクラス
 	WNDCLASS wc_{};

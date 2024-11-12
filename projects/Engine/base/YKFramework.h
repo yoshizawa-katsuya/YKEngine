@@ -52,20 +52,20 @@ public:
 protected:
 
 
-	WinApp* winApp_ = nullptr;
+	std::unique_ptr<WinApp> winApp_;
 	DirectXCommon* dxCommon_ = nullptr;
 	Audio* audio_ = nullptr;
-	SrvHeapManager* srvHeapManager_ = nullptr;
+	std::unique_ptr<SrvHeapManager> srvHeapManager_;
 	std::unique_ptr<ImGuiManager> imGuiManager_;
 	Input* input_ = nullptr;
-	PrimitiveDrawer* primitiveDrawer_ = nullptr;
+	std::unique_ptr<PrimitiveDrawer> primitiveDrawer_;
 	SpritePlatform* spritePlatform_ = nullptr;
 	ModelPlatform* modelPlatform_ = nullptr;
 
 	SceneManager* sceneManager_ = nullptr;
 
 	//シーンファクトリー
-	AbstractSceneFactory* sceneFactory_ = nullptr;
+	std::unique_ptr<AbstractSceneFactory> sceneFactory_;
 
 	//ゲーム終了フラグ
 	bool isEndReqest_ = false;

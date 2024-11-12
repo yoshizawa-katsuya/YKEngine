@@ -2,20 +2,15 @@
 #include "Matrix.h"
 #include "Camera.h"
 
-ModelPlatform* ModelPlatform::instance_ = nullptr;
-
 ModelPlatform* ModelPlatform::GetInstance()
 {
-	if (instance_ == nullptr) {
-		instance_ = new ModelPlatform;
-	}
-	return instance_;
+	static ModelPlatform instance;
+	return &instance;
 }
 
 void ModelPlatform::Finalize()
 {
-	delete instance_;
-	instance_ = nullptr;
+	
 }
 
 void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)

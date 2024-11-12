@@ -2,20 +2,15 @@
 #include <fstream>
 #include <cassert>
 
-Audio* Audio::instance_ = nullptr;
-
 Audio* Audio::GetInstance()
 {
-	if (instance_ == nullptr) {
-		instance_ = new Audio;
-	}
-	return instance_;
+	static Audio instance;
+	return &instance;
 }
 
 void Audio::Finalize()
 {
-	delete instance_;
-	instance_ = nullptr;
+	
 }
 
 void Audio::Initialize()

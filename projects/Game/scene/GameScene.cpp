@@ -6,7 +6,7 @@
 #include "Input.h"
 
 GameScene::~GameScene() {
-
+	//Finalize();
 }
 
 void GameScene::Initialize() {

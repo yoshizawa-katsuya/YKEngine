@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseScene.h"
 #include "AbstractSceneFactory.h"
+#include <memory>
 
 //シーン管理
 class SceneManager
@@ -30,15 +31,13 @@ public:
 
 private:
 
-	static SceneManager* instance_;
-
 	SceneManager() = default;
 	~SceneManager() = default;
-	SceneManager(SceneManager&) = default;
-	SceneManager& operator=(SceneManager&) = default;
+	SceneManager(SceneManager&) = delete;
+	SceneManager& operator=(SceneManager&) = delete;
 
 	//今のシーン(実行中シーン)
-	BaseScene* scene_ = nullptr;
+	std::unique_ptr<BaseScene> scene_;
 
 	//次のシーン
 	BaseScene* nextScene_ = nullptr;

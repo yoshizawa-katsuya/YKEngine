@@ -19,7 +19,7 @@ class GameScene : public BaseScene
 {
 public:
 
-	~GameScene();
+	~GameScene() override;
 
 	void Initialize() override;
 

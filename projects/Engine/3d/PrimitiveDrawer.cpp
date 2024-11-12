@@ -528,5 +528,4 @@ void PrimitiveDrawer::SetPipelineSet(ID3D12GraphicsCommandList* commandList, Ble
 	commandList->SetGraphicsRootSignature(pipelineSets_.at(static_cast<uint16_t>(blendMode))->rootSignature.Get());
 	commandList->SetPipelineState(pipelineSets_.at(static_cast<uint16_t>(blendMode))->graphicsPipelineState.Get());	//PSOを設定
 
-
 }

@@ -25,8 +25,6 @@ public:
 
 private:
 
-	static SpritePlatform* instance_;
-
 	SpritePlatform() = default;
 	~SpritePlatform() = default;
 	SpritePlatform(SpritePlatform&) = default;

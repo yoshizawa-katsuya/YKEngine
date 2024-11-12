@@ -114,8 +114,6 @@ private:
 	XINPUT_GAMEPAD_Y
 	*/
 
-	static Input* instance_;
-
 	Input() = default;
 	~Input() = default;
 	Input(Input&) = default;

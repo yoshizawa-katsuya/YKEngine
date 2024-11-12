@@ -50,8 +50,6 @@ private:
 		Matrix4x4 WVP2;
 	};
 
-	static ModelPlatform* instance_;
-
 	ModelPlatform() = default;
 	~ModelPlatform() = default;
 	ModelPlatform(ModelPlatform&) = default;

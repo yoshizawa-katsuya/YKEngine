@@ -5,20 +5,15 @@
 #include <numbers>
 #include "imgui/imgui.h"
 
-ParticleManager* ParticleManager::instance_ = nullptr;
-
 ParticleManager* ParticleManager::GetInstance()
 {
-	if (instance_ == nullptr) {
-		instance_ = new ParticleManager;
-	}
-	return instance_;
+	static ParticleManager instance;
+	return &instance;
 }
 
 void ParticleManager::Finalize()
 {
-	delete instance_;
-	instance_ = nullptr;
+
 }
 
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer)

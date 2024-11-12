@@ -41,8 +41,6 @@ private:
 	//Textureデータを読む
 	void LoadTexture(const std::string& filePath);
 
-	static TextureManager* instance_;
-
 	TextureManager() = default;
 	~TextureManager() = default;
 	TextureManager(TextureManager&) = default;

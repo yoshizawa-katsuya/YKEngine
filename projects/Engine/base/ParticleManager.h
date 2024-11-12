@@ -27,8 +27,6 @@ public:
 
 private:
 
-	static ParticleManager* instance_;
-
 	ParticleManager() = default;
 	~ParticleManager() = default;
 	ParticleManager(ParticleManager&) = default;

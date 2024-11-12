@@ -12,6 +12,8 @@ class TitleScene : public BaseScene
 {
 public:
 
+	~TitleScene() override;
+
 	void Initialize() override;
 
 	void Update() override;

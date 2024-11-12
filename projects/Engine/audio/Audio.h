@@ -37,12 +37,10 @@ public:
 
 private:
 
-	static Audio* instance_;
-
 	Audio() = default;
 	~Audio() = default;
-	Audio(Audio&) = default;
-	Audio& operator=(Audio&) = default;
+	Audio(Audio&) = delete;
+	Audio& operator=(Audio&) = delete;
 
 	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
 	IXAudio2MasteringVoice* masterVoice_;

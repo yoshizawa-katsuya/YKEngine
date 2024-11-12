@@ -2,6 +2,11 @@
 #include "imgui/imgui.h"
 #include "SceneManager.h"
 
+TitleScene::~TitleScene()
+{
+	//Finalize();
+}
+
 void TitleScene::Initialize()
 {
 

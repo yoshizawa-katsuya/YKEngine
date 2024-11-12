@@ -1,19 +1,14 @@
 #include "SpritePlatform.h"
 
-SpritePlatform* SpritePlatform::instance_ = nullptr;
-
 SpritePlatform* SpritePlatform::GetInstance()
 {
-	if (instance_ == nullptr) {
-		instance_ = new SpritePlatform;
-	}
-	return instance_;
+	static SpritePlatform instance;
+	return &instance;
 }
 
 void SpritePlatform::Finalize()
 {
-	delete instance_;
-	instance_ = nullptr;
+	
 }
 
 void SpritePlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer)
