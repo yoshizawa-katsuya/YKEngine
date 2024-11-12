@@ -7,6 +7,7 @@ public:
 
 	void CreateSphere(uint32_t textureHandle);
 
+	void Update() override;
 
 private:
 

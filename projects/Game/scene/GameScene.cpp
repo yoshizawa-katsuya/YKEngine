@@ -4,6 +4,7 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "RigidModel.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -40,7 +41,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
-	modelPlayer_ = std::make_unique<BaseModel>();
+	modelPlayer_ = std::make_unique<RigidModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 
 	

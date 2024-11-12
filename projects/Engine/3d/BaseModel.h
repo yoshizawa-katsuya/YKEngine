@@ -28,13 +28,9 @@ public:
 
 	virtual void Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle);
 
-	
-
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
 	const Node& GetRootNode() { return modelData_.rootNode; }
-
-	
 
 	//Transforms& GetTransformAddress() { return transform_; }
 
@@ -55,24 +51,19 @@ protected:
 	void CreateTransformData();
 	*/
 	//objファイルの読み込み
-	void LoadModelFile(const std::string& directoryPath, const std::string& filename);
+	virtual void LoadModelFile(const std::string& directoryPath, const std::string& filename);
 
-	//mtlファイルの読み込み
-	void LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
+	//頂点データ読み込み
+	void LoadVertexData(aiMesh* mesh);
+
+	//インデックスデータ読み込み
+	void LoadIndexData(aiMesh* mesh);
 
 	Node ReadNode(aiNode* node);
 	
-	void CreateSkelton();
-
-	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent);
-
 	ModelPlatform* modelPlatform_ = nullptr;
 
 	ModelData modelData_;
-
-	Skeleton skeleton_;
-
-	SkinCluster skinCluster_;
 
 	//VertexResourceを生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
@@ -97,11 +88,8 @@ protected:
 	//データを書き込む
 	TransformationMatrix* transformationMatrixData_ = nullptr;
 	*/
-	
 
 	uint32_t textureHandle_;
-
-	bool isSkinModel_ = false;
 
 };
 

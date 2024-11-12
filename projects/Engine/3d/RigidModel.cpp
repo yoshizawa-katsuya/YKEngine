@@ -130,3 +130,7 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 
 
 }
+
+void RigidModel::Update()
+{
+}

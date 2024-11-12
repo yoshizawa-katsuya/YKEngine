@@ -50,24 +50,8 @@ void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera) {
 	*/
 
 	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
-
-	if (isSkinModel_) {
-
-		std::array<D3D12_VERTEX_BUFFER_VIEW, 2> vbvs = {
-			vertexBufferView_,
-			skinCluster_.influenceBufferView
-		};
-
-		modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 2, &vbvs.front());	//VBVを設定
-
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(4, skinCluster_.paletteSrvHandle.second);
-
-	}
-	else {
-
-		modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	}
+	
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	//マテリアルのCBufferの場所を設定
@@ -104,23 +88,7 @@ void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera, uint3
 
 	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
-	if (isSkinModel_) {
-
-		std::array<D3D12_VERTEX_BUFFER_VIEW, 2> vbvs = {
-			vertexBufferView_,
-			skinCluster_.influenceBufferView
-		};
-
-		modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 2, &vbvs.front());	//VBVを設定
-
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(4, skinCluster_.paletteSrvHandle.second);
-
-	}
-	else {
-
-		modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	}
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	//マテリアルのCBufferの場所を設定
@@ -153,7 +121,6 @@ void BaseModel::CreateVertexData()
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//頂点データをリソースにコピー
 	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
-
 
 }
 
@@ -212,47 +179,10 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
 		modelData_.vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
-		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
-			aiVector3D& position = mesh->mVertices[vertexIndex];
-			aiVector3D& normal = mesh->mNormals[vertexIndex];
-			aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
-			//右手系->左手系の変換
-			modelData_.vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
-			modelData_.vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
-			modelData_.vertices[vertexIndex].texcoord = { texcord.x, texcord.y };
-		}
 
-		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
-			aiFace& face = mesh->mFaces[faceIndex];
-			assert(face.mNumIndices == 3);
+		LoadVertexData(mesh);
 
-			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
-				uint32_t vertexIndex = face.mIndices[element];
-				modelData_.indeces.push_back(vertexIndex);
-			}
-		}
-
-		//SkinCluster構築用のデータを取得
-		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
-			aiBone* bone = mesh->mBones[boneIndex];
-			std::string jointName = bone->mName.C_Str();
-			JointWeightData& jointWeightData = modelData_.skinClusterData[jointName];
-
-			aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();	//BindPoseMatrixに戻す
-			aiVector3D scale, translate;
-			aiQuaternion rotate;
-			bindPoseMatrixAssimp.Decompose(scale, rotate, translate);	//成分を抽出
-			//左手系のBindPoseMatrixを作る
-			Matrix4x4 bindPoseMatrix = MakeAffineMatrix(
-				{scale.x, scale.y, scale.z}, { -rotate.x, rotate.y, rotate.z, rotate.w }, { -translate.x, translate.y, translate.z });
-			//InverseBindPoseMatrixにする
-			jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrix);
-
-			for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
-				jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight, bone->mWeights[weightIndex].mVertexId });
-			}
-
-		}
+		LoadIndexData(mesh);
 
 	}
 
@@ -346,6 +276,33 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 	
 }
 
+void BaseModel::LoadVertexData(aiMesh* mesh)
+{
+	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
+		aiVector3D& position = mesh->mVertices[vertexIndex];
+		aiVector3D& normal = mesh->mNormals[vertexIndex];
+		aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
+		//右手系->左手系の変換
+		modelData_.vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
+		modelData_.vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
+		modelData_.vertices[vertexIndex].texcoord = { texcord.x, texcord.y };
+	}
+}
+
+void BaseModel::LoadIndexData(aiMesh* mesh)
+{
+	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
+		aiFace& face = mesh->mFaces[faceIndex];
+		assert(face.mNumIndices == 3);
+
+		for (uint32_t element = 0; element < face.mNumIndices; ++element) {
+			uint32_t vertexIndex = face.mIndices[element];
+			modelData_.indeces.push_back(vertexIndex);
+		}
+	}
+}
+
+/*
 void BaseModel::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
 
 	//1.中で必要となる変数の宣言
@@ -372,7 +329,7 @@ void BaseModel::LoadMaterialTemplateFile(const std::string& directoryPath, const
 
 	
 }
-
+*/
 Node BaseModel::ReadNode(aiNode* node)
 {
 	Node result;
@@ -402,43 +359,4 @@ Node BaseModel::ReadNode(aiNode* node)
 	}
 
 	return result;
-}
-
-void BaseModel::CreateSkelton()
-{
-
-	skeleton_.root = CreateJoint(modelData_.rootNode, {});
-
-	//名前とindexのマッピングを行いアクセスしやすくする
-	for (const Joint& joint : skeleton_.joints) {
-		skeleton_.jointMap.emplace(joint.name, joint.index);
-	}
-
-	SkeletonUpdate();
-
-}
-
-int32_t BaseModel::CreateJoint(const Node& node, const std::optional<int32_t>& parent)
-{
-	
-	Joint joint;
-	joint.name = node.name;
-	joint.localMatrix = node.localMatrix;
-	joint.skeletonSpaceMatrix = MakeIdentity4x4();
-	joint.transform = node.transform;
-	joint.index = int32_t(skeleton_.joints.size());	//現在登録されている数をIndexに
-	joint.parent = parent;
-	skeleton_.joints.push_back(joint);	//SkeletonのJoints列に追加
-	for (const Node& child : node.children) {
-		//子Jointを作成し、そのIndexを登録
-		int32_t childIndex = CreateJoint(child, joint.index);
-		skeleton_.joints[joint.index].children.push_back(childIndex);
-	}
-	//自身のIndexを返す
-	return joint.index;
-}
-
-void BaseModel::SkinClusterUpdate()
-{
-
 }
