@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 #include "Struct.h"
-class Model;
+class BaseModel;
 
 class Animation
 {
@@ -14,7 +14,7 @@ public:
 	void Update();
 
 	//RootNodeのアニメーションを再生する
-	Matrix4x4 Reproducing(Model* model);
+	Matrix4x4 Reproducing(BaseModel* model);
 
 	Vector3 CalculateValue(const std::vector<KeyframeVector3>& keyframes, float time);
 	

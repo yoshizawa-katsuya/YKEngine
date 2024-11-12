@@ -1,12 +1,12 @@
 #pragma once
-#include "Model.h"
+#include "BaseModel.h"
 class Camera;
 
 class Object3d
 {
 public:
 
-	void Initialize(Model* model);
+	void Initialize(BaseModel* model);
 
 	void Update(const std::string& label);
 
@@ -24,7 +24,7 @@ private:
 	//カメラの変数
 	//Camera* camera_ = nullptr;
 
-	Model* model_ = nullptr;
+	BaseModel* model_ = nullptr;
 
 };
 

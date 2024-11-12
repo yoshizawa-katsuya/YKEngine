@@ -7,7 +7,7 @@
 #include "TextureManager.h"
 #include "Sprite.h"
 #include "SpritePlatform.h"
-#include "Model.h"
+#include "BaseModel.h"
 #include "ModelPlatform.h"
 #include "PrimitiveDrawer.h"
 #include "ParticleManager.h"

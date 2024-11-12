@@ -126,7 +126,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
     <ClCompile Include="Engine\lib\Vector.cpp" />
-    <ClCompile Include="Engine\3d\Model.cpp" />
+    <ClCompile Include="Engine\3d\BaseModel.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
@@ -145,6 +145,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\scene\SceneFactory.cpp" />
     <ClCompile Include="Engine\lib\Quaternion.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
+    <ClCompile Include="Engine\3d\RigidModel.cpp" />
+    <ClCompile Include="Engine\3d\SkinModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Line3D.GS.hlsl">
@@ -245,7 +247,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\Matrix.h" />
     <ClInclude Include="Engine\lib\Struct.h" />
     <ClInclude Include="Engine\lib\Vector.h" />
-    <ClInclude Include="Engine\3d\Model.h" />
+    <ClInclude Include="Engine\3d\BaseModel.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
@@ -268,6 +270,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\LevelDataLoader.h" />
     <ClInclude Include="Engine\lib\Quaternion.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
+    <ClInclude Include="Engine\3d\RigidModel.h" />
+    <ClInclude Include="Engine\3d\SkinModel.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

@@ -5,7 +5,7 @@
 #include <cassert>
 #include "Lerp.h"
 #include "Slerp.h"
-#include "Model.h"
+#include "BaseModel.h"
 #include "Matrix.h"
 
 void Animation::LoadAnimationFile(const std::string& directoryPath, const std::string& filename)
@@ -58,7 +58,7 @@ void Animation::Update()
 
 }
 
-Matrix4x4 Animation::Reproducing(Model* model)
+Matrix4x4 Animation::Reproducing(BaseModel* model)
 {
 	
 	NodeAnimation& rootNodeAnimation = nodeAnimations_[model->GetRootNode().name];	//rootNodeのAnimationを取得

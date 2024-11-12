@@ -11,45 +11,36 @@ class ModelPlatform;
 class Camera;
 class Animation;
 
-class Model
+class BaseModel
 {
 public:
 
-	
-	void Initialize(ModelPlatform* modelPlatform);
+	BaseModel();
+
+	//void Initialize(ModelPlatform* modelPlatform);
 
 	//三角面化しているモデルのみ読み込み可能
-	void CreateModel(const std::string& directoryPath, const std::string& filename);
+	virtual void CreateModel(const std::string& directoryPath, const std::string& filename);
 
-	void CreateSkinModel(const std::string& directoryPath, const std::string& filename);
+	virtual void Update() = 0;
 
-	void CreateSphere(uint32_t textureHandle);
+	virtual void Draw(const WorldTransform& worldTransform, Camera* camera);
 
-	void Draw(const WorldTransform& worldTransform, Camera* camera);
+	virtual void Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle);
 
-	void Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle);
-
-	void BoneDraw(const EulerTransform& transform, Camera* camera);
-
-	void JointDraw(const EulerTransform& transform, Camera* camera);
-
-	void ApplyAnimation(Animation* animation);
+	
 
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
 	const Node& GetRootNode() { return modelData_.rootNode; }
 
-	void SkeletonUpdate();
-
-	void CreateSkinCluster();
-
-	void SkinClusterUpdate();
+	
 
 	//Transforms& GetTransformAddress() { return transform_; }
 
 	//void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
 
-private:
+protected:
 
 	//頂点データ作成
 	void CreateVertexData();

@@ -1,5 +1,5 @@
 #pragma once
-#include "Model.h"
+#include "BaseModel.h"
 #include "WorldTransform.h"
 class Camera;
 class MapChipField;
@@ -8,7 +8,7 @@ class Player
 {
 public:
 
-	void Initialize(Model* model);
+	void Initialize(BaseModel* model);
 
 	void Update();
 
@@ -19,7 +19,7 @@ private:
 	//Transform変数を作る
 	WorldTransform worldTransform_;
 
-	Model* model_ = nullptr;
+	BaseModel* model_ = nullptr;
 
 };
 

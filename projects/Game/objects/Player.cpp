@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "imgui/imgui.h"
 
-void Player::Initialize(Model* model) {
+void Player::Initialize(BaseModel* model) {
 
 	model_ = model;
 	

@@ -93,7 +93,7 @@
     <ClCompile Include="Engine\lib\Vector.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Model.cpp">
+    <ClCompile Include="Engine\3d\BaseModel.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\PrimitiveDrawer.cpp">
@@ -192,6 +192,12 @@
     <ClCompile Include="Engine\3d\WorldTransform.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\RigidModel.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\SkinModel.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -247,7 +253,7 @@
     <ClInclude Include="Engine\base\WinApp.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Model.h">
+    <ClInclude Include="Engine\3d\BaseModel.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\PrimitiveDrawer.h">
@@ -353,6 +359,12 @@
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\WorldTransform.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\RigidModel.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\SkinModel.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,7 +7,7 @@
 #include "Input.h"
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
-#include "Model.h"
+#include "BaseModel.h"
 #include "DirectionalLight.h"
 #include "Sprite.h"
 #include "Player.h"
@@ -55,7 +55,7 @@ private:
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
-	std::unique_ptr<Model> modelPlayer_;
+	std::unique_ptr<BaseModel> modelPlayer_;
 	
 
 	uint32_t textureHandle_;

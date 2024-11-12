@@ -40,8 +40,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
-	modelPlayer_ = std::make_unique<Model>();
-	modelPlayer_->Initialize(modelPlatform_);
+	modelPlayer_ = std::make_unique<BaseModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 
 	

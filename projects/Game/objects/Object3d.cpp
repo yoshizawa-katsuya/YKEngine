@@ -1,7 +1,7 @@
 #include "Object3d.h"
 #include "imgui/imgui.h"
 
-void Object3d::Initialize(Model* model)
+void Object3d::Initialize(BaseModel* model)
 {
 
 	model_ = model;

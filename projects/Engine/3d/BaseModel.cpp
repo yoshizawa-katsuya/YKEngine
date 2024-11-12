@@ -1,4 +1,4 @@
-#include "Model.h"
+#include "BaseModel.h"
 #include "Matrix.h"
 #include <fstream>
 #include <sstream>
@@ -9,14 +9,12 @@
 #include "Animation.h"
 #include "Struct.h"
 
-void Model::Initialize(ModelPlatform* modelPlatform)
+BaseModel::BaseModel()
+	: modelPlatform_(ModelPlatform::GetInstance())
 {
-
-	modelPlatform_ = modelPlatform;
-
 }
 
-void Model::CreateModel(const std::string& directoryPath, const std::string& filename) {
+void BaseModel::CreateModel(const std::string& directoryPath, const std::string& filename) {
 
 	//モデル読み込み
 	LoadModelFile(directoryPath, filename);
@@ -33,160 +31,7 @@ void Model::CreateModel(const std::string& directoryPath, const std::string& fil
 
 }
 
-void Model::CreateSkinModel(const std::string& directoryPath, const std::string& filename)
-{
-
-	//モデル読み込み
-	LoadModelFile(directoryPath, filename);
-
-	CreateVertexData();
-
-	CreateIndexData();
-
-	CreateMaterialData();
-
-	//CreateTransformData();
-
-	CreateSkelton();
-
-	CreateSkinCluster();
-
-	textureHandle_ = TextureManager::GetInstance()->Load(modelData_.material.textureFilePath);
-
-	isSkinModel_ = true;
-
-}
-
-void Model::CreateSphere(uint32_t textureHandle)
-{
-
-	//球の分割数
-	const uint32_t kSubdivision = 16;
-	//円周率
-	const float pi = std::numbers::pi_v<float>;
-
-	//VertexResourceを生成
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * (kSubdivision * kSubdivision * 4));
-
-	//リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * (kSubdivision * kSubdivision * 4));
-	//1頂点当たりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
-
-	//頂点リソースにデータを書き込む
-	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	//頂点データをリソースにコピー
-	//std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
-
-	//経度分割1つ分の角度 φ
-	const float kLonEvery = pi * 2.0f / float(kSubdivision);
-	//緯度分割1つ分の角度 θ
-	const float kLatEvery = pi / float(kSubdivision);
-	//緯度の方向に分割
-	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		float lat = -pi / 2.0f + kLatEvery * latIndex;	//θ
-		//経度の方向に分割しながら線を描く
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-			uint32_t start = (latIndex * kSubdivision + lonIndex) * 4;
-			float lon = lonIndex * kLonEvery;	//φ
-			//頂点にデータを入力する。基準点a
-			vertexData_[start].position.x = cos(lat) * cos(lon);
-			vertexData_[start].position.y = sin(lat);
-			vertexData_[start].position.z = cos(lat) * sin(lon);
-			vertexData_[start].position.w = 1.0f;
-			vertexData_[start].texcoord.x = float(lonIndex) / float(kSubdivision);
-			vertexData_[start].texcoord.y = 1.0f - float(latIndex) / float(kSubdivision);
-			vertexData_[start].normal.x = vertexData_[start].position.x;
-			vertexData_[start].normal.y = vertexData_[start].position.y;
-			vertexData_[start].normal.z = vertexData_[start].position.z;
-			//b
-			uint32_t i = 1;
-			vertexData_[start + i].position.x = cos(lat + kLatEvery) * cos(lon);
-			vertexData_[start + i].position.y = sin(lat + kLatEvery);
-			vertexData_[start + i].position.z = cos(lat + kLatEvery) * sin(lon);
-			vertexData_[start + i].position.w = 1.0f;
-			vertexData_[start + i].texcoord.x = float(lonIndex) / float(kSubdivision);
-			vertexData_[start + i].texcoord.y = 1.0f - float(latIndex + 1) / float(kSubdivision);
-			vertexData_[start + i].normal.x = vertexData_[start + i].position.x;
-			vertexData_[start + i].normal.y = vertexData_[start + i].position.y;
-			vertexData_[start + i].normal.z = vertexData_[start + i].position.z;
-			//c
-			i++;
-			vertexData_[start + i].position.x = cos(lat) * cos(lon + kLonEvery);
-			vertexData_[start + i].position.y = sin(lat);
-			vertexData_[start + i].position.z = cos(lat) * sin(lon + kLonEvery);
-			vertexData_[start + i].position.w = 1.0f;
-			vertexData_[start + i].texcoord.x = float(lonIndex + 1) / float(kSubdivision);
-			vertexData_[start + i].texcoord.y = 1.0f - float(latIndex) / float(kSubdivision);
-			vertexData_[start + i].normal.x = vertexData_[start + i].position.x;
-			vertexData_[start + i].normal.y = vertexData_[start + i].position.y;
-			vertexData_[start + i].normal.z = vertexData_[start + i].position.z;
-			
-			//d
-			i++;
-			vertexData_[start + i].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
-			vertexData_[start + i].position.y = sin(lat + kLatEvery);
-			vertexData_[start + i].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery);
-			vertexData_[start + i].position.w = 1.0f;
-			vertexData_[start + i].texcoord.x = float(lonIndex + 1) / float(kSubdivision);
-			vertexData_[start + i].texcoord.y = 1.0f - float(latIndex + 1) / float(kSubdivision);
-			vertexData_[start + i].normal.x = vertexData_[start + i].position.x;
-			vertexData_[start + i].normal.y = vertexData_[start + i].position.y;
-			vertexData_[start + i].normal.z = vertexData_[start + i].position.z;
-			
-
-		}
-	}
-
-	modelData_.vertices.resize(kSubdivision * kSubdivision * 4);
-
-
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * (kSubdivision * kSubdivision * 6));
-
-	//リソースの先頭のアドレスから使う
-	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
-
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * (kSubdivision * kSubdivision * 6);
-	//インデックスはuint32_tとする
-	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
-
-	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
-
-	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-
-			uint32_t index = (latIndex * kSubdivision + lonIndex) * 6;
-			uint32_t index2 = (latIndex * kSubdivision + lonIndex) * 4;
-
-			indexData_[index] = index2;
-			uint32_t i = 1;
-			indexData_[index + i] = index2 + 1;
-			i++;
-			indexData_[index + i] = index2 + 2;
-			i++;
-			indexData_[index + i] = index2 + 1;
-			i++;
-			indexData_[index + i] = index2 + 3;
-			i++;
-			indexData_[index + i] = index2 + 2;
-		}
-	}
-
-	modelData_.indeces.resize(kSubdivision * kSubdivision * 6);
-
-	CreateMaterialData();
-
-	//CreateTransformData();
-
-	textureHandle_ = textureHandle;
-
-
-}
-
-void Model::Draw(const WorldTransform& worldTransform, Camera* camera) {
+void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera) {
 
 	Matrix4x4 worldViewProjectionMatrix;
 	if (camera) {
@@ -238,7 +83,7 @@ void Model::Draw(const WorldTransform& worldTransform, Camera* camera) {
 
 }
 
-void Model::Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle)
+void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle)
 {
 
 	Matrix4x4 worldViewProjectionMatrix;
@@ -290,59 +135,7 @@ void Model::Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t 
 
 }
 
-void Model::BoneDraw(const EulerTransform& transform, Camera* camera)
-{
-
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotation, transform.translation);
-
-	//全てのJointを更新。親が若いので通常ループで処理可能になっている
-	for (Joint& joint : skeleton_.joints) {
-		if (joint.parent) {	//親がいれば親の行列を掛ける
-
-			Matrix4x4 jointWorldMatrix1, jointWorldMatrix2;
-
-			jointWorldMatrix1 = joint.skeletonSpaceMatrix * worldMatrix;
-			jointWorldMatrix2 = skeleton_.joints[joint.parent.value()].skeletonSpaceMatrix * worldMatrix;
-
-			modelPlatform_->LineDraw(jointWorldMatrix1, jointWorldMatrix2, camera);
-
-		}
-	}
-
-}
-
-void Model::JointDraw(const EulerTransform& transform, Camera* camera)
-{
-
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotation, transform.translation);
-
-	//全てのJointを更新。親が若いので通常ループで処理可能になっている
-	for (Joint& joint : skeleton_.joints) {
-		
-		Matrix4x4 jointWorldMatrix;
-
-		jointWorldMatrix = joint.skeletonSpaceMatrix * worldMatrix;
-		
-		modelPlatform_->SphereDraw(jointWorldMatrix, camera);
-	}
-
-}
-
-void Model::ApplyAnimation(Animation* animation)
-{
-	for (Joint& joint : skeleton_.joints) {
-		//対象のJointのAnimationがあれば、値の適用を行う。下記のif文はC++17から可能になった初期化付きif文。
-		if (auto it = animation->GetNodeAnimations().find(joint.name); it != animation->GetNodeAnimations().end()) {
-			const NodeAnimation& rootNodeAnimation = (*it).second;
-			joint.transform.translation = animation->CalculateValue(rootNodeAnimation.translate.keyframes, animation->GetAnimationTime());
-			joint.transform.rotation = animation->CalculateValue(rootNodeAnimation.rotate.keyframes, animation->GetAnimationTime());
-			joint.transform.scale = animation->CalculateValue(rootNodeAnimation.scale.keyframes, animation->GetAnimationTime());
-
-		}
-	}
-}
-
-void Model::CreateVertexData()
+void BaseModel::CreateVertexData()
 {
 
 	//VertexResourceを生成
@@ -364,7 +157,7 @@ void Model::CreateVertexData()
 
 }
 
-void Model::CreateIndexData()
+void BaseModel::CreateIndexData()
 {
 
 	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData_.indeces.size());
@@ -378,7 +171,7 @@ void Model::CreateIndexData()
 
 }
 
-void Model::CreateMaterialData()
+void BaseModel::CreateMaterialData()
 {
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
@@ -406,7 +199,7 @@ void Model::CreateTransformData()
 
 }
 */
-void Model::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
+void BaseModel::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
 
 	Assimp::Importer importer;
 	std::string filepath = directoryPath + "/" + filename;
@@ -553,7 +346,7 @@ void Model::LoadModelFile(const std::string& directoryPath, const std::string& f
 	
 }
 
-void Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
+void BaseModel::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
 
 	//1.中で必要となる変数の宣言
 	std::string line;	//ファイルから読んだ1行を格納するもの
@@ -580,7 +373,7 @@ void Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std
 	
 }
 
-Node Model::ReadNode(aiNode* node)
+Node BaseModel::ReadNode(aiNode* node)
 {
 	Node result;
 	/*
@@ -611,7 +404,7 @@ Node Model::ReadNode(aiNode* node)
 	return result;
 }
 
-void Model::CreateSkelton()
+void BaseModel::CreateSkelton()
 {
 
 	skeleton_.root = CreateJoint(modelData_.rootNode, {});
@@ -625,7 +418,7 @@ void Model::CreateSkelton()
 
 }
 
-int32_t Model::CreateJoint(const Node& node, const std::optional<int32_t>& parent)
+int32_t BaseModel::CreateJoint(const Node& node, const std::optional<int32_t>& parent)
 {
 	
 	Joint joint;
@@ -645,96 +438,7 @@ int32_t Model::CreateJoint(const Node& node, const std::optional<int32_t>& paren
 	return joint.index;
 }
 
-void Model::SkeletonUpdate()
+void BaseModel::SkinClusterUpdate()
 {
-
-	//全てのJointを更新。親が若いので通常ループで処理可能になっている
-	for (Joint& joint : skeleton_.joints) {
-		joint.localMatrix = MakeAffineMatrix(joint.transform.scale, joint.transform.rotation, joint.transform.translation);
-		if (joint.parent) {	//親がいれば親の行列を掛ける
-			joint.skeletonSpaceMatrix = joint.localMatrix * skeleton_.joints[*joint.parent].skeletonSpaceMatrix;
-		}
-		else {	//親がいないのでlocalMatrixとskeltonSpaceMatrixは一致する
-			joint.skeletonSpaceMatrix = joint.localMatrix;
-		}
-	}
-
-}
-
-void Model::CreateSkinCluster()
-{
-
-	SrvHeapManager* srvHeapManager = modelPlatform_->GetSrvHeapManager();
-
-	//palette用のResourceを確保
-	skinCluster_.paletteResource = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(WellForGPU) * skeleton_.joints.size());
-	WellForGPU* mappedPalette = nullptr;
-	skinCluster_.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
-	skinCluster_.mappedPalette = { mappedPalette, skeleton_.joints.size() };	//spanを使ってアクセスするようにする
-
-	int32_t srvIndex = srvHeapManager->Allocate();
-
-	skinCluster_.paletteSrvHandle.first = srvHeapManager->GetCPUDescriptorHandle(srvIndex);
-	skinCluster_.paletteSrvHandle.second = srvHeapManager->GetGPUDescriptorHandle(srvIndex);
-
-	//palette用のsrvを作成。StructuredBufferでアクセスできるようにする。
-	D3D12_SHADER_RESOURCE_VIEW_DESC palletteSrvDesc{};
-	palletteSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	palletteSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	palletteSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	palletteSrvDesc.Buffer.FirstElement = 0;
-	palletteSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	palletteSrvDesc.Buffer.NumElements = UINT(skeleton_.joints.size());
-	palletteSrvDesc.Buffer.StructureByteStride = sizeof(WellForGPU);
-	modelPlatform_->GetDxCommon()->GetDevice()->CreateShaderResourceView(skinCluster_.paletteResource.Get(), &palletteSrvDesc, skinCluster_.paletteSrvHandle.first);
-
-	//influence用のResourceを確保。頂点ごとにinfluence情報を追加できるようにする
-	skinCluster_.influenceResource = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexInfluence) * modelData_.vertices.size());
-	VertexInfluence* mappedInfluence = nullptr;
-	skinCluster_.influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
-	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * modelData_.vertices.size());	//0埋め。weightを0にしておく
-	skinCluster_.mappedInfluence = { mappedInfluence, modelData_.vertices.size() };
-
-	//Influence用のVBVを確保
-	skinCluster_.influenceBufferView.BufferLocation = skinCluster_.influenceResource->GetGPUVirtualAddress();
-	skinCluster_.influenceBufferView.SizeInBytes = UINT(sizeof(VertexInfluence) * modelData_.vertices.size());
-	skinCluster_.influenceBufferView.StrideInBytes = sizeof(VertexInfluence);
-
-	//InverseBindPoseMatrixを格納する場所を作成して、単位行列で埋める
-	skinCluster_.inverseBindPoseMatrices.resize(skeleton_.joints.size());
-	std::generate(skinCluster_.inverseBindPoseMatrices.begin(), skinCluster_.inverseBindPoseMatrices.end(), MakeIdentity4x4);
-
-	//ModelDataのSkinCluster情報を解析してInfluenceの中身を埋める
-	for (const auto& jointWeight : modelData_.skinClusterData) {	//ModelのSkinClusterの情報を解析
-		auto it = skeleton_.jointMap.find(jointWeight.first);	//jointWeight.firstはjoint名なので、skeltonに対象となるjointが含まれているか判断
-		if (it == skeleton_.jointMap.end()) {	//そんな名前のJointは存在しない。なので次に回す
-			continue;
-		}
-		//(*it).secondにはjointのindexが入っているので、外套のindexのinverseBindPoseMatrixを代入
-		skinCluster_.inverseBindPoseMatrices[(*it).second] = jointWeight.second.inverseBindPoseMatrix;
-		for (const auto& vertexWeight : jointWeight.second.vertexWeights) {
-			auto& currentInfluence = skinCluster_.mappedInfluence[vertexWeight.vertexIndex];	//該当のvertexIndex
-			for (uint32_t index = 0; index < kNumMaxInfluence; ++index) {	//空いているところに入れる
-				if (currentInfluence.weights[index] == 0.0f) {	//weight==0が空いている状態なので、その場所にweightとjointのindexを代入
-					currentInfluence.weights[index] = vertexWeight.weight;
-					currentInfluence.jointIndices[index] = (*it).second;
-					break;
-				}
-			}
-		}
-	}
-
-}
-
-void Model::SkinClusterUpdate()
-{
-
-	for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) {
-		assert(jointIndex < skinCluster_.inverseBindPoseMatrices.size());
-		skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix = 
-			skinCluster_.inverseBindPoseMatrices[jointIndex] * skeleton_.joints[jointIndex].skeletonSpaceMatrix;
-		skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
-			Transpose(Inverse(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
-	}
 
 }
