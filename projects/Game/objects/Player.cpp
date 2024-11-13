@@ -5,10 +5,6 @@ void Player::Initialize(BaseModel* model) {
 
 	model_ = model;
 	
-	animation_ = std::make_unique<Animation>();
-	
-	animation_->LoadAnimationFile("./resources/simpleSkin", "simpleSkin.gltf");
-
 	worldTransform_.Initialize();
 
 	worldTransform_.UpdateMatrix();
@@ -18,10 +14,6 @@ void Player::Initialize(BaseModel* model) {
 void Player::Update() {
 
 	worldTransform_.UpdateMatrix();
-
-	animation_->Update();
-
-	model_->Update(animation_.get());
 
 #ifdef _DEBUG
 

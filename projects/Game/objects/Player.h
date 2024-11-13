@@ -23,7 +23,5 @@ private:
 
 	BaseModel* model_ = nullptr;
 
-	std::unique_ptr<Animation> animation_;
-
 };
 
