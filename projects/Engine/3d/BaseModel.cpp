@@ -14,6 +14,10 @@ BaseModel::BaseModel()
 {
 }
 
+BaseModel::~BaseModel()
+{
+}
+
 void BaseModel::CreateModel(const std::string& directoryPath, const std::string& filename) {
 
 	//モデル読み込み
@@ -29,6 +33,10 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 
 	textureHandle_ = TextureManager::GetInstance()->Load(modelData_.material.textureFilePath);
 
+}
+
+void BaseModel::Update(Animation* animation)
+{
 }
 
 void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera) {

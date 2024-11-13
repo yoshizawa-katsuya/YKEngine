@@ -2,6 +2,10 @@
 #include "ModelPlatform.h"
 #include <numbers>
 
+RigidModel::~RigidModel()
+{
+}
+
 void RigidModel::CreateSphere(uint32_t textureHandle)
 {
 

@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
+#include "SkinModel.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -41,8 +42,8 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
-	modelPlayer_ = std::make_unique<RigidModel>();
-	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
+	modelPlayer_ = std::make_unique<SkinModel>();
+	modelPlayer_->CreateModel("./resources/simpleSkin", "simpleSkin.gltf");
 
 	
 	/*
@@ -135,7 +136,8 @@ void GameScene::Draw() {
 	//sprite_->Draw();
 
 	//Modelの描画前処理
-	modelPlatform_->PreDraw();
+	//modelPlatform_->PreDraw();
+	modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);

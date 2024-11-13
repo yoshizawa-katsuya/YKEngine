@@ -5,12 +5,13 @@ class SkinModel : public BaseModel
 {
 public:
 
+	~SkinModel() override;
+
 	void CreateModel(const std::string& directoryPath, const std::string& filename) override;
 
-	//アニメーションを適用する場合はApplyAnimationをUpdateの前に呼び出す
 	void Update() override;
 
-	void ApplyAnimation(Animation* animation);
+	void Update(Animation* animation) override;
 
 	void Draw(const WorldTransform& worldTransform, Camera* camera) override;
 
@@ -30,6 +31,8 @@ private:
 
 	//スキンクラスター作成用のデータ読み込み
 	void LoadSkinCluster(aiMesh* mesh);
+
+	void ApplyAnimation(Animation* animation);
 
 	void SkeletonUpdate();
 

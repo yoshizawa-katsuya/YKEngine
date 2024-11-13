@@ -2,9 +2,7 @@
 
 void YKFramework::Initialize()
 {
-
-	static D3DResourceLeakChecker leakCheck_;
-
+	
 	//ゲームウィンドウの作成
 	winApp_ = std::make_unique<WinApp>();
 	winApp_->Initialize();

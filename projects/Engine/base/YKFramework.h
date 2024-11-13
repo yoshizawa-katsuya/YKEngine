@@ -13,7 +13,6 @@
 #include "ParticleManager.h"
 #include "Input.h"
 #include "dx12.h"
-#include "D3DResourceLeakChecker.h"
 #include "SceneManager.h"
 #include "AbstractSceneFactory.h"
 #include <format>

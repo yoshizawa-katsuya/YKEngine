@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseModel.h"
+#include "SkinModel.h"
 #include "WorldTransform.h"
+#include "Animation.h"
 class Camera;
 class MapChipField;
 
@@ -20,6 +22,8 @@ private:
 	WorldTransform worldTransform_;
 
 	BaseModel* model_ = nullptr;
+
+	std::unique_ptr<Animation> animation_;
 
 };
 

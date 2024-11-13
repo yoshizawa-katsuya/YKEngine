@@ -17,12 +17,16 @@ public:
 
 	BaseModel();
 
+	virtual ~BaseModel();
+
 	//void Initialize(ModelPlatform* modelPlatform);
 
 	//三角面化しているモデルのみ読み込み可能
 	virtual void CreateModel(const std::string& directoryPath, const std::string& filename);
 
 	virtual void Update() = 0;
+
+	virtual void Update(Animation* animation = nullptr);
 
 	virtual void Draw(const WorldTransform& worldTransform, Camera* camera);
 

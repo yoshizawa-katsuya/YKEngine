@@ -4,6 +4,10 @@
 #include "Animation.h"
 #include "Camera.h"
 
+SkinModel::~SkinModel()
+{
+}
+
 void SkinModel::CreateModel(const std::string& directoryPath, const std::string& filename)
 {
 
@@ -24,18 +28,13 @@ void SkinModel::Update()
 
 }
 
-void SkinModel::ApplyAnimation(Animation* animation)
+void SkinModel::Update(Animation* animation)
 {
-	for (Joint& joint : skeleton_.joints) {
-		//対象のJointのAnimationがあれば、値の適用を行う。下記のif文はC++17から可能になった初期化付きif文。
-		if (auto it = animation->GetNodeAnimations().find(joint.name); it != animation->GetNodeAnimations().end()) {
-			const NodeAnimation& rootNodeAnimation = (*it).second;
-			joint.transform.translation = animation->CalculateValue(rootNodeAnimation.translate.keyframes, animation->GetAnimationTime());
-			joint.transform.rotation = animation->CalculateValue(rootNodeAnimation.rotate.keyframes, animation->GetAnimationTime());
-			joint.transform.scale = animation->CalculateValue(rootNodeAnimation.scale.keyframes, animation->GetAnimationTime());
 
-		}
-	}
+	ApplyAnimation(animation);
+
+	Update();
+
 }
 
 void SkinModel::Draw(const WorldTransform& worldTransform, Camera* camera)
@@ -249,12 +248,14 @@ void SkinModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		LoadSkinCluster(mesh);
 	}
 
+	//現状だと1つのモデルに複数のテクスチャをつけるのは不可能
 	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
 		aiMaterial* material = scene->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			modelData_.material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
+			break;
 		}
 		else {
 			modelData_.material.textureFilePath = "./resources/white.png";
@@ -288,6 +289,20 @@ void SkinModel::LoadSkinCluster(aiMesh* mesh)
 			jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight, bone->mWeights[weightIndex].mVertexId });
 		}
 
+	}
+}
+
+void SkinModel::ApplyAnimation(Animation* animation)
+{
+	for (Joint& joint : skeleton_.joints) {
+		//対象のJointのAnimationがあれば、値の適用を行う。下記のif文はC++17から可能になった初期化付きif文。
+		if (auto it = animation->GetNodeAnimations().find(joint.name); it != animation->GetNodeAnimations().end()) {
+			const NodeAnimation& rootNodeAnimation = (*it).second;
+			joint.transform.translation = animation->CalculateValue(rootNodeAnimation.translate.keyframes, animation->GetAnimationTime());
+			joint.transform.rotation = animation->CalculateValue(rootNodeAnimation.rotate.keyframes, animation->GetAnimationTime());
+			joint.transform.scale = animation->CalculateValue(rootNodeAnimation.scale.keyframes, animation->GetAnimationTime());
+
+		}
 	}
 }
 
