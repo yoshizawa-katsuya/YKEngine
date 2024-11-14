@@ -28,10 +28,10 @@ public:
 
 	virtual void Update(Animation* animation = nullptr);
 
-	//3dObjectクラス経由で呼び出す物
+	//3dObjectクラス経由で呼び出す
 	virtual void Draw();
 
-	//3dObjectクラス経由で呼び出す物
+	//3dObjectクラス経由で呼び出す
 	virtual void Draw(uint32_t textureHandle);
 
 	Material& GetMaterialDataAddress() { return *materialData_; }

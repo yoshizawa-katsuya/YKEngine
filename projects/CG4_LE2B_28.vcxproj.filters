@@ -198,7 +198,10 @@
     <ClCompile Include="Engine\3d\Base3dObject.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Rigid3dObject.cpp">
+    <ClCompile Include="Engine\3d\Rigid3dObject.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Skin3dObject.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
   </ItemGroup>
@@ -370,7 +373,10 @@
     <ClInclude Include="Engine\3d\Base3dObject.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Rigid3dObject.h">
+    <ClInclude Include="Engine\3d\Rigid3dObject.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Skin3dObject.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
   </ItemGroup>

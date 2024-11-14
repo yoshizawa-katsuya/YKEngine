@@ -298,10 +298,10 @@ void SkinModel::ApplyAnimation(Animation* animation)
 	for (Joint& joint : skeleton_.joints) {
 		//対象のJointのAnimationがあれば、値の適用を行う。下記のif文はC++17から可能になった初期化付きif文。
 		if (auto it = animation->GetNodeAnimations().find(joint.name); it != animation->GetNodeAnimations().end()) {
-			const NodeAnimation& rootNodeAnimation = (*it).second;
-			joint.transform.translation = animation->CalculateValue(rootNodeAnimation.translate.keyframes, animation->GetAnimationTime());
-			joint.transform.rotation = animation->CalculateValue(rootNodeAnimation.rotate.keyframes, animation->GetAnimationTime());
-			joint.transform.scale = animation->CalculateValue(rootNodeAnimation.scale.keyframes, animation->GetAnimationTime());
+			const NodeAnimation& nodeAnimation = (*it).second;
+			joint.transform.translation = animation->CalculateValue(nodeAnimation.translate.keyframes, animation->GetAnimationTime());
+			joint.transform.rotation = animation->CalculateValue(nodeAnimation.rotate.keyframes, animation->GetAnimationTime());
+			joint.transform.scale = animation->CalculateValue(nodeAnimation.scale.keyframes, animation->GetAnimationTime());
 
 		}
 	}
