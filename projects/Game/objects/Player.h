@@ -10,7 +10,7 @@ class Player
 {
 public:
 
-	void Initialize(BaseModel* model);
+	void Initialize(const std::vector<BaseModel*>& models);
 
 	void Update();
 
@@ -18,10 +18,10 @@ public:
 
 private:
 
-	//Transform変数を作る
-	WorldTransform worldTransform_;
+	// 各部位のTransform変数を格納する
+	std::vector<WorldTransform> worldTransforms_;
 
-	BaseModel* model_ = nullptr;
+	std::vector<BaseModel*> models_;
 
 };
 

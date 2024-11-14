@@ -1,30 +1,41 @@
 #include "Player.h"
 #include "imgui/imgui.h"
 
-void Player::Initialize(BaseModel* model) {
+void Player::Initialize(const std::vector<BaseModel*>& models) {
 
-	model_ = model;
+	models_ = models;
 	
-	worldTransform_.Initialize();
+	// 各部位のWorldTransformを初期化
+	worldTransforms_.resize(models.size());
+	for (auto& transform : worldTransforms_) {
+		transform.Initialize();
+		transform.UpdateMatrix();
+		// プレイヤーを前に向かせるため
+		transform.rotation_.y = -1.5f;
+		// ペアレント設定をしていないため現在動かせない
+		// scaleを変えるなら今はここから全てのscaleを変えてください
 
-	worldTransform_.UpdateMatrix();
-
+	}
+	
 }
 
 void Player::Update() {
 
-	worldTransform_.UpdateMatrix();
+	for (auto& transform : worldTransforms_) {
+		transform.UpdateMatrix();
+	}
 
 #ifdef _DEBUG
 
 	ImGui::Begin("Player");
-	if (ImGui::TreeNode("Model")) {
-		ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
-		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
-		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
-		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
-
-		ImGui::TreePop();
+	for (size_t i = 0; i < models_.size(); ++i) {
+		if (ImGui::TreeNode(("Model " + std::to_string(i)).c_str())) {
+			ImGui::ColorEdit4("color", &models_[i]->GetMaterialDataAddress().color.x);
+			ImGui::DragFloat3("translate", &worldTransforms_[i].translation_.x, 0.01f);
+			ImGui::DragFloat3("rotate", &worldTransforms_[i].rotation_.x, 0.01f);
+			ImGui::DragFloat3("scale", &worldTransforms_[i].scale_.x, 0.01f);
+			ImGui::TreePop();
+		}
 	}
 	ImGui::End();
 
@@ -36,6 +47,9 @@ void Player::Update() {
 void Player::Draw(Camera* camera) {
 
 	
-	model_->Draw(worldTransform_, camera);
+	// 各部位のモデルを描画
+	for (size_t i = 0; i < models_.size(); ++i) {
+		models_[i]->Draw(worldTransforms_[i], camera);
+	}
 	
 }

@@ -63,6 +63,6 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
-
+	std::vector<std::unique_ptr<BaseModel>> playerModels_;
 };
 
