@@ -79,6 +79,10 @@ void BaseModel::Draw(uint32_t textureHandle)
 
 }
 
+void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
+{
+}
+
 void BaseModel::CreateVertexData()
 {
 

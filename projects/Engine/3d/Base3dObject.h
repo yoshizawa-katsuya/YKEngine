@@ -13,6 +13,8 @@ public:
 
 	virtual void Update(const WorldTransform& worldTransform, Camera* camera);
 
+	virtual void Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation);
+
 	virtual void Draw();
 
 	virtual void Draw(uint32_t textureHandle);

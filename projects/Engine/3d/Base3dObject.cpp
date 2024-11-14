@@ -43,6 +43,11 @@ void Base3dObject::Update(const WorldTransform& worldTransform, Camera* camera)
 
 }
 
+void Base3dObject::Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation)
+{
+	Update(worldTransform, camera);
+}
+
 void Base3dObject::Draw()
 {
 	//Transform用のCBufferの場所を設定

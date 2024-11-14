@@ -5,7 +5,6 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
-#include "SkinModel.h"
 
 GameScene::~GameScene() {
 	//Finalize();

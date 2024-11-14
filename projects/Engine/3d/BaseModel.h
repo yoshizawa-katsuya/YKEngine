@@ -34,9 +34,16 @@ public:
 	//3dObjectクラス経由で呼び出す
 	virtual void Draw(uint32_t textureHandle);
 
+	virtual void SetSkinCluster(const SkinCluster& skinCluster);
+
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
-	const Node& GetRootNode() { return modelData_.rootNode; }
+	const Node& GetRootNode() const { return modelData_.rootNode; }
+
+	const ModelData& GetModelData() const { return modelData_; }
+	ModelData& GetModelData() { return modelData_; }
+
+	ModelPlatform* GetModelPlatform() { return modelPlatform_; }
 
 	//Transforms& GetTransformAddress() { return transform_; }
 
