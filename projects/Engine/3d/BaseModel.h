@@ -17,7 +17,7 @@ public:
 
 	BaseModel();
 
-	virtual ~BaseModel();
+	virtual ~BaseModel() = 0;
 
 	//void Initialize(ModelPlatform* modelPlatform);
 
