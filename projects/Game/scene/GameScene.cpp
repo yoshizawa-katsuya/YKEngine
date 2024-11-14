@@ -46,6 +46,17 @@ void GameScene::Initialize() {
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 
 	
+
+	//Bossモデルの生成
+	 modelBoss_ = std::make_unique<RigidModel>();
+	 modelBoss_ -> CreateModel("./resources/Boss", "Boss.obj");
+
+
+
+
+
+
+
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -58,6 +69,10 @@ void GameScene::Initialize() {
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
+
+	//Bossの初期化
+	boss_ = std::make_unique<Boss>();
+	boss_->Initialize(modelBoss_.get());
 
 }
 
@@ -82,6 +97,9 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+
+	boss_->Update();
 
 #ifdef _DEBUG
 
@@ -142,8 +160,15 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	boss_->Draw(mainCamera_);
+
+
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
+
+
+
 
 }
 

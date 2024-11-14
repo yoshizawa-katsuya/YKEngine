@@ -24,7 +24,7 @@ private:
 
 	BaseModel* model_ = nullptr;
 
-	std::unique_ptr<BaseModel> modelBoss_;
+	
 
 };
 

@@ -20,7 +20,7 @@ void Boss::Update()
 #ifdef _DEBUG
 
 	ImGui::Begin("Boss");
-	if (ImGui::TreeNode("Model")) {
+	if (ImGui::TreeNode("Model1")) {
 		ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
@@ -37,9 +37,7 @@ void Boss::Update()
 void Boss::Draw(Camera* camera)
 {
 
-	//Transform変数を作る
-	WorldTransform worldTransform_;
 
-	BaseModel* model_ = nullptr;
+	model_->Draw(worldTransform_, camera);
 
 }
