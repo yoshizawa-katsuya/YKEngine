@@ -13,9 +13,9 @@ public:
 
 	void Update(Animation* animation) override;
 
-	void Draw(const WorldTransform& worldTransform, Camera* camera) override;
+	void Draw() override;
 
-	void Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle) override;
+	void Draw(uint32_t textureHandle) override;
 
 	//デバッグ機能
 	void BoneDraw(const EulerTransform& transform, Camera* camera);

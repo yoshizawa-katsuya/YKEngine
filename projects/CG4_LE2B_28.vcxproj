@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\3d\Base3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
     <ClCompile Include="Engine\lib\Easing.cpp" />
     <ClCompile Include="Engine\lib\Lerp.cpp" />
@@ -134,7 +135,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\Player.cpp" />
     <ClCompile Include="Engine\3d\ModelPlatform.cpp" />
     <ClCompile Include="Engine\2d\SpritePlatform.cpp" />
-    <ClCompile Include="Game\objects\Object3d.cpp" />
     <ClCompile Include="Engine\3d\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\3d\ParticleManager.cpp" />
     <ClCompile Include="Engine\base\SrvHeapManager.cpp" />
@@ -147,6 +147,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\3d\RigidModel.cpp" />
     <ClCompile Include="Engine\3d\SkinModel.cpp" />
+    <ClCompile Include="Rigid3dObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Line3D.GS.hlsl">
@@ -231,6 +232,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\3d\Base3dObject.h" />
     <ClInclude Include="Engine\3d\Animation.h" />
     <ClInclude Include="Engine\lib\Easing.h" />
     <ClInclude Include="Engine\lib\Lerp.h" />
@@ -258,7 +260,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\ModelPlatform.h" />
     <ClInclude Include="Engine\2d\SpritePlatform.h" />
     <ClInclude Include="Engine\base\ImGuiManager.h" />
-    <ClInclude Include="Game\objects\Object3d.h" />
     <ClInclude Include="Engine\3d\ParticleEmitter.h" />
     <ClInclude Include="Engine\base\ParticleManager.h" />
     <ClInclude Include="Engine\base\SrvHeapManager.h" />
@@ -272,6 +273,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\3d\RigidModel.h" />
     <ClInclude Include="Engine\3d\SkinModel.h" />
+    <ClInclude Include="Rigid3dObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

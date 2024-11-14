@@ -132,9 +132,6 @@
     <ClCompile Include="Engine\3d\Camera.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\Object3d.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\SrvHeapManager.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
@@ -196,6 +193,12 @@
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\SkinModel.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Base3dObject.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigid3dObject.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
   </ItemGroup>
@@ -298,9 +301,6 @@
     <ClInclude Include="Engine\3d\Camera.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\Object3d.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\SrvHeapManager.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
@@ -365,6 +365,12 @@
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\SkinModel.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Base3dObject.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigid3dObject.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
   </ItemGroup>

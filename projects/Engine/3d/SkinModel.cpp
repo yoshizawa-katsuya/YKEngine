@@ -37,26 +37,9 @@ void SkinModel::Update(Animation* animation)
 
 }
 
-void SkinModel::Draw(const WorldTransform& worldTransform, Camera* camera)
+void SkinModel::Draw()
 {
-
-	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
-		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
-	}
-	else {
-		worldViewProjectionMatrix = worldTransform.worldMatrix_;
-	}
-	/*
-	transformationMatrixData_->WVP = worldViewProjectionMatrix;
-	transformationMatrixData_->World = worldMatrix;
-
-	//wvp用のCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	*/
-
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	std::array<D3D12_VERTEX_BUFFER_VIEW, 2> vbvs = {
 			vertexBufferView_,
@@ -80,26 +63,10 @@ void SkinModel::Draw(const WorldTransform& worldTransform, Camera* camera)
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
 }
 
-void SkinModel::Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle)
+void SkinModel::Draw(uint32_t textureHandle)
 {
 
-	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
-		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
-	}
-	else {
-		worldViewProjectionMatrix = worldTransform.worldMatrix_;
-	}
-	/*
-	transformationMatrixData_->WVP = worldViewProjectionMatrix;
-	transformationMatrixData_->World = worldMatrix;
-
-	//wvp用のCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	*/
-
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	std::array<D3D12_VERTEX_BUFFER_VIEW, 2> vbvs = {
 			vertexBufferView_,

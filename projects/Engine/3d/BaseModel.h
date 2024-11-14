@@ -28,9 +28,11 @@ public:
 
 	virtual void Update(Animation* animation = nullptr);
 
-	virtual void Draw(const WorldTransform& worldTransform, Camera* camera);
+	//3dObjectクラス経由で呼び出す物
+	virtual void Draw();
 
-	virtual void Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle);
+	//3dObjectクラス経由で呼び出す物
+	virtual void Draw(uint32_t textureHandle);
 
 	Material& GetMaterialDataAddress() { return *materialData_; }
 

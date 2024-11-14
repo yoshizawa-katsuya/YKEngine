@@ -39,25 +39,9 @@ void BaseModel::Update(Animation* animation)
 {
 }
 
-void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera) {
+void BaseModel::Draw() {
 
-	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
-		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
-	}
-	else {
-		worldViewProjectionMatrix = worldTransform.worldMatrix_;
-	}
-	/*
-	transformationMatrixData_->WVP = worldViewProjectionMatrix;
-	transformationMatrixData_->World = worldMatrix;
-
-	//wvp用のCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	*/
-
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 	
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
@@ -75,26 +59,10 @@ void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera) {
 
 }
 
-void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle)
+void BaseModel::Draw(uint32_t textureHandle)
 {
 
-	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
-		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
-	}
-	else {
-		worldViewProjectionMatrix = worldTransform.worldMatrix_;
-	}
-	/*
-	transformationMatrixData_->WVP = worldViewProjectionMatrix;
-	transformationMatrixData_->World = worldMatrix;
-
-	//wvp用のCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	*/
-
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
