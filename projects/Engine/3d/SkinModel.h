@@ -25,22 +25,22 @@ public:
 
 private:
 
-	void CreateSkinCluster();
-
 	void LoadModelFile(const std::string& directoryPath, const std::string& filename) override;
 
 	//スキンクラスター作成用のデータ読み込み
 	void LoadSkinCluster(aiMesh* mesh);
+
+	void CreateSkelton();
+
+	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent);
+
+	void CreateSkinCluster();
 
 	void ApplyAnimation(Animation* animation);
 
 	void SkeletonUpdate();
 
 	void SkinClusterUpdate();
-
-	void CreateSkelton();
-
-	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent);
 
 	Skeleton skeleton_;
 
