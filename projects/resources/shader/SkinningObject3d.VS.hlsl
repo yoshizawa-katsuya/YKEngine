@@ -1,4 +1,4 @@
-#include "SkinningObject3d.hlsli"
+#include "object3d.hlsli"
 
 struct TransformationMatrix
 {

@@ -40,6 +40,8 @@ public:
 
 	void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
 
+	void SetCamera(Camera* camera) { camera_ = camera; }
+
 private:
 
 	struct LineWVP
@@ -60,6 +62,8 @@ private:
 	PrimitiveDrawer* primitiveDrawer_;
 
 	DirectionalLight* directionalLight_;
+
+	Camera* camera_;
 
 	//VertexResourceを生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;

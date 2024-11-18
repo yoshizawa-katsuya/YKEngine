@@ -24,6 +24,8 @@ public:
 	//三角面化しているモデルのみ読み込み可能
 	virtual void CreateModel(const std::string& directoryPath, const std::string& filename);
 
+	virtual void CreateSphere(uint32_t textureHandle);
+
 	virtual void Update() = 0;
 
 	virtual void Update(Animation* animation = nullptr);

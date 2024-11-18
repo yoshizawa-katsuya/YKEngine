@@ -248,9 +248,6 @@
     <FxCompile Include="resources\shader\Sprite.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
-    <FxCompile Include="resources\shader\SkinningObject3d.PS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">
@@ -403,9 +400,6 @@
       <Filter>リソース ファイル\shader</Filter>
     </None>
     <None Include="resources\shader\Sprite.hlsli">
-      <Filter>リソース ファイル\shader</Filter>
-    </None>
-    <None Include="resources\shader\SkinningObject3d.hlsli">
       <Filter>リソース ファイル\shader</Filter>
     </None>
   </ItemGroup>

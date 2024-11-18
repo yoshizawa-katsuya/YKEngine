@@ -21,8 +21,6 @@ void GameScene::Initialize() {
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize(dxCommon_);
 
-	modelPlatform_->SetDirectionalLight(directionalLight_.get());
-
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
@@ -38,12 +36,15 @@ void GameScene::Initialize() {
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
+	modelPlatform_->SetDirectionalLight(directionalLight_.get());
+	modelPlatform_->SetCamera(mainCamera_);
+
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
-	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
-
+	//modelPlayer_->CreateModel("./resources/Player", "Player.obj");
+	modelPlayer_->CreateSphere(textureHandle_);
 	
 	/*
 	//テクスチャハンドルの生成

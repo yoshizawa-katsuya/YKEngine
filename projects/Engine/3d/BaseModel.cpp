@@ -35,6 +35,10 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 
 }
 
+void BaseModel::CreateSphere(uint32_t textureHandle)
+{
+}
+
 void BaseModel::Update(Animation* animation)
 {
 }
@@ -130,6 +134,7 @@ void BaseModel::CreateMaterialData()
 	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialData_->enableLighting = true;
 	materialData_->uvTransform = MakeIdentity4x4();
+	materialData_->shininess = 40.0f;
 
 }
 /*

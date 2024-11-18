@@ -85,7 +85,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	case BlendMode::kSkinModelMode:
 
-		rootParameters.resize(5);
+		rootParameters.resize(6);
 
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
@@ -106,15 +106,19 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 		rootParameters[3].Descriptor.ShaderRegister = 1;	//レジスタ番号1を使う
 
-		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		rootParameters[4].DescriptorTable.pDescriptorRanges = descriptorRangeSkinning;	//Tableの中身の配列を指定
-		rootParameters[4].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSkinning);	//Tableで利用する数
+		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[4].Descriptor.ShaderRegister = 2;
+
+		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		rootParameters[5].DescriptorTable.pDescriptorRanges = descriptorRangeSkinning;	//Tableの中身の配列を指定
+		rootParameters[5].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSkinning);	//Tableで利用する数
 
 		break;
 
 	default:
-		rootParameters.resize(4);
+		rootParameters.resize(5);
 
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
@@ -146,6 +150,10 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 		rootParameters[3].Descriptor.ShaderRegister = 1;	//レジスタ番号1を使う
+
+		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[4].Descriptor.ShaderRegister = 2;
 
 		break;
 	}
@@ -422,7 +430,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 
-		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/SkinningObject3d.PS.hlsl",
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Object3d.PS.hlsl",
 			L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 
