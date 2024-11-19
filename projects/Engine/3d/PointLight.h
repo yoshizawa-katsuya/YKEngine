@@ -27,6 +27,16 @@ public:
 	float& GetDecay() { return data_->decay; }
 	float GetDecay() const { return data_->decay; }
 
+	void SetColor(const Vector4& color) { data_->color = color; }
+
+	void SetPosition(const Vector3& position) { data_->position = position; }
+
+	void SetIntensity(float intensity) { data_->intensity = intensity; }
+
+	void SetRadius(float radius) { data_->radius = radius; }
+
+	void SetDecay(float decay) { data_->decay = decay; }
+
 private:
 
 	struct PointLightData {

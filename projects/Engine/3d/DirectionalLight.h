@@ -21,6 +21,12 @@ public:
 	float& GetIntensity() { return data_->intensity; }
 	float GetIntensity() const { return data_->intensity; }
 
+	void SetColor(const Vector4& color) { data_->color = color; }
+
+	void SetDirection(const Vector3& direction) { data_->direction = direction; }
+
+	void SetIntensity(float intensity) { data_->intensity = intensity; }
+
 private:
 
 	struct DirectionalLightData {

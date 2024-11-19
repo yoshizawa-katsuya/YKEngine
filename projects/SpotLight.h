@@ -36,6 +36,22 @@ public:
 	float& GetCosFalloffStart() { return data_->cosFalloffStart; }
 	float GetCosFalloffStart() const { return data_->cosFalloffStart; }
 
+	void SetColor(const Vector4& color) { data_->color = color; }
+
+	void SetPosition(const Vector3& position) { data_->position = position; }
+
+	void SetIntensity(float intensity) { data_->intensity = intensity; }
+
+	void SetDirection(const Vector3& direction) { data_->direction = direction; }
+
+	void SetDistance(float distance) { data_->distance = distance; }
+
+	void SetDecay(float decay) { data_->decay = decay; }
+
+	void SetCosAngle(float cosAngle) { data_->cosAngle = cosAngle; }
+
+	void SetCosFalloffStart(float cosFalloffStart) { data_->cosFalloffStart = cosFalloffStart; }
+
 private:
 
 	struct SpotLightData {
