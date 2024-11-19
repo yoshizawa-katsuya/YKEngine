@@ -201,6 +201,12 @@
     <ClCompile Include="Boss.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
+    <ClCompile Include="LockOnSystem.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLockOn.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -372,6 +378,12 @@
     </ClInclude>
     <ClInclude Include="Boss.h">
       <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="LockOnSystem.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLockOn.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
