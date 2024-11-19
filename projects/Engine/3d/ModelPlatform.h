@@ -2,6 +2,7 @@
 #include "DirectXCommon.h"
 #include "PrimitiveDrawer.h"
 #include "DirectionalLight.h"
+#include "PointLight.h"
 #include <array>
 #include "SrvHeapManager.h"
 class Camera;
@@ -40,6 +41,8 @@ public:
 
 	void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
 
+	void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
+
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
 private:
@@ -62,6 +65,8 @@ private:
 	PrimitiveDrawer* primitiveDrawer_;
 
 	DirectionalLight* directionalLight_;
+
+	PointLight* pointLight_;
 
 	Camera* camera_;
 

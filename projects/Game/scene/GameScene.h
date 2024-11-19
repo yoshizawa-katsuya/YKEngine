@@ -9,6 +9,7 @@
 #include "SpritePlatform.h"
 #include "BaseModel.h"
 #include "DirectionalLight.h"
+#include "PointLight.h"
 #include "Sprite.h"
 #include "Player.h"
 #include "Camera.h"
@@ -54,6 +55,9 @@ private:
 
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
+
+	//点光源
+	std::unique_ptr<PointLight> pointLight_;
 
 	std::unique_ptr<BaseModel> modelPlayer_;
 	

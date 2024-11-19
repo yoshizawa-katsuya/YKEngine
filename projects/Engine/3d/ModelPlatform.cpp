@@ -72,6 +72,7 @@ void ModelPlatform::PreDraw()
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	directionalLight_->Draw();
+	pointLight_->Draw();
 	camera_->SetCameraReaource();
 
 }
@@ -83,6 +84,7 @@ void ModelPlatform::SkinPreDraw()
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	directionalLight_->Draw();
+	pointLight_->Draw();
 	camera_->SetCameraReaource();
 
 }

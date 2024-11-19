@@ -72,7 +72,7 @@ void SkinModel::SetSkinCluster(const SkinCluster& skinCluster)
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 2, &vbvs.front());	//VBVを設定
 
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(5, skinCluster.paletteSrvHandle.second);
+	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(6, skinCluster.paletteSrvHandle.second);
 
 }
 

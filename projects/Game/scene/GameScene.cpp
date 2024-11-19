@@ -21,6 +21,9 @@ void GameScene::Initialize() {
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize(dxCommon_);
 
+	pointLight_ = std::make_unique<PointLight>();
+	pointLight_->Initialize(dxCommon_);
+
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
@@ -37,6 +40,7 @@ void GameScene::Initialize() {
 	mainCamera_ = camera_.get();
 
 	modelPlatform_->SetDirectionalLight(directionalLight_.get());
+	modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
 
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
@@ -95,10 +99,20 @@ void GameScene::Update() {
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("directionalLight")) {
+		if (ImGui::TreeNode("DirectionalLight")) {
 			ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
 			ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
 			ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("PointLight")) {
+			ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
+			ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
+			ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
+			ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
+			ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
 
 			ImGui::TreePop();
 		}
@@ -107,13 +121,14 @@ void GameScene::Update() {
 			isActiveDebugCamera_ = false;
 
 			mainCamera_ = camera_.get();
-
+			modelPlatform_->SetCamera(mainCamera_);
 
 		}
 		if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
 			isActiveDebugCamera_ = true;
 
 			mainCamera_ = camera2_.get();
+			modelPlatform_->SetCamera(mainCamera_);
 
 		}
 		/*
