@@ -85,7 +85,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	case BlendMode::kSkinModelMode:
 
-		rootParameters.resize(7);
+		rootParameters.resize(8);
 
 		//マテリアル
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -118,16 +118,21 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 		rootParameters[5].Descriptor.ShaderRegister = 3;
 
+		//スポットライト
+		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[6].Descriptor.ShaderRegister = 4;
+
 		//Well
-		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		rootParameters[6].DescriptorTable.pDescriptorRanges = descriptorRangeSkinning;	//Tableの中身の配列を指定
-		rootParameters[6].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSkinning);	//Tableで利用する数
+		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		rootParameters[7].DescriptorTable.pDescriptorRanges = descriptorRangeSkinning;	//Tableの中身の配列を指定
+		rootParameters[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSkinning);	//Tableで利用する数
 
 		break;
 
 	default:
-		rootParameters.resize(6);
+		rootParameters.resize(7);
 
 		//マテリアル
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -174,6 +179,11 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 		rootParameters[5].Descriptor.ShaderRegister = 3;
+
+		//スポットライト
+		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[6].Descriptor.ShaderRegister = 4;
 
 		break;
 	}

@@ -73,6 +73,7 @@ void ModelPlatform::PreDraw()
 
 	directionalLight_->Draw();
 	pointLight_->Draw();
+	spotLight_->Draw();
 	camera_->SetCameraReaource();
 
 }
@@ -85,6 +86,7 @@ void ModelPlatform::SkinPreDraw()
 
 	directionalLight_->Draw();
 	pointLight_->Draw();
+	spotLight_->Draw();
 	camera_->SetCameraReaource();
 
 }

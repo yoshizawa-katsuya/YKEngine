@@ -18,11 +18,17 @@ void GameScene::Initialize() {
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
+	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize(dxCommon_);
 
+	//点光源の生成
 	pointLight_ = std::make_unique<PointLight>();
 	pointLight_->Initialize(dxCommon_);
+
+	//スポットライトの生成
+	spotLight_ = std::make_unique<SpotLight>();
+	spotLight_->Initialize(dxCommon_);
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -42,13 +48,14 @@ void GameScene::Initialize() {
 	modelPlatform_->SetDirectionalLight(directionalLight_.get());
 	modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
+	modelPlatform_->SetSpotLight(spotLight_.get());
 
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
-	//modelPlayer_->CreateModel("./resources/Player", "Player.obj");
-	modelPlayer_->CreateSphere(textureHandle_);
+	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
+	//modelPlayer_->CreateSphere(textureHandle_);
 	
 	/*
 	//テクスチャハンドルの生成
@@ -113,6 +120,19 @@ void GameScene::Update() {
 			ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
 			ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
 			ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("SpotLight")) {
+			ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
+			ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
+			ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
+			ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
+			ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
+			ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
+			ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
+			ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
 
 			ImGui::TreePop();
 		}

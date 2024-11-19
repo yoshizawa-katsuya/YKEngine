@@ -10,6 +10,7 @@
 #include "BaseModel.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 #include "Sprite.h"
 #include "Player.h"
 #include "Camera.h"
@@ -58,6 +59,9 @@ private:
 
 	//点光源
 	std::unique_ptr<PointLight> pointLight_;
+
+	//スポットライト
+	std::unique_ptr<SpotLight> spotLight_;
 
 	std::unique_ptr<BaseModel> modelPlayer_;
 	

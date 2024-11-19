@@ -3,6 +3,7 @@
 #include "PrimitiveDrawer.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 #include <array>
 #include "SrvHeapManager.h"
 class Camera;
@@ -43,6 +44,8 @@ public:
 
 	void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
 
+	void SetSpotLight(SpotLight* spotLight) { spotLight_ = spotLight; }
+
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
 private:
@@ -64,9 +67,11 @@ private:
 
 	PrimitiveDrawer* primitiveDrawer_;
 
-	DirectionalLight* directionalLight_;
+	DirectionalLight* directionalLight_ = nullptr;
 
-	PointLight* pointLight_;
+	PointLight* pointLight_ = nullptr;
+
+	SpotLight* spotLight_ = nullptr;
 
 	Camera* camera_;
 
