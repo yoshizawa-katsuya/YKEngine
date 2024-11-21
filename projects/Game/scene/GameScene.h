@@ -16,6 +16,8 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
+#include "Boss.h"
+#include "PlayerLockOn.h"
 #include "Skydome.h"
 #include "Ground.h"
 
@@ -81,6 +83,15 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+
+
+	std::unique_ptr<BaseModel> modelBoss_;
+
+
+	std::unique_ptr<Boss> boss_;
+	std::unique_ptr<PlayerLockOn> playerLockOn_;
+
 
 };
 

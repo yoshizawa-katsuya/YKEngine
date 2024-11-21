@@ -195,6 +195,10 @@
     <ClCompile Include="Engine\3d\SkinModel.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLockOn.cpp">
     <ClCompile Include="Engine\3d\Base3dObject.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
@@ -379,6 +383,10 @@
     <ClInclude Include="Engine\3d\SkinModel.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLockOn.h">
     <ClInclude Include="Engine\3d\Base3dObject.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>

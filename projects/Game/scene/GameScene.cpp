@@ -56,12 +56,17 @@ void GameScene::Initialize() {
 	modelPlayer_ = std::make_unique<RigidModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
-	
+
+	//Bossモデルの生成
+	modelBoss_ = std::make_unique<RigidModel>();
+	modelBoss_ -> CreateModel("./resources/Boss", "Boss.obj");
+
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
 
 	modelGround_ = std::make_unique<RigidModel>();
 	modelGround_->CreateModel("./resources/ground", "ground.obj");
+
 
 	/*
 	//テクスチャハンドルの生成
@@ -76,6 +81,15 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+	//Bossの初期化
+	boss_ = std::make_unique<Boss>();
+	boss_->Initialize(modelBoss_.get());
+
+	// ボスのロックオン処理の生成
+	playerLockOn_ = std::make_unique<PlayerLockOn>();
+	playerLockOn_->Initialize(camera_.get());
+	boss_->SetLockOn(playerLockOn_.get());
+  
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialzie(modelSkydome_.get());
 
@@ -106,6 +120,9 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
+	boss_->Update();
+	playerLockOn_->Update(player_);
+  
 	// 天球の更新
 	skydome_->Update(camera_.get());
 
@@ -195,6 +212,8 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	boss_->Draw(mainCamera_);
+	
 	// 天球の描画
 	skydome_->Draw();
 
@@ -203,6 +222,9 @@ void GameScene::Draw() {
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
+
+
+
 
 }
 
