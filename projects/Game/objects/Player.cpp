@@ -11,9 +11,53 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 		transform.Initialize();
 		transform.UpdateMatrix();
 	}
+
+	/// <summary>
+	/// 体のパーツの座標設定
+	/// </summary>
+
+	// 体及び全体
 	worldTransforms_[0].scale_ = { 0.8f,0.8f,0.8f };
-	worldTransforms_[0].rotation_.y = -1.55f;
-	worldTransforms_[0].translation_.y = -2.0f;
+	worldTransforms_[0].rotation_.y = -1.56f;
+	worldTransforms_[0].translation_.y = -0.2f;
+
+	// 頭部
+	worldTransforms_[1].translation_.y = 0.7f;
+
+	// 右腕
+	worldTransforms_[2].rotation_.z = 1.58f;
+	worldTransforms_[2].translation_.y = 0.33f;
+	worldTransforms_[2].translation_.z = -0.68f;
+
+	// 左腕
+	worldTransforms_[3].translation_.y = 0.34f;
+	worldTransforms_[3].translation_.z = 0.68f;
+
+	// 右足
+	worldTransforms_[4].translation_.y = -0.4f;
+	worldTransforms_[4].translation_.z = -0.18f;
+
+	// 左足
+	worldTransforms_[5].translation_.y = -0.4f;
+	worldTransforms_[5].translation_.z = 0.22f;
+
+	// ブースター
+	worldTransforms_[6].translation_.x = -0.37f;
+	worldTransforms_[6].translation_.y = 0.25f;
+
+	// ジェット
+	worldTransforms_[7].translation_.x = -0.1f;
+	worldTransforms_[7].translation_.y = -0.05f;
+
+	// 銃
+	worldTransforms_[8].translation_.y = -1.72f;
+	worldTransforms_[8].rotation_.z = -1.59f;
+
+	// ミサイルランチャー
+	worldTransforms_[9].translation_.y = 0.81f;
+	worldTransforms_[9].translation_.z = -0.54f;
+
+	// ペアレント設定
 	worldTransforms_[1].parent_ = &worldTransforms_[0];
 	worldTransforms_[2].parent_ = &worldTransforms_[0];
 	worldTransforms_[3].parent_ = &worldTransforms_[0];
