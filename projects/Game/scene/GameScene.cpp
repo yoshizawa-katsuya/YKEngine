@@ -33,7 +33,7 @@ void GameScene::Initialize() {
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, 0.0f });
+	camera_->SetTranslate({ 0.0f, 1.75f, -10.0f });
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -60,6 +60,9 @@ void GameScene::Initialize() {
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
 
+	modelGround_ = std::make_unique<RigidModel>();
+	modelGround_->CreateModel("./resources/ground", "ground.obj");
+
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -75,6 +78,9 @@ void GameScene::Initialize() {
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialzie(modelSkydome_.get());
+
+	ground_ = std::make_unique<Ground>();
+	ground_->Initialzie(modelGround_.get());
 
 }
 
@@ -102,6 +108,9 @@ void GameScene::Update() {
 
 	// 天球の更新
 	skydome_->Update(camera_.get());
+
+	// 地面の更新
+	ground_->Update(camera_.get());
 
 #ifdef _DEBUG
 
@@ -188,6 +197,9 @@ void GameScene::Draw() {
 
 	// 天球の描画
 	skydome_->Draw();
+
+	// 地面の描画
+	ground_->Draw();
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();

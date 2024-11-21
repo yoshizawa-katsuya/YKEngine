@@ -2,12 +2,12 @@
 #include "Base3dObject.h"
 #include "WorldTransform.h"
 
-class Camera;
+#include <memory>
 
 /// <summary>
-/// 天球
+/// 地面
 /// </summary>
-class Skydome
+class Ground
 {
 public:
 
@@ -18,9 +18,10 @@ public:
 	void Draw();
 
 private:
+
 	WorldTransform worldTransform_;
 
 	std::unique_ptr<Base3dObject> object_;
-
+	
 };
 
