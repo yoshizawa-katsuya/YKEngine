@@ -10,13 +10,19 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	for (auto& transform : worldTransforms_) {
 		transform.Initialize();
 		transform.UpdateMatrix();
-		// プレイヤーを前に向かせるため
-		transform.rotation_.y = -1.5f;
-		// ペアレント設定をしていないため現在動かせない
-		// scaleを変えるなら今はここから全てのscaleを変えてください
-
 	}
-	
+	worldTransforms_[0].scale_ = { 0.8f,0.8f,0.8f };
+	worldTransforms_[0].rotation_.y = -1.55f;
+	worldTransforms_[0].translation_.y = -2.0f;
+	worldTransforms_[1].parent_ = &worldTransforms_[0];
+	worldTransforms_[2].parent_ = &worldTransforms_[0];
+	worldTransforms_[3].parent_ = &worldTransforms_[0];
+	worldTransforms_[4].parent_ = &worldTransforms_[0];
+	worldTransforms_[5].parent_ = &worldTransforms_[0];
+	worldTransforms_[6].parent_ = &worldTransforms_[0];
+	worldTransforms_[7].parent_ = &worldTransforms_[6];
+	worldTransforms_[8].parent_ = &worldTransforms_[2];
+	worldTransforms_[9].parent_ = &worldTransforms_[0];
 }
 
 void Player::Update() {
