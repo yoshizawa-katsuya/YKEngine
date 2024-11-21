@@ -2,11 +2,13 @@
 #include "imgui/imgui.h"
 #include "PlayerLockOn.h"
 #include "Vector.h"
+#include "Rigid3dObject.h"
 
 void Boss::Initialize(BaseModel* model)
 {
 
-	model_ = model;
+	object_ = std::make_unique<Rigid3dObject>();
+	object_->Initialize(model);
 
 	worldTransform_.Initialize();
 
@@ -37,7 +39,7 @@ void Boss::Update()
 
 	ImGui::Begin("Boss");
 	if (ImGui::TreeNode("Model1")) {
-		ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
+		ImGui::ColorEdit4("color", &object_->GetModel().GetMaterialDataAddress().color.x);
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
 		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
@@ -54,6 +56,7 @@ void Boss::Draw(Camera* camera)
 {
 
 
-	model_->Draw(worldTransform_, camera);
+	object_->Update(worldTransform_, camera);
+	object_->Draw();
 
 }
