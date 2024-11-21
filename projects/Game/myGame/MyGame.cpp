@@ -50,14 +50,14 @@ void MyGame::Draw()
 	srvHeapManager_->PreDraw();
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNone);
+	//primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNone);
 	/*
 	dxCommon->GetCommandList()->SetGraphicsRootSignature(primitiveDrawer->GetRootSignature());
 	dxCommon->GetCommandList()->SetPipelineState(primitiveDrawer->GetGrahicsPipelineState());	//PSOを設定
 	*/
 	//commandList_->IASetIndexBuffer(&indexBufferView);	//IBVを設定
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
 	//gameScene_->Draw();
