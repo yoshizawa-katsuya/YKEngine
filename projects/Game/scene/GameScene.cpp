@@ -48,12 +48,9 @@ void GameScene::Initialize() {
 	
 
 	//Bossモデルの生成
-	 modelBoss_ = std::make_unique<RigidModel>();
-	 modelBoss_ -> CreateModel("./resources/Boss", "Boss.obj");
-
-
-
-
+	modelBoss_ = std::make_unique<RigidModel>();
+	modelBoss_ -> CreateModel("./resources/Boss", "Boss.obj");
+	
 
 
 
@@ -73,6 +70,11 @@ void GameScene::Initialize() {
 	//Bossの初期化
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize(modelBoss_.get());
+
+	// ボスのロックオン処理の生成
+	playerLockOn_ = std::make_unique<PlayerLockOn>();
+	playerLockOn_->Initialize(camera_.get());
+	boss_->SetLockOn(playerLockOn_.get());
 
 }
 
@@ -100,6 +102,7 @@ void GameScene::Update() {
 
 
 	boss_->Update();
+	playerLockOn_->Update(player_);
 
 #ifdef _DEBUG
 
@@ -161,7 +164,7 @@ void GameScene::Draw() {
 	player_->Draw(mainCamera_);
 
 	boss_->Draw(mainCamera_);
-
+	
 
 
 	//Spriteの描画前処理

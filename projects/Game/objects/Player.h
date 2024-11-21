@@ -16,6 +16,12 @@ public:
 
 	void Draw(Camera* camera);
 
+	/// <summary>
+	/// 中心座標取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetCenterPosition() const;
+
 private:
 
 	//Transform変数を作る
@@ -23,5 +29,7 @@ private:
 
 	BaseModel* model_ = nullptr;
 
+private:
+	Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) const;
 };
 

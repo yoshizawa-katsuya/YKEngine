@@ -1,5 +1,7 @@
 #include "Boss.h"
 #include "imgui/imgui.h"
+#include "PlayerLockOn.h"
+#include "Vector.h"
 
 void Boss::Initialize(BaseModel* model)
 {
@@ -17,6 +19,17 @@ void Boss::Initialize(BaseModel* model)
 
 void Boss::Update()
 {
+
+	// ロックオン
+	if (lockOn_ && lockOn_->ExistTarget()) {
+		// ロックオン座標
+		Vector3 lockOnPosition = lockOn_->GetTargetPosition();
+		// 追従対象からロックオン対象へのベクトル
+		Vector3 sub = lockOnPosition - worldTransform_.translation_;
+
+		// Y軸周り角度
+		worldTransform_.rotation_.y = std::atan2(sub.x, sub.z);
+	}
 
 	worldTransform_.UpdateMatrix();
 

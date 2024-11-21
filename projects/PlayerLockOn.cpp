@@ -1,19 +1,21 @@
 #include "PlayerLockOn.h"
+#include "Matrix.h"
+#include "WinApp.h"
 #include <cassert>
+#include <Boss.h>
 
-void PlayerLockOn::Initialize()
+
+void PlayerLockOn::Initialize(Camera* camera)
 {
-	//--------------------------------
-	// 基底クラスの初期化
-	//--------------------------------
-
-	LockOnSystem::Initialize();
-
+	camera_ = camera;
 }
 
-void PlayerLockOn::Update()
+void PlayerLockOn::Update(const std::unique_ptr<Player>& player)
 {
-	
+	viewProjection_ = camera_->GetViewProjection();
+	matView_ = camera_->GetViewMatrix();
+	matProjection_ = camera_->GetProjection();
+
 	// ロックオン状態なら
 	if (target_) {
 		// 範囲外判定
@@ -23,19 +25,18 @@ void PlayerLockOn::Update()
 		}
 	} else {
 		// ロックオン対象の検索
-		Search();
+		Search(player);
 	}
-
 }
 
-void PlayerLockOn::Search()
+void PlayerLockOn::Search(const std::unique_ptr<Player>& player)
 {
 	// 目標
 	std::list<std::pair<float, const Player*>> targets;
 
 	// プレイヤーに対してロックオン判定
 	// 敵のロックオン座標を取得
-	Vector3 positionWorld = target_->GetCenterPosition();
+	Vector3 positionWorld = player->GetCenterPosition();
 
 	// ワールド->ビュー座標変換
 	Vector3 positionView = Transform(positionWorld, matView_);
@@ -47,7 +48,7 @@ void PlayerLockOn::Search()
 
 		// 角度条件チェック（コーンに収まっているか）
 		if (std::abs(arcTangent) <= angleRange_) {
-			targets.emplace_back(std::make_pair(positionView.z, target_));
+			targets.emplace_back(std::make_pair(positionView.z, player.get()));
 		}
 	}
 
@@ -62,19 +63,46 @@ void PlayerLockOn::Search()
 
 }
 
-Vector3 PlayerLockOn::WorldToScreen()
+Vector3 PlayerLockOn::WorldToScreen(Vector3& worldPosition)
 {
-	return Vector3();
+	// ビューポート行列
+	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kClientWidth, WinApp::kClientHeight, 0, 1);
+	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
+	Matrix4x4 matViewProjectionViewport = matView_ * matProjection_ * matViewport;
+	// ワールド->スクリーン変換
+	Vector3 screenPosition = Transform(worldPosition, matViewProjectionViewport);
+	return screenPosition;
 }
 
 bool PlayerLockOn::OutsideSelectionRange()
 {
-	return false;
+	std::list<std::pair<float, const Boss*>> targets;
+
+	// すべての敵に対して順にロックオン判定
+	// 敵のロックオン座標を取得
+	Vector3 positionWorld = target_->GetCenterPosition();
+	// ワールド->ビュー座標変換
+	Vector3 positionView = Transform(positionWorld, matView_);
+	// 距離条件のチェック
+	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
+		// カメラ前方との角度を計算
+		float arcTangent = std::atan2(std::sqrt(positionView.x * positionView.x + positionView.y * positionView.y), positionView.z);
+		// 角度条件チェック(コーンにおさまってるか)
+		if (std::abs(arcTangent) <= angleRange_) {
+			// 範囲外ではない
+			return false;
+		}
+	}
+	// 範囲外である
+	return true;
 }
 
 Vector3 PlayerLockOn::GetTargetPosition() const
 {
-	return Vector3();
+	if (target_) {
+		return target_->GetCenterPosition();
+	}
+	return Vector3{};
 }
 
 Vector3 PlayerLockOn::Transform(const Vector3& vector, const Matrix4x4& matrix)

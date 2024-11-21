@@ -15,6 +15,7 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "Boss.h"
+#include "PlayerLockOn.h"
 class GameScene : public BaseScene
 {
 public:
@@ -70,6 +71,7 @@ private:
 
 
 	std::unique_ptr<Boss> boss_;
+	std::unique_ptr<PlayerLockOn> playerLockOn_;
 
 
 };
