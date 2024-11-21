@@ -75,24 +75,27 @@ void GameScene::Initialize() {
 
 	
 
-	//Bossモデルの生成
+	 //Bossモデルの生成
 	 bossModels_.emplace_back(std::make_unique<RigidModel>());
-	 bossModels_.back()->CreateModel("./resources/Boss/BossBody", "BossBody.obj");//0
+	 bossModels_.back()->CreateModel("./resources/Boss/Connection", "Connection.obj");//0
 
 	 bossModels_.emplace_back(std::make_unique<RigidModel>());
-	 bossModels_.back()->CreateModel("./resources/Boss/BossHead", "BossHead.obj");//1
+	 bossModels_.back()->CreateModel("./resources/Boss/BossBody", "BossBody.obj");//1
 
 	 bossModels_.emplace_back(std::make_unique<RigidModel>());
-	 bossModels_.back()->CreateModel("./resources/Boss/BossGunR", "BossGunR.obj");//2
+	 bossModels_.back()->CreateModel("./resources/Boss/BossHead", "BossHead.obj");//2
 
 	 bossModels_.emplace_back(std::make_unique<RigidModel>());
-	 bossModels_.back()->CreateModel("./resources/Boss/BossGunL", "BossGunL.obj");//3
+	 bossModels_.back()->CreateModel("./resources/Boss/BossGunR", "BossGunR.obj");//3
 
 	 bossModels_.emplace_back(std::make_unique<RigidModel>());
-	 bossModels_.back()->CreateModel("./resources/Boss/TrackL", "TrackL.obj");//4
+	 bossModels_.back()->CreateModel("./resources/Boss/BossGunL", "BossGunL.obj");//4
 
 	 bossModels_.emplace_back(std::make_unique<RigidModel>());
-	 bossModels_.back()->CreateModel("./resources/Boss/TrackR", "TrackR.obj");//5
+	 bossModels_.back()->CreateModel("./resources/Boss/TrackL", "TrackL.obj");//5
+
+	 bossModels_.emplace_back(std::make_unique<RigidModel>());
+	 bossModels_.back()->CreateModel("./resources/Boss/TrackR", "TrackR.obj");//6
 
 
 	/*

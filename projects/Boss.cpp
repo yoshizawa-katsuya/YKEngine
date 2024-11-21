@@ -13,10 +13,11 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 	worldTransforms_[0].rotation_ = { 0.0f,1.5f,0.0f };
 	worldTransforms_[0].translation_ = { 0.0f,0.0f,65.0f };
 	worldTransforms_[1].parent_ = &worldTransforms_[0];
-	worldTransforms_[2].parent_ = &worldTransforms_[1];
-	worldTransforms_[3].parent_ = &worldTransforms_[1];
-	worldTransforms_[4].parent_ = &worldTransforms_[0];
-	worldTransforms_[5].parent_ = &worldTransforms_[0];
+	worldTransforms_[2].parent_ = &worldTransforms_[0];
+	worldTransforms_[3].parent_ = &worldTransforms_[2];
+	worldTransforms_[4].parent_ = &worldTransforms_[2];
+	worldTransforms_[5].parent_ = &worldTransforms_[1];
+	worldTransforms_[6].parent_ = &worldTransforms_[1];
 
 }
 
