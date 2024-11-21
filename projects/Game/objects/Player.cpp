@@ -36,7 +36,8 @@ void Player::Update() {
 
 void Player::Draw(Camera* camera) {
 	
-	model_->Draw(worldTransform_, camera);
+	object_->Update(worldTransform_, camera);
+	object_->Draw();
 	
 }
 
