@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
+#include "Skydome.h"
 
 class GameScene : public BaseScene
 {
@@ -65,9 +66,12 @@ private:
 
 	std::unique_ptr<BaseModel> modelPlayer_;
 	
+	std::unique_ptr<BaseModel> modelSkydome_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
+
+	std::unique_ptr<Skydome> skydome_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
