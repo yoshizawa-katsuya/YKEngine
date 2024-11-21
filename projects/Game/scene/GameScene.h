@@ -63,14 +63,12 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+	std::vector<std::unique_ptr<BaseModel>> playerModels_;
 
 
-
-	std::unique_ptr<BaseModel> modelBoss_;
-
-
+	//Boss
+	std::vector<std::unique_ptr<BaseModel>> bossModels_;
 	std::unique_ptr<Boss> boss_;
-
 
 };
 

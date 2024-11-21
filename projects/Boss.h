@@ -11,7 +11,7 @@ class Boss
 
 public:
 
-	void Initialize(BaseModel* model);
+	void Initialize(const std::vector<BaseModel*>& models);
 
 	void Update();
 
@@ -20,11 +20,9 @@ public:
 private:
 
 	//Transform変数を作る
-	WorldTransform worldTransform_;
+	std::vector<WorldTransform> worldTransforms_;
 
-	BaseModel* model_ = nullptr;
-
-	
+	std::vector<BaseModel*> models_;
 
 };
 

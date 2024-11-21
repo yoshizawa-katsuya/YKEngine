@@ -76,13 +76,23 @@ void GameScene::Initialize() {
 	
 
 	//Bossモデルの生成
-	 modelBoss_ = std::make_unique<RigidModel>();
-	 modelBoss_ -> CreateModel("./resources/Boss", "Boss.obj");
+	 bossModels_.emplace_back(std::make_unique<RigidModel>());
+	 bossModels_.back()->CreateModel("./resources/Boss/BossBody", "BossBody.obj");//0
 
+	 bossModels_.emplace_back(std::make_unique<RigidModel>());
+	 bossModels_.back()->CreateModel("./resources/Boss/BossHead", "BossHead.obj");//1
 
+	 bossModels_.emplace_back(std::make_unique<RigidModel>());
+	 bossModels_.back()->CreateModel("./resources/Boss/BossGunR", "BossGunR.obj");//2
 
+	 bossModels_.emplace_back(std::make_unique<RigidModel>());
+	 bossModels_.back()->CreateModel("./resources/Boss/BossGunL", "BossGunL.obj");//3
 
+	 bossModels_.emplace_back(std::make_unique<RigidModel>());
+	 bossModels_.back()->CreateModel("./resources/Boss/TrackL", "TrackL.obj");//4
 
+	 bossModels_.emplace_back(std::make_unique<RigidModel>());
+	 bossModels_.back()->CreateModel("./resources/Boss/TrackR", "TrackR.obj");//5
 
 
 	/*
@@ -95,16 +105,23 @@ void GameScene::Initialize() {
 	*/
 
 	// プレイヤーの初期化
-	std::vector<BaseModel*> modelPtrs;
-	for (auto& model : playerModels_) {
-		modelPtrs.push_back(model.get());
-	}
-	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
+	 std::vector<BaseModel*> modelPtrs;
+	 for (auto& model : playerModels_) {
+		 modelPtrs.push_back(model.get());
+	 }
+	 player_ = std::make_unique<Player>();
+	 player_->Initialize(modelPtrs);
 
 	//Bossの初期化
-	boss_ = std::make_unique<Boss>();
-	boss_->Initialize(modelBoss_.get());
+	 std::vector<BaseModel*> bossModelPtrs;
+	 for (auto& model : bossModels_) {
+		 bossModelPtrs.push_back(model.get());
+	 }
+	 boss_ = std::make_unique<Boss>();
+	 boss_->Initialize(bossModelPtrs);
+
+
+	
 
 }
 

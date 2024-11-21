@@ -1,35 +1,43 @@
 #include "Boss.h"
 #include "imgui/imgui.h"
 
-void Boss::Initialize(BaseModel* model)
+void Boss::Initialize(const std::vector<BaseModel*>& models)
 {
 
-	model_ = model;
-
-	worldTransform_.Initialize();
-
-	worldTransform_.translation_ = { 0.0f,0.0f,65.0f };
-	worldTransform_.rotation_ = { 0.0f,1.5f,0.0f };
-
-	worldTransform_.UpdateMatrix();
+	models_ = models;
+	worldTransforms_.resize(models.size());
+	for (auto& transform : worldTransforms_) {
+		transform.Initialize();
+		transform.UpdateMatrix();
+	}
+	worldTransforms_[0].rotation_ = { 0.0f,1.5f,0.0f };
+	worldTransforms_[0].translation_ = { 0.0f,0.0f,65.0f };
+	worldTransforms_[1].parent_ = &worldTransforms_[0];
+	worldTransforms_[2].parent_ = &worldTransforms_[1];
+	worldTransforms_[3].parent_ = &worldTransforms_[1];
+	worldTransforms_[4].parent_ = &worldTransforms_[0];
+	worldTransforms_[5].parent_ = &worldTransforms_[0];
 
 }
 
 void Boss::Update()
 {
 
-	worldTransform_.UpdateMatrix();
+	for (auto& transform : worldTransforms_) {
+		transform.UpdateMatrix();
+	}
 
 #ifdef _DEBUG
 
 	ImGui::Begin("Boss");
-	if (ImGui::TreeNode("Model1")) {
-		ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
-		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
-		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
-		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
-
-		ImGui::TreePop();
+	for (size_t i = 0; i < models_.size(); ++i) {
+		if (ImGui::TreeNode(("Model" + std::to_string(i)).c_str())) {
+			ImGui::ColorEdit4("color", &models_[i]->GetMaterialDataAddress().color.x);
+			ImGui::DragFloat3("translate", &worldTransforms_[i].translation_.x, 0.01f);
+			ImGui::DragFloat3("rotate", &worldTransforms_[i].rotation_.x, 0.01f);
+			ImGui::DragFloat3("scale", &worldTransforms_[i].scale_.x, 0.01f);
+			ImGui::TreePop();
+		}
 	}
 	ImGui::End();
 
@@ -41,6 +49,8 @@ void Boss::Draw(Camera* camera)
 {
 
 
-	model_->Draw(worldTransform_, camera);
+	for (size_t i = 0; i < models_.size(); ++i) {
+		models_[i]->Draw(worldTransforms_[i], camera);
+	}
 
 }
