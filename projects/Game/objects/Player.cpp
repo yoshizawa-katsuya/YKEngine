@@ -1,14 +1,14 @@
 #include "Player.h"
 #include "imgui/imgui.h"
 #include "Matrix.h"
+#include "Rigid3dObject.h"
 
 void Player::Initialize(BaseModel* model) {
 
-	model_ = model;
-	
-	worldTransform_.Initialize();
+	object_ = std::make_unique<Rigid3dObject>();
+	object_->Initialize(model);
 
-	worldTransform_.UpdateMatrix();
+	worldTransform_.Initialize();
 
 }
 
@@ -20,7 +20,7 @@ void Player::Update() {
 
 	ImGui::Begin("Player");
 	if (ImGui::TreeNode("Model")) {
-		ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
+		ImGui::ColorEdit4("color", &object_->GetModel().GetMaterialDataAddress().color.x);
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
 		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
@@ -35,7 +35,6 @@ void Player::Update() {
 }
 
 void Player::Draw(Camera* camera) {
-
 	
 	model_->Draw(worldTransform_, camera);
 	
@@ -64,3 +63,4 @@ Vector3 Player::Transform(const Vector3& vector, const Matrix4x4& matrix) const
 	result.z /= w;
 	return result;
 }
+

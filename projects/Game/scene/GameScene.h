@@ -9,6 +9,8 @@
 #include "SpritePlatform.h"
 #include "BaseModel.h"
 #include "DirectionalLight.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 #include "Sprite.h"
 #include "Player.h"
 #include "Camera.h"
@@ -16,6 +18,9 @@
 #include "ParticleEmitter.h"
 #include "Boss.h"
 #include "PlayerLockOn.h"
+#include "Skydome.h"
+#include "Ground.h"
+
 class GameScene : public BaseScene
 {
 public:
@@ -56,11 +61,25 @@ private:
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
+	//点光源
+	std::unique_ptr<PointLight> pointLight_;
+
+	//スポットライト
+	std::unique_ptr<SpotLight> spotLight_;
+
 	std::unique_ptr<BaseModel> modelPlayer_;
 	
+	std::unique_ptr<BaseModel> modelSkydome_;
+
+	std::unique_ptr<BaseModel> modelGround_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
+	
+	// 天球
+	std::unique_ptr<Skydome> skydome_;
+	// 地面
+	std::unique_ptr<Ground> ground_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;

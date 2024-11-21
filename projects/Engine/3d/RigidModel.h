@@ -7,7 +7,7 @@ public:
 
 	~RigidModel() override;
 
-	void CreateSphere(uint32_t textureHandle);
+	void CreateSphere(uint32_t textureHandle) override;
 
 	void Update() override;
 

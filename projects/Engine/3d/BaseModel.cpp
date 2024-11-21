@@ -35,29 +35,17 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 
 }
 
+void BaseModel::CreateSphere(uint32_t textureHandle)
+{
+}
+
 void BaseModel::Update(Animation* animation)
 {
 }
 
-void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera) {
+void BaseModel::Draw() {
 
-	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
-		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
-	}
-	else {
-		worldViewProjectionMatrix = worldTransform.worldMatrix_;
-	}
-	/*
-	transformationMatrixData_->WVP = worldViewProjectionMatrix;
-	transformationMatrixData_->World = worldMatrix;
-
-	//wvp用のCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	*/
-
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 	
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
@@ -75,26 +63,10 @@ void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera) {
 
 }
 
-void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle)
+void BaseModel::Draw(uint32_t textureHandle)
 {
 
-	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
-		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
-	}
-	else {
-		worldViewProjectionMatrix = worldTransform.worldMatrix_;
-	}
-	/*
-	transformationMatrixData_->WVP = worldViewProjectionMatrix;
-	transformationMatrixData_->World = worldMatrix;
-
-	//wvp用のCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	*/
-
-	modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
@@ -109,6 +81,10 @@ void BaseModel::Draw(const WorldTransform& worldTransform, Camera* camera, uint3
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
 
+}
+
+void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
+{
 }
 
 void BaseModel::CreateVertexData()
@@ -158,6 +134,7 @@ void BaseModel::CreateMaterialData()
 	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialData_->enableLighting = true;
 	materialData_->uvTransform = MakeIdentity4x4();
+	materialData_->shininess = 40.0f;
 
 }
 /*

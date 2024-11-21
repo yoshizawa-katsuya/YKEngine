@@ -5,7 +5,6 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
-#include "SkinModel.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -19,15 +18,22 @@ void GameScene::Initialize() {
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
+	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize(dxCommon_);
 
-	modelPlatform_->SetDirectionalLight(directionalLight_.get());
+	//点光源の生成
+	pointLight_ = std::make_unique<PointLight>();
+	pointLight_->Initialize(dxCommon_);
+
+	//スポットライトの生成
+	spotLight_ = std::make_unique<SpotLight>();
+	spotLight_->Initialize(dxCommon_);
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+	camera_->SetTranslate({ 0.0f, 1.75f, -10.0f });
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -39,19 +45,27 @@ void GameScene::Initialize() {
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
+	modelPlatform_->SetDirectionalLight(directionalLight_.get());
+	modelPlatform_->SetPointLight(pointLight_.get());
+	modelPlatform_->SetCamera(mainCamera_);
+	modelPlatform_->SetSpotLight(spotLight_.get());
+
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
-
-	
+	//modelPlayer_->CreateSphere(textureHandle_);
 
 	//Bossモデルの生成
 	modelBoss_ = std::make_unique<RigidModel>();
 	modelBoss_ -> CreateModel("./resources/Boss", "Boss.obj");
-	
 
+	modelSkydome_ = std::make_unique<RigidModel>();
+	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
+
+	modelGround_ = std::make_unique<RigidModel>();
+	modelGround_->CreateModel("./resources/ground", "ground.obj");
 
 
 	/*
@@ -75,6 +89,12 @@ void GameScene::Initialize() {
 	playerLockOn_ = std::make_unique<PlayerLockOn>();
 	playerLockOn_->Initialize(camera_.get());
 	boss_->SetLockOn(playerLockOn_.get());
+  
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialzie(modelSkydome_.get());
+
+	ground_ = std::make_unique<Ground>();
+	ground_->Initialzie(modelGround_.get());
 
 }
 
@@ -100,9 +120,14 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
-
 	boss_->Update();
 	playerLockOn_->Update(player_);
+  
+	// 天球の更新
+	skydome_->Update(camera_.get());
+
+	// 地面の更新
+	ground_->Update(camera_.get());
 
 #ifdef _DEBUG
 
@@ -116,10 +141,33 @@ void GameScene::Update() {
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("directionalLight")) {
+		if (ImGui::TreeNode("DirectionalLight")) {
 			ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
 			ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
 			ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("PointLight")) {
+			ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
+			ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
+			ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
+			ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
+			ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("SpotLight")) {
+			ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
+			ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
+			ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
+			ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
+			ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
+			ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
+			ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
+			ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
 
 			ImGui::TreePop();
 		}
@@ -128,13 +176,14 @@ void GameScene::Update() {
 			isActiveDebugCamera_ = false;
 
 			mainCamera_ = camera_.get();
-
+			modelPlatform_->SetCamera(mainCamera_);
 
 		}
 		if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
 			isActiveDebugCamera_ = true;
 
 			mainCamera_ = camera2_.get();
+			modelPlatform_->SetCamera(mainCamera_);
 
 		}
 		/*
@@ -165,7 +214,11 @@ void GameScene::Draw() {
 
 	boss_->Draw(mainCamera_);
 	
+	// 天球の描画
+	skydome_->Draw();
 
+	// 地面の描画
+	ground_->Draw();
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();

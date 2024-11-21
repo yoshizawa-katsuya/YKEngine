@@ -1,6 +1,5 @@
 #pragma once
-#include "BaseModel.h"
-#include "SkinModel.h"
+#include "Base3dObject.h"
 #include "WorldTransform.h"
 #include "Animation.h"
 class Camera;
@@ -27,7 +26,7 @@ private:
 	//Transform変数を作る
 	WorldTransform worldTransform_;
 
-	BaseModel* model_ = nullptr;
+	std::unique_ptr<Base3dObject> object_;
 
 private:
 	Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) const;
