@@ -1,17 +1,18 @@
 #include "Player.h"
 #include "imgui/imgui.h"
+#include <RigidModel.h>
 
 void Player::Initialize(const std::vector<BaseModel*>& models) {
 
 	models_ = models;
-	
+	bulletModel = std::make_unique<RigidModel>();
+	bulletModel->CreateModel("./resources/player/PlayerBullet", "PlayerBullet.obj");
 	// 各部位のWorldTransformを初期化
 	worldTransforms_.resize(models.size());
 	for (auto& transform : worldTransforms_) {
 		transform.Initialize();
 		transform.UpdateMatrix();
 	}
-
 	/// <summary>
 	/// 体のパーツの座標設定
 	/// </summary>
@@ -70,6 +71,33 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 }
 
 void Player::Update() {
+	// キャラクターの移動ベクトル
+	Vector3 move = { 0, 0, 0 };
+
+	// キャラクターの移動速さ
+	const float kCharacterSpeed = 0.08f;
+
+	/*/////////////////////////////
+	/// キーボードによる移動処理
+	/////////////////////////////*/
+
+#ifdef _DEBUG
+	// 押した方向で移動ベクトルを変更(左右)
+	if (input_->GetInstance()->PushKey(DIK_LEFT)) {
+		move.x -= kCharacterSpeed;
+	} else if (input_->GetInstance()->PushKey(DIK_RIGHT)) {
+		move.x += kCharacterSpeed;
+	}
+
+	// 押した方向で移動ベクトルを変更(上下)
+	if (input_->GetInstance()->PushKey(DIK_DOWN)) {
+		move.y -= kCharacterSpeed;
+	} else if (input_->GetInstance()->PushKey(DIK_UP)) {
+		move.y += kCharacterSpeed;
+	}
+#endif
+	// 座標移動(ベクトルの加算)
+	worldTransforms_[0].translation_ += move;
 
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();

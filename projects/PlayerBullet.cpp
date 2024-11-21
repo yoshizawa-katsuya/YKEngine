@@ -4,11 +4,12 @@ PlayerBullet::~PlayerBullet()
 {
 }
 
-void PlayerBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity)
+void PlayerBullet::Initialize(std::unique_ptr<BaseModel> model, const Vector3& position, const Vector3& velocity)
 {
 	// NULLポインタチェック
 	assert(model);
-	model_ = model;
+	// モデルをセット
+	model_ = std::move(model);
 	// テクスチャ読み込み
 	textureHandle_ = TextureManager::GetInstance()->Load("white.png");
 	// ワールドトランスフォームの初期化
@@ -21,8 +22,30 @@ void PlayerBullet::Initialize(BaseModel* model, const Vector3& position, const V
 
 void PlayerBullet::Update()
 {
+	if (isDead_) {
+		return;
+	}
+
+	// 弾の移動処理
+	worldTransform_.translation_ +=  velocity_;
+
+	// 寿命タイマーを減らす
+	--deathTimer_;
+	if (deathTimer_ <= 0) {
+		isDead_ = true;
+	}
+
+	// ワールドトランスフォームの行列を更新
+	worldTransform_.UpdateMatrix();
 }
 
 void PlayerBullet::Draw(Camera* camera)
 {
+	if (isDead_) {
+		return;
+	}
+
+	// モデルを描画
+	assert(model_);
+	model_->Draw(worldTransform_, camera);
 }

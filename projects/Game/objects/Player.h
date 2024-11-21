@@ -3,6 +3,7 @@
 #include "SkinModel.h"
 #include "WorldTransform.h"
 #include "Animation.h"
+#include "Input.h"
 class Camera;
 class MapChipField;
 
@@ -23,5 +24,9 @@ private:
 
 	std::vector<BaseModel*> models_;
 
+	// 弾丸のモデルを生成
+	std::unique_ptr<BaseModel> bulletModel;
+
+	Input* input_ = nullptr;
 };
 
