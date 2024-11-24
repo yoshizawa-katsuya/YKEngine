@@ -84,10 +84,10 @@ void Boss::GunAttack()
 	//}
 	if (input_->TriggerKey(DIK_SPACE)) {
 
-		const float kBulletSpeed = -0.001f;
-		Vector3 velocity(0, 0, kBulletSpeed);
+		const float kBulletSpeed = 0.01f;
+		Vector3 velocity(kBulletSpeed, 0.0f, 0.0f);
 		velocity = TransFormNormal(velocity, worldTransforms_[3].worldMatrix_);
-
+		
 		auto bullet = std::make_unique<BossBullet>();
 		bullet->Initialize(bulletModel_.get(), velocity);
 
