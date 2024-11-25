@@ -11,7 +11,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(std::unique_ptr<BaseModel> model, const Vector3& position, const Vector3& velocity);
+	void Initialize(const std::shared_ptr<BaseModel> model, const Vector3& position, const Vector3& velocity);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -28,10 +28,10 @@ private:
 	WorldTransform worldTransform_;
 
 	// モデル
-	std::unique_ptr<BaseModel> model_ = nullptr;
+	std::shared_ptr<BaseModel> model_ = nullptr;
 
 	// テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
+	//uint32_t textureHandle_ = 0u;
 
 	// 速度
 	Vector3 velocity_;

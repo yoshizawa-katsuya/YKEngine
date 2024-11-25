@@ -2,10 +2,18 @@
 #include "imgui/imgui.h"
 #include <RigidModel.h>
 
+Player::~Player()
+{
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
+
+}
+
 void Player::Initialize(const std::vector<BaseModel*>& models) {
 
 	models_ = models;
-	bulletModel = std::make_unique<RigidModel>();
+	bulletModel = std::make_shared<RigidModel>();
 	bulletModel->CreateModel("./resources/player/PlayerBullet", "PlayerBullet.obj");
 	// 各部位のWorldTransformを初期化
 	worldTransforms_.resize(models.size());
@@ -58,6 +66,8 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	worldTransforms_[9].translation_.y = 0.81f;
 	worldTransforms_[9].translation_.z = -0.54f;
 
+	bulletEmitter.translation_ = { 0.54f,0.17f,1.4f };
+
 	// ペアレント設定
 	worldTransforms_[1].parent_ = &worldTransforms_[0];
 	worldTransforms_[2].parent_ = &worldTransforms_[0];
@@ -68,20 +78,36 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	worldTransforms_[7].parent_ = &worldTransforms_[6];
 	worldTransforms_[8].parent_ = &worldTransforms_[2];
 	worldTransforms_[9].parent_ = &worldTransforms_[0];
+	bulletEmitter.parent_ = &worldTransforms_[8];
 }
 
 void Player::Update() {
+	// デスフラグの立った弾を削除
+	bullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		});
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
 	// キャラクターの移動速さ
 	const float kCharacterSpeed = 0.08f;
 
+	// 弾丸の更新
+	for (PlayerBullet* bullet : bullets_) {
+
+		bullet->Update();
+	}
+	Attack();
 	/*/////////////////////////////
 	/// キーボードによる移動処理
 	/////////////////////////////*/
 
 #ifdef _DEBUG
+
 	// 押した方向で移動ベクトルを変更(左右)
 	if (input_->GetInstance()->PushKey(DIK_LEFT)) {
 		move.x -= kCharacterSpeed;
@@ -99,10 +125,12 @@ void Player::Update() {
 	// 座標移動(ベクトルの加算)
 	worldTransforms_[0].translation_ += move;
 
+	bulletEmitter.translation_ += move;
+
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();
 	}
-
+	
 #ifdef _DEBUG
 
 	ImGui::Begin("Player");
@@ -115,6 +143,7 @@ void Player::Update() {
 			ImGui::TreePop();
 		}
 	}
+	ImGui::DragFloat3("bulletEmitter", &bulletEmitter.translation_.x, 0.01f);
 	ImGui::End();
 
 #endif // _DEBUG	
@@ -129,5 +158,34 @@ void Player::Draw(Camera* camera) {
 	for (size_t i = 0; i < models_.size(); ++i) {
 		models_[i]->Draw(worldTransforms_[i], camera);
 	}
-	
+	// 弾描画
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(camera);
+	}
+#ifdef _DEBUG
+	bulletModel->Draw(bulletEmitter, camera);
+#endif
+}
+
+void Player::Attack()
+{
+	if (input_->GetInstance()->TriggerKey(DIK_SPACE)) {
+		// 弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+		// 速度ベクトルを自機の向きに合わせて回転させる
+		//velocity = mathMatrix_->TransformNormal(velocity, worldTransform_.matWorld_);
+
+		// 弾を生成し、初期化
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(bulletModel, bulletEmitter.translation_, velocity);
+
+		// 弾を登録する
+		bullets_.push_back(newBullet);
+	}
+}
+
+void Player::OnCollision()
+{
 }

@@ -1,33 +1,32 @@
 #include "PlayerBullet.h"
-
+#include "imgui/imgui.h"
 PlayerBullet::~PlayerBullet()
 {
+
 }
 
-void PlayerBullet::Initialize(std::unique_ptr<BaseModel> model, const Vector3& position, const Vector3& velocity)
+void PlayerBullet::Initialize(const std::shared_ptr<BaseModel> model, const Vector3& position, const Vector3& velocity)
 {
 	// NULLポインタチェック
 	assert(model);
 	// モデルをセット
-	model_ = std::move(model);
+	model_ = model;
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::GetInstance()->Load("white.png");
+	//textureHandle_ = TextureManager::GetInstance()->Load("white.png");
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	// 引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
 	// 引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+	worldTransform_.UpdateMatrix();
 }
 
 void PlayerBullet::Update()
 {
-	if (isDead_) {
-		return;
-	}
 
 	// 弾の移動処理
-	worldTransform_.translation_ +=  velocity_;
+	worldTransform_.translation_ += velocity_;
 
 	// 寿命タイマーを減らす
 	--deathTimer_;
@@ -37,13 +36,19 @@ void PlayerBullet::Update()
 
 	// ワールドトランスフォームの行列を更新
 	worldTransform_.UpdateMatrix();
+#ifdef _DEBUG
+
+	ImGui::Begin("PlayerBullet");
+	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
+	ImGui::End();
+
+#endif // _DEBUG
 }
 
 void PlayerBullet::Draw(Camera* camera)
 {
-	if (isDead_) {
-		return;
-	}
 
 	// モデルを描画
 	assert(model_);
