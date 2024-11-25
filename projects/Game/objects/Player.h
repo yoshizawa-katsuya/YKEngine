@@ -48,5 +48,9 @@ private:
 	// 弾の発射地点
 	WorldTransform bulletEmitter{};
 
+	// クールタイム（秒）
+	const float kCoolDownTime = 15.0f;
+
+	float fireCoolTime = 0.0f;
 };
 

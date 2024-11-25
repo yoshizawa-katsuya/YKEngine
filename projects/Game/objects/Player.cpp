@@ -21,6 +21,7 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 		transform.Initialize();
 		transform.UpdateMatrix();
 	}
+	fireCoolTime = kCoolDownTime;
 	/// <summary>
 	/// 体のパーツの座標設定
 	/// </summary>
@@ -144,6 +145,7 @@ void Player::Update() {
 		}
 	}
 	ImGui::DragFloat3("bulletEmitter", &bulletEmitter.translation_.x, 0.01f);
+	ImGui::InputFloat("fireCoolTime", &fireCoolTime);
 	ImGui::End();
 
 #endif // _DEBUG	
@@ -169,7 +171,10 @@ void Player::Draw(Camera* camera) {
 
 void Player::Attack()
 {
-	if (input_->GetInstance()->TriggerKey(DIK_SPACE)) {
+	
+	fireCoolTime++;
+	if (input_->GetInstance()->PushKey(DIK_SPACE) && fireCoolTime >= kCoolDownTime) {
+		fireCoolTime = 0;
 		// 弾の速度
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
