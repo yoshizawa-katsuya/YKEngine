@@ -163,47 +163,7 @@ void Player::Update() {
 
 void Player::Draw(Camera* camera) {
 	
-	// 各部位のモデルを描画
-	for (size_t i = 0; i < models_.size(); ++i) {
-		models_[i]->Draw(worldTransforms_[i], camera);
-	}
-	// 弾描画
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw(camera);
-	}
-#ifdef _DEBUG
-	bulletModel->Draw(bulletEmitter, camera);
-#endif
-}
-
-void Player::Attack()
-{
-	
-	fireCoolTime++;
-	if (input_->GetInstance()->PushKey(DIK_SPACE) && fireCoolTime >= kCoolDownTime) {
-		fireCoolTime = 0;
-		// 弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
-
-		// 速度ベクトルを自機の向きに合わせて回転させる
-		//velocity = mathMatrix_->TransformNormal(velocity, worldTransform_.matWorld_);
-
-		// 弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(bulletModel, bulletEmitter.translation_, velocity);
-
-		// 弾を登録する
-		bullets_.push_back(newBullet);
-	}
-}
-
-void Player::OnCollision()
-{
-}
-
-	object_->Update(worldTransform_, camera);
-	object_->Draw();
+	model_->Draw(worldTransform_, camera);
 	
 }
 
