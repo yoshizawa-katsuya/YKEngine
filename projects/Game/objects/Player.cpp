@@ -1,7 +1,8 @@
 #include "Player.h"
 #include "imgui/imgui.h"
 #include <RigidModel.h>
-
+#include "Matrix.h"
+#include "Rigid3dObject.h"
 Player::~Player()
 {
 	for (PlayerBullet* bullet : bullets_) {
@@ -50,6 +51,11 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	// 左足
 	worldTransforms_[5].translation_.y = -0.4f;
 	worldTransforms_[5].translation_.z = 0.22f;
+
+	object_ = std::make_unique<Rigid3dObject>();
+	object_->Initialize(model);
+
+	worldTransform_.Initialize();
 
 	// ブースター
 	worldTransforms_[6].translation_.x = -0.37f;
@@ -109,12 +115,14 @@ void Player::Update() {
 
 #ifdef _DEBUG
 
+
 	// 押した方向で移動ベクトルを変更(左右)
 	if (input_->GetInstance()->PushKey(DIK_LEFT)) {
 		move.x -= kCharacterSpeed;
 	} else if (input_->GetInstance()->PushKey(DIK_RIGHT)) {
 		move.x += kCharacterSpeed;
 	}
+
 
 	// 押した方向で移動ベクトルを変更(上下)
 	if (input_->GetInstance()->PushKey(DIK_DOWN)) {
@@ -154,7 +162,6 @@ void Player::Update() {
 }
 
 void Player::Draw(Camera* camera) {
-
 	
 	// 各部位のモデルを描画
 	for (size_t i = 0; i < models_.size(); ++i) {
@@ -194,3 +201,34 @@ void Player::Attack()
 void Player::OnCollision()
 {
 }
+
+	object_->Update(worldTransform_, camera);
+	object_->Draw();
+	
+}
+
+Vector3 Player::GetCenterPosition() const
+{
+	//ローカル座標でのオフセット
+	const Vector3 offset = { 0.0f, 1.5f, 0.0f };
+	Matrix4x4 matWorld = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	//ワールド座標に変換
+	Vector3 worldPos = Transform(offset, matWorld);
+	return worldPos;
+}
+
+Vector3 Player::Transform(const Vector3& vector, const Matrix4x4& matrix) const
+{
+	Vector3 result{};
+	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
+	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
+	result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
+	float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + 1.0f * matrix.m[3][3];
+	assert(w != 0.0f);
+	result.x /= w;
+	result.y /= w;
+	result.z /= w;
+	return result;
+}
+
+

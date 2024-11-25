@@ -17,24 +17,35 @@ public:
 
 	BaseModel();
 
-	virtual ~BaseModel();
+	virtual ~BaseModel() = 0;
 
 	//void Initialize(ModelPlatform* modelPlatform);
 
 	//三角面化しているモデルのみ読み込み可能
 	virtual void CreateModel(const std::string& directoryPath, const std::string& filename);
 
+	virtual void CreateSphere(uint32_t textureHandle);
+
 	virtual void Update() = 0;
 
 	virtual void Update(Animation* animation = nullptr);
 
-	virtual void Draw(const WorldTransform& worldTransform, Camera* camera);
+	//3dObjectクラス経由で呼び出す
+	virtual void Draw();
 
-	virtual void Draw(const WorldTransform& worldTransform, Camera* camera, uint32_t textureHandle);
+	//3dObjectクラス経由で呼び出す
+	virtual void Draw(uint32_t textureHandle);
+
+	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
-	const Node& GetRootNode() { return modelData_.rootNode; }
+	const Node& GetRootNode() const { return modelData_.rootNode; }
+
+	const ModelData& GetModelData() const { return modelData_; }
+	ModelData& GetModelData() { return modelData_; }
+
+	ModelPlatform* GetModelPlatform() { return modelPlatform_; }
 
 	//Transforms& GetTransformAddress() { return transform_; }
 

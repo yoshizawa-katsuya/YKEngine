@@ -132,9 +132,6 @@
     <ClCompile Include="Engine\3d\Camera.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\Object3d.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\SrvHeapManager.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
@@ -199,6 +196,29 @@
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
     <ClCompile Include="PlayerBullet.cpp">
+    <ClCompile Include="Boss.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLockOn.cpp">
+    <ClCompile Include="Engine\3d\Base3dObject.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Rigid3dObject.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\Skin3dObject.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\PointLight.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Skydome.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -240,9 +260,6 @@
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
     <FxCompile Include="resources\shader\Sprite.PS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\SkinningObject3d.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
   </ItemGroup>
@@ -300,9 +317,6 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\Camera.h">
       <Filter>ヘッダー ファイル\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\Object3d.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\SrvHeapManager.h">
       <Filter>ヘッダー ファイル\base</Filter>
@@ -371,6 +385,29 @@
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="PlayerBullet.h">
+    <ClInclude Include="Boss.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLockOn.h">
+    <ClInclude Include="Engine\3d\Base3dObject.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Rigid3dObject.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Skin3dObject.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\PointLight.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -391,9 +428,6 @@
       <Filter>リソース ファイル\shader</Filter>
     </None>
     <None Include="resources\shader\Sprite.hlsli">
-      <Filter>リソース ファイル\shader</Filter>
-    </None>
-    <None Include="resources\shader\SkinningObject3d.hlsli">
       <Filter>リソース ファイル\shader</Filter>
     </None>
   </ItemGroup>

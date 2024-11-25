@@ -1,6 +1,7 @@
 #pragma once
 #include "Struct.h"
 #include "WinApp.h"
+#include "DirectXCommon.h"
 
 //カメラ
 class Camera
@@ -11,6 +12,8 @@ public:
 
 	//更新
 	void Update();
+
+	void SetCameraReaource();
 
 	//getter
 	const Matrix4x4& GetWorldMatrix() const { return worldMatrix_; }
@@ -42,6 +45,10 @@ public:
 
 private:
 
+	struct CameraForGPU {
+		Vector3 worldPosition;
+	};
+
 	//カメラの変数
 	EulerTransform transform_;
 	Matrix4x4 worldMatrix_;
@@ -53,5 +60,10 @@ private:
 	float farClip_;	//ファークリップ距離
 	Matrix4x4 viewProjectionMatrix_;
 
+	DirectXCommon* dxCommon_;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> cameraResource_;
+	CameraForGPU* cameraForGPUData_;
+	
 };
 

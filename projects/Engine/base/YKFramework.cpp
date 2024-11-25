@@ -56,7 +56,7 @@ void YKFramework::Initialize()
 
 void YKFramework::Finalize()
 {
-
+	dxCommon_->Finalize();
 }
 
 void YKFramework::Update()

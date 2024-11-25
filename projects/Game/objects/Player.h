@@ -1,6 +1,5 @@
 #pragma once
-#include "BaseModel.h"
-#include "SkinModel.h"
+#include "Base3dObject.h"
 #include "WorldTransform.h"
 #include "Animation.h"
 #include "Input.h"
@@ -19,6 +18,7 @@ public:
 
 	void Draw(Camera* camera);
 
+
 	void Attack();
 
 	// ワールド座標を取得
@@ -29,6 +29,13 @@ public:
 
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
+
+	/// <summary>
+	/// 中心座標取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetCenterPosition() const;
+
 
 private:
 
@@ -48,9 +55,16 @@ private:
 	// 弾の発射地点
 	WorldTransform bulletEmitter{};
 
+
 	// クールタイム（秒）
 	const float kCoolDownTime = 15.0f;
 
 	float fireCoolTime = 0.0f;
+
+	std::unique_ptr<Base3dObject> object_;
+
+private:
+	Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) const;
+
 };
 
