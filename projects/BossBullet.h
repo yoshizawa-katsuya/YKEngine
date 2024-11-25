@@ -3,6 +3,9 @@
 #include "SkinModel.h"
 #include "WorldTransform.h"
 #include "Animation.h"
+
+class Boss;
+
 class BossBullet
 {
 public:
@@ -24,6 +27,7 @@ private:
 
 
 	Vector3 velocity_;
+
 
 };
 

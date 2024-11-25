@@ -15,6 +15,9 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "Boss.h"
+#include "Ground.h"
+#include "SkyDome.h"
+
 class GameScene : public BaseScene
 {
 public:
@@ -69,6 +72,14 @@ private:
 	//Boss
 	std::unique_ptr<Boss> boss_;
 	std::vector<std::unique_ptr<BaseModel>> bossModels_;
+
+	//Ground
+	std::unique_ptr<Ground> ground_;
+	std::unique_ptr<BaseModel> modelGround_;
+
+	//SkyDome
+	std::unique_ptr<SkyDome> skyDome_;
+	std::unique_ptr<BaseModel> modelSkyDome_;
 
 };
 

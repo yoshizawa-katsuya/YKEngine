@@ -27,6 +27,7 @@ public:
 
 	Vector3 Add(const Vector3& v1, const Vector3& v2);
 
+
 private:
 
 	//Transform変数を作る
@@ -43,6 +44,7 @@ private:
 	int cooldownTimer_ = 0;
 	const int maxBulletCount_ = 10;
 	const int cooldownDuration_ = 60;
+
 
 	Input* input_;
 

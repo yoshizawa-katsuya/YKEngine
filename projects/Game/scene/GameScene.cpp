@@ -123,8 +123,21 @@ void GameScene::Initialize() {
 	 boss_ = std::make_unique<Boss>();
 	 boss_->Initialize(bossModelPtrs);
 
+	 //Groundモデルの生成
+	 modelGround_ = std::make_unique<RigidModel>();
+	 modelGround_ -> CreateModel("./resources/ground", "ground.obj");
 
-	
+	 //Groundの初期化
+	 ground_ = std::make_unique<Ground>();
+	 ground_->Initialize(modelGround_.get());
+
+	 //SkyDomeモデルの生成
+	 modelSkyDome_ = std::make_unique<RigidModel>();
+	 modelSkyDome_->CreateModel("./resources/skyDome", "skyDome.obj");
+
+	 //SkyDomeの初期化
+	 skyDome_ = std::make_unique<SkyDome>();
+	 skyDome_->Initialize(modelSkyDome_.get());
 
 }
 
@@ -152,6 +165,11 @@ void GameScene::Update() {
 
 
 	boss_->Update();
+
+	skyDome_->Update();
+
+	ground_->Update();
+
 
 #ifdef _DEBUG
 
@@ -210,10 +228,13 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	//player_->Draw(mainCamera_);
 
 	boss_->Draw(mainCamera_);
 
+	skyDome_->Draw(mainCamera_);
+
+	ground_->Draw(mainCamera_);
 
 
 	//Spriteの描画前処理

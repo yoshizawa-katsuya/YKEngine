@@ -10,8 +10,19 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 		transform.Initialize();
 		transform.UpdateMatrix();
 	}
+
+	
+	
+
 	worldTransforms_[0].rotation_ = { 0.0f,1.5f,0.0f };
-	worldTransforms_[0].translation_ = { 0.0f,0.0f,65.0f }; //Connection
+	worldTransforms_[0].translation_ = { 0.0f,2.52f,65.0f }; //Connection
+	worldTransforms_[1].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[2].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[3].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[4].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[5].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[6].translation_ = { 0.0f,0.0f,0.0f };
+
 	worldTransforms_[1].parent_ = &worldTransforms_[0];     //BossBody
 	worldTransforms_[2].parent_ = &worldTransforms_[0];     //BossHead
 	worldTransforms_[3].parent_ = &worldTransforms_[2];     //BossGunR
@@ -21,7 +32,7 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 
 	bulletModel_ = std::make_unique<RigidModel>();
 	
-	bulletModel_->CreateModel("./resources/Boss/bullet", "bullet.obj");
+	bulletModel_->CreateModel("./resources/Boss/bullet", "bullet.obj"); 
 
 }
 
@@ -86,15 +97,20 @@ void Boss::GunAttack()
 
 		const float kBulletSpeed = 0.01f;
 		Vector3 velocity(kBulletSpeed, 0.0f, 0.0f);
-		velocity = TransFormNormal(velocity, worldTransforms_[3].worldMatrix_);
+		velocity = TransFormNormal(velocity, worldTransforms_[0].worldMatrix_);
 		
 		auto bullet = std::make_unique<BossBullet>();
 		bullet->Initialize(bulletModel_.get(), velocity);
 
-		bullet->SetPosition(worldTransforms_[3].translation_);
+		Vector3 offset = { 1.5f, 1.0f, 0.0f };
+		Vector3 initialPosition = Add(worldTransforms_[3].translation_, offset);
+		bullet->SetPosition(initialPosition);
 
 		bullets_.push_back(std::move(bullet));
 	}
+
+
+
 
 }
 
@@ -106,5 +122,16 @@ Vector3 Boss::TransFormNormal(const Vector3& v, const Matrix4x4& m)
 		v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2]
 
 	};
+	return result;
+}
+
+Vector3 Boss::Add(const Vector3& v1, const Vector3& v2)
+{
+	Vector3 result;
+
+	result.x = v1.x + v2.x;
+	result.y = v1.y + v2.y;
+	result.z = v1.z + v2.z;
+
 	return result;
 }

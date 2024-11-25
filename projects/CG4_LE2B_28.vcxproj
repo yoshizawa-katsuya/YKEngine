@@ -125,6 +125,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
     <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
     <ClCompile Include="Engine\lib\Vector.cpp" />
@@ -149,6 +150,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\3d\RigidModel.cpp" />
     <ClCompile Include="Engine\3d\SkinModel.cpp" />
+    <ClCompile Include="SkyDome.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Line3D.GS.hlsl">
@@ -276,6 +278,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\3d\RigidModel.h" />
     <ClInclude Include="Engine\3d\SkinModel.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="SkyDome.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
