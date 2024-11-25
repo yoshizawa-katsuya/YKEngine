@@ -52,10 +52,36 @@ void GameScene::Initialize() {
 
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
-	//モデルの生成
-	modelPlayer_ = std::make_unique<RigidModel>();
-	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
-	//modelPlayer_->CreateSphere(textureHandle_);
+	// プレイヤーのモデル部位ごとの読み込み
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/Body", "Body.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/Head", "Head.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/RightArm", "RightArm.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/LeftArm", "LeftArm.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/RightLeg", "RightLeg.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/LeftLeg", "LeftLeg.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/Booster", "Booster.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/Jet", "Jet.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/Gun", "Gun.obj");
+
+	playerModels_.emplace_back(std::make_unique<RigidModel>());
+	playerModels_.back()->CreateModel("./resources/player/MissileLauncher", "MissileLauncher.obj");
 
 	//Bossモデルの生成
 	modelBoss_ = std::make_unique<RigidModel>();
@@ -68,6 +94,7 @@ void GameScene::Initialize() {
 	modelGround_->CreateModel("./resources/ground", "ground.obj");
 
 
+
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -77,9 +104,15 @@ void GameScene::Initialize() {
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	*/
 
-	//プレイヤーの初期化
+	// プレイヤーの初期化
+	std::vector<BaseModel*> modelPtrs;
+	for (auto& model : playerModels_) {
+		modelPtrs.push_back(model.get());
+	}
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
+
+	player_->Initialize(modelPtrs);
+
 
 	//Bossの初期化
 	boss_ = std::make_unique<Boss>();
@@ -95,6 +128,7 @@ void GameScene::Initialize() {
 
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialzie(modelGround_.get());
+
 
 }
 

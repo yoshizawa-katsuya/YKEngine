@@ -149,6 +149,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\3d\RigidModel.cpp" />
     <ClCompile Include="Engine\3d\SkinModel.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="PlayerLockOn.cpp" />
     <ClCompile Include="Engine\3d\Rigid3dObject.cpp" />
     <ClCompile Include="Engine\3d\Skin3dObject.cpp" />
@@ -275,6 +276,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\3d\RigidModel.h" />
     <ClInclude Include="Engine\3d\SkinModel.h" />
+    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="PlayerLockOn.h" />
     <ClInclude Include="Engine\3d\Rigid3dObject.h" />
     <ClInclude Include="Engine\3d\Skin3dObject.h" />

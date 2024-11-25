@@ -2,18 +2,33 @@
 #include "Base3dObject.h"
 #include "WorldTransform.h"
 #include "Animation.h"
+#include "Input.h"
+#include "PlayerBullet.h"
 class Camera;
 class MapChipField;
 
 class Player
 {
 public:
+	~Player();
 
-	void Initialize(BaseModel* model);
+	void Initialize(const std::vector<BaseModel*>& models);
 
 	void Update();
 
 	void Draw(Camera* camera);
+
+
+	void Attack();
+
+	// ワールド座標を取得
+	//Vector3 GetWorldPosition();
+
+	// 衝突を検出したら呼び出されるコールバック関数
+	void OnCollision();
+
+	// 弾リストを取得
+	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
 
 	/// <summary>
 	/// 中心座標取得
@@ -21,14 +36,35 @@ public:
 	/// <returns></returns>
 	Vector3 GetCenterPosition() const;
 
+
 private:
 
-	//Transform変数を作る
-	WorldTransform worldTransform_;
+	// 各部位のTransform変数を格納する
+	std::vector<WorldTransform> worldTransforms_;
+
+	std::vector<BaseModel*> models_;
+
+	// 弾丸のモデルを生成
+	std::shared_ptr<BaseModel> bulletModel;
+
+	Input* input_ = nullptr;
+
+	// 弾
+	std::list<PlayerBullet*> bullets_;
+
+	// 弾の発射地点
+	WorldTransform bulletEmitter{};
+
+
+	// クールタイム（秒）
+	const float kCoolDownTime = 15.0f;
+
+	float fireCoolTime = 0.0f;
 
 	std::unique_ptr<Base3dObject> object_;
 
 private:
 	Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) const;
+
 };
 
