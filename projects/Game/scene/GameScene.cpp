@@ -169,6 +169,10 @@ void GameScene::Update() {
 	input_->GetLeftStickX();
 	*/
 
+	if (player_->IsDead()) {
+		sceneManager_->ChengeScene("TitleScene");
+	}
+
 	//カメラの更新
 	camera_->Update();
 
