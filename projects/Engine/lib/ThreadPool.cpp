@@ -1,12 +1,27 @@
 #include "ThreadPool.h"
+#include <cassert>
 
-ThreadPool::ThreadPool(size_t numThreads) : stop(false), activeTasks(0) {
+ThreadPool* ThreadPool::GetInstance()
+{
+    static ThreadPool instance;
+    return &instance;
+}
+
+void ThreadPool::Initlaize()
+{
+    stop = false;
+    activeTasks = 0;
+
+    uint32_t numThreads = std::thread::hardware_concurrency();
+    assert(numThreads > 0);
+
     for (size_t i = 0; i < numThreads; ++i) {
         workers.emplace_back([this] { worker(); });
     }
 }
 
-ThreadPool::~ThreadPool() {
+void ThreadPool::Finalize()
+{
     {
         std::unique_lock<std::mutex> lock(queueMutex);
         stop = true;
@@ -32,7 +47,7 @@ void ThreadPool::waitForCompletion() {
     finishedCondition.wait(lock, [this] {
         // タスクキューが空であり、すべてのタスクが完了しているか確認
         return tasks.empty() && (activeTasks == 0);
-        });
+    });
 }
 
 void ThreadPool::worker() {
@@ -42,7 +57,7 @@ void ThreadPool::worker() {
             std::unique_lock<std::mutex> lock(queueMutex);
             condition.wait(lock, [this] {
                 return stop || !tasks.empty();
-                });
+            });
 
             if (stop && tasks.empty()) return;
 

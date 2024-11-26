@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Animation.h"
 #include "Struct.h"
+#include "ThreadPool.h"
 
 BaseModel::BaseModel()
 	: modelPlatform_(ModelPlatform::GetInstance())
@@ -23,11 +24,16 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 	//モデル読み込み
 	LoadModelFile(directoryPath, filename);
 
-	CreateVertexData();
-	
-	CreateIndexData();
+	ThreadPool* threadpool = ThreadPool::GetInstance();
 
-	CreateMaterialData();
+	//CreateVertexData();
+	threadpool->enqueueTask(&BaseModel::CreateVertexData, this);
+
+	//CreateIndexData();
+	threadpool->enqueueTask(&BaseModel::CreateIndexData, this);
+
+	//CreateMaterialData();
+	threadpool->enqueueTask(&BaseModel::CreateMaterialData, this);
 
 	//CreateTransformData();
 

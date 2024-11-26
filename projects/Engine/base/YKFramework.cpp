@@ -2,7 +2,10 @@
 
 void YKFramework::Initialize()
 {
-	
+	//スレッドプールの作成
+	threadPool_ = ThreadPool::GetInstance();
+	threadPool_->Initlaize();
+
 	//ゲームウィンドウの作成
 	winApp_ = std::make_unique<WinApp>();
 	winApp_->Initialize();
@@ -57,6 +60,8 @@ void YKFramework::Initialize()
 void YKFramework::Finalize()
 {
 	dxCommon_->Finalize();
+
+	threadPool_->Finalize();
 }
 
 void YKFramework::Update()
@@ -101,17 +106,20 @@ void YKFramework::Run()
 {
 	//初期化
 	Initialize();
+	threadPool_->waitForCompletion();
 
 	while (true)	//ゲームループ
 	{
 		//毎フレーム更新
 		Update();
+		threadPool_->waitForCompletion();
 		//終了リクエストが来たら抜ける
 		if (GetIsEndReqest()) {
 			break;
 		}
 		//描画
 		Draw();
+		threadPool_->waitForCompletion();
 	}
 	//ゲームの終了
 	Finalize();
