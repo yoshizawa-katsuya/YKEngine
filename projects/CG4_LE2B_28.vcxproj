@@ -156,6 +156,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\PointLight.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
+    <ClCompile Include="TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Line3D.GS.hlsl">
@@ -284,6 +285,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\SpotLight.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Skydome.h" />
+    <ClInclude Include="TutorialScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
