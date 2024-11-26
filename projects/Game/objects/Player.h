@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Input.h"
 #include "PlayerBullet.h"
+#include "Audio.h"
 class Camera;
 class MapChipField;
 
@@ -45,7 +46,7 @@ private:
 	// 弾丸のモデルを生成
 	std::unique_ptr<BaseModel> bulletModel;
 	
-
+	Audio* audio_;
 	Input* input_ = nullptr;
 
 	// 弾
@@ -64,5 +65,10 @@ private:
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
 
 	std::unique_ptr<Base3dObject> bulletObject;
+
+
+	//se
+	SoundData hitSE01_;
+
 };
 

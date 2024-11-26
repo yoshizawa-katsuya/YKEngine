@@ -13,6 +13,8 @@ Player::~Player()
 
 void Player::Initialize(const std::vector<BaseModel*>& models) {
 
+	audio_ = Audio::GetInstance();
+
 	bulletModel = std::make_unique<RigidModel>();
 	bulletModel->CreateModel("./resources/player/PlayerBullet", "PlayerBullet.obj");
 	// 各部位のWorldTransformを初期化
@@ -90,6 +92,9 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	worldTransforms_[8].parent_ = &worldTransforms_[2];
 	worldTransforms_[9].parent_ = &worldTransforms_[0];
 	bulletEmitter.parent_ = &worldTransforms_[8];
+
+
+	hitSE01_ = audio_->SoundLoadWave("./resources/Sound/SE_01.wav");
 }
 
 void Player::Update() {
@@ -186,6 +191,8 @@ void Player::Attack()
 		// 弾の速度
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
+
+		audio_->SoundPlayWave(hitSE01_);
 
 		// 速度ベクトルを自機の向きに合わせて回転させる
 		//velocity = mathMatrix_->TransformNormal(velocity, worldTransform_.matWorld_);
