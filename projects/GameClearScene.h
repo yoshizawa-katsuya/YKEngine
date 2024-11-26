@@ -37,7 +37,10 @@ private:
 
 	std::unique_ptr<Sprite> sprite1_ = nullptr;
 
+	uint32_t clear2Sprite_ = 0;
 
+	std::unique_ptr<Sprite> sprite2_ = nullptr;
 
+	int time = 40;
 };
 
