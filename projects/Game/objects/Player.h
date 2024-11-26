@@ -36,10 +36,16 @@ public:
 	/// <returns></returns>
 	Vector3 GetCenterPosition() const;
 
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetWorldPosition();
 
 private:
 
 	// 各部位のTransform変数を格納する
+	WorldTransform worldTransform_;
 	std::vector<WorldTransform> worldTransforms_;
 
 	// 弾丸のモデルを生成

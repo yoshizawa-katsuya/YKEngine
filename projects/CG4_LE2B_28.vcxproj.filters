@@ -65,6 +65,7 @@
     <ClCompile Include="Engine\3d\PointLight.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
+    <ClCompile Include="BossCanon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="Engine\3d\SpotLight.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Skydome.h" />
+    <ClInclude Include="BossCanon.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader\Line3D.hlsli" />

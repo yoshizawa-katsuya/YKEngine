@@ -5,7 +5,10 @@
 #include "WorldTransform.h"
 #include "Animation.h"
 
+#include "BossCanon.h"
+
 class Camera;
+class Player;
 class PlayerLockOn;
 
 class Boss
@@ -19,7 +22,11 @@ public:
 
 	void Draw(Camera* camera);
 
+	void Attack(Camera* camera, BaseModel* model);
+
 	void SetLockOn(PlayerLockOn* lockOn) { lockOn_ = lockOn; }
+
+	void SetPlayer(Player* player) { player_ = player; }
 
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
@@ -31,10 +38,18 @@ private:
 	WorldTransform worldTransform_;
 	std::vector<WorldTransform> worldTransforms_;
 
+	// 砲撃
+	std::list<std::unique_ptr<BossCanon>> canons_;
+	float coolTime_ = 3.0f;
+
+	Player* player_ = nullptr;
+
 	//オブジェクト
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
 	PlayerLockOn* lockOn_ = nullptr;
 
+private:
+	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 };
 
 

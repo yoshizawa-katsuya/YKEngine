@@ -94,6 +94,7 @@ private:
 	std::vector<std::unique_ptr<BaseModel>> bossModels_;
 
 
+
 	std::unique_ptr<PlayerLockOn> playerLockOn_;
 
 	// 当たり判定の大きさ

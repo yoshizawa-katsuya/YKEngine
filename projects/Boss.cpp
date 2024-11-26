@@ -3,6 +3,7 @@
 #include "PlayerLockOn.h"
 #include "Vector.h"
 #include "Rigid3dObject.h"
+#include "Matrix.h"
 
 void Boss::Initialize(const std::vector<BaseModel*>& models)
 {
@@ -89,6 +90,56 @@ void Boss::Draw(Camera* camera)
 		objects_[i]->Draw();
 	}
 
+	for (const auto& canon : canons_) {
+		canon->Draw();
+	}
+
+}
+
+void Boss::Attack(Camera* camera, BaseModel* model)
+{
+	// デスフラグが立った大砲を削除
+	canons_.remove_if([](const std::unique_ptr<BossCanon>& canon) {return canon->IsDead(); });
+
+	// 弾の速度
+	const float kCanonSpeed = -1.0f;
+	// ボスの座標を取得
+	Vector3 bossTranslate = GetWorldPosition();
+	// 自キャラの座標を取得
+	Vector3 playerTranslate = player_->GetWorldPosition();
+	// ボスから自キャラへの差分ベクトルを求める
+	Vector3 diff = bossTranslate - playerTranslate;
+	// ベクトルの正規化
+	diff = Normalize(diff);
+	// ベクトルの長さを速さに合わせる
+	diff = diff * kCanonSpeed;
+
+	Vector3 velocity = diff;
+
+	// 速度ベクトルを自機の向きに合わせて回転させる
+	Matrix4x4 matWorld = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	velocity = TransformNormal(velocity, matWorld);
+
+	// 3秒間隔で砲撃
+	float deltaTime = 1.0f / 60.0f;
+	coolTime_ -= deltaTime;
+
+	if (coolTime_ <= 0.0f) {
+		auto newCanon = std::make_unique<BossCanon>();
+		newCanon->Initialize(model, this, velocity);
+		newCanon->SetPlayer(player_);
+
+		// 登録
+		canons_.push_back(std::move(newCanon));
+
+		// タイマーを戻す
+		coolTime_ = 3.0f;
+	}
+
+	for (const auto& canon : canons_) {
+		canon->Update(camera);
+	}
+
 }
 
 Vector3 Boss::GetWorldPosition()
@@ -105,4 +156,14 @@ Vector3 Boss::GetWorldPosition()
 
 void Boss::OnCollision()
 {
+}
+
+Vector3 Boss::TransformNormal(const Vector3& v, const Matrix4x4& m)
+{
+	Vector3 result{
+		v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0],
+		v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1],
+		v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2],
+	};
+	return result;
 }
