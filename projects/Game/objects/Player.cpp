@@ -34,6 +34,8 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	}
 	
 	fireCoolTime = kCoolDownTime;
+	// HPのセット
+	playerHP = playerMaxHP;
 	/// <summary>
 	/// 体のパーツの座標設定
 	/// </summary>
@@ -106,6 +108,10 @@ void Player::Update() {
 		}
 		return false;
 		});
+
+	if (playerHP <= 0) {
+		isDead_ = true;
+	}
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
@@ -163,6 +169,9 @@ void Player::Update() {
 	}
 	ImGui::DragFloat3("bulletEmitter", &bulletEmitter.translation_.x, 0.01f);
 	ImGui::InputFloat("fireCoolTime", &fireCoolTime);
+	int intPlayerHP = static_cast<int>(playerHP);
+	ImGui::InputInt("playerHP", &intPlayerHP);
+	playerHP = static_cast<uint32_t>(intPlayerHP);
 	ImGui::End();
 
 #endif // _DEBUG	
@@ -208,6 +217,7 @@ void Player::Attack()
 
 void Player::OnCollision()
 {
+	playerHP -= 1;
 }
 
 Vector3 Player::GetCenterPosition() const
