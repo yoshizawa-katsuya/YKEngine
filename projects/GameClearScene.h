@@ -7,12 +7,12 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Sprite.h"
-
-class TitleScene : public BaseScene
+class GameClearScene : public BaseScene
 {
+
 public:
 
-	~TitleScene() override;
+	~GameClearScene() override;
 
 	void Initialize() override;
 
@@ -33,9 +33,11 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 
-	uint32_t title1Sprite_ = 0;
+	uint32_t clear1Sprite_ = 0;
 
 	std::unique_ptr<Sprite> sprite1_ = nullptr;
-	
+
+
+
 };
 
