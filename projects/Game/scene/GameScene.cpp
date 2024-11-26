@@ -158,10 +158,10 @@ void GameScene::Update() {
 	playerLockOn_->Update(player_);
   
 	// 天球の更新
-	skydome_->Update(camera_.get());
+	skydome_->Update(mainCamera_);
 
 	// 地面の更新
-	ground_->Update(camera_.get());
+	ground_->Update(mainCamera_);
 
 #ifdef _DEBUG
 
