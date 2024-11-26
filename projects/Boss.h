@@ -21,6 +21,10 @@ public:
 
 	void SetLockOn(PlayerLockOn* lockOn) { lockOn_ = lockOn; }
 
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	void OnCollision();
 private:
 
 	//Transform変数を作る

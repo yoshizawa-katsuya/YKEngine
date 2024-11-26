@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
+#include <Vector.h>
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -86,7 +87,7 @@ void GameScene::Initialize() {
 
 	//Bossモデルの生成
 	modelBoss_ = std::make_unique<RigidModel>();
-	modelBoss_ -> CreateModel("./resources/Boss", "Boss.obj");
+	modelBoss_->CreateModel("./resources/Boss", "Boss.obj");
 
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
@@ -123,7 +124,7 @@ void GameScene::Initialize() {
 	playerLockOn_ = std::make_unique<PlayerLockOn>();
 	playerLockOn_->Initialize(camera_.get());
 	boss_->SetLockOn(playerLockOn_.get());
-  
+
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialzie(modelSkydome_.get());
 
@@ -157,79 +158,82 @@ void GameScene::Update() {
 
 	boss_->Update();
 	playerLockOn_->Update(player_);
-  
+
 	// 天球の更新
 	skydome_->Update(mainCamera_);
 
 	// 地面の更新
 	ground_->Update(mainCamera_);
 
+	// 当たり判定
+	CheckAllCollisions();
+
 #ifdef _DEBUG
 
 
-		ImGui::Begin("Window");
-		if (ImGui::TreeNode("camera")) {
-			ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
-			ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
-			//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
+	ImGui::Begin("Window");
+	if (ImGui::TreeNode("camera")) {
+		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
+		ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
+		//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
 
-			ImGui::TreePop();
-		}
+		ImGui::TreePop();
+	}
 
-		if (ImGui::TreeNode("DirectionalLight")) {
-			ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
-			ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
-			ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
+	if (ImGui::TreeNode("DirectionalLight")) {
+		ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
+		ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
+		ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
 
-			ImGui::TreePop();
-		}
+		ImGui::TreePop();
+	}
 
-		if (ImGui::TreeNode("PointLight")) {
-			ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
-			ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
-			ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
-			ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
-			ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
+	if (ImGui::TreeNode("PointLight")) {
+		ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
+		ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
+		ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
+		ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
+		ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
 
-			ImGui::TreePop();
-		}
+		ImGui::TreePop();
+	}
 
-		if (ImGui::TreeNode("SpotLight")) {
-			ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
-			ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
-			ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
-			ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
-			ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
-			ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
-			ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
-			ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
+	if (ImGui::TreeNode("SpotLight")) {
+		ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
+		ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
+		ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
+		ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
+		ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
+		ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
+		ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
+		ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
 
-			ImGui::TreePop();
-		}
-		//メインカメラの切り替え
-		if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
-			isActiveDebugCamera_ = false;
+		ImGui::TreePop();
+	}
+	//メインカメラの切り替え
+	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
+		isActiveDebugCamera_ = false;
 
-			mainCamera_ = camera_.get();
-			modelPlatform_->SetCamera(mainCamera_);
+		mainCamera_ = camera_.get();
+		modelPlatform_->SetCamera(mainCamera_);
 
-		}
-		if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
-			isActiveDebugCamera_ = true;
+	}
+	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
+		isActiveDebugCamera_ = true;
 
-			mainCamera_ = camera2_.get();
-			modelPlatform_->SetCamera(mainCamera_);
+		mainCamera_ = camera2_.get();
+		modelPlatform_->SetCamera(mainCamera_);
 
-		}
-		/*
-		if (ImGui::Button("BGMstop")) {
-			audio_->SoundStopWave(bgm1_);
-		}
-		*/
-		ImGui::End();
+	}
+	/*
+	if (ImGui::Button("BGMstop")) {
+		audio_->SoundStopWave(bgm1_);
+	}
+	*/
+	ImGui::End();
 
 #endif // _DEBUG
-	
+
 
 }
 
@@ -248,7 +252,7 @@ void GameScene::Draw() {
 	player_->Draw(mainCamera_);
 
 	boss_->Draw(mainCamera_);
-	
+
 	// 天球の描画
 	skydome_->Draw();
 
@@ -267,3 +271,44 @@ void GameScene::Finalize()
 {
 
 }
+
+void GameScene::CheckAllCollisions()
+{
+	// 判定対象AとBの座標
+	Vector3 posA{}, posB{};
+
+	// 自弾リストの取得
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	// 敵弾リストの取得
+	//const std::list<EnemyBullet*>& enemyBullets = GetEnemyBullets();
+
+#pragma region 自キャラと敵弾の当たり判定
+	
+#pragma endregion
+
+#pragma region 自弾と敵キャラの当たり判定
+
+	// 敵キャラと自弾全ての当たり判定
+
+	for (PlayerBullet* bullet : playerBullets) {
+		// 敵キャラの座標
+		posA = boss_->GetWorldPosition();
+		// 自弾の座標
+		posB = bullet->GetWorldPosition();
+		// 距離
+		float length = Length(Subtract(posB, posA));
+		if (length <= (playerBulletRadius_ + bossRadius_)) {
+			// 敵キャラの衝突時コールバックを呼び出す
+			boss_->OnCollision();
+			// 自弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+
+#pragma endregion
+
+#pragma region 自弾と敵弾の当たり判定
+	
+#pragma endregion
+}
+
