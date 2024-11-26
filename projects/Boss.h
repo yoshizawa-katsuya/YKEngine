@@ -27,9 +27,9 @@ public:
 	void OnCollision();
 
 	// ボスのHPを取得
-	uint32_t GetBossHP() { return bossHP; }
+	float GetBossHP() { return bossHP; }
 
-	uint32_t GetBossMaxHP() { return bossMaxHP; }
+	float GetBossMaxHP() { return bossMaxHP; }
 private:
 
 	//Transform変数を作る
@@ -41,10 +41,10 @@ private:
 	PlayerLockOn* lockOn_ = nullptr;
 
 	// ボスのHP上限
-	const uint32_t bossMaxHP = 100;
+	const float bossMaxHP = 100.0f;
 
 	// ボスの現在HP
-	uint32_t bossHP;
+	float bossHP;
 };
 
 

@@ -115,6 +115,6 @@ private:
 
 	Vector2 bossHP_position_ = {};
 
-	Vector2 bossHP_size_;
+	Vector2 bossHP_size_{ 1280.0f,720.0f };
 };
 

@@ -151,7 +151,8 @@ void GameScene::Initialize() {
 
 	bossHPSprite_ = std::make_unique<Sprite>();
 	bossHPSprite_->Initialize(bossHP_textureHandle_, spritePlatform_);
-
+	bossHPSprite_->SetPosition({ 0.0f,0.0f });
+	bossHPSprite_->SetSize({ bossHP_size_.x,bossHP_size_.y });
 	// ボスのロックオン処理の生成
 	playerLockOn_ = std::make_unique<PlayerLockOn>();
 	playerLockOn_->Initialize(camera_.get());
@@ -163,7 +164,7 @@ void GameScene::Initialize() {
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialzie(modelGround_.get());
 
-
+	
 }
 
 void GameScene::Update() {
@@ -197,9 +198,25 @@ void GameScene::Update() {
 	// 地面の更新
 	ground_->Update(mainCamera_);
 
-	bossHP_size_ = bossHPSprite_->GetTextureSize();
+
+
 	// HPに応じてsize_.xを更新
-	bossHP_size_.x = 1280.0f * static_cast<float>(boss_->GetBossHP()) / boss_->GetBossMaxHP();
+	
+	float hpRatio = static_cast<float>(boss_->GetBossHP()) / static_cast<float>(boss_->GetBossMaxHP());
+	float originalWidth = 1280.0f; 
+	bossHP_size_.x = originalWidth * hpRatio;
+	bossHP_position_.x = 0.0f;
+	bossHPSprite_->SetPosition(bossHP_position_);
+	bossHP_size_.x = originalWidth * hpRatio;
+	bossHPSprite_->SetSize(bossHP_size_);
+
+	//float hpRatio = static_cast<float>(boss_->GetBossHP()) / static_cast<float>(boss_->GetBossMaxHP());
+	//float originalWidth = 1280.0f;
+	//bossHP_size_.x = originalWidth * hpRatio;
+	//bossHPSprite_->SetSize(bossHP_size_);
+	//Vector2 newLeftTop = { (originalWidth - bossHP_size_.x) * 0.5f, 0.0f };
+	//bossHPSprite_->SetTextureLeftTop(newLeftTop);
+
 	// 当たり判定
 	CheckAllCollisions();
 
@@ -260,15 +277,19 @@ void GameScene::Update() {
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
-	bossHPBar_position_ = bossHPBarSprite_->GetPosition();
-	ImGui::DragFloat2("bossHPBar_position", &bossHPBar_position_.x, 0.1f);
-	bossHPBarSprite_->SetPosition(bossHPBar_position_);
+	ImGui::SliderFloat("bossHP_size", &bossHP_size_.x,0.1f,2000.0f);
 
-	bossHP_position_ = bossHPSprite_->GetPosition();
-	ImGui::DragFloat2("bossHP_position", &bossHP_position_.x, 0.1f);
-	ImGui::DragFloat("bossHP_size.x", &bossHP_size_.x, 1.0f,0.0f,1000.0f);
-	bossHPSprite_->SetPosition(bossHP_position_);
-	bossHPSprite_->SetTextureSize(bossHP_size_);
+	ImGui::Text("bossHP_position_.x: %u", bossHP_position_.x);
+
+	//bossHPBar_position_ = bossHPBarSprite_->GetPosition();
+	//ImGui::DragFloat2("bossHPBar_position", &bossHPBar_position_.x, 0.1f);
+	//bossHPBarSprite_->SetPosition(bossHPBar_position_);
+	//
+	//bossHP_position_ = bossHPSprite_->GetPosition();
+	//ImGui::DragFloat2("bossHP_position", &bossHP_position_.x, 0.1f);
+	//ImGui::DragFloat("bossHP_size.x", &bossHP_size_.x, 1.0f,0.0f,1000.0f);
+	//bossHPSprite_->SetPosition(bossHP_position_);
+	//bossHPSprite_->SetTextureSize(bossHP_size_);
 	/*
 	if (ImGui::Button("BGMstop")) {
 		audio_->SoundStopWave(bgm1_);

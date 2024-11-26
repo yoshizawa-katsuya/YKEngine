@@ -77,10 +77,14 @@ void Boss::Update()
 				ImGui::TreePop();
 			}
 		}
-		int intBossHP = static_cast<int>(bossHP);
-		if (ImGui::InputInt("bossHP", &intBossHP)) {
-			bossHP = static_cast<uint32_t>(intBossHP);
-		}
+
+		ImGui::Text("Boss Max HP: %u", bossMaxHP);
+		ImGui::Text("Boss HP: %u", bossHP);
+
+		//int intBossHP = static_cast<int>(bossHP);
+		//if (ImGui::InputInt("bossHP", &intBossHP)) {
+		//	bossHP = static_cast<uint32_t>(intBossHP);
+		//}
 	ImGui::End();
 
 #endif // _DEBUG	
