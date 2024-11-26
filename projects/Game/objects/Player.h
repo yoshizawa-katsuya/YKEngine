@@ -43,7 +43,7 @@ private:
 	std::vector<WorldTransform> worldTransforms_;
 
 	// 弾丸のモデルを生成
-	std::shared_ptr<BaseModel> bulletModel;
+	std::unique_ptr<BaseModel> bulletModel;
 	
 
 	Input* input_ = nullptr;
@@ -63,5 +63,6 @@ private:
 	//オブジェクト
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
 
+	std::unique_ptr<Base3dObject> bulletObject;
 };
 

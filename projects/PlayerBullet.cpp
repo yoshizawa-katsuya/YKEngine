@@ -7,14 +7,14 @@ PlayerBullet::~PlayerBullet()
 
 }
 
-void PlayerBullet::Initialize(std::shared_ptr<BaseModel>& model, const Vector3& position, const Vector3& velocity)
+void PlayerBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity)
 {
 	// NULLポインタチェック
 	assert(model);
 	// モデルをセット
-	model_ = model;
+	//model_ = model;
 	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model_.get());
+	object_->Initialize(model);
 	// テクスチャ読み込み
 	//textureHandle_ = TextureManager::GetInstance()->Load("white.png");
 	// ワールドトランスフォームの初期化
