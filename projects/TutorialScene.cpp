@@ -1,61 +1,49 @@
-#include "TitleScene.h"
+#include "TutorialScene.h"
 #include "imgui/imgui.h"
 #include "SceneManager.h"
 
-TitleScene::~TitleScene()
+TutorialScene::~TutorialScene()
 {
-	//Finalize();
 }
 
-void TitleScene::Initialize()
+void TutorialScene::Initialize()
 {
-
 	dxCommon_ = DirectXCommon::GetInstance();
 	audio_ = Audio::GetInstance();
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
-	/*
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/Title.png");
-
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(textureHandle_, spritePlatform_);
-	sprite_->SetPosition({ 100.0f, 100.0f });
-	*/
-	title1Sprite_ = TextureManager::GetInstance()->Load("./resources/screen/title1.png");
+	
+	title1Sprite_ = TextureManager::GetInstance()->Load("./resources/screen/tutorial.png");
 	sprite1_ = std::make_unique<Sprite>();
 	sprite1_->Initialize(title1Sprite_, spritePlatform_);
 	sprite1_->SetPosition({ 0.0f, 0.0f });
 }
 
-void TitleScene::Update()
+void TutorialScene::Update()
 {
-
 #ifdef _DEBUG
-	
+
 	ImGui::Begin("Window");
-	ImGui::Text("Title");
+	ImGui::Text("Tutorial");
 	ImGui::End();
-	
+
 #endif // _DEBUG
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("Tutorial");
+		sceneManager_->ChengeScene("GameScene");
 	}
 
 }
 
-void TitleScene::Draw()
+void TutorialScene::Draw()
 {
-
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 	sprite1_->Draw();
-
 }
 
-void TitleScene::Finalize()
+void TutorialScene::Finalize()
 {
-
 }
