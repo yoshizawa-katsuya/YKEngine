@@ -4,11 +4,37 @@
 #include "Vector.h"
 #include "Rigid3dObject.h"
 
-void Boss::Initialize(BaseModel* model)
+void Boss::Initialize(const std::vector<BaseModel*>& models)
 {
 
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
+	worldTransforms_.resize(models.size());
+	objects_.resize(models.size());
+	for (auto& transform : worldTransforms_) {
+		transform.Initialize();
+		transform.UpdateMatrix();
+	}
+	for (std::unique_ptr<Base3dObject>& object : objects_) {
+		object = std::make_unique<Rigid3dObject>();
+	}
+	for (uint32_t i = 0; i < models.size(); i++) {
+		objects_[i]->Initialize(models[i]);
+	}
+
+	worldTransforms_[0].rotation_ = { 0.0f,1.5f,0.0f };
+	worldTransforms_[0].translation_ = { 0.0f,2.52f,65.0f }; //Connection
+	worldTransforms_[1].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[2].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[3].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[4].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[5].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[6].translation_ = { 0.0f,0.0f,0.0f };
+
+	worldTransforms_[1].parent_ = &worldTransforms_[0];     //BossBody
+	worldTransforms_[2].parent_ = &worldTransforms_[0];     //BossHead
+	worldTransforms_[3].parent_ = &worldTransforms_[2];     //BossGunR
+	worldTransforms_[4].parent_ = &worldTransforms_[2];     //BossGunL
+	worldTransforms_[5].parent_ = &worldTransforms_[1];     //TrackL
+	worldTransforms_[6].parent_ = &worldTransforms_[1];     //TrackR
 
 	worldTransform_.Initialize();
 
@@ -21,7 +47,9 @@ void Boss::Initialize(BaseModel* model)
 
 void Boss::Update()
 {
-
+	for (auto& transform : worldTransforms_) {
+		transform.UpdateMatrix();
+	}
 	// ロックオン
 	if (lockOn_ && lockOn_->ExistTarget()) {
 		// ロックオン座標
@@ -38,14 +66,15 @@ void Boss::Update()
 #ifdef _DEBUG
 
 	ImGui::Begin("Boss");
-	if (ImGui::TreeNode("Model1")) {
-		ImGui::ColorEdit4("color", &object_->GetModel().GetMaterialDataAddress().color.x);
-		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
-		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
-		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
-
-		ImGui::TreePop();
-	}
+		for (size_t i = 0; i < objects_.size(); ++i) {
+			if (ImGui::TreeNode(("Model " + std::to_string(i)).c_str())) {
+				ImGui::ColorEdit4("color", &objects_[i]->GetModel().GetMaterialDataAddress().color.x);
+				ImGui::DragFloat3("translate", &worldTransforms_[i].translation_.x, 0.01f);
+				ImGui::DragFloat3("rotate", &worldTransforms_[i].rotation_.x, 0.01f);
+				ImGui::DragFloat3("scale", &worldTransforms_[i].scale_.x, 0.01f);
+				ImGui::TreePop();
+			}
+		}
 	ImGui::End();
 
 #endif // _DEBUG	
@@ -55,7 +84,9 @@ void Boss::Update()
 void Boss::Draw(Camera* camera)
 {
 
-	object_->Update(worldTransform_,camera);
-	object_->Draw();
+	for (size_t i = 0; i < objects_.size(); ++i) {
+		objects_[i]->Update(worldTransforms_[i], camera);
+		objects_[i]->Draw();
+	}
 
 }

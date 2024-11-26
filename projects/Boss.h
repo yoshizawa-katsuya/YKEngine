@@ -13,7 +13,7 @@ class Boss
 
 public:
 
-	void Initialize(BaseModel* model);
+	void Initialize(const std::vector<BaseModel*>& models);
 
 	void Update();
 
@@ -25,9 +25,10 @@ private:
 
 	//Transform変数を作る
 	WorldTransform worldTransform_;
+	std::vector<WorldTransform> worldTransforms_;
 
 	//オブジェクト
-	std::unique_ptr<Base3dObject> object_;
+	std::vector<std::unique_ptr<Base3dObject>> objects_;
 	PlayerLockOn* lockOn_ = nullptr;
 
 };
