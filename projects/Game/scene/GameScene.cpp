@@ -154,7 +154,8 @@ void GameScene::Initialize() {
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialzie(modelGround_.get());
 
-
+	//se
+	hitSE02_ = audio_->SoundLoadWave("./resources/Sound/SE_02.wav");
 }
 
 void GameScene::Update() {
@@ -325,6 +326,7 @@ void GameScene::CheckAllCollisions()
 			boss_->OnCollision();
 			// 自弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
+			Audio::GetInstance()->SoundPlayWave(hitSE02_);
 		}
 	}
 
