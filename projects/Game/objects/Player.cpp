@@ -31,7 +31,7 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	for (uint32_t i = 0; i < models.size(); i++) {
 		objects_[i]->Initialize(models[i]);
 	}
-
+	
 	fireCoolTime = kCoolDownTime;
 	/// <summary>
 	/// 体のパーツの座標設定
@@ -173,11 +173,31 @@ void Player::Draw(Camera* camera) {
 		objects_[i]->Update(worldTransforms_[i], camera);
 		objects_[i]->Draw();
 	}
-
+	// 弾描画
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(camera);
+	}
 }
 
 void Player::Attack()
 {
+	fireCoolTime++;
+	if (input_->GetInstance()->PushKey(DIK_SPACE) && fireCoolTime >= kCoolDownTime) {
+		fireCoolTime = 0;
+		// 弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+		// 速度ベクトルを自機の向きに合わせて回転させる
+		//velocity = mathMatrix_->TransformNormal(velocity, worldTransform_.matWorld_);
+
+		// 弾を生成し、初期化
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(bulletModel.get(), bulletEmitter.translation_, velocity);
+
+		// 弾を登録する
+		bullets_.push_back(newBullet);
+	}
 }
 
 void Player::OnCollision()

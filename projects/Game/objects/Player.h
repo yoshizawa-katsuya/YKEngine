@@ -63,5 +63,6 @@ private:
 	//オブジェクト
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
 
+	std::unique_ptr<Base3dObject> bulletObject;
 };
 
