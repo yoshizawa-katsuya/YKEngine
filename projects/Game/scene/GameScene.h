@@ -35,6 +35,8 @@ public:
 
 	void Finalize() override;
 
+	void CheckAllCollisions();
+
 private:
 
 	//デバイス
@@ -94,6 +96,9 @@ private:
 
 	std::unique_ptr<PlayerLockOn> playerLockOn_;
 
+	// 当たり判定の大きさ
+	float playerBulletRadius_ = 1.0f;
 
+	float bossRadius_ = 10.0f;
 };
 
