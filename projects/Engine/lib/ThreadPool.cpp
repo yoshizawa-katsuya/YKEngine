@@ -12,7 +12,7 @@ void ThreadPool::Initlaize()
     stop = false;
     activeTasks = 0;
 
-    uint32_t numThreads = std::thread::hardware_concurrency();
+    uint32_t numThreads = std::thread::hardware_concurrency() - 1;
     assert(numThreads > 0);
 
     for (size_t i = 0; i < numThreads; ++i) {
