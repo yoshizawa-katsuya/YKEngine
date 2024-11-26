@@ -53,6 +53,8 @@ void GameScene::Initialize() {
 	modelPlatform_->SetSpotLight(spotLight_.get());
 
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
+	bossHPBar_textureHandle_ = TextureManager::GetInstance()->Load("./resources/BossHPBar.png");
+	bossHP_textureHandle_ = TextureManager::GetInstance()->Load("./resources/BossHP.png");
 
 	// プレイヤーのモデル部位ごとの読み込み
 	playerModels_.emplace_back(std::make_unique<RigidModel>());
@@ -134,7 +136,7 @@ void GameScene::Initialize() {
 
 	player_->Initialize(modelPtrs);
 
-
+	
 	//Bossの初期化
 	std::vector<BaseModel*> bossModelPtrs;
 	for (auto& model : bossModels_) {
@@ -142,6 +144,13 @@ void GameScene::Initialize() {
 	}
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize(bossModelPtrs);
+
+	// ボスのHPゲージのスプライト生成
+	bossHPBarSprite_ = std::make_unique<Sprite>();
+	bossHPBarSprite_->Initialize(bossHPBar_textureHandle_, spritePlatform_);
+
+	bossHPSprite_ = std::make_unique<Sprite>();
+	bossHPSprite_->Initialize(bossHP_textureHandle_, spritePlatform_);
 
 	// ボスのロックオン処理の生成
 	playerLockOn_ = std::make_unique<PlayerLockOn>();
@@ -188,6 +197,9 @@ void GameScene::Update() {
 	// 地面の更新
 	ground_->Update(mainCamera_);
 
+	bossHP_size_ = bossHPSprite_->GetTextureSize();
+	// HPに応じてsize_.xを更新
+	bossHP_size_.x = 1280.0f * static_cast<float>(boss_->GetBossHP()) / boss_->GetBossMaxHP();
 	// 当たり判定
 	CheckAllCollisions();
 
@@ -248,6 +260,15 @@ void GameScene::Update() {
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
+	bossHPBar_position_ = bossHPBarSprite_->GetPosition();
+	ImGui::DragFloat2("bossHPBar_position", &bossHPBar_position_.x, 0.1f);
+	bossHPBarSprite_->SetPosition(bossHPBar_position_);
+
+	bossHP_position_ = bossHPSprite_->GetPosition();
+	ImGui::DragFloat2("bossHP_position", &bossHP_position_.x, 0.1f);
+	ImGui::DragFloat("bossHP_size.x", &bossHP_size_.x, 1.0f,0.0f,1000.0f);
+	bossHPSprite_->SetPosition(bossHP_position_);
+	bossHPSprite_->SetTextureSize(bossHP_size_);
 	/*
 	if (ImGui::Button("BGMstop")) {
 		audio_->SoundStopWave(bgm1_);
@@ -265,7 +286,7 @@ void GameScene::Draw() {
 	//Spriteの背景描画前処理
 	spritePlatform_->PreBackGroundDraw();
 
-	//sprite_->Draw();
+	
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
@@ -285,9 +306,10 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
+	//sprite_->Draw();
+	bossHPBarSprite_->Draw();
 
-
-
+	bossHPSprite_->Draw();
 }
 
 void GameScene::Finalize()

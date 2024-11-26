@@ -25,6 +25,11 @@ public:
 	Vector3 GetWorldPosition();
 
 	void OnCollision();
+
+	// ボスのHPを取得
+	uint32_t GetBossHP() { return bossHP; }
+
+	uint32_t GetBossMaxHP() { return bossMaxHP; }
 private:
 
 	//Transform変数を作る
@@ -35,6 +40,11 @@ private:
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
 	PlayerLockOn* lockOn_ = nullptr;
 
+	// ボスのHP上限
+	const uint32_t bossMaxHP = 100;
+
+	// ボスの現在HP
+	uint32_t bossHP;
 };
 
 

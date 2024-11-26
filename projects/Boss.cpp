@@ -43,6 +43,8 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 
 	worldTransform_.UpdateMatrix();
 
+	// ボスのHPを初期化
+	bossHP = bossMaxHP;
 }
 
 void Boss::Update()
@@ -75,6 +77,10 @@ void Boss::Update()
 				ImGui::TreePop();
 			}
 		}
+		int intBossHP = static_cast<int>(bossHP);
+		if (ImGui::InputInt("bossHP", &intBossHP)) {
+			bossHP = static_cast<uint32_t>(intBossHP);
+		}
 	ImGui::End();
 
 #endif // _DEBUG	
@@ -105,4 +111,5 @@ Vector3 Boss::GetWorldPosition()
 
 void Boss::OnCollision()
 {
+	bossHP -= 1;
 }

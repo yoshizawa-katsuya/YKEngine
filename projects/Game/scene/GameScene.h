@@ -100,5 +100,21 @@ private:
 	float playerBulletRadius_ = 1.0f;
 
 	float bossRadius_ = 10.0f;
+
+	// ボスのHPゲージ
+	std::unique_ptr<Sprite> bossHPBarSprite_;
+
+	uint32_t bossHPBar_textureHandle_;
+
+	Vector2 bossHPBar_position_ = {};
+
+	// ボスの現在HP
+	std::unique_ptr<Sprite> bossHPSprite_;
+
+	uint32_t bossHP_textureHandle_;
+
+	Vector2 bossHP_position_ = {};
+
+	Vector2 bossHP_size_;
 };
 
