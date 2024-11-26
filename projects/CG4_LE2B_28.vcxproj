@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Engine\3d\Base3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
     <ClCompile Include="Engine\lib\Easing.cpp" />
@@ -124,6 +125,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
     <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
     <ClCompile Include="Engine\lib\Vector.cpp" />
@@ -147,9 +149,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\3d\RigidModel.cpp" />
     <ClCompile Include="Engine\3d\SkinModel.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="PlayerLockOn.cpp" />
     <ClCompile Include="Engine\3d\Rigid3dObject.cpp" />
     <ClCompile Include="Engine\3d\Skin3dObject.cpp" />
     <ClCompile Include="Engine\3d\PointLight.cpp" />
+    <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
     <ClCompile Include="Engine\lib\ThreadPool.cpp" />
   </ItemGroup>
@@ -230,6 +235,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="Engine\3d\Base3dObject.h" />
     <ClInclude Include="Engine\3d\Animation.h" />
     <ClInclude Include="Engine\lib\Easing.h" />
@@ -271,10 +277,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\3d\RigidModel.h" />
     <ClInclude Include="Engine\3d\SkinModel.h" />
+    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="PlayerLockOn.h" />
     <ClInclude Include="Engine\3d\Rigid3dObject.h" />
     <ClInclude Include="Engine\3d\Skin3dObject.h" />
     <ClInclude Include="Engine\3d\PointLight.h" />
     <ClInclude Include="Engine\3d\SpotLight.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Skydome.h" />
     <ClInclude Include="Engine\lib\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>

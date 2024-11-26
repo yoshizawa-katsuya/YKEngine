@@ -16,6 +16,10 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
+#include "Boss.h"
+#include "PlayerLockOn.h"
+#include "Skydome.h"
+#include "Ground.h"
 
 class GameScene : public BaseScene
 {
@@ -30,6 +34,8 @@ public:
 	void Draw() override;
 
 	void Finalize() override;
+
+	void CheckAllCollisions();
 
 private:
 
@@ -65,12 +71,34 @@ private:
 
 	std::unique_ptr<BaseModel> modelPlayer_;
 	
+	std::unique_ptr<BaseModel> modelSkydome_;
+
+	std::unique_ptr<BaseModel> modelGround_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
+	
+	// 天球
+	std::unique_ptr<Skydome> skydome_;
+	// 地面
+	std::unique_ptr<Ground> ground_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	std::vector<std::unique_ptr<BaseModel>> playerModels_;
+
+	// Boss
+	std::unique_ptr<Boss> boss_;
+
+	std::vector<std::unique_ptr<BaseModel>> bossModels_;
+
+
+	std::unique_ptr<PlayerLockOn> playerLockOn_;
+
+	// 当たり判定の大きさ
+	float playerBulletRadius_ = 1.0f;
+
+	float bossRadius_ = 10.0f;
 };
 

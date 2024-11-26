@@ -32,6 +32,10 @@ private:
 
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
+
+	uint32_t title1Sprite_ = 0;
+
+	std::unique_ptr<Sprite> sprite1_ = nullptr;
 	
 };
 

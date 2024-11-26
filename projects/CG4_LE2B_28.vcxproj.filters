@@ -1,81 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="ソース ファイル\externals">
-      <UniqueIdentifier>{16a0c585-ac22-4a34-975f-f8e0d36985fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\base">
-      <UniqueIdentifier>{a7a4b486-663f-416d-a218-8a1806a0a478}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\lib">
-      <UniqueIdentifier>{c0b9c9c4-3207-4424-b5d4-0dd412a98808}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\3d">
-      <UniqueIdentifier>{0d2e8eaf-cbe6-45f0-8fca-905449cd8f69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\2d">
-      <UniqueIdentifier>{c93a0680-fdf0-4569-b2f4-073ee2a2ba0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\scene">
-      <UniqueIdentifier>{c9c98a9d-4b41-4e16-8456-280046b33237}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\objects">
-      <UniqueIdentifier>{f3aa0bcb-25c4-4cb4-9c60-49ea40856008}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\externals">
-      <UniqueIdentifier>{18b5cb1f-e3a5-4ba9-8b8b-9c902fdd18e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\base">
-      <UniqueIdentifier>{0a618894-8aa4-4d76-8160-ff9b4e2d1ae6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\3d">
-      <UniqueIdentifier>{c3b2f56d-45ef-489d-9c77-18c7d30a9247}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\2d">
-      <UniqueIdentifier>{ab1a734f-c435-43da-b0de-49d2367f7bf7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\lib">
-      <UniqueIdentifier>{a870ca28-d1cf-4f3b-b258-5535b4a8446f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\objects">
-      <UniqueIdentifier>{d9b955fc-3a1e-49db-9a6e-ea5e03c55ddb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\scene">
-      <UniqueIdentifier>{134ac728-9100-4706-ba82-1c2652abb654}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\input">
-      <UniqueIdentifier>{1a77b6c0-ac61-4c79-9d12-eef2798b1766}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\input">
-      <UniqueIdentifier>{6d202443-46c0-4c15-a6f0-b8e54f165814}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="リソース ファイル\shader">
-      <UniqueIdentifier>{0efeb8c7-ba96-4736-b6bb-bc70fc08273b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\audio">
-      <UniqueIdentifier>{19dc6b97-dd4f-4bd7-95bf-2f75c0b3af44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\audio">
-      <UniqueIdentifier>{bc075b9d-899e-4e1d-aa5b-33d8048ea46a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\myGame">
-      <UniqueIdentifier>{15938fc7-0288-4f39-b8fc-11bea30fda65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\myGame">
-      <UniqueIdentifier>{b57f4e00-fd0e-4231-8414-f893d017e1a2}</UniqueIdentifier>
-    </Filter>
+    <FxCompile Include="resources\shader\Line3D.GS.hlsl" />
+    <FxCompile Include="resources\shader\Line3D.PS.hlsl" />
+    <FxCompile Include="resources\shader\Line3D.VS.hlsl" />
+    <FxCompile Include="resources\shader\Object3d.PS.hlsl" />
+    <FxCompile Include="resources\shader\Object3d.VS.hlsl" />
+    <FxCompile Include="resources\shader\Particle.PS.hlsl" />
+    <FxCompile Include="resources\shader\Particle.VS.hlsl" />
+    <FxCompile Include="resources\shader\Sphere3D.GS.hlsl" />
+    <FxCompile Include="resources\shader\Sphere3D.PS.hlsl" />
+    <FxCompile Include="resources\shader\Sphere3D.VS.hlsl" />
+    <FxCompile Include="resources\shader\SkinningObject3d.VS.hlsl" />
+    <FxCompile Include="resources\shader\Sprite.PS.hlsl" />
+    <FxCompile Include="resources\shader\Sprite.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -215,45 +153,56 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="resources\shader\Object3d.PS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Object3d.VS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Particle.PS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Particle.VS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Line3D.VS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Line3D.PS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Line3D.GS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Sphere3D.VS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Sphere3D.GS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Sphere3D.PS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\SkinningObject3d.VS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Sprite.VS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\shader\Sprite.PS.hlsl">
-      <Filter>リソース ファイル\shader</Filter>
-    </FxCompile>
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="Engine\3d\Base3dObject.h" />
+    <ClInclude Include="Engine\3d\Animation.h" />
+    <ClInclude Include="Engine\lib\Easing.h" />
+    <ClInclude Include="Engine\lib\Lerp.h" />
+    <ClInclude Include="Engine\lib\Slerp.h" />
+    <ClInclude Include="Engine\scene\AbstractSceneFactory.h" />
+    <ClInclude Include="Engine\scene\BaseScene.h" />
+    <ClInclude Include="Engine\3d\DebugCamera.h" />
+    <ClInclude Include="Engine\audio\Audio.h" />
+    <ClInclude Include="Engine\3d\Camera.h" />
+    <ClInclude Include="Engine\base\D3DResourceLeakChecker.h" />
+    <ClInclude Include="Engine\3d\DirectionalLight.h" />
+    <ClInclude Include="Engine\base\DirectXCommon.h" />
+    <ClInclude Include="Engine\lib\dx12.h" />
+    <ClInclude Include="Engine\lib\Matrix.h" />
+    <ClInclude Include="Engine\lib\Struct.h" />
+    <ClInclude Include="Engine\lib\Vector.h" />
+    <ClInclude Include="Engine\3d\BaseModel.h" />
+    <ClInclude Include="Engine\2d\Sprite.h" />
+    <ClInclude Include="Engine\base\TextureManager.h" />
+    <ClInclude Include="Engine\base\WinApp.h" />
+    <ClInclude Include="Engine\3d\PrimitiveDrawer.h" />
+    <ClInclude Include="Game\scene\GameScene.h" />
+    <ClInclude Include="Game\objects\Player.h" />
+    <ClInclude Include="Engine\input\Input.h" />
+    <ClInclude Include="Engine\3d\ModelPlatform.h" />
+    <ClInclude Include="Engine\2d\SpritePlatform.h" />
+    <ClInclude Include="Engine\base\ImGuiManager.h" />
+    <ClInclude Include="Engine\3d\ParticleEmitter.h" />
+    <ClInclude Include="Engine\base\ParticleManager.h" />
+    <ClInclude Include="Engine\base\SrvHeapManager.h" />
+    <ClInclude Include="Game\myGame\MyGame.h" />
+    <ClInclude Include="Engine\base\YKFramework.h" />
+    <ClInclude Include="Game\scene\TitleScene.h" />
+    <ClInclude Include="Engine\scene\SceneManager.h" />
+    <ClInclude Include="Game\scene\SceneFactory.h" />
+    <ClInclude Include="Engine\lib\LevelDataLoader.h" />
+    <ClInclude Include="Engine\lib\Quaternion.h" />
+    <ClInclude Include="Engine\3d\WorldTransform.h" />
+    <ClInclude Include="Engine\3d\RigidModel.h" />
+    <ClInclude Include="Engine\3d\SkinModel.h" />
+    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="PlayerLockOn.h" />
+    <ClInclude Include="Engine\3d\Rigid3dObject.h" />
+    <ClInclude Include="Engine\3d\Skin3dObject.h" />
+    <ClInclude Include="Engine\3d\PointLight.h" />
+    <ClInclude Include="Engine\3d\SpotLight.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Skydome.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">
@@ -397,22 +346,5 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\shader\Object3d.hlsli">
-      <Filter>リソース ファイル\shader</Filter>
-    </None>
-    <None Include="resources\shader\Particle.hlsli">
-      <Filter>リソース ファイル\shader</Filter>
-    </None>
-    <None Include="resources\shader\Line3D.hlsli">
-      <Filter>リソース ファイル\shader</Filter>
-    </None>
-    <None Include="resources\shader\Sphere3D.hlsli">
-      <Filter>リソース ファイル\shader</Filter>
-    </None>
-    <None Include="resources\shader\Sprite.hlsli">
-      <Filter>リソース ファイル\shader</Filter>
-    </None>
   </ItemGroup>
 </Project>
