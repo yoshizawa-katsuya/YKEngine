@@ -100,5 +100,8 @@ private:
 	float playerBulletRadius_ = 1.0f;
 
 	float bossRadius_ = 10.0f;
+
+	SoundData hitSE02_;
+
 };
 

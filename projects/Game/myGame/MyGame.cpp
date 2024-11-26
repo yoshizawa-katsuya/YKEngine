@@ -14,6 +14,9 @@ void MyGame::Initialize()
 	sceneManager_->ChengeScene("TitleScene");
 
 	
+	bgm1_ = audio_->LoopSoundLoadWave("./resources/Sound/BGM_01.wav");
+	audio_->SoundLoopPlayWave(bgm1_, 1.0f);
+
 }
 
 void MyGame::Finalize()

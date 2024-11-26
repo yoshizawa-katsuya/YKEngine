@@ -16,9 +16,15 @@ void GameClearScene::Initialize()
 	modelPlatform_ = ModelPlatform::GetInstance();
 
 	clear1Sprite_ = TextureManager::GetInstance()->Load("./resources/screen/clear1.png");
+	clear2Sprite_ = TextureManager::GetInstance()->Load("./resources/screen/clear2.png");
+
 	sprite1_ = std::make_unique<Sprite>();
 	sprite1_->Initialize(clear1Sprite_, spritePlatform_);
 	sprite1_->SetPosition({ 0.0f, 0.0f });
+
+	sprite2_ = std::make_unique<Sprite>();
+	sprite2_->Initialize(clear2Sprite_, spritePlatform_);
+	sprite2_->SetPosition({ 0.0f, 0.0f });
 
 }
 
@@ -34,7 +40,16 @@ void GameClearScene::Update()
 void GameClearScene::Draw()
 {
 	spritePlatform_->PreDraw();
-	sprite1_->Draw();
+	time--;
+	if (time <= 40) {
+		sprite1_->Draw();
+		if (time <= 20) {
+			sprite2_->Draw();
+		}
+	}
+	if (time == 0) {
+		time = 40;
+	}
 
 }
 

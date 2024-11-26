@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Input.h"
 #include "PlayerBullet.h"
+#include "Audio.h"
 class Camera;
 class MapChipField;
 
@@ -47,7 +48,7 @@ private:
 	// 弾丸のモデルを生成
 	std::unique_ptr<BaseModel> bulletModel;
 	
-
+	Audio* audio_;
 	Input* input_ = nullptr;
 
 	// 弾
@@ -74,5 +75,9 @@ private:
 
 	// プレイヤーの死亡フラグ
 	bool isDead_;
+
+	//se
+	SoundData hitSE01_;
+
 };
 
