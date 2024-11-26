@@ -88,13 +88,12 @@ private:
 
 	std::vector<std::unique_ptr<BaseModel>> playerModels_;
 
-
-
-
-	std::unique_ptr<BaseModel> modelBoss_;
-
-
+	// Boss
 	std::unique_ptr<Boss> boss_;
+
+	std::vector<std::unique_ptr<BaseModel>> bossModels_;
+
+
 	std::unique_ptr<PlayerLockOn> playerLockOn_;
 
 	// 当たり判定の大きさ
