@@ -13,8 +13,7 @@ Player::~Player()
 
 void Player::Initialize(const std::vector<BaseModel*>& models) {
 
-	//bulletModel = std::make_shared<RigidModel>();
-	bulletModel = std::make_unique<RigidModel>();
+	bulletModel = std::make_shared<RigidModel>();
 	bulletModel->CreateModel("./resources/player/PlayerBullet", "PlayerBullet.obj");
 	// 各部位のWorldTransformを初期化
 	worldTransforms_.resize(models.size());
