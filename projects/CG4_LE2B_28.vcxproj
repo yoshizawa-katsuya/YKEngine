@@ -155,7 +155,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\Skin3dObject.cpp" />
     <ClCompile Include="Engine\3d\PointLight.cpp" />
     <ClCompile Include="Skydome.cpp" />
-    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
   </ItemGroup>
   <ItemGroup>
