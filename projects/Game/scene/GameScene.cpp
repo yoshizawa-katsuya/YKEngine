@@ -85,8 +85,26 @@ void GameScene::Initialize() {
 	playerModels_.back()->CreateModel("./resources/player/MissileLauncher", "MissileLauncher.obj");
 
 	//Bossモデルの生成
-	modelBoss_ = std::make_unique<RigidModel>();
-	modelBoss_ -> CreateModel("./resources/Boss", "Boss.obj");
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/Connection", "Connection.obj");//0
+
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/BossBody", "BossBody.obj");//1
+
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/BossHead", "BossHead.obj");//2
+
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/BossGunR", "BossGunR.obj");//3
+
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/BossGunL", "BossGunL.obj");//4
+
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/TrackL", "TrackL.obj");//5
+
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/TrackR", "TrackR.obj");//6
 
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
@@ -116,8 +134,12 @@ void GameScene::Initialize() {
 
 
 	//Bossの初期化
+	std::vector<BaseModel*> bossModelPtrs;
+	for (auto& model : bossModels_) {
+		bossModelPtrs.push_back(model.get());
+	}
 	boss_ = std::make_unique<Boss>();
-	boss_->Initialize(modelBoss_.get());
+	boss_->Initialize(bossModelPtrs);
 
 	// ボスのロックオン処理の生成
 	playerLockOn_ = std::make_unique<PlayerLockOn>();
