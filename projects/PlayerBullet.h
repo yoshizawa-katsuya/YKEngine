@@ -12,7 +12,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(std::shared_ptr<BaseModel>& model, const Vector3& position, const Vector3& velocity);
+	void Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -29,7 +29,7 @@ private:
 	WorldTransform worldTransform_;
 
 	//モデル
-	std::shared_ptr<BaseModel> model_;
+	//std::shared_ptr<BaseModel> model_;
 
 	//オブジェクト
 	std::unique_ptr<Base3dObject> object_;
