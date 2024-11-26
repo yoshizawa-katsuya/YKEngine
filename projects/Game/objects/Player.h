@@ -37,6 +37,8 @@ public:
 	/// <returns></returns>
 	Vector3 GetCenterPosition() const;
 
+	// 死亡フラグのゲッター
+	bool IsDead() { return isDead_; }
 
 private:
 
@@ -66,6 +68,13 @@ private:
 
 	std::unique_ptr<Base3dObject> bulletObject;
 
+	// プレイヤーの現在体力
+	uint32_t playerHP;
+	// プレイヤーの最大体力
+	const uint32_t playerMaxHP = 10;
+
+	// プレイヤーの死亡フラグ
+	bool isDead_;
 
 	//se
 	SoundData hitSE01_;
