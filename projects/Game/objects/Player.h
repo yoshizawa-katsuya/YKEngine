@@ -42,10 +42,9 @@ private:
 	// 各部位のTransform変数を格納する
 	std::vector<WorldTransform> worldTransforms_;
 
-	std::vector<BaseModel*> models_;
-
 	// 弾丸のモデルを生成
-	std::shared_ptr<BaseModel> bulletModel;
+	//std::shared_ptr<BaseModel> bulletModel;
+	std::unique_ptr<BaseModel> bulletModel;
 
 	Input* input_ = nullptr;
 
@@ -61,10 +60,8 @@ private:
 
 	float fireCoolTime = 0.0f;
 
-	std::unique_ptr<Base3dObject> object_;
-
-private:
-	Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) const;
+	//オブジェクト
+	std::vector<std::unique_ptr<Base3dObject>> objects_;
 
 };
 

@@ -1,5 +1,5 @@
 #pragma once
-#pragma once
+#include "Base3dObject.h"
 #include "BaseModel.h"
 #include "SkinModel.h"
 #include "WorldTransform.h"
@@ -26,10 +26,9 @@ private:
 	//Transform変数を作る
 	WorldTransform worldTransform_;
 
-	BaseModel* model_ = nullptr;
+	//オブジェクト
+	std::unique_ptr<Base3dObject> object_;
 	PlayerLockOn* lockOn_ = nullptr;
-
-	
 
 };
 

@@ -13,15 +13,25 @@ Player::~Player()
 
 void Player::Initialize(const std::vector<BaseModel*>& models) {
 
-	models_ = models;
-	bulletModel = std::make_shared<RigidModel>();
+	//bulletModel = std::make_shared<RigidModel>();
+	bulletModel = std::make_unique<RigidModel>();
 	bulletModel->CreateModel("./resources/player/PlayerBullet", "PlayerBullet.obj");
 	// 各部位のWorldTransformを初期化
 	worldTransforms_.resize(models.size());
+	objects_.resize(models.size());
 	for (auto& transform : worldTransforms_) {
 		transform.Initialize();
 		transform.UpdateMatrix();
 	}
+
+	for (std::unique_ptr<Base3dObject>& object : objects_) {
+		object = std::make_unique<Rigid3dObject>();
+	}
+
+	for (uint32_t i = 0; i < models.size(); i++) {
+		objects_[i]->Initialize(models[i]);
+	}
+
 	fireCoolTime = kCoolDownTime;
 	/// <summary>
 	/// 体のパーツの座標設定
@@ -51,11 +61,6 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	// 左足
 	worldTransforms_[5].translation_.y = -0.4f;
 	worldTransforms_[5].translation_.z = 0.22f;
-
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
-
-	worldTransform_.Initialize();
 
 	// ブースター
 	worldTransforms_[6].translation_.x = -0.37f;
@@ -143,9 +148,9 @@ void Player::Update() {
 #ifdef _DEBUG
 
 	ImGui::Begin("Player");
-	for (size_t i = 0; i < models_.size(); ++i) {
+	for (size_t i = 0; i < objects_.size(); ++i) {
 		if (ImGui::TreeNode(("Model " + std::to_string(i)).c_str())) {
-			ImGui::ColorEdit4("color", &models_[i]->GetMaterialDataAddress().color.x);
+			ImGui::ColorEdit4("color", &objects_[i]->GetModel().GetMaterialDataAddress().color.x);
 			ImGui::DragFloat3("translate", &worldTransforms_[i].translation_.x, 0.01f);
 			ImGui::DragFloat3("rotate", &worldTransforms_[i].rotation_.x, 0.01f);
 			ImGui::DragFloat3("scale", &worldTransforms_[i].scale_.x, 0.01f);
@@ -163,32 +168,28 @@ void Player::Update() {
 
 void Player::Draw(Camera* camera) {
 	
-	model_->Draw(worldTransform_, camera);
-	
+	//model_->Draw(worldTransform_, camera);
+	for (size_t i = 0; i < objects_.size(); ++i) {
+		objects_[i]->Update(worldTransforms_[i], camera);
+		objects_[i]->Draw();
+	}
+
+}
+
+void Player::Attack()
+{
+}
+
+void Player::OnCollision()
+{
 }
 
 Vector3 Player::GetCenterPosition() const
 {
 	//ローカル座標でのオフセット
 	const Vector3 offset = { 0.0f, 1.5f, 0.0f };
-	Matrix4x4 matWorld = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	Matrix4x4 matWorld = MakeAffineMatrix(worldTransforms_[0].scale_, worldTransforms_[0].rotation_, worldTransforms_[0].translation_);
 	//ワールド座標に変換
 	Vector3 worldPos = Transform(offset, matWorld);
 	return worldPos;
 }
-
-Vector3 Player::Transform(const Vector3& vector, const Matrix4x4& matrix) const
-{
-	Vector3 result{};
-	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
-	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
-	result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
-	float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + 1.0f * matrix.m[3][3];
-	assert(w != 0.0f);
-	result.x /= w;
-	result.y /= w;
-	result.z /= w;
-	return result;
-}
-
-

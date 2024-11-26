@@ -1,6 +1,7 @@
 #pragma once
 #include "WorldTransform.h"
-#include "BaseModel.h"
+#include "Base3dObject.h"
+
 class PlayerBullet
 {
 public:
@@ -11,7 +12,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const std::shared_ptr<BaseModel> model, const Vector3& position, const Vector3& velocity);
+	void Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -27,8 +28,8 @@ private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
 
-	// モデル
-	std::shared_ptr<BaseModel> model_ = nullptr;
+	//オブジェクト
+	std::unique_ptr<Base3dObject> object_;
 
 	// テクスチャハンドル
 	//uint32_t textureHandle_ = 0u;

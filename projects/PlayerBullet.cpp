@@ -1,16 +1,19 @@
 #include "PlayerBullet.h"
 #include "imgui/imgui.h"
+#include "Rigid3dObject.h"
+
 PlayerBullet::~PlayerBullet()
 {
 
 }
 
-void PlayerBullet::Initialize(const std::shared_ptr<BaseModel> model, const Vector3& position, const Vector3& velocity)
+void PlayerBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity)
 {
 	// NULLポインタチェック
 	assert(model);
 	// モデルをセット
-	model_ = model;
+	object_ = std::make_unique<Rigid3dObject>();
+	object_->Initialize(model);
 	// テクスチャ読み込み
 	//textureHandle_ = TextureManager::GetInstance()->Load("white.png");
 	// ワールドトランスフォームの初期化
@@ -51,6 +54,6 @@ void PlayerBullet::Draw(Camera* camera)
 {
 
 	// モデルを描画
-	assert(model_);
-	model_->Draw(worldTransform_, camera);
+	object_->Update(worldTransform_, camera);
+	object_->Draw();
 }
