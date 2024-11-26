@@ -13,7 +13,7 @@ void DirectionalLight::Initialize(DirectXCommon* dxCommon)
 	resource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
 	//デフォルト値
 	data_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	data_->direction = { 0.0f, 0.0f, 1.0f };
+	data_->direction = { -0.3f, -1.0f, -0.3f };
 	data_->intensity = 1.0f;
 
 }
