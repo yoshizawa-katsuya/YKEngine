@@ -212,7 +212,7 @@
     <ClCompile Include="Engine\3d\PointLight.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
-    <ClCompile Include="SpotLight.cpp">
+    <ClCompile Include="Engine\3d\SpotLight.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
     <ClCompile Include="Skydome.cpp">
@@ -401,7 +401,7 @@
     <ClInclude Include="Engine\3d\PointLight.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
-    <ClInclude Include="SpotLight.h">
+    <ClInclude Include="Engine\3d\SpotLight.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Skydome.h">

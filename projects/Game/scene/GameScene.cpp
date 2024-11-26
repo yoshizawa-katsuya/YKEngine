@@ -45,6 +45,7 @@ void GameScene::Initialize() {
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
+	//モデルを描画する際ライトとカメラの設定は必須
 	modelPlatform_->SetDirectionalLight(directionalLight_.get());
 	modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);

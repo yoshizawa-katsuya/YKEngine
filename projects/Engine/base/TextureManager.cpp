@@ -30,6 +30,10 @@ void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeap
 uint32_t TextureManager::Load(const std::string& fileName) {
 
 	//読み込み済みテクスチャを検索
+	if (textureHandles_.contains(fileName)) {
+		return textureHandles_[fileName];
+	}
+	/*
 	auto it = std::find_if(
 		textures_.begin(),
 		textures_.end(),
@@ -39,13 +43,15 @@ uint32_t TextureManager::Load(const std::string& fileName) {
 		uint32_t textureIndex = static_cast<uint32_t>(std::distance(textures_.begin(), it));
 		return textureIndex;
 	}
-
+	*/
 	
 
 	index_ = srvHeapManager_->Allocate();
 	
 	//テクスチャ枚数上限チェック
 	assert(srvHeapManager_->Check());
+
+	textureHandles_[fileName] = index_;
 
 	//Textureを読んで転送する
 	LoadTexture(fileName);
@@ -136,7 +142,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	}
 
 	//ミップマップ付きのデータを返す
-	texture.filePath = filePath;
+	//texture.filePath = filePath;
 	texture.metadata = image.GetMetadata();
 	texture.resource = dxCommon_->CreateTextureResource(texture.metadata);
 

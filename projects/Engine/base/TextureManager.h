@@ -1,6 +1,6 @@
 #pragma once
 
-#include <array>
+#include <unordered_map>
 #include <d3d12.h>
 #include <string>
 #include <wrl.h>
@@ -57,7 +57,6 @@ private:
 	/// テクスチャ
 	/// </summary>
 	struct Texture {
-		std::string filePath;
 		DirectX::TexMetadata metadata;
 		// テクスチャリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
@@ -68,6 +67,8 @@ private:
 	};
 
 	// テクスチャコンテナ
-	std::array<Texture, SrvHeapManager::kMaxSrvDescriptors_> textures_;
+	//std::array<Texture, SrvHeapManager::kMaxSrvDescriptors_> textures_;
+	std::unordered_map<uint32_t, Texture> textures_;
+	std::unordered_map<std::string, uint32_t> textureHandles_;
 
 };
