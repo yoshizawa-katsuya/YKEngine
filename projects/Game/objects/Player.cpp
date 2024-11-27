@@ -43,7 +43,7 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	// 体及び全体
 	worldTransforms_[0].scale_ = { 0.8f,0.8f,0.8f };
 	worldTransforms_[0].rotation_.y = -1.56f;
-	worldTransforms_[0].translation_.y = -0.2f;
+	worldTransforms_[0].translation_.y = 1.7f;
 
 	// 頭部
 	worldTransforms_[1].translation_.y = 0.7f;
@@ -81,7 +81,7 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	worldTransforms_[9].translation_.y = 0.81f;
 	worldTransforms_[9].translation_.z = -0.54f;
 
-	bulletEmitter.translation_ = { 0.54f,0.17f,1.4f };
+	bulletEmitter.translation_ = { 0.55f,2.02f,2.46f };
 
 	// ペアレント設定
 	worldTransforms_[1].parent_ = &worldTransforms_[0];
@@ -128,8 +128,6 @@ void Player::Update() {
 	/// キーボードによる移動処理
 	/////////////////////////////*/
 
-#ifdef _DEBUG
-
 
 	// 押した方向で移動ベクトルを変更(左右)
 	if (input_->GetInstance()->PushKey(DIK_LEFT)) {
@@ -145,7 +143,14 @@ void Player::Update() {
 	} else if (input_->GetInstance()->PushKey(DIK_UP)) {
 		move.y += kCharacterSpeed;
 	}
-#endif
+	// 移動限界座標
+	const float kMoveLimitX = 3.6f;
+	// 範囲を超えない処理
+	worldTransforms_[0].translation_.x = std::clamp(worldTransforms_[0].translation_.x, -kMoveLimitX, +kMoveLimitX);
+	worldTransforms_[0].translation_.y = std::clamp(worldTransforms_[0].translation_.y, 1.7f, 3.4f);
+
+	bulletEmitter.translation_.x = std::clamp(bulletEmitter.translation_.x, -kMoveLimitX + 0.55f, +kMoveLimitX + 0.55f);
+	bulletEmitter.translation_.y = std::clamp(bulletEmitter.translation_.y, 2.02f, 3.72f);
 	// 座標移動(ベクトルの加算)
 	worldTransforms_[0].translation_ += move;
 
