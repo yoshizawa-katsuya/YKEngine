@@ -29,7 +29,7 @@ void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonMod
 	worldTransforms_[4].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[5].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[6].translation_ = { 0.0f,0.0f,0.0f };
-	worldTransforms_[7].translation_ = { 0.5f,-0.27f,0.0f };
+	worldTransforms_[7].translation_ = { -0.03f,-0.27f,0.0f };
 
 	worldTransforms_[1].parent_ = &worldTransforms_[0];     //BossBody
 	worldTransforms_[2].parent_ = &worldTransforms_[0];     //BossHead
