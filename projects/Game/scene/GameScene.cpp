@@ -168,6 +168,7 @@ void GameScene::Initialize() {
 
 	//se
 	hitSE02_ = audio_->SoundLoadWave("./resources/Sound/SE_02.wav");
+	hitSE03_ = audio_->SoundLoadWave("./resources/Sound/SE_03.wav");
 
 	// プレイヤーのHPゲージ
 
@@ -390,6 +391,7 @@ void GameScene::CheckAllCollisions()
 		if (length <= (canon->GetRadius() + player_->GetRadius())) {
 			player_->OnCollision();
 			canon->OnCollision();
+			Audio::GetInstance()->SoundPlayWave(hitSE03_);
 		}
 	}
 
@@ -400,6 +402,7 @@ void GameScene::CheckAllCollisions()
 		if (length <= (bullet->GetRadius() + player_->GetRadius())) {
 			player_->OnCollision();
 			bullet->OnCollision();
+			Audio::GetInstance()->SoundPlayWave(hitSE03_);
 		}
 	}
 

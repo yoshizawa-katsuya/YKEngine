@@ -106,6 +106,7 @@ private:
 	float bossRadius_ = 10.0f;
 
 	SoundData hitSE02_;
+	SoundData hitSE03_;
 
 	/// <summary>
 	/// プレイヤーのHPゲージ
