@@ -112,6 +112,10 @@ void GameScene::Initialize() {
 	canonModel_ = std::make_unique<RigidModel>();
 	canonModel_->CreateModel("./resources/Boss/Canon", "Canon.obj");// 
 
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/BossEye", "BossEye.obj");//7
+
+
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
 
@@ -159,7 +163,33 @@ void GameScene::Initialize() {
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialzie(modelGround_.get());
 
+	//se
+	hitSE02_ = audio_->SoundLoadWave("./resources/Sound/SE_02.wav");
 
+	// プレイヤーのHPゲージ
+
+	playerHPBar_ = TextureManager::GetInstance()->Load("./resources/playerHPBar.png");
+	playerHPBarSprite_ = std::make_unique<Sprite>();
+	playerHPBarSprite_->Initialize(playerHPBar_, spritePlatform_);
+	playerHPBarSprite_->SetPosition({ 20.0f,180.0f });
+
+	playerHP_ = TextureManager::GetInstance()->Load("./resources/playerHP.png");
+	playerHPSprite_ = std::make_unique<Sprite>();
+	playerHPSprite_->Initialize(playerHP_, spritePlatform_);
+	// アンカーを左下に設定
+	playerHPSprite_->SetAnchorPoint(Vector2(0,1));
+	playerHPSprite_->SetPosition({ 25.0f,692.0f });
+
+	// ボスのHPゲージ
+	bossHPBar_ = TextureManager::GetInstance()->Load("./resources/bossHPBar.png");
+	bossHPBarSprite_ = std::make_unique<Sprite>();
+	bossHPBarSprite_->Initialize(bossHPBar_, spritePlatform_);
+	bossHPBarSprite_->SetPosition({ 86.0f,20.0f });
+
+	bossHP_ = TextureManager::GetInstance()->Load("./resources/bossHP.png");
+	bossHPSprite_ = std::make_unique<Sprite>();
+	bossHPSprite_->Initialize(bossHP_, spritePlatform_);
+	bossHPSprite_->SetPosition({ 93.0f,27.0f });
 }
 
 void GameScene::Update() {
@@ -173,6 +203,13 @@ void GameScene::Update() {
 	input_->HoldButton(XINPUT_GAMEPAD_Y);
 	input_->GetLeftStickX();
 	*/
+
+	if (player_->IsDead()) {
+		sceneManager_->ChengeScene("GameOver");
+	}
+	if (boss_->IsDead()) {
+		sceneManager_->ChengeScene("GameClear");
+	}
 
 	//カメラの更新
 	camera_->Update();
@@ -197,6 +234,13 @@ void GameScene::Update() {
 
 	// 当たり判定
 	CheckAllCollisions();
+
+	// HPに応じてsize_.yを更新
+	playerHP_size.y = 507.0f * static_cast<float>(player_->GetPlayerHP()) / player_->GetPlayerMaxHP();
+	playerHPSprite_->SetSize(playerHP_size);
+
+	bossHP_size.x = 1076.0f * static_cast<float>(boss_->GetBossHP()) / boss_->GetBossMaxHP();
+	bossHPSprite_->SetSize(bossHP_size);
 
 #ifdef _DEBUG
 
@@ -255,6 +299,22 @@ void GameScene::Update() {
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
+	playerHPBar_position_ = playerHPBarSprite_->GetPosition();
+	ImGui::DragFloat2("playerHPBar_position", &playerHPBar_position_.x, 0.1f);
+	playerHPBarSprite_->SetPosition(playerHPBar_position_);
+
+	playerHP_position_ = playerHPSprite_->GetPosition();
+	ImGui::DragFloat2("playerHP_position", &playerHP_position_.x, 0.1f);
+	playerHPSprite_->SetPosition(playerHP_position_);
+
+	// ボスのHPゲージの座標
+	bossHPBar_position_ = bossHPBarSprite_->GetPosition();
+	ImGui::DragFloat2("bossHPBar_position", &bossHPBar_position_.x, 0.1f);
+	bossHPBarSprite_->SetPosition(bossHPBar_position_);
+
+	bossHP_position_ = bossHPSprite_->GetPosition();
+	ImGui::DragFloat2("bossHP_position", &bossHP_position_.x, 0.1f);
+	bossHPSprite_->SetPosition(bossHP_position_);
 	/*
 	if (ImGui::Button("BGMstop")) {
 		audio_->SoundStopWave(bgm1_);
@@ -292,9 +352,13 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
+	playerHPBarSprite_->Draw();
 
+	playerHPSprite_->Draw();
 
+	bossHPBarSprite_->Draw();
 
+	bossHPSprite_->Draw();
 }
 
 void GameScene::Finalize()
@@ -332,6 +396,7 @@ void GameScene::CheckAllCollisions()
 			boss_->OnCollision();
 			// 自弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
+			Audio::GetInstance()->SoundPlayWave(hitSE02_);
 		}
 	}
 

@@ -103,5 +103,39 @@ private:
 	float playerBulletRadius_ = 1.0f;
 
 	float bossRadius_ = 10.0f;
+
+	SoundData hitSE02_;
+
+	/// <summary>
+	/// プレイヤーのHPゲージ
+	/// </summary>
+
+	uint32_t playerHPBar_;
+
+	std::unique_ptr<Sprite> playerHPBarSprite_;
+
+	Vector2 playerHPBar_position_ = {};
+
+	uint32_t playerHP_;
+
+	std::unique_ptr<Sprite> playerHPSprite_;
+
+	Vector2 playerHP_position_ = {};
+
+	Vector2 playerHP_size = { 55.0f,507.0f };
+
+	uint32_t bossHPBar_;
+
+	std::unique_ptr<Sprite> bossHPBarSprite_;
+
+	Vector2 bossHPBar_position_ = {};
+
+	uint32_t bossHP_;
+
+	std::unique_ptr<Sprite> bossHPSprite_;
+
+	Vector2 bossHP_position_ = {};
+
+	Vector2 bossHP_size = { 1076.0f,51.0f };
 };
 

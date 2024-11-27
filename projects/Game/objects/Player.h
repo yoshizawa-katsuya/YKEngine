@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Input.h"
 #include "PlayerBullet.h"
+#include "Audio.h"
 class Camera;
 class MapChipField;
 
@@ -42,6 +43,14 @@ public:
 	/// <returns></returns>
 	Vector3 GetWorldPosition();
 
+	// 死亡フラグのゲッター
+	bool IsDead() { return isDead_; }
+
+	uint32_t GetPlayerHP() { return playerHP; }
+
+	const uint32_t GetPlayerMaxHP() { return playerMaxHP; }
+
+
 private:
 
 	// 各部位のTransform変数を格納する
@@ -50,7 +59,7 @@ private:
 	// 弾丸のモデルを生成
 	std::unique_ptr<BaseModel> bulletModel;
 	
-
+	Audio* audio_;
 	Input* input_ = nullptr;
 
 	// 弾
@@ -69,5 +78,17 @@ private:
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
 
 	std::unique_ptr<Base3dObject> bulletObject;
+
+	// プレイヤーの現在体力
+	uint32_t playerHP;
+	// プレイヤーの最大体力
+	const uint32_t playerMaxHP = 10;
+
+	// プレイヤーの死亡フラグ
+	bool isDead_;
+
+	//se
+	SoundData hitSE01_;
+
 };
 

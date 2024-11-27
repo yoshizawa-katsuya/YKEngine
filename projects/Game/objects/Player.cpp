@@ -13,6 +13,8 @@ Player::~Player()
 
 void Player::Initialize(const std::vector<BaseModel*>& models) {
 
+	audio_ = Audio::GetInstance();
+
 	bulletModel = std::make_unique<RigidModel>();
 	bulletModel->CreateModel("./resources/player/PlayerBullet", "PlayerBullet.obj");
 	// 各部位のWorldTransformを初期化
@@ -32,6 +34,8 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	}
 	
 	fireCoolTime = kCoolDownTime;
+	// HPのセット
+	playerHP = playerMaxHP;
 	/// <summary>
 	/// 体のパーツの座標設定
 	/// </summary>
@@ -39,7 +43,7 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	// 体及び全体
 	worldTransforms_[0].scale_ = { 0.8f,0.8f,0.8f };
 	worldTransforms_[0].rotation_.y = -1.56f;
-	worldTransforms_[0].translation_.y = -0.2f;
+	worldTransforms_[0].translation_.y = 1.7f;
 
 	// 頭部
 	worldTransforms_[1].translation_.y = 0.7f;
@@ -77,7 +81,7 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	worldTransforms_[9].translation_.y = 0.81f;
 	worldTransforms_[9].translation_.z = -0.54f;
 
-	bulletEmitter.translation_ = { 0.54f,0.17f,1.4f };
+	bulletEmitter.translation_ = { 0.55f,2.02f,2.46f };
 
 	// ペアレント設定
 	worldTransforms_[1].parent_ = &worldTransforms_[0];
@@ -90,6 +94,9 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	worldTransforms_[8].parent_ = &worldTransforms_[2];
 	worldTransforms_[9].parent_ = &worldTransforms_[0];
 	bulletEmitter.parent_ = &worldTransforms_[8];
+
+
+	hitSE01_ = audio_->SoundLoadWave("./resources/Sound/SE_01.wav");
 }
 
 void Player::Update() {
@@ -101,6 +108,10 @@ void Player::Update() {
 		}
 		return false;
 		});
+
+	if (playerHP <= 0) {
+		isDead_ = true;
+	}
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
@@ -117,8 +128,6 @@ void Player::Update() {
 	/// キーボードによる移動処理
 	/////////////////////////////*/
 
-#ifdef _DEBUG
-
 
 	// 押した方向で移動ベクトルを変更(左右)
 	if (input_->GetInstance()->PushKey(DIK_LEFT)) {
@@ -134,7 +143,14 @@ void Player::Update() {
 	} else if (input_->GetInstance()->PushKey(DIK_UP)) {
 		move.y += kCharacterSpeed;
 	}
-#endif
+	// 移動限界座標
+	const float kMoveLimitX = 3.6f;
+	// 範囲を超えない処理
+	worldTransforms_[0].translation_.x = std::clamp(worldTransforms_[0].translation_.x, -kMoveLimitX, +kMoveLimitX);
+	worldTransforms_[0].translation_.y = std::clamp(worldTransforms_[0].translation_.y, 1.7f, 3.4f);
+
+	bulletEmitter.translation_.x = std::clamp(bulletEmitter.translation_.x, -kMoveLimitX + 0.55f, +kMoveLimitX + 0.55f);
+	bulletEmitter.translation_.y = std::clamp(bulletEmitter.translation_.y, 2.02f, 3.72f);
 	// 座標移動(ベクトルの加算)
 	worldTransforms_[0].translation_ += move;
 
@@ -158,6 +174,9 @@ void Player::Update() {
 	}
 	ImGui::DragFloat3("bulletEmitter", &bulletEmitter.translation_.x, 0.01f);
 	ImGui::InputFloat("fireCoolTime", &fireCoolTime);
+	int intPlayerHP = static_cast<int>(playerHP);
+	ImGui::InputInt("playerHP", &intPlayerHP);
+	playerHP = static_cast<uint32_t>(intPlayerHP);
 	ImGui::End();
 
 #endif // _DEBUG	
@@ -187,6 +206,8 @@ void Player::Attack()
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 
+		audio_->SoundPlayWave(hitSE01_);
+
 		// 速度ベクトルを自機の向きに合わせて回転させる
 		//velocity = mathMatrix_->TransformNormal(velocity, worldTransform_.matWorld_);
 
@@ -201,6 +222,7 @@ void Player::Attack()
 
 void Player::OnCollision()
 {
+	playerHP -= 1;
 }
 
 Vector3 Player::GetCenterPosition() const

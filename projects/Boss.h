@@ -32,6 +32,12 @@ public:
 	Vector3 GetWorldPosition();
 
 	void OnCollision();
+
+	uint32_t GetBossHP() { return bossHP; }
+
+	const uint32_t GetBossMaxHP() { return bossMaxHP; }
+
+	bool IsDead() { return isDead_; }
 private:
 
 	//Transform変数を作る
@@ -48,8 +54,18 @@ private:
 	std::unique_ptr<Base3dObject> canonObject_;
 	PlayerLockOn* lockOn_ = nullptr;
 
+
 private:
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
+
+	// ボスのHP上限
+	const uint32_t bossMaxHP = 100;
+
+	// ボスの現在HP
+	uint32_t bossHP;
+
+	bool isDead_;
+
 };
 
 

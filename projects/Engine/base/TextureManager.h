@@ -39,7 +39,7 @@ public:
 private:
 
 	//Textureデータを読む
-	void LoadTexture(const std::string& filePath);
+	void LoadTexture(const std::string& filePath, uint32_t index);
 
 	TextureManager() = default;
 	~TextureManager() = default;
@@ -48,9 +48,6 @@ private:
 
 	DirectXCommon* dxCommon_ = nullptr;
 	SrvHeapManager* srvHeapManager_ = nullptr;
-
-	uint32_t index_ = 0;
-
 	
 
 	/// <summary>

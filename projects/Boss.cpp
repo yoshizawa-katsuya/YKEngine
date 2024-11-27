@@ -22,13 +22,14 @@ void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonMod
 	}
 
 	worldTransforms_[0].rotation_ = { 0.0f,1.5f,0.0f };
-	worldTransforms_[0].translation_ = { 0.0f,2.52f,65.0f }; //Connection
+	worldTransforms_[0].translation_ = { 0.0f,0.0f,65.0f }; //Connection
 	worldTransforms_[1].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[2].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[3].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[4].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[5].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[6].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[7].translation_ = { 0.5f,-0.27f,0.0f };
 
 	worldTransforms_[1].parent_ = &worldTransforms_[0];     //BossBody
 	worldTransforms_[2].parent_ = &worldTransforms_[0];     //BossHead
@@ -36,14 +37,29 @@ void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonMod
 	worldTransforms_[4].parent_ = &worldTransforms_[2];     //BossGunL
 	worldTransforms_[5].parent_ = &worldTransforms_[1];     //TrackL
 	worldTransforms_[6].parent_ = &worldTransforms_[1];     //TrackR
+	worldTransforms_[7].parent_ = &worldTransforms_[2];     //Eye
 
 	canonObject_ = std::make_unique<Rigid3dObject>();
 	canonObject_->Initialize(canonModel);
+  
+	worldTransform_.Initialize();
 
+	worldTransform_.translation_ = { 0.0f,0.0f,65.0f };
+	worldTransform_.rotation_ = { 0.0f,1.5f,0.0f };
+
+	worldTransform_.UpdateMatrix();
+	// ボスのHPを初期化
+	bossHP = bossMaxHP;
+
+
+	isDead_ = false;
 }
 
 void Boss::Update(Camera* camera)
 {
+	if (bossHP <= 0) {
+		isDead_ = true;
+	}
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();
 	}
@@ -76,6 +92,8 @@ void Boss::Update(Camera* camera)
 				ImGui::TreePop();
 			}
 		}
+		ImGui::Text("Boss Max HP: %u", bossMaxHP);
+		ImGui::Text("Boss HP: %u", bossHP);
 	ImGui::End();
 
 #endif // _DEBUG	
@@ -156,6 +174,7 @@ Vector3 Boss::GetWorldPosition()
 
 void Boss::OnCollision()
 {
+	bossHP -= 1;
 }
 
 Vector3 Boss::TransformNormal(const Vector3& v, const Matrix4x4& m)
