@@ -17,8 +17,6 @@ void BossCanon::Initialize(BaseModel* model, Boss* boss, const Vector3& velocity
 	// 初期化
 	worldTransform_.Initialize();
 	// ボスの中心座標を取得
-	
-	////// 関数内要修正？//////
 	worldTransform_.translation_ = pBoss_->GetWorldPosition();
 
 	// y軸周りの回転角度（0y）を計算
