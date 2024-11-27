@@ -107,14 +107,17 @@ void GameScene::Initialize() {
 
 	bossModels_.emplace_back(std::make_unique<RigidModel>());
 	bossModels_.back()->CreateModel("./resources/Boss/TrackR", "TrackR.obj");//6
+	
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/BossEye", "BossEye.obj");//7
+
+	// 通常弾モデル
+	bulletModel_ = std::make_unique<RigidModel>();
+	bulletModel_->CreateModel("./resources/Boss/bullet", "bullet.obj");
 
 	// Bossの砲撃モデル
 	canonModel_ = std::make_unique<RigidModel>();
 	canonModel_->CreateModel("./resources/Boss/Canon", "missile.obj");// 
-
-	bossModels_.emplace_back(std::make_unique<RigidModel>());
-	bossModels_.back()->CreateModel("./resources/Boss/BossEye", "BossEye.obj");//7
-
 
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
@@ -149,7 +152,7 @@ void GameScene::Initialize() {
 		bossModelPtrs.push_back(model.get());
 	}
 	boss_ = std::make_unique<Boss>();
-	boss_->Initialize(bossModelPtrs, canonModel_.get());
+	boss_->Initialize(bossModelPtrs, canonModel_.get(),bulletModel_.get());
 
 	// ボスのロックオン処理の生成
 	playerLockOn_ = std::make_unique<PlayerLockOn>();
@@ -375,6 +378,8 @@ void GameScene::CheckAllCollisions()
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 	// ボスの砲撃リストの取得
 	const std::list<std::unique_ptr<BossCanon>>& canons = boss_->GetCanons();
+	// ボスの通常弾リストの取得
+	const std::list<std::unique_ptr<BossBullet>>& bullets = boss_->GetBullets();
 
 #pragma region 自キャラと敵弾の当たり判定
 	
@@ -385,6 +390,16 @@ void GameScene::CheckAllCollisions()
 		if (length <= (canon->GetRadius() + player_->GetRadius())) {
 			player_->OnCollision();
 			canon->OnCollision();
+		}
+	}
+
+	for (const auto& bullet : bullets) {
+		posA = player_->GetWorldPosition();
+		posB = bullet->GetWorldPosition();
+		float length = Length(Subtract(posB, posA));
+		if (length <= (bullet->GetRadius() + player_->GetRadius())) {
+			player_->OnCollision();
+			bullet->OnCollision();
 		}
 	}
 

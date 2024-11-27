@@ -5,6 +5,7 @@
 #include "WorldTransform.h"
 #include "Animation.h"
 
+#include "BossBullet.h"
 #include "BossCanon.h"
 
 class Camera;
@@ -16,13 +17,15 @@ class Boss
 
 public:
 
-	void Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel);
+	void Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel,BaseModel* bulletModel);
 
 	void Update(Camera* camera);
 
 	void Draw(Camera* camera);
 
-	void Attack(Camera* camera);
+	void BulletAttack(Camera* camera);
+
+	void CanonAttack(Camera* camera);
 	
 	void OnCollision();
 
@@ -40,20 +43,39 @@ public:
 	bool IsDead() { return isDead_; }
 
 	const std::list<std::unique_ptr<BossCanon>>& GetCanons()const { return canons_; }
+	const std::list<std::unique_ptr<BossBullet>>& GetBullets()const { return bullets_; }
 private:
 
 	//Transform変数を作る
 	std::vector<WorldTransform> worldTransforms_;
 
+	// 弾
+	std::list<std::unique_ptr<BossBullet>> bullets_;
+	// 発射間隔
+	static const int kBulletAttackInterval = 20;
+	// 発射タイマー
+	int32_t bulletTimer_ = 0;
+	static const int kBurstCount_ = 3;      // 一度に発射する弾の数
+	static const int kBurstInterval_ = 60;  // 弾と弾の間隔
+	static const int kBurstCooldown_ = 180; // 連射後の待機時間
+
+	int32_t burstCounter_ = 0;       // 現在の発射数
+	int32_t burstCooldownTimer_ = 0; // 待機タイマー
+
 	// 砲撃
 	std::list<std::unique_ptr<BossCanon>> canons_;
-	float coolTime_ = 5.0f;
+	// 発射間隔
+	static const int kCanonAttackInterval = 60 * 9;
+	// 発射タイマー
+	int32_t canonTimer_ = 0;
 
 	Player* player_ = nullptr;
 
 	//オブジェクト
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
 	std::unique_ptr<Base3dObject> canonObject_;
+	std::unique_ptr<Base3dObject> bulletObject_;
+
 	PlayerLockOn* lockOn_ = nullptr;
 
 	// ボスのHP上限

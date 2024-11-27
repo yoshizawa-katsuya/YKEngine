@@ -5,7 +5,7 @@
 #include "Rigid3dObject.h"
 #include "Matrix.h"
 
-void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel)
+void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel, BaseModel* bulletModel)
 {
 
 	worldTransforms_.resize(models.size());
@@ -42,6 +42,10 @@ void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonMod
 	canonObject_ = std::make_unique<Rigid3dObject>();
 	canonObject_->Initialize(canonModel);
 
+	bulletObject_ = std::make_unique<Rigid3dObject>();
+	bulletObject_->Initialize(bulletModel);
+	bulletTimer_ = kBurstInterval_;
+
 	// ボスのHPを初期化
 	bossHP = bossMaxHP;
 
@@ -67,7 +71,13 @@ void Boss::Update(Camera* camera)
 		worldTransforms_[0].rotation_.y = std::atan2(sub.x, sub.z);
 	}
 
-	Attack(camera);
+	// 通常弾
+	BulletAttack(camera);
+
+	// 砲撃
+	CanonAttack(camera);
+
+
 
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();
@@ -101,13 +111,63 @@ void Boss::Draw(Camera* camera)
 		objects_[i]->Draw();
 	}
 
+	// 通常弾描画
+	for (const auto& bullet : bullets_) {
+		bullet->Draw();
+	}
+
+	// 砲撃描画
 	for (const auto& canon : canons_) {
 		canon->Draw();
 	}
 
 }
 
-void Boss::Attack(Camera* camera)
+void Boss::BulletAttack(Camera* camera)
+{
+	// デスフラグが立った大砲を削除
+	bullets_.remove_if([](const std::unique_ptr<BossBullet>& bullet) { return bullet->IsDead(); });
+
+	// 連射後の待機中
+	if (burstCooldownTimer_ > 0) {
+		--burstCooldownTimer_;
+	} else {
+		// 発射タイマーカウントダウン
+		--bulletTimer_;
+
+		if (bulletTimer_ <= 0) {
+			// 弾の速度
+			const float kBulletSpeed = 1.5f;
+			Vector3 velocity(0.0f, 0.0f, kBulletSpeed);
+
+			// 速度ベクトルを自機の向きに合わせて回転させる
+			velocity = TransformNormal(velocity, worldTransforms_[0].worldMatrix_);
+
+			// 弾の生成と初期化
+			std::unique_ptr<BossBullet> newBullet = std::make_unique<BossBullet>();
+			newBullet->Initialize(bulletObject_.get(), this, velocity);
+
+			// 弾を登録する
+			bullets_.push_back(std::move(newBullet));
+
+			++burstCounter_;
+
+			if (burstCounter_ >= kBurstCount_) {
+				// 連射が完了したらクールダウン開始
+				burstCounter_ = 0;
+				burstCooldownTimer_ = kBurstCooldown_;
+			}
+
+			// 次の弾を撃つまでの間隔
+			bulletTimer_ = kBurstInterval_;
+		}
+	}
+	for (const auto& bullet : bullets_) {
+		bullet->Update(camera);
+	}
+}
+
+void Boss::CanonAttack(Camera* camera)
 {
 	// デスフラグが立った大砲を削除
 	canons_.remove_if([](const std::unique_ptr<BossCanon>& canon) {return canon->IsDead(); });
@@ -133,11 +193,10 @@ void Boss::Attack(Camera* camera)
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransforms_[0].worldMatrix_);
 
-	// 5秒間隔で砲撃
-	float deltaTime = 1.0f / 60.0f;
-	coolTime_ -= deltaTime;
+	// 発射タイマーカウントダウン
+	--canonTimer_;
 
-	if (coolTime_ <= 0.0f) {
+	if (canonTimer_ <= 0.0f) {
 		auto newCanon = std::make_unique<BossCanon>();
 		newCanon->Initialize(canonObject_.get(), this, velocity);
 		newCanon->SetPlayer(player_);
@@ -146,7 +205,7 @@ void Boss::Attack(Camera* camera)
 		canons_.push_back(std::move(newCanon));
 
 		// タイマーを戻す
-		coolTime_ = 5.0f;
+		canonTimer_ = kCanonAttackInterval;
 	}
 
 	for (const auto& canon : canons_) {

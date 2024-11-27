@@ -43,7 +43,7 @@ void BossCanon::Update(Camera* camera)
 	toPlayer = Normalize(toPlayer);
 
 	// ホーミング強度
-	float homingStrength = 0.05f;
+	float homingStrength = 0.04f;
 	// 弾の速さ
 	float speed = 0.9f;
 
