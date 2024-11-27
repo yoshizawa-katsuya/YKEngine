@@ -21,7 +21,7 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 	}
 
 	worldTransforms_[0].rotation_ = { 0.0f,1.5f,0.0f };
-	worldTransforms_[0].translation_ = { 0.0f,2.52f,65.0f }; //Connection
+	worldTransforms_[0].translation_ = { 0.0f,0.0f,65.0f }; //Connection
 	worldTransforms_[1].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[2].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[3].translation_ = { 0.0f,0.0f,0.0f };
