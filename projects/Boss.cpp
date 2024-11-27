@@ -44,6 +44,7 @@ void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonMod
 
 	bulletObject_ = std::make_unique<Rigid3dObject>();
 	bulletObject_->Initialize(bulletModel);
+	bulletTimer_ = kBurstInterval_;
 
 	// ボスのHPを初期化
 	bossHP = bossMaxHP;
@@ -127,23 +128,16 @@ void Boss::BulletAttack(Camera* camera)
 	// デスフラグが立った大砲を削除
 	bullets_.remove_if([](const std::unique_ptr<BossBullet>& bullet) { return bullet->IsDead(); });
 
-	static const int kBurstCount = 3;      // 一度に発射する弾の数
-	static const int kBurstInterval = 10;  // 弾と弾の間隔
-	static const int kBurstCooldown = 180; // 連射後の待機時間
-
-	static int burstCounter = 0;       // 現在の発射数
-	static int burstCooldownTimer = 0; // 待機タイマー
-
 	// 連射後の待機中
-	if (burstCooldownTimer > 0) {
-		--burstCooldownTimer;
+	if (burstCooldownTimer_ > 0) {
+		--burstCooldownTimer_;
 	} else {
 		// 発射タイマーカウントダウン
 		--bulletTimer_;
 
 		if (bulletTimer_ <= 0) {
 			// 弾の速度
-			const float kBulletSpeed = 1.0f;
+			const float kBulletSpeed = 1.5f;
 			Vector3 velocity(0.0f, 0.0f, kBulletSpeed);
 
 			// 速度ベクトルを自機の向きに合わせて回転させる
@@ -151,21 +145,21 @@ void Boss::BulletAttack(Camera* camera)
 
 			// 弾の生成と初期化
 			std::unique_ptr<BossBullet> newBullet = std::make_unique<BossBullet>();
-			newBullet->Initialize(bulletObject_.get(), worldTransforms_[0].translation_, velocity);
+			newBullet->Initialize(bulletObject_.get(), this, velocity);
 
 			// 弾を登録する
 			bullets_.push_back(std::move(newBullet));
 
-			++burstCounter;
+			++burstCounter_;
 
-			if (burstCounter >= kBurstCount) {
+			if (burstCounter_ >= kBurstCount_) {
 				// 連射が完了したらクールダウン開始
-				burstCounter = 0;
-				burstCooldownTimer = kBurstCooldown;
+				burstCounter_ = 0;
+				burstCooldownTimer_ = kBurstCooldown_;
 			}
 
 			// 次の弾を撃つまでの間隔
-			bulletTimer_ = kBurstInterval;
+			bulletTimer_ = kBurstInterval_;
 		}
 	}
 	for (const auto& bullet : bullets_) {

@@ -55,11 +55,17 @@ private:
 	static const int kBulletAttackInterval = 20;
 	// 発射タイマー
 	int32_t bulletTimer_ = 0;
+	static const int kBurstCount_ = 3;      // 一度に発射する弾の数
+	static const int kBurstInterval_ = 60;  // 弾と弾の間隔
+	static const int kBurstCooldown_ = 180; // 連射後の待機時間
+
+	int32_t burstCounter_ = 0;       // 現在の発射数
+	int32_t burstCooldownTimer_ = 0; // 待機タイマー
 
 	// 砲撃
 	std::list<std::unique_ptr<BossCanon>> canons_;
 	// 発射間隔
-	static const int kCanonAttackInterval = 60 * 8;
+	static const int kCanonAttackInterval = 60 * 9;
 	// 発射タイマー
 	int32_t canonTimer_ = 0;
 

@@ -1,14 +1,17 @@
 #include "BossBullet.h"
 #include "Camera.h"
+#include "Boss.h"
 
-void BossBullet::Initialize(Base3dObject* object, const Vector3& translation, const Vector3& velocity)
+void BossBullet::Initialize(Base3dObject* object, Boss* boss, const Vector3& velocity)
 {
 
 	object_ = object;
 	velocity_ = velocity;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = translation;
+	worldTransform_.translation_ = boss->GetWorldPosition();
+
+	worldTransform_.UpdateMatrix();
 }
 
 void BossBullet::Update(Camera* camera)

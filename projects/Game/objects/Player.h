@@ -87,7 +87,7 @@ private:
 	// プレイヤーの現在体力
 	uint32_t playerHP;
 	// プレイヤーの最大体力
-	const uint32_t playerMaxHP = 10;
+	const uint32_t playerMaxHP = 15;
 
 	// プレイヤーの死亡フラグ
 	bool isDead_;

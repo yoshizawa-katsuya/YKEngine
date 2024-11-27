@@ -4,12 +4,13 @@
 #include "WorldTransform.h"
 #include "Vector.h"
 
+class Boss;
 class Camera;
 
 class BossBullet {
 public:
 
-	void Initialize(Base3dObject* object, const Vector3& translation, const Vector3& velocity);
+	void Initialize(Base3dObject* object, Boss* boss, const Vector3& velocity);
 
 	void Update(Camera* camera);
 
@@ -47,6 +48,6 @@ private:
 	bool isDead_ = false;
 
 	// 当たり判定の大きさ（半径）
-	float radius_ = 0.8f;
+	float radius_ = 1.0f;
 
 };
