@@ -156,6 +156,20 @@ void GameScene::Initialize() {
 
 	//se
 	hitSE02_ = audio_->SoundLoadWave("./resources/Sound/SE_02.wav");
+
+	// プレイヤーのHPゲージ
+
+	playerHPBar_ = TextureManager::GetInstance()->Load("./resources/playerHPBar.png");
+	playerHPBarSprite_ = std::make_unique<Sprite>();
+	playerHPBarSprite_->Initialize(playerHPBar_, spritePlatform_);
+	playerHPBarSprite_->SetPosition({ 20.0f,180.0f });
+
+	playerHP_ = TextureManager::GetInstance()->Load("./resources/playerHP.png");
+	playerHPSprite_ = std::make_unique<Sprite>();
+	playerHPSprite_->Initialize(playerHP_, spritePlatform_);
+	// アンカーを左下に設定
+	playerHPSprite_->SetAnchorPoint(Vector2(0,1));
+	playerHPSprite_->SetPosition({ 25.0f,692.0f });
 }
 
 void GameScene::Update() {
@@ -195,6 +209,10 @@ void GameScene::Update() {
 
 	// 当たり判定
 	CheckAllCollisions();
+
+	// HPに応じてsize_.yを更新
+	playerHP_size.y = 507.0f * static_cast<float>(player_->GetPlayerHP()) / player_->GetPlayerMaxHP();
+	playerHPSprite_->SetSize(playerHP_size);
 
 #ifdef _DEBUG
 
@@ -253,6 +271,13 @@ void GameScene::Update() {
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
+	playerHPBar_position_ = playerHPBarSprite_->GetPosition();
+	ImGui::DragFloat2("playerHPBar_position", &playerHPBar_position_.x, 0.1f);
+	playerHPBarSprite_->SetPosition(playerHPBar_position_);
+
+	playerHP_position_ = playerHPSprite_->GetPosition();
+	ImGui::DragFloat2("playerHP_position", &playerHP_position_.x, 0.1f);
+	playerHPSprite_->SetPosition(playerHP_position_);
 	/*
 	if (ImGui::Button("BGMstop")) {
 		audio_->SoundStopWave(bgm1_);
@@ -290,9 +315,9 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
+	playerHPBarSprite_->Draw();
 
-
-
+	playerHPSprite_->Draw();
 }
 
 void GameScene::Finalize()
