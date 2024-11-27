@@ -120,7 +120,7 @@ void Boss::Attack(Camera* camera)
 	// 自キャラの座標を取得
 	Vector3 playerTranslate = player_->GetCenterPosition();
 	// ボスから自キャラへの差分ベクトルを求める
-	Vector3 diff = playerTranslate - bossTranslate;
+	Vector3 diff = bossTranslate - playerTranslate;
 	// ベクトルの正規化
 	diff = Normalize(diff);
 	// ベクトルの長さを速さに合わせる
