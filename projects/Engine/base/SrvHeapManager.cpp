@@ -31,13 +31,14 @@ void SrvHeapManager::SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uin
 
 uint32_t SrvHeapManager::Allocate()
 {
-
+	std::unique_lock<std::mutex> lock(mutex_);
 	assert(useIndex < kMaxSrvDescriptors_);
-
+	
 	//returnする番号を記録しておく
 	uint32_t index = useIndex;
 	//次回のために番号を1進める
 	useIndex++;
+	
 	//上で記録した値をreturn
 	return index;
 

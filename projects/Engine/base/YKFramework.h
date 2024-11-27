@@ -1,4 +1,5 @@
 #pragma once
+#include "ThreadPool.h"
 #include "WinApp.h"
 #include "DirectXCommon.h"
 #include "Audio.h"
@@ -50,7 +51,7 @@ public:
 
 protected:
 
-
+	ThreadPool* threadPool_ = nullptr;
 	std::unique_ptr<WinApp> winApp_;
 	DirectXCommon* dxCommon_ = nullptr;
 	Audio* audio_ = nullptr;

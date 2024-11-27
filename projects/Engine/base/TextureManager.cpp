@@ -33,30 +33,17 @@ uint32_t TextureManager::Load(const std::string& fileName) {
 	if (textureHandles_.contains(fileName)) {
 		return textureHandles_[fileName];
 	}
-	/*
-	auto it = std::find_if(
-		textures_.begin(),
-		textures_.end(),
-		[&](Texture& texture) {return texture.filePath == fileName; }
-	);
-	if (it != textures_.end()) {
-		uint32_t textureIndex = static_cast<uint32_t>(std::distance(textures_.begin(), it));
-		return textureIndex;
-	}
-	*/
-	
 
-	index_ = srvHeapManager_->Allocate();
-	
+	uint32_t index = srvHeapManager_->Allocate();
+	textureHandles_[fileName] = index;
+
 	//テクスチャ枚数上限チェック
 	assert(srvHeapManager_->Check());
 
-	textureHandles_[fileName] = index_;
-
 	//Textureを読んで転送する
-	LoadTexture(fileName);
+	LoadTexture(fileName, index);
 
-	return index_;
+	return index;
 }
 
 void TextureManager::SetGraphicsRootDescriptorTable(uint32_t textureHandle) {
@@ -95,10 +82,10 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> TextureManager::CreateDescriptorHea
 
 }
 
-void TextureManager::LoadTexture(const std::string& filePath) {
+void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 
 	//テクスチャデータを追加して書き込む
-	Texture& texture = textures_[index_];
+	Texture& texture = textures_[index];
 
 	//テクスチャファイルを読み込んでプログラムで扱えるようにする
 	DirectX::ScratchImage image{};
@@ -147,10 +134,10 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	texture.resource = dxCommon_->CreateTextureResource(texture.metadata);
 
 	//SRVを作成するDescriptorHeapの場所を決める。先頭はImGuiが使っているのでその次を使う
-	texture.cpuDescHandleSRV = srvHeapManager_->GetCPUDescriptorHandle(index_);
-	texture.gpuDescHandleSRV = srvHeapManager_->GetGPUDescriptorHandle(index_);
+	texture.cpuDescHandleSRV = srvHeapManager_->GetCPUDescriptorHandle(index);
+	texture.gpuDescHandleSRV = srvHeapManager_->GetGPUDescriptorHandle(index);
 
-	srvHeapManager_->CreateSRVforTexture2D(index_, texture.resource.Get(), texture.metadata.format, UINT(texture.metadata.mipLevels));
+	srvHeapManager_->CreateSRVforTexture2D(index, texture.resource.Get(), texture.metadata.format, UINT(texture.metadata.mipLevels));
 
 
 	//Meta情報を取得

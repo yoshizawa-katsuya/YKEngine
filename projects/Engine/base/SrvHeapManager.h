@@ -1,5 +1,6 @@
 #pragma once
 #include "DirectXCommon.h"
+#include <mutex>
 
 //SRV管理
 class SrvHeapManager
@@ -57,4 +58,6 @@ private:
 	//次に使用するSRVインデックス
 	uint32_t useIndex = 0;
 
+
+	std::mutex mutex_;
 };
