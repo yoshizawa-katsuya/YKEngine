@@ -28,6 +28,7 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 	worldTransforms_[4].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[5].translation_ = { 0.0f,0.0f,0.0f };
 	worldTransforms_[6].translation_ = { 0.0f,0.0f,0.0f };
+	worldTransforms_[7].translation_ = { 0.5f,-0.27f,0.0f };
 
 	worldTransforms_[1].parent_ = &worldTransforms_[0];     //BossBody
 	worldTransforms_[2].parent_ = &worldTransforms_[0];     //BossHead
@@ -35,6 +36,7 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 	worldTransforms_[4].parent_ = &worldTransforms_[2];     //BossGunL
 	worldTransforms_[5].parent_ = &worldTransforms_[1];     //TrackL
 	worldTransforms_[6].parent_ = &worldTransforms_[1];     //TrackR
+	worldTransforms_[7].parent_ = &worldTransforms_[2];     //Eye
 
 	worldTransform_.Initialize();
 

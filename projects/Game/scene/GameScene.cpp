@@ -108,6 +108,9 @@ void GameScene::Initialize() {
 	bossModels_.emplace_back(std::make_unique<RigidModel>());
 	bossModels_.back()->CreateModel("./resources/Boss/TrackR", "TrackR.obj");//6
 
+	bossModels_.emplace_back(std::make_unique<RigidModel>());
+	bossModels_.back()->CreateModel("./resources/Boss/BossEye", "BossEye.obj");//7
+
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
 
