@@ -40,6 +40,10 @@ public:
 	// 死亡フラグのゲッター
 	bool IsDead() { return isDead_; }
 
+	uint32_t GetPlayerHP() { return playerHP; }
+
+	const uint32_t GetPlayerMaxHP() { return playerMaxHP; }
+
 private:
 
 	// 各部位のTransform変数を格納する
