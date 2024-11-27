@@ -34,6 +34,11 @@ void BossCanon::Initialize(Base3dObject* object, Boss* boss, const Vector3& velo
 
 void BossCanon::Update(Camera* camera)
 {
+	// 時間経過でデス
+	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
+
 	// ホーミング処理
 
 	// ボスの弾から自キャラへのベクトルを計算
