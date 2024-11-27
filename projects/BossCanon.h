@@ -21,7 +21,15 @@ public:
 
 	void Draw();
 	
+	void OnCollision();
+
 	//-------------ゲッター・セッター-------------//
+
+	/// <summary>
+	/// 半径を取得
+	/// </summary>
+	/// <returns></returns>
+	float GetRadius()const { return radius_; }
 
 	/// <summary>
 	/// デスフラグゲッター
@@ -56,6 +64,8 @@ private:
 	// デスタイマー
 	int32_t deathTimer_ = kLifeTime_;
 
+	// 当たり判定の大きさ（半径）
+	float radius_ = 3.0f;
 
 };
 

@@ -23,6 +23,8 @@ public:
 	void Draw(Camera* camera);
 
 	void Attack(Camera* camera);
+	
+	void OnCollision();
 
 	void SetLockOn(PlayerLockOn* lockOn) { lockOn_ = lockOn; }
 
@@ -31,13 +33,13 @@ public:
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
-	void OnCollision();
-
 	uint32_t GetBossHP() { return bossHP; }
 
 	const uint32_t GetBossMaxHP() { return bossMaxHP; }
 
 	bool IsDead() { return isDead_; }
+
+	const std::list<std::unique_ptr<BossCanon>>& GetCanons()const { return canons_; }
 private:
 
 	//Transform変数を作る

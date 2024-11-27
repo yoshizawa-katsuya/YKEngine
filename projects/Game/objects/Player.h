@@ -50,6 +50,11 @@ public:
 
 	const uint32_t GetPlayerMaxHP() { return playerMaxHP; }
 
+	/// <summary>
+	/// 半径を取得
+	/// </summary>
+	/// <returns></returns>
+	float GetRadius()const { return radius_; }
 
 private:
 
@@ -89,6 +94,9 @@ private:
 
 	//se
 	SoundData hitSE01_;
+	
+	// 当たり判定の大きさ（半径）
+	float radius_ = 3.0f;
 
 };
 
