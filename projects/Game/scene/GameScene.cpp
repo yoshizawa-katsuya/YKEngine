@@ -373,11 +373,21 @@ void GameScene::CheckAllCollisions()
 
 	// 自弾リストの取得
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
-	// 敵弾リストの取得
-	//const std::list<EnemyBullet*>& enemyBullets = GetEnemyBullets();
+	// ボスの砲撃リストの取得
+	const std::list<std::unique_ptr<BossCanon>>& canons = boss_->GetCanons();
 
 #pragma region 自キャラと敵弾の当たり判定
 	
+	for (const auto& canon : canons) {
+		posA = player_->GetWorldPosition();
+		posB = canon->GetWorldPosition();
+		float length = Length(Subtract(posB, posA));
+		if (length <= (canon->GetRadius() + player_->GetRadius())) {
+			player_->OnCollision();
+			canon->OnCollision();
+		}
+	}
+
 #pragma endregion
 
 #pragma region 自弾と敵キャラの当たり判定

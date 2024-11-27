@@ -76,6 +76,11 @@ void BossCanon::Draw()
 
 }
 
+void BossCanon::OnCollision()
+{
+	isDead_ = true;
+}
+
 Vector3 BossCanon::GetWorldPosition()
 {
 	// ワールド座標を入れる変数
