@@ -24,21 +24,24 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 	//モデル読み込み
 	LoadModelFile(directoryPath, filename);
 
-	ThreadPool* threadpool = ThreadPool::GetInstance();
-
 	//CreateVertexData();
-	threadpool->enqueueTask(&BaseModel::CreateVertexData, this);
+	//threadpool->enqueueTask(&BaseModel::CreateVertexData, this);
 
 	//CreateIndexData();
-	threadpool->enqueueTask(&BaseModel::CreateIndexData, this);
+	//threadpool->enqueueTask(&BaseModel::CreateIndexData, this);
 
 	//CreateMaterialData();
-	threadpool->enqueueTask(&BaseModel::CreateMaterialData, this);
+	//threadpool->enqueueTask(&BaseModel::CreateMaterialData, this);
 
-	//CreateTransformData();
+	
+	ThreadPool::GetInstance()->enqueueTask([this]() {
+		CreateVertexData();
+		CreateIndexData();
+		CreateMaterialData();
+		textureHandle_ = TextureManager::GetInstance()->Load(modelData_.material.textureFilePath);
+	});
 
-	textureHandle_ = TextureManager::GetInstance()->Load(modelData_.material.textureFilePath);
-
+	
 }
 
 void BaseModel::CreateSphere(uint32_t textureHandle)
