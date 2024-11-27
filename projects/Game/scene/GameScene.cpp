@@ -184,9 +184,9 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
-	boss_->Update();
+	boss_->Update(mainCamera_);
 	// Updateに入れて、Cameraの引数を追加する形でもok
-	boss_->Attack(mainCamera_);
+	//boss_->Attack(mainCamera_);
 	playerLockOn_->Update(player_);
 
 	// 天球の更新

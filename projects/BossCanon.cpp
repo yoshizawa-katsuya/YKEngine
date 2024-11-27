@@ -60,9 +60,10 @@ void BossCanon::Update(Camera* camera)
 	worldTransform_.rotation_.x = std::atan2(-velocity_.y, lengthXZ);
 
 	// 高さの調整（無理やり）
+	
 
-
-
+	// 座標を移動させる
+	worldTransform_.translation_ += velocity_;
 	worldTransform_.UpdateMatrix();
 	// オブジェクト更新
 	object_->Update(worldTransform_, camera);
@@ -79,11 +80,10 @@ Vector3 BossCanon::GetWorldPosition()
 {
 	// ワールド座標を入れる変数
 	Vector3 worldPos;
-	Matrix4x4 matWorld = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	// ワールド行列の平行移動成分を取得
-	worldPos.x = matWorld.m[3][0];
-	worldPos.y = matWorld.m[3][1];
-	worldPos.z = matWorld.m[3][2];
+	worldPos.x = worldTransform_.worldMatrix_.m[3][0];
+	worldPos.y = worldTransform_.worldMatrix_.m[3][1];
+	worldPos.z = worldTransform_.worldMatrix_.m[3][2];
 
 	return worldPos;
 }

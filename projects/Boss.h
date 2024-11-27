@@ -18,7 +18,7 @@ public:
 
 	void Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel);
 
-	void Update();
+	void Update(Camera* camera);
 
 	void Draw(Camera* camera);
 
@@ -39,7 +39,7 @@ private:
 
 	// 砲撃
 	std::list<std::unique_ptr<BossCanon>> canons_;
-	float coolTime_ = 3.0f;
+	float coolTime_ = 5.0f;
 
 	Player* player_ = nullptr;
 

@@ -42,7 +42,7 @@ void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonMod
 
 }
 
-void Boss::Update()
+void Boss::Update(Camera* camera)
 {
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();
@@ -57,6 +57,8 @@ void Boss::Update()
 		// Y軸周り角度
 		worldTransforms_[0].rotation_.y = std::atan2(sub.x, sub.z);
 	}
+
+	Attack(camera);
 
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();
@@ -83,7 +85,7 @@ void Boss::Update()
 void Boss::Draw(Camera* camera)
 {
 
-	for (size_t i = 0; i < objects_.size()-1; ++i) {
+	for (size_t i = 0; i < objects_.size(); ++i) {
 		objects_[i]->Update(worldTransforms_[i], camera);
 		objects_[i]->Draw();
 	}
@@ -105,9 +107,9 @@ void Boss::Attack(Camera* camera)
 	// ボスの座標を取得
 	Vector3 bossTranslate = GetWorldPosition();
 	// 自キャラの座標を取得
-	Vector3 playerTranslate = player_->GetWorldPosition();
+	Vector3 playerTranslate = player_->GetCenterPosition();
 	// ボスから自キャラへの差分ベクトルを求める
-	Vector3 diff = bossTranslate - playerTranslate;
+	Vector3 diff = playerTranslate - bossTranslate;
 	// ベクトルの正規化
 	diff = Normalize(diff);
 	// ベクトルの長さを速さに合わせる
@@ -116,8 +118,7 @@ void Boss::Attack(Camera* camera)
 	Vector3 velocity = diff;
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
-	Matrix4x4 matWorld = MakeAffineMatrix(worldTransforms_[0].scale_, worldTransforms_[0].rotation_, worldTransforms_[0].translation_);
-	velocity = TransformNormal(velocity, matWorld);
+	velocity = TransformNormal(velocity, worldTransforms_[0].worldMatrix_);
 
 	// 3秒間隔で砲撃
 	float deltaTime = 1.0f / 60.0f;
@@ -132,7 +133,7 @@ void Boss::Attack(Camera* camera)
 		canons_.push_back(std::move(newCanon));
 
 		// タイマーを戻す
-		coolTime_ = 3.0f;
+		coolTime_ = 5.0f;
 	}
 
 	for (const auto& canon : canons_) {
@@ -145,11 +146,10 @@ Vector3 Boss::GetWorldPosition()
 {
 	// ワールド座標を入れる変数
 	Vector3 worldPos = {};
-	Matrix4x4 matWorld = MakeAffineMatrix(worldTransforms_[0].scale_, worldTransforms_[0].rotation_, worldTransforms_[0].translation_);
 	// ワールド行列の平行移動成分を取得(ワールド座標)
-	worldPos.x = matWorld.m[3][0];
-	worldPos.y = matWorld.m[3][1];
-	worldPos.z = matWorld.m[3][2];
+	worldPos.x = worldTransforms_[0].worldMatrix_.m[3][0];
+	worldPos.y = worldTransforms_[0].worldMatrix_.m[3][1];
+	worldPos.z = worldTransforms_[0].worldMatrix_.m[3][2];
 
 	return worldPos;
 }
