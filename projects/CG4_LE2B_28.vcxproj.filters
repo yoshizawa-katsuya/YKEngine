@@ -66,6 +66,8 @@
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
     <ClCompile Include="TutorialScene.cpp" />
+    <ClCompile Include="GameClearScene.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss.h" />
@@ -119,6 +121,8 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="TutorialScene.h" />
+    <ClInclude Include="GameClearScene.h" />
+    <ClInclude Include="GameOverScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader\Line3D.hlsli" />
