@@ -5,6 +5,8 @@
 #include "Matrix.h"
 #include "Vector.h"
 #include "Slerp.h"
+#include "ImGuiManager.h"
+#include <imgui.h>
 
 void BossCanon::Initialize(Base3dObject* object, Boss* boss, const Vector3& velocity)
 {
@@ -60,7 +62,11 @@ void BossCanon::Update(Camera* camera)
 	worldTransform_.rotation_.x = std::atan2(-velocity_.y, lengthXZ);
 
 	// 高さの調整（無理やり）
-	
+	ImGui::Begin("Canon");
+	ImGui::SliderFloat3("translation", &worldTransform_.translation_.x, -50.0f, 50.0f);
+	ImGui::End();
+
+
 
 	// 座標を移動させる
 	worldTransform_.translation_ += velocity_;
