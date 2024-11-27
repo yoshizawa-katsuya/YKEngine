@@ -42,11 +42,17 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 	worldTransform_.rotation_ = { 0.0f,1.5f,0.0f };
 
 	worldTransform_.UpdateMatrix();
+	// ボスのHPを初期化
+	bossHP = bossMaxHP;
 
+	isDead_ = false;
 }
 
 void Boss::Update()
 {
+	if (bossHP <= 0) {
+		isDead_ = true;
+	}
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();
 	}
@@ -75,6 +81,8 @@ void Boss::Update()
 				ImGui::TreePop();
 			}
 		}
+		ImGui::Text("Boss Max HP: %u", bossMaxHP);
+		ImGui::Text("Boss HP: %u", bossHP);
 	ImGui::End();
 
 #endif // _DEBUG	
@@ -105,4 +113,5 @@ Vector3 Boss::GetWorldPosition()
 
 void Boss::OnCollision()
 {
+	bossHP -= 1;
 }

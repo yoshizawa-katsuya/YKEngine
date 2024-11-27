@@ -120,5 +120,19 @@ private:
 	Vector2 playerHP_position_ = {};
 
 	Vector2 playerHP_size = { 55.0f,507.0f };
+
+	uint32_t bossHPBar_;
+
+	std::unique_ptr<Sprite> bossHPBarSprite_;
+
+	Vector2 bossHPBar_position_ = {};
+
+	uint32_t bossHP_;
+
+	std::unique_ptr<Sprite> bossHPSprite_;
+
+	Vector2 bossHP_position_ = {};
+
+	Vector2 bossHP_size = { 1076.0f,51.0f };
 };
 
