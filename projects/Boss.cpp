@@ -5,7 +5,7 @@
 #include "Rigid3dObject.h"
 #include "Matrix.h"
 
-void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel)
+void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel, BaseModel* bulletModel)
 {
 
 	worldTransforms_.resize(models.size());
@@ -42,6 +42,9 @@ void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonMod
 	canonObject_ = std::make_unique<Rigid3dObject>();
 	canonObject_->Initialize(canonModel);
 
+	bulletObject_ = std::make_unique<Rigid3dObject>();
+	bulletObject_->Initialize(bulletModel);
+
 	// ボスのHPを初期化
 	bossHP = bossMaxHP;
 
@@ -66,6 +69,9 @@ void Boss::Update(Camera* camera)
 		// Y軸周り角度
 		worldTransforms_[0].rotation_.y = std::atan2(sub.x, sub.z);
 	}
+
+	// 通常弾
+	BulletAttack(camera);
 
 	// 砲撃
 	CanonAttack(camera);
@@ -104,10 +110,67 @@ void Boss::Draw(Camera* camera)
 		objects_[i]->Draw();
 	}
 
+	// 通常弾描画
+	for (const auto& bullet : bullets_) {
+		bullet->Draw();
+	}
+
+	// 砲撃描画
 	for (const auto& canon : canons_) {
 		canon->Draw();
 	}
 
+}
+
+void Boss::BulletAttack(Camera* camera)
+{
+	// デスフラグが立った大砲を削除
+	bullets_.remove_if([](const std::unique_ptr<BossBullet>& bullet) { return bullet->IsDead(); });
+
+	static const int kBurstCount = 3;      // 一度に発射する弾の数
+	static const int kBurstInterval = 10;  // 弾と弾の間隔
+	static const int kBurstCooldown = 180; // 連射後の待機時間
+
+	static int burstCounter = 0;       // 現在の発射数
+	static int burstCooldownTimer = 0; // 待機タイマー
+
+	// 連射後の待機中
+	if (burstCooldownTimer > 0) {
+		--burstCooldownTimer;
+	} else {
+		// 発射タイマーカウントダウン
+		--bulletTimer_;
+
+		if (bulletTimer_ <= 0) {
+			// 弾の速度
+			const float kBulletSpeed = 1.0f;
+			Vector3 velocity(0.0f, 0.0f, kBulletSpeed);
+
+			// 速度ベクトルを自機の向きに合わせて回転させる
+			velocity = TransformNormal(velocity, worldTransforms_[0].worldMatrix_);
+
+			// 弾の生成と初期化
+			std::unique_ptr<BossBullet> newBullet = std::make_unique<BossBullet>();
+			newBullet->Initialize(bulletObject_.get(), worldTransforms_[0].translation_, velocity);
+
+			// 弾を登録する
+			bullets_.push_back(std::move(newBullet));
+
+			++burstCounter;
+
+			if (burstCounter >= kBurstCount) {
+				// 連射が完了したらクールダウン開始
+				burstCounter = 0;
+				burstCooldownTimer = kBurstCooldown;
+			}
+
+			// 次の弾を撃つまでの間隔
+			bulletTimer_ = kBurstInterval;
+		}
+	}
+	for (const auto& bullet : bullets_) {
+		bullet->Update(camera);
+	}
 }
 
 void Boss::CanonAttack(Camera* camera)

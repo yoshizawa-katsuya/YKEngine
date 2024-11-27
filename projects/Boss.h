@@ -5,6 +5,7 @@
 #include "WorldTransform.h"
 #include "Animation.h"
 
+#include "BossBullet.h"
 #include "BossCanon.h"
 
 class Camera;
@@ -16,11 +17,13 @@ class Boss
 
 public:
 
-	void Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel);
+	void Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel,BaseModel* bulletModel);
 
 	void Update(Camera* camera);
 
 	void Draw(Camera* camera);
+
+	void BulletAttack(Camera* camera);
 
 	void CanonAttack(Camera* camera);
 	
@@ -40,10 +43,18 @@ public:
 	bool IsDead() { return isDead_; }
 
 	const std::list<std::unique_ptr<BossCanon>>& GetCanons()const { return canons_; }
+	const std::list<std::unique_ptr<BossBullet>>& GetBullets()const { return bullets_; }
 private:
 
 	//Transform変数を作る
 	std::vector<WorldTransform> worldTransforms_;
+
+	// 弾
+	std::list<std::unique_ptr<BossBullet>> bullets_;
+	// 発射間隔
+	static const int kBulletAttackInterval = 20;
+	// 発射タイマー
+	int32_t bulletTimer_ = 0;
 
 	// 砲撃
 	std::list<std::unique_ptr<BossCanon>> canons_;
@@ -57,6 +68,8 @@ private:
 	//オブジェクト
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
 	std::unique_ptr<Base3dObject> canonObject_;
+	std::unique_ptr<Base3dObject> bulletObject_;
+
 	PlayerLockOn* lockOn_ = nullptr;
 
 	// ボスのHP上限

@@ -94,6 +94,7 @@ private:
 
 
 	std::vector<std::unique_ptr<BaseModel>> bossModels_;
+	std::unique_ptr<BaseModel> bulletModel_;
 	std::unique_ptr<BaseModel> canonModel_;
 
 
