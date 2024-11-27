@@ -117,7 +117,8 @@ void Boss::Attack(Camera* camera)
 	const float kCanonSpeed = -1.0f;
 	// ボスの座標を取得
 	Vector3 bossTranslate = GetWorldPosition();
-	bossTranslate.x = -5.0f;
+	// 生成位置を変更（無理矢理）
+	bossTranslate.x = 10.0f;
 	// 自キャラの座標を取得
 	Vector3 playerTranslate = player_->GetCenterPosition();
 	// ボスから自キャラへの差分ベクトルを求める
