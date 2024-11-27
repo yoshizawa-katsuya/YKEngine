@@ -15,7 +15,7 @@ class BossCanon
 public:
 	//-------------基本処理-------------//
 
-	void Initialize(BaseModel* model, Boss* boss, const Vector3& velocity);
+	void Initialize(Base3dObject* object, Boss* boss, const Vector3& velocity);
 
 	void Update(Camera* camera);
 
@@ -41,7 +41,8 @@ private:
 	// ポインタ
 	Player* pPlayer_ = nullptr;
 	Boss* pBoss_ = nullptr;
-	std::unique_ptr<Base3dObject> object_;
+	std::unique_ptr<BaseModel> model_;
+	Base3dObject* object_;
 
 	WorldTransform worldTransform_;
 	Vector3 velocity_ = {};

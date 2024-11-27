@@ -6,14 +6,13 @@
 #include "Vector.h"
 #include "Slerp.h"
 
-void BossCanon::Initialize(BaseModel* model, Boss* boss, const Vector3& velocity)
+void BossCanon::Initialize(Base3dObject* object, Boss* boss, const Vector3& velocity)
 {
 	// 引数から変数に記録
 	velocity_ = velocity;
 	pBoss_ = boss;
 	// オブジェクト生成
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
+	object_ = object;
 	// 初期化
 	worldTransform_.Initialize();
 	// ボスの中心座標を取得

@@ -36,8 +36,6 @@ void Player::Initialize(const std::vector<BaseModel*>& models) {
 	/// 体のパーツの座標設定
 	/// </summary>
 
-	worldTransform_.Initialize();
-
 	// 体及び全体
 	worldTransforms_[0].scale_ = { 0.8f,0.8f,0.8f };
 	worldTransforms_[0].rotation_.y = -1.56f;
@@ -142,8 +140,6 @@ void Player::Update() {
 
 	bulletEmitter.translation_ += move;
 
-	worldTransform_.UpdateMatrix();
-
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();
 	}
@@ -221,7 +217,7 @@ Vector3 Player::GetWorldPosition()
 {
 	// ワールド座標を入れる変数
 	Vector3 worldPos;
-	Matrix4x4 matWorld = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	Matrix4x4 matWorld = MakeAffineMatrix(worldTransforms_[0].scale_, worldTransforms_[0].rotation_, worldTransforms_[0].translation_);
 	// ワールド行列の平行移動成分を取得
 	worldPos.x = matWorld.m[3][0];
 	worldPos.y = matWorld.m[3][1];

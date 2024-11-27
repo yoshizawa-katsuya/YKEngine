@@ -45,7 +45,6 @@ public:
 private:
 
 	// 各部位のTransform変数を格納する
-	WorldTransform worldTransform_;
 	std::vector<WorldTransform> worldTransforms_;
 
 	// 弾丸のモデルを生成

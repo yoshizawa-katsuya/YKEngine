@@ -109,8 +109,8 @@ void GameScene::Initialize() {
 	bossModels_.back()->CreateModel("./resources/Boss/TrackR", "TrackR.obj");//6
 
 	// Bossの砲撃モデル
-	bossModels_.emplace_back(std::make_unique<RigidModel>());
-	bossModels_.back()->CreateModel("./resources/Boss/Canon", "Canon.obj");// 7
+	canonModel_ = std::make_unique<RigidModel>();
+	canonModel_->CreateModel("./resources/Boss/Canon", "Canon.obj");// 
 
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./resources/skydome", "skydome.obj");
@@ -145,14 +145,14 @@ void GameScene::Initialize() {
 		bossModelPtrs.push_back(model.get());
 	}
 	boss_ = std::make_unique<Boss>();
-	boss_->Initialize(bossModelPtrs);
+	boss_->Initialize(bossModelPtrs, canonModel_.get());
 
 	// ボスのロックオン処理の生成
 	playerLockOn_ = std::make_unique<PlayerLockOn>();
 	playerLockOn_->Initialize(camera_.get());
 	boss_->SetLockOn(playerLockOn_.get());
 	boss_->SetPlayer(player_.get());
-
+	
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialzie(modelSkydome_.get());
 
@@ -186,7 +186,7 @@ void GameScene::Update() {
 
 	boss_->Update();
 	// Updateに入れて、Cameraの引数を追加する形でもok
-	boss_->Attack(camera_.get(),bossModels_[7].get());
+	boss_->Attack(mainCamera_);
 	playerLockOn_->Update(player_);
 
 	// 天球の更新

@@ -5,7 +5,7 @@
 #include "Rigid3dObject.h"
 #include "Matrix.h"
 
-void Boss::Initialize(const std::vector<BaseModel*>& models)
+void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel)
 {
 
 	worldTransforms_.resize(models.size());
@@ -37,12 +37,8 @@ void Boss::Initialize(const std::vector<BaseModel*>& models)
 	worldTransforms_[5].parent_ = &worldTransforms_[1];     //TrackL
 	worldTransforms_[6].parent_ = &worldTransforms_[1];     //TrackR
 
-	worldTransform_.Initialize();
-
-	worldTransform_.translation_ = { 0.0f,0.0f,65.0f };
-	worldTransform_.rotation_ = { 0.0f,1.5f,0.0f };
-
-	worldTransform_.UpdateMatrix();
+	canonObject_ = std::make_unique<Rigid3dObject>();
+	canonObject_->Initialize(canonModel);
 
 }
 
@@ -56,13 +52,15 @@ void Boss::Update()
 		// ロックオン座標
 		Vector3 lockOnPosition = lockOn_->GetTargetPosition();
 		// 追従対象からロックオン対象へのベクトル
-		Vector3 sub = lockOnPosition - worldTransform_.translation_;
+		Vector3 sub = lockOnPosition - worldTransforms_[0].translation_;
 
 		// Y軸周り角度
-		worldTransform_.rotation_.y = std::atan2(sub.x, sub.z);
+		worldTransforms_[0].rotation_.y = std::atan2(sub.x, sub.z);
 	}
 
-	worldTransform_.UpdateMatrix();
+	for (auto& transform : worldTransforms_) {
+		transform.UpdateMatrix();
+	}
 
 #ifdef _DEBUG
 
@@ -85,7 +83,7 @@ void Boss::Update()
 void Boss::Draw(Camera* camera)
 {
 
-	for (size_t i = 0; i < objects_.size(); ++i) {
+	for (size_t i = 0; i < objects_.size()-1; ++i) {
 		objects_[i]->Update(worldTransforms_[i], camera);
 		objects_[i]->Draw();
 	}
@@ -96,10 +94,11 @@ void Boss::Draw(Camera* camera)
 
 }
 
-void Boss::Attack(Camera* camera, BaseModel* model)
+void Boss::Attack(Camera* camera)
 {
 	// デスフラグが立った大砲を削除
 	canons_.remove_if([](const std::unique_ptr<BossCanon>& canon) {return canon->IsDead(); });
+
 
 	// 弾の速度
 	const float kCanonSpeed = -1.0f;
@@ -117,7 +116,7 @@ void Boss::Attack(Camera* camera, BaseModel* model)
 	Vector3 velocity = diff;
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
-	Matrix4x4 matWorld = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	Matrix4x4 matWorld = MakeAffineMatrix(worldTransforms_[0].scale_, worldTransforms_[0].rotation_, worldTransforms_[0].translation_);
 	velocity = TransformNormal(velocity, matWorld);
 
 	// 3秒間隔で砲撃
@@ -126,7 +125,7 @@ void Boss::Attack(Camera* camera, BaseModel* model)
 
 	if (coolTime_ <= 0.0f) {
 		auto newCanon = std::make_unique<BossCanon>();
-		newCanon->Initialize(model, this, velocity);
+		newCanon->Initialize(canonObject_.get(), this, velocity);
 		newCanon->SetPlayer(player_);
 
 		// 登録
@@ -146,7 +145,7 @@ Vector3 Boss::GetWorldPosition()
 {
 	// ワールド座標を入れる変数
 	Vector3 worldPos = {};
-	Matrix4x4 matWorld = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	Matrix4x4 matWorld = MakeAffineMatrix(worldTransforms_[0].scale_, worldTransforms_[0].rotation_, worldTransforms_[0].translation_);
 	// ワールド行列の平行移動成分を取得(ワールド座標)
 	worldPos.x = matWorld.m[3][0];
 	worldPos.y = matWorld.m[3][1];

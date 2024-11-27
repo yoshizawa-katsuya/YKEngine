@@ -16,13 +16,13 @@ class Boss
 
 public:
 
-	void Initialize(const std::vector<BaseModel*>& models);
+	void Initialize(const std::vector<BaseModel*>& models, BaseModel* canonModel);
 
 	void Update();
 
 	void Draw(Camera* camera);
 
-	void Attack(Camera* camera, BaseModel* model);
+	void Attack(Camera* camera);
 
 	void SetLockOn(PlayerLockOn* lockOn) { lockOn_ = lockOn; }
 
@@ -35,7 +35,6 @@ public:
 private:
 
 	//Transform変数を作る
-	WorldTransform worldTransform_;
 	std::vector<WorldTransform> worldTransforms_;
 
 	// 砲撃
@@ -46,6 +45,7 @@ private:
 
 	//オブジェクト
 	std::vector<std::unique_ptr<Base3dObject>> objects_;
+	std::unique_ptr<Base3dObject> canonObject_;
 	PlayerLockOn* lockOn_ = nullptr;
 
 private:
