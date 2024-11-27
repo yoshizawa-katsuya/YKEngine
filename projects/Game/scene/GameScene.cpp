@@ -110,7 +110,7 @@ void GameScene::Initialize() {
 
 	// Bossの砲撃モデル
 	canonModel_ = std::make_unique<RigidModel>();
-	canonModel_->CreateModel("./resources/Boss/Canon", "Canon.obj");// 
+	canonModel_->CreateModel("./resources/Boss/Canon", "missile.obj");// 
 
 	bossModels_.emplace_back(std::make_unique<RigidModel>());
 	bossModels_.back()->CreateModel("./resources/Boss/BossEye", "BossEye.obj");//7

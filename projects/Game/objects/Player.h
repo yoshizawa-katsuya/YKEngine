@@ -96,7 +96,7 @@ private:
 	SoundData hitSE01_;
 	
 	// 当たり判定の大きさ（半径）
-	float radius_ = 3.0f;
+	float radius_ = 1.0f;
 
 };
 

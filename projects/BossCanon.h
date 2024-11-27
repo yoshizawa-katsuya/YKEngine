@@ -65,7 +65,7 @@ private:
 	int32_t deathTimer_ = kLifeTime_;
 
 	// 当たり判定の大きさ（半径）
-	float radius_ = 3.0f;
+	float radius_ = 0.5f;
 
 };
 
