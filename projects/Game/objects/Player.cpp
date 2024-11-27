@@ -229,8 +229,20 @@ Vector3 Player::GetCenterPosition() const
 {
 	//ローカル座標でのオフセット
 	const Vector3 offset = { 0.0f, 1.5f, 0.0f };
-	Matrix4x4 matWorld = MakeAffineMatrix(worldTransforms_[0].scale_, worldTransforms_[0].rotation_, worldTransforms_[0].translation_);
+	
 	//ワールド座標に変換
-	Vector3 worldPos = Transform(offset, matWorld);
+	Vector3 worldPos = Transform(offset, worldTransforms_[0].worldMatrix_);
+	return worldPos;
+}
+
+Vector3 Player::GetWorldPosition()
+{
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得
+	worldPos.x = worldTransforms_[0].worldMatrix_.m[3][0];
+	worldPos.y = worldTransforms_[0].worldMatrix_.m[3][1];
+	worldPos.z = worldTransforms_[0].worldMatrix_.m[3][2];
+
 	return worldPos;
 }

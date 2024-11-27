@@ -37,12 +37,19 @@ public:
 	/// <returns></returns>
 	Vector3 GetCenterPosition() const;
 
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetWorldPosition();
+
 	// 死亡フラグのゲッター
 	bool IsDead() { return isDead_; }
 
 	uint32_t GetPlayerHP() { return playerHP; }
 
 	const uint32_t GetPlayerMaxHP() { return playerMaxHP; }
+
 
 private:
 
