@@ -67,7 +67,10 @@ void Boss::Update(Camera* camera)
 		worldTransforms_[0].rotation_.y = std::atan2(sub.x, sub.z);
 	}
 
-	Attack(camera);
+	// 砲撃
+	CanonAttack(camera);
+
+
 
 	for (auto& transform : worldTransforms_) {
 		transform.UpdateMatrix();
@@ -107,7 +110,7 @@ void Boss::Draw(Camera* camera)
 
 }
 
-void Boss::Attack(Camera* camera)
+void Boss::CanonAttack(Camera* camera)
 {
 	// デスフラグが立った大砲を削除
 	canons_.remove_if([](const std::unique_ptr<BossCanon>& canon) {return canon->IsDead(); });
@@ -133,11 +136,10 @@ void Boss::Attack(Camera* camera)
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransforms_[0].worldMatrix_);
 
-	// 5秒間隔で砲撃
-	float deltaTime = 1.0f / 60.0f;
-	coolTime_ -= deltaTime;
+	// 発射タイマーカウントダウン
+	--canonTimer_;
 
-	if (coolTime_ <= 0.0f) {
+	if (canonTimer_ <= 0.0f) {
 		auto newCanon = std::make_unique<BossCanon>();
 		newCanon->Initialize(canonObject_.get(), this, velocity);
 		newCanon->SetPlayer(player_);
@@ -146,7 +148,7 @@ void Boss::Attack(Camera* camera)
 		canons_.push_back(std::move(newCanon));
 
 		// タイマーを戻す
-		coolTime_ = 5.0f;
+		canonTimer_ = kCanonAttackInterval;
 	}
 
 	for (const auto& canon : canons_) {

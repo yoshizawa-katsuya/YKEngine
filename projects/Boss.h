@@ -22,7 +22,7 @@ public:
 
 	void Draw(Camera* camera);
 
-	void Attack(Camera* camera);
+	void CanonAttack(Camera* camera);
 	
 	void OnCollision();
 
@@ -47,7 +47,10 @@ private:
 
 	// 砲撃
 	std::list<std::unique_ptr<BossCanon>> canons_;
-	float coolTime_ = 5.0f;
+	// 発射間隔
+	static const int kCanonAttackInterval = 60 * 8;
+	// 発射タイマー
+	int32_t canonTimer_ = 0;
 
 	Player* player_ = nullptr;
 
