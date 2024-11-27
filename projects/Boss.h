@@ -54,10 +54,6 @@ private:
 	std::unique_ptr<Base3dObject> canonObject_;
 	PlayerLockOn* lockOn_ = nullptr;
 
-
-private:
-	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
-
 	// ボスのHP上限
 	const uint32_t bossMaxHP = 100;
 
@@ -66,6 +62,9 @@ private:
 
 	bool isDead_;
 
+
+private:
+	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 };
 
 
