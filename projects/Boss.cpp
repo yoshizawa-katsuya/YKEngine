@@ -117,6 +117,8 @@ void Boss::Attack(Camera* camera)
 	const float kCanonSpeed = -1.0f;
 	// ボスの座標を取得
 	Vector3 bossTranslate = GetWorldPosition();
+	// 生成位置を変更（無理矢理）
+	bossTranslate.x = 10.0f;
 	// 自キャラの座標を取得
 	Vector3 playerTranslate = player_->GetCenterPosition();
 	// ボスから自キャラへの差分ベクトルを求める
@@ -131,7 +133,7 @@ void Boss::Attack(Camera* camera)
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransforms_[0].worldMatrix_);
 
-	// 3秒間隔で砲撃
+	// 5秒間隔で砲撃
 	float deltaTime = 1.0f / 60.0f;
 	coolTime_ -= deltaTime;
 

@@ -61,12 +61,10 @@ void BossCanon::Update(Camera* camera)
 	float lengthXZ = Length(velocityXZ);
 	worldTransform_.rotation_.x = std::atan2(-velocity_.y, lengthXZ);
 
-	// 高さの調整（無理やり）
 	ImGui::Begin("Canon");
 	ImGui::SliderFloat3("translation", &worldTransform_.translation_.x, -50.0f, 50.0f);
 	ImGui::End();
-
-
+	
 
 	// 座標を移動させる
 	worldTransform_.translation_ += velocity_;
