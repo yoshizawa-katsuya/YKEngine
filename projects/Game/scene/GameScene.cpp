@@ -171,7 +171,7 @@ void GameScene::Update() {
 	*/
 
 	if (player_->IsDead()) {
-		sceneManager_->ChengeScene("TitleScene");
+		sceneManager_->ChengeScene("GameOver");
 	}
 
 	//カメラの更新
