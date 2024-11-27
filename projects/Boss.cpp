@@ -41,16 +41,9 @@ void Boss::Initialize(const std::vector<BaseModel*>& models, BaseModel* canonMod
 
 	canonObject_ = std::make_unique<Rigid3dObject>();
 	canonObject_->Initialize(canonModel);
-  
-	worldTransform_.Initialize();
 
-	worldTransform_.translation_ = { 0.0f,0.0f,65.0f };
-	worldTransform_.rotation_ = { 0.0f,1.5f,0.0f };
-
-	worldTransform_.UpdateMatrix();
 	// ボスのHPを初期化
 	bossHP = bossMaxHP;
-
 
 	isDead_ = false;
 }
