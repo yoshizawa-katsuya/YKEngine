@@ -28,6 +28,8 @@ void Player::Update() {
 	}
 	ImGui::End();
 
+	object_->WorldTransformUpdate(worldTransform_);
+
 #endif // _DEBUG	
 
 	
@@ -35,7 +37,7 @@ void Player::Update() {
 
 void Player::Draw(Camera* camera) {
 
-	object_->Update(worldTransform_, camera);
+	object_->CameraUpdate(camera);
 	object_->Draw();
 
 }

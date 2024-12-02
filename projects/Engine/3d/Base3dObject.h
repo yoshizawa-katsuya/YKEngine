@@ -11,9 +11,15 @@ public:
 
 	virtual void Initialize(BaseModel* model);
 
-	virtual void Update(const WorldTransform& worldTransform, Camera* camera);
+	//virtual void Update(const WorldTransform& worldTransform, Camera* camera);
 
-	virtual void Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation);
+	//virtual void Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation);
+
+	virtual void WorldTransformUpdate(const WorldTransform& worldTransform);
+
+	virtual void CameraUpdate(Camera* camera);
+
+	virtual void AnimationUpdate(Animation* animation);
 
 	virtual void Draw();
 

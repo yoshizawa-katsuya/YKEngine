@@ -25,27 +25,31 @@ void Base3dObject::Initialize(BaseModel* model)
 
 }
 
-void Base3dObject::Update(const WorldTransform& worldTransform, Camera* camera)
+void Base3dObject::WorldTransformUpdate(const WorldTransform& worldTransform)
+{
+
+	TransformationData_->World = worldTransform.worldMatrix_;
+
+}
+
+void Base3dObject::CameraUpdate(Camera* camera)
 {
 
 	Matrix4x4 worldViewProjectionMatrix;
 	if (camera) {
-		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
-		worldViewProjectionMatrix = Multiply(worldTransform.worldMatrix_, viewProjectionMatrix);
+		worldViewProjectionMatrix = Multiply(TransformationData_->World, camera->GetViewProjection());
 	}
 	else {
-		worldViewProjectionMatrix = worldTransform.worldMatrix_;
+		worldViewProjectionMatrix = TransformationData_->World;
 	}
 
 	TransformationData_->WVP = worldViewProjectionMatrix;
-	TransformationData_->World = worldTransform.worldMatrix_;
-	TransformationData_->WorldInverseTranspose = Transpose(Inverse(worldTransform.worldMatrix_));
+	TransformationData_->WorldInverseTranspose = Transpose(Inverse(TransformationData_->World));
 
 }
 
-void Base3dObject::Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation)
+void Base3dObject::AnimationUpdate(Animation* animation)
 {
-	Update(worldTransform, camera);
 }
 
 void Base3dObject::Draw()

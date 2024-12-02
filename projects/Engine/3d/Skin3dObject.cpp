@@ -18,6 +18,17 @@ void Skin3dObject::Initialize(BaseModel* model)
 
 }
 
+void Skin3dObject::AnimationUpdate(Animation* animation)
+{
+
+	ApplyAnimation(animation);
+
+	SkeletonUpdate();
+
+	SkinClusterUpdate();
+}
+
+/*
 void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera)
 {
 
@@ -37,7 +48,7 @@ void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera, 
 	Update(worldTransform, camera);
 
 }
-
+*/
 void Skin3dObject::Draw()
 {
 	//Transform用のCBufferの場所を設定
