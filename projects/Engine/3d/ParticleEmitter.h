@@ -13,6 +13,8 @@ public:
 
 	void Emit();
 
+	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
+
 private:
 
 	std::string name_;
