@@ -1,5 +1,6 @@
 #pragma once
 #include "DirectXCommon.h"
+#include <mutex>
 
 //SRV管理
 class SrvHeapManager
@@ -29,6 +30,8 @@ public:
 
 	ID3D12DescriptorHeap* GetDescriptorHeap() { return descriptorHeap_.Get(); }
 
+	uint32_t GetDescriptorSize() { return descriptorSize_; }
+
 	/// <summary>
 	/// SRVの指定番号のCPUデスクリプタハンドルを取得
 	/// </summary>
@@ -43,11 +46,11 @@ public:
 	static const uint32_t kMaxSrvDescriptors_ = 512;
 
 private:
-	
+
 	DirectXCommon* dxCommon_ = nullptr;
 
-	
-	//SRV用のデスクリプタサイズ
+
+	//SRV用のデスクリプタ1個分のサイズ
 	uint32_t descriptorSize_;
 	//SRV用デスクリプタヒープ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
@@ -55,5 +58,6 @@ private:
 	//次に使用するSRVインデックス
 	uint32_t useIndex = 0;
 
-};
 
+	std::mutex mutex_;
+};

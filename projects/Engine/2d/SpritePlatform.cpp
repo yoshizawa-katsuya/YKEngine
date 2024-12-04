@@ -1,19 +1,14 @@
 #include "SpritePlatform.h"
 
-SpritePlatform* SpritePlatform::instance_ = nullptr;
-
 SpritePlatform* SpritePlatform::GetInstance()
 {
-	if (instance_ == nullptr) {
-		instance_ = new SpritePlatform;
-	}
-	return instance_;
+	static SpritePlatform instance;
+	return &instance;
 }
 
 void SpritePlatform::Finalize()
 {
-	delete instance_;
-	instance_ = nullptr;
+	
 }
 
 void SpritePlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer)
@@ -26,10 +21,18 @@ void SpritePlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primit
 
 }
 
+void SpritePlatform::PreBackGroundDraw()
+{
+	
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBackGroundSprite);
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+}
+
 void SpritePlatform::PreDraw()
 {
 
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNoneSprite);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNormalSprite);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 }

@@ -11,21 +11,26 @@
 
 using namespace Microsoft::WRL;
 
-DirectXCommon* DirectXCommon::instance_ = nullptr;
+//DirectXCommon* DirectXCommon::instance_ = nullptr;
 
 
 DirectXCommon* DirectXCommon::GetInstance()
 {
+	/*
 	if (instance_ == nullptr) {
 		instance_ = new DirectXCommon;
 	}
 	return instance_;
+	*/
+	static DirectXCommon instance;
+	return &instance;
 }
 
 void DirectXCommon::Finalize()
 {
-	delete instance_;
-	instance_ = nullptr;
+	
+	CloseHandle(fenceEvent_);
+
 }
 
 void DirectXCommon::Initialize(WinApp* winApp) {
@@ -312,6 +317,8 @@ void DirectXCommon::CreateFence() {
 	HRESULT hr = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
 	assert(SUCCEEDED(hr));
 
+	//FenceのSignalを待つためのイベントを作成する
+	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 }
 
 void DirectXCommon::CreateViewport()
@@ -473,22 +480,20 @@ void DirectXCommon::PostDraw() {
 	swapChain_->Present(1, 0);
 
 	//Fenceの値を更新
+	//膨大な時間exeを起動し続けるとオーバーフローを起こすが、年単位の時間がかかるので気にしなくていい。
 	fenceValue_++;
 	//GPUがここまでたどり着いたときに、Fenceの値を指定した値に代入するようにSiganlを送る
 	commandQueue_->Signal(fence_.Get(), fenceValue_);
 
-	//Fenceの値が指定したSignak値にたどり着いているか確認する
+	//Fenceの値が指定したSignal値にたどり着いているか確認する
 	//GetCompletedValueの初期値はFence作成時に渡した初期値
 	if (fence_->GetCompletedValue() < fenceValue_)
 	{
-		//FenceのSignalを待つためのイベントを作成する
-		HANDLE fenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-		assert(fenceEvent != nullptr);
+		assert(fenceEvent_ != nullptr);
 		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントを設定する
-		fence_->SetEventOnCompletion(fenceValue_, fenceEvent);
+		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
 		//イベントを待つ
-		WaitForSingleObject(fenceEvent, INFINITE);
-		CloseHandle(fenceEvent);
+		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
 
 	//FPS固定

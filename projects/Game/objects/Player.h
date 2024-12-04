@@ -1,28 +1,26 @@
 #pragma once
-#include "Model.h"
+#include "Base3dObject.h"
+#include "WorldTransform.h"
+#include "Animation.h"
 class Camera;
+class MapChipField;
 
 class Player
 {
 public:
 
-	void Initialize(Model* model, Camera* camera);
+	void Initialize(BaseModel* model);
 
 	void Update();
 
-	void Draw();
-
-	void SetCamera(Camera* camera) { camera_ = camera; }
+	void Draw(Camera* camera);
 
 private:
 
 	//Transform変数を作る
-	Transforms transform_{ {1.0f, 1.0f, 1.0f}, { 0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f, 0.0f } };
+	WorldTransform worldTransform_;
 
-	//カメラの変数
-	Camera* camera_ = nullptr;
-
-	Model* model_ = nullptr;
+	std::unique_ptr<Base3dObject> object_;
 
 };
 

@@ -20,7 +20,18 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNoneSprite)) = CreateGraphicsPipeline(BlendMode::kBlendModeNoneSprite, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormalSprite)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormalSprite, dxCommon);
+
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBackGroundSprite)) = CreateGraphicsPipeline(BlendMode::kBackGroundSprite, dxCommon);
+
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeAddParticle)) = CreateGraphicsPipeline(BlendMode::kBlendModeAddParticle, dxCommon);
+
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kLineMode)) = CreateGraphicsPipeline(BlendMode::kLineMode, dxCommon);
+
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSphereMode)) = CreateGraphicsPipeline(BlendMode::kSphereMode, dxCommon);
+
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSkinModelMode)) = CreateGraphicsPipeline(BlendMode::kSkinModelMode, dxCommon);
+
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(BlendMode blendMode, DirectXCommon* dxCommon) {
@@ -49,55 +60,166 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
 	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
 
+	D3D12_DESCRIPTOR_RANGE descriptorRangeSkinning[1] = {};
+	if (blendMode == BlendMode::kSkinModelMode) {
+		descriptorRangeSkinning[0].BaseShaderRegister = 0;
+		descriptorRangeSkinning[0].NumDescriptors = 1;	//数は1つ
+		descriptorRangeSkinning[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
+		descriptorRangeSkinning[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+	}
 
 	//RootParameter作成。複数設定できるので配列。
-	D3D12_ROOT_PARAMETER rootParameters[4] = {};
-	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-	rootParameters[0].Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+	std::vector<D3D12_ROOT_PARAMETER> rootParameters = {};
 
 	switch (blendMode) {
-	default:
-		//Object3d用
+	case BlendMode::kLineMode:
+	case BlendMode::kSphereMode:
+
+		rootParameters.resize(1);
+
+		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	//VSとGSで使う
+		rootParameters[0].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+
+		break;
+
+	case BlendMode::kSkinModelMode:
+
+		rootParameters.resize(8);
+
+		//マテリアル
+		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[0].Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+		//TransformationMatrix
 		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
 		rootParameters[1].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
-		break;
-	case BlendMode::kBlendModeAddParticle:
+		
+		//テクスチャ
+		rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
 
-		//Particle用
-		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;
-		rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);
+		//平行光源
+		rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[3].Descriptor.ShaderRegister = 1;	//レジスタ番号1を使う
+
+		//カメラ
+		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[4].Descriptor.ShaderRegister = 2;
+
+		//点光源
+		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[5].Descriptor.ShaderRegister = 3;
+
+		//スポットライト
+		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[6].Descriptor.ShaderRegister = 4;
+
+		//Well
+		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		rootParameters[7].DescriptorTable.pDescriptorRanges = descriptorRangeSkinning;	//Tableの中身の配列を指定
+		rootParameters[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSkinning);	//Tableで利用する数
+
+		break;
+
+	default:
+		rootParameters.resize(7);
+
+		//マテリアル
+		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[0].Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+		switch (blendMode) {
+		default:
+			//Object3d用
+			//TransformationMatrix
+			rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+			rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+			rootParameters[1].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+			break;
+		case BlendMode::kBlendModeAddParticle:
+
+			//Particle用
+			//ParticleForGPU
+			rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+			rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+			rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;
+			rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);
+
+			break;
+		}
+
+		//テクスチャ
+		rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+
+		//平行光源
+		rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[3].Descriptor.ShaderRegister = 1;	//レジスタ番号1を使う
+
+		//カメラ
+		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[4].Descriptor.ShaderRegister = 2;
+
+		//点光源
+		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[5].Descriptor.ShaderRegister = 3;
+
+		//スポットライト
+		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[6].Descriptor.ShaderRegister = 4;
 
 		break;
 	}
 
-	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-	rootParameters[3].Descriptor.ShaderRegister = 1;	//レジスタ番号1を使う
-
-	descriptionRootSignature.pParameters = rootParameters;	//ルートパラメータ配列へのポインタ
-	descriptionRootSignature.NumParameters = _countof(rootParameters);	//配列の長さ
+	descriptionRootSignature.pParameters = rootParameters.data();	//ルートパラメータ配列へのポインタ
+	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size());	//配列の長さ
 
 	//Samplerの設定
-	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
-	staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;	//バイリニアフィルタ
-	staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//0～1の範囲外をリピート
-	staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
-	staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapｗｐ使う
-	staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う
-	staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-	descriptionRootSignature.pStaticSamplers = staticSamplers;
-	descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
+	std::vector<D3D12_STATIC_SAMPLER_DESC> staticSamplers = {};
+
+	switch (blendMode) {
+	case BlendMode::kLineMode:
+	case BlendMode::kSphereMode:
+
+		break;
+
+	default:
+
+		staticSamplers.resize(1);
+
+		staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;	//バイリニアフィルタ
+		staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//0～1の範囲外をリピート
+		staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
+		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapｗｐ使う
+		staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う
+		staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+
+		break;
+
+	}
+
+	
+	descriptionRootSignature.pStaticSamplers = staticSamplers.data();
+	descriptionRootSignature.NumStaticSamplers = static_cast<UINT>(staticSamplers.size());
 
 	//シリアナイズしてバイナリにする
 	Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob = nullptr;
@@ -114,22 +236,75 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	assert(SUCCEEDED(hr));
 
 	//InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
-	inputElementDescs[0].SemanticName = "POSITION";
-	inputElementDescs[0].SemanticIndex = 0;
-	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-	inputElementDescs[1].SemanticName = "TEXCOORD";
-	inputElementDescs[1].SemanticIndex = 0;
-	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-	inputElementDescs[2].SemanticName = "NORMAL";
-	inputElementDescs[2].SemanticIndex = 0;
-	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	std::vector<D3D12_INPUT_ELEMENT_DESC> inputElementDescs = {};
+
+	switch (blendMode) {
+	case BlendMode::kLineMode:
+	case BlendMode::kSphereMode:
+
+		inputElementDescs.resize(1);
+
+		inputElementDescs[0].SemanticName = "POSITION";
+		inputElementDescs[0].SemanticIndex = 0;
+		inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+		break;
+
+	case BlendMode::kSkinModelMode:
+
+		inputElementDescs.resize(5);
+
+		inputElementDescs[0].SemanticName = "POSITION";
+		inputElementDescs[0].SemanticIndex = 0;
+		inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[1].SemanticName = "TEXCOORD";
+		inputElementDescs[1].SemanticIndex = 0;
+		inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+		inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[2].SemanticName = "NORMAL";
+		inputElementDescs[2].SemanticIndex = 0;
+		inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[3].SemanticName = "WEIGHT";
+		inputElementDescs[3].SemanticIndex = 0;
+		inputElementDescs[3].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;	//float32_t4
+		inputElementDescs[3].InputSlot = 1;	//1番目のslotのVBVのことだと伝える
+		inputElementDescs[3].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[4].SemanticName = "INDEX";
+		inputElementDescs[4].SemanticIndex = 0;
+		inputElementDescs[4].Format = DXGI_FORMAT_R32G32B32A32_SINT;	//int32_t4
+		inputElementDescs[4].InputSlot = 1;	//1番目のslotのVBVのことだと伝える
+		inputElementDescs[4].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+		break;
+
+	default:
+
+		inputElementDescs.resize(3);
+
+		inputElementDescs[0].SemanticName = "POSITION";
+		inputElementDescs[0].SemanticIndex = 0;
+		inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[1].SemanticName = "TEXCOORD";
+		inputElementDescs[1].SemanticIndex = 0;
+		inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+		inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+		inputElementDescs[2].SemanticName = "NORMAL";
+		inputElementDescs[2].SemanticIndex = 0;
+		inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+		break;
+	}
+
+	
+
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
-	inputLayoutDesc.pInputElementDescs = inputElementDescs;
-	inputLayoutDesc.NumElements = _countof(inputElementDescs);
+	inputLayoutDesc.pInputElementDescs = inputElementDescs.data();
+	inputLayoutDesc.NumElements = static_cast<UINT>(inputElementDescs.size());
 
 	//BlendStateの設定
 	D3D12_BLEND_DESC blendDesc{};
@@ -145,6 +320,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		break;
 
 	case BlendMode::kBlendModeNormal:
+	case BlendMode::kBlendModeNormalSprite:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
@@ -186,6 +362,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	switch (blendMode) {
 	case BlendMode::kBlendModeNoneSprite:
+	case BlendMode::kBlendModeNormalSprite:
+	case BlendMode::kBackGroundSprite:
 		//裏面（時計回り）を表示する
 		rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 		break;
@@ -201,8 +379,9 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	//Shaderをコンパイルする
 	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob;
+	Microsoft::WRL::ComPtr<IDxcBlob> GeometryShaderBlob;
 	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob;
-	
+
 	switch (blendMode) {
 	default:
 		//Object3d用
@@ -215,6 +394,21 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 		break;
+
+	case BlendMode::kBlendModeNoneSprite:
+	case BlendMode::kBlendModeNormalSprite:
+	case BlendMode::kBackGroundSprite:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sprite.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sprite.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+
 	case BlendMode::kBlendModeAddParticle:
 
 		//Particle用
@@ -227,21 +421,83 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		assert(pixelShaderBlob != nullptr);
 
 		break;
+
+	case BlendMode::kLineMode:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Line3D.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+
+		GeometryShaderBlob = dxCommon->CompilerShader(L"resources/shader/Line3D.GS.hlsl", 
+			L"gs_6_0");
+		assert(GeometryShaderBlob != nullptr);
+
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Line3D.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+	case BlendMode::kSphereMode:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sphere3D.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+
+		GeometryShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sphere3D.GS.hlsl",
+			L"gs_6_0");
+		assert(GeometryShaderBlob != nullptr);
+
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sphere3D.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+
+	case BlendMode::kSkinModelMode:
+
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/SkinningObject3d.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Object3d.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
 	}
 
 	
 
 	//DepthStencilStateの設定
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
-	//Depthの機能を有効化する
-	depthStencilDesc.DepthEnable = true;
+	
 	switch (blendMode) {
 	default:
+		//Depthの機能を有効化する
+		depthStencilDesc.DepthEnable = true;
 		//書き込みします
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 		break;
+	case BlendMode::kLineMode:
+	case BlendMode::kSphereMode:
+		//Depthの機能を有効化する
+		depthStencilDesc.DepthEnable = false;
+		//書き込みします
+		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+
+		break;
 	case BlendMode::kBlendModeAddParticle:
+		//Depthの機能を有効化する
+		depthStencilDesc.DepthEnable = true;
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		break;
+
+	case BlendMode::kBackGroundSprite:
+		depthStencilDesc.DepthEnable = FALSE;  // 深度バッファ無効化
+		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;  // 深度への書き込み無効
+		depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+		depthStencilDesc.StencilEnable = FALSE;
 		break;
 	}
 	//比較関数はLessEqual。つまり、近ければ描画される
@@ -255,6 +511,18 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	vertexShaderBlob->GetBufferSize() };	//VertexShader
 	graphicsPipelineStateDesc.PS = { pixelShaderBlob->GetBufferPointer(),
 	pixelShaderBlob->GetBufferSize() };		//PixelShader
+	switch (blendMode) {
+	default:
+
+		break;
+	case BlendMode::kLineMode:
+	case BlendMode::kSphereMode:
+
+		graphicsPipelineStateDesc.GS = { GeometryShaderBlob->GetBufferPointer(),
+		GeometryShaderBlob->GetBufferSize() };
+
+		break;
+	}
 	graphicsPipelineStateDesc.BlendState = blendDesc;	//BlendState
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;	//ResterizerState
 
@@ -265,9 +533,23 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	//書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = 1;
 	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	//利用するトポロジ（形状）のタイプ。三角形
-	graphicsPipelineStateDesc.PrimitiveTopologyType =
-		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+
+
+	//利用するトポロジ（形状）のタイプ。
+	switch (blendMode) {
+	default:
+		graphicsPipelineStateDesc.PrimitiveTopologyType =
+			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE; 
+		break;
+
+	case BlendMode::kLineMode:
+	case BlendMode::kSphereMode:
+
+		graphicsPipelineStateDesc.PrimitiveTopologyType =
+			D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+		break;
+
+	}
 	//どのように画面に色を打ち込むかの設定（気にしなくて良い）
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
@@ -283,6 +565,5 @@ void PrimitiveDrawer::SetPipelineSet(ID3D12GraphicsCommandList* commandList, Ble
 
 	commandList->SetGraphicsRootSignature(pipelineSets_.at(static_cast<uint16_t>(blendMode))->rootSignature.Get());
 	commandList->SetPipelineState(pipelineSets_.at(static_cast<uint16_t>(blendMode))->graphicsPipelineState.Get());	//PSOを設定
-
 
 }

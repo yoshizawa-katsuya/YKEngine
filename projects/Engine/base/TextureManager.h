@@ -1,6 +1,6 @@
 #pragma once
 
-#include <array>
+#include <unordered_map>
 #include <d3d12.h>
 #include <string>
 #include <wrl.h>
@@ -39,9 +39,7 @@ public:
 private:
 
 	//Textureデータを読む
-	void LoadTexture(const std::string& filePath);
-
-	static TextureManager* instance_;
+	void LoadTexture(const std::string& filePath, uint32_t index);
 
 	TextureManager() = default;
 	~TextureManager() = default;
@@ -50,16 +48,12 @@ private:
 
 	DirectXCommon* dxCommon_ = nullptr;
 	SrvHeapManager* srvHeapManager_ = nullptr;
-
-	uint32_t index_ = 0;
-
 	
 
 	/// <summary>
 	/// テクスチャ
 	/// </summary>
 	struct Texture {
-		std::string filePath;
 		DirectX::TexMetadata metadata;
 		// テクスチャリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
@@ -70,6 +64,8 @@ private:
 	};
 
 	// テクスチャコンテナ
-	std::array<Texture, SrvHeapManager::kMaxSrvDescriptors_> textures_;
+	//std::array<Texture, SrvHeapManager::kMaxSrvDescriptors_> textures_;
+	std::unordered_map<uint32_t, Texture> textures_;
+	std::unordered_map<std::string, uint32_t> textureHandles_;
 
 };

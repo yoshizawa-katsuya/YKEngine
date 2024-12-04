@@ -1,35 +1,43 @@
 #include "Player.h"
 #include "imgui/imgui.h"
+#include "Rigid3dObject.h"
 
-void Player::Initialize(Model* model, Camera* camera) {
+void Player::Initialize(BaseModel* model) {
 
-	model_ = model;
-	camera_ = camera;
+	object_ = std::make_unique<Rigid3dObject>();
+	object_->Initialize(model);
 
-	//model->SetRotate({ 0.0f, 3.15f, 0.0f });
-	transform_.rotate = { 0.0f, 3.15f, 0.0f };
-	transform_.translate = { 2.0f, 0.0f, 0.0f };
+	worldTransform_.Initialize();
+
 }
 
 void Player::Update() {
 
+	worldTransform_.UpdateMatrix();
+
+#ifdef _DEBUG
+
 	ImGui::Begin("Player");
 	if (ImGui::TreeNode("Model")) {
-		ImGui::ColorEdit4("color", &model_->GetMaterialDataAddress().color.x);
-		ImGui::DragFloat3("translate", &transform_.translate.x, 0.01f);
-		ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.01f);
-		ImGui::DragFloat3("scale", &transform_.scale.x, 0.01f);
+		ImGui::ColorEdit4("color", &object_->GetModel().GetMaterialDataAddress().color.x);
+		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
+		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
+		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
 
 		ImGui::TreePop();
 	}
 	ImGui::End();
 
+	object_->WorldTransformUpdate(worldTransform_);
+
+#endif // _DEBUG	
+
+	
 }
 
-void Player::Draw() {
+void Player::Draw(Camera* camera) {
 
-	if (model_) {
-		model_->Draw(transform_, camera_);
-	}
+	object_->CameraUpdate(camera);
+	object_->Draw();
 
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "ThreadPool.h"
 #include "WinApp.h"
 #include "DirectXCommon.h"
 #include "Audio.h"
@@ -7,13 +8,12 @@
 #include "TextureManager.h"
 #include "Sprite.h"
 #include "SpritePlatform.h"
-#include "Model.h"
+#include "BaseModel.h"
 #include "ModelPlatform.h"
 #include "PrimitiveDrawer.h"
 #include "ParticleManager.h"
 #include "Input.h"
 #include "dx12.h"
-#include "D3DResourceLeakChecker.h"
 #include "SceneManager.h"
 #include "AbstractSceneFactory.h"
 #include <format>
@@ -51,22 +51,21 @@ public:
 
 protected:
 
-	D3DResourceLeakChecker leakCheck_;
-
-	WinApp* winApp_ = nullptr;
+	ThreadPool* threadPool_ = nullptr;
+	std::unique_ptr<WinApp> winApp_;
 	DirectXCommon* dxCommon_ = nullptr;
 	Audio* audio_ = nullptr;
-	SrvHeapManager* srvHeapManager_ = nullptr;
-	ImGuiManager* imGuiManager_ = nullptr;
+	std::unique_ptr<SrvHeapManager> srvHeapManager_;
+	std::unique_ptr<ImGuiManager> imGuiManager_;
 	Input* input_ = nullptr;
-	PrimitiveDrawer* primitiveDrawer_ = nullptr;
+	std::unique_ptr<PrimitiveDrawer> primitiveDrawer_;
 	SpritePlatform* spritePlatform_ = nullptr;
 	ModelPlatform* modelPlatform_ = nullptr;
 
 	SceneManager* sceneManager_ = nullptr;
 
 	//シーンファクトリー
-	AbstractSceneFactory* sceneFactory_ = nullptr;
+	std::unique_ptr<AbstractSceneFactory> sceneFactory_;
 
 	//ゲーム終了フラグ
 	bool isEndReqest_ = false;

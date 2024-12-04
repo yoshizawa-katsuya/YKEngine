@@ -4,21 +4,20 @@
 #include <list>
 #include <string>
 #include <xaudio2.h>
+#include <optional>
+#include <map>
+#include <array>
+#include <wrl.h>
+#include <span>
+#include <Windows.h>
+#include <d3d12.h>
 
-//static const int kRowHeight = 20;
-//static const int kColumnWidth = 60;
-
-typedef struct intVector2 {
-	int x;
-	int y;
-}intVector2;
-
-typedef struct Vector2 {
+struct Vector2 {
 	float x;
 	float y;
-}Vector2;
+};
 
-typedef struct Vector3{
+struct Vector3{
 	float x;
 	float y;
 	float z;
@@ -28,51 +27,61 @@ typedef struct Vector3{
 	Vector3& operator+=(const Vector3& v) { x += v.x; y += v.y; z += v.z; return *this; }
 	Vector3& operator/=(float s) { x /= s;  y /= s; z /= s; return *this; }
 
-}Vector3;
+};
 
-typedef struct Vector4 {
+struct Vector4 {
 	float x;
 	float y;
 	float z;
 	float w;
-}Vector4;
+};
 
-typedef struct VertexData {
+struct  Quaternion
+{
+	float x;
+	float y;
+	float z;
+	float w;
+};
+
+struct VertexData {
 	Vector4 position;
 	Vector2 texcoord;
 	Vector3 normal;
-}VertexData;
+};
 
 
 
-typedef struct Matrix3x3
+struct Matrix3x3
 {
 	float m[3][3];
-} Matrix3x3;
+};
 
-typedef struct Matrix4x4
+struct Matrix4x4
 {
 	float m[4][4];
-} Matrix4x4;
+};
 
 struct AABB {
 	Vector3 min;
 	Vector3 max;
 };
 
-typedef struct Material {
+struct Material {
 	Vector4 color;
 	int32_t enableLighting;
 	float padding[3];
 	Matrix4x4 uvTransform;
-}Material;
+	float shininess;
+};
 
-typedef struct TransformationMatrix {
+struct TransformationMatrix {
 	Matrix4x4 WVP;
 	Matrix4x4 World;
-}TransformationMatrix;
+	Matrix4x4 WorldInverseTranspose;
+};
 
-typedef struct Ball
+struct Ball
 {
 
 	Vector2 pos;
@@ -82,9 +91,9 @@ typedef struct Ball
 	float radius;
 	unsigned int color;
 
-} Ball;
+};
 
-typedef struct Box
+struct Box
 {
 	Vector2 pos;
 	Vector2 size;
@@ -92,13 +101,20 @@ typedef struct Box
 	Vector2 acceleration;
 	float mass;
 	unsigned int color;
-} Box;
+};
 
-struct Transforms
+struct EulerTransform
 {
 	Vector3 scale;
-	Vector3 rotate;
-	Vector3 translate;
+	Vector3 rotation;
+	Vector3 translation;
+};
+
+struct QuaternionTransform
+{
+	Vector3 scale;
+	Quaternion rotation;
+	Vector3 translation;
 };
 
 struct MaterialData
@@ -107,19 +123,53 @@ struct MaterialData
 };
 
 struct Node {
+	QuaternionTransform transform;
 	Matrix4x4 localMatrix;
 	std::string name;
 	std::vector<Node> children;
 };
 
+const uint32_t kNumMaxInfluence = 4;
+struct VertexInfluence {
+	std::array<float, kNumMaxInfluence> weights;
+	std::array<int32_t, kNumMaxInfluence> jointIndices;
+};
+
+struct WellForGPU {
+	Matrix4x4 skeletonSpaceMatrix;	//位置用
+	Matrix4x4 skeletonSpaceInverseTransposeMatrix;	//法線用
+};
+
+struct SkinCluster {
+	std::vector<Matrix4x4> inverseBindPoseMatrices;
+	Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource;
+	D3D12_VERTEX_BUFFER_VIEW influenceBufferView;
+	std::span<VertexInfluence> mappedInfluence;
+	Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
+	std::span<WellForGPU> mappedPalette;
+	std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
+};
+
+struct VertexWeightData {
+	float weight;
+	uint32_t vertexIndex;
+};
+
+struct JointWeightData {
+	Matrix4x4 inverseBindPoseMatrix;
+	std::vector<VertexWeightData> vertexWeights;
+};
+
 struct ModelData {
+	std::map<std::string, JointWeightData> skinClusterData;
 	std::vector<VertexData> vertices;
+	std::vector<uint32_t> indeces;
 	MaterialData material;
 	Node rootNode;
 };
 
 struct Particle {
-	Transforms transform;
+	EulerTransform transform;
 	Vector3 velocity;
 	Vector4 color;
 	float lifeTime;
@@ -127,7 +177,7 @@ struct Particle {
 };
 
 struct Emitter {
-	Transforms transform; //!< エミッタのTransform
+	EulerTransform transform; //!< エミッタのTransform
 	uint32_t count;	//!< 発生数
 	float frequency; //!<　発生頻度
 	float frequencyTime; //!<頻度用時刻
@@ -177,13 +227,57 @@ struct SoundData
 	unsigned int bufferSize;
 };
 
+//音声データ
+struct LoopSoundData
+{
+	SoundData soundData;
+
+	IXAudio2SourceVoice* pSourceVoice = nullptr;
+};
+
 struct ObjectData
 {
 	std::string fileName;
-	Transforms transform;
+	EulerTransform transform;
 };
 
 struct LevelData
 {
 	std::list<ObjectData> objects;
+};
+
+template <typename tValue>
+struct  KeyFrame
+{
+	float time;
+	tValue value;
+};
+using KeyframeVector3 = KeyFrame<Vector3>;
+using KeyframeQuaternion = KeyFrame<Quaternion>;
+
+template <typename tValue>
+struct AnimationCurve {
+	std::vector<KeyFrame<tValue>> keyframes;
+};
+
+struct NodeAnimation {
+	AnimationCurve<Vector3> translate;
+	AnimationCurve<Quaternion> rotate;
+	AnimationCurve<Vector3> scale;
+};
+
+struct Joint {
+	QuaternionTransform transform;	//transform情報
+	Matrix4x4 localMatrix;	//localMatrix
+	Matrix4x4 skeletonSpaceMatrix;	//skeletonSpaceでの変換行列
+	std::string name;	//名前
+	std::vector<int32_t> children;	//子JointのIndexのリスト。いなければ空
+	int32_t index;	//自身のIndex
+	std::optional<int32_t> parent;	//親JointのIndex。いなければnull
+};
+
+struct Skeleton {
+	int32_t root;	//RootJointのIndex
+	std::map<std::string, int32_t> jointMap;	//Joint名とIndexとの辞書
+	std::vector<Joint> joints;	//所属しているジョイント
 };

@@ -12,6 +12,8 @@ class TitleScene : public BaseScene
 {
 public:
 
+	~TitleScene() override;
+
 	void Initialize() override;
 
 	void Update() override;
@@ -30,11 +32,6 @@ private:
 
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
-
-	uint32_t textureHandle_;
-
-	std::unique_ptr<Sprite> sprite_;
-
-
+	
 };
 

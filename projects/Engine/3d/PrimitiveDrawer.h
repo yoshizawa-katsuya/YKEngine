@@ -20,8 +20,16 @@ enum class BlendMode {
 	kBlendModeScreen,	//スクリーン
 
 	kBlendModeNoneSprite,
+	kBlendModeNormalSprite,
+	kBackGroundSprite,
 
 	kBlendModeAddParticle,
+
+	kLineMode,
+
+	kSphereMode,
+
+	kSkinModelMode,
 
 	kCountOfBlendMode,	//利用してはいけない
 };
@@ -29,8 +37,6 @@ enum class BlendMode {
 class PrimitiveDrawer
 {
 public:
-
-	
 
 	//パイプラインセット
 	struct PipelineSet
@@ -41,10 +47,6 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon);
 
-	//パイプライン生成
-	std::unique_ptr<PipelineSet> CreateGraphicsPipeline(BlendMode blendMode, DirectXCommon* dxCommon);
-
-
 	void SetPipelineSet(ID3D12GraphicsCommandList* commandList, BlendMode blendMode);
 
 	//ID3D12RootSignature* GetRootSignature() { return rootSignature_.Get(); }
@@ -53,7 +55,9 @@ public:
 
 private:
 
-	
+	//パイプライン生成
+	std::unique_ptr<PipelineSet> CreateGraphicsPipeline(BlendMode blendMode, DirectXCommon* dxCommon);
+
 	//Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
 
 	//パイプライン。ブレンドモードの数だけ用意する

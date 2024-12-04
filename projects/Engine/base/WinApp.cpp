@@ -5,6 +5,13 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 
 #pragma comment(lib, "winmm.lib")
 
+WinApp::~WinApp()
+{
+
+	TerminateGameWindow();
+
+}
+
 //ウィンドウプロシージャ
 LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 
@@ -65,7 +72,7 @@ void WinApp::CreateGameWindow() {
 	//ウィンドウの生成
 	hwnd_ = CreateWindow(
 		wc_.lpszClassName,		//利用するクラス名	
-		L"CG4",					//タイトルバーの文字(何でも良い)
+		L"Enigine",			//タイトルバーの文字(何でも良い)
 		WS_OVERLAPPEDWINDOW,	//よく見るウィンドウスタイル
 		CW_USEDEFAULT,			//表示x座標(Windowsに任せる)
 		CW_USEDEFAULT,			//表示y座標(WindowsOSに任せる)

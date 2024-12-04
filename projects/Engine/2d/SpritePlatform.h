@@ -15,14 +15,15 @@ public:
 	//初期化
 	void Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer);
 
+	//背景描画前設定
+	void PreBackGroundDraw();
+
 	//共通描画設定
 	void PreDraw();
 
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
 private:
-
-	static SpritePlatform* instance_;
 
 	SpritePlatform() = default;
 	~SpritePlatform() = default;

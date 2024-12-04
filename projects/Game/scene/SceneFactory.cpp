@@ -7,10 +7,10 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 	//次のシーンを生成
 	BaseScene* newScene = nullptr;
 
-	if (sceneName == "TITLE") {
+	if (sceneName == "TitleScene") {
 		newScene = new TitleScene();
 	}
-	else if (sceneName == "GAMEPLAY") {
+	else if (sceneName == "GameScene") {
 		newScene = new GameScene();
 	}
 

@@ -4,20 +4,14 @@
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
-Input* Input::instance_ = nullptr;
-
 Input* Input::GetInstance()
 {
-	if (instance_ == nullptr) {
-		instance_ = new Input;
-	}
-	return instance_;
+	static Input instance;
+	return &instance;
 }
 
 void Input::Finalize()
 {
-	delete instance_;
-	instance_ = nullptr;
 }
 
 void Input::Initialize(WinApp* winApp)
@@ -81,8 +75,28 @@ bool Input::PushKey(BYTE keyNumber)
 
 bool Input::TriggerKey(BYTE keyNumber)
 {
-	//指定キーをトリガーでtrueを返す
+	//指定キーを押した瞬間でtrueを返す
 	if (!keyPre_[keyNumber] && key_[keyNumber]) {
+		return true;
+	}
+	//そうでなければfalseを返す
+	return false;
+}
+
+bool Input::ReleaseKey(BYTE keyNumber)
+{
+	//指定キーを離した瞬間でtrueを返す
+	if (keyPre_[keyNumber] && !key_[keyNumber]) {
+		return true;
+	}
+	//そうでなければfalseを返す
+	return false;
+}
+
+bool Input::HoldKey(BYTE keyNumber)
+{
+	//指定キーを押し続けていればtrueを返す
+	if (keyPre_[keyNumber] && key_[keyNumber]) {
 		return true;
 	}
 	//そうでなければfalseを返す
@@ -123,4 +137,97 @@ Vector2 Input::GetMouseVelocity()
 
 	return Vector2((float)mouseState_.lX, (float)mouseState_.lY);
 
+}
+
+bool Input::IsPushKeyPre(BYTE keyNumber)
+{
+	if (keyPre_[keyNumber]) {
+		return true;
+	}
+
+	// そうでなければfalseを返す
+	return false;
+}
+
+bool Input::GamePadUpdate(uint32_t padNo)
+{
+
+	preGamePadState_ = gamePadState_;
+	DWORD dwResult = XInputGetState(padNo, &gamePadState_);
+	
+	if (dwResult == ERROR_SUCCESS) {
+
+		if (std::abs(gamePadState_.Gamepad.sThumbLX) < deadZone_) {
+			gamePadState_.Gamepad.sThumbLX = 0;
+		}
+		if (std::abs(gamePadState_.Gamepad.sThumbLY) < deadZone_) {
+			gamePadState_.Gamepad.sThumbLY = 0;
+		}
+		if (std::abs(gamePadState_.Gamepad.sThumbRX) < deadZone_) {
+			gamePadState_.Gamepad.sThumbRX = 0;
+		}
+		if (std::abs(gamePadState_.Gamepad.sThumbRY) < deadZone_) {
+			gamePadState_.Gamepad.sThumbRY = 0;
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::PushButton(uint32_t xinput)
+{
+	if (gamePadState_.Gamepad.wButtons & xinput) {
+		return true;
+	}
+	
+	return false;
+}
+
+bool Input::TriggerButton(uint32_t xinput)
+{
+	if ((gamePadState_.Gamepad.wButtons & xinput) && !(preGamePadState_.Gamepad.wButtons & xinput)) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::ReleaseButton(uint32_t xinput)
+{
+	if (!(gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::HoldButton(uint32_t xinput)
+{
+	if ((gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) {
+		return true;
+	}
+
+	return false;
+}
+
+float Input::GetLeftStickX()
+{
+	return static_cast<float>(gamePadState_.Gamepad.sThumbLX) / SHRT_MAX;
+}
+
+float Input::GetLeftStickY()
+{
+	return static_cast<float>(gamePadState_.Gamepad.sThumbLY) / SHRT_MAX;
+}
+
+float Input::GetRightStickX()
+{
+	return static_cast<float>(gamePadState_.Gamepad.sThumbRX) / SHRT_MAX;
+}
+
+float Input::GetRightStickY()
+{
+	return static_cast<float>(gamePadState_.Gamepad.sThumbRY) / SHRT_MAX;
 }

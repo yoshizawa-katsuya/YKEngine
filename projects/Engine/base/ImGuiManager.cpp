@@ -3,6 +3,11 @@
 #include "imgui/imgui_impl_dx12.h"
 #include "imgui/imgui_impl_win32.h"
 
+ImGuiManager::~ImGuiManager()
+{
+	Finalize();
+}
+
 void ImGuiManager::Initialize(DirectXCommon* dxCommon, WinApp* winApp, SrvHeapManager* srvHeapManager)
 {
 
