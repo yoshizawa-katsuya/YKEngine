@@ -51,7 +51,7 @@ void GameScene::Initialize() {
 	modelPlatform_->SetCamera(mainCamera_);
 	modelPlatform_->SetSpotLight(spotLight_.get());
 
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/uvChecker.png");
+	textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
@@ -74,8 +74,9 @@ void GameScene::Initialize() {
 	emitter_ = std::make_unique<ParticleEmitter>("bord", 10, 1.0f);
 	emitter_->Initialize(textureHandle_);
 	emitter_->Emit();
-	EulerTransform trnaform{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f} };
-	emitter_->SetTransform(trnaform);
+	emitter_->SetIsRandomColor(true);
+	//EulerTransform trnaform{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f} };
+	//emitter_->SetTransform(trnaform);
 }
 
 void GameScene::Update() {

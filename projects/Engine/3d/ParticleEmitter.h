@@ -15,6 +15,8 @@ public:
 
 	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
 
+	void SetIsRandomColor(bool isRandomColor) { isRandomColor_ = isRandomColor; }
+
 private:
 
 	std::string name_;
@@ -24,5 +26,6 @@ private:
 	float frequencyTime_; //!<頻度用時刻
 	const float kDeltaTime_ = 1.0f / 60.0f;
 
+	bool isRandomColor_ = false;
 };
 

@@ -155,12 +155,12 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 }
 
-void ParticleManager::Emit(const std::string name, const Vector3& position, uint32_t count)
+void ParticleManager::Emit(const std::string name, const Vector3& position, uint32_t count, bool isRandomColor)
 {
 
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(position));
+		particleGroups_[name].particles.push_back(MakeNewParticle(position, isRandomColor));
 	}
 
 }
@@ -202,7 +202,7 @@ void ParticleManager::Create()
 
 }
 
-Particle ParticleManager::MakeNewParticle(const Vector3& position)
+Particle ParticleManager::MakeNewParticle(const Vector3& position, bool isRandomColor)
 {
 	
 	
@@ -218,9 +218,13 @@ Particle ParticleManager::MakeNewParticle(const Vector3& position)
 	//particle.velocity = { 0.0f, 1.0f, 0.0f };
 	particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
 
-	std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
-	particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
-
+	if (isRandomColor) {
+		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
+		particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
+	}
+	else {
+		particle.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	}
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 	particle.lifeTime = distTime(randomEngine_);
 	particle.currentTime = 0;
