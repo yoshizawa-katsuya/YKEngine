@@ -73,6 +73,7 @@ private:
 	std::unique_ptr<Player> player_;
 
 	std::unique_ptr<ParticleEmitter> emitter_;
+	std::unique_ptr<AccelerationField> field_;
 
 };
 

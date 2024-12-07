@@ -17,7 +17,7 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer);
 
-	void Update(Camera* camera);
+	void Update(Camera* camera, AccelerationField* accelerationField = nullptr);
 
 	void Draw();
 
@@ -73,7 +73,7 @@ private:
 
 	bool useBillboard_ = true;
 
-	AccelerationField accelerationField_;
+	//AccelerationField accelerationField_;
 	bool useAccelerationField_ = false;
 
 };

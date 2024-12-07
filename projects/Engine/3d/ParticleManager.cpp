@@ -27,14 +27,14 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHea
 	randomEngine_ = randomEngine;
 
 	Create();
-
+	/*
 	accelerationField_.accerelation = { 15.0f, 0.0f, 0.0f };
 	accelerationField_.area.min = { -1.0f, -1.0f, -1.0f };
 	accelerationField_.area.max = { 1.0f, 1.0f, 1.0f };
-
+	*/
 }
 
-void ParticleManager::Update(Camera* camera)
+void ParticleManager::Update(Camera* camera, AccelerationField* accelerationField)
 {
 
 	Matrix4x4 cameraMatrix = camera->GetWorldMatrix();
@@ -62,9 +62,9 @@ void ParticleManager::Update(Camera* camera)
 			}
 
 			//Fieldの範囲内のParticleには加速度を適用する
-			if (useAccelerationField_) {
-				if (IsCollision(accelerationField_.area, particleIterator->transform.translation)) {
-					particleIterator->velocity += accelerationField_.accerelation * kDeltaTime_;
+			if (useAccelerationField_ && accelerationField) {
+				if (IsCollision(accelerationField->area, particleIterator->transform.translation)) {
+					particleIterator->velocity += accelerationField->accerelation * kDeltaTime_;
 				}
 			}
 
