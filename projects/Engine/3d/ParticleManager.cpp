@@ -165,6 +165,14 @@ void ParticleManager::Emit(const std::string name, const EulerTransform& transfo
 
 }
 
+void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color)
+{
+	assert(particleGroups_.contains(name));
+	for (uint32_t i = 0; i < count; ++i) {
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, color));
+	}
+}
+
 void ParticleManager::Create()
 {
 
@@ -202,7 +210,7 @@ void ParticleManager::Create()
 
 }
 
-Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor)
+Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor, const Vector4& color)
 {
 	
 	
@@ -223,7 +231,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool 
 		particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
 	}
 	else {
-		particle.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		particle.color = color;
 	}
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 	particle.lifeTime = distTime(randomEngine_);

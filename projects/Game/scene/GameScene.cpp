@@ -73,14 +73,14 @@ void GameScene::Initialize() {
 
 	emitter_ = std::make_unique<ParticleEmitter>("bord", 10, 1.0f);
 	emitter_->Initialize(textureHandle_);
-	emitter_->Emit();
 	emitter_->SetIsRandomColor(true);
-	emitter_->SetScale({ 0.5f, 0.5f, 0.5f });
+	emitter_->Emit();
+	//emitter_->SetScale({ 0.5f, 0.5f, 0.5f });
 	//EulerTransform trnaform{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f} };
 	//emitter_->SetTransform(trnaform);
 
 	field_ = std::make_unique<AccelerationField>();
-	field_->accerelation = { 15.0f, 0.0f, 0.0f };
+	field_->accerelation = { 0.0f, 15.0f, 0.0f };
 	field_->area.min = { -1.0f, -1.0f, -1.0f };
 	field_->area.max = { 1.0f, 1.0f, 1.0f };
 }
@@ -99,6 +99,7 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
+	//emitter_->Update({ 1.0f, 0.3f, 0.0f, 1.0f });
 	emitter_->Update();
 
 	ParticleManager::GetInstance()->Update(mainCamera_, field_.get());

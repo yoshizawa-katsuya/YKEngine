@@ -11,7 +11,11 @@ public:
 
 	void Update();
 
+	void Update(const Vector4& color);
+
 	void Emit();
+
+	void Emit(const Vector4& color);
 
 	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
 
