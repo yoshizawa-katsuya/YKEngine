@@ -155,12 +155,12 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 }
 
-void ParticleManager::Emit(const std::string name, const Vector3& position, uint32_t count, bool isRandomColor)
+void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor)
 {
 
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(position, isRandomColor));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor));
 	}
 
 }
@@ -202,7 +202,7 @@ void ParticleManager::Create()
 
 }
 
-Particle ParticleManager::MakeNewParticle(const Vector3& position, bool isRandomColor)
+Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor)
 {
 	
 	
@@ -210,11 +210,11 @@ Particle ParticleManager::MakeNewParticle(const Vector3& position, bool isRandom
 
 	Particle particle;
 
-	particle.transform.scale = { 1.0f, 1.0f, 1.0f };
+	particle.transform.scale = transform.scale;
 	particle.transform.rotation = { 0.0f, 0.0f, 0.0f };
 	//particle.transform.translate = { index * 0.1f, index * 0.1f, index * 0.1f };
 	Vector3 randomTranslate{ distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
-	particle.transform.translation = position + randomTranslate;
+	particle.transform.translation = transform.translation + randomTranslate;
 	//particle.velocity = { 0.0f, 1.0f, 0.0f };
 	particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
 

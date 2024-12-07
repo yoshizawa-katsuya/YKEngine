@@ -15,6 +15,10 @@ public:
 
 	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
 
+	void SetTranslation(const Vector3& translation) { transform_.translation = translation; }
+
+	void SetScale(const Vector3& scale) { transform_.scale = scale; }
+
 	void SetIsRandomColor(bool isRandomColor) { isRandomColor_ = isRandomColor; }
 
 private:

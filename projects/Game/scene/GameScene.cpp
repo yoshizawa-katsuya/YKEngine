@@ -75,6 +75,7 @@ void GameScene::Initialize() {
 	emitter_->Initialize(textureHandle_);
 	emitter_->Emit();
 	emitter_->SetIsRandomColor(true);
+	emitter_->SetScale({ 0.5f, 0.5f, 0.5f });
 	//EulerTransform trnaform{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f} };
 	//emitter_->SetTransform(trnaform);
 }

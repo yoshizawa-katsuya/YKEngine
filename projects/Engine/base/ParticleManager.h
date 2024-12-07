@@ -23,7 +23,7 @@ public:
 
 	void CreateParticleGroup(const std::string name, uint32_t textureHandle);
 
-	void Emit(const std::string name, const Vector3& position, uint32_t count, bool randomColor);
+	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool randomColor);
 
 private:
 
@@ -34,7 +34,7 @@ private:
 
 	void Create();
 
-	Particle MakeNewParticle(const Vector3& position, bool isRandomColor);
+	Particle MakeNewParticle(const EulerTransform& transform, bool isRandomColor);
 
 	struct ParticleGroup {
 		uint32_t textureHandle;

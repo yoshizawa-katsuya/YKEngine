@@ -28,7 +28,7 @@ void ParticleEmitter::Update()
 
 	frequencyTime_ += kDeltaTime_;	//時刻を進める
 	if (frequency_ <= frequencyTime_) {	//頻度より大きいなら発生
-		ParticleManager::GetInstance()->Emit(name_, transform_.translation, count_, isRandomColor_);	//発生処理
+		ParticleManager::GetInstance()->Emit(name_, transform_, count_, isRandomColor_);	//発生処理
 		frequencyTime_ -= frequency_;	//余計に過ぎた時間も加味して頻度計算する
 	}
 
@@ -37,6 +37,6 @@ void ParticleEmitter::Update()
 void ParticleEmitter::Emit()
 {
 
-	ParticleManager::GetInstance()->Emit(name_, transform_.translation, count_, isRandomColor_);	//発生処理
+	ParticleManager::GetInstance()->Emit(name_, transform_, count_, isRandomColor_);	//発生処理
 
 }
