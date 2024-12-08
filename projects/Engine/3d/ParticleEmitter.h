@@ -25,6 +25,10 @@ public:
 
 	void SetIsRandomColor(bool isRandomColor) { isRandomColor_ = isRandomColor; }
 
+	void SetCount(uint32_t count) { count_ = count; }
+
+	void SetFrequency(float frequency);
+
 private:
 
 	std::string name_;
@@ -35,5 +39,9 @@ private:
 	const float kDeltaTime_ = 1.0f / 60.0f;
 
 	bool isRandomColor_ = false;
+
+	Vector3 randTranslateMin_ = { -1.0f, -1.0f, -1.0f };
+	Vector3 randTranslateMax_ = { 1.0f, 1.0f, 1.0f };
+
 };
 

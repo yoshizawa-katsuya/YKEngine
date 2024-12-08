@@ -23,9 +23,15 @@ public:
 
 	void CreateParticleGroup(const std::string name, uint32_t textureHandle);
 
-	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor);
+	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor);
 
-	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color);
+	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color);
+
+	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, 
+		const Vector3& translateMin, const Vector3& translateMax);
+
+	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color,
+		const Vector3& translateMin, const Vector3& translateMax);
 
 private:
 
@@ -36,7 +42,9 @@ private:
 
 	void Create();
 
-	Particle MakeNewParticle(const EulerTransform& transform, bool isRandomColor, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
+	Particle MakeNewParticle(const EulerTransform& transform, bool isRandomColor, 
+		const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, const Vector3& translateMin = { -1.0f, -1.0f, -1.0f }, 
+		const Vector3& translateMax = { 1.0f, 1.0f, 1.0f });
 
 
 	struct ParticleGroup {

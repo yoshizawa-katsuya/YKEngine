@@ -155,21 +155,19 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 }
 
-void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor)
+void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector3& translateMin, const Vector3& translateMax)
 {
-
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, {1.0f, 1.0f, 1.0f, 1.0f}, translateMin, translateMax));
 	}
-
 }
 
-void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color)
+void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
 {
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, color));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, color, translateMin, translateMax));
 	}
 }
 
@@ -210,18 +208,20 @@ void ParticleManager::Create()
 
 }
 
-Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor, const Vector4& color)
+Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor, const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
 {
 	
-	
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+	std::uniform_real_distribution<float> distributionX(translateMin.x, translateMax.x);
+	std::uniform_real_distribution<float> distributionY(translateMin.y, translateMax.y);
+	std::uniform_real_distribution<float> distributionZ(translateMin.z, translateMax.z);
 
 	Particle particle;
 
 	particle.transform.scale = transform.scale;
 	particle.transform.rotation = { 0.0f, 0.0f, 0.0f };
 	//particle.transform.translate = { index * 0.1f, index * 0.1f, index * 0.1f };
-	Vector3 randomTranslate{ distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
+	Vector3 randomTranslate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
 	particle.transform.translation = transform.translation + randomTranslate;
 	//particle.velocity = { 0.0f, 1.0f, 0.0f };
 	particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
