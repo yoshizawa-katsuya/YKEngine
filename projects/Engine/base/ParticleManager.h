@@ -52,7 +52,7 @@ private:
 		std::list<Particle> particles;
 		uint32_t instancingSrvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResouce;
-		const uint32_t kNumMaxInstance = 100;
+		const uint32_t kNumMaxInstance = 500;
 		uint32_t numInstance;
 		ParticleForGPU* instancingData;
 	};

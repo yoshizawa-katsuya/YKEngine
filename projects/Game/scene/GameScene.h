@@ -46,7 +46,7 @@ private:
 
 	Camera* mainCamera_ = nullptr;
 
-	
+
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;
 
@@ -64,7 +64,7 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	std::unique_ptr<BaseModel> modelPlayer_;
-	
+
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
@@ -74,6 +74,6 @@ private:
 
 	std::unique_ptr<ParticleEmitter> emitter_;
 	std::unique_ptr<AccelerationField> field_;
+	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 
 };
-
