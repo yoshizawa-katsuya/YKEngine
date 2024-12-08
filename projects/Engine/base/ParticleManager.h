@@ -33,6 +33,11 @@ public:
 	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color,
 		const Vector3& translateMin, const Vector3& translateMax);
 
+	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
+
+	bool& GetUseAccelerationField() { return useAccelerationField_; }
+	bool GetUseAccelerationField() const { return useAccelerationField_; }
+
 private:
 
 	ParticleManager() = default;

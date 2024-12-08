@@ -183,8 +183,8 @@ void GameScene::Update() {
 		ImGui::DragFloat("Frequency", &emitter_->GetFrequency(), 0.01f);
 		ImGui::Checkbox("IsRandomColor", &emitter_->GetIsRandomColor());
 		ImGui::DragFloat3("Accerelation", &field_->accerelation.x, 0.01f);
-		ImGui::DragFloat3("FieldMin", &field_->area.min.x, 0.01f);
-		ImGui::DragFloat3("FieldMax", &field_->area.max.x, 0.01f);
+		ImGui::DragFloat3("AccerelationFieldMin", &field_->area.min.x, 0.01f);
+		ImGui::DragFloat3("AccerelationFieldMax", &field_->area.max.x, 0.01f);
 		if (ImGui::Button("Reset")) {
 			color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 			emitter_->SetTranslation({ 0.0f, 0.0f, 0.0f });
@@ -196,6 +196,7 @@ void GameScene::Update() {
 			field_->accerelation = { 5.0f, 0.0f, 0.0f };
 			field_->area.max = { 1.0f, 1.0f, 1.0f };
 			field_->area.min = { -1.0f, -1.0f, -1.0f };
+			ParticleManager::GetInstance()->SetUseAccelerationField(false);
 		}
 		if (ImGui::Button("FireParticle")) {
 			color_ = { 1.0f, 0.3f, 0.0f, 1.0f };
@@ -208,6 +209,7 @@ void GameScene::Update() {
 			field_->accerelation = { 0.0f, 3.0f, 9.0f };
 			field_->area.max = { 5.0f, 0.0f, 5.0f };
 			field_->area.min = { -5.0f, -8.0f, -6.0f };
+			ParticleManager::GetInstance()->SetUseAccelerationField(true);
 		}
 		ImGui::End();
 
