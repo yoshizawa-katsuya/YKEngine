@@ -102,7 +102,7 @@ struct Box
 	float mass;
 	unsigned int color;
 };
-
+//拡縮、回転、移動
 struct EulerTransform
 {
 	Vector3 scale;

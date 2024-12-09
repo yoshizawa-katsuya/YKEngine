@@ -17,13 +17,26 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer);
 
-	void Update(Camera* camera);
+	void Update(Camera* camera, AccelerationField* accelerationField = nullptr);
 
 	void Draw();
 
 	void CreateParticleGroup(const std::string name, uint32_t textureHandle);
 
-	void Emit(const std::string name, const Vector3& position, uint32_t count);
+	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor);
+
+	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color);
+
+	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, 
+		const Vector3& translateMin, const Vector3& translateMax);
+
+	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color,
+		const Vector3& translateMin, const Vector3& translateMax);
+
+	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
+
+	bool& GetUseAccelerationField() { return useAccelerationField_; }
+	bool GetUseAccelerationField() const { return useAccelerationField_; }
 
 private:
 
@@ -34,14 +47,17 @@ private:
 
 	void Create();
 
-	Particle MakeNewParticle(const Vector3& position);
+	Particle MakeNewParticle(const EulerTransform& transform, bool isRandomColor, 
+		const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, const Vector3& translateMin = { -1.0f, -1.0f, -1.0f }, 
+		const Vector3& translateMax = { 1.0f, 1.0f, 1.0f });
+
 
 	struct ParticleGroup {
 		uint32_t textureHandle;
 		std::list<Particle> particles;
 		uint32_t instancingSrvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResouce;
-		const uint32_t kNumMaxInstance = 100;
+		const uint32_t kNumMaxInstance = 500;
 		uint32_t numInstance;
 		ParticleForGPU* instancingData;
 	};
@@ -73,7 +89,7 @@ private:
 
 	bool useBillboard_ = true;
 
-	AccelerationField accelerationField_;
+	//AccelerationField accelerationField_;
 	bool useAccelerationField_ = false;
 
 };

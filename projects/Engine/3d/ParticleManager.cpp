@@ -27,14 +27,14 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHea
 	randomEngine_ = randomEngine;
 
 	Create();
-
+	/*
 	accelerationField_.accerelation = { 15.0f, 0.0f, 0.0f };
 	accelerationField_.area.min = { -1.0f, -1.0f, -1.0f };
 	accelerationField_.area.max = { 1.0f, 1.0f, 1.0f };
-
+	*/
 }
 
-void ParticleManager::Update(Camera* camera)
+void ParticleManager::Update(Camera* camera, AccelerationField* accelerationField)
 {
 
 	Matrix4x4 cameraMatrix = camera->GetWorldMatrix();
@@ -62,9 +62,9 @@ void ParticleManager::Update(Camera* camera)
 			}
 
 			//Fieldの範囲内のParticleには加速度を適用する
-			if (useAccelerationField_) {
-				if (IsCollision(accelerationField_.area, particleIterator->transform.translation)) {
-					particleIterator->velocity += accelerationField_.accerelation * kDeltaTime_;
+			if (useAccelerationField_ && accelerationField) {
+				if (IsCollision(accelerationField->area, particleIterator->transform.translation)) {
+					particleIterator->velocity += accelerationField->accerelation * kDeltaTime_;
 				}
 			}
 
@@ -155,14 +155,20 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 }
 
-void ParticleManager::Emit(const std::string name, const Vector3& position, uint32_t count)
+void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector3& translateMin, const Vector3& translateMax)
 {
-
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(position));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, {1.0f, 1.0f, 1.0f, 1.0f}, translateMin, translateMax));
 	}
+}
 
+void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
+{
+	assert(particleGroups_.contains(name));
+	for (uint32_t i = 0; i < count; ++i) {
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, color, translateMin, translateMax));
+	}
 }
 
 void ParticleManager::Create()
@@ -202,25 +208,31 @@ void ParticleManager::Create()
 
 }
 
-Particle ParticleManager::MakeNewParticle(const Vector3& position)
+Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor, const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
 {
 	
-	
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+	std::uniform_real_distribution<float> distributionX(translateMin.x, translateMax.x);
+	std::uniform_real_distribution<float> distributionY(translateMin.y, translateMax.y);
+	std::uniform_real_distribution<float> distributionZ(translateMin.z, translateMax.z);
 
 	Particle particle;
 
-	particle.transform.scale = { 1.0f, 1.0f, 1.0f };
+	particle.transform.scale = transform.scale;
 	particle.transform.rotation = { 0.0f, 0.0f, 0.0f };
 	//particle.transform.translate = { index * 0.1f, index * 0.1f, index * 0.1f };
-	Vector3 randomTranslate{ distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
-	particle.transform.translation = position + randomTranslate;
+	Vector3 randomTranslate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+	particle.transform.translation = transform.translation + randomTranslate;
 	//particle.velocity = { 0.0f, 1.0f, 0.0f };
 	particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
 
-	std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
-	particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
-
+	if (isRandomColor) {
+		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
+		particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
+	}
+	else {
+		particle.color = color;
+	}
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 	particle.lifeTime = distTime(randomEngine_);
 	particle.currentTime = 0;
