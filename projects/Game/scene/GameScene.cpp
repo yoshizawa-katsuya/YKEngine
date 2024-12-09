@@ -71,17 +71,7 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
-	emitter_ = std::make_unique<ParticleEmitter>("bord", 10, 0.5f);
-	emitter_->Initialize(textureHandle_);
-	emitter_->SetIsRandomColor(true);
-	//emitter_->SetScale({ 0.5f, 0.5f, 0.5f });
-	//EulerTransform trnaform{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, -1.0f, 0.0f} };
-	//emitter_->SetTransform(trnaform);
-
-	field_ = std::make_unique<AccelerationField>();
-	field_->accerelation = { 5.0f, 0.0f, 0.0f };
-	field_->area.min = { -1.0f, -1.0f, -1.0f };
-	field_->area.max = { 1.0f, 1.0f, 1.0f };
+	
 }
 
 void GameScene::Update() {
@@ -98,10 +88,9 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
-	//emitter_->Update({ 1.0f, 0.3f, 0.0f, 1.0f });
-	emitter_->Update(color_);
+	//emitter_->Update(color_);
 
-	ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
+	//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
 
 #ifdef _DEBUG
 
@@ -167,7 +156,7 @@ void GameScene::Update() {
 		}
 		*/
 		ImGui::End();
-
+		/*
 		ImGui::Begin("Particle");
 		ImGui::ColorEdit4("color", &color_.x);
 		ImGui::DragFloat3("Translate", &emitter_->GetTranslate().x, 0.01f);
@@ -212,7 +201,7 @@ void GameScene::Update() {
 			ParticleManager::GetInstance()->SetUseAccelerationField(true);
 		}
 		ImGui::End();
-
+		*/
 
 #endif // _DEBUG
 	
@@ -231,12 +220,12 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	//player_->Draw(mainCamera_);
+	player_->Draw(mainCamera_);
 
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
-	ParticleManager::GetInstance()->Draw();
+	//ParticleManager::GetInstance()->Draw();
 
 }
 
