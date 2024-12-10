@@ -12,7 +12,7 @@ class Sprite
 public:
 
 	//初期化
-	void Initialize(uint32_t textureHandle, SpritePlatform* spritePlatform);
+	void Initialize(uint32_t textureHandle);
 
 	//描画
 	void Draw();

@@ -3,10 +3,10 @@
 #include <cassert>
 #include "SpritePlatform.h"
 
-void Sprite::Initialize(uint32_t textureHandle,  SpritePlatform* spritePlatform) {
+void Sprite::Initialize(uint32_t textureHandle) {
 
 	//引数を受け取ってメンバ変数に記録する
-	spritePlatform_ = spritePlatform;
+	spritePlatform_ = SpritePlatform::GetInstance();
 	textureHandle_ = textureHandle;
 
 	CreateVertexData();
