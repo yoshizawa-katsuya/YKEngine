@@ -12,6 +12,9 @@ void Player::Initialize(BaseModel* model, Animation* animation) {
 
 	worldTransform_.Initialize();
 
+	worldTransform_.rotation_.y = 3.15f;
+	worldTransform_.translation_.y = -1.0f;
+	worldTransform_.translation_.z = -3.0f;
 }
 
 void Player::Update() {
@@ -28,6 +31,11 @@ void Player::Update() {
 
 		ImGui::TreePop();
 	}
+	
+	ImGui::Checkbox("AnimeUpdate", &useAnimation_);
+	if (ImGui::Button("FrameForward")) {
+		animation_->Update();
+	}
 	ImGui::End();
 
 
@@ -35,8 +43,9 @@ void Player::Update() {
 
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
-
-	animation_->Update();
+	if (useAnimation_) {
+		animation_->Update();
+	}
 	object_->AnimationUpdate(animation_);
 }
 

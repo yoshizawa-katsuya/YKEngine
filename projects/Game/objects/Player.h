@@ -22,5 +22,7 @@ private:
 
 	std::unique_ptr<Base3dObject> object_;
 	Animation* animation_;
+
+	bool useAnimation_ = false;
 };
 
