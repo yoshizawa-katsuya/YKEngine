@@ -63,8 +63,11 @@ private:
 	//スポットライト
 	std::unique_ptr<SpotLight> spotLight_;
 
+	//モデル
 	std::unique_ptr<BaseModel> modelPlayer_;
 
+	//アニメーション
+	std::unique_ptr<Animation> animationPlayer_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;

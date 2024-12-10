@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
+#include "SkinModel.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -54,10 +55,13 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 
 	//モデルの生成
-	modelPlayer_ = std::make_unique<RigidModel>();
-	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
+	modelPlayer_ = std::make_unique<SkinModel>();
+	modelPlayer_->CreateModel("./resources/human", "walk.gltf");
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
+	//アニメーションの生成
+	animationPlayer_ = std::make_unique<Animation>();
+	animationPlayer_->LoadAnimationFile("./resources/human", "walk.gltf");
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -69,7 +73,7 @@ void GameScene::Initialize() {
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
+	player_->Initialize(modelPlayer_.get(), animationPlayer_.get());
 
 	
 }
@@ -216,8 +220,8 @@ void GameScene::Draw() {
 	//sprite_->Draw();
 
 	//Modelの描画前処理
-	modelPlatform_->PreDraw();
-	//modelPlatform_->SkinPreDraw();
+	//modelPlatform_->PreDraw();
+	modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);

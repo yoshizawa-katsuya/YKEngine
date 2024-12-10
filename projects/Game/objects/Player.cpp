@@ -1,11 +1,14 @@
 #include "Player.h"
 #include "imgui/imgui.h"
 #include "Rigid3dObject.h"
+#include "Skin3dObject.h"
 
-void Player::Initialize(BaseModel* model) {
+void Player::Initialize(BaseModel* model, Animation* animation) {
 
-	object_ = std::make_unique<Rigid3dObject>();
+	object_ = std::make_unique<Skin3dObject>();
 	object_->Initialize(model);
+
+	animation_ = animation;
 
 	worldTransform_.Initialize();
 
@@ -33,6 +36,8 @@ void Player::Update() {
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
 
+	animation_->Update();
+	object_->AnimationUpdate(animation_);
 }
 
 void Player::Draw(Camera* camera) {
