@@ -13,7 +13,6 @@ void Player::Initialize(BaseModel* model) {
 
 void Player::Update() {
 
-	worldTransform_.UpdateMatrix();
 
 #ifdef _DEBUG
 
@@ -28,11 +27,12 @@ void Player::Update() {
 	}
 	ImGui::End();
 
-	object_->WorldTransformUpdate(worldTransform_);
 
 #endif // _DEBUG	
 
-	
+	worldTransform_.UpdateMatrix();
+	object_->WorldTransformUpdate(worldTransform_);
+
 }
 
 void Player::Draw(Camera* camera) {
