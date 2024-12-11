@@ -1,4 +1,6 @@
 #include "Lerp.h"
+#include <numbers>
+#include <cmath>
 
 float Lerp(const float& p0, const float& p1, float t) {
 	return (1 - t) * p0 + t * p1;
@@ -39,4 +41,23 @@ Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t)
 
 	return anser;
 
+}
+
+float LeapShortAngle(float a, float b, float t)
+{
+
+	//角度差分を求める
+	float diff = b - a;
+	float mpi = static_cast<float>(std::numbers::pi_v<float>);
+
+	diff = std::fmod(diff, 2.0f * mpi);
+
+	if (diff > mpi) {
+		diff -= 2.0f * mpi;
+	}
+	else if (diff < -mpi) {
+		diff += 2.0f * mpi;
+	}
+
+	return a + diff * t;
 }
