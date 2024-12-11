@@ -1,11 +1,15 @@
 #include "Player.h"
 #include "imgui/imgui.h"
 #include "Rigid3dObject.h"
+#include "Lerp.h"
+#include "Easing.h"
 
 Player::Player()
 	: input_(Input::GetInstance())
 	, speed_(0.1f)
 	, lrDirection_(LRDirection::kRight)
+	, angleCompletionRate_(0.2f)
+	, turnTimer_(1.0f)
 {
 }
 
@@ -23,14 +27,33 @@ void Player::Update() {
 	if (input_->PushKey(DIK_A)) {
 		worldTransform_.translation_.x -= speed_;
 		if (lrDirection_ != LRDirection::kLeft) {
-			lrDirection_ = LRDirection::kRight;
+			lrDirection_ = LRDirection::kLeft;
+			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = 0.0f;
 		}
 	}
 	if (input_->PushKey(DIK_D)) {
 		worldTransform_.translation_.x += speed_;
 		if (lrDirection_ != LRDirection::kRight) {
-			lrDirection_ = LRDirection::kLeft;
+			lrDirection_ = LRDirection::kRight;
+			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = 0.0f;
 		}
+	}
+
+	// 旋回制御
+	if (turnTimer_ < 1.0f) {
+		turnTimer_ += 1.0f / 12.0f;
+
+		if (turnTimer_ > 1.0f) {
+			turnTimer_ = 1.0f;
+		}
+		// 自キャラの角度を設定する
+		//worldTransform_.rotation_.y = turnFirstRotationY_ * EaseOut(turnTimer_) + destinationRotationY * (1 - EaseOut(turnTimer_));
+		worldTransform_.rotation_.y = Lerp(turnFirstRotationY_, targetAngle_, EaseOut(turnTimer_));
+
 	}
 
 #ifdef _DEBUG
