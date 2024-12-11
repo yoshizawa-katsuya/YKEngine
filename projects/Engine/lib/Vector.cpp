@@ -1,5 +1,5 @@
-#include <math.h>
 #include "Vector.h"
+
 
 Vector3 Add(const Vector3& v1, const Vector3& v2) {
 
@@ -116,7 +116,20 @@ Vector3 Perpendicular(const Vector3& vector) {
 	}
 	return { 0.0f, -vector.z, vector.y };
 }
+/*
+Vector3 ConvertingToScreen(const Vector3& position, const ViewProjection& viewProjection) {
 
+	//ビューポート行列
+	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+
+	Matrix4x4 matViewProjectionViewport = viewProjection.matView * viewProjection.matProjection * matViewport;
+
+	Vector3 ScreenPosition = Transform(position, matViewProjectionViewport);
+
+	return ScreenPosition;
+
+}
+*/
 Vector3 operator+(const Vector3& v1, const Vector3& v2) { return Add(v1, v2); }
 
 Vector3 operator-(const Vector3& v1, const Vector3& v2) { return Subtract(v1, v2); }
