@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
+#include <numbers>
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -32,15 +33,15 @@ void GameScene::Initialize() {
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
-	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+	camera_->SetRotateX(std::numbers::pi_v<float> / 2.0f);
+	camera_->SetTranslate({ 0.0f, 10.0f, 0.0f });
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
-	camera2_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera2_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+	camera2_->SetTranslate({ 0.0f, 10.0f, 0.0f });
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize(camera2_.get(), input_);
+	debugCamera_->AddRotateX(std::numbers::pi_v<float> / 2.0f);
 
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
