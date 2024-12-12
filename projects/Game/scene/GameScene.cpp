@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
+#include "Rigid3dObject.h"
 #include <numbers>
 
 GameScene::~GameScene() {
@@ -57,7 +58,9 @@ void GameScene::Initialize() {
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
-	//modelPlayer_->CreateSphere(textureHandle_);
+	
+	modelBox_ = std::make_unique<RigidModel>();
+	modelBox_->CreateModel("./resources/box", "box.obj");
 	
 	/*
 	//テクスチャハンドルの生成
@@ -68,10 +71,15 @@ void GameScene::Initialize() {
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	*/
 
+	//マップチップフィールドの生成
+	mapChipField_ = std::make_unique<MapChipField>();
+	mapChipField_->LoadMapChipCsv("./resources/csv/stage1.csv");
+
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+	GenerateObjects();
 	
 }
 
@@ -223,6 +231,16 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	//boxの描画
+	for (std::vector<std::unique_ptr<Base3dObject>>& boxesLine : boxes_) {
+		for (std::unique_ptr<Base3dObject>& box : boxesLine) {
+			if (!box) {
+				continue;
+			}
+			box->CameraUpdate(mainCamera_);
+			box->Draw();
+		}
+	}
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
@@ -232,5 +250,36 @@ void GameScene::Draw() {
 
 void GameScene::Finalize()
 {
+
+}
+
+void GameScene::GenerateObjects()
+{
+
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVertical();
+	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	//要素数を変更する
+	boxes_.resize(numBlockVirtical);
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		boxes_[i].resize(numBlockHorizontal);
+	}
+
+	// キューブの生成
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBox) {
+				Base3dObject* objectBox = new Rigid3dObject;
+				objectBox->Initialize(modelBox_.get());
+				boxes_[i][j].reset(objectBox);
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransform->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+				worldTransform->UpdateMatrix();
+				boxes_[i][j]->WorldTransformUpdate(*worldTransform);
+			}
+		}
+	}
+
 
 }

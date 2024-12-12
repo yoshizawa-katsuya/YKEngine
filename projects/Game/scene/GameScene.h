@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
+#include "MapChipField.h"
 
 class GameScene : public BaseScene
 {
@@ -30,6 +31,8 @@ public:
 	void Draw() override;
 
 	void Finalize() override;
+
+	void GenerateObjects();
 
 private:
 
@@ -63,14 +66,21 @@ private:
 	//スポットライト
 	std::unique_ptr<SpotLight> spotLight_;
 
+	//モデル
 	std::unique_ptr<BaseModel> modelPlayer_;
-
+	std::unique_ptr<BaseModel> modelBox_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
 
+	//マップチップ
+	std::unique_ptr<MapChipField> mapChipField_;
+
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	//ボックス
+	std::vector<std::vector<std::unique_ptr<Base3dObject>>> boxes_;
 
 	//パーティクル
 	/*
