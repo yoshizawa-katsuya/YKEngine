@@ -76,6 +76,12 @@
     <Filter Include="ヘッダー ファイル\myGame">
       <UniqueIdentifier>{b57f4e00-fd0e-4231-8414-f893d017e1a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\mapChip">
+      <UniqueIdentifier>{854432db-37d4-40a4-80df-2c93ec97a3e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\mapChip">
+      <UniqueIdentifier>{bde167e0-a501-41f7-8bc7-9d3ee261e232}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -212,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="Engine\lib\ThreadPool.cpp">
       <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\mapChip\MapChipField.cpp">
+      <Filter>ソース ファイル\mapChip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -393,6 +402,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\ThreadPool.h">
       <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\mapChip\MapChipField.h">
+      <Filter>ヘッダー ファイル\mapChip</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
