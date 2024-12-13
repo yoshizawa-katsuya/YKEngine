@@ -76,7 +76,10 @@ MapChipType MapChipField::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t zIndex
 }
 
 Vector3 MapChipField::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t zIndex) {
-	return Vector3(kBlockWidth * xIndex, 0, kBlockDepth * (kNumBlockVertical - 1 - zIndex));
+	//return Vector3(kBlockWidth * xIndex, 0, kBlockDepth * (kNumBlockVertical - 1 - zIndex));
+	//マップの中心座標が原点になるように変更
+	return Vector3(kBlockWidth * (xIndex - (kNumBlockHorizontal - 1) / 2.0f), 0, kBlockDepth * ((kNumBlockVertical - 1) / 2.0f - zIndex));
+
 }
 
 MapChipField::Rect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t zIndex) {
