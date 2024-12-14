@@ -32,6 +32,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSkinModelMode)) = CreateGraphicsPipeline(BlendMode::kSkinModelMode, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormalinstancing)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormalinstancing, dxCommon);
+
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(BlendMode blendMode, DirectXCommon* dxCommon) {
@@ -148,9 +150,9 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			rootParameters[1].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
 			break;
 		case BlendMode::kBlendModeAddParticle:
-
-			//Particle用
-			//ParticleForGPU
+		case BlendMode::kBlendModeNormalinstancing:
+			//Particle用、instancing用
+			//ParticleForGPU、TransformationMatrix
 			rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
 			rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
 			rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;
@@ -321,6 +323,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	case BlendMode::kBlendModeNormal:
 	case BlendMode::kBlendModeNormalSprite:
+	case BlendMode::kBlendModeNormalinstancing:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
