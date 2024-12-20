@@ -73,8 +73,6 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
-	std::unique_ptr<InstancingObject> objects_;
-
 	//パーティクル
 	/*
 	std::unique_ptr<ParticleEmitter> emitter_;
