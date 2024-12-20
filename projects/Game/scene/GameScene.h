@@ -17,6 +17,7 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "MapChipField.h"
+#include "InstancingObjects.h"
 
 class GameScene : public BaseScene
 {
