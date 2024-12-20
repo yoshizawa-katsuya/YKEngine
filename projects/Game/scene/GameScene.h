@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
+#include "InstancingObjects.h"
 
 class GameScene : public BaseScene
 {
@@ -71,6 +72,8 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	std::unique_ptr<InstancingObject> objects_;
 
 	//パーティクル
 	/*

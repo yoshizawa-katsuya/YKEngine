@@ -36,6 +36,8 @@ public:
 	//3dObjectクラス経由で呼び出す
 	virtual void Draw(uint32_t textureHandle);
 
+	virtual void InstancingDraw(uint32_t numInstance);
+
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
 	Material& GetMaterialDataAddress() { return *materialData_; }

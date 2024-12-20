@@ -71,7 +71,19 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
-	
+	objects_ = std::make_unique<InstancingObject>();
+	objects_->Initialize(modelPlayer_.get(), 3);
+
+	WorldTransform worldTransform;
+	worldTransform.Initialize();
+
+	WorldTransform worldTransform2;
+	worldTransform2.Initialize();
+	worldTransform2.translation_.x = 2;
+	worldTransform2.UpdateMatrix();
+
+	objects_->AddWorldTransform(worldTransform);
+	objects_->AddWorldTransform(worldTransform2);
 }
 
 void GameScene::Update() {
@@ -220,7 +232,12 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	//player_->Draw(mainCamera_);
+
+	modelPlatform_->InstancingPreDraw();
+
+	objects_->CameraUpdate(mainCamera_);
+	objects_->Draw();
 
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();

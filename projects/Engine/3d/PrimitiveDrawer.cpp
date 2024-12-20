@@ -398,6 +398,16 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		assert(pixelShaderBlob != nullptr);
 		break;
 
+	case BlendMode::kBlendModeNormalinstancing:
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/InstancingObject3d.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Object3d.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+		break;
+
 	case BlendMode::kBlendModeNoneSprite:
 	case BlendMode::kBlendModeNormalSprite:
 	case BlendMode::kBackGroundSprite:

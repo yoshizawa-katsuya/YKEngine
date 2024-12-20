@@ -6,7 +6,7 @@ struct TransformationMatrix
     float32_t4x4 World;
     float32_t4x4 WorldInverseTranspose;
 };
-ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(t0);
+StructuredBuffer<TransformationMatrix> gTransformationMatrix : register(t0);
 
 
 
