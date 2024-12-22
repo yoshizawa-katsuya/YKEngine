@@ -103,3 +103,27 @@ void DebugCamera::ViewMatrixUpdate()
 	camera_->SetviewProjection(Multiply(viewMatrix, camera_->GetProjection()));
 
 }
+
+void DebugCamera::AddRotateX(float rotateX)
+{
+	Matrix4x4 matRotDelta = MakeIdentity4x4() * MakeRotateXMatrix(rotateX);
+	
+	//累積の回転行列を合成
+	matRot_ = matRotDelta * matRot_;
+}
+
+void DebugCamera::AddRotateY(float rotateY)
+{
+	Matrix4x4 matRotDelta = MakeIdentity4x4() * MakeRotateXMatrix(rotateY);
+
+	//累積の回転行列を合成
+	matRot_ = matRotDelta * matRot_;
+}
+
+void DebugCamera::AddRotateZ(float rotateZ)
+{
+	Matrix4x4 matRotDelta = MakeIdentity4x4() * MakeRotateXMatrix(rotateZ);
+
+	//累積の回転行列を合成
+	matRot_ = matRotDelta * matRot_;
+}

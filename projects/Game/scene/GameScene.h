@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
+#include "InstancingObjects.h"
 
 class GameScene : public BaseScene
 {

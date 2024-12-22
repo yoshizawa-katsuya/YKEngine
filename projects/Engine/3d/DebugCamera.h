@@ -16,6 +16,12 @@ public:
 
 	void ViewMatrixUpdate();
 
+	void AddRotateX(float rotateX);
+
+	void AddRotateY(float rotateY);
+
+	void AddRotateZ(float rotateZ);
+
 private:
 
 	Camera* camera_;

@@ -71,7 +71,6 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
-	
 }
 
 void GameScene::Update() {
@@ -221,6 +220,7 @@ void GameScene::Draw() {
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
 
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
