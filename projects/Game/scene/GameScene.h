@@ -65,13 +65,15 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	std::unique_ptr<BaseModel> modelPlayer_;
-
+	std::unique_ptr<BaseModel> modelGround_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	std::unique_ptr<Base3dObject> ground_;
 
 	//パーティクル
 	/*

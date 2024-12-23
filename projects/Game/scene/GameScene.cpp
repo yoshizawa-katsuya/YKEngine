@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
+#include "Rigid3dObject.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -58,6 +59,13 @@ void GameScene::Initialize() {
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
+	modelGround_ = std::make_unique<RigidModel>();
+	modelGround_->CreateModel("./resources/ground", "Ground.obj");
+	modelGround_->SetUVTransform({ 25.0f, 25.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
+
+	ground_ = std::make_unique<Rigid3dObject>();
+	ground_->Initialize(modelGround_.get());
+
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -221,6 +229,8 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	ground_->CameraUpdate(mainCamera_);
+	ground_->Draw();
 
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();

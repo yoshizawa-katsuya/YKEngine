@@ -6,7 +6,12 @@
 
 Player::Player()
 	: input_(Input::GetInstance())
+	, kJumpAcceleration_(0.5f)
+	, kLimitFallSpeed_(1.0f)
+	, kGravityAcceleration_(0.03f)
 	, speed_(0.1f)
+	, velocity_({0.0f, 0.0f, 0.0f})
+	, onGround_(true)
 	, lrDirection_(LRDirection::kRight)
 	, angleCompletionRate_(0.2f)
 	, turnTimer_(1.0f)
@@ -24,24 +29,11 @@ void Player::Initialize(BaseModel* model) {
 
 void Player::Update() {
 
-	if (input_->PushKey(DIK_A)) {
-		worldTransform_.translation_.x -= speed_;
-		if (lrDirection_ != LRDirection::kLeft) {
-			lrDirection_ = LRDirection::kLeft;
-			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-			turnFirstRotationY_ = worldTransform_.rotation_.y;
-			turnTimer_ = 0.0f;
-		}
-	}
-	if (input_->PushKey(DIK_D)) {
-		worldTransform_.translation_.x += speed_;
-		if (lrDirection_ != LRDirection::kRight) {
-			lrDirection_ = LRDirection::kRight;
-			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-			turnFirstRotationY_ = worldTransform_.rotation_.y;
-			turnTimer_ = 0.0f;
-		}
-	}
+	Move();
+
+	MoveAppli();
+
+	GroundCollision();
 
 	// 旋回制御
 	if (turnTimer_ < 1.0f) {
@@ -81,5 +73,62 @@ void Player::Draw(Camera* camera) {
 
 	object_->CameraUpdate(camera);
 	object_->Draw();
+
+}
+
+void Player::Move()
+{
+	//左右移動
+	if (input_->PushKey(DIK_A)) {
+		worldTransform_.translation_.x -= speed_;
+		if (lrDirection_ != LRDirection::kLeft) {
+			lrDirection_ = LRDirection::kLeft;
+			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = 0.0f;
+		}
+	}
+	if (input_->PushKey(DIK_D)) {
+		worldTransform_.translation_.x += speed_;
+		if (lrDirection_ != LRDirection::kRight) {
+			lrDirection_ = LRDirection::kRight;
+			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = 0.0f;
+		}
+	}
+
+	//ジャンプ
+	if (onGround_ && input_->TriggerKey(DIK_W)) {
+		// ジャンプ加速
+		velocity_.y += kJumpAcceleration_;
+		onGround_ = false;
+	}
+	else if (!onGround_) {
+
+		// 落下速度
+		velocity_.y += -kGravityAcceleration_;
+		// 落下速度制限
+		velocity_.y = (std::max)(velocity_.y, -kLimitFallSpeed_);
+	}
+
+}
+
+void Player::MoveAppli()
+{
+	worldTransform_.translation_ += velocity_;
+}
+
+void Player::GroundCollision()
+{
+	if (onGround_) {
+		return;
+	}
+
+	if (worldTransform_.translation_.y < 0.0f) {
+		worldTransform_.translation_.y = 0.0f;
+		velocity_.y = 0.0f;
+		onGround_ = true;
+	}
 
 }
