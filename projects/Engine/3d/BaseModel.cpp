@@ -114,6 +114,20 @@ void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
 {
 }
 
+void BaseModel::SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	Matrix4x4 uvTransformMatrix = MakeAffineMatrix(scale, rotate, translate);
+	materialData_->uvTransform = uvTransformMatrix;
+}
+
+void BaseModel::SetUVTransform(const EulerTransform& uvTransform)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	Matrix4x4 uvTransformMatrix = MakeAffineMatrix(uvTransform);
+	materialData_->uvTransform = uvTransformMatrix;
+}
+
 void BaseModel::CreateVertexData()
 {
 
@@ -204,6 +218,7 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			modelData_.material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
+			
 		}
 		else {
 			modelData_.material.textureFilePath = "./resources/white.png";

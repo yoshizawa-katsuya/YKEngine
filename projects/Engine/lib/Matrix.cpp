@@ -465,6 +465,11 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 
 }
 
+Matrix4x4 MakeAffineMatrix(const EulerTransform& transform)
+{
+	return MakeAffineMatrix(transform.scale, transform.rotation, transform.translation);
+}
+
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const Vector3& translate)
 {
 	
