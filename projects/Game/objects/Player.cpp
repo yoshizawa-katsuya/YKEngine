@@ -11,10 +11,15 @@ Player::Player()
 	, kGravityAcceleration_(0.03f)
 	, speed_(0.1f)
 	, velocity_({0.0f, 0.0f, 0.0f})
-	, onGround_(true)
+	, onGround_(false)
 	, lrDirection_(LRDirection::kRight)
 	, angleCompletionRate_(0.2f)
 	, turnTimer_(1.0f)
+{
+	radius_ = 0.5f;
+}
+
+Player::~Player()
 {
 }
 
@@ -125,8 +130,8 @@ void Player::GroundCollision()
 		return;
 	}
 
-	if (worldTransform_.translation_.y < 0.0f) {
-		worldTransform_.translation_.y = 0.0f;
+	if (worldTransform_.translation_.y < radius_) {
+		worldTransform_.translation_.y = radius_;
 		velocity_.y = 0.0f;
 		onGround_ = true;
 	}

@@ -4,14 +4,16 @@
 #include "Animation.h"
 #include "Input.h"
 #include <numbers>
+#include "Collider.h"
 class Camera;
 class MapChipField;
 
-class Player
+class Player : public Collider
 {
 public:
 
 	Player();
+	~Player() override;
 
 	void Initialize(BaseModel* model);
 
