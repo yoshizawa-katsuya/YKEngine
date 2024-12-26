@@ -59,6 +59,9 @@ void GameScene::Initialize() {
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
+	modelEnemy_ = std::make_unique<RigidModel>();
+	modelEnemy_->CreateModel("./resources/enemy", "Enemy.obj");
+
 	modelGround_ = std::make_unique<RigidModel>();
 	modelGround_->CreateModel("./resources/ground", "Ground.obj");
 	modelGround_->SetUVTransform({ 25.0f, 25.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
@@ -79,6 +82,9 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+	//敵の生成
+	enemy_ = std::make_unique<Enemy>();
+	enemy_->Initialize(modelEnemy_.get());
 }
 
 void GameScene::Update() {
@@ -94,6 +100,9 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//敵の更新
+	enemy_->Update();
 
 	//emitter_->Update(color_);
 
@@ -228,6 +237,9 @@ void GameScene::Draw() {
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+	//敵の描画
+	enemy_->Draw(mainCamera_);
 
 	ground_->CameraUpdate(mainCamera_);
 	ground_->Draw();

@@ -13,6 +13,7 @@
 #include "SpotLight.h"
 #include "Sprite.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
@@ -65,6 +66,7 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	std::unique_ptr<BaseModel> modelPlayer_;
+	std::unique_ptr<BaseModel> modelEnemy_;
 	std::unique_ptr<BaseModel> modelGround_;
 
 	uint32_t textureHandle_;
@@ -74,6 +76,9 @@ private:
 	std::unique_ptr<Player> player_;
 
 	std::unique_ptr<Base3dObject> ground_;
+
+	//敵
+	std::unique_ptr<Enemy> enemy_;
 
 	//パーティクル
 	/*

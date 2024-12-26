@@ -29,7 +29,7 @@ void Player::Initialize(BaseModel* model) {
 	object_->Initialize(model);
 
 	worldTransform_.Initialize();
-	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
+	worldTransform_.rotation_.y = destinationRotationYTable[0];
 }
 
 void Player::Update() {
