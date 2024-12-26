@@ -33,6 +33,8 @@ public:
 
 	void Finalize() override;
 
+	void CreateLevel();
+
 private:
 
 	//デバイス
@@ -78,7 +80,8 @@ private:
 	std::unique_ptr<Base3dObject> ground_;
 
 	//敵
-	std::unique_ptr<Enemy> enemy_;
+	//std::unique_ptr<Enemy> enemy_;
+	std::list<std::unique_ptr<Enemy>> enemies_;
 
 	//パーティクル
 	/*

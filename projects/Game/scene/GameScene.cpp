@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "RigidModel.h"
 #include "Rigid3dObject.h"
+#include "LevelDataLoader.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -83,8 +84,10 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_.get());
 
 	//敵の生成
-	enemy_ = std::make_unique<Enemy>();
-	enemy_->Initialize(modelEnemy_.get());
+	//enemy_ = std::make_unique<Enemy>();
+	//enemy_->Initialize(modelEnemy_.get());
+	CreateLevel();
+
 }
 
 void GameScene::Update() {
@@ -102,7 +105,10 @@ void GameScene::Update() {
 	player_->Update();
 
 	//敵の更新
-	enemy_->Update();
+	//enemy_->Update();
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemy->Update();
+	}
 
 	//emitter_->Update(color_);
 
@@ -239,7 +245,10 @@ void GameScene::Draw() {
 	player_->Draw(mainCamera_);
 
 	//敵の描画
-	enemy_->Draw(mainCamera_);
+	//enemy_->Draw(mainCamera_);
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemy->Draw(mainCamera_);
+	}
 
 	ground_->CameraUpdate(mainCamera_);
 	ground_->Draw();
@@ -254,4 +263,36 @@ void GameScene::Draw() {
 void GameScene::Finalize()
 {
 
+}
+
+void GameScene::CreateLevel()
+{
+	LevelData* levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
+
+	//レベルデータからオブジェクトを生成、配置
+	for (ObjectData& objectData : levelData->objects) {
+		if (objectData.fileName != "Enemy") {
+			continue;
+		}
+		enemies_.emplace_back();
+		std::unique_ptr<Enemy>& enemy = enemies_.back();
+		enemy = std::make_unique<Enemy>();
+		enemy->Initialize(modelEnemy_.get(), objectData.transform.translation);
+		/*
+		//ファイルから登録済みモデルを検索
+		Model* model = nullptr;
+		decltype(models_)::iterator it = models_.find(objectData.fileName);
+		if (it != models_.end())
+		{
+			model = it->second;
+		}
+		//モデルを指定して3Dオブジェクトを生成
+		Object3d* newObject = new Object3d();
+		newObject->Initialize(model, mainCamera_);
+
+		newObject->SetTransform(objectData.transform);
+		//配列に登録
+		objects_.push_back(newObject);
+		*/
+	}
 }
