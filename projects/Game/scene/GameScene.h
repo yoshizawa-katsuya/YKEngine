@@ -33,9 +33,16 @@ public:
 
 	void Finalize() override;
 
+private:
+
+	//敵の配置
 	void CreateLevel();
 
-private:
+	// 衝突判定と応答
+	void CheckAllCollisions();
+
+	//自キャラの攻撃の衝突判定
+	void CheackPlayerAttackCollision();
 
 	//デバイス
 	DirectXCommon* dxCommon_;

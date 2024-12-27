@@ -59,3 +59,5 @@ Vector3 operator/(const Vector3& v, float s);
 Vector3 operator-(const Vector3& v);
 
 Vector3 operator+(const Vector3& v);
+
+Vector2 operator-(const Vector2& v1, const Vector2& v2);

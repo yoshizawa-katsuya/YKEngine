@@ -1,7 +1,5 @@
 #pragma once
-#include "Base3dObject.h"
 #include "Collider.h"
-#include "WorldTransform.h"
 
 class Enemy : public Collider
 {
@@ -11,14 +9,11 @@ public:
 
 	void Initialize(BaseModel* model, const Vector3& translate = {0.0f, 0.5f, 0.0f});
 
-	void Update();
+	//void Update() override;
 
-	void Draw(Camera* camera);
+	//void Draw(Camera* camera) override;
 
 private:
-	//Transform変数を作る
-	WorldTransform worldTransform_;
 
-	std::unique_ptr<Base3dObject> object_;
 };
 

@@ -7,6 +7,7 @@
 #include "RigidModel.h"
 #include "Rigid3dObject.h"
 #include "LevelDataLoader.h"
+#include "Collision.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -113,6 +114,8 @@ void GameScene::Update() {
 	//emitter_->Update(color_);
 
 	//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
+
+	CheckAllCollisions();
 
 #ifdef _DEBUG
 
@@ -294,5 +297,40 @@ void GameScene::CreateLevel()
 		//配列に登録
 		objects_.push_back(newObject);
 		*/
+	}
+}
+
+void GameScene::CheckAllCollisions()
+{
+	CheackPlayerAttackCollision();
+}
+
+void GameScene::CheackPlayerAttackCollision()
+{
+	if (!player_->GetIsAttack()) {
+		return;
+	}
+
+	Square playerAttackCollider;
+
+	if (player_->GetLRDirection() == Player::LRDirection::kRight) {
+		playerAttackCollider.min.x = player_->Get2DCenterPosition().x;
+		playerAttackCollider.min.y = player_->Get2DCenterPosition().y - (player_->GetAttackRange().y / 2);
+
+		playerAttackCollider.max.x = playerAttackCollider.min.x + player_->GetAttackRange().x;
+		playerAttackCollider.max.y = player_->Get2DCenterPosition().y + (player_->GetAttackRange().y / 2);
+	}
+	else {
+		playerAttackCollider.max.x = player_->Get2DCenterPosition().x;
+		playerAttackCollider.max.y = player_->Get2DCenterPosition().y + (player_->GetAttackRange().y / 2);
+
+		playerAttackCollider.min.x = playerAttackCollider.max.x - player_->GetAttackRange().x;
+		playerAttackCollider.min.y = player_->Get2DCenterPosition().y - (player_->GetAttackRange().y / 2);
+	}
+
+	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+		if (IsCollision(playerAttackCollider, { enemy->Get2DCenterPosition(), enemy->GetRadius() })) {
+			enemy->OnCollision();
+		}
 	}
 }

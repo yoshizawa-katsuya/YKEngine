@@ -15,6 +15,8 @@ Player::Player()
 	, lrDirection_(LRDirection::kRight)
 	, angleCompletionRate_(0.2f)
 	, turnTimer_(1.0f)
+	, isAttack_(false)
+	, attackRange_({1.5f, 1.0f})
 {
 	radius_ = 0.5f;
 }
@@ -25,10 +27,8 @@ Player::~Player()
 
 void Player::Initialize(BaseModel* model) {
 
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
+	Collider::Initialize(model);
 
-	worldTransform_.Initialize();
 	worldTransform_.rotation_.y = destinationRotationYTable[0];
 }
 
@@ -39,6 +39,8 @@ void Player::Update() {
 	MoveAppli();
 
 	GroundCollision();
+
+	Attack();
 
 	// 旋回制御
 	if (turnTimer_ < 1.0f) {
@@ -69,18 +71,17 @@ void Player::Update() {
 
 #endif // _DEBUG	
 
-	worldTransform_.UpdateMatrix();
-	object_->WorldTransformUpdate(worldTransform_);
+	Collider::Update();
 
 }
-
+/*
 void Player::Draw(Camera* camera) {
 
 	object_->CameraUpdate(camera);
 	object_->Draw();
 
 }
-
+*/
 void Player::Move()
 {
 	//左右移動
@@ -136,4 +137,15 @@ void Player::GroundCollision()
 		onGround_ = true;
 	}
 
+}
+
+void Player::Attack()
+{
+	if (isAttack_) {
+		return;
+	}
+	if (!input_->TriggerKey(DIK_SPACE)) {
+		return;
+	}
+	isAttack_ = true;
 }

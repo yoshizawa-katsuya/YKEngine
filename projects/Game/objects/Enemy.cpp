@@ -4,6 +4,7 @@
 
 Enemy::Enemy()
 {
+	radius_ = 0.5f;
 }
 
 Enemy::~Enemy()
@@ -12,14 +13,12 @@ Enemy::~Enemy()
 
 void Enemy::Initialize(BaseModel* model, const Vector3& translate)
 {
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
+	Collider::Initialize(model);
 
-	worldTransform_.Initialize();
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 	worldTransform_.translation_ = translate;
 }
-
+/*
 void Enemy::Update()
 {
 	worldTransform_.UpdateMatrix();
@@ -31,3 +30,4 @@ void Enemy::Draw(Camera* camera)
 	object_->CameraUpdate(camera);
 	object_->Draw();
 }
+*/

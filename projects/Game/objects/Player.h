@@ -12,14 +12,25 @@ class Player : public Collider
 {
 public:
 
+	enum  class LRDirection {
+		kRight,
+		kLeft,
+	};
+
 	Player();
 	~Player() override;
 
-	void Initialize(BaseModel* model);
+	void Initialize(BaseModel* model) override;
 
-	void Update();
+	void Update() override;
 
-	void Draw(Camera* camera);
+	//void Draw(Camera* camera) override;
+
+	bool GetIsAttack() { return isAttack_; }
+
+	LRDirection GetLRDirection() { return lrDirection_; }
+
+	const Vector2& GetAttackRange() const { return attackRange_; }
 
 private:
 
@@ -32,17 +43,10 @@ private:
 	//地面に接触している場合の処理
 	void GroundCollision();
 
-	//Transform変数を作る
-	WorldTransform worldTransform_;
-
-	std::unique_ptr<Base3dObject> object_;
+	//攻撃入力
+	void Attack();
 
 	Input* input_;
-
-	enum  class LRDirection {
-		kRight,
-		kLeft,
-	};
 
 	LRDirection lrDirection_;
 	// 左右の自キャラ角度テーブル
@@ -67,7 +71,12 @@ private:
 	float kJumpAcceleration_;
 	//重力加速度
 	float kGravityAcceleration_;
-
+	//落下速度の限界
 	float kLimitFallSpeed_;
+
+	//攻撃中か否か
+	bool isAttack_;
+	//攻撃範囲
+	Vector2 attackRange_;
 };
 

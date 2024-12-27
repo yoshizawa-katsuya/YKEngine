@@ -168,3 +168,5 @@ Vector3 operator/(const Vector3& v, float s) { return Multiply(1.0f / s, v); }
 Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
 
 Vector3 operator+(const Vector3& v) { return v; }
+
+Vector2 operator-(const Vector2& v1, const Vector2& v2) { return Subtract(v1, v2); }
