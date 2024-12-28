@@ -75,6 +75,7 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	std::unique_ptr<BaseModel> modelPlayer_;
+	std::unique_ptr<BaseModel> modelHammer_;
 	std::unique_ptr<BaseModel> modelEnemy_;
 	std::unique_ptr<BaseModel> modelGround_;
 

@@ -61,6 +61,9 @@ void GameScene::Initialize() {
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
+	modelHammer_ = std::make_unique<RigidModel>();
+	modelHammer_->CreateModel("./resources/Hammer", "Hammer.obj");
+
 	modelEnemy_ = std::make_unique<RigidModel>();
 	modelEnemy_->CreateModel("./resources/enemy", "Enemy.obj");
 
@@ -83,6 +86,7 @@ void GameScene::Initialize() {
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
+	player_->HammerInitialize(modelHammer_.get());
 
 	//敵の生成
 	//enemy_ = std::make_unique<Enemy>();

@@ -26,6 +26,10 @@ public:
 
 	void Update() override;
 
+	void Draw(Camera* camera) override;
+
+	void HammerInitialize(BaseModel* model);
+
 	//攻撃が敵に当たった時の処理
 	void AttackHit(Enemy* enemy);
 
@@ -38,6 +42,8 @@ public:
 	const Vector2& GetAttackRange() const { return workAttack_.attackRange_; }
 
 private:
+
+	void HammerUpdate();
 
 	//移動入力
 	void Move();
@@ -101,5 +107,11 @@ private:
 	
 	WorkAttack workAttack_;
 
+	struct Hammer {
+		WorldTransform worldTransform_;
+		std::unique_ptr<Base3dObject> object_;
+	};
+
+	Hammer hammer_;
 };
 

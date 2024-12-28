@@ -74,7 +74,30 @@ void Player::Update() {
 
 	Collider::Update();
 
+	HammerUpdate();
+
 }
+
+void Player::Draw(Camera* camera)
+{
+	Collider::Draw(camera);
+
+	if (workAttack_.attackParameter_ == 0) {
+		return;
+	}
+	hammer_.object_->CameraUpdate(camera);
+	hammer_.object_->Draw();
+}
+
+void Player::HammerInitialize(BaseModel* model)
+{
+	hammer_.object_ = std::make_unique<Rigid3dObject>();
+	hammer_.object_->Initialize(model);
+
+	hammer_.worldTransform_.Initialize();
+	hammer_.worldTransform_.parent_ = &worldTransform_;
+}
+
 void Player::AttackHit(Enemy* enemy)
 {
 	if (workAttack_.contactRecord_.HistoryCheck(enemy->GetSerialNumber())) {
@@ -83,6 +106,16 @@ void Player::AttackHit(Enemy* enemy)
 
 	//接触履歴に追加
 	workAttack_.contactRecord_.AddRecord(enemy->GetSerialNumber());
+}
+void Player::HammerUpdate()
+{
+	if (workAttack_.attackParameter_ <= workAttack_.swingEndTime_) {
+		hammer_.worldTransform_.rotation_.y -= 0.5f;
+	}
+
+	hammer_.worldTransform_.UpdateMatrix();
+	hammer_.object_->WorldTransformUpdate(hammer_.worldTransform_);
+
 }
 /*
 void Player::Draw(Camera* camera) {
@@ -158,6 +191,7 @@ void Player::Attack()
 		return;
 	}
 	workAttack_.isAttack_ = true;
+	hammer_.worldTransform_.rotation_.y = destinationRotationYTable[0];
 }
 
 void Player::AttackUpdate()
