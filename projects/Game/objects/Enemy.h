@@ -13,7 +13,14 @@ public:
 
 	//void Draw(Camera* camera) override;
 
+	uint32_t GetSerialNumber() const { return serialNumber_; }
+
 private:
 
+	//シリアルナンバー
+	uint32_t serialNumber_;
+
+	//次のシリアルナンバー
+	static uint32_t nextSerialNumber_;
 };
 

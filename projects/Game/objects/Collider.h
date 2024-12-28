@@ -33,6 +33,6 @@ protected:
 	std::unique_ptr<Base3dObject> object_;
 
 	//衝突半径
-	float radius_ = 1.5f;
+	float radius_ = 0.5f;
 };
 

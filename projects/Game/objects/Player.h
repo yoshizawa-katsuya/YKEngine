@@ -5,8 +5,10 @@
 #include "Input.h"
 #include <numbers>
 #include "Collider.h"
+#include "ContactRecord.h"
 class Camera;
 class MapChipField;
+class Enemy;
 
 class Player : public Collider
 {
@@ -24,13 +26,16 @@ public:
 
 	void Update() override;
 
+	//攻撃が敵に当たった時の処理
+	void AttackHit(Enemy* enemy);
+
 	//void Draw(Camera* camera) override;
 
-	bool GetIsAttack() { return isAttack_; }
+	bool GetIsAttack() { return workAttack_.isAttack_; }
 
 	LRDirection GetLRDirection() { return lrDirection_; }
 
-	const Vector2& GetAttackRange() const { return attackRange_; }
+	const Vector2& GetAttackRange() const { return workAttack_.attackRange_; }
 
 private:
 
@@ -45,6 +50,9 @@ private:
 
 	//攻撃入力
 	void Attack();
+
+	//攻撃更新
+	void AttackUpdate();
 
 	Input* input_;
 
@@ -74,9 +82,24 @@ private:
 	//落下速度の限界
 	float kLimitFallSpeed_;
 
-	//攻撃中か否か
-	bool isAttack_;
-	//攻撃範囲
-	Vector2 attackRange_;
+	//攻撃用ワーク
+	struct WorkAttack {
+		WorkAttack();
+		//攻撃中か否か
+		bool isAttack_;
+		//攻撃範囲
+		Vector2 attackRange_;
+		// 攻撃用の媒介変数
+		uint16_t attackParameter_;
+		//攻撃の全体フレーム
+		uint16_t attackTime_;
+		//振り払いの終わる時間
+		uint16_t swingEndTime_;
+		//接触記録
+		ContactRecord contactRecord_;
+	};
+	
+	WorkAttack workAttack_;
+
 };
 

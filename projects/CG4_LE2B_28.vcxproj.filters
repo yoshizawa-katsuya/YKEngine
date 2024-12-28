@@ -76,6 +76,12 @@
     <Filter Include="ヘッダー ファイル\myGame">
       <UniqueIdentifier>{b57f4e00-fd0e-4231-8414-f893d017e1a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Contactecord">
+      <UniqueIdentifier>{795d28e8-e2de-46f1-8849-72be4335a3e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ContactRecord">
+      <UniqueIdentifier>{235e13c6-e5dc-4bdb-ad9b-8ee031b3146a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -224,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="Game\objects\Enemy.cpp">
       <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactRecord.cpp">
+      <Filter>ソース ファイル\Contactecord</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -420,6 +429,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\Enemy.h">
       <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactRecord.h">
+      <Filter>ヘッダー ファイル\ContactRecord</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

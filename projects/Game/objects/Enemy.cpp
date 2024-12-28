@@ -2,9 +2,15 @@
 #include <numbers>
 #include "Rigid3dObject.h"
 
+uint32_t Enemy::nextSerialNumber_ = 0;
+
 Enemy::Enemy()
 {
 	radius_ = 0.5f;
+	//シリアル番号を振る
+	serialNumber_ = nextSerialNumber_;
+	//次の番号を1加算
+	nextSerialNumber_++;
 }
 
 Enemy::~Enemy()

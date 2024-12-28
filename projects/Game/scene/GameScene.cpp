@@ -330,7 +330,8 @@ void GameScene::CheackPlayerAttackCollision()
 
 	for (std::unique_ptr<Enemy>& enemy : enemies_) {
 		if (IsCollision(playerAttackCollider, { enemy->Get2DCenterPosition(), enemy->GetRadius() })) {
-			enemy->OnCollision();
+			player_->AttackHit(enemy.get());
+			//enemy->OnCollision();
 		}
 	}
 }

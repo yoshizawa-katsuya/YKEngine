@@ -3,6 +3,7 @@
 #include "Rigid3dObject.h"
 #include "Lerp.h"
 #include "Easing.h"
+#include "Enemy.h"
 
 Player::Player()
 	: input_(Input::GetInstance())
@@ -15,8 +16,6 @@ Player::Player()
 	, lrDirection_(LRDirection::kRight)
 	, angleCompletionRate_(0.2f)
 	, turnTimer_(1.0f)
-	, isAttack_(false)
-	, attackRange_({1.5f, 1.0f})
 {
 	radius_ = 0.5f;
 }
@@ -41,6 +40,8 @@ void Player::Update() {
 	GroundCollision();
 
 	Attack();
+
+	AttackUpdate();
 
 	// 旋回制御
 	if (turnTimer_ < 1.0f) {
@@ -73,6 +74,15 @@ void Player::Update() {
 
 	Collider::Update();
 
+}
+void Player::AttackHit(Enemy* enemy)
+{
+	if (workAttack_.contactRecord_.HistoryCheck(enemy->GetSerialNumber())) {
+		return;
+	}
+
+	//接触履歴に追加
+	workAttack_.contactRecord_.AddRecord(enemy->GetSerialNumber());
 }
 /*
 void Player::Draw(Camera* camera) {
@@ -141,11 +151,43 @@ void Player::GroundCollision()
 
 void Player::Attack()
 {
-	if (isAttack_) {
+	if (workAttack_.attackParameter_ != 0) {
 		return;
 	}
 	if (!input_->TriggerKey(DIK_SPACE)) {
 		return;
 	}
-	isAttack_ = true;
+	workAttack_.isAttack_ = true;
+}
+
+void Player::AttackUpdate()
+{
+	
+	if (workAttack_.isAttack_) {
+		workAttack_.attackParameter_++;
+		if (workAttack_.attackParameter_ > workAttack_.swingEndTime_) {
+			workAttack_.isAttack_ = false;
+			return;
+		}
+		return;
+	}
+
+	if (workAttack_.attackParameter_ > workAttack_.swingEndTime_) {
+		workAttack_.attackParameter_++;
+		if (workAttack_.attackParameter_ > workAttack_.attackTime_) {
+			workAttack_.contactRecord_.Clear();
+			workAttack_.attackParameter_ = 0;
+			return;
+		}
+		return;
+	}
+}
+
+Player::WorkAttack::WorkAttack()
+	: isAttack_(false)
+	, attackRange_({ 1.5f, 1.0f })
+	, attackParameter_(0)
+	, attackTime_(12)
+	, swingEndTime_(6)
+{
 }
