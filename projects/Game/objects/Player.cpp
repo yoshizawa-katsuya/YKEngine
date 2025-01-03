@@ -166,6 +166,11 @@ void Player::Move()
 void Player::MoveAppli()
 {
 	worldTransform_.translation_ += velocity_;
+	
+	//移動範囲制限
+	worldTransform_.translation_.x = (std::max)(worldTransform_.translation_.x, moveRange_.min_);
+	worldTransform_.translation_.x = (std::min)(worldTransform_.translation_.x, moveRange_.max_);
+
 }
 
 void Player::GroundCollision()
@@ -223,5 +228,11 @@ Player::WorkAttack::WorkAttack()
 	, attackParameter_(0)
 	, attackTime_(12)
 	, swingEndTime_(6)
+{
+}
+
+Player::MoveRange::MoveRange()
+	: min_(-20.0f)
+	, max_(20.0f)
 {
 }

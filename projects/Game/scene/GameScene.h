@@ -18,6 +18,7 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
+#include "CameraController.h"
 
 class GameScene : public BaseScene
 {
@@ -62,6 +63,8 @@ private:
 	std::unique_ptr<Camera> camera2_;
 
 	std::unique_ptr<DebugCamera> debugCamera_;
+
+	std::unique_ptr<CameraController> cameraController_;
 
 	bool isActiveDebugCamera_ = false;
 

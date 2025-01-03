@@ -74,6 +74,14 @@ private:
 	//旋回タイマー
 	float turnTimer_;
 
+	struct MoveRange {
+		MoveRange();
+		float min_;
+		float max_;
+	};
+
+	MoveRange moveRange_;
+
 	//移動の速さ
 	float speed_;
 

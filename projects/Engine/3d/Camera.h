@@ -34,6 +34,9 @@ public:
 	void SetRotateZ(float z) { transform_.rotation.z = z; }
 
 	void SetTranslate(const Vector3& translate) { transform_.translation = translate; }
+	void SetTranslateX(float x) { transform_.translation.x = x; }
+	void SetTranslateY(float y) { transform_.translation.y = y; }
+	void SetTranslateZ(float z) { transform_.translation.z = z; }
 	void SetFovY(float fovY) { fovY_ = fovY; }
 	void SetAspectRatio(float aspectRatio) { aspectRatio_ = aspectRatio; }
 	void SetNearClip(float nearClip) { nearClip_ = nearClip; }

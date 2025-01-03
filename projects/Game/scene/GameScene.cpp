@@ -88,6 +88,9 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_.get());
 	player_->HammerInitialize(modelHammer_.get());
 
+	cameraController_ = std::make_unique<CameraController>();
+	cameraController_->Initialize(camera_.get(), player_.get());
+
 	//敵の生成
 	//enemy_ = std::make_unique<Enemy>();
 	//enemy_->Initialize(modelEnemy_.get());
@@ -97,10 +100,6 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	
-
-	//カメラの更新
-	camera_->Update();
 
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
@@ -114,6 +113,12 @@ void GameScene::Update() {
 	for (std::unique_ptr<Enemy>& enemy : enemies_) {
 		enemy->Update();
 	}
+
+	//カメラコントローラーの更新
+	cameraController_->Update();
+
+	//カメラの更新
+	camera_->Update();
 
 	//emitter_->Update(color_);
 

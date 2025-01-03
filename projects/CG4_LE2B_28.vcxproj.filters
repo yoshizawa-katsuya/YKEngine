@@ -231,8 +231,11 @@
     <ClCompile Include="Game\objects\Enemy.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="ContactRecord.cpp">
+    <ClCompile Include="Game\ContactRecord\ContactRecord.cpp">
       <Filter>ソース ファイル\Contactecord</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\CameraController.cpp">
+      <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -430,8 +433,11 @@
     <ClInclude Include="Game\objects\Enemy.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="ContactRecord.h">
+    <ClInclude Include="Game\ContactRecord\ContactRecord.h">
       <Filter>ヘッダー ファイル\ContactRecord</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\CameraController.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
