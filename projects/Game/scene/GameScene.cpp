@@ -8,7 +8,7 @@
 #include "Rigid3dObject.h"
 #include "LevelDataLoader.h"
 #include "Collision.h"
-
+#include "Enemy01.h"
 GameScene::~GameScene() {
 	//Finalize();
 }
@@ -283,13 +283,13 @@ void GameScene::CreateLevel()
 
 	//レベルデータからオブジェクトを生成、配置
 	for (ObjectData& objectData : levelData->objects) {
-		if (objectData.fileName != "Enemy") {
+		if (objectData.fileName != "Enemy01") {
 			continue;
 		}
 		enemies_.emplace_back();
 		std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
-		enemy = std::make_unique<BaseEnemy>();
-		enemy->Initialize(modelEnemy_.get(), objectData.transform.translation);
+		enemy = std::make_unique<Enemy01>();
+		enemy->Initialize(modelEnemy_.get(), objectData.transform);
 		/*
 		//ファイルから登録済みモデルを検索
 		Model* model = nullptr;

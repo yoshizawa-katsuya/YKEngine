@@ -7,6 +7,11 @@ class Collider
 {
 public:
 
+	enum  class LRDirection {
+		kRight,
+		kLeft,
+	};
+
 	virtual ~Collider() = default;
 
 	virtual void Initialize(BaseModel* model);

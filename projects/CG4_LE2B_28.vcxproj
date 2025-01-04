@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\Enemy01.cpp" />
     <ClCompile Include="Game\objects\CameraController.cpp" />
     <ClCompile Include="Game\ContactRecord\ContactRecord.cpp" />
     <ClCompile Include="Game\objects\BaseEnemy.cpp" />
@@ -242,6 +243,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\Enemy01.h" />
     <ClInclude Include="Game\objects\CameraController.h" />
     <ClInclude Include="Game\ContactRecord\ContactRecord.h" />
     <ClInclude Include="Game\objects\BaseEnemy.h" />

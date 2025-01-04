@@ -14,11 +14,6 @@ class Player : public Collider
 {
 public:
 
-	enum  class LRDirection {
-		kRight,
-		kLeft,
-	};
-
 	Player();
 	~Player() override;
 

@@ -63,7 +63,7 @@
                     1.0
                 ]
             },
-            "file_name": "Enemy"
+            "file_name": "Enemy01"
         },
         {
             "type": "MESH",
@@ -85,7 +85,7 @@
                     1.0
                 ]
             },
-            "file_name": "Enemy"
+            "file_name": "Enemy01"
         }
     ]
 }

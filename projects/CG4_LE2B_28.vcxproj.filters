@@ -237,6 +237,9 @@
     <ClCompile Include="Game\objects\CameraController.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\Enemy01.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -437,6 +440,9 @@
       <Filter>ヘッダー ファイル\ContactRecord</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\CameraController.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\Enemy01.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>
