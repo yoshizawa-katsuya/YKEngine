@@ -311,6 +311,17 @@ void GameScene::CreateLevel()
 
 void GameScene::CheckAllCollisions()
 {
+
+	Circle collider1 = { player_->Get2DCenterPosition(), player_->GetRadius() };
+	Circle collider2;
+
+	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
+		collider2 = { enemy->Get2DCenterPosition(), enemy->GetRadius() };
+		if (IsCollision(collider1, collider2)) {
+			player_->OnCollision();
+		}
+	}
+
 	CheackPlayerAttackCollision();
 }
 

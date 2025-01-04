@@ -97,6 +97,17 @@ bool IsCollision(const Square& square, const Circle& circle)
 
 }
 
+bool IsCollision(const Circle& circle1, const Circle& circle2)
+{
+	//2つの球の中心点間の距離を求める
+	float distance = Length(Subtract(circle2.center, circle1.center));
+	//半径の合計よりも短ければ衝突
+	if (!(distance <= circle1.radius + circle2.radius)) {
+		return false;
+	}
+	return true;
+}
+
 bool IsCollision(const Sphere& s1, const Sphere& s2) {
 
 	//2つの球の中心点間の距離を求める

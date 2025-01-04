@@ -8,6 +8,9 @@ bool BoxCollision(Vector2 boxA, int boxAwidht, int boxAhight, Vector2 boxB, int 
 //円と四角の衝突判定
 bool IsCollision(const Square& square, const Circle& circle);
 
+//円と円の消灯判定
+bool IsCollision(const Circle& circle1, const Circle& circle2);
+
 //球と球の衝突判定
 bool IsCollision(const Sphere& s1, const Sphere& s2);
 

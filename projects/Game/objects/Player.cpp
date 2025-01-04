@@ -89,6 +89,14 @@ void Player::Draw(Camera* camera)
 	hammer_.object_->Draw();
 }
 
+void Player::OnCollision()
+{
+	if (status_.HP_ <= 0) {
+		return;
+	}
+
+}
+
 void Player::HammerInitialize(BaseModel* model)
 {
 	hammer_.object_ = std::make_unique<Rigid3dObject>();
@@ -234,5 +242,11 @@ Player::WorkAttack::WorkAttack()
 Player::MoveRange::MoveRange()
 	: min_(-20.0f)
 	, max_(20.0f)
+{
+}
+
+Player::StatusWork::StatusWork()
+	: HP_(3)
+	, remainingInvincibleTime_(0)
 {
 }

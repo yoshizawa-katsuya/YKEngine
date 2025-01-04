@@ -4,6 +4,10 @@
 class Enemy01 : public BaseEnemy
 {
 public:
+	Enemy01();
+	~Enemy01() override;
+
+	void Initialize(BaseModel* model, const EulerTransform& transform) override;
 
 private:
 

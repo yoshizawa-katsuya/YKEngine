@@ -6,7 +6,7 @@ class BaseEnemy : public Collider
 {
 public:
 	BaseEnemy();
-	~BaseEnemy() override;
+	virtual ~BaseEnemy() override;
 
 	virtual void Initialize(BaseModel* model, const EulerTransform& transform);
 
@@ -29,5 +29,6 @@ protected:
 
 	LRDirection lrDirection_;
 
+	uint32_t attackPower_;
 };
 

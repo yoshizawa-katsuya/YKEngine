@@ -23,6 +23,8 @@ public:
 
 	void Draw(Camera* camera) override;
 
+	void OnCollision() override;
+
 	void HammerInitialize(BaseModel* model);
 
 	//攻撃が敵に当たった時の処理
@@ -109,6 +111,17 @@ private:
 	};
 	
 	WorkAttack workAttack_;
+
+	//体力や無敵時間など
+	struct StatusWork {
+		StatusWork();
+		//体力
+		uint32_t HP_;
+		//残りの無敵時間
+		uint32_t remainingInvincibleTime_;
+	};
+	
+	StatusWork status_;
 
 	struct Hammer {
 		WorldTransform worldTransform_;
