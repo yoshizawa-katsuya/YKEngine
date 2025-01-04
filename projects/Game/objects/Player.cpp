@@ -224,7 +224,7 @@ void Player::AttackUpdate()
 
 Player::WorkAttack::WorkAttack()
 	: isAttack_(false)
-	, attackRange_({ 1.5f, 1.0f })
+	, attackRange_({ 3.3f, 1.0f })
 	, attackParameter_(0)
 	, attackTime_(12)
 	, swingEndTime_(6)
