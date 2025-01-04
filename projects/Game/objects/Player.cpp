@@ -3,7 +3,7 @@
 #include "Rigid3dObject.h"
 #include "Lerp.h"
 #include "Easing.h"
-#include "Enemy.h"
+#include "BaseEnemy.h"
 
 Player::Player()
 	: input_(Input::GetInstance())
@@ -98,7 +98,7 @@ void Player::HammerInitialize(BaseModel* model)
 	hammer_.worldTransform_.parent_ = &worldTransform_;
 }
 
-void Player::AttackHit(Enemy* enemy)
+void Player::AttackHit(BaseEnemy* enemy)
 {
 	if (workAttack_.contactRecord_.HistoryCheck(enemy->GetSerialNumber())) {
 		return;

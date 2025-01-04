@@ -92,7 +92,7 @@ void GameScene::Initialize() {
 	cameraController_->Initialize(camera_.get(), player_.get());
 
 	//敵の生成
-	//enemy_ = std::make_unique<Enemy>();
+	//enemy_ = std::make_unique<BaseEnemy>();
 	//enemy_->Initialize(modelEnemy_.get());
 	CreateLevel();
 
@@ -110,7 +110,7 @@ void GameScene::Update() {
 
 	//敵の更新
 	//enemy_->Update();
-	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 		enemy->Update();
 	}
 
@@ -258,7 +258,7 @@ void GameScene::Draw() {
 
 	//敵の描画
 	//enemy_->Draw(mainCamera_);
-	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 		enemy->Draw(mainCamera_);
 	}
 
@@ -287,8 +287,8 @@ void GameScene::CreateLevel()
 			continue;
 		}
 		enemies_.emplace_back();
-		std::unique_ptr<Enemy>& enemy = enemies_.back();
-		enemy = std::make_unique<Enemy>();
+		std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
+		enemy = std::make_unique<BaseEnemy>();
 		enemy->Initialize(modelEnemy_.get(), objectData.transform.translation);
 		/*
 		//ファイルから登録済みモデルを検索
@@ -337,7 +337,7 @@ void GameScene::CheackPlayerAttackCollision()
 		playerAttackCollider.min.y = player_->Get2DCenterPosition().y - (player_->GetAttackRange().y / 2);
 	}
 
-	for (std::unique_ptr<Enemy>& enemy : enemies_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 		if (IsCollision(playerAttackCollider, { enemy->Get2DCenterPosition(), enemy->GetRadius() })) {
 			player_->AttackHit(enemy.get());
 			//enemy->OnCollision();

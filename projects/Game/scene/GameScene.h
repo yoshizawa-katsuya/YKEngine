@@ -13,7 +13,7 @@
 #include "SpotLight.h"
 #include "Sprite.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "BaseEnemy.h"
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
@@ -91,8 +91,8 @@ private:
 	std::unique_ptr<Base3dObject> ground_;
 
 	//敵
-	//std::unique_ptr<Enemy> enemy_;
-	std::list<std::unique_ptr<Enemy>> enemies_;
+	//std::unique_ptr<BaseEnemy> enemy_;
+	std::list<std::unique_ptr<BaseEnemy>> enemies_;
 
 	//パーティクル
 	/*

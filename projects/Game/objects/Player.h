@@ -8,7 +8,7 @@
 #include "ContactRecord.h"
 class Camera;
 class MapChipField;
-class Enemy;
+class BaseEnemy;
 
 class Player : public Collider
 {
@@ -31,7 +31,7 @@ public:
 	void HammerInitialize(BaseModel* model);
 
 	//攻撃が敵に当たった時の処理
-	void AttackHit(Enemy* enemy);
+	void AttackHit(BaseEnemy* enemy);
 
 	//void Draw(Camera* camera) override;
 

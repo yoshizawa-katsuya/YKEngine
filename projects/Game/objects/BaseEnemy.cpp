@@ -1,10 +1,10 @@
-#include "Enemy.h"
+#include "BaseEnemy.h"
 #include <numbers>
 #include "Rigid3dObject.h"
 
-uint32_t Enemy::nextSerialNumber_ = 0;
+uint32_t BaseEnemy::nextSerialNumber_ = 0;
 
-Enemy::Enemy()
+BaseEnemy::BaseEnemy()
 {
 	radius_ = 0.5f;
 	//シリアル番号を振る
@@ -13,11 +13,11 @@ Enemy::Enemy()
 	nextSerialNumber_++;
 }
 
-Enemy::~Enemy()
+BaseEnemy::~BaseEnemy()
 {
 }
 
-void Enemy::Initialize(BaseModel* model, const Vector3& translate)
+void BaseEnemy::Initialize(BaseModel* model, const Vector3& translate)
 {
 	Collider::Initialize(model);
 
@@ -25,13 +25,13 @@ void Enemy::Initialize(BaseModel* model, const Vector3& translate)
 	worldTransform_.translation_ = translate;
 }
 /*
-void Enemy::Update()
+void BaseEnemy::Update()
 {
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
 }
 
-void Enemy::Draw(Camera* camera)
+void BaseEnemy::Draw(Camera* camera)
 {
 	object_->CameraUpdate(camera);
 	object_->Draw();

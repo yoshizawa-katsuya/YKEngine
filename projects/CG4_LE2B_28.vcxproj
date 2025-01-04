@@ -109,7 +109,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="Game\objects\CameraController.cpp" />
     <ClCompile Include="Game\ContactRecord\ContactRecord.cpp" />
-    <ClCompile Include="Game\objects\Enemy.cpp" />
+    <ClCompile Include="Game\objects\BaseEnemy.cpp" />
     <ClCompile Include="Game\objects\Collider.cpp" />
     <ClCompile Include="Engine\3d\Base3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
@@ -244,7 +244,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="Game\objects\CameraController.h" />
     <ClInclude Include="Game\ContactRecord\ContactRecord.h" />
-    <ClInclude Include="Game\objects\Enemy.h" />
+    <ClInclude Include="Game\objects\BaseEnemy.h" />
     <ClInclude Include="Game\objects\Collider.h" />
     <ClInclude Include="Engine\3d\Base3dObject.h" />
     <ClInclude Include="Engine\3d\Animation.h" />
