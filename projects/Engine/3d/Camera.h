@@ -15,6 +15,8 @@ public:
 
 	void SetCameraReaource();
 
+	Matrix4x4 MakeBillBoardMatrix();
+
 	//getter
 	const Matrix4x4& GetWorldMatrix() const { return worldMatrix_; }
 	const Matrix4x4& GetViewMatrix() const { return viewMatrix_; }
@@ -62,6 +64,8 @@ private:
 	float nearClip_;	//ニアクリップ距離
 	float farClip_;	//ファークリップ距離
 	Matrix4x4 viewProjectionMatrix_;
+
+	Matrix4x4 backToFrontMatrix_;
 
 	DirectXCommon* dxCommon_;
 
