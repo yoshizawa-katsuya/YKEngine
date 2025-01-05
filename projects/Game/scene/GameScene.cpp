@@ -74,6 +74,10 @@ void GameScene::Initialize() {
 	modelGround_->CreateModel("./resources/ground", "Ground.obj");
 	modelGround_->SetUVTransform({ 25.0f, 25.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 
+	modelHPGauge_ = std::make_unique<RigidModel>();
+	modelHPGauge_->CreateModel("./resources/HPGauge", "HPGauge.obj");
+	modelHPGauge_->SetEnableLighting(false);
+
 	ground_ = std::make_unique<Rigid3dObject>();
 	ground_->Initialize(modelGround_.get());
 
@@ -270,8 +274,10 @@ void GameScene::Draw() {
 
 	//敵の描画
 	//enemy_->Draw(mainCamera_);
+	Matrix4x4 billbordMatrix = mainCamera_->MakeBillBoardMatrix();
 	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 		enemy->Draw(mainCamera_);
+		enemy->HPGaugeDraw(mainCamera_, billbordMatrix);
 	}
 
 	ground_->CameraUpdate(mainCamera_);
@@ -304,6 +310,7 @@ void GameScene::CreateLevel()
 		std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
 		enemy = std::make_unique<Enemy01>();
 		enemy->Initialize(modelEnemy_.get(), objectData.transform);
+		enemy->SetHPGaugeModel(modelHPGauge_.get());
 		/*
 		//ファイルから登録済みモデルを検索
 		Model* model = nullptr;

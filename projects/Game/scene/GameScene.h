@@ -81,6 +81,7 @@ private:
 	std::unique_ptr<BaseModel> modelHammer_;
 	std::unique_ptr<BaseModel> modelEnemy_;
 	std::unique_ptr<BaseModel> modelGround_;
+	std::unique_ptr<BaseModel> modelHPGauge_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandleHeartFrame_;

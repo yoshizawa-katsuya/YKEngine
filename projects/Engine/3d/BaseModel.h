@@ -45,6 +45,8 @@ public:
 
 	virtual void SetUVTransform(const EulerTransform& uvTransform);
 
+	void SetEnableLighting(bool enable);
+
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
 	const Node& GetRootNode() const { return modelData_.rootNode; }

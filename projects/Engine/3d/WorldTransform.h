@@ -24,5 +24,6 @@ public:
 	/// 行列を計算する
 	/// </summary>
 	void UpdateMatrix();
+	void UpdateMatrix(Matrix4x4 matrix);
 };
 

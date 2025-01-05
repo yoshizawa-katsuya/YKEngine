@@ -10,9 +10,13 @@ public:
 
 	virtual void Initialize(BaseModel* model, const EulerTransform& transform);
 
-	//void Update() override;
+	virtual void Update() override;
 
-	//void Draw(Camera* camera) override;
+	void Draw(Camera* camera) override;
+
+	void HPGaugeDraw(Camera* camera, const Matrix4x4& billbordMatrix);
+
+	void SetHPGaugeModel(BaseModel* model);
 
 	virtual void TakeHammer(uint32_t power);
 
@@ -21,6 +25,8 @@ public:
 	bool GetIsAlive() { return status_.isAlive_; }
 
 protected:
+
+	void HPGaugeUpdate();
 
 	//シリアルナンバー
 	uint32_t serialNumber_;
@@ -46,5 +52,12 @@ protected:
 
 	StatusWork status_;
 
+	//体力ゲージ
+	struct HPGauge {
+		WorldTransform worldTransform_;
+		std::unique_ptr<Base3dObject> object_;
+	};
+
+	HPGauge hpGauge_;
 };
 
