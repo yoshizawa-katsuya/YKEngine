@@ -3,6 +3,7 @@
 #include "WorldTransform.h"
 #include "Animation.h"
 #include "Input.h"
+#include "Sprite.h"
 #include <numbers>
 #include "Collider.h"
 #include "ContactRecord.h"
@@ -22,6 +23,10 @@ public:
 	void Update() override;
 
 	void Draw(Camera* camera) override;
+
+	void HUDInitialize(uint32_t textureHandleHeartFrame, uint32_t textureHandleHeart);
+
+	void HUDDraw();
 
 	void OnCollision() override;
 
@@ -56,6 +61,9 @@ private:
 
 	//攻撃更新
 	void AttackUpdate();
+
+	//無敵時間更新
+	void InvincibleTimeUpdate();
 
 	Input* input_;
 
@@ -115,13 +123,26 @@ private:
 	//体力や無敵時間など
 	struct StatusWork {
 		StatusWork();
+		//最大体力
+		uint32_t maxHP_;
 		//体力
 		uint32_t HP_;
+		//生存しているか否か
+		bool isAlive_;
 		//残りの無敵時間
 		uint32_t remainingInvincibleTime_;
+		//攻撃を喰らった際の無敵時間
+		uint32_t maxInvincibleTime_;
 	};
 	
 	StatusWork status_;
+
+	struct HUD {
+		std::vector<std::unique_ptr<Sprite>> spriteHeartFrame_;
+		std::vector<std::unique_ptr<Sprite>> spriteHeart_;
+	};
+
+	HUD hud_;
 
 	struct Hammer {
 		WorldTransform worldTransform_;

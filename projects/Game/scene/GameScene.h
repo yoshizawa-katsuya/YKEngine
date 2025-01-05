@@ -83,6 +83,8 @@ private:
 	std::unique_ptr<BaseModel> modelGround_;
 
 	uint32_t textureHandle_;
+	uint32_t textureHandleHeartFrame_;
+	uint32_t textureHandleHeart_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー

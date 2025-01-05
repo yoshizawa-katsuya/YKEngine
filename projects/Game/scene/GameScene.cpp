@@ -56,6 +56,9 @@ void GameScene::Initialize() {
 
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 
+	textureHandleHeartFrame_ = TextureManager::GetInstance()->Load("./resources/heartFrame.png");
+	textureHandleHeart_ = TextureManager::GetInstance()->Load("./resources/heart.png");
+
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
@@ -87,6 +90,7 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 	player_->HammerInitialize(modelHammer_.get());
+	player_->HUDInitialize(textureHandleHeartFrame_, textureHandleHeart_);
 
 	cameraController_ = std::make_unique<CameraController>();
 	cameraController_->Initialize(camera_.get(), player_.get());
@@ -266,7 +270,9 @@ void GameScene::Draw() {
 	ground_->Draw();
 
 	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
+	spritePlatform_->PreDraw();
+
+	player_->HUDDraw();
 
 	//ParticleManager::GetInstance()->Draw();
 

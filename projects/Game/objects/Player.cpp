@@ -43,6 +43,8 @@ void Player::Update() {
 
 	AttackUpdate();
 
+	InvincibleTimeUpdate();
+
 	// 旋回制御
 	if (turnTimer_ < 1.0f) {
 		turnTimer_ += 1.0f / 12.0f;
@@ -80,7 +82,10 @@ void Player::Update() {
 
 void Player::Draw(Camera* camera)
 {
-	Collider::Draw(camera);
+	//無敵時間のときは点滅する
+	if (!(status_.remainingInvincibleTime_ % 2 == 1)) {
+		Collider::Draw(camera);
+	}
 
 	if (workAttack_.attackParameter_ == 0) {
 		return;
@@ -89,11 +94,48 @@ void Player::Draw(Camera* camera)
 	hammer_.object_->Draw();
 }
 
+void Player::HUDInitialize(uint32_t textureHandleHeartFrame, uint32_t textureHandleHeart)
+{
+	hud_.spriteHeartFrame_.resize(status_.maxHP_);
+	hud_.spriteHeart_.resize(status_.maxHP_);
+
+	for (uint32_t i = 0; i < status_.maxHP_; i++) {
+		hud_.spriteHeartFrame_[i] = std::make_unique<Sprite>();
+		hud_.spriteHeartFrame_[i]->Initialize(textureHandleHeartFrame);
+		hud_.spriteHeartFrame_[i]->SetPosition({ 60.0f + 80.0f * i, 600.0f });
+
+		hud_.spriteHeart_[i] = std::make_unique<Sprite>();
+		hud_.spriteHeart_[i]->Initialize(textureHandleHeart);
+		hud_.spriteHeart_[i]->SetPosition({ 60.0f + 80.0f * i, 600.0f });
+
+	}
+
+}
+
+void Player::HUDDraw()
+{
+	for (uint32_t i = 0; i < status_.maxHP_; i++) {
+		hud_.spriteHeartFrame_[i]->Draw();
+	}
+	for (uint32_t i = 0; i < status_.HP_; i++) {
+		hud_.spriteHeart_[i]->Draw();
+	}
+}
+
 void Player::OnCollision()
 {
-	if (status_.HP_ <= 0) {
+	if (status_.remainingInvincibleTime_ != 0) {
 		return;
 	}
+	if (!status_.isAlive_) {
+		return;
+	}
+
+	status_.HP_--;
+	if (status_.HP_ <= 0) {
+		status_.isAlive_ = false;
+	}
+	status_.remainingInvincibleTime_ = status_.maxInvincibleTime_;
 
 }
 
@@ -115,6 +157,7 @@ void Player::AttackHit(BaseEnemy* enemy)
 	//接触履歴に追加
 	workAttack_.contactRecord_.AddRecord(enemy->GetSerialNumber());
 }
+
 void Player::HammerUpdate()
 {
 	if (workAttack_.attackParameter_ <= workAttack_.swingEndTime_) {
@@ -230,6 +273,14 @@ void Player::AttackUpdate()
 	}
 }
 
+void Player::InvincibleTimeUpdate()
+{
+	if (status_.remainingInvincibleTime_ == 0) {
+		return;
+	}
+	status_.remainingInvincibleTime_--;
+}
+
 Player::WorkAttack::WorkAttack()
 	: isAttack_(false)
 	, attackRange_({ 3.3f, 1.0f })
@@ -246,7 +297,10 @@ Player::MoveRange::MoveRange()
 }
 
 Player::StatusWork::StatusWork()
-	: HP_(3)
+	: maxHP_(3)
+	, HP_(maxHP_)
+	, isAlive_(true)
 	, remainingInvincibleTime_(0)
+	, maxInvincibleTime_(60)
 {
 }
