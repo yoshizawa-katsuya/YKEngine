@@ -12,5 +12,4 @@ void Enemy01::Initialize(BaseModel* model, const EulerTransform& transform)
 {
 	BaseEnemy::Initialize(model, transform);
 
-	attackPower_ = 1;
 }

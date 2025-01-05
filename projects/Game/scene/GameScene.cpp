@@ -112,6 +112,14 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
+	//デスフラグの立った敵を削除
+	enemies_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
+		if (!enemy->GetIsAlive()) {
+			return true;
+		}
+		return false;
+	});
+
 	//敵の更新
 	//enemy_->Update();
 	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
@@ -357,7 +365,6 @@ void GameScene::CheackPlayerAttackCollision()
 	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 		if (IsCollision(playerAttackCollider, { enemy->Get2DCenterPosition(), enemy->GetRadius() })) {
 			player_->AttackHit(enemy.get());
-			//enemy->OnCollision();
 		}
 	}
 }

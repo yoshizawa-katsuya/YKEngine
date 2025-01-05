@@ -156,6 +156,8 @@ void Player::AttackHit(BaseEnemy* enemy)
 
 	//接触履歴に追加
 	workAttack_.contactRecord_.AddRecord(enemy->GetSerialNumber());
+
+	enemy->TakeHammer(workAttack_.attackPower_);
 }
 
 void Player::HammerUpdate()
@@ -283,6 +285,7 @@ void Player::InvincibleTimeUpdate()
 
 Player::WorkAttack::WorkAttack()
 	: isAttack_(false)
+	, attackPower_(2)
 	, attackRange_({ 3.3f, 1.0f })
 	, attackParameter_(0)
 	, attackTime_(12)

@@ -106,6 +106,8 @@ private:
 		WorkAttack();
 		//攻撃中か否か
 		bool isAttack_;
+		//攻撃力
+		uint32_t attackPower_;
 		//攻撃範囲
 		Vector2 attackRange_;
 		// 攻撃用の媒介変数

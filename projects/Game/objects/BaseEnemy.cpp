@@ -33,6 +33,15 @@ void BaseEnemy::Initialize(BaseModel* model, const EulerTransform& transform)
 	}
 	worldTransform_.translation_ = transform.translation;
 }
+
+void BaseEnemy::TakeHammer(uint32_t power)
+{
+	status_.HP_ -= power;
+	if (status_.HP_ <= 0) {
+		status_.isAlive_ = false;
+	}
+}
+
 /*
 void BaseEnemy::Update()
 {
@@ -46,3 +55,10 @@ void BaseEnemy::Draw(Camera* camera)
 	object_->Draw();
 }
 */
+
+BaseEnemy::StatusWork::StatusWork()
+	: maxHP_(5)
+	, HP_(maxHP_)
+	, isAlive_(true)
+{
+}
