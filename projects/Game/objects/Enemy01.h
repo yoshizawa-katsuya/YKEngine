@@ -9,7 +9,11 @@ public:
 
 	void Initialize(BaseModel* model, const EulerTransform& transform) override;
 
+	void Update() override;
+
 private:
+
+	float speed_;
 
 };
 

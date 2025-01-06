@@ -16,7 +16,6 @@ Player::Player()
 	, velocity_({0.0f, 0.0f, 0.0f})
 	, onGround_(false)
 	, lrDirection_(LRDirection::kRight)
-	, angleCompletionRate_(0.2f)
 	, turnTimer_(1.0f)
 {
 	radius_ = 0.5f;

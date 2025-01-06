@@ -40,6 +40,12 @@ protected:
 
 	// 左右の角度テーブル
 	std::vector<float> destinationRotationYTable = { std::numbers::pi_v<float> / 2.0f + 0.3f, std::numbers::pi_v<float> *3.0f / 2.0f - 0.3f };
+	//目標角度
+	float targetAngle_;
+	//旋回開始時の角度
+	float turnFirstRotationY_;
+	//旋回タイマー
+	float turnTimer_ = 1.0f;
 
 	LRDirection lrDirection_;
 

@@ -28,7 +28,7 @@ private:
 	};
 
 	//カメラ移動範囲
-	Rect movableArea_ = { -15.0f, 15.0f, 6.0f, 6.0f };
+	Rect movableArea_ = { -13.5f, 13.5f, 6.0f, 6.0f };
 
 	//追従対象の各方向へのカメラ移動範囲
 	Rect margin_ = { -8.0f, 8.0f, -5.0f, 5.0f };
