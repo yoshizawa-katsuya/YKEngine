@@ -4,6 +4,8 @@
 #include "Lerp.h"
 #include "Easing.h"
 #include "BaseEnemy.h"
+#include "PlayerBullet.h"
+#include "GameScene.h"
 
 Player::Player()
 	: input_(Input::GetInstance())
@@ -42,6 +44,8 @@ void Player::Update() {
 	Attack();
 
 	AttackUpdate();
+
+	Fire();
 
 	InvincibleTimeUpdate();
 
@@ -250,6 +254,22 @@ void Player::Attack()
 	}
 	workAttack_.isAttack_ = true;
 	hammer_.worldTransform_.rotation_.y = destinationRotationYTable[0];
+}
+
+void Player::Fire()
+{
+	if (!input_->TriggerKey(DIK_K)) {
+		return;
+	}
+	if (lrDirection_ == LRDirection::kRight) {
+		gameScene_->AddPlayerBullet({ bulletSpped_, 0.0f, 0.0f });
+		return;
+	}
+	else {
+		gameScene_->AddPlayerBullet({ -bulletSpped_, 0.0f, 0.0f });
+		return;
+	}
+	
 }
 
 void Player::AttackUpdate()

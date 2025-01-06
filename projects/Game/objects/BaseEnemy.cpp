@@ -43,6 +43,11 @@ void BaseEnemy::Update()
 	HPGaugeUpdate();
 }
 
+void BaseEnemy::OnCollision()
+{
+	status_.bombNum_++;
+}
+
 void BaseEnemy::Draw(Camera* camera)
 {
 	Collider::Draw(camera);
@@ -55,11 +60,19 @@ void BaseEnemy::SetHPGaugeModel(BaseModel* model)
 	hpGauge_.object_->Initialize(model);
 
 	hpGauge_.worldTransform_.Initialize();
+
+	hpGauge_.frameObject_ = std::make_unique<Rigid3dObject>();
+	hpGauge_.frameObject_->Initialize(model);
+
+	hpGauge_.frameWorldTransform_.Initialize();
+	hpGauge_.frameWorldTransform_.translation_.z = 0.001f;
+
 }
 
 void BaseEnemy::TakeHammer(uint32_t power)
 {
-	status_.HP_ -= power;
+	status_.HP_ -= power + status_.bombNum_;
+	status_.bombNum_ = 0;
 	if (status_.HP_ <= 0) {
 		status_.isAlive_ = false;
 	}
@@ -68,8 +81,10 @@ void BaseEnemy::TakeHammer(uint32_t power)
 void BaseEnemy::HPGaugeUpdate()
 {
 	hpGauge_.worldTransform_.translation_.x = GetCenterPosition().x - radius_;
-	hpGauge_.worldTransform_.scale_.x = static_cast<float>(status_.HP_) / static_cast<float>(status_.maxHP_);
+	hpGauge_.worldTransform_.scale_.x = (static_cast<float>(status_.HP_) - static_cast<float>(status_.bombNum_)) / static_cast<float>(status_.maxHP_);
 	
+	hpGauge_.frameWorldTransform_.translation_.x = hpGauge_.worldTransform_.translation_.x;
+	hpGauge_.frameWorldTransform_.scale_.x = static_cast<float>(status_.HP_) / static_cast<float>(status_.maxHP_);
 }
 
 void BaseEnemy::HPGaugeDraw(Camera* camera, const Matrix4x4& billbordMatrix)
@@ -79,6 +94,12 @@ void BaseEnemy::HPGaugeDraw(Camera* camera, const Matrix4x4& billbordMatrix)
 	hpGauge_.object_->WorldTransformUpdate(hpGauge_.worldTransform_);
 	hpGauge_.object_->CameraUpdate(camera);
 	hpGauge_.object_->Draw();
+
+	hpGauge_.frameWorldTransform_.UpdateMatrix(billbordMatrix);
+
+	hpGauge_.frameObject_->WorldTransformUpdate(hpGauge_.frameWorldTransform_);
+	hpGauge_.frameObject_->CameraUpdate(camera);
+	hpGauge_.frameObject_->Draw(textureHandleDarkRed_);
 }
 
 /*
@@ -98,6 +119,7 @@ void BaseEnemy::Draw(Camera* camera)
 BaseEnemy::StatusWork::StatusWork()
 	: maxHP_(5)
 	, HP_(maxHP_)
+	, bombNum_(0)
 	, isAlive_(true)
 {
 }

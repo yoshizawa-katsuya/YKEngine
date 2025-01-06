@@ -58,6 +58,8 @@ void GameScene::Initialize() {
 
 	textureHandleHeartFrame_ = TextureManager::GetInstance()->Load("./resources/heartFrame.png");
 	textureHandleHeart_ = TextureManager::GetInstance()->Load("./resources/heart.png");
+	textureHandleBlue_ = TextureManager::GetInstance()->Load("./resources/blue1x1.png");
+	textureHandleDarkRed_ = TextureManager::GetInstance()->Load("./resources/darkRed1x1.png");
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
@@ -78,6 +80,10 @@ void GameScene::Initialize() {
 	modelHPGauge_->CreateModel("./resources/HPGauge", "HPGauge.obj");
 	modelHPGauge_->SetEnableLighting(false);
 
+	modelPlayerBullet_ = std::make_unique<RigidModel>();
+	modelPlayerBullet_->CreateSphere(textureHandleBlue_);
+	//modelPlayerBullet_->SetEnableLighting(false);
+
 	ground_ = std::make_unique<Rigid3dObject>();
 	ground_->Initialize(modelGround_.get());
 
@@ -95,6 +101,7 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_.get());
 	player_->HammerInitialize(modelHammer_.get());
 	player_->HUDInitialize(textureHandleHeartFrame_, textureHandleHeart_);
+	player_->SetGameScene(this);
 
 	cameraController_ = std::make_unique<CameraController>();
 	cameraController_->Initialize(camera_.get(), player_.get());
@@ -115,6 +122,20 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//デスフラグの立った弾を削除
+	playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& playerBullet) {
+		if (!playerBullet->GetIsAlive()) {
+			return true;
+		}
+		return false;
+	});
+
+	float playerPositionX = player_->GetCenterPosition().x;
+	//自キャラの弾の更新
+	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
+		playerBullet->Update(playerPositionX);
+	}
 
 	//デスフラグの立った敵を削除
 	enemies_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
@@ -272,6 +293,10 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
+		playerBullet->Draw(mainCamera_);
+	}
+
 	//敵の描画
 	//enemy_->Draw(mainCamera_);
 	Matrix4x4 billbordMatrix = mainCamera_->MakeBillBoardMatrix();
@@ -297,6 +322,18 @@ void GameScene::Finalize()
 
 }
 
+void GameScene::AddPlayerBullet(const Vector3& velocity)
+{
+	if (playerBullets_.size() >= kMaxPlayerBulletsNum_) {
+		return;
+	}
+	PlayerBullet* newBullet = new PlayerBullet();
+	newBullet->Initialize(modelPlayerBullet_.get(), player_->GetCenterPosition(), velocity);
+	playerBullets_.emplace_back();
+	std::unique_ptr<PlayerBullet>& playerBullet = playerBullets_.back();
+	playerBullet.reset(newBullet);
+}
+
 void GameScene::CreateLevel()
 {
 	LevelData* levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
@@ -311,6 +348,7 @@ void GameScene::CreateLevel()
 		enemy = std::make_unique<Enemy01>();
 		enemy->Initialize(modelEnemy_.get(), objectData.transform);
 		enemy->SetHPGaugeModel(modelHPGauge_.get());
+		enemy->SetDarkRed(textureHandleDarkRed_);
 		/*
 		//ファイルから登録済みモデルを検索
 		Model* model = nullptr;
@@ -340,6 +378,17 @@ void GameScene::CheckAllCollisions()
 		collider2 = { enemy->Get2DCenterPosition(), enemy->GetRadius() };
 		if (IsCollision(collider1, collider2)) {
 			player_->OnCollision();
+		}
+	}
+
+	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
+		collider1 = { playerBullet->Get2DCenterPosition(), playerBullet->GetRadius() };
+		for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
+			collider2 = { enemy->Get2DCenterPosition(), enemy->GetRadius() };
+			if (IsCollision(collider1, collider2)) {
+				playerBullet->OnCollision();
+				enemy->OnCollision();
+			}
 		}
 	}
 

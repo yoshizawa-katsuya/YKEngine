@@ -21,6 +21,12 @@ void Collider::Draw(Camera* camera)
 	object_->Draw();
 }
 
+void Collider::Draw(Camera* camera, uint32_t textureHandle)
+{
+	object_->CameraUpdate(camera);
+	object_->Draw(textureHandle);
+}
+
 Vector3 Collider::GetCenterPosition() const
 {
 	//ワールド座標を入れる変数

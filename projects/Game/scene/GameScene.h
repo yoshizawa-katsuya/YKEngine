@@ -19,6 +19,7 @@
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "CameraController.h"
+#include "PlayerBullet.h"
 
 class GameScene : public BaseScene
 {
@@ -33,6 +34,8 @@ public:
 	void Draw() override;
 
 	void Finalize() override;
+
+	void AddPlayerBullet(const Vector3& velocity);
 
 private:
 
@@ -82,14 +85,19 @@ private:
 	std::unique_ptr<BaseModel> modelEnemy_;
 	std::unique_ptr<BaseModel> modelGround_;
 	std::unique_ptr<BaseModel> modelHPGauge_;
+	std::unique_ptr<BaseModel> modelPlayerBullet_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandleHeartFrame_;
 	uint32_t textureHandleHeart_;
+	uint32_t textureHandleBlue_;
+	uint32_t textureHandleDarkRed_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+	std::list<std::unique_ptr<PlayerBullet>> playerBullets_;
+	const uint32_t kMaxPlayerBulletsNum_ = 3;
 
 	std::unique_ptr<Base3dObject> ground_;
 

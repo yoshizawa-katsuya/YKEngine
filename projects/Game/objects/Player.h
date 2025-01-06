@@ -7,6 +7,7 @@
 #include <numbers>
 #include "Collider.h"
 #include "ContactRecord.h"
+class GameScene;
 class Camera;
 class MapChipField;
 class BaseEnemy;
@@ -37,6 +38,8 @@ public:
 
 	//void Draw(Camera* camera) override;
 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 	bool GetIsAttack() { return workAttack_.isAttack_; }
 
 	LRDirection GetLRDirection() { return lrDirection_; }
@@ -59,11 +62,19 @@ private:
 	//攻撃入力
 	void Attack();
 
+	//射撃入力
+	void Fire();
+
 	//攻撃更新
 	void AttackUpdate();
 
 	//無敵時間更新
 	void InvincibleTimeUpdate();
+
+	//ゲームシーン
+	GameScene* gameScene_ = nullptr;
+
+	float bulletSpped_ = 0.25f;
 
 	Input* input_;
 

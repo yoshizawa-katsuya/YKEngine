@@ -20,6 +20,8 @@ public:
 
 	virtual void Draw(Camera* camera);
 
+	virtual void Draw(Camera* camera, uint32_t textureHandle);
+
 	virtual void OnCollision() {}
 
 	//中心座標を取得

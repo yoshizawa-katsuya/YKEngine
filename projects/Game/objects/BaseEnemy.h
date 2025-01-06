@@ -12,9 +12,13 @@ public:
 
 	virtual void Update() override;
 
+	void OnCollision() override;
+
 	void Draw(Camera* camera) override;
 
 	void HPGaugeDraw(Camera* camera, const Matrix4x4& billbordMatrix);
+
+	void SetDarkRed(uint32_t textureHandle) { textureHandleDarkRed_ = textureHandle; }
 
 	void SetHPGaugeModel(BaseModel* model);
 
@@ -46,6 +50,8 @@ protected:
 		uint32_t maxHP_;
 		//体力
 		int32_t HP_;
+		//爆弾の数
+		uint32_t bombNum_;
 		//生存しているか否か
 		bool isAlive_;
 	};
@@ -56,8 +62,11 @@ protected:
 	struct HPGauge {
 		WorldTransform worldTransform_;
 		std::unique_ptr<Base3dObject> object_;
+		WorldTransform frameWorldTransform_;
+		std::unique_ptr<Base3dObject> frameObject_;
 	};
-
+	
 	HPGauge hpGauge_;
+	uint32_t textureHandleDarkRed_;
 };
 
