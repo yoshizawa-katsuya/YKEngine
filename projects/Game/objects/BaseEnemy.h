@@ -20,7 +20,7 @@ public:
 
 	void SetDarkRed(uint32_t textureHandle) { textureHandleDarkRed_ = textureHandle; }
 
-	void SetHPGaugeModel(BaseModel* model);
+	virtual void SetHPGaugeModel(BaseModel* model);
 
 	virtual void TakeHammer(uint32_t power);
 

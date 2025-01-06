@@ -76,11 +76,13 @@ void BaseEnemy::SetHPGaugeModel(BaseModel* model)
 	hpGauge_.object_->Initialize(model);
 
 	hpGauge_.worldTransform_.Initialize();
+	hpGauge_.worldTransform_.translation_.y = worldTransform_.translation_.y;
 
 	hpGauge_.frameObject_ = std::make_unique<Rigid3dObject>();
 	hpGauge_.frameObject_->Initialize(model);
 
 	hpGauge_.frameWorldTransform_.Initialize();
+	hpGauge_.frameWorldTransform_.translation_.y = worldTransform_.translation_.y;
 	hpGauge_.frameWorldTransform_.translation_.z = 0.001f;
 
 }

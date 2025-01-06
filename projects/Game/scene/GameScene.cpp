@@ -9,6 +9,8 @@
 #include "LevelDataLoader.h"
 #include "Collision.h"
 #include "Enemy01.h"
+#include "Enemy02.h"
+
 GameScene::~GameScene() {
 	//Finalize();
 }
@@ -69,8 +71,11 @@ void GameScene::Initialize() {
 	modelHammer_ = std::make_unique<RigidModel>();
 	modelHammer_->CreateModel("./resources/Hammer", "Hammer.obj");
 
-	modelEnemy_ = std::make_unique<RigidModel>();
-	modelEnemy_->CreateModel("./resources/enemy", "Enemy.obj");
+	modelEnemy01_ = std::make_unique<RigidModel>();
+	modelEnemy01_->CreateModel("./resources/enemy", "Enemy.obj");
+
+	modelEnemy02_ = std::make_unique<RigidModel>();
+	modelEnemy02_->CreateModel("./resources/enemy02", "Enemy02.obj");
 
 	modelGround_ = std::make_unique<RigidModel>();
 	modelGround_->CreateModel("./resources/ground", "Ground.obj");
@@ -108,7 +113,7 @@ void GameScene::Initialize() {
 
 	//敵の生成
 	//enemy_ = std::make_unique<BaseEnemy>();
-	//enemy_->Initialize(modelEnemy_.get());
+	//enemy_->Initialize(modelEnemy01_.get());
 	CreateLevel();
 
 }
@@ -340,15 +345,22 @@ void GameScene::CreateLevel()
 
 	//レベルデータからオブジェクトを生成、配置
 	for (ObjectData& objectData : levelData->objects) {
-		if (objectData.fileName != "Enemy01") {
-			continue;
+		if (objectData.fileName == "Enemy01") {
+			enemies_.emplace_back();
+			std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
+			enemy = std::make_unique<Enemy01>();
+			enemy->Initialize(modelEnemy01_.get(), objectData.transform);
+			enemy->SetHPGaugeModel(modelHPGauge_.get());
+			enemy->SetDarkRed(textureHandleDarkRed_);
 		}
-		enemies_.emplace_back();
-		std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
-		enemy = std::make_unique<Enemy01>();
-		enemy->Initialize(modelEnemy_.get(), objectData.transform);
-		enemy->SetHPGaugeModel(modelHPGauge_.get());
-		enemy->SetDarkRed(textureHandleDarkRed_);
+		else if (objectData.fileName == "Enemy02") {
+			enemies_.emplace_back();
+			std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
+			enemy = std::make_unique<Enemy02>();
+			enemy->Initialize(modelEnemy02_.get(), objectData.transform);
+			enemy->SetHPGaugeModel(modelHPGauge_.get());
+			enemy->SetDarkRed(textureHandleDarkRed_);
+		}
 		/*
 		//ファイルから登録済みモデルを検索
 		Model* model = nullptr;
