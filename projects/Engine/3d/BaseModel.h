@@ -40,6 +40,11 @@ public:
 
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
+	//TODO:mtlファイルからuvTransform情報を読み込めるようにする
+	virtual void SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+
+	virtual void SetUVTransform(const EulerTransform& uvTransform);
+
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
 	const Node& GetRootNode() const { return modelData_.rootNode; }

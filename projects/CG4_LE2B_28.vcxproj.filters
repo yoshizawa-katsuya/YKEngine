@@ -222,6 +222,9 @@
     <ClCompile Include="Engine\3d\InstancingObjects.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\lib\Collision.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
     <ClCompile Include="Game\mapChip\MapChipField.cpp">
       <Filter>ソース ファイル\mapChip</Filter>
     </ClCompile>
@@ -411,6 +414,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\InstancingObjects.h">
       <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Collision.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
     <ClInclude Include="Game\mapChip\MapChipField.h">
       <Filter>ヘッダー ファイル\mapChip</Filter>
