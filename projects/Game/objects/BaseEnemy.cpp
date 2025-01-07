@@ -47,8 +47,8 @@ void BaseEnemy::Update()
 {
 	if (lrDirection_ == LRDirection::kRight) {
 		worldTransform_.translation_.x += speed_;
-		if (worldTransform_.translation_.x > 19.5f + radius_) {
-			worldTransform_.translation_.x = 19.5f + radius_;
+		if (worldTransform_.translation_.x > 20.5f - radius_) {
+			worldTransform_.translation_.x = 20.5f - radius_;
 			lrDirection_ = LRDirection::kLeft;
 			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 			turnFirstRotationY_ = worldTransform_.rotation_.y;
@@ -57,8 +57,8 @@ void BaseEnemy::Update()
 	}
 	else {
 		worldTransform_.translation_.x -= speed_;
-		if (worldTransform_.translation_.x < -19.5f - radius_) {
-			worldTransform_.translation_.x = -19.5f - radius_;
+		if (worldTransform_.translation_.x < -20.5f + radius_) {
+			worldTransform_.translation_.x = -20.5f + radius_;
 			lrDirection_ = LRDirection::kRight;
 			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 			turnFirstRotationY_ = worldTransform_.rotation_.y;
