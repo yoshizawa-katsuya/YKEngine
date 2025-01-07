@@ -432,8 +432,8 @@ void GameScene::AddEnemyBullet(const Vector3& position, const Vector3& velocity)
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(modelEnemyBullet_.get(), position, velocity);
 	enemyBullets_.emplace_back();
-	std::unique_ptr<EnemyBullet>& playerBullet = enemyBullets_.back();
-	playerBullet.reset(newBullet);
+	std::unique_ptr<EnemyBullet>& enemyBullet = enemyBullets_.back();
+	enemyBullet.reset(newBullet);
 }
 
 void GameScene::CreateLevel()

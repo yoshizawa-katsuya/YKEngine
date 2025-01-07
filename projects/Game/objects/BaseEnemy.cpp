@@ -160,7 +160,7 @@ void BaseEnemy::Draw(Camera* camera)
 */
 
 BaseEnemy::StatusWork::StatusWork()
-	: maxHP_(10)
+	: maxHP_(7)
 	, HP_(maxHP_)
 	, bombNum_(0)
 	, isAlive_(true)
