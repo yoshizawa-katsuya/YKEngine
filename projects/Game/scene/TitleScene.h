@@ -51,6 +51,7 @@ private:
 	uint32_t textureHandleTitle_;
 	uint32_t textuHandleSetsumei_;
 	uint32_t textuHandleSetsumei02_;
+	uint32_t textuHandleSetsumei03_;
 
 	std::unique_ptr<Sprite> spriteTitle_;
 

@@ -35,7 +35,7 @@ void GameOverScene::Update()
 		break;
 
 	case GameOverScene::Phase::kMain:
-		if (input_->TriggerKey(DIK_SPACE)) {
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 			phase_ = Phase::kFadoOut;

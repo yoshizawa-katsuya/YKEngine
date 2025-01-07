@@ -187,7 +187,7 @@ void Player::Draw(Camera* camera) {
 void Player::Move()
 {
 	//左右移動
-	if (input_->PushKey(DIK_A)) {
+	if (input_->PushKey(DIK_A) || input_->PushButton(XINPUT_GAMEPAD_DPAD_LEFT) || input_->GetLeftStickX() < -0.5f) {
 		worldTransform_.translation_.x -= speed_;
 		if (lrDirection_ != LRDirection::kLeft) {
 			lrDirection_ = LRDirection::kLeft;
@@ -196,7 +196,7 @@ void Player::Move()
 			turnTimer_ = 0.0f;
 		}
 	}
-	if (input_->PushKey(DIK_D)) {
+	if (input_->PushKey(DIK_D) || input_->PushButton(XINPUT_GAMEPAD_DPAD_RIGHT) || input_->GetLeftStickX() > 0.5f) {
 		worldTransform_.translation_.x += speed_;
 		if (lrDirection_ != LRDirection::kRight) {
 			lrDirection_ = LRDirection::kRight;
@@ -207,7 +207,7 @@ void Player::Move()
 	}
 
 	//ジャンプ
-	if (onGround_ && input_->TriggerKey(DIK_W)) {
+	if (onGround_ && input_->TriggerKey(DIK_W) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		// ジャンプ加速
 		velocity_.y += kJumpAcceleration_;
 		onGround_ = false;
@@ -251,7 +251,7 @@ void Player::Attack()
 	if (workAttack_.attackParameter_ != 0) {
 		return;
 	}
-	if (!input_->TriggerKey(DIK_SPACE)) {
+	if (!input_->TriggerKey(DIK_SPACE) && !input_->TriggerButton(XINPUT_GAMEPAD_X)) {
 		return;
 	}
 	workAttack_.isAttack_ = true;
@@ -260,7 +260,7 @@ void Player::Attack()
 
 void Player::Fire()
 {
-	if (!input_->TriggerKey(DIK_K)) {
+	if (!input_->TriggerKey(DIK_K) && !input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_THUMB) && !input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 		return;
 	}
 	if (lrDirection_ == LRDirection::kRight) {

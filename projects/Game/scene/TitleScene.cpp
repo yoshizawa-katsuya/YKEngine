@@ -19,6 +19,7 @@ void TitleScene::Initialize()
 	textureHandleTitle_ = TextureManager::GetInstance()->Load("./resources/Title.png");
 	textuHandleSetsumei_ = TextureManager::GetInstance()->Load("./resources/Setsumei01.png");
 	textuHandleSetsumei02_ = TextureManager::GetInstance()->Load("./resources/Setsumei02.png");
+	textuHandleSetsumei03_ = TextureManager::GetInstance()->Load("./resources/Setsumei03.png");
 
 	spriteTitle_ = std::make_unique<Sprite>();
 	spriteTitle_->Initialize(textureHandleTitle_);
@@ -49,7 +50,7 @@ void TitleScene::Update()
 		break;
 
 	case TitleScene::Phase::kMain:
-		if (input_->TriggerKey(DIK_SPACE)) {
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 			if (phase2_ == 0) {
 				phase2_++;
 				spriteTitle_->SetTexture(textuHandleSetsumei_);
@@ -57,6 +58,10 @@ void TitleScene::Update()
 			else if (phase2_ == 1) {
 				phase2_++;
 				spriteTitle_->SetTexture(textuHandleSetsumei02_);
+			}
+			else if (phase2_ == 2) {
+				phase2_++;
+				spriteTitle_->SetTexture(textuHandleSetsumei03_);
 			}
 			else {
 				fade_->Start(Fade::Status::FadeOut, 0.5f);
