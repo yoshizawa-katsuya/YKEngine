@@ -354,7 +354,13 @@ void GameScene::AddPlayerBullet(const Vector3& velocity)
 		return;
 	}
 	PlayerBullet* newBullet = new PlayerBullet();
-	newBullet->Initialize(modelPlayerBullet_.get(), player_->GetCenterPosition(), velocity);
+	Vector3 position = player_->GetCenterPosition();
+	if (player_->GetLRDirection() == Collider::LRDirection::kRight) {
+		newBullet->Initialize(modelPlayerBullet_.get(), {position.x + 0.5f, position.y, position.z}, velocity);
+	}
+	else {
+		newBullet->Initialize(modelPlayerBullet_.get(), { position.x - 0.5f, position.y, position.z }, velocity);
+	}
 	playerBullets_.emplace_back();
 	std::unique_ptr<PlayerBullet>& playerBullet = playerBullets_.back();
 	playerBullet.reset(newBullet);
