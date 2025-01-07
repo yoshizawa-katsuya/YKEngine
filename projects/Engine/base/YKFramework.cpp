@@ -83,6 +83,7 @@ void YKFramework::Update()
 
 	//入力の更新
 	input_->Update();
+	input_->GamePadUpdate();
 
 	sceneManager_->Update();
 
