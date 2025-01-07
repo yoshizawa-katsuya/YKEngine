@@ -10,6 +10,7 @@
 #include "Collision.h"
 #include "Enemy01.h"
 #include "Enemy02.h"
+#include "Enemy03.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -77,6 +78,9 @@ void GameScene::Initialize() {
 
 	modelEnemy02_ = std::make_unique<RigidModel>();
 	modelEnemy02_->CreateModel("./resources/enemy02", "Enemy02.obj");
+
+	modelEnemy03_ = std::make_unique<RigidModel>();
+	modelEnemy03_->CreateModel("./resources/enemy03", "Enemy03.obj");
 
 	modelGround_ = std::make_unique<RigidModel>();
 	modelGround_->CreateModel("./resources/ground", "Ground.obj");
@@ -397,6 +401,14 @@ void GameScene::CreateLevel()
 			enemy->SetHPGaugeModel(modelHPGauge_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
 			enemy->SetGameScene(this);
+		}
+		else if (objectData.fileName == "Enemy03") {
+			enemies_.emplace_back();
+			std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
+			enemy = std::make_unique<Enemy03>();
+			enemy->Initialize(modelEnemy03_.get(), objectData.transform);
+			enemy->SetHPGaugeModel(modelHPGauge_.get());
+			enemy->SetDarkRed(textureHandleDarkRed_);
 		}
 		/*
 		//ファイルから登録済みモデルを検索

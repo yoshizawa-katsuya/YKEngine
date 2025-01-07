@@ -87,6 +87,7 @@ private:
 	std::unique_ptr<BaseModel> modelHammer_;
 	std::unique_ptr<BaseModel> modelEnemy01_;
 	std::unique_ptr<BaseModel> modelEnemy02_;
+	std::unique_ptr<BaseModel> modelEnemy03_;
 	std::unique_ptr<BaseModel> modelGround_;
 	std::unique_ptr<BaseModel> modelHPGauge_;
 	std::unique_ptr<BaseModel> modelPlayerBullet_;

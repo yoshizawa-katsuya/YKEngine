@@ -1,21 +1,18 @@
 #pragma once
 #include "BaseEnemy.h"
 
-class Enemy01 : public BaseEnemy
+class Enemy03 : public BaseEnemy
 {
 public:
-	Enemy01();
-	~Enemy01() override;
+	Enemy03();
+	~Enemy03() override;
 
 	void Initialize(BaseModel* model, const EulerTransform& transform) override;
-
-	void Update() override;
 
 	void SetHPGaugeModel(BaseModel* model) override;
 
 private:
 
-	
+	void HPGaugeUpdate() override;
 
 };
-

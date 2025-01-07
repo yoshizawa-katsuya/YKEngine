@@ -33,7 +33,7 @@ public:
 
 protected:
 
-	void HPGaugeUpdate();
+	virtual void HPGaugeUpdate();
 
 	//シリアルナンバー
 	uint32_t serialNumber_;
