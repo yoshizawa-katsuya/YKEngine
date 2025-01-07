@@ -89,6 +89,7 @@ private:
 	std::unique_ptr<BaseModel> modelEnemy02_;
 	std::unique_ptr<BaseModel> modelEnemy03_;
 	std::unique_ptr<BaseModel> modelGround_;
+	std::unique_ptr<BaseModel> modelSkyDome_;
 	std::unique_ptr<BaseModel> modelHPGauge_;
 	std::unique_ptr<BaseModel> modelPlayerBullet_;
 	std::unique_ptr<BaseModel> modelEnemyBullet_;
@@ -107,6 +108,7 @@ private:
 	const uint32_t kMaxPlayerBulletsNum_ = 3;
 
 	std::unique_ptr<Base3dObject> ground_;
+	std::unique_ptr<Base3dObject> skydome_;
 
 	//敵
 	//std::unique_ptr<BaseEnemy> enemy_;

@@ -86,6 +86,10 @@ void GameScene::Initialize() {
 	modelGround_->CreateModel("./resources/ground", "Ground.obj");
 	modelGround_->SetUVTransform({ 25.0f, 25.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 
+	modelSkyDome_ = std::make_unique<RigidModel>();
+	modelSkyDome_->CreateModel("./resources/skyDome", "skydome.obj");
+	modelSkyDome_->SetEnableLighting(false);
+
 	modelHPGauge_ = std::make_unique<RigidModel>();
 	modelHPGauge_->CreateModel("./resources/HPGauge", "HPGauge.obj");
 	modelHPGauge_->SetEnableLighting(false);
@@ -99,6 +103,9 @@ void GameScene::Initialize() {
 
 	ground_ = std::make_unique<Rigid3dObject>();
 	ground_->Initialize(modelGround_.get());
+
+	skydome_ = std::make_unique<Rigid3dObject>();
+	skydome_->Initialize(modelSkyDome_.get());
 
 	/*
 	//テクスチャハンドルの生成
@@ -334,6 +341,9 @@ void GameScene::Draw() {
 		enemy->Draw(mainCamera_);
 		enemy->HPGaugeDraw(mainCamera_, billbordMatrix);
 	}
+
+	skydome_->CameraUpdate(mainCamera_);
+	skydome_->Draw();
 
 	ground_->CameraUpdate(mainCamera_);
 	ground_->Draw();
