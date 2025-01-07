@@ -5,6 +5,7 @@
 #include "Matrix.h"
 #include "Lerp.h"
 #include "Easing.h"
+#include "Audio.h"
 
 uint32_t BaseEnemy::nextSerialNumber_ = 0;
 
@@ -119,6 +120,16 @@ void BaseEnemy::TakeHammer(uint32_t power)
 	if (status_.HP_ <= 0) {
 		status_.isAlive_ = false;
 	}
+}
+
+bool BaseEnemy::PlaySE3()
+{
+
+	if (status_.bombNum_ > 0) {
+		Audio::GetInstance()->SoundPlayWave(*HitSE3_);
+		return true;
+	}
+	return false;
 }
 
 void BaseEnemy::HPGaugeUpdate()

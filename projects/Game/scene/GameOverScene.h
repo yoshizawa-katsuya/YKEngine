@@ -49,4 +49,7 @@ private:
 	uint32_t textureHandle_;
 
 	std::unique_ptr<Sprite> sprite_;
+
+	LoopSoundData bgm1_;
+
 };

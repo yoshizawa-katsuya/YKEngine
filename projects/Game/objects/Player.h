@@ -48,6 +48,9 @@ public:
 
 	const Vector2& GetAttackRange() const { return workAttack_.attackRange_; }
 
+	void SetHitSEData(SoundData* hitSE) { HitSE1_ = hitSE; }
+	void SetHitSE2Data(SoundData* hitSE) { HitSE2_ = hitSE; }
+
 private:
 
 	void HammerUpdate();
@@ -72,6 +75,10 @@ private:
 
 	//無敵時間更新
 	void InvincibleTimeUpdate();
+
+	SoundData* HitSE1_;
+	SoundData* HitSE2_;
+	bool isSE2Play_;
 
 	//ゲームシーン
 	GameScene* gameScene_ = nullptr;

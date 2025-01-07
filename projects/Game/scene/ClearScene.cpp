@@ -3,6 +3,7 @@
 
 ClearScene::~ClearScene()
 {
+	audio_->SoundStopWave(bgm1_);
 }
 
 void ClearScene::Initialize()
@@ -21,6 +22,9 @@ void ClearScene::Initialize()
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
+
+	bgm1_ = audio_->LoopSoundLoadWave("./resources/sound/ClearScene.wav");
+	audio_->SoundLoopPlayWave(bgm1_, 0.7f);
 }
 
 void ClearScene::Update()

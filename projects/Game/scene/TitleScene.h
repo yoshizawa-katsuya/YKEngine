@@ -55,5 +55,6 @@ private:
 
 	std::unique_ptr<Sprite> spriteTitle_;
 
+	LoopSoundData bgm1_;
 };
 

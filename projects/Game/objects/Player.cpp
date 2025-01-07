@@ -143,6 +143,8 @@ void Player::OnCollision()
 	}
 	status_.remainingInvincibleTime_ = status_.maxInvincibleTime_;
 
+	Audio::GetInstance()->SoundPlayWave(*HitSE1_);
+
 }
 
 void Player::HammerInitialize(BaseModel* model)
@@ -163,6 +165,8 @@ void Player::AttackHit(BaseEnemy* enemy)
 	//接触履歴に追加
 	workAttack_.contactRecord_.AddRecord(enemy->GetSerialNumber());
 
+	isSE2Play_ = true;
+
 	enemy->TakeHammer(workAttack_.attackPower_);
 }
 
@@ -175,6 +179,10 @@ void Player::HammerUpdate()
 	hammer_.worldTransform_.UpdateMatrix();
 	hammer_.object_->WorldTransformUpdate(hammer_.worldTransform_);
 
+	if (isSE2Play_) {
+		Audio::GetInstance()->SoundPlayWave(*HitSE2_);
+	}
+	isSE2Play_ = false;
 }
 /*
 void Player::Draw(Camera* camera) {

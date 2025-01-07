@@ -14,6 +14,8 @@
 
 GameScene::~GameScene() {
 	//Finalize();
+	audio_->SoundStopWave(bgm1_);
+	//audio_->SoundUnload(&bgm1_);
 }
 
 void GameScene::Initialize() {
@@ -130,6 +132,16 @@ void GameScene::Initialize() {
 	//enemy_ = std::make_unique<BaseEnemy>();
 	//enemy_->Initialize(modelEnemy01_.get());
 	CreateLevel();
+
+	bgm1_ = audio_->LoopSoundLoadWave("./resources/sound/gameScene.wav");
+	audio_->SoundLoopPlayWave(bgm1_, 0.7f);
+
+	HitSE1_ = audio_->SoundLoadWave("./resources/sound/HitSE1.wav");
+	HitSE2_ = audio_->SoundLoadWave("./resources/sound/HitSE2.wav");
+	HitSE3_ = audio_->SoundLoadWave("./resources/sound/HitSE3.wav");
+
+	player_->SetHitSEData(&HitSE1_);
+	player_->SetHitSE2Data(&HitSE2_);
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
@@ -449,6 +461,7 @@ void GameScene::CreateLevel()
 			enemy->Initialize(modelEnemy01_.get(), objectData.transform);
 			enemy->SetHPGaugeModel(modelHPGauge_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
+			enemy->SetHitSE3Data(&HitSE3_);
 		}
 		else if (objectData.fileName == "Enemy02") {
 			enemies_.emplace_back();
@@ -458,6 +471,8 @@ void GameScene::CreateLevel()
 			enemy->SetHPGaugeModel(modelHPGauge_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
 			enemy->SetGameScene(this);
+			enemy->SetHitSE3Data(&HitSE3_);
+
 		}
 		else if (objectData.fileName == "Enemy03") {
 			enemies_.emplace_back();
@@ -466,6 +481,7 @@ void GameScene::CreateLevel()
 			enemy->Initialize(modelEnemy03_.get(), objectData.transform);
 			enemy->SetHPGaugeModel(modelHPGauge_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
+			enemy->SetHitSE3Data(&HitSE3_);
 		}
 		/*
 		//ファイルから登録済みモデルを検索
@@ -492,6 +508,8 @@ void GameScene::CheckAllCollisions()
 	Circle collider1 = { player_->Get2DCenterPosition(), player_->GetRadius() };
 	Circle collider2;
 
+	bool isSE = false;
+
 	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 		collider2 = { enemy->Get2DCenterPosition(), enemy->GetRadius() };
 		if (IsCollision(collider1, collider2)) {
@@ -504,7 +522,12 @@ void GameScene::CheckAllCollisions()
 		if (IsCollision(collider1, collider2)) {
 			enemyBullet->OnCollision();
 			player_->OnCollision();
+			isSE = true;
 		}
+	}
+	if (isSE) {
+		audio_->SoundPlayWave(HitSE1_);
+		isSE = false;
 	}
 
 	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
@@ -514,8 +537,13 @@ void GameScene::CheckAllCollisions()
 			if (IsCollision(collider1, collider2)) {
 				playerBullet->OnCollision();
 				enemy->OnCollision();
+				isSE = true;
 			}
 		}
+	}
+	if (isSE) {
+		audio_->SoundPlayWave(HitSE1_);
+		isSE = false;
 	}
 
 	CheackPlayerAttackCollision();
@@ -526,7 +554,7 @@ void GameScene::CheackPlayerAttackCollision()
 	if (!player_->GetIsAttack()) {
 		return;
 	}
-
+	bool isSE3 = false;
 	Square playerAttackCollider;
 
 	if (player_->GetLRDirection() == Player::LRDirection::kRight) {
@@ -546,6 +574,13 @@ void GameScene::CheackPlayerAttackCollision()
 
 	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 		if (IsCollision(playerAttackCollider, { enemy->Get2DCenterPosition(), enemy->GetRadius() })) {
+			if (!isSE3) {
+				bool a = enemy->PlaySE3();
+				if (a) {
+					isSE3 = true;
+				}
+
+			}
 			player_->AttackHit(enemy.get());
 		}
 	}

@@ -5,6 +5,8 @@
 TitleScene::~TitleScene()
 {
 	//Finalize();
+	audio_->SoundStopWave(bgm1_);
+
 }
 
 void TitleScene::Initialize()
@@ -27,6 +29,9 @@ void TitleScene::Initialize()
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
+
+	bgm1_ = audio_->LoopSoundLoadWave("./resources/sound/titleScene.wav");
+	audio_->SoundLoopPlayWave(bgm1_, 0.7f);
 }
 
 void TitleScene::Update()
