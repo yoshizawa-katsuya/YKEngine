@@ -40,6 +40,26 @@ void BaseEnemy::Initialize(BaseModel* model, const EulerTransform& transform)
 
 void BaseEnemy::Update()
 {
+	if (lrDirection_ == LRDirection::kRight) {
+		worldTransform_.translation_.x += speed_;
+		if (worldTransform_.translation_.x > 19.5f + radius_) {
+			worldTransform_.translation_.x = 19.5f + radius_;
+			lrDirection_ = LRDirection::kLeft;
+			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = 0.0f;
+		}
+	}
+	else {
+		worldTransform_.translation_.x -= speed_;
+		if (worldTransform_.translation_.x < -19.5f - radius_) {
+			worldTransform_.translation_.x = -19.5f - radius_;
+			lrDirection_ = LRDirection::kRight;
+			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+			turnFirstRotationY_ = worldTransform_.rotation_.y;
+			turnTimer_ = 0.0f;
+		}
+	}
 
 	// 旋回制御
 	if (turnTimer_ < 1.0f) {
@@ -135,7 +155,7 @@ void BaseEnemy::Draw(Camera* camera)
 */
 
 BaseEnemy::StatusWork::StatusWork()
-	: maxHP_(5)
+	: maxHP_(10)
 	, HP_(maxHP_)
 	, bombNum_(0)
 	, isAlive_(true)

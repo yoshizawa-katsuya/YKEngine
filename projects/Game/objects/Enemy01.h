@@ -13,7 +13,7 @@ public:
 
 private:
 
-	float speed_;
+	
 
 };
 

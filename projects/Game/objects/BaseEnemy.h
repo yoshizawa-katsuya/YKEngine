@@ -1,6 +1,7 @@
 #pragma once
 #include "Collider.h"
 #include <numbers>
+class GameScene;
 
 class BaseEnemy : public Collider
 {
@@ -28,6 +29,8 @@ public:
 
 	bool GetIsAlive() { return status_.isAlive_; }
 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 protected:
 
 	void HPGaugeUpdate();
@@ -37,6 +40,8 @@ protected:
 
 	//次のシリアルナンバー
 	static uint32_t nextSerialNumber_;
+
+	GameScene* gameScene_;
 
 	// 左右の角度テーブル
 	std::vector<float> destinationRotationYTable = { std::numbers::pi_v<float> / 2.0f + 0.3f, std::numbers::pi_v<float> *3.0f / 2.0f - 0.3f };
@@ -48,6 +53,8 @@ protected:
 	float turnTimer_ = 1.0f;
 
 	LRDirection lrDirection_;
+
+	float speed_ = 0.05f;
 
 	//体力や無敵時間など
 	struct StatusWork {

@@ -20,6 +20,7 @@
 #include "InstancingObjects.h"
 #include "CameraController.h"
 #include "PlayerBullet.h"
+#include "EnemyBullet.h"
 
 class GameScene : public BaseScene
 {
@@ -36,6 +37,8 @@ public:
 	void Finalize() override;
 
 	void AddPlayerBullet(const Vector3& velocity);
+
+	void AddEnemyBullet(const Vector3& position, const Vector3& velocity);
 
 private:
 
@@ -87,12 +90,14 @@ private:
 	std::unique_ptr<BaseModel> modelGround_;
 	std::unique_ptr<BaseModel> modelHPGauge_;
 	std::unique_ptr<BaseModel> modelPlayerBullet_;
+	std::unique_ptr<BaseModel> modelEnemyBullet_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandleHeartFrame_;
 	uint32_t textureHandleHeart_;
 	uint32_t textureHandleBlue_;
 	uint32_t textureHandleDarkRed_;
+	uint32_t textureHandleRed_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー
@@ -105,6 +110,7 @@ private:
 	//敵
 	//std::unique_ptr<BaseEnemy> enemy_;
 	std::list<std::unique_ptr<BaseEnemy>> enemies_;
+	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
 
 	//パーティクル
 	/*
