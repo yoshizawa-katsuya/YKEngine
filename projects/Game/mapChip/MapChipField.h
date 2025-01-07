@@ -4,8 +4,9 @@
 #include "Struct.h"
 
 enum class MapChipType {
-	kBlank,
+	kFloor,//床
 	kBox, // ボックス
+	kBlank,
 };
 
 class MapChipField
@@ -40,7 +41,7 @@ public:
 
 	uint32_t GetNumBlockVertical() { return kNumBlockVertical; };
 
-	uint32_t GetNumBlockHorizontal() { return kNumBlockVertical; }
+	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; }
 
 private:
 

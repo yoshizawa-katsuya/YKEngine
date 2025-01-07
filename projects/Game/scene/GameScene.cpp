@@ -62,6 +62,8 @@ void GameScene::Initialize() {
 	modelBox_ = std::make_unique<RigidModel>();
 	modelBox_->CreateModel("./resources/box", "box.obj");
 	
+	modelFloor_ = std::make_unique<RigidModel>();
+	modelFloor_->CreateModel("./resources/floor", "Floor.obj");
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -241,6 +243,14 @@ void GameScene::Draw() {
 			box->Draw();
 		}
 	}
+
+	//instancingObject描画前処理
+	modelPlatform_->InstancingPreDraw();
+
+	//floorの描画
+	floors_->CameraUpdate(mainCamera_);
+	floors_->Draw();
+	
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
@@ -265,10 +275,16 @@ void GameScene::GenerateObjects()
 		boxes_[i].resize(numBlockHorizontal);
 	}
 
+	floors_ = std::make_unique<InstancingObject>();
+	floors_->Initialize(modelFloor_.get(), numBlockVirtical * numBlockHorizontal);
+
+	MapChipType mapChipType;
+
 	// キューブの生成
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
-			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBox) {
+			mapChipType = mapChipField_->GetMapChipTypeByIndex(j, i);
+			if (mapChipType == MapChipType::kBox) {
 				Base3dObject* objectBox = new Rigid3dObject;
 				objectBox->Initialize(modelBox_.get());
 				boxes_[i][j].reset(objectBox);
@@ -277,6 +293,13 @@ void GameScene::GenerateObjects()
 				worldTransform->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 				worldTransform->UpdateMatrix();
 				boxes_[i][j]->WorldTransformUpdate(*worldTransform);
+			}
+			else if (mapChipType == MapChipType::kFloor) {
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransform->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+				worldTransform->UpdateMatrix();
+				floors_->AddWorldTransform(*worldTransform);
 			}
 		}
 	}

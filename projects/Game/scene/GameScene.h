@@ -70,6 +70,7 @@ private:
 	//モデル
 	std::unique_ptr<BaseModel> modelPlayer_;
 	std::unique_ptr<BaseModel> modelBox_;
+	std::unique_ptr<BaseModel> modelFloor_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
@@ -82,6 +83,10 @@ private:
 
 	//ボックス
 	std::vector<std::vector<std::unique_ptr<Base3dObject>>> boxes_;
+
+	//床
+	std::unique_ptr<InstancingObject> floors_;
+
 
 	//パーティクル
 	/*
