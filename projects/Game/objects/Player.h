@@ -40,6 +40,8 @@ public:
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	bool GetIsAlive() { return status_.isAlive_; }
+
 	bool GetIsAttack() { return workAttack_.isAttack_; }
 
 	LRDirection GetLRDirection() { return lrDirection_; }

@@ -68,7 +68,7 @@ void GameScene::Initialize() {
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
-	//modelPlayer_->CreateSphere(textureHandle_);
+	//modelPlayer_->CreateSphere(textureHandleTitle_);
 	
 	modelHammer_ = std::make_unique<RigidModel>();
 	modelHammer_->CreateModel("./resources/Hammer", "Hammer.obj");
@@ -109,11 +109,11 @@ void GameScene::Initialize() {
 
 	/*
 	//テクスチャハンドルの生成
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
+	textureHandleTitle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
 
 	//スプライトの生成
 	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(textureHandle_, spritePlatform_);
+	sprite_->Initialize(textureHandleTitle_, spritePlatform_);
 	*/
 
 	//プレイヤーの初期化
@@ -131,6 +131,9 @@ void GameScene::Initialize() {
 	//enemy_->Initialize(modelEnemy01_.get());
 	CreateLevel();
 
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 0.5f);
 }
 
 void GameScene::Update() {
@@ -140,61 +143,103 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 
-	//プレイヤーの更新
-	player_->Update();
+	float playerPositionX = 0.0f;
 
-	//デスフラグの立った弾を削除
-	playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& playerBullet) {
-		if (!playerBullet->GetIsAlive()) {
-			return true;
+	switch (phase_) {
+	case GameScene::Phase::kFadeIn:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			fade_->Stop();
+			phase_ = Phase::kMain;
 		}
-		return false;
-	});
+		break;
 
-	float playerPositionX = player_->GetCenterPosition().x;
-	//自キャラの弾の更新
-	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
-		playerBullet->Update(playerPositionX);
-	}
+	case GameScene::Phase::kMain:
+		//プレイヤーの更新
+		player_->Update();
 
-	//デスフラグの立った敵を削除
-	enemies_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
-		if (!enemy->GetIsAlive()) {
-			return true;
+		//デスフラグの立った弾を削除
+		playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& playerBullet) {
+			if (!playerBullet->GetIsAlive()) {
+				return true;
+			}
+			return false;
+			});
+
+		playerPositionX = player_->GetCenterPosition().x;
+		//自キャラの弾の更新
+		for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
+			playerBullet->Update(playerPositionX);
 		}
-		return false;
-	});
 
-	//敵の更新
-	//enemy_->Update();
-	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
-		enemy->Update();
-	}
+		//デスフラグの立った敵を削除
+		enemies_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
+			if (!enemy->GetIsAlive()) {
+				return true;
+			}
+			return false;
+			});
 
-	//デスフラグの立った弾を削除
-	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& enemyBullet) {
-		if (!enemyBullet->GetIsAlive()) {
-			return true;
+		//敵の更新
+		//enemy_->Update();
+		for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
+			enemy->Update();
 		}
-		return false;
-	});
 
-	//自キャラの弾の更新
-	for (std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets_) {
-		enemyBullet->Update();
+		//デスフラグの立った弾を削除
+		enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& enemyBullet) {
+			if (!enemyBullet->GetIsAlive()) {
+				return true;
+			}
+			return false;
+			});
+
+		//自キャラの弾の更新
+		for (std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets_) {
+			enemyBullet->Update();
+		}
+
+		//emitter_->Update(color_);
+
+		//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
+
+		CheckAllCollisions();
+
+		if (enemies_.size() == 0) {
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+			phase_ = Phase::kClear;
+		}
+		else if (!player_->GetIsAlive()) {
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+			phase_ = Phase::kGameOver;
+		}
+		break;
+
+	case GameScene::Phase::kClear:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			//fade_->Stop();
+			//シーン切り替え依頼
+			sceneManager_->ChengeScene("ClearScene");
+		}
+		break;
+	
+	case GameScene::Phase::kGameOver:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			//fade_->Stop();
+			//シーン切り替え依頼
+			sceneManager_->ChengeScene("GameOverScene");
+		}
+		break;
 	}
+	
 
 	//カメラコントローラーの更新
 	cameraController_->Update();
 
 	//カメラの更新
 	camera_->Update();
-
-	//emitter_->Update(color_);
-
-	//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
-
-	CheckAllCollisions();
 
 #ifdef _DEBUG
 
@@ -352,6 +397,8 @@ void GameScene::Draw() {
 	spritePlatform_->PreDraw();
 
 	player_->HUDDraw();
+
+	fade_->Draw();
 
 	//ParticleManager::GetInstance()->Draw();
 

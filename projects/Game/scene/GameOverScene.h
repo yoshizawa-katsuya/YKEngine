@@ -9,11 +9,11 @@
 #include "Sprite.h"
 #include "Fade.h"
 
-class TitleScene : public BaseScene
+class GameOverScene : public BaseScene
 {
 public:
 
-	~TitleScene() override;
+	~GameOverScene() override;
 
 	void Initialize() override;
 
@@ -33,7 +33,7 @@ private:
 
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
-	
+
 	//シーンのフェーズ
 	enum class Phase {
 		kFadeIn,	//フェードイン
@@ -46,13 +46,7 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	uint32_t phase2_ = 0;
+	uint32_t textureHandle_;
 
-	uint32_t textureHandleTitle_;
-	uint32_t textuHandleSetsumei_;
-	uint32_t textuHandleSetsumei02_;
-
-	std::unique_ptr<Sprite> spriteTitle_;
-
+	std::unique_ptr<Sprite> sprite_;
 };
-

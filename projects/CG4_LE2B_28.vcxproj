@@ -107,7 +107,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Enemy03.cpp" />
+    <ClCompile Include="Engine\lib\Fade.cpp" />
+    <ClCompile Include="Game\scene\ClearScene.cpp" />
+    <ClCompile Include="Game\objects\Enemy03.cpp" />
+    <ClCompile Include="Game\scene\GameOverScene.cpp" />
     <ClCompile Include="Game\objects\EnemyBullet.cpp" />
     <ClCompile Include="Game\objects\Enemy02.cpp" />
     <ClCompile Include="Game\objects\Bullet.cpp" />
@@ -248,7 +251,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemy03.h" />
+    <ClInclude Include="Engine\lib\Fade.h" />
+    <ClInclude Include="Game\scene\ClearScene.h" />
+    <ClInclude Include="Game\objects\Enemy03.h" />
+    <ClInclude Include="Game\scene\GameOverScene.h" />
     <ClInclude Include="Game\objects\EnemyBullet.h" />
     <ClInclude Include="Game\objects\Enemy02.h" />
     <ClInclude Include="Game\objects\Bullet.h" />

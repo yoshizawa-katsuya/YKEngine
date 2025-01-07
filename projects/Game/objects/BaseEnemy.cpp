@@ -36,6 +36,11 @@ void BaseEnemy::Initialize(BaseModel* model, const EulerTransform& transform)
 		lrDirection_ = LRDirection::kLeft;
 	}
 	worldTransform_.translation_ = transform.translation;
+
+	worldTransform_.UpdateMatrix();
+	object_->WorldTransformUpdate(worldTransform_);
+	HPGaugeUpdate();
+
 }
 
 void BaseEnemy::Update()

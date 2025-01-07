@@ -30,6 +30,9 @@ void Player::Initialize(BaseModel* model) {
 	Collider::Initialize(model);
 
 	worldTransform_.rotation_.y = destinationRotationYTable[0];
+	worldTransform_.translation_.y = radius_;
+	worldTransform_.UpdateMatrix();
+	object_->WorldTransformUpdate(worldTransform_);
 }
 
 void Player::Update() {

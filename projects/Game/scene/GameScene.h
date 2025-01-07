@@ -21,6 +21,7 @@
 #include "CameraController.h"
 #include "PlayerBullet.h"
 #include "EnemyBullet.h"
+#include "Fade.h"
 
 class GameScene : public BaseScene
 {
@@ -61,6 +62,19 @@ private:
 
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
+
+	//シーンのフェーズ
+	enum class Phase {
+		kFadeIn,	//フェードイン
+		kMain,	//メイン部
+		kGameOver, 
+		kClear,
+	};
+
+	//現在のフェーズ
+	Phase phase_ = Phase::kFadeIn;
+
+	std::unique_ptr<Fade> fade_;
 
 	Camera* mainCamera_ = nullptr;
 
