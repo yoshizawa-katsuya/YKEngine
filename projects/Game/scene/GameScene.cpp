@@ -149,58 +149,15 @@ void GameScene::Update() {
 
 		}
 		
+		ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
+
 		/*
 		if (ImGui::Button("BGMstop")) {
 			audio_->SoundStopWave(bgm1_);
 		}
 		*/
 		ImGui::End();
-		/*
-		ImGui::Begin("Particle");
-		ImGui::ColorEdit4("color", &color_.x);
-		ImGui::DragFloat3("Translate", &emitter_->GetTranslate().x, 0.01f);
-		ImGui::DragFloat3("Scele", &emitter_->GetScele().x, 0.01f);
-		ImGui::DragFloat3("TranslateMin", &emitter_->GetRandTranslateMin().x, 0.01f);
-		ImGui::DragFloat3("TranslateMax", &emitter_->GetRandTranslateMax().x, 0.01f);
-		int count = emitter_->GetCount();
-		ImGui::DragInt("Count", &count, 0.1f);
-		if (count < 0) {
-			count = 0;
-		}
-		emitter_->SetCount(count);
-		ImGui::DragFloat("Frequency", &emitter_->GetFrequency(), 0.01f);
-		ImGui::Checkbox("IsRandomColor", &emitter_->GetIsRandomColor());
-		ImGui::DragFloat3("Accerelation", &field_->accerelation.x, 0.01f);
-		ImGui::DragFloat3("AccerelationFieldMin", &field_->area.min.x, 0.01f);
-		ImGui::DragFloat3("AccerelationFieldMax", &field_->area.max.x, 0.01f);
-		if (ImGui::Button("Reset")) {
-			color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
-			emitter_->SetTranslation({ 0.0f, 0.0f, 0.0f });
-			emitter_->SetRandTranslationMin({ -1.0f, -1.0f, -1.0f });
-			emitter_->SetRandTranslationMax({ 1.0f, 1.0f, 1.0f });
-			emitter_->SetCount(10);
-			emitter_->SetFrequency(0.5f);
-			emitter_->SetIsRandomColor(true);
-			field_->accerelation = { 5.0f, 0.0f, 0.0f };
-			field_->area.max = { 1.0f, 1.0f, 1.0f };
-			field_->area.min = { -1.0f, -1.0f, -1.0f };
-			ParticleManager::GetInstance()->SetUseAccelerationField(false);
-		}
-		if (ImGui::Button("FireParticle")) {
-			color_ = { 1.0f, 0.3f, 0.0f, 1.0f };
-			emitter_->SetTranslation({ 0.0f, -2.0f, 0.0f });
-			emitter_->SetRandTranslationMin({ -3.0f, 0.0f, -3.0f });
-			emitter_->SetRandTranslationMax({ 3.0f, 0.3f, 1.0f });
-			emitter_->SetCount(3);
-			emitter_->SetFrequency(0.01f);
-			emitter_->SetIsRandomColor(false);
-			field_->accerelation = { 0.0f, 3.0f, 9.0f };
-			field_->area.max = { 5.0f, 0.0f, 5.0f };
-			field_->area.min = { -5.0f, -8.0f, -6.0f };
-			ParticleManager::GetInstance()->SetUseAccelerationField(true);
-		}
-		ImGui::End();
-		*/
+		
 
 #endif // _DEBUG
 	

@@ -139,6 +139,15 @@ Vector2 Input::GetMouseVelocity()
 
 }
 
+Vector2 Input::GetMousePosition()
+{
+	POINT position;
+	GetCursorPos(&position);
+	ScreenToClient(winApp_->GetHwnd(), &position);
+
+	return Vector2(static_cast<float>(position.x), winApp_->kClientHeight - static_cast<float>(position.y));
+}
+
 bool Input::IsPushKeyPre(BYTE keyNumber)
 {
 	if (keyPre_[keyNumber]) {
