@@ -91,6 +91,19 @@ void ModelPlatform::SkinPreDraw()
 
 }
 
+void ModelPlatform::InstancingPreDraw()
+{
+
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNormalinstancing);
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	directionalLight_->Draw();
+	pointLight_->Draw();
+	spotLight_->Draw();
+	camera_->SetCameraReaource();
+
+}
+
 void ModelPlatform::LinePreDraw()
 {
 

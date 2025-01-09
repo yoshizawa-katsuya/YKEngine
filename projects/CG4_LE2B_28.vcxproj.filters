@@ -213,6 +213,12 @@
     <ClCompile Include="Engine\lib\ThreadPool.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\InstancingObjects.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\lib\Collision.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
     <ClCompile Include="MapChipField.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -255,6 +261,9 @@
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
     <FxCompile Include="resources\shader\Sprite.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shader\InstancingObject3d.VS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
   </ItemGroup>
@@ -395,6 +404,12 @@
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\lib\ThreadPool.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\InstancingObjects.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Collision.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
     <ClInclude Include="MapChipField.h">

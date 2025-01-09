@@ -31,6 +31,8 @@ enum class BlendMode {
 
 	kSkinModelMode,
 
+	kBlendModeNormalinstancing,
+
 	kCountOfBlendMode,	//利用してはいけない
 };
 

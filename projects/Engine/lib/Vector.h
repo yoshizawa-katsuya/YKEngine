@@ -2,6 +2,15 @@
 #include "Struct.h"
 //#include <Novice.h>
 
+//減算
+Vector2 Subtract(const Vector2& v1, const Vector2& v2);
+
+//長さ
+float Length(const Vector2& v);
+
+//内積
+float Dot(const Vector2& v1, const Vector2& v2);
+
 //加算
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 

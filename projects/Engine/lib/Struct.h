@@ -62,9 +62,55 @@ struct Matrix4x4
 	float m[4][4];
 };
 
+struct Circle
+{
+	Vector2 center;
+	float radius;
+};
+
+struct Square {
+	Vector2 min;
+	Vector2 max;
+};
+
+struct Sphere {
+	Vector3 center;
+	float radius;
+};
+
+struct Line {
+	Vector3 origin;
+	Vector3 diff;
+};
+
+struct Ray {
+	Vector3 origin;
+	Vector3 diff;
+};
+
+struct Segment {
+	Vector3 origin;
+	Vector3 diff;
+};
+
+struct Plane {
+	Vector3 normal;	//法線
+	float distance;	//距離
+};
+
+struct Triangle {
+	Vector3 vertices[3];	//頂点
+};
+
 struct AABB {
 	Vector3 min;
 	Vector3 max;
+};
+
+struct OBB {
+	Vector3 center;	//中心点
+	Vector3 orientations[3];	//座標軸。正規化・直交必須
+	Vector3 size;	//座標軸方向の長さの半分。中心から面までの距離
 };
 
 struct Material {
