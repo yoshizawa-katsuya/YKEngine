@@ -215,7 +215,7 @@ void Player::Move()
 	}
 
 	//ジャンプ
-	if (onGround_ && input_->TriggerKey(DIK_W) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+	if (onGround_ && (input_->TriggerKey(DIK_W) || input_->TriggerButton(XINPUT_GAMEPAD_A))) {
 		// ジャンプ加速
 		velocity_.y += kJumpAcceleration_;
 		onGround_ = false;
