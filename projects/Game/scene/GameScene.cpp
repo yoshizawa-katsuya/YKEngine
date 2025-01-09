@@ -71,7 +71,31 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+
+	//select Sprite
+	easySprite_ = TextureManager::GetInstance()->Load("./resources/selectStageEasy.png");
+	normalSprite_ = TextureManager::GetInstance()->Load("./resources/selectStageNormal.png");
+	hardSprite_ = TextureManager::GetInstance()->Load("./resources/selectStageHard.png");
+
+	selectEasySprite_ = std::make_unique<Sprite>();
+	selectEasySprite_->Initialize(easySprite_);
+	selectEasySprite_->SetPosition({ 100.0f, 50.0f });
+
+	selectNormalSprite_ = std::make_unique<Sprite>();
+	selectNormalSprite_->Initialize(normalSprite_);
+	selectNormalSprite_->SetPosition({ 200.0f, 50.0f });
+
+	selectHardSprite_ = std::make_unique<Sprite>();
+	selectHardSprite_->Initialize(hardSprite_);
+	selectHardSprite_->SetPosition({ 300.0f, 50.0f });
 	
+	// マップチップフィールドの生成
+	mapChipField_ = std::make_unique<MapChipField>();
+	mapChipField_->LoadMapChipCsv("Resources/stage/stage1.csv");
+	//map chip model
+	modelBlock_ = std::make_unique<RigidModel>();
+	modelBlock_->CreateModel("./resources/box", "box.obj");
+
 }
 
 void GameScene::Update() {
@@ -222,14 +246,54 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+
+	//ブロックの描画
+	for (std::vector<std::unique_ptr<WorldTransform>>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (std::unique_ptr<WorldTransform>& worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock) {
+				continue;
+			}
+			modelBlock_->Draw();
+		}
+	}
+
 	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
+	spritePlatform_->PreDraw();
+
+	selectEasySprite_->Draw();
+	selectNormalSprite_->Draw();
+	selectHardSprite_->Draw();
 
 	//ParticleManager::GetInstance()->Draw();
-
 }
 
 void GameScene::Finalize()
 {
+
+}
+
+void GameScene::GeneratrBlocks()
+{
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	// 配列を初期化
+	worldTransformBlocks_.resize(numBlockVirtical);
+
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		worldTransformBlocks_[i].resize(numBlockHorizontal);
+	}
+	// キューブと床の生成
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+			// ブロックの生成
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+				worldTransformBlocks_[i][j] = std::make_unique<WorldTransform>();
+				worldTransformBlocks_[i][j]->Initialize();
+				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+
+		}
+	}
 
 }

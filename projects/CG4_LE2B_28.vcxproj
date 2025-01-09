@@ -152,6 +152,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\PointLight.cpp" />
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
     <ClCompile Include="Engine\lib\ThreadPool.cpp" />
+    <ClCompile Include="MapChipField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Line3D.GS.hlsl">
@@ -276,6 +277,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\PointLight.h" />
     <ClInclude Include="Engine\3d\SpotLight.h" />
     <ClInclude Include="Engine\lib\ThreadPool.h" />
+    <ClInclude Include="MapChipField.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
+#include "MapChipField.h"
 
 class GameScene : public BaseScene
 {
@@ -32,6 +33,11 @@ public:
 	void Finalize() override;
 
 private:
+
+	//マップの生成
+	void GeneratrBlocks();
+
+
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -71,6 +77,23 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	//
+	std::unique_ptr<Sprite> selectEasySprite_ = nullptr;
+	uint32_t easySprite_ = 0;
+	std::unique_ptr<Sprite> selectNormalSprite_ = nullptr;
+	uint32_t normalSprite_ = 0;
+	std::unique_ptr<Sprite> selectHardSprite_ = nullptr;
+	uint32_t hardSprite_ = 0;
+
+	//map chip
+	std::unique_ptr<MapChipField> mapChipField_;
+
+	//ステージの壁
+	std::vector<std::vector<std::unique_ptr<WorldTransform>>> worldTransformBlocks_;
+
+	std::unique_ptr<BaseModel> modelBlock_;
+
 
 	//パーティクル
 	/*
