@@ -15,6 +15,11 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 
 	//誤差により1.0fを超えるのを防ぐ
 	dot = (std::min)(dot, 1.0f);
+
+	if (dot == 1.0f) {
+		return Lerp(v1, v2, t);
+	}
+
 	//アークコサインでθの角度を求める
 	float theta = std::acos(dot);
 	//θの角度からsinθを求める
@@ -27,6 +32,7 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 
 	Vector3 normalizationCompletion;
 	//ゼロ除算を防ぐ
+	/*
 	if (sinTheta < 1.0e-5) {
 		//normalizationCompletion = v1N;
 		sinTheta = 0.001f;
@@ -35,6 +41,10 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 		//球面線形補完したベクトル
 		normalizationCompletion = (sinThetaFrom * v1N + sinThetaTo * v2N) / sinTheta;
 	}
+	*/
+
+	//球面線形補完したベクトル
+	normalizationCompletion = (sinThetaFrom * v1N + sinThetaTo * v2N) / sinTheta;
 
 	//ベクトルの長さはv1とv2の長さを線形補間
 	float length1 = Length(v1);
@@ -63,6 +73,11 @@ Quaternion Slerp(const Quaternion& v1, const Quaternion& v2, float t)
 
 	//誤差により1.0fを超えるのを防ぐ
 	dot = (std::min)(dot, 1.0f);
+
+	if (dot == 1.0f) {
+		return Lerp(v1, v2, t);
+	}
+
 	//アークコサインでθの角度を求める
 	float theta = std::acos(dot);
 	//θの角度からsinθを求める
@@ -75,6 +90,7 @@ Quaternion Slerp(const Quaternion& v1, const Quaternion& v2, float t)
 
 	Quaternion normalizationCompletion;
 	//ゼロ除算を防ぐ
+	/*
 	if (sinTheta < 1.0e-5) {
 		//normalizationCompletion = v1N;
 		sinTheta = 0.001f;
@@ -84,6 +100,10 @@ Quaternion Slerp(const Quaternion& v1, const Quaternion& v2, float t)
 		//球面線形補完したベクトル
 		normalizationCompletion = (sinThetaFrom * v1N + sinThetaTo * v2N) / sinTheta;
 	}
+	*/
+
+	//球面線形補完したベクトル
+	normalizationCompletion = (sinThetaFrom * v1N + sinThetaTo * v2N) / sinTheta;
 
 	//ベクトルの長さはv1とv2の長さを線形補間
 	float length1 = Length(v1);
