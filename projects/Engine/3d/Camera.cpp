@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Matrix.h"
+#include <numbers>
 
 Camera::Camera()
 	: transform_({ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} })
@@ -11,6 +12,7 @@ Camera::Camera()
 	, viewMatrix_(Inverse(worldMatrix_))
 	, projectionMatrix_(MakePerspectiveFovMatrix(fovY_, aspectRatio_, nearClip_, farClip_))
 	, viewProjectionMatrix_(Multiply(viewMatrix_, projectionMatrix_))
+	, backToFrontMatrix_(MakeRotateYMatrix(std::numbers::pi_v<float>))
 	, dxCommon_(DirectXCommon::GetInstance())
 	, cameraResource_(dxCommon_->CreateBufferResource(sizeof(CameraForGPU)))
 {
@@ -36,4 +38,14 @@ void Camera::SetCameraReaource()
 
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
 
+}
+
+Matrix4x4 Camera::MakeBillBoardMatrix()
+{
+	Matrix4x4 billboardMatrix = Multiply(backToFrontMatrix_, worldMatrix_);
+	billboardMatrix.m[3][0] = 0.0f;	//平行移動成分はいらない
+	billboardMatrix.m[3][1] = 0.0f;
+	billboardMatrix.m[3][2] = 0.0f;
+
+	return billboardMatrix;
 }

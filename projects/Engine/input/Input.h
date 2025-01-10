@@ -65,6 +65,8 @@ public:
 
 	Vector2 GetMouseVelocity();
 
+	Vector2 GetMousePosition();
+
 	bool IsPushKeyPre(BYTE keyNumber);
 
 	//ゲームパッドの状態を得る。毎フレームの最初に一度だけやれば良い

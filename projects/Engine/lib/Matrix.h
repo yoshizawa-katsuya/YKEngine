@@ -65,6 +65,8 @@ Matrix4x4 MakeRotateMatrix(Quaternion q);
 //アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
+Matrix4x4 MakeAffineMatrix(const EulerTransform& transform);
+
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const Vector3& translate);
 
 //透視投影行列

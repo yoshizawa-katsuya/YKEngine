@@ -28,6 +28,8 @@ public:
 
 	void SkinPreDraw();
 
+	void InstancingPreDraw();
+
 	void LinePreDraw();
 
 	void LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& worldMatrix2, Camera* camera);

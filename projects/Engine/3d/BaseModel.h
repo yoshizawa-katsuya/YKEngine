@@ -36,7 +36,14 @@ public:
 	//3dObjectクラス経由で呼び出す
 	virtual void Draw(uint32_t textureHandle);
 
+	virtual void InstancingDraw(uint32_t numInstance);
+
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
+
+	//TODO:mtlファイルからuvTransform情報を読み込めるようにする
+	virtual void SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+
+	virtual void SetUVTransform(const EulerTransform& uvTransform);
 
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
