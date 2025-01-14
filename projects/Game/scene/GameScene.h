@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
+#include "Stone.h"
 
 class GameScene : public BaseScene
 {
@@ -64,7 +65,8 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	std::unique_ptr<BaseModel> modelPlayer_;
-
+	//ストーンモデル
+	std::unique_ptr<BaseModel>modelStone_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
@@ -72,6 +74,8 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	//ストーン
+	std::unique_ptr<Stone>stone_;
 	//パーティクル
 	/*
 	std::unique_ptr<ParticleEmitter> emitter_;

@@ -8,17 +8,36 @@ Vector3 Add(const Vector3& v1, const Vector3& v2);
 //減算
 Vector3 Subtract(const Vector3& v1, const Vector3& v2);
 
+//Vector2用
+Vector2 Subtract(const Vector2& v1, const Vector2& v2);
+
 //スカラー倍
 Vector3 Multiply(float scalar, const Vector3& v);
+
+Vector3 Multiply(const Vector3& v, float scalar);
+
+//Vector2用
+Vector2 Multiply(float scalar, const Vector2& v);
+
+Vector2 Multiply(const Vector2& v1, const Vector2& v2);
 
 //内積
 float Dot(const Vector3& v1, const Vector3& v2);
 
+//Vector2用
+float Dot(const Vector2& v1, const Vector2& v2);
+
 //長さ(ノルム)
 float Length(const Vector3& v);
 
+//Vector2用
+float Length(const Vector2& v);
+
 //正規化
 Vector3 Normalize(const Vector3& v);
+
+//Vector2用
+Vector2 Normalize(const Vector2& v);
 
 //void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label);
 
@@ -47,3 +66,9 @@ Vector3 operator/(const Vector3& v, float s);
 Vector3 operator-(const Vector3& v);
 
 Vector3 operator+(const Vector3& v);
+
+Vector2 operator-(const Vector2& v1, const Vector2& v2);
+
+Vector2 operator*(const Vector2& v, float s);
+
+Vector2 operator*(const Vector2& v1, const Vector2& v2);

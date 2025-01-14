@@ -57,6 +57,8 @@ void GameScene::Initialize() {
 	modelPlayer_ = std::make_unique<RigidModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
+	modelStone_ = std::make_unique<RigidModel>();
+	modelStone_->CreateModel("./resources", "plane.obj");
 	
 	/*
 	//テクスチャハンドルの生成
@@ -71,7 +73,9 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
-	
+	//ストーンの初期化
+	stone_ = std::make_unique<Stone>();
+	stone_->Initialize(modelStone_.get());
 }
 
 void GameScene::Update() {
@@ -86,7 +90,10 @@ void GameScene::Update() {
 	}
 
 	//プレイヤーの更新
-	player_->Update();
+	//player_->Update();
+
+	//ストーンの更新
+	stone_->Update();
 
 	//emitter_->Update(color_);
 
@@ -220,7 +227,10 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	//player_->Draw(mainCamera_);
+
+	//ストーンの描画
+	stone_->Draw(mainCamera_);
 
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();

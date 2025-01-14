@@ -119,6 +119,15 @@ bool Input::TrigerMouseLeft()
 	return false;
 }
 
+bool Input::TrigerMouseRight()
+{
+	if (!(preMouseState_.rgbButtons[1] & 0x80) && (mouseState_.rgbButtons[1] & 0x80)) {
+		return true;
+	}
+	return false;
+}
+
+
 bool Input::PushMouseCenter()
 {
 	if (mouseState_.rgbButtons[2] & 0x80) {
@@ -137,6 +146,14 @@ Vector2 Input::GetMouseVelocity()
 
 	return Vector2((float)mouseState_.lX, (float)mouseState_.lY);
 
+}
+
+Vector2 Input::GetMousePosition() {
+	POINT point;
+	if (GetCursorPos(&point)) {
+		return Vector2(static_cast<float>(point.x), static_cast<float>(point.y));
+	}
+	return Vector2(0.0f, 0.0f);
 }
 
 bool Input::IsPushKeyPre(BYTE keyNumber)

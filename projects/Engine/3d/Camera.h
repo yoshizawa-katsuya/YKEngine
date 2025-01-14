@@ -66,4 +66,3 @@ private:
 	CameraForGPU* cameraForGPUData_;
 	
 };
-

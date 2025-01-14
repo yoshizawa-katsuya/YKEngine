@@ -59,11 +59,15 @@ public:
 
 	bool TrigerMouseLeft();
 
+	bool TrigerMouseRight();
+
 	bool PushMouseCenter();
 
 	float GetMouseWheel();
 
 	Vector2 GetMouseVelocity();
+
+	Vector2 GetMousePosition();
 
 	bool IsPushKeyPre(BYTE keyNumber);
 

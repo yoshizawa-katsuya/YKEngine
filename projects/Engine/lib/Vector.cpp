@@ -23,6 +23,15 @@ Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
 
 }
 
+//Vector2用
+Vector2 Subtract(const Vector2& v1, const Vector2& v2) {
+	Vector2 anser;
+	anser.x = v1.x - v2.x;
+	anser.y = v1.y - v2.y;
+	
+	return anser;
+}
+
 Vector3 Multiply(float scalar, const Vector3& v) {
 
 	Vector3 anser;
@@ -34,6 +43,32 @@ Vector3 Multiply(float scalar, const Vector3& v) {
 
 }
 
+Vector3 Multiply(const Vector3& v, float scalar) {
+	Vector3 anser;
+	anser.x = v.x * scalar;
+	anser.y = v.y * scalar;
+	anser.z - v.z * scalar;
+
+	return anser;
+}
+
+//Vector2用
+Vector2 Multiply(float scalar, const Vector2& v) {
+	Vector2 anser;
+	anser.x = scalar * v.x;
+	anser.y = scalar * v.y;
+
+	return anser;
+}
+
+Vector2 Multiply(const Vector2& v1, const Vector2& v2) {
+	Vector2 anser;
+	anser.x = v1.x * v2.x;
+	anser.y = v1.y * v2.y;
+
+	return anser;
+}
+
 float Dot(const Vector3& v1, const Vector3& v2) {
 
 	float anser;
@@ -43,6 +78,14 @@ float Dot(const Vector3& v1, const Vector3& v2) {
 
 }
 
+//Vector2用
+float Dot(const Vector2& v1, const Vector2& v2) {
+	float anser;
+	anser = (v1.x * v2.x) + (v1.y * v2.y);
+
+	return anser;
+}
+
 float Length(const Vector3& v) {
 
 	float anser;
@@ -50,6 +93,14 @@ float Length(const Vector3& v) {
 
 	return anser;
 
+}
+
+//Vector2用
+float Length(const Vector2& v) {
+	float anser;
+	anser = sqrtf(Dot(v, v));
+
+	return anser;
 }
 
 Vector3 Normalize(const Vector3& v) {
@@ -63,6 +114,17 @@ Vector3 Normalize(const Vector3& v) {
 	return anser;
 
 }
+
+//Vector2用
+Vector2 Normalize(const Vector2& v) {
+	Vector2 anser;
+	float length = Length(v);
+	anser.x = v.x / length;
+	anser.y = v.y / length;
+
+	return anser;
+}
+
 /*
 void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) {
 	Novice::ScreenPrintf(x, y, "%.02f", vector.x);
@@ -123,10 +185,16 @@ Vector3 operator-(const Vector3& v1, const Vector3& v2) { return Subtract(v1, v2
 
 Vector3 operator*(float s, const Vector3& v) { return Multiply(s, v); }
 
-Vector3 operator*(const Vector3& v, float s) { return s * v; }
+Vector3 operator*(const Vector3& v, float s) { return Multiply(v, s); }
 
 Vector3 operator/(const Vector3& v, float s) { return Multiply(1.0f / s, v); }
 
 Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
 
 Vector3 operator+(const Vector3& v) { return v; }
+
+Vector2 operator-(const Vector2& v1, const Vector2& v2) { return Subtract(v1, v2); }
+
+Vector2 operator*(const Vector2& v, float s) {return Multiply(s, v);}
+
+Vector2 operator*(const Vector2& v1, const Vector2& v2) { return Multiply(v1, v2); }
