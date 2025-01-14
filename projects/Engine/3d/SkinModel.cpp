@@ -80,7 +80,7 @@ void SkinModel::LoadModelFile(const std::string& directoryPath, const std::strin
 {
 	Assimp::Importer importer;
 	std::string filepath = directoryPath + "/" + filename;
-	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 
 	assert(scene->HasMeshes());	//メッシュがないのは対応しない
 
