@@ -104,7 +104,7 @@ MapChipField::IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3&
 	indexSet.xIndex = uint32_t((position.x + kBlockWidth / 2) / kBlockWidth);
 	//indexSet.yIndex = uint32_t(kNumBlockVirtical - 1 - (position.y + kBlockHeight / 2) / kBlockHeight);
 	//indexSet.yIndex = uint32_t(kNumBlockVirtical - (position.y + kBlockHeight / 2) / kBlockHeight);
-	indexSet.zIndex = uint32_t((position.y + kBlockDepth / 2) / kBlockDepth);
+	indexSet.zIndex = uint32_t((position.z + kBlockDepth / 2) / kBlockDepth);
 	indexSet.zIndex = kNumBlockVertical - 1 - indexSet.zIndex;
 	return indexSet;
 }
