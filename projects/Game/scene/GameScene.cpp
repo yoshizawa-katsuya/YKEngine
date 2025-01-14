@@ -35,7 +35,7 @@ void GameScene::Initialize() {
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotateX(std::numbers::pi_v<float> / 2.0f);
-	camera_->SetTranslate({ 0.0f, 10.0f, 0.0f });
+	//camera_->SetTranslate({ 0.0f, 10.0f, 0.0f });
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -76,6 +76,10 @@ void GameScene::Initialize() {
 	//マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
 	mapChipField_->LoadMapChipCsv("./resources/csv/stage1.csv");
+
+	Vector3 cameraPosition = mapChipField_->GetMapChipPositionByIndex(mapChipField_->GetNumBlockHorizontal() - 1, 0);
+	cameraPosition /= 2;
+	camera_->SetTranslate({ cameraPosition.x, 10.0f, cameraPosition.z });
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
