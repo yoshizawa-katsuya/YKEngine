@@ -9,12 +9,6 @@
 
 Player::Player()
 	: input_(Input::GetInstance())
-	, kJumpAcceleration_(0.5f)
-	, kLimitFallSpeed_(1.0f)
-	, kGravityAcceleration_(0.03f)
-	, speed_(0.1f)
-	, velocity_({0.0f, 0.0f, 0.0f})
-	, onGround_(false)
 	, lrDirection_(LRDirection::kRight)
 	, turnTimer_(1.0f)
 {
@@ -196,7 +190,7 @@ void Player::Move()
 {
 	//左右移動
 	if (input_->PushKey(DIK_A) || input_->PushButton(XINPUT_GAMEPAD_DPAD_LEFT) || input_->GetLeftStickX() < -0.5f) {
-		worldTransform_.translation_.x -= speed_;
+		moveWork_.velocity_.x = -moveWork_.speed_;
 		if (lrDirection_ != LRDirection::kLeft) {
 			lrDirection_ = LRDirection::kLeft;
 			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
@@ -205,7 +199,7 @@ void Player::Move()
 		}
 	}
 	if (input_->PushKey(DIK_D) || input_->PushButton(XINPUT_GAMEPAD_DPAD_RIGHT) || input_->GetLeftStickX() > 0.5f) {
-		worldTransform_.translation_.x += speed_;
+		moveWork_.velocity_.x = moveWork_.speed_;
 		if (lrDirection_ != LRDirection::kRight) {
 			lrDirection_ = LRDirection::kRight;
 			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
@@ -214,26 +208,52 @@ void Player::Move()
 		}
 	}
 
+	
+	Jump();
+
+}
+
+void Player::Jump()
+{
 	//ジャンプ
-	if (onGround_ && (input_->TriggerKey(DIK_W) || input_->TriggerButton(XINPUT_GAMEPAD_A))) {
+	if (moveWork_.onGround_ && (input_->TriggerKey(DIK_W) || input_->TriggerButton(XINPUT_GAMEPAD_A))) {
 		// ジャンプ加速
-		velocity_.y += kJumpAcceleration_;
-		onGround_ = false;
+		moveWork_.velocity_.y += moveWork_.kJumpAcceleration_;
+		moveWork_.onGround_ = false;
+		moveWork_.isJumping_ = true;
+		moveWork_.jumpHoldTime_ = 0;
+		return;
 	}
-	else if (!onGround_) {
+	else if (!moveWork_.onGround_) {
 
 		// 落下速度
-		velocity_.y += -kGravityAcceleration_;
+		moveWork_.velocity_.y += -moveWork_.kGravityAcceleration_;
 		// 落下速度制限
-		velocity_.y = (std::max)(velocity_.y, -kLimitFallSpeed_);
+		moveWork_.velocity_.y = (std::max)(moveWork_.velocity_.y, -moveWork_.kLimitFallSpeed_);
+	}
+
+	if (moveWork_.isJumping_) {
+		//ジャンプボタンを押し続けている間の処理
+		if (input_->HoldKey(DIK_W) || input_->HoldButton(XINPUT_GAMEPAD_A)) {
+			moveWork_.jumpHoldTime_++;
+
+			//最大時間内なら追加加速
+			if (moveWork_.jumpHoldTime_ < moveWork_.kMaxJumpHoldTime_) {
+				moveWork_.velocity_.y += moveWork_.kJumpHoldAcceleration_;
+			}
+		}
+		else {
+			moveWork_.isJumping_ = false;
+		}
 	}
 
 }
 
 void Player::MoveAppli()
 {
-	worldTransform_.translation_ += velocity_;
-	
+	worldTransform_.translation_ += moveWork_.velocity_;
+	moveWork_.velocity_.x = 0;
+
 	//移動範囲制限
 	worldTransform_.translation_.x = (std::max)(worldTransform_.translation_.x, moveRange_.min_);
 	worldTransform_.translation_.x = (std::min)(worldTransform_.translation_.x, moveRange_.max_);
@@ -242,14 +262,15 @@ void Player::MoveAppli()
 
 void Player::GroundCollision()
 {
-	if (onGround_) {
+	if (moveWork_.onGround_) {
 		return;
 	}
 
 	if (worldTransform_.translation_.y < radius_) {
 		worldTransform_.translation_.y = radius_;
-		velocity_.y = 0.0f;
-		onGround_ = true;
+		moveWork_.velocity_.y = 0.0f;
+		moveWork_.onGround_ = true;
+		moveWork_.isJumping_ = false;
 	}
 
 }
@@ -335,5 +356,19 @@ Player::StatusWork::StatusWork()
 	, isAlive_(true)
 	, remainingInvincibleTime_(0)
 	, maxInvincibleTime_(60)
+{
+}
+
+Player::MoveWork::MoveWork()
+	: kJumpAcceleration_(0.3f)
+	, kJumpHoldAcceleration_(0.019f)
+	, kMaxJumpHoldTime_(24)
+	, jumpHoldTime_(0)
+	, isJumping_(false)
+	, kLimitFallSpeed_(1.0f)
+	, kGravityAcceleration_(0.03f)
+	, speed_(0.1f)
+	, velocity_({ 0.0f, 0.0f, 0.0f })
+	, onGround_(false)
 {
 }

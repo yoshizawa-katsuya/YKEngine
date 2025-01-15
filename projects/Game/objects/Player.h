@@ -58,6 +58,9 @@ private:
 	//移動入力
 	void Move();
 
+	//ジャンプ入力
+	void Jump();
+
 	//移動
 	void MoveAppli();
 
@@ -105,19 +108,31 @@ private:
 
 	MoveRange moveRange_;
 
-	//移動の速さ
-	float speed_;
+	struct MoveWork {
+		MoveWork();
+		//移動の速さ
+		float speed_;
+		//速度
+		Vector3 velocity_;
+		//接地状態か否か
+		bool onGround_;
+		//ジャンプ時の加速度
+		float kJumpAcceleration_;
+		//ジャンプボタンを長押ししたときの加速度
+		float kJumpHoldAcceleration_;
+		//ジャンプ長押しで加速が続くフレーム数
+		uint32_t kMaxJumpHoldTime_;
+		//ジャンプボタンを押しているフレーム数
+		uint32_t jumpHoldTime_;
+		//現在ジャンプ中か否か
+		bool isJumping_;
+		//重力加速度
+		float kGravityAcceleration_;
+		//落下速度の限界
+		float kLimitFallSpeed_;
+	};
 
-	//速度
-	Vector3 velocity_;
-	//接地状態か否か
-	bool onGround_;
-	//ジャンプ時の加速度
-	float kJumpAcceleration_;
-	//重力加速度
-	float kGravityAcceleration_;
-	//落下速度の限界
-	float kLimitFallSpeed_;
+	MoveWork moveWork_;
 
 	//攻撃用ワーク
 	struct WorkAttack {
