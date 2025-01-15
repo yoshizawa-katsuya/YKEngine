@@ -170,13 +170,8 @@ void GameScene::Update() {
 		//プレイヤーの更新
 		player_->Update();
 
-		//デスフラグの立った弾を削除
-		playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& playerBullet) {
-			if (!playerBullet->GetIsAlive()) {
-				return true;
-			}
-			return false;
-			});
+		//デスフラグの立ったオブジェクトを削除
+		CheckAllDelete();
 
 		playerPositionX = player_->GetCenterPosition().x;
 		//自キャラの弾の更新
@@ -184,29 +179,13 @@ void GameScene::Update() {
 			playerBullet->Update(playerPositionX);
 		}
 
-		//デスフラグの立った敵を削除
-		enemies_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
-			if (!enemy->GetIsAlive()) {
-				return true;
-			}
-			return false;
-			});
-
 		//敵の更新
 		//enemy_->Update();
 		for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 			enemy->Update();
 		}
 
-		//デスフラグの立った弾を削除
-		enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& enemyBullet) {
-			if (!enemyBullet->GetIsAlive()) {
-				return true;
-			}
-			return false;
-			});
-
-		//自キャラの弾の更新
+		//敵の弾の更新
 		for (std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets_) {
 			enemyBullet->Update();
 		}
@@ -457,6 +436,33 @@ void GameScene::CreateLevel()
 		objects_.push_back(newObject);
 		*/
 	}
+}
+
+void GameScene::CheckAllDelete()
+{
+	//デスフラグの立った弾を削除
+	playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& playerBullet) {
+		if (!playerBullet->GetIsAlive()) {
+			return true;
+		}
+		return false;
+	});
+
+	//デスフラグの立った敵を削除
+	enemies_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
+		if (!enemy->GetIsAlive()) {
+			return true;
+		}
+		return false;
+	});
+
+	//デスフラグの立った弾を削除
+	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& enemyBullet) {
+		if (!enemyBullet->GetIsAlive()) {
+			return true;
+		}
+		return false;
+	});
 }
 
 void GameScene::CheckAllCollisions()

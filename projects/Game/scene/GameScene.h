@@ -46,6 +46,9 @@ private:
 	//敵の配置
 	void CreateLevel();
 
+	//デスフラグが経っているものを削除
+	void CheckAllDelete();
+
 	// 衝突判定と応答
 	void CheckAllCollisions();
 
