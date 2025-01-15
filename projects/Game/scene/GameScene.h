@@ -112,6 +112,7 @@ private:
 	std::unique_ptr<BaseModel> modelGround_;
 	std::unique_ptr<BaseModel> modelSkyDome_;
 	std::unique_ptr<BaseModel> modelHPGauge_;
+	std::unique_ptr<BaseModel> modelHPGaugeFrame_;
 	std::unique_ptr<BaseModel> modelPlayerBullet_;
 	std::unique_ptr<BaseModel> modelEnemyBullet_;
 

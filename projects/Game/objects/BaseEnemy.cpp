@@ -104,8 +104,8 @@ void BaseEnemy::SetHPGaugeModel(BaseModel* model)
 	hpGauge_.worldTransform_.Initialize();
 	hpGauge_.worldTransform_.translation_.y = worldTransform_.translation_.y;
 
-	hpGauge_.darkFrameObject_ = std::make_unique<Rigid3dObject>();
-	hpGauge_.darkFrameObject_->Initialize(model);
+	hpGauge_.darkObject_ = std::make_unique<Rigid3dObject>();
+	hpGauge_.darkObject_->Initialize(model);
 
 	hpGauge_.darkWorldTransform_.Initialize();
 	hpGauge_.darkWorldTransform_.translation_.y = worldTransform_.translation_.y;
@@ -151,9 +151,9 @@ void BaseEnemy::HPGaugeDraw(Camera* camera, const Matrix4x4& billbordMatrix)
 
 	hpGauge_.darkWorldTransform_.UpdateMatrix(billbordMatrix);
 
-	hpGauge_.darkFrameObject_->WorldTransformUpdate(hpGauge_.darkWorldTransform_);
-	hpGauge_.darkFrameObject_->CameraUpdate(camera);
-	hpGauge_.darkFrameObject_->Draw(textureHandleDarkRed_);
+	hpGauge_.darkObject_->WorldTransformUpdate(hpGauge_.darkWorldTransform_);
+	hpGauge_.darkObject_->CameraUpdate(camera);
+	hpGauge_.darkObject_->Draw(textureHandleDarkRed_);
 }
 
 /*

@@ -82,7 +82,9 @@ protected:
 		WorldTransform worldTransform_;
 		std::unique_ptr<Base3dObject> object_;
 		WorldTransform darkWorldTransform_;
-		std::unique_ptr<Base3dObject> darkFrameObject_;
+		std::unique_ptr<Base3dObject> darkObject_;
+		WorldTransform frameWorldTransform_;
+		std::unique_ptr<Base3dObject> frameObject_;
 	};
 	
 	HPGauge hpGauge_;

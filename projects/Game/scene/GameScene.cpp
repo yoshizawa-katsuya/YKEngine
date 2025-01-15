@@ -96,6 +96,10 @@ void GameScene::Initialize() {
 	modelHPGauge_->CreateModel("./resources/HPGauge", "HPGauge.obj");
 	modelHPGauge_->SetEnableLighting(false);
 
+	modelHPGaugeFrame_ = std::make_unique<RigidModel>();
+	modelHPGaugeFrame_->CreateModel("./resources/HPGauge", "HPGauge.obj");
+	modelHPGaugeFrame_->SetEnableLighting(false);
+
 	modelPlayerBullet_ = std::make_unique<RigidModel>();
 	modelPlayerBullet_->CreateSphere(textureHandleBlue_);
 	//modelPlayerBullet_->SetEnableLighting(false);
