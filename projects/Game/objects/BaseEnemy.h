@@ -81,8 +81,8 @@ protected:
 	struct HPGauge {
 		WorldTransform worldTransform_;
 		std::unique_ptr<Base3dObject> object_;
-		WorldTransform frameWorldTransform_;
-		std::unique_ptr<Base3dObject> frameObject_;
+		WorldTransform darkWorldTransform_;
+		std::unique_ptr<Base3dObject> darkFrameObject_;
 	};
 	
 	HPGauge hpGauge_;

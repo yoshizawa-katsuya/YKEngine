@@ -29,10 +29,10 @@ void Enemy01::SetHPGaugeModel(BaseModel* model)
 	hpGauge_.worldTransform_.Initialize();
 	hpGauge_.worldTransform_.translation_.y = worldTransform_.translation_.y - 0.2f;
 
-	hpGauge_.frameObject_ = std::make_unique<Rigid3dObject>();
-	hpGauge_.frameObject_->Initialize(model);
+	hpGauge_.darkFrameObject_ = std::make_unique<Rigid3dObject>();
+	hpGauge_.darkFrameObject_->Initialize(model);
 
-	hpGauge_.frameWorldTransform_.Initialize();
-	hpGauge_.frameWorldTransform_.translation_.y = worldTransform_.translation_.y - 0.2f;
-	hpGauge_.frameWorldTransform_.translation_.z = 0.001f;
+	hpGauge_.darkWorldTransform_.Initialize();
+	hpGauge_.darkWorldTransform_.translation_.y = worldTransform_.translation_.y - 0.2f;
+	hpGauge_.darkWorldTransform_.translation_.z = 0.001f;
 }

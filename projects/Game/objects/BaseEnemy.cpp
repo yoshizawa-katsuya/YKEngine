@@ -104,12 +104,12 @@ void BaseEnemy::SetHPGaugeModel(BaseModel* model)
 	hpGauge_.worldTransform_.Initialize();
 	hpGauge_.worldTransform_.translation_.y = worldTransform_.translation_.y;
 
-	hpGauge_.frameObject_ = std::make_unique<Rigid3dObject>();
-	hpGauge_.frameObject_->Initialize(model);
+	hpGauge_.darkFrameObject_ = std::make_unique<Rigid3dObject>();
+	hpGauge_.darkFrameObject_->Initialize(model);
 
-	hpGauge_.frameWorldTransform_.Initialize();
-	hpGauge_.frameWorldTransform_.translation_.y = worldTransform_.translation_.y;
-	hpGauge_.frameWorldTransform_.translation_.z = 0.001f;
+	hpGauge_.darkWorldTransform_.Initialize();
+	hpGauge_.darkWorldTransform_.translation_.y = worldTransform_.translation_.y;
+	hpGauge_.darkWorldTransform_.translation_.z = 0.001f;
 
 }
 
@@ -137,8 +137,8 @@ void BaseEnemy::HPGaugeUpdate()
 	hpGauge_.worldTransform_.translation_.x = GetCenterPosition().x - radius_;
 	hpGauge_.worldTransform_.scale_.x = (static_cast<float>(status_.HP_) - static_cast<float>(status_.bombNum_)) / static_cast<float>(status_.maxHP_);
 	
-	hpGauge_.frameWorldTransform_.translation_.x = hpGauge_.worldTransform_.translation_.x;
-	hpGauge_.frameWorldTransform_.scale_.x = static_cast<float>(status_.HP_) / static_cast<float>(status_.maxHP_);
+	hpGauge_.darkWorldTransform_.translation_.x = hpGauge_.worldTransform_.translation_.x;
+	hpGauge_.darkWorldTransform_.scale_.x = static_cast<float>(status_.HP_) / static_cast<float>(status_.maxHP_);
 }
 
 void BaseEnemy::HPGaugeDraw(Camera* camera, const Matrix4x4& billbordMatrix)
@@ -149,11 +149,11 @@ void BaseEnemy::HPGaugeDraw(Camera* camera, const Matrix4x4& billbordMatrix)
 	hpGauge_.object_->CameraUpdate(camera);
 	hpGauge_.object_->Draw();
 
-	hpGauge_.frameWorldTransform_.UpdateMatrix(billbordMatrix);
+	hpGauge_.darkWorldTransform_.UpdateMatrix(billbordMatrix);
 
-	hpGauge_.frameObject_->WorldTransformUpdate(hpGauge_.frameWorldTransform_);
-	hpGauge_.frameObject_->CameraUpdate(camera);
-	hpGauge_.frameObject_->Draw(textureHandleDarkRed_);
+	hpGauge_.darkFrameObject_->WorldTransformUpdate(hpGauge_.darkWorldTransform_);
+	hpGauge_.darkFrameObject_->CameraUpdate(camera);
+	hpGauge_.darkFrameObject_->Draw(textureHandleDarkRed_);
 }
 
 /*
