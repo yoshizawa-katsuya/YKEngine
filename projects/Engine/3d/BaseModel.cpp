@@ -19,7 +19,7 @@ BaseModel::~BaseModel()
 {
 }
 
-void BaseModel::CreateModel(const std::string& directoryPath, const std::string& filename) {
+void BaseModel::CreateModel(const std::string& directoryPath, const std::string& filename, const Vector4& color) {
 
 	//モデル読み込み
 	LoadModelFile(directoryPath, filename);
@@ -34,10 +34,10 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 	//threadpool->enqueueTask(&BaseModel::CreateMaterialData, this);
 
 	
-	ThreadPool::GetInstance()->enqueueTask([this]() {
+	ThreadPool::GetInstance()->enqueueTask([this, color]() {
 		CreateVertexData();
 		CreateIndexData();
-		CreateMaterialData();
+		CreateMaterialData(color);
 		textureHandle_ = TextureManager::GetInstance()->Load(modelData_.material.textureFilePath);
 	});
 
@@ -163,7 +163,7 @@ void BaseModel::CreateIndexData()
 
 }
 
-void BaseModel::CreateMaterialData()
+void BaseModel::CreateMaterialData(const Vector4& color)
 {
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
@@ -172,7 +172,7 @@ void BaseModel::CreateMaterialData()
 	//書き込むためのアドレスを取得
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//白を書き込む
-	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	materialData_->color = color;
 	materialData_->enableLighting = true;
 	materialData_->uvTransform = MakeIdentity4x4();
 	materialData_->shininess = 40.0f;

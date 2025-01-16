@@ -8,26 +8,6 @@ SkinModel::~SkinModel()
 {
 }
 
-void SkinModel::CreateModel(const std::string& directoryPath, const std::string& filename)
-{
-
-	BaseModel::CreateModel(directoryPath, filename);
-
-}
-
-void SkinModel::Update()
-{
-
-	
-
-}
-
-void SkinModel::Update(Animation* animation)
-{
-
-	
-}
-
 void SkinModel::Draw()
 {
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
