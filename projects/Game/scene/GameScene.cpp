@@ -34,8 +34,9 @@ void GameScene::Initialize() {
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
-	camera_->SetRotateX(std::numbers::pi_v<float> / 2.0f);
-	camera_->SetTranslate({ 0.0f, 10.0f, 0.0f });
+	camera_->SetRotateX(0.741f);
+	camera_->SetRotateZ(0.0f);
+	camera_->SetTranslate({ 0.0f, 31.31f, -33.19f });
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -72,6 +73,14 @@ void GameScene::Initialize() {
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	*/
+	//background
+	background_ = TextureManager::GetInstance()->Load("./resources/scene/background1.png");
+	backgroundSprite_ = std::make_unique<Sprite>();
+	backgroundSprite_->Initialize(background_);
+	//backgroundSprite_->SetPosition({ 0.0f,0.0f });
+
+
+
 
 	//マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
@@ -179,9 +188,9 @@ void GameScene::Update() {
 void GameScene::Draw() {
 
 	//Spriteの背景描画前処理
-	//spritePlatform_->PreBackGroundDraw();
+	spritePlatform_->PreBackGroundDraw();
 
-	//sprite_->Draw();
+	backgroundSprite_->Draw();
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
