@@ -47,7 +47,7 @@ Vector3 Multiply(const Vector3& v, float scalar) {
 	Vector3 anser;
 	anser.x = v.x * scalar;
 	anser.y = v.y * scalar;
-	anser.z - v.z * scalar;
+	anser.z = v.z * scalar;
 
 	return anser;
 }
