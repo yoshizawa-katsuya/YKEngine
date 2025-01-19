@@ -110,7 +110,7 @@ void SkinModel::LoadSkinCluster(aiMesh* mesh)
 		bindPoseMatrixAssimp.Decompose(scale, rotate, translate);	//成分を抽出
 		//左手系のBindPoseMatrixを作る
 		Matrix4x4 bindPoseMatrix = MakeAffineMatrix(
-			{ scale.x, scale.y, scale.z }, { -rotate.x, rotate.y, rotate.z, rotate.w }, { -translate.x, translate.y, translate.z });
+			{ scale.x, scale.y, scale.z }, { rotate.x, -rotate.y, -rotate.z, rotate.w }, { -translate.x, translate.y, translate.z });
 		//InverseBindPoseMatrixにする
 		jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrix);
 
