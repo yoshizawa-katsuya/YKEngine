@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <memory>
 #include <map>
+#include <vector>
 #include "BaseScene.h"
 #include "Audio.h"
 #include "Input.h"
@@ -21,65 +22,53 @@
 class GameScene : public BaseScene
 {
 public:
+    ~GameScene() override;
 
-	~GameScene() override;
+    void Initialize() override;
 
-	void Initialize() override;
+    void Update() override;
 
-	void Update() override;
+    void Draw() override;
 
-	void Draw() override;
-
-	void Finalize() override;
+    void Finalize() override;
 
 private:
+    // デバイス
+    DirectXCommon* dxCommon_;
 
-	//デバイス
-	DirectXCommon* dxCommon_;
+    Audio* audio_;
+    Input* input_;
 
-	Audio* audio_;
-	Input* input_;
+    SpritePlatform* spritePlatform_;
+    ModelPlatform* modelPlatform_;
 
-	//LoopSoundData bgm1_;
+    Camera* mainCamera_ = nullptr;
 
-	SpritePlatform* spritePlatform_;
-	ModelPlatform* modelPlatform_;
+    std::unique_ptr<Camera> camera_;
+    std::unique_ptr<Camera> camera2_;
 
-	Camera* mainCamera_ = nullptr;
+    std::unique_ptr<DebugCamera> debugCamera_;
 
+    bool isActiveDebugCamera_ = false;
 
-	std::unique_ptr<Camera> camera_;
-	std::unique_ptr<Camera> camera2_;
+    // 平行光源
+    std::unique_ptr<DirectionalLight> directionalLight_;
 
-	std::unique_ptr<DebugCamera> debugCamera_;
+    // 点光源
+    std::unique_ptr<PointLight> pointLight_;
 
-	bool isActiveDebugCamera_ = false;
+    // スポットライト
+    std::unique_ptr<SpotLight> spotLight_;
 
-	//平行光源
-	std::unique_ptr<DirectionalLight> directionalLight_;
+    std::unique_ptr<BaseModel> modelPlayer_;
+    // ストーンモデル
+    std::unique_ptr<BaseModel> modelStone_;
 
-	//点光源
-	std::unique_ptr<PointLight> pointLight_;
+    uint32_t textureHandle_;
 
-	//スポットライト
-	std::unique_ptr<SpotLight> spotLight_;
+    // プレイヤー
+    std::unique_ptr<Player> player_;
 
-	std::unique_ptr<BaseModel> modelPlayer_;
-	//ストーンモデル
-	std::unique_ptr<BaseModel>modelStone_;
-
-	uint32_t textureHandle_;
-	//std::unique_ptr<Sprite> sprite_;
-
-	//プレイヤー
-	std::unique_ptr<Player> player_;
-
-	//ストーン
-	std::unique_ptr<Stone>stone_;
-	//パーティクル
-	/*
-	std::unique_ptr<ParticleEmitter> emitter_;
-	std::unique_ptr<AccelerationField> field_;
-	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
-	*/
+    // ストーンのリスト
+    std::vector<std::unique_ptr<Stone>> stones_; // 複数のストーンを管理
 };

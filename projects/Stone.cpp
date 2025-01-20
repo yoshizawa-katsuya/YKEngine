@@ -72,8 +72,12 @@ void Stone::Update() {
         }
         else {
             //動きが止まったら待機状態に
-            state_ = State::Waiting;
+            state_ = State::Stopped;
+ 
         }
+        break;
+    }
+    case State::Stopped: {
         break;
     }
     }

@@ -16,6 +16,13 @@ public:
         Vector3 max;
     };
 
+    enum class State {
+        Waiting,
+        PowerSetting,
+        Flying,
+        Stopped
+    };
+
     // 初期化
     void Initialize(BaseModel* model_);
     // 更新
@@ -24,15 +31,10 @@ public:
     void Draw(Camera* camera);
 
     AABB GetAABB()const;
-
+    State GetState()const { return state_; }
     //当たり判定
     bool CheckCollision(const Stone& stone1, const Stone& stone2);
 private:
-    enum class State {
-        Waiting,     
-        PowerSetting,
-        Flying     
-    };
 
     State state_ = State::Waiting; 
     WorldTransform worldTransform_; 

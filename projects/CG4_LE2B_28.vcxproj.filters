@@ -216,9 +216,6 @@
     <ClCompile Include="Stone.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="StoneManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -402,9 +399,6 @@
     </ClInclude>
     <ClInclude Include="Stone.h">
       <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="StoneManager.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
