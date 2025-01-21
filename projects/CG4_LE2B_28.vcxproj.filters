@@ -228,6 +228,9 @@
     <ClCompile Include="Game\mapChip\MapChipField.cpp">
       <Filter>ソース ファイル\mapChip</Filter>
     </ClCompile>
+    <ClCompile Include="SelectScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -420,6 +423,9 @@
     </ClInclude>
     <ClInclude Include="Game\mapChip\MapChipField.h">
       <Filter>ヘッダー ファイル\mapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
