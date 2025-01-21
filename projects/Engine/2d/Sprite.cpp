@@ -24,7 +24,7 @@ void Sprite::Draw() {
 	float left = 0.0f - anchorPoint_.x;
 	float right = 1.0f - anchorPoint_.x;
 	float top = 0.0f - anchorPoint_.y;
-	float bottom = -1.0f + anchorPoint_.y;
+	float bottom = 1.0f - anchorPoint_.y;
 
 	//左右反転
 	if (isFlipX_) {
@@ -63,7 +63,7 @@ void Sprite::Draw() {
 	//Sprite用のWorldViewProjectionMatrixを作る
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transform_.scale, transform_.rotation, transform_.translation);
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
-	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, WinApp::kClientHeight, WinApp::kClientWidth, 0.0f, 0.0f, 100.0f);
+	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, WinApp::kClientWidth, WinApp::kClientHeight, 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, projectionMatrixSprite));
 	transformationMatrixData_->WVP = worldViewProjectionMatrixSprite;
 	transformationMatrixData_->World = worldMatrixSprite;
