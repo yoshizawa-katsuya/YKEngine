@@ -70,5 +70,5 @@ private:
     std::unique_ptr<Player> player_;
 
     // ストーンのリスト
-    std::vector<std::unique_ptr<Stone>> stones_; // 複数のストーンを管理
+    std::vector<std::unique_ptr<Stone>> stones_;
 };

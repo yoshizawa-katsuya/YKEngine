@@ -71,13 +71,25 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-    // 新しいストーンを追加する条件
-    if (stones_.back()->GetState() == Stone::State::Stopped) {
-        if (input_->TriggerKey(DIK_SPACE)) {
-            auto newStone = std::make_unique<Stone>();
-            newStone->Initialize(modelStone_.get());
-            stones_.push_back(std::move(newStone));
+  
+        for (size_t i = 0; i < stones_.size(); ++i) {
+            if (i == stones_.size() - 1) {
+                //現在のストーンのみ操作
+                stones_[i]->Update();
+            }
+            else {
+                // 他のストーンは動作更新のみ
+                if (stones_[i]->GetState() == Stone::State::Flying) {
+                    stones_[i]->Update();
+                }
+            }
         }
+
+    //最後のストーンがStoppedになったら新しいストーンを追加
+    if (!stones_.empty() && stones_.back()->GetState() == Stone::State::Stopped) {
+        auto newStone = std::make_unique<Stone>();
+        newStone->Initialize(modelStone_.get());
+        stones_.push_back(std::move(newStone));
     }
 
     // カメラの更新
@@ -85,11 +97,6 @@ void GameScene::Update() {
 
     if (isActiveDebugCamera_) {
         debugCamera_->Update();
-    }
-
-    // 全ストーンを更新
-    for (auto& stone : stones_) {
-        stone->Update();
     }
 
 #ifdef _DEBUG
