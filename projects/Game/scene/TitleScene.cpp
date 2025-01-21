@@ -2,6 +2,8 @@
 #include "imgui/imgui.h"
 #include "SceneManager.h"
 #include "Collision.h"
+#include "Vector.h"
+
 TitleScene::~TitleScene()
 {
 	//Finalize();
@@ -27,16 +29,16 @@ void TitleScene::Initialize()
 	selectTutorial_ = TextureManager::GetInstance()->Load("./resources/select/selectTutorial.png");
 	tutorialSprite_ = std::make_unique<Sprite>();
 	tutorialSprite_->Initialize(selectTutorial_);
-	tutorialSprite_->SetPosition({ 232.0f, 569.0f });
+	tutorialSprite_->SetPosition({ 232.0f, 31.0f });
 
 	select1_ = TextureManager::GetInstance()->Load("./resources/select/select1.png");
 	selectdSprite1_ = std::make_unique<Sprite>();
 	selectdSprite1_->Initialize(select1_);
-	selectdSprite1_->SetPosition({ 254.0f,400.0f });
+	selectdSprite1_->SetPosition({ 254.0f,200.0f });
 	select2_ = TextureManager::GetInstance()->Load("./resources/select/select2.png");
 	selectdSprite2_ = std::make_unique<Sprite>();
 	selectdSprite2_->Initialize(select2_);
-	selectdSprite2_->SetPosition({ 846.0f,472.0f });
+	selectdSprite2_->SetPosition({ 846.0f,128.0f });
 	select3_ = TextureManager::GetInstance()->Load("./resources/select/select3.png");
 	selectdSprite3_ = std::make_unique<Sprite>();
 	selectdSprite3_->Initialize(select3_);
@@ -61,13 +63,12 @@ void TitleScene::Update()
 
 	if (input_->PushMouseLeft()) {
 		Square square;
-		Vector2 pos = selectdSprite2_->GetPosition();
-		Vector2 size = selectdSprite2_->GetSize();
-		square.max = { pos.x + size.x, pos.y };
-		square.min = { pos.x, pos.y - size.y };
+		square.min = selectdSprite2_->GetPosition();
+		square.max = square.min + selectdSprite2_->GetSize();
+		
 		if (IsCollision(square, input_->GetMousePosition())) {
-			selectdSprite1_->SetPosition({ -342.0f,472.0f });
-			selectdSprite2_->SetPosition({ 254.0f,400.0f });
+			selectdSprite1_->SetPosition({ -342.0f,128.0f });
+			selectdSprite2_->SetPosition({ 254.0f,200.0f });
 		}
 	}
 
