@@ -82,6 +82,16 @@ bool BoxCollision(Vector2 boxA, int boxAwidht, int boxAhight, Vector2 boxB, int 
 
 }
 
+bool IsCollision(const Square& square, const Vector2 point)
+{
+	if ((point.x <= square.max.x && point.x >= square.min.x) &&
+		(point.y <= square.max.y && point.y >= square.min.y)) {
+		
+		return true;
+	}
+	return false;
+}
+
 bool IsCollision(const Square& square, const Circle& circle)
 {
 	Vector2 closestPoint{ std::clamp(circle.center.x, square.min.x, square.max.x),
