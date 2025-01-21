@@ -1,7 +1,7 @@
 #include "TitleScene.h"
 #include "imgui/imgui.h"
 #include "SceneManager.h"
-
+#include "Collision.h"
 TitleScene::~TitleScene()
 {
 	//Finalize();
@@ -60,8 +60,15 @@ void TitleScene::Update()
 {
 
 	if (input_->PushMouseLeft()) {
-		selectdSprite1_->SetPosition({ -342.0f,472.0f });
-		selectdSprite2_->SetPosition({ 254.0f,400.0f });
+		Square square;
+		Vector2 pos = selectdSprite2_->GetPosition();
+		Vector2 size = selectdSprite2_->GetSize();
+		square.max = { pos.x + size.x, pos.y };
+		square.min = { pos.x, pos.y - size.y };
+		if (IsCollision(square, input_->GetMousePosition())) {
+			selectdSprite1_->SetPosition({ -342.0f,472.0f });
+			selectdSprite2_->SetPosition({ 254.0f,400.0f });
+		}
 	}
 
 
