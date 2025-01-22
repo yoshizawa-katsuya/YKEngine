@@ -30,8 +30,18 @@ public:
     // 描画
     void Draw(Camera* camera);
 
+    //速度のセッター
+    void SetSpeed(float speed) { speed_ = speed; }
+    //状態のセッター
+    void SetState(State state) { state_ = state; }
+    //座標のセッター
+    void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; }
+
     AABB GetAABB()const;
     State GetState()const { return state_; }
+    float GetSpeed()const { return speed_; }
+    Vector3 GetPosition()const { return worldTransform_.translation_; }
+
     //当たり判定
     bool CheckCollision(const Stone& stone1, const Stone& stone2);
 private:

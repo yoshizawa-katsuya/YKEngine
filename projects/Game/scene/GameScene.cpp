@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
+#include "Vector.h"
 
 GameScene::~GameScene() {
     // Finalize();
@@ -81,6 +82,14 @@ void GameScene::Update() {
                 // 他のストーンは動作更新のみ
                 if (stones_[i]->GetState() == Stone::State::Flying) {
                     stones_[i]->Update();
+                }
+            }
+        }
+                //衝突判定
+        for (size_t i = 0; i < stones_.size(); ++i) {
+            for (size_t j = i + 1; j < stones_.size(); ++j) {
+                if (stones_[i]->CheckCollision(*stones_[i], *stones_[j])) {
+                   
                 }
             }
         }

@@ -103,10 +103,10 @@ void Stone::Draw(Camera* camera) {
     object_->Draw();
 }
 
+
 Stone::AABB Stone::GetAABB()const {
-    //ストーンの大きさを考慮したAABBを計算
     AABB aabb;
-    Vector3 halfScale = worldTransform_.scale_ * 0.5f;
+    Vector3 halfScale = worldTransform_.scale_ * 0.5f;//仮
 
     aabb.min = {
         worldTransform_.translation_.x - halfScale.x,
