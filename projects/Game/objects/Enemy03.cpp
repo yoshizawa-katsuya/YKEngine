@@ -19,7 +19,7 @@ void Enemy03::Initialize(BaseModel* model, const EulerTransform& transform)
 	status_.HP_ = status_.maxHP_;
 }
 
-void Enemy03::SetHPGaugeModel(BaseModel* model)
+void Enemy03::SetHPGaugeModel(BaseModel* model, BaseModel* frameModel)
 {
 	hpGauge_.object_ = std::make_unique<Rigid3dObject>();
 	hpGauge_.object_->Initialize(model);
@@ -33,6 +33,13 @@ void Enemy03::SetHPGaugeModel(BaseModel* model)
 	hpGauge_.darkWorldTransform_.Initialize();
 	hpGauge_.darkWorldTransform_.translation_.y = worldTransform_.translation_.y + 0.2f;
 	hpGauge_.darkWorldTransform_.translation_.z = 0.001f;
+
+	hpGauge_.frameObject_ = std::make_unique<Rigid3dObject>();
+	hpGauge_.frameObject_->Initialize(frameModel);
+
+	hpGauge_.frameWorldTransform_.Initialize();
+	hpGauge_.frameWorldTransform_.translation_.y = worldTransform_.translation_.y + 0.2f;
+	hpGauge_.frameWorldTransform_.scale_.x = 2.0f;
 }
 
 void Enemy03::HPGaugeUpdate()
@@ -42,4 +49,6 @@ void Enemy03::HPGaugeUpdate()
 
 	hpGauge_.darkWorldTransform_.translation_.x = hpGauge_.worldTransform_.translation_.x;
 	hpGauge_.darkWorldTransform_.scale_.x = static_cast<float>(status_.HP_) / static_cast<float>(status_.maxHP_) * 2.0f;
+
+	hpGauge_.frameWorldTransform_.translation_.x = hpGauge_.worldTransform_.translation_.x;
 }

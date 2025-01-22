@@ -98,7 +98,7 @@ void GameScene::Initialize() {
 	modelHPGauge_->SetEnableLighting(false);
 
 	modelHPGaugeFrame_ = std::make_unique<RigidModel>();
-	modelHPGaugeFrame_->CreateModel("./resources/HPGauge", "HPGauge.obj");
+	modelHPGaugeFrame_->CreateModel("./resources/HPGaugeFrame", "HPGaugeFrame.obj");
 	modelHPGaugeFrame_->SetEnableLighting(false);
 
 	modelPlayerBullet_ = std::make_unique<RigidModel>();
@@ -402,7 +402,7 @@ void GameScene::CreateLevel()
 			std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
 			enemy = std::make_unique<Enemy01>();
 			enemy->Initialize(modelEnemy01_.get(), objectData.transform);
-			enemy->SetHPGaugeModel(modelHPGauge_.get());
+			enemy->SetHPGaugeModel(modelHPGauge_.get(), modelHPGaugeFrame_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
 			enemy->SetHitSE3Data(&HitSE3_);
 		}
@@ -411,7 +411,7 @@ void GameScene::CreateLevel()
 			std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
 			enemy = std::make_unique<Enemy02>();
 			enemy->Initialize(modelEnemy02_.get(), objectData.transform);
-			enemy->SetHPGaugeModel(modelHPGauge_.get());
+			enemy->SetHPGaugeModel(modelHPGauge_.get(), modelHPGaugeFrame_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
 			enemy->SetGameScene(this);
 			enemy->SetHitSE3Data(&HitSE3_);
@@ -422,7 +422,7 @@ void GameScene::CreateLevel()
 			std::unique_ptr<BaseEnemy>& enemy = enemies_.back();
 			enemy = std::make_unique<Enemy03>();
 			enemy->Initialize(modelEnemy03_.get(), objectData.transform);
-			enemy->SetHPGaugeModel(modelHPGauge_.get());
+			enemy->SetHPGaugeModel(modelHPGauge_.get(), modelHPGaugeFrame_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
 			enemy->SetHitSE3Data(&HitSE3_);
 		}

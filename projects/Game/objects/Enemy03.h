@@ -9,7 +9,7 @@ public:
 
 	void Initialize(BaseModel* model, const EulerTransform& transform) override;
 
-	void SetHPGaugeModel(BaseModel* model) override;
+	void SetHPGaugeModel(BaseModel* model, BaseModel* frameModel) override;
 
 private:
 

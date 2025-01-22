@@ -11,7 +11,7 @@ public:
 
 	void Update() override;
 
-	void SetHPGaugeModel(BaseModel* model) override;
+	void SetHPGaugeModel(BaseModel* model, BaseModel* frameModel) override;
 
 private:
 
