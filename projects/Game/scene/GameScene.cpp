@@ -23,6 +23,7 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	audio_ = Audio::GetInstance();
 	input_ = Input::GetInstance();
+	threadPool_ = ThreadPool::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
@@ -188,6 +189,7 @@ void GameScene::Update() {
 		for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 			enemy->Update();
 		}
+		threadPool_->waitForCompletion();
 
 		//敵の弾の更新
 		for (std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets_) {
@@ -197,7 +199,7 @@ void GameScene::Update() {
 		//emitter_->Update(color_);
 
 		//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
-
+		
 		CheckAllCollisions();
 
 		if (enemies_.size() == 0) {
@@ -381,6 +383,7 @@ void GameScene::AddPlayerBullet(const Vector3& velocity)
 
 void GameScene::AddEnemyBullet(const Vector3& position, const Vector3& velocity)
 {
+	std::unique_lock<std::mutex> lock(mutex_);
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(modelEnemyBullet_.get(), position, velocity);
 	enemyBullets_.emplace_back();
@@ -471,6 +474,7 @@ void GameScene::CheckAllDelete()
 
 void GameScene::CheckAllCollisions()
 {
+	threadPool_->waitForCompletion();
 
 	Circle collider1 = { player_->Get2DCenterPosition(), player_->GetRadius() };
 	Circle collider2;

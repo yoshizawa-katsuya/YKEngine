@@ -246,9 +246,6 @@
     <ClCompile Include="Game\objects\PlayerBullet.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\Enemy02.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\objects\EnemyBullet.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
@@ -263,6 +260,9 @@
     </ClCompile>
     <ClCompile Include="Engine\lib\Fade.cpp">
       <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\Enemy02.cpp">
+      <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

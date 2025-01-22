@@ -6,6 +6,7 @@
 #include "Lerp.h"
 #include "Easing.h"
 #include "Audio.h"
+#include "ThreadPool.h"
 
 uint32_t BaseEnemy::nextSerialNumber_ = 0;
 
@@ -46,43 +47,46 @@ void BaseEnemy::Initialize(BaseModel* model, const EulerTransform& transform)
 
 void BaseEnemy::Update()
 {
-	if (lrDirection_ == LRDirection::kRight) {
-		worldTransform_.translation_.x += speed_;
-		if (worldTransform_.translation_.x > 20.5f - radius_) {
-			worldTransform_.translation_.x = 20.5f - radius_;
-			lrDirection_ = LRDirection::kLeft;
-			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-			turnFirstRotationY_ = worldTransform_.rotation_.y;
-			turnTimer_ = 0.0f;
+	ThreadPool::GetInstance()->enqueueTask([&]() {
+
+		if (lrDirection_ == LRDirection::kRight) {
+			worldTransform_.translation_.x += speed_;
+			if (worldTransform_.translation_.x > 20.5f - radius_) {
+				worldTransform_.translation_.x = 20.5f - radius_;
+				lrDirection_ = LRDirection::kLeft;
+				targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = 0.0f;
+			}
 		}
-	}
-	else {
-		worldTransform_.translation_.x -= speed_;
-		if (worldTransform_.translation_.x < -20.5f + radius_) {
-			worldTransform_.translation_.x = -20.5f + radius_;
-			lrDirection_ = LRDirection::kRight;
-			targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
-			turnFirstRotationY_ = worldTransform_.rotation_.y;
-			turnTimer_ = 0.0f;
+		else {
+			worldTransform_.translation_.x -= speed_;
+			if (worldTransform_.translation_.x < -20.5f + radius_) {
+				worldTransform_.translation_.x = -20.5f + radius_;
+				lrDirection_ = LRDirection::kRight;
+				targetAngle_ = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				turnTimer_ = 0.0f;
+			}
 		}
-	}
 
-	// 旋回制御
-	if (turnTimer_ < 1.0f) {
-		turnTimer_ += 1.0f / 12.0f;
+		// 旋回制御
+		if (turnTimer_ < 1.0f) {
+			turnTimer_ += 1.0f / 12.0f;
 
-		if (turnTimer_ > 1.0f) {
-			turnTimer_ = 1.0f;
+			if (turnTimer_ > 1.0f) {
+				turnTimer_ = 1.0f;
+			}
+			// 自キャラの角度を設定する
+			//worldTransform_.rotation_.y = turnFirstRotationY_ * EaseOut(turnTimer_) + destinationRotationY * (1 - EaseOut(turnTimer_));
+			worldTransform_.rotation_.y = Lerp(turnFirstRotationY_, targetAngle_, EaseOut(turnTimer_));
+
 		}
-		// 自キャラの角度を設定する
-		//worldTransform_.rotation_.y = turnFirstRotationY_ * EaseOut(turnTimer_) + destinationRotationY * (1 - EaseOut(turnTimer_));
-		worldTransform_.rotation_.y = Lerp(turnFirstRotationY_, targetAngle_, EaseOut(turnTimer_));
 
-	}
+		Collider::Update();
 
-	Collider::Update();
-
-	HPGaugeUpdate();
+		HPGaugeUpdate();
+	});
 }
 
 void BaseEnemy::OnCollision()

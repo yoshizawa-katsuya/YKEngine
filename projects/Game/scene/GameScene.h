@@ -22,6 +22,7 @@
 #include "PlayerBullet.h"
 #include "EnemyBullet.h"
 #include "Fade.h"
+#include "ThreadPool.h"
 
 class GameScene : public BaseScene
 {
@@ -60,6 +61,7 @@ private:
 
 	Audio* audio_;
 	Input* input_;
+	ThreadPool* threadPool_;
 
 	LoopSoundData bgm1_;
 
@@ -136,6 +138,8 @@ private:
 	//std::unique_ptr<BaseEnemy> enemy_;
 	std::list<std::unique_ptr<BaseEnemy>> enemies_;
 	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+
+	std::mutex mutex_;
 
 	//パーティクル
 	/*

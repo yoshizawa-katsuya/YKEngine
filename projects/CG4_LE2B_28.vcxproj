@@ -108,11 +108,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\lib\Fade.cpp" />
+    <ClCompile Include="Game\objects\Enemy02.cpp" />
     <ClCompile Include="Game\scene\ClearScene.cpp" />
     <ClCompile Include="Game\objects\Enemy03.cpp" />
     <ClCompile Include="Game\scene\GameOverScene.cpp" />
     <ClCompile Include="Game\objects\EnemyBullet.cpp" />
-    <ClCompile Include="Game\objects\Enemy02.cpp" />
     <ClCompile Include="Game\objects\Bullet.cpp" />
     <ClCompile Include="Game\objects\Enemy01.cpp" />
     <ClCompile Include="Game\objects\CameraController.cpp" />

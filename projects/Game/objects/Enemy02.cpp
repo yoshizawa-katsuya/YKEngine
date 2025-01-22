@@ -18,14 +18,17 @@ void Enemy02::Initialize(BaseModel* model, const EulerTransform& transform)
 
 void Enemy02::Update()
 {
-	interval_--;
+	
+	ThreadPool::GetInstance()->enqueueTask([&]() {
+		interval_--;
 
-	if (interval_ <= 0) {
-		interval_ = 60;
-		gameScene_->AddEnemyBullet({ worldTransform_.translation_.x,  worldTransform_.translation_.y - 1.0f ,worldTransform_.translation_.z }, { 0.0f, -bulletSpeed_, 0.0f });
-		gameScene_->AddEnemyBullet({ worldTransform_.translation_.x,  worldTransform_.translation_.y + 1.0f ,worldTransform_.translation_.z }, { 0.0f, bulletSpeed_, 0.0f });
-	}
+		if (interval_ <= 0) {
+			interval_ = 60;
+			gameScene_->AddEnemyBullet({ worldTransform_.translation_.x,  worldTransform_.translation_.y - 1.0f ,worldTransform_.translation_.z }, { 0.0f, -bulletSpeed_, 0.0f });
+			gameScene_->AddEnemyBullet({ worldTransform_.translation_.x,  worldTransform_.translation_.y + 1.0f ,worldTransform_.translation_.z }, { 0.0f, bulletSpeed_, 0.0f });
+		}
 
-	BaseEnemy::Update();
-
+	
+		BaseEnemy::Update();
+	});
 }
