@@ -22,11 +22,15 @@ void Stone::Update() {
         //角度を決める
         if (input_->PushKey(DIK_LEFT)) {
             angle_ -= 1.0f;
+            if (angle_ < 0.0f) angle_ = 0.0f; // 0度以下に制限
         }
         if (input_->PushKey(DIK_RIGHT)) {
             angle_ += 1.0f;
+            if (angle_ > 180.0f) angle_ = 180.0f; // 180度以上に制限
         }
-        angle_ = std::clamp(angle_, 0.0f, 360.0f);
+
+        // 角度を0度から180度の範囲に制限
+        angle_ = std::clamp(angle_, 0.0f, 180.0f);
 
         if (input_->TriggerKey(DIK_SPACE)) {
             // 強さ決定フェーズに移行
@@ -55,7 +59,7 @@ void Stone::Update() {
 
         if (input_->TriggerKey(DIK_SPACE)) {
        
-            speed_ = power_ * 0.2f;
+            speed_ = power_ * 0.15f;
             state_ = State::Flying;
         }
         break;
@@ -66,17 +70,19 @@ void Stone::Update() {
             float radian = angle_ * (3.14159265f / 180.0f);
             worldTransform_.translation_.x += speed_ * cos(radian);
             worldTransform_.translation_.y += speed_ * sin(radian);
-            //摩擦で減速
-            speed_ -= 0.01f; 
-            if (speed_ < 0.0f) speed_ = 0.0f;
+
+            //摩擦による速度減少
+            float frictionCoefficient = 0.07f; //摩擦係数
+            speed_ -= speed_ * frictionCoefficient;
+
+            if (speed_ < 0.001f) speed_ = 0.0f;
         }
         else {
-            //動きが止まったら待機状態に
             state_ = State::Stopped;
- 
         }
         break;
     }
+
     case State::Stopped: {
         break;
     }
@@ -103,10 +109,28 @@ void Stone::Draw(Camera* camera) {
     object_->Draw();
 }
 
+//衝突
+void Stone::HandleCollision(Stone& other) {
+   
+    Vector3 collisionDirection = other.GetPosition() - this->GetPosition();
+
+    float length = Length(collisionDirection);
+
+    if (length == 0.0f) return; //同じ位置の場合は何もしない
+
+    Normalize(collisionDirection);
+
+    float pushBackDistance = 0.1f; //移動量
+    other.SetPosition(other.GetPosition() + collisionDirection * pushBackDistance);
+
+    //発射したストーンの速度を減少
+    speed_ *= 0.5f; 
+}
+
 
 Stone::AABB Stone::GetAABB()const {
     AABB aabb;
-    Vector3 halfScale = worldTransform_.scale_ * 0.5f;//仮
+    Vector3 halfScale = worldTransform_.scale_;//仮
 
     aabb.min = {
         worldTransform_.translation_.x - halfScale.x,

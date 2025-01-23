@@ -73,28 +73,25 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
   
-        for (size_t i = 0; i < stones_.size(); ++i) {
-            if (i == stones_.size() - 1) {
-                //現在のストーンのみ操作
-                stones_[i]->Update();
-            }
-            else {
-                // 他のストーンは動作更新のみ
-                if (stones_[i]->GetState() == Stone::State::Flying) {
-                    stones_[i]->Update();
-                }
-            }
+    for (size_t i = 0; i < stones_.size(); ++i) {
+        if (i == stones_.size() - 1) {
+            stones_[i]->Update();  // 現在のストーンのみ操作
         }
-                //衝突判定
-        for (size_t i = 0; i < stones_.size(); ++i) {
-            for (size_t j = i + 1; j < stones_.size(); ++j) {
-                if (stones_[i]->CheckCollision(*stones_[i], *stones_[j])) {
-                   
-                }
-            }
+        else if (stones_[i]->GetState() == Stone::State::Flying) {
+            stones_[i]->Update();
         }
+    }
 
-    //最後のストーンがStoppedになったら新しいストーンを追加
+    // 衝突判定
+    for (size_t i = 0; i < stones_.size(); ++i) {
+        for (size_t j = i + 1; j < stones_.size(); ++j) {
+            if (stones_[i]->CheckCollision(*stones_[i], *stones_[j])) {
+                stones_[i]->HandleCollision(*stones_[j]);
+            }
+        }
+    }
+
+    // 最後のストーンがStoppedになったら新しいストーンを追加
     if (!stones_.empty() && stones_.back()->GetState() == Stone::State::Stopped) {
         auto newStone = std::make_unique<Stone>();
         newStone->Initialize(modelStone_.get());
@@ -107,7 +104,7 @@ void GameScene::Update() {
     if (isActiveDebugCamera_) {
         debugCamera_->Update();
     }
-
+    
 #ifdef _DEBUG
     ImGui::Begin("Window");
     if (ImGui::TreeNode("camera")) {
