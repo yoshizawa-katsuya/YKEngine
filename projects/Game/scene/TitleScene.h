@@ -35,5 +35,6 @@ private:
 	
 	uint32_t title_;
 	std::unique_ptr<Sprite> titleSprite_;
+
 };
 

@@ -22,6 +22,8 @@ public:
 
 	void Finalize() override;
 
+	bool IsPointInBounds(const Vector2& point, const Vector2& minBounds, const Vector2& maxBounds);
+
 private:
 
 	//デバイス
@@ -33,23 +35,26 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 
+	//BackGround
+	uint32_t background_;
+	std::unique_ptr<Sprite> backgroundSprite_;
+
 	//select
-	uint32_t selectTutorial_;
-	std::unique_ptr<Sprite> tutorialSprite_;
-	uint32_t select1_;
-	std::unique_ptr<Sprite> selectdSprite1_;
-	uint32_t select2_;
-	std::unique_ptr<Sprite> selectdSprite2_;
-	uint32_t select3_;
-	std::unique_ptr<Sprite> selectdSprite3_;
-	uint32_t select4_;
-	std::unique_ptr<Sprite> selectdSprite4_;
-	uint32_t select5_;
-	std::unique_ptr<Sprite> selectdSprite5_;
-	uint32_t select6_;
-	std::unique_ptr<Sprite> selectdSprite6_;
-	uint32_t select7_;
-	std::unique_ptr<Sprite> selectdSprite7_;
+	std::vector<uint32_t> selectTextures_;
+	std::vector<std::unique_ptr<Sprite>> selectSprites_;
+	//bundle
+	std::vector<uint32_t> bundleTextures_;
+	std::vector<std::unique_ptr<Sprite>> bundleSprites_;
+
+
+
+	//
+	uint32_t difficulty1_;
+	std::unique_ptr<Sprite> difficultySprite1_;
+	uint32_t difficulty2_;
+	std::unique_ptr<Sprite> difficultySprite2_;
+	uint32_t difficulty3_;
+	std::unique_ptr<Sprite> difficultySprite3_;
 
 
 };

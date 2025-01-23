@@ -26,7 +26,7 @@ void TitleScene::Initialize()
 	title_ = TextureManager::GetInstance()->Load("./resources/scene/title.png");
 	titleSprite_ = std::make_unique<Sprite>();
 	titleSprite_->Initialize(title_);
-	titleSprite_->SetPosition({ 0.0f,0.0f });
+	titleSprite_->SetPosition({ 0.0f, 600.0f });
 
 }
 
@@ -50,7 +50,7 @@ void TitleScene::Update()
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("GameScene");
+		sceneManager_->ChengeScene("SelectScene");
 	}
 
 }
@@ -60,7 +60,7 @@ void TitleScene::Draw()
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
-
+	
 	titleSprite_->Draw();
 	
 
