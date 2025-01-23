@@ -7,12 +7,6 @@ public:
 
 	~SkinModel() override;
 
-	void CreateModel(const std::string& directoryPath, const std::string& filename) override;
-
-	void Update() override;
-
-	void Update(Animation* animation) override;
-
 	void Draw() override;
 
 	void Draw(uint32_t textureHandle) override;
