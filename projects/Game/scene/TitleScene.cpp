@@ -25,7 +25,10 @@ void TitleScene::Initialize()
 	sprite_->SetPosition({ 100.0f, 100.0f });
 	*/
 
-	//select
+	title_ = TextureManager::GetInstance()->Load("./resources/scene/title.png");
+	titleSprite_ = std::make_unique<Sprite>();
+	titleSprite_->Initialize(title_);
+	titleSprite_->SetPosition({ 0.0f, 0.0f });
 	
 
 
@@ -63,7 +66,7 @@ void TitleScene::Draw()
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
-
+	titleSprite_->Draw();
 
 }
 

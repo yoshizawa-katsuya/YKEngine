@@ -16,6 +16,13 @@ void SelectScene::Initialize()
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
+
+	//background
+	background_ = TextureManager::GetInstance()->Load("./resources/select/background2.png");
+	backgroundSprite_ = std::make_unique<Sprite>();
+	backgroundSprite_->Initialize(background_);
+	backgroundSprite_->SetPosition({ 0.0f,0.0f });
+
 	//select
 	selectTutorial_ = TextureManager::GetInstance()->Load("./resources/select/selectTutorial.png");
 	tutorialSprite_ = std::make_unique<Sprite>();
@@ -41,6 +48,82 @@ void SelectScene::Initialize()
 	selectSprites_[static_cast<uint32_t>(positionType::kRightSide)] = std::make_unique<Sprite>();
 	selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->Initialize(selectTextureHandles_[1]);
 	selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->SetPosition({ 846.0f,128.0f });
+
+	
+	//bundle
+	std::vector<std::string> bundlePaths = {
+		"./resources/select/bundle/bundle1.png",
+		"./resources/select/bundle/bundle2.png",
+		"./resources/select/bundle/bundle3.png",
+		"./resources/select/bundle/bundle4.png",
+		"./resources/select/bundle/bundle5.png",
+		"./resources/select/bundle/bundle6.png",
+		"./resources/select/bundle/bundle7.png"
+	};
+	for (const auto& path : bundlePaths) {
+		bundleTextures_.push_back(TextureManager::GetInstance()->Load(path));
+	}
+	std::vector<Vector2> bundlePositions(7, Vector2(275.0f, 50.0f));
+	for (size_t i = 0; i < bundleTextures_.size(); ++i) {
+		auto sprite = std::make_unique<Sprite>();
+		sprite->Initialize(bundleTextures_[i]);
+		if (i < bundlePositions.size()) {
+			sprite->SetPosition(bundlePositions[i]);
+		}
+		bundleSprites_.push_back(std::move(sprite));
+	}
+	//select stage
+	std::vector<std::string> stagePaths = {
+		"./resources/select/selectStage/stage1.png",
+		"./resources/select/selectStage/stage2.png",
+		"./resources/select/selectStage/stage3.png",
+		"./resources/select/selectStage/stage4.png",
+		"./resources/select/selectStage/stage5.png",
+		"./resources/select/selectStage/stage6.png",
+		"./resources/select/selectStage/stage7.png",
+		"./resources/select/selectStage/stage8.png",
+		"./resources/select/selectStage/stage9.png",
+		"./resources/select/selectStage/stage10.png"
+	};
+	for (const auto& path : stagePaths) {
+		stageTextures_.push_back(TextureManager::GetInstance()->Load(path));
+	}
+	std::vector<Vector2> stagePositions = {
+		{65.0f, 220.0f}, {245.0f,220.0f}, {425.0f,220.0f}, {605.0f,220.0f}, {785.0f,220.0f},
+		{65.0f, 370.0f}, {245.0f,370.0f}, {425.0f,370.0f}, {605.0f,370.0f}, {785.0f,370.0f}
+	};
+	for (size_t i = 0; i < stageTextures_.size(); ++i) {
+		auto sprite = std::make_unique<Sprite>();
+		sprite->Initialize(stageTextures_[i]);
+		if (i < stageTextures_.size()) {
+			sprite->SetPosition(stagePositions[i]);
+		}
+		stageSprites_.push_back(std::move(sprite));
+	}
+
+
+
+	//
+	std::vector<std::string> difficultyPaths = {
+		"./resources/select/sam1.png",
+		"./resources/select/sam2.png",
+		"./resources/select/sam3.png"
+	};
+	for (const auto& path : difficultyPaths) {
+		difficulty_.push_back(TextureManager::GetInstance()->Load(path));
+	}
+	std::vector<Vector2> difficultyPositions = {
+		{0.0f,0.0f}, {0.0f,0.0f}, {0.0f,0.0f}
+	};
+	for (size_t i = 0; i < difficulty_.size(); ++i) {
+		auto sprite = std::make_unique<Sprite>();
+		sprite->Initialize(difficulty_[i]);
+		if (i < difficultyPositions.size()) {
+			sprite->SetPosition(difficultyPositions[i]);
+		}
+		difficultySprites_.push_back(std::move(sprite));
+	}
+	
 
 }
 
@@ -100,6 +183,22 @@ void SelectScene::Update()
 		sceneManager_->ChengeScene("GameScene");
 	}
 
+
+	ImGui::Begin("Window");
+	ImGui::Text("SelectScene");
+	for (size_t i = 0; i < 10; i++)
+	{
+		std::string label = "stageSprites_[" + std::to_string(i) + "]";
+		ImGui::DragFloat2(label.c_str(), &stageSprites_[i]->GetPosition().x, 0.11f);
+	}
+	ImGui::DragFloat2("size", &stageSprites_[0]->GetSize().x, 0.11f);
+	ImGui::DragFloat2("Tsize", &stageSprites_[0]->GetTextureSize().x, 0.11f);
+	/*
+	ImGui::DragFloat2("selectdSprite1_", &selectdSprite1_->GetPosition().x, 0.11f);
+	ImGui::DragFloat2("selectdSprite2_", &selectdSprite2_->GetPosition().x, 0.11f);
+	*/
+	ImGui::End();
+
 }
 
 void SelectScene::Draw()
@@ -108,15 +207,71 @@ void SelectScene::Draw()
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
+	backgroundSprite_->Draw();
+
 	tutorialSprite_->Draw();
 
+	
+
+
+	if (input_->GetMousePosition().x < 144.0f || input_->GetMousePosition().x>836.0f) {
+		difficultySprites_[0]->Draw();
+		difficultySprites_[2]->Draw();
+	} else {
+		difficultySprites_[0]->Draw();
+		difficultySprites_[1]->Draw();
+	}
+	if (selectSpr) {
 	for (std::unique_ptr<Sprite>& selectSprite : selectSprites_) {
 		selectSprite->Draw();
 	}
+	}
+
+	
+	//if (input_->PushMouseLeft() && IsMouseOverSprite(input_->GetMousePosition(), selectSprites_[1])) {
+	//	// selectSprites_[1]의 텍스처 핸들을 가져옴
+	//	uint32_t currentTexture = selectSprites_[1]->get
+	//
+	//	// selectTextureHandles_와 비교
+	//	for (size_t i = 0; i < selectTextureHandles_.size(); ++i) {
+	//		if (currentTexture == selectTextureHandles_[i]) {
+	//			// 대응되는 bundleSprites_ 드로우
+	//			bundleSprites_[i]->Draw();
+	//			break; // 일치하는 텍스처를 찾으면 반복문 종료
+	//		}
+	//	}
+	//}
+	
 	
 
+
+
+
+	//for (std::unique_ptr<Sprite>& selectBund : bundleSprites_) {
+	//	selectBund->Draw();
+	//}
+	//for (std::unique_ptr<Sprite>& stageSprite : stageSprites_) {
+	//	stageSprite->Draw();
+	//}
 }
 
 void SelectScene::Finalize()
 {
+}
+
+bool SelectScene::IsMouseOverSprite(const Vector2& mousePos, const std::unique_ptr<Sprite>& sprite)
+{
+	if (!sprite) return false;
+
+	
+	Vector2 spritePos = sprite->GetPosition();
+	Vector2 spriteSize = sprite->GetSize();
+
+	float left = spritePos.x;
+	float right = spritePos.x + spriteSize.x;
+	float bottom = spritePos.y;
+	float top = spritePos.y + spriteSize.y;
+
+	return (mousePos.x >= left && mousePos.x <= right &&
+		mousePos.y >= bottom && mousePos.y <= top);
 }

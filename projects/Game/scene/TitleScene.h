@@ -33,12 +33,8 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 	
-	uint32_t selectStageNum_ = 1;
-	static const uint32_t kMaxStageNum_ = 7;
-
-	
-
-	
+	uint32_t title_;
+	std::unique_ptr<Sprite> titleSprite_;
 
 };
 
