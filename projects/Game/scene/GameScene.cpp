@@ -51,11 +51,12 @@ void GameScene::Initialize() {
 	modelPlatform_->SetCamera(mainCamera_);
 	modelPlatform_->SetSpotLight(spotLight_.get());
 
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	textureHandle_ = TextureManager::GetInstance()->Load("./resources/uvChecker.png");
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
-	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
+	modelPlayer_->CreateSphere(textureHandle_);
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
 	/*
