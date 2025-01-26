@@ -4,7 +4,6 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
-#include "RigidModel.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -32,8 +31,8 @@ void GameScene::Initialize() {
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
-	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+	camera_->SetRotate({ 0.3f, 0.0f, 0.0f });
+	camera_->SetTranslate({ 0.0f, 7.0f, -20.0f });
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -59,6 +58,12 @@ void GameScene::Initialize() {
 	modelPlayer_->CreateSphere(textureHandle_);
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
+	modelTerrain_ = std::make_unique<RigidModel>();
+	modelTerrain_->CreateModel("./resources/terrain", "terrain.obj");
+
+	objectTerrain_ = std::make_unique<Rigid3dObject>();
+	objectTerrain_->Initialize(modelTerrain_.get());
+
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -150,7 +155,7 @@ void GameScene::Update() {
 
 		}
 		
-		ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
+		//ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 
 		/*
 		if (ImGui::Button("BGMstop")) {
@@ -159,6 +164,10 @@ void GameScene::Update() {
 		*/
 		ImGui::End();
 		
+		ImGui::Begin("Object");
+		ImGui::Checkbox("isDrawSphere", &isDrawSphere_);
+		ImGui::Checkbox("isDrawTerrain", &isDrawTerrain_);
+		ImGui::End();
 
 #endif // _DEBUG
 	
@@ -176,9 +185,15 @@ void GameScene::Draw() {
 	modelPlatform_->PreDraw();
 	//modelPlatform_->SkinPreDraw();
 
-	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	if (isDrawSphere_) {
+		//プレイヤーの描画
+		player_->Draw(mainCamera_);
+	}
 
+	if (isDrawTerrain_) {
+		objectTerrain_->CameraUpdate(mainCamera_);
+		objectTerrain_->Draw();
+	}
 
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();

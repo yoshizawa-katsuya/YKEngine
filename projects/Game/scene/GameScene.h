@@ -17,6 +17,8 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
+#include "RigidModel.h"
+#include "Rigid3dObject.h"
 
 class GameScene : public BaseScene
 {
@@ -64,14 +66,19 @@ private:
 	//スポットライト
 	std::unique_ptr<SpotLight> spotLight_;
 
-	std::unique_ptr<BaseModel> modelPlayer_;
-
+	std::unique_ptr<RigidModel> modelPlayer_;
+	std::unique_ptr<RigidModel> modelTerrain_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
 
+	std::unique_ptr<Rigid3dObject> objectTerrain_;
+
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	bool isDrawSphere_ = true;
+	bool isDrawTerrain_ = true;
 
 	//パーティクル
 	/*

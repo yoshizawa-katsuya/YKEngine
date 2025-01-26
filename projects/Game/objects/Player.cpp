@@ -8,7 +8,7 @@ void Player::Initialize(BaseModel* model) {
 	object_->Initialize(model);
 
 	worldTransform_.Initialize();
-
+	worldTransform_.translation_.y = 1.0f;
 }
 
 void Player::Update() {
