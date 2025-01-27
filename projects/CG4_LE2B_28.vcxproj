@@ -167,6 +167,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
     <ClCompile Include="Engine\lib\ThreadPool.cpp" />
     <ClCompile Include="Game\objects\PlayerBullet.cpp" />
+    <ClCompile Include="Game\scene\TutorialScene.cpp" />
+    <ClCompile Include="Game\objects\TutorialEnemy01.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\InstancingObject3d.VS.hlsl">
@@ -312,6 +314,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\ThreadPool.h" />
     <ClInclude Include="Engine\3d\InstancingObjects.h" />
     <ClInclude Include="Game\objects\PlayerBullet.h" />
+    <ClInclude Include="Game\scene\TutorialScene.h" />
+    <ClInclude Include="Game\objects\TutorialEnemy01.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

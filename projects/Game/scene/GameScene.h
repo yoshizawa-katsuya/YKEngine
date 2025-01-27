@@ -28,11 +28,11 @@ class GameScene : public BaseScene
 {
 public:
 
-	~GameScene() override;
+	virtual ~GameScene() override;
 
-	void Initialize() override;
+	virtual void Initialize() override;
 
-	void Update() override;
+	virtual void Update() override;
 
 	void Draw() override;
 
@@ -42,10 +42,10 @@ public:
 
 	void AddEnemyBullet(const Vector3& position, const Vector3& velocity);
 
-private:
+protected:
 
 	//敵の配置
-	void CreateLevel();
+	virtual void CreateLevel();
 
 	//デスフラグが経っているものを削除
 	void CheckAllDelete();
