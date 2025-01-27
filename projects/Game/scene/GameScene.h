@@ -34,7 +34,7 @@ public:
 
 	virtual void Update() override;
 
-	void Draw() override;
+	virtual void Draw() override;
 
 	void Finalize() override;
 

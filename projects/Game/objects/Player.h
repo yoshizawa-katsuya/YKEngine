@@ -48,6 +48,8 @@ public:
 
 	const Vector2& GetAttackRange() const { return workAttack_.attackRange_; }
 
+	void SetTranslation(const Vector3& translation) { worldTransform_.translation_ = translation; }
+
 	void SetHitSEData(SoundData* hitSE) { HitSE1_ = hitSE; }
 	void SetHitSE2Data(SoundData* hitSE) { HitSE2_ = hitSE; }
 

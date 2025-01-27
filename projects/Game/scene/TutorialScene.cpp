@@ -3,6 +3,8 @@
 #include "SceneManager.h"
 #include "LevelDataLoader.h"
 #include "TutorialEnemy01.h"
+#include "RigidModel.h"
+#include "Rigid3dObject.h"
 
 TutorialScene::~TutorialScene()
 {
@@ -11,7 +13,13 @@ TutorialScene::~TutorialScene()
 
 void TutorialScene::Initialize()
 {
+
+	modelPlane_ = std::make_unique<RigidModel>();
+	modelPlane_->CreateModel("./resources/Plane", "plane.obj");
+
 	GameScene::Initialize();
+
+	player_->SetTranslation({ -18.0f, 0.0f, 0.0f });
 }
 
 void TutorialScene::Update()
@@ -26,6 +34,9 @@ void TutorialScene::Update()
 
 	switch (phase_) {
 	case GameScene::Phase::kFadeIn:
+
+		player_->Update();
+
 		fade_->Update();
 		if (fade_->IsFinished()) {
 			fade_->Stop();
@@ -173,6 +184,59 @@ void TutorialScene::Update()
 
 }
 
+void TutorialScene::Draw()
+{
+
+	//Spriteの背景描画前処理
+	//spritePlatform_->PreBackGroundDraw();
+
+	//sprite_->Draw();
+
+	//Modelの描画前処理
+	modelPlatform_->PreDraw();
+	//modelPlatform_->SkinPreDraw();
+
+	//プレイヤーの描画
+	player_->Draw(mainCamera_);
+
+	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
+		playerBullet->Draw(mainCamera_);
+	}
+
+	for (std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets_) {
+		enemyBullet->Draw(mainCamera_);
+	}
+
+	//敵の描画
+	//enemy_->Draw(mainCamera_);
+	Matrix4x4 billbordMatrix = mainCamera_->MakeBillBoardMatrix();
+	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
+		enemy->Draw(mainCamera_);
+		enemy->HPGaugeDraw(mainCamera_, billbordMatrix);
+	}
+
+	skydome_->CameraUpdate(mainCamera_);
+	skydome_->Draw();
+
+	ground_->CameraUpdate(mainCamera_);
+	ground_->Draw();
+
+	for (std::unique_ptr<Plane>& plane : planes_) {
+		plane->object_->CameraUpdate(mainCamera_);
+		//plane->object_->Draw(plane->textureHandle_);
+		plane->object_->Draw();
+	}
+
+	//Spriteの描画前処理
+	spritePlatform_->PreDraw();
+
+	player_->HUDDraw();
+
+	fade_->Draw();
+
+	//ParticleManager::GetInstance()->Draw();
+}
+
 void TutorialScene::CreateLevel()
 {
 	LevelData* levelData = LevelDataLoad("./resources/LevelData/", "tutorialLevelData", ".json");
@@ -188,7 +252,20 @@ void TutorialScene::CreateLevel()
 			enemy->SetDarkRed(textureHandleDarkRed_);
 			enemy->SetHitSE3Data(&HitSE3_);
 		}
-		
+		else if (objectData.fileName == "Plane") {
+			planes_.emplace_back();
+			std::unique_ptr<Plane>& plane = planes_.back();
+			plane = std::make_unique<Plane>();
+			plane->object_ = std::make_unique<Rigid3dObject>();
+			plane->object_->Initialize(modelPlane_.get());
+			WorldTransform worldTransform;
+			worldTransform.translation_ = objectData.transform.translation;
+			worldTransform.scale_ = objectData.transform.scale;
+			worldTransform.rotation_ = objectData.transform.rotation;
+			worldTransform.UpdateMatrix();
+			plane->object_->WorldTransformUpdate(worldTransform);
+
+		}
 		
 	}
 }
