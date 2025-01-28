@@ -87,18 +87,19 @@ void Stone::Update() {
         break;
     }
     }
-    input_->Update();
     worldTransform_.UpdateMatrix();
 
 #ifdef _DEBUG
-    ImGui::Begin("Stone");
-    ImGui::Text("State: %s",
-        state_ == State::Waiting ? "Waiting" :
-        state_ == State::PowerSetting ? "PowerSetting" : "Flying");
-    ImGui::Text("Angle: %.2f", angle_);
-    ImGui::Text("Power: %.2f", power_);
-    ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.01f);
-    ImGui::End();
+    if (state_ != State::Stopped) {
+        ImGui::Begin("Stone");
+        ImGui::Text("State: %s",
+            state_ == State::Waiting ? "Waiting" :
+            state_ == State::PowerSetting ? "PowerSetting" : "Flying");
+        ImGui::Text("Angle: %.2f", angle_);
+        ImGui::Text("Power: %.2f", power_);
+        ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.01f);
+        ImGui::End();
+    }
 #endif
 }
 
@@ -118,7 +119,7 @@ void Stone::HandleCollision(Stone& other) {
 
     if (length == 0.0f) return; //同じ位置の場合は何もしない
 
-    Normalize(collisionDirection);
+    collisionDirection = Normalize(collisionDirection);
 
     float pushBackDistance = 0.1f; //移動量
     other.SetPosition(other.GetPosition() + collisionDirection * pushBackDistance);

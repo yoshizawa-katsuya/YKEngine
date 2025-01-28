@@ -74,19 +74,14 @@ void GameScene::Initialize() {
 void GameScene::Update() {
   
     for (size_t i = 0; i < stones_.size(); ++i) {
-        if (i == stones_.size() - 1) {
-            stones_[i]->Update();  // 現在のストーンのみ操作
-        }
-        else if (stones_[i]->GetState() == Stone::State::Flying) {
-            stones_[i]->Update();
-        }
+        stones_[i]->Update();
     }
 
     // 衝突判定
     for (size_t i = 0; i < stones_.size(); ++i) {
         for (size_t j = i + 1; j < stones_.size(); ++j) {
             if (stones_[i]->CheckCollision(*stones_[i], *stones_[j])) {
-               stones_[i]->HandleCollision(*stones_[j]);
+               stones_[j]->HandleCollision(*stones_[i]);
             }
         }
     }
