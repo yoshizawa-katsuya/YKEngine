@@ -111,7 +111,7 @@ void Stone::Draw(Camera* camera) {
 
 //衝突
 void Stone::HandleCollision(Stone& other) {
-   
+   /*
     Vector3 collisionDirection = other.GetPosition() - this->GetPosition();
 
     float length = Length(collisionDirection);
@@ -125,6 +125,7 @@ void Stone::HandleCollision(Stone& other) {
 
     //発射したストーンの速度を減少
     speed_ *= 0.5f; 
+    */
 }
 
 
