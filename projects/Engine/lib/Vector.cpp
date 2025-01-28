@@ -1,5 +1,30 @@
-#include <math.h>
 #include "Vector.h"
+
+
+Vector2 Subtract(const Vector2& v1, const Vector2& v2)
+{
+	Vector2 anser;
+	anser.x = v1.x - v2.x;
+	anser.y = v1.y - v2.y;
+	
+	return anser;
+}
+
+float Length(const Vector2& v)
+{
+	float anser;
+	anser = sqrtf(Dot(v, v));
+
+	return anser;
+}
+
+float Dot(const Vector2& v1, const Vector2& v2)
+{
+	float anser;
+	anser = (v1.x * v2.x) + (v1.y * v2.y);
+
+	return anser;
+}
 
 Vector3 Add(const Vector3& v1, const Vector3& v2) {
 
@@ -21,15 +46,6 @@ Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
 
 	return anser;
 
-}
-
-//Vector2用
-Vector2 Subtract(const Vector2& v1, const Vector2& v2) {
-	Vector2 anser;
-	anser.x = v1.x - v2.x;
-	anser.y = v1.y - v2.y;
-	
-	return anser;
 }
 
 Vector3 Multiply(float scalar, const Vector3& v) {
@@ -78,14 +94,6 @@ float Dot(const Vector3& v1, const Vector3& v2) {
 
 }
 
-//Vector2用
-float Dot(const Vector2& v1, const Vector2& v2) {
-	float anser;
-	anser = (v1.x * v2.x) + (v1.y * v2.y);
-
-	return anser;
-}
-
 float Dot(const Vector3& v1, const Vector2& v2) {
 	float anser;
 	anser = (v1.x * v2.x) + (v1.y * v2.y);
@@ -99,14 +107,6 @@ float Length(const Vector3& v) {
 
 	return anser;
 
-}
-
-//Vector2用
-float Length(const Vector2& v) {
-	float anser;
-	anser = sqrtf(Dot(v, v));
-
-	return anser;
 }
 
 Vector3 Normalize(const Vector3& v) {
@@ -184,7 +184,20 @@ Vector3 Perpendicular(const Vector3& vector) {
 	}
 	return { 0.0f, -vector.z, vector.y };
 }
+/*
+Vector3 ConvertingToScreen(const Vector3& position, const ViewProjection& viewProjection) {
 
+	//ビューポート行列
+	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+
+	Matrix4x4 matViewProjectionViewport = viewProjection.matView * viewProjection.matProjection * matViewport;
+
+	Vector3 ScreenPosition = Transform(position, matViewProjectionViewport);
+
+	return ScreenPosition;
+
+}
+*/
 Vector3 operator+(const Vector3& v1, const Vector3& v2) { return Add(v1, v2); }
 
 Vector3 operator-(const Vector3& v1, const Vector3& v2) { return Subtract(v1, v2); }

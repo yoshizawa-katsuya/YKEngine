@@ -12,7 +12,7 @@ class Sprite
 public:
 
 	//初期化
-	void Initialize(uint32_t textureHandle, SpritePlatform* spritePlatform);
+	void Initialize(uint32_t textureHandle);
 
 	//描画
 	void Draw();
@@ -69,6 +69,8 @@ public:
 	void SetTextureSize(const Vector2& textureSize) { textureSize_ = textureSize; }
 
 	void SetTexture(uint32_t textureHandle) { textureHandle_ = textureHandle; }
+
+	uint32_t GetTeture() { return textureHandle_; }
 
 private:
 

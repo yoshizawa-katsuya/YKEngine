@@ -8,26 +8,6 @@ SkinModel::~SkinModel()
 {
 }
 
-void SkinModel::CreateModel(const std::string& directoryPath, const std::string& filename)
-{
-
-	BaseModel::CreateModel(directoryPath, filename);
-
-}
-
-void SkinModel::Update()
-{
-
-	
-
-}
-
-void SkinModel::Update(Animation* animation)
-{
-
-	
-}
-
 void SkinModel::Draw()
 {
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
@@ -80,7 +60,7 @@ void SkinModel::LoadModelFile(const std::string& directoryPath, const std::strin
 {
 	Assimp::Importer importer;
 	std::string filepath = directoryPath + "/" + filename;
-	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 
 	assert(scene->HasMeshes());	//メッシュがないのは対応しない
 
@@ -130,7 +110,7 @@ void SkinModel::LoadSkinCluster(aiMesh* mesh)
 		bindPoseMatrixAssimp.Decompose(scale, rotate, translate);	//成分を抽出
 		//左手系のBindPoseMatrixを作る
 		Matrix4x4 bindPoseMatrix = MakeAffineMatrix(
-			{ scale.x, scale.y, scale.z }, { -rotate.x, rotate.y, rotate.z, rotate.w }, { -translate.x, translate.y, translate.z });
+			{ scale.x, scale.y, scale.z }, { rotate.x, -rotate.y, -rotate.z, rotate.w }, { -translate.x, translate.y, translate.z });
 		//InverseBindPoseMatrixにする
 		jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrix);
 

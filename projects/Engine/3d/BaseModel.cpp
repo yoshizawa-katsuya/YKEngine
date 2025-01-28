@@ -19,7 +19,7 @@ BaseModel::~BaseModel()
 {
 }
 
-void BaseModel::CreateModel(const std::string& directoryPath, const std::string& filename) {
+void BaseModel::CreateModel(const std::string& directoryPath, const std::string& filename, const Vector4& color) {
 
 	//モデル読み込み
 	LoadModelFile(directoryPath, filename);
@@ -34,10 +34,10 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 	//threadpool->enqueueTask(&BaseModel::CreateMaterialData, this);
 
 	
-	ThreadPool::GetInstance()->enqueueTask([this]() {
+	ThreadPool::GetInstance()->enqueueTask([this, color]() {
 		CreateVertexData();
 		CreateIndexData();
-		CreateMaterialData();
+		CreateMaterialData(color);
 		textureHandle_ = TextureManager::GetInstance()->Load(modelData_.material.textureFilePath);
 	});
 
@@ -92,8 +92,40 @@ void BaseModel::Draw(uint32_t textureHandle)
 
 }
 
+void BaseModel::InstancingDraw(uint32_t numInstance)
+{
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
+	//マテリアルのCBufferの場所を設定
+	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+
+	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
+		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
+	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), numInstance, 0, 0, 0);
+}
+
 void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
 {
+}
+
+void BaseModel::SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	Matrix4x4 uvTransformMatrix = MakeAffineMatrix(scale, rotate, translate);
+	materialData_->uvTransform = uvTransformMatrix;
+}
+
+void BaseModel::SetUVTransform(const EulerTransform& uvTransform)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	Matrix4x4 uvTransformMatrix = MakeAffineMatrix(uvTransform);
+	materialData_->uvTransform = uvTransformMatrix;
 }
 
 void BaseModel::CreateVertexData()
@@ -131,7 +163,7 @@ void BaseModel::CreateIndexData()
 
 }
 
-void BaseModel::CreateMaterialData()
+void BaseModel::CreateMaterialData(const Vector4& color)
 {
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
@@ -140,7 +172,7 @@ void BaseModel::CreateMaterialData()
 	//書き込むためのアドレスを取得
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//白を書き込む
-	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	materialData_->color = color;
 	materialData_->enableLighting = true;
 	materialData_->uvTransform = MakeIdentity4x4();
 	materialData_->shininess = 40.0f;
@@ -164,7 +196,7 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 
 	Assimp::Importer importer;
 	std::string filepath = directoryPath + "/" + filename;
-	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 
 	assert(scene->HasMeshes());	//メッシュがないのは対応しない
 
@@ -186,6 +218,7 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			modelData_.material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
+			
 		}
 		else {
 			modelData_.material.textureFilePath = "./resources/white.png";
@@ -341,7 +374,7 @@ Node BaseModel::ReadNode(aiNode* node)
 	aiQuaternion rotate;
 	node->mTransformation.Decompose(scale, rotate, translate);	//assimpの行列からSRTを抽出する関数を利用
 	result.transform.scale = { scale.x, scale.y, scale.z };	//Scaleはそのまま
-	result.transform.rotation = { -rotate.x, -rotate.y, -rotate.z, rotate.w };	//x軸を反転、さらに回転方向が逆なので軸を反転させる
+	result.transform.rotation = { rotate.x, -rotate.y, -rotate.z, rotate.w };	//x軸を反転、さらに回転方向が逆なので軸を反転させる
 	result.transform.translation = { -translate.x, translate.y, translate.z };	//x軸を反転
 	result.localMatrix = MakeAffineMatrix(result.transform.scale, result.transform.rotation, result.transform.translation);
 

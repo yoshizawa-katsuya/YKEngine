@@ -427,23 +427,23 @@ Matrix4x4 MakeRotateMatrix(Quaternion q)
 	float wz = nq.w * nq.z;
 
 	matrix.m[0][0] = 1.0f - 2.0f * (yy + zz);
-	matrix.m[0][1] = 2.0f * (xy - wz);
-	matrix.m[0][2] = 2.0f * (xz + wy);
-	matrix.m[0][3] = 0.0f;
-
-	matrix.m[1][0] = 2.0f * (xy + wz);
-	matrix.m[1][1] = 1.0f - 2.0f * (xx + zz);
-	matrix.m[1][2] = 2.0f * (yz - wx);
-	matrix.m[1][3] = 0.0f;
-
-	matrix.m[2][0] = 2.0f * (xz - wy);
-	matrix.m[2][1] = 2.0f * (yz + wx);
-	matrix.m[2][2] = 1.0f - 2.0f * (xx + yy);
-	matrix.m[2][3] = 0.0f;
-
+	matrix.m[1][0] = 2.0f * (xy - wz);
+	matrix.m[2][0] = 2.0f * (xz + wy);
 	matrix.m[3][0] = 0.0f;
+
+	matrix.m[0][1] = 2.0f * (xy + wz);
+	matrix.m[1][1] = 1.0f - 2.0f * (xx + zz);
+	matrix.m[2][1] = 2.0f * (yz - wx);
 	matrix.m[3][1] = 0.0f;
+
+	matrix.m[0][2] = 2.0f * (xz - wy);
+	matrix.m[1][2] = 2.0f * (yz + wx);
+	matrix.m[2][2] = 1.0f - 2.0f * (xx + yy);
 	matrix.m[3][2] = 0.0f;
+
+	matrix.m[0][3] = 0.0f;
+	matrix.m[1][3] = 0.0f;
+	matrix.m[2][3] = 0.0f;
 	matrix.m[3][3] = 1.0f;
 
 	return matrix;
@@ -463,6 +463,11 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 
 	return m;
 
+}
+
+Matrix4x4 MakeAffineMatrix(const EulerTransform& transform)
+{
+	return MakeAffineMatrix(transform.scale, transform.rotation, transform.translation);
 }
 
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const Vector3& translate)

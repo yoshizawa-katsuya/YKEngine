@@ -159,27 +159,43 @@ void GameScene::Update() {
         mainCamera_ = camera2_.get();
         modelPlatform_->SetCamera(mainCamera_);
 
-    }
+	}
+		
+	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 
-    ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
+	/*
+	if (ImGui::Button("BGMstop")) {
+		audio_->SoundStopWave(bgm1_);
+	}
+	*/
+	ImGui::End();
+		
 
-    /*
-    if (ImGui::Button("BGMstop")) {
-        audio_->SoundStopWave(bgm1_);
-    }
-    */
-    ImGui::End();
 #endif // _DEBUG
 }
 
 void GameScene::Draw() {
-    // Modelの描画前処理
-    modelPlatform_->PreDraw();
+
+	//Spriteの背景描画前処理
+	//spritePlatform_->PreBackGroundDraw();
+
+	//sprite_->Draw();
+
+	//Modelの描画前処理
+	modelPlatform_->PreDraw();
+	//modelPlatform_->SkinPreDraw();
 
     // 全ストーンを描画
     for (auto& stone : stones_) {
         stone->Draw(mainCamera_);
     }
+
+	//Spriteの描画前処理
+	//spritePlatform_->PreDraw();
+
+	//ParticleManager::GetInstance()->Draw();
+
+    
 
     // (残りの描画処理は省略)
 }

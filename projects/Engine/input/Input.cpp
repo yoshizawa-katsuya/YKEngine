@@ -148,12 +148,13 @@ Vector2 Input::GetMouseVelocity()
 
 }
 
-Vector2 Input::GetMousePosition() {
-	POINT point;
-	if (GetCursorPos(&point)) {
-		return Vector2(static_cast<float>(point.x), static_cast<float>(point.y));
-	}
-	return Vector2(0.0f, 0.0f);
+Vector2 Input::GetMousePosition()
+{
+	POINT position;
+	GetCursorPos(&position);
+	ScreenToClient(winApp_->GetHwnd(), &position);
+
+	return Vector2(static_cast<float>(position.x), static_cast<float>(position.y));
 }
 
 bool Input::IsPushKeyPre(BYTE keyNumber)
