@@ -29,6 +29,16 @@ void TitleScene::Initialize()
 	titleSprite_ = std::make_unique<Sprite>();
 	titleSprite_->Initialize(title_);
 	titleSprite_->SetPosition({ 0.0f, 0.0f });
+
+	start1_ = TextureManager::GetInstance()->Load("./resources/scene/start1.png");
+	startSprite1_ = std::make_unique<Sprite>();
+	startSprite1_->Initialize(start1_);
+	startSprite1_->SetPosition({ 0.0f, 0.0f });
+
+	start2_ = TextureManager::GetInstance()->Load("./resources/scene/start2.png");
+	startSprite2_ = std::make_unique<Sprite>();
+	startSprite2_->Initialize(start2_);
+	startSprite2_->SetPosition({ 0.0f, 0.0f });
 	
 
 
@@ -36,9 +46,27 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	
-	
+	Square square;
+	square.min = { 254.0f, 369.0f };
+	square.max = { 732.0f, 486.0f };
 
+	bool isMouseInside = IsCollision(square, input_->GetMousePosition());
+
+	if (isMouseInside) {
+		startSprite2_->SetVisible(true); 
+		startSprite1_->SetVisible(false);
+	} else {
+		startSprite2_->SetVisible(false); 
+		startSprite1_->SetVisible(true);
+	}
+	if (startSprite2_->IsVisible()) {
+		if (input_->TrigerMouseLeft()) {
+			//シーン切り替え依頼
+			sceneManager_->ChengeScene("SelectScene");
+		}
+
+
+	}
 
 #ifdef _DEBUG
 	
@@ -53,10 +81,10 @@ void TitleScene::Update()
 	
 #endif // _DEBUG
 
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("SelectScene");
-	}
+	//if (input_->TriggerKey(DIK_SPACE)) {
+	//	//シーン切り替え依頼
+	//	sceneManager_->ChengeScene("SelectScene");
+	//}
 
 }
 
@@ -68,6 +96,16 @@ void TitleScene::Draw()
 
 	titleSprite_->Draw();
 
+	
+	if (startSprite1_->IsVisible()) {
+		startSprite1_->Draw();
+	}
+	if (startSprite2_->IsVisible()) {
+		startSprite2_->Draw();
+	}
+	
+
+	
 }
 
 void TitleScene::Finalize()

@@ -3,7 +3,7 @@
 #include "SceneManager.h"
 #include "Collision.h"
 #include "Vector.h"
-
+#include <algorithm>
 SelectScene::~SelectScene()
 {
 }
@@ -123,13 +123,18 @@ void SelectScene::Initialize()
 		}
 		difficultySprites_.push_back(std::move(sprite));
 	}
-	
+
+
+	bundleActive_.resize(bundleSprites_.size(), false);
 
 }
 
 void SelectScene::Update()
 {
+	Vector2 mousePos = input_->GetMousePosition();
 	
+	
+
 	if (input_->TrigerMouseLeft()) {
 		Square square;
 		square.min = selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->GetPosition();
@@ -178,6 +183,21 @@ void SelectScene::Update()
 
 	}
 
+	if (input_->PushMouseLeft() && IsMouseOverSprite(input_->GetMousePosition(), selectSprites_[1])) {
+
+		uint32_t currentTexture = selectSprites_[1]->GetTeture();
+
+
+		for (size_t i = 0; i < selectTextureHandles_.size(); ++i) {
+			if (currentTexture == selectTextureHandles_[i]) {
+				bundleActive_[i] = true;
+				break;
+			}
+		}
+	}
+
+
+
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GameScene");
@@ -209,10 +229,14 @@ void SelectScene::Draw()
 
 	backgroundSprite_->Draw();
 
+
+	bool isAnyBundleActive = std::any_of(bundleActive_.begin(), bundleActive_.end(), [](bool active) {
+		return active;
+		});
+
+	if (!isAnyBundleActive) {
+
 	tutorialSprite_->Draw();
-
-	
-
 
 	if (input_->GetMousePosition().x < 144.0f || input_->GetMousePosition().x>836.0f) {
 		difficultySprites_[0]->Draw();
@@ -227,32 +251,24 @@ void SelectScene::Draw()
 	}
 	}
 
+	}
 	
-	//if (input_->PushMouseLeft() && IsMouseOverSprite(input_->GetMousePosition(), selectSprites_[1])) {
-	//	// selectSprites_[1]의 텍스처 핸들을 가져옴
-	//	uint32_t currentTexture = selectSprites_[1]->get
-	//
-	//	// selectTextureHandles_와 비교
-	//	for (size_t i = 0; i < selectTextureHandles_.size(); ++i) {
-	//		if (currentTexture == selectTextureHandles_[i]) {
-	//			// 대응되는 bundleSprites_ 드로우
-	//			bundleSprites_[i]->Draw();
-	//			break; // 일치하는 텍스처를 찾으면 반복문 종료
-	//		}
-	//	}
-	//}
+	for (size_t i = 0; i < bundleSprites_.size(); ++i) {
+		if (bundleActive_[i] && bundleSprites_[i]) {
+			bundleSprites_[i]->Draw();
+			for (std::unique_ptr<Sprite>& stageSprite : stageSprites_) {
+				stageSprite->Draw();
+			}
+		}
+	}
 	
 	
 
 
 
 
-	//for (std::unique_ptr<Sprite>& selectBund : bundleSprites_) {
-	//	selectBund->Draw();
-	//}
-	//for (std::unique_ptr<Sprite>& stageSprite : stageSprites_) {
-	//	stageSprite->Draw();
-	//}
+	
+	
 }
 
 void SelectScene::Finalize()

@@ -67,6 +67,6 @@ private:
 	std::vector<std::unique_ptr<Sprite>> difficultySprites_;
 
 
-
+	std::vector<bool> bundleActive_;
 	bool selectSpr = true;
 };
