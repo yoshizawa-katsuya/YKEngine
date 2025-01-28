@@ -55,7 +55,7 @@ private:
 
 	// ブロックの個数
 	const uint32_t kNumBlockVertical = 15;
-	const uint32_t kNumBlockHorizontal = 22;
+	const uint32_t kNumBlockHorizontal = 24;
 
 	MapChipData mapChipData_;
 

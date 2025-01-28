@@ -1,6 +1,15 @@
 #include "Vector.h"
 
 
+Vector2 Add(const Vector2& v1, const Vector2& v2)
+{
+	Vector2 anser;
+	anser.x = v1.x + v2.x;
+	anser.y = v1.y + v2.y;
+
+	return anser;
+}
+
 Vector2 Subtract(const Vector2& v1, const Vector2& v2)
 {
 	Vector2 anser;
@@ -25,6 +34,8 @@ float Dot(const Vector2& v1, const Vector2& v2)
 
 	return anser;
 }
+
+Vector2 operator+(const Vector2& v1, const Vector2& v2) { return Add(v1, v2); }
 
 Vector3 Add(const Vector3& v1, const Vector3& v2) {
 

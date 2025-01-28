@@ -88,6 +88,10 @@ private:
 	std::unique_ptr<InstancingObject> floors_;
 
 
+	//BackGround
+	uint32_t background_;
+	std::unique_ptr<Sprite> backgroundSprite_;
+
 	//パーティクル
 	/*
 	std::unique_ptr<ParticleEmitter> emitter_;

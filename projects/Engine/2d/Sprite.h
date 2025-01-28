@@ -70,6 +70,12 @@ public:
 
 	void SetTexture(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 
+	uint32_t GetTeture() { return textureHandle_; }
+
+	void SetVisible(bool visible) { visible_ = visible; }
+
+	bool IsVisible() const { return visible_; }
+
 private:
 
 	//頂点データ作成
@@ -133,6 +139,8 @@ private:
 	Vector2 textureLeftTop_ = { 0.0f, 0.0f };
 	//テクスチャ切り出しサイズ
 	Vector2 textureSize_ = { 100.0f, 100.0f };
+
+	bool visible_ = true;
 
 };
 

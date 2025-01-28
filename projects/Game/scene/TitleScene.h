@@ -8,6 +8,7 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 
+
 class TitleScene : public BaseScene
 {
 public:
@@ -33,5 +34,14 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 	
+	uint32_t title_;
+	std::unique_ptr<Sprite> titleSprite_;
+
+	uint32_t start1_;
+	std::unique_ptr<Sprite> startSprite1_;
+
+	uint32_t start2_;
+	std::unique_ptr<Sprite> startSprite2_;
+
 };
 
