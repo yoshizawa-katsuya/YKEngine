@@ -110,9 +110,64 @@ void GameScene::Update() {
     if (ImGui::TreeNode("camera")) {
         ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
         ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
+        //ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
+
         ImGui::TreePop();
     }
-    // (残りのImGuiの設定は省略)
+
+    if (ImGui::TreeNode("DirectionalLight")) {
+        ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
+        ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
+        ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
+
+        ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNode("PointLight")) {
+        ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
+        ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
+        ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
+        ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
+        ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
+
+        ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNode("SpotLight")) {
+        ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
+        ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
+        ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
+        ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
+        ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
+        ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
+        ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
+        ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
+
+        ImGui::TreePop();
+    }
+    //メインカメラの切り替え
+    if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
+        isActiveDebugCamera_ = false;
+
+        mainCamera_ = camera_.get();
+        modelPlatform_->SetCamera(mainCamera_);
+
+    }
+    if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
+        isActiveDebugCamera_ = true;
+
+        mainCamera_ = camera2_.get();
+        modelPlatform_->SetCamera(mainCamera_);
+
+    }
+
+    ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
+
+    /*
+    if (ImGui::Button("BGMstop")) {
+        audio_->SoundStopWave(bgm1_);
+    }
+    */
     ImGui::End();
 #endif // _DEBUG
 }
