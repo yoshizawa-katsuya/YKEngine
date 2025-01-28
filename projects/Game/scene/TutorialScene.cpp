@@ -16,6 +16,7 @@ void TutorialScene::Initialize()
 
 	modelPlane_ = std::make_unique<RigidModel>();
 	modelPlane_->CreateModel("./resources/Plane", "plane.obj");
+	modelPlane_->SetEnableLighting(false);
 
 	GameScene::Initialize();
 
@@ -75,7 +76,7 @@ void TutorialScene::Update()
 
 		CheckAllCollisions();
 
-		if (enemies_.size() == 0) {
+		if (player_->GetCenterPosition().x >= 20.0f) {
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 			phase_ = Phase::kClear;
 		}
@@ -90,7 +91,7 @@ void TutorialScene::Update()
 		if (fade_->IsFinished()) {
 			//fade_->Stop();
 			//シーン切り替え依頼
-			sceneManager_->ChengeScene("ClearScene");
+			sceneManager_->ChengeScene("TitleScene");
 		}
 		break;
 
@@ -223,8 +224,8 @@ void TutorialScene::Draw()
 
 	for (std::unique_ptr<Plane>& plane : planes_) {
 		plane->object_->CameraUpdate(mainCamera_);
-		//plane->object_->Draw(plane->textureHandle_);
-		plane->object_->Draw();
+		plane->object_->Draw(plane->textureHandle_);
+		//plane->object_->Draw();
 	}
 
 	//Spriteの描画前処理
@@ -252,7 +253,7 @@ void TutorialScene::CreateLevel()
 			enemy->SetDarkRed(textureHandleDarkRed_);
 			enemy->SetHitSE3Data(&HitSE3_);
 		}
-		else if (objectData.fileName == "Plane") {
+		else if (objectData.fileName.find("Plane") != std::string::npos) {
 			planes_.emplace_back();
 			std::unique_ptr<Plane>& plane = planes_.back();
 			plane = std::make_unique<Plane>();
@@ -265,6 +266,27 @@ void TutorialScene::CreateLevel()
 			worldTransform.UpdateMatrix();
 			plane->object_->WorldTransformUpdate(worldTransform);
 
+			if (objectData.fileName == "Plane01") {
+				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane01.png");
+			}
+			else if (objectData.fileName == "Plane02") {
+				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane02.png");
+			}
+			else if (objectData.fileName == "Plane03") {
+				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane03.png");
+			}
+			else if (objectData.fileName == "Plane04") {
+				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane04.png");
+			}
+			else if (objectData.fileName == "Plane05") {
+				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane05.png");
+			}
+			else if (objectData.fileName == "Plane06") {
+				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane06.png");
+			}
+			else if (objectData.fileName == "Plane07") {
+				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane07.png");
+			}
 		}
 		
 	}
