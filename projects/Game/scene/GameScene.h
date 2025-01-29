@@ -42,6 +42,8 @@ public:
 
 	void AddEnemyBullet(const Vector3& position, const Vector3& velocity);
 
+	static uint32_t stageNum_;
+
 protected:
 
 	//敵の配置

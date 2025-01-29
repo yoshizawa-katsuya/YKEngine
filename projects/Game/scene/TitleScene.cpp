@@ -19,12 +19,14 @@ void TitleScene::Initialize()
 	modelPlatform_ = ModelPlatform::GetInstance();
 	
 	textureHandleTitle_ = TextureManager::GetInstance()->Load("./resources/Title.png");
-	textuHandleSetsumei_ = TextureManager::GetInstance()->Load("./resources/Setsumei01.png");
-	textuHandleSetsumei02_ = TextureManager::GetInstance()->Load("./resources/Setsumei02.png");
-	textuHandleSetsumei03_ = TextureManager::GetInstance()->Load("./resources/Setsumei03.png");
+	texturehandleCursor_ = TextureManager::GetInstance()->Load("./resources/cursor.png");
 
 	spriteTitle_ = std::make_unique<Sprite>();
 	spriteTitle_->Initialize(textureHandleTitle_);
+
+	spriteCursor_ = std::make_unique<Sprite>();
+	spriteCursor_->Initialize(texturehandleCursor_);
+	spriteCursor_->SetPosition({ 156.0f, 400.0f });
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
@@ -55,24 +57,24 @@ void TitleScene::Update()
 		break;
 
 	case TitleScene::Phase::kMain:
+		if (input_->TriggerKey(DIK_W) || input_->TriggerButton(XINPUT_GAMEPAD_DPAD_UP)) {
+			selectNum_--;
+			if (selectNum_ < 1) {
+				selectNum_ = 3;
+			}
+			spriteCursor_->SetPosition({ 156.0f, 315.0f + selectNum_ * 85.0f});
+		}
+		else if (input_->TriggerKey(DIK_S) || input_->TriggerButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
+			selectNum_++;
+			if (selectNum_ > 3) {
+				selectNum_ = 1;
+			}
+			spriteCursor_->SetPosition({ 156.0f, 315.0f + selectNum_ * 85.0f });
+		}
+
 		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
-			if (phase2_ == 0) {
-				phase2_++;
-				spriteTitle_->SetTexture(textuHandleSetsumei_);
-			}
-			else if (phase2_ == 1) {
-				phase2_++;
-				spriteTitle_->SetTexture(textuHandleSetsumei02_);
-			}
-			else if (phase2_ == 2) {
-				phase2_++;
-				spriteTitle_->SetTexture(textuHandleSetsumei03_);
-			}
-			else {
-				fade_->Start(Fade::Status::FadeOut, 0.5f);
-				phase_ = Phase::kFadoOut;
-				
-			}
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+			phase_ = Phase::kFadoOut;
 		}
 		break;
 
@@ -81,7 +83,15 @@ void TitleScene::Update()
 		if (fade_->IsFinished()) {
 			//fade_->Stop();
 			//シーン切り替え依頼
-			sceneManager_->ChengeScene("GameScene");
+			if (selectNum_ == 1) {
+				sceneManager_->ChengeScene("TutorialScene");
+			}
+			else if (selectNum_ == 2) {
+				sceneManager_->ChengeScene("GameScene01");
+			}
+			else {
+				sceneManager_->ChengeScene("GameScene02");
+			}
 		}
 		break;
 	}
@@ -97,6 +107,8 @@ void TitleScene::Draw()
 	spritePlatform_->PreDraw();
 	
 	spriteTitle_->Draw();
+
+	spriteCursor_->Draw();
 
 	fade_->Draw();
 }

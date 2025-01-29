@@ -12,6 +12,8 @@
 #include "Enemy02.h"
 #include "Enemy03.h"
 
+uint32_t GameScene::stageNum_ = 1;
+
 GameScene::~GameScene() {
 	//Finalize();
 	audio_->SoundStopWave(bgm1_);
@@ -393,7 +395,13 @@ void GameScene::AddEnemyBullet(const Vector3& position, const Vector3& velocity)
 
 void GameScene::CreateLevel()
 {
-	LevelData* levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
+	LevelData* levelData;
+	if (stageNum_ == 1) {
+		levelData = LevelDataLoad("./resources/LevelData/", "levelData02", ".json");
+	}
+	else {
+		levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
+	}
 
 	//レベルデータからオブジェクトを生成、配置
 	for (ObjectData& objectData : levelData->objects) {

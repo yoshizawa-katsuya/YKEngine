@@ -46,14 +46,13 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	uint32_t phase2_ = 0;
+	uint32_t selectNum_ = 1;
 
 	uint32_t textureHandleTitle_;
-	uint32_t textuHandleSetsumei_;
-	uint32_t textuHandleSetsumei02_;
-	uint32_t textuHandleSetsumei03_;
+	uint32_t texturehandleCursor_;
 
 	std::unique_ptr<Sprite> spriteTitle_;
+	std::unique_ptr<Sprite> spriteCursor_;
 
 	LoopSoundData bgm1_;
 };
