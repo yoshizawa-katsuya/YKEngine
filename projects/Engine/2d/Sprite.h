@@ -70,6 +70,8 @@ public:
 
 	void SetTexture(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 
+	uint32_t GetTeture() { return textureHandle_; }
+
 private:
 
 	//頂点データ作成
