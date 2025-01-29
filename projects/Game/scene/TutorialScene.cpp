@@ -289,6 +289,9 @@ void TutorialScene::CreateLevel()
 			else if (objectData.fileName == "Plane07") {
 				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane07.png");
 			}
+			else if (objectData.fileName == "Plane08") {
+				plane->textureHandle_ = TextureManager::GetInstance()->Load("./resources/plane08.png");
+			}
 		}
 		
 	}
