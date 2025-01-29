@@ -46,7 +46,7 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	uint32_t selectNum_ = 1;
+	static uint32_t selectNum_;
 
 	uint32_t textureHandleTitle_;
 	uint32_t texturehandleCursor_;

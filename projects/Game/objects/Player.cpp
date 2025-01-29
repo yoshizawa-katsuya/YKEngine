@@ -289,7 +289,7 @@ void Player::Attack()
 
 void Player::Fire()
 {
-	if (!input_->TriggerKey(DIK_K) && !input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_THUMB) && !input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+	if (!input_->TriggerKey(DIK_K) && !input_->TrigerRT() && !input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 		return;
 	}
 	if (lrDirection_ == LRDirection::kRight) {

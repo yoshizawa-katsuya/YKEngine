@@ -2,6 +2,8 @@
 #include "imgui/imgui.h"
 #include "SceneManager.h"
 
+uint32_t TitleScene::selectNum_ = 1;
+
 TitleScene::~TitleScene()
 {
 	//Finalize();
@@ -26,7 +28,7 @@ void TitleScene::Initialize()
 
 	spriteCursor_ = std::make_unique<Sprite>();
 	spriteCursor_->Initialize(texturehandleCursor_);
-	spriteCursor_->SetPosition({ 156.0f, 400.0f });
+	spriteCursor_->SetPosition({ 156.0f, 315.0f + selectNum_ * 85.0f });
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
@@ -57,14 +59,14 @@ void TitleScene::Update()
 		break;
 
 	case TitleScene::Phase::kMain:
-		if (input_->TriggerKey(DIK_W) || input_->TriggerButton(XINPUT_GAMEPAD_DPAD_UP)) {
+		if (input_->TriggerKey(DIK_W) || input_->TriggerButton(XINPUT_GAMEPAD_DPAD_UP) || input_->TrigerLeftStickUp()) {
 			selectNum_--;
 			if (selectNum_ < 1) {
 				selectNum_ = 3;
 			}
 			spriteCursor_->SetPosition({ 156.0f, 315.0f + selectNum_ * 85.0f});
 		}
-		else if (input_->TriggerKey(DIK_S) || input_->TriggerButton(XINPUT_GAMEPAD_DPAD_DOWN)) {
+		else if (input_->TriggerKey(DIK_S) || input_->TriggerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input_->TrigerLeftStickDown()) {
 			selectNum_++;
 			if (selectNum_ > 3) {
 				selectNum_ = 1;
