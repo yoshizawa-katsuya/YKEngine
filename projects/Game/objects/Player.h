@@ -48,6 +48,8 @@ public:
 
 	const Vector2& GetAttackRange() const { return workAttack_.attackRange_; }
 
+	float GetMoveRengeMax() { return moveRange_.max_; }
+
 	void SetTranslation(const Vector3& translation) { worldTransform_.translation_ = translation; }
 
 	void SetHitSEData(SoundData* hitSE) { HitSE1_ = hitSE; }

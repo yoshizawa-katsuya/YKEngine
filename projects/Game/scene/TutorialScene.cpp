@@ -76,14 +76,16 @@ void TutorialScene::Update()
 
 		CheckAllCollisions();
 
-		if (player_->GetCenterPosition().x >= 20.0f) {
+		if (player_->GetCenterPosition().x >= player_->GetMoveRengeMax()) {
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 			phase_ = Phase::kClear;
 		}
+		/*
 		else if (!player_->GetIsAlive()) {
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 			phase_ = Phase::kGameOver;
 		}
+		*/
 		break;
 
 	case GameScene::Phase::kClear:
