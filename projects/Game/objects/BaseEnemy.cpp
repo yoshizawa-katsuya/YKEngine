@@ -131,14 +131,9 @@ void BaseEnemy::TakeHammer(uint32_t power)
 	}
 }
 
-bool BaseEnemy::PlaySE3()
+bool BaseEnemy::isHavingBomb()
 {
-
-	if (status_.bombNum_ > 0) {
-		Audio::GetInstance()->SoundPlayWave(*HitSE3_);
-		return true;
-	}
-	return false;
+	return (status_.bombNum_ > 0);
 }
 
 void BaseEnemy::HPGaugeUpdate()

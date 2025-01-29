@@ -504,10 +504,6 @@ void GameScene::CheckAllCollisions()
 			isSE = true;
 		}
 	}
-	if (isSE) {
-		audio_->SoundPlayWave(HitSE1_);
-		isSE = false;
-	}
 
 	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
 		collider1 = { playerBullet->Get2DCenterPosition(), playerBullet->GetRadius() };
@@ -553,14 +549,15 @@ void GameScene::CheackPlayerAttackCollision()
 
 	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) {
 		if (IsCollision(playerAttackCollider, { enemy->Get2DCenterPosition(), enemy->GetRadius() })) {
-			if (!isSE3) {
-				bool a = enemy->PlaySE3();
-				if (a) {
-					isSE3 = true;
-				}
-
+			if (enemy->isHavingBomb()) {
+				isSE3 = true;
 			}
 			player_->AttackHit(enemy.get());
 		}
+	}
+
+	if (isSE3) {
+		audio_->SoundPlayWave(HitSE3_);
+		isSE3 = false;
 	}
 }

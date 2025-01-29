@@ -33,7 +33,7 @@ public:
 
 	void SetHitSE3Data(SoundData* hitSE) { HitSE3_ = hitSE; }
 
-	virtual bool PlaySE3();
+	bool isHavingBomb();
 
 protected:
 
