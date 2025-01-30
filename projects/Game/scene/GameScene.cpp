@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 
     // ストーンモデルの初期化
     modelStone_ = std::make_unique<RigidModel>();
-    modelStone_->CreateModel("./resources", "plane.obj");
+    modelStone_->CreateModel("./resources/stone/stone", "stone.obj");
 
     // プレイヤーの初期化
     player_ = std::make_unique<Player>();
@@ -74,17 +74,21 @@ void GameScene::Initialize() {
 void GameScene::Update() {
   
     for (size_t i = 0; i < stones_.size(); ++i) {
-        stones_[i]->Update();
-    }
-
-    // 衝突判定
-    for (size_t i = 0; i < stones_.size(); ++i) {
-        for (size_t j = i + 1; j < stones_.size(); ++j) {
-            if (stones_[i]->CheckCollision(*stones_[i], *stones_[j])) {
-               stones_[j]->HandleCollision(*stones_[i]);
+        if (i == stones_.size() - 1) {
+            stones_[i]->Update();  // 現在のストーンのみ操作
+        }
+        else if (stones_[i]->GetState() == Stone::State::Flying) {
+            stones_[i]->Update();
+        }
+        //衝突判定
+        for (size_t j = 0; j < stones_.size(); ++j) {
+            if (i != j && stones_[i]->CheckCollision(*stones_[i], *stones_[j])) {
+                stones_[i]->HandleCollision(*stones_[j]);
             }
         }
     }
+
+    
 
     // 最後のストーンがStoppedになったら新しいストーンを追加
     if (!stones_.empty() && stones_.back()->GetState() == Stone::State::Stopped) {

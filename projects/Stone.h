@@ -7,8 +7,6 @@
 #include <cmath>
 #include <algorithm>
 
-
-
 class Stone {
 public:
     struct AABB {
@@ -46,6 +44,8 @@ public:
 
     //当たり判定
     bool CheckCollision(const Stone& stone1, const Stone& stone2);
+    //挟む判定
+    bool CheckCaptureItem(const Stone& stone1, const Stone& stone2, const Vector3& itemPosition, float captureRange);
 private:
 
     State state_ = State::Waiting; 
@@ -58,4 +58,5 @@ private:
     float powerChangeRate_ = 0.005f; //発射強さの変動速度
     bool powerIncreasing_ = true;   //発射強さが増加中か減少中か
     float speed_ = 0.0f;            //発射時の速度
+    float maxSpeed = 0.05f;
 };
