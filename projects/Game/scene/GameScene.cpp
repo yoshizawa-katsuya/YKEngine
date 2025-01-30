@@ -1,34 +1,20 @@
 #include "GameScene.h"
-#include "dx12.h"
+#include "TextureManager.h"
+#include <cassert>
+#include "GlobalVariables.h"
 #include "imgui/imgui.h"
-#include "ParticleManager.h"
-#include "SceneManager.h"
-#include "Input.h"
-#include "RigidModel.h"
 
-GameScene::~GameScene() {
-	//Finalize();
-}
+GameScene::GameScene() {}
+
+GameScene::~GameScene() {}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
-	audio_ = Audio::GetInstance();
 	input_ = Input::GetInstance();
+	audio_ = Audio::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
-
-	//平行光源の生成
-	directionalLight_ = std::make_unique<DirectionalLight>();
-	directionalLight_->Initialize(dxCommon_);
-
-	//点光源の生成
-	pointLight_ = std::make_unique<PointLight>();
-	pointLight_->Initialize(dxCommon_);
-
-	//スポットライトの生成
-	spotLight_ = std::make_unique<SpotLight>();
-	spotLight_->Initialize(dxCommon_);
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -45,37 +31,76 @@ void GameScene::Initialize() {
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
-	//モデルを描画する際ライトとカメラの設定は必須
-	modelPlatform_->SetDirectionalLight(directionalLight_.get());
-	modelPlatform_->SetPointLight(pointLight_.get());
-	modelPlatform_->SetCamera(mainCamera_);
-	modelPlatform_->SetSpotLight(spotLight_.get());
+	//追従カメラの生成
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
 
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	//衝突マネージャの生成
+	collisionManager_ = std::make_unique<CollisionManager>();
+	collisionManager_->Initialize();
 
-	//モデルの生成
-	modelPlayer_ = std::make_unique<RigidModel>();
-	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
-	//modelPlayer_->CreateSphere(textureHandle_);
-	
-	/*
-	//テクスチャハンドルの生成
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
+	//ファイル名を指定してテクスチャを読み込む
+	//textureHnadle_ = TextureManager::Load("./Resources/mario.jpg");
 
-	//スプライトの生成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(textureHandle_, spritePlatform_);
-	*/
+	//3Dモデルの生成
+	//model_.reset(Model::Create());
+	modelSkydome_.reset(Model::CreateFromOBJ("Skydome03", true));
+	modelGround_.reset(Model::CreateFromOBJ("Ground01", true));
 
-	//プレイヤーの初期化
+	//自キャラモデル
+	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
+	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
+	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
+	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
+	modelHammer_.reset(Model::CreateFromOBJ("Hammer01", true));
+	std::vector<Model*> playerModels = 
+	{modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
+	 modelFighterR_arm_.get(), modelHammer_.get()};
+
+	//敵モデル
+	modelEnemyBody_.reset(Model::CreateFromOBJ("Enemy02_Body", true));
+	modelEnemyL_arm_.reset(Model::CreateFromOBJ("Enemy02_L_arm", true));
+	modelEnemyR_arm_.reset(Model::CreateFromOBJ("Enemy02_R_arm", true));
+	std::vector<Model*> enemyModels = {modelEnemyBody_.get(), modelEnemyL_arm_.get(), modelEnemyR_arm_.get()};
+
+	//スカイドームの生成
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(modelSkydome_.get(), &viewProjection_);
+
+	//地面の生成
+	ground_ = std::make_unique<Ground>();
+	ground_->Initialize(modelGround_.get(), &viewProjection_);
+
+	//自キャラの生成
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
+	//自キャラの初期化
+	player_->Initialize(playerModels, &viewProjection_);
+	player_->SetCameraViewProjection(&followCamera_->GetViewProjection());
+
+	//ロックオンの生成
+	lockOn_ = std::make_unique<LockOn>();
+	//ロックオンの初期化
+	lockOn_->Initialize();
+
+	//自キャラのワールドトランスフォームを追従カメラにセット
+	followCamera_->SetTarget(&player_->GetWorldTransform());
+	//ロックオンをセット
+	followCamera_->SetLockOn(lockOn_.get());
+	player_->SetLockOn(lockOn_.get());
+
+	//敵の生成
+	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
+	// 敵の初期化
+	enemy->Initialize(enemyModels, &viewProjection_);
+
+	enemies_.push_back(std::move(enemy));
+	
+	
+
 
 }
 
 void GameScene::Update() {
-
-	
 
 	//カメラの更新
 	camera_->Update();
@@ -84,109 +109,148 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 
-	//プレイヤーの更新
+	// スカイドームの更新
+	skydome_->Update();
+
+	//地面の更新
+	ground_->Update();
+
+	//自キャラの更新
 	player_->Update();
 
-	//emitter_->Update(color_);
+	//ロックオンの更新
+	lockOn_->Update(enemies_, viewProjection_);
 
-	//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
-
-#ifdef _DEBUG
-
-
-		ImGui::Begin("Window");
-		if (ImGui::TreeNode("camera")) {
-			ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
-			ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
-			//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
-
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("DirectionalLight")) {
-			ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
-			ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
-			ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
-
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("PointLight")) {
-			ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
-			ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
-			ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
-			ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
-			ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
-
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("SpotLight")) {
-			ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
-			ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
-			ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
-			ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
-			ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
-			ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
-			ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
-			ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
-
-			ImGui::TreePop();
-		}
-		//メインカメラの切り替え
-		if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
-			isActiveDebugCamera_ = false;
-
-			mainCamera_ = camera_.get();
-			modelPlatform_->SetCamera(mainCamera_);
-
-		}
-		if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
-			isActiveDebugCamera_ = true;
-
-			mainCamera_ = camera2_.get();
-			modelPlatform_->SetCamera(mainCamera_);
-
-		}
-		
-		ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
-
-		/*
-		if (ImGui::Button("BGMstop")) {
-			audio_->SoundStopWave(bgm1_);
-		}
-		*/
-		ImGui::End();
-		
-
-#endif // _DEBUG
+	//敵の更新
+	for (const std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemy->Update();
+	}
 	
+	//デバッグ表示用にワールドトランスフォームを更新
+	collisionManager_->UpdateWorldTransform();
+
+	//衝突判定と応答
+	CheckAllCollisions();
+
+	// カメラの処理
+	if (isActiveDebugCamera_) {
+
+		// デバッグカメラの更新
+		debugCamera_->Update();
+
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
+	} else {
+
+		// 追従カメラの更新
+		followCamera_->Update();
+
+		viewProjection_.matView = followCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
+	}
+
+	ImGui::Begin("Window");
+	//メインカメラの切り替え
+	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
+		isActiveDebugCamera_ = false;
+
+		mainCamera_ = camera_.get();
+		modelPlatform_->SetCamera(mainCamera_);
+
+	}
+	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
+		isActiveDebugCamera_ = true;
+
+		mainCamera_ = camera2_.get();
+		modelPlatform_->SetCamera(mainCamera_);
+
+	}
+	ImGui::End();
 
 }
 
 void GameScene::Draw() {
 
-	//Spriteの背景描画前処理
-	//spritePlatform_->PreBackGroundDraw();
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	//sprite_->Draw();
+#pragma region 背景スプライト描画
+	// 背景スプライト描画前処理
+	Sprite::PreDraw(commandList);
 
-	//Modelの描画前処理
-	modelPlatform_->PreDraw();
-	//modelPlatform_->SkinPreDraw();
+	/// <summary>
+	/// ここに背景スプライトの描画処理を追加できる
+	/// </summary>
 
-	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	// スプライト描画後処理
+	Sprite::PostDraw();
+	// 深度バッファクリア
+	dxCommon_->ClearDepthBuffer();
+#pragma endregion
 
+#pragma region 3Dオブジェクト描画
+	// 3Dオブジェクト描画前処理
+	Model::PreDraw(commandList);
 
-	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
+	/// <summary>
+	/// ここに3Dオブジェクトの描画処理を追加できる
+	/// </summary>
+	
+	//当たり判定の表示
+	collisionManager_->Draw(viewProjection_);
 
-	//ParticleManager::GetInstance()->Draw();
+	// スカイドームの描画
+	skydome_->Draw();
 
+	//地面の描画
+	ground_->Draw();
+
+	//自キャラの描画
+	player_->Draw();
+
+	//敵の描画
+	for (const std::unique_ptr<Enemy>& enemy : enemies_) {
+		enemy->Draw();
+	}
+
+	// 3Dオブジェクト描画後処理
+	Model::PostDraw();
+#pragma endregion
+
+#pragma region 前景スプライト描画
+	// 前景スプライト描画前処理
+	Sprite::PreDraw(commandList);
+
+	/// <summary>
+	/// ここに前景スプライトの描画処理を追加できる
+	/// </summary>
+	//ロックオンの描画
+	lockOn_->Draw();
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+
+#pragma endregion
 }
 
-void GameScene::Finalize()
-{
+void GameScene::CheckAllCollisions() {
+
+	//衝突マネージャのリセット
+	collisionManager_->Reset();
+
+	//コライダーをリストに登録
+	collisionManager_->AddCollider(player_.get());
+	collisionManager_->AddCollider(player_->GatHammer());
+	//敵すべてについて
+	for (const std::unique_ptr<Enemy>& enemy : enemies_) {
+		collisionManager_->AddCollider(enemy.get());
+	}
+
+	//衝突判定と応答
+	collisionManager_->CheckAllCollisions();
 
 }
