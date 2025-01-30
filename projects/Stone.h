@@ -1,13 +1,10 @@
 #pragma once
-
 #include "Base3dObject.h"
 #include "WorldTransform.h"
 #include "Input.h"
 #include <imgui.h>
 #include <cmath>
 #include <algorithm>
-
-
 
 class Stone {
 public:
@@ -48,9 +45,9 @@ public:
     bool CheckCollision(const Stone& stone1, const Stone& stone2);
 private:
 
-    State state_ = State::Waiting; 
-    WorldTransform worldTransform_; 
-    std::unique_ptr<Base3dObject> object_; 
+    State state_ = State::Waiting;
+    WorldTransform worldTransform_;
+    std::unique_ptr<Base3dObject> object_;
     Input* input_ = nullptr;
 
     float angle_ = 0.0f;            //発射角度
@@ -58,4 +55,5 @@ private:
     float powerChangeRate_ = 0.005f; //発射強さの変動速度
     bool powerIncreasing_ = true;   //発射強さが増加中か減少中か
     float speed_ = 0.0f;            //発射時の速度
+    float maxSpeed = 0.05f;
 };
