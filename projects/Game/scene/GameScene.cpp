@@ -61,6 +61,10 @@ void GameScene::Initialize() {
     modelStone_ = std::make_unique<RigidModel>();
     modelStone_->CreateModel("./resources/stone/stone", "stone.obj");
 
+    //スターモデルの生成
+    modelStar_ = std::make_unique<RigidModel>();
+    modelStar_->CreateModel("./resources/star", "star.obj");
+
     // プレイヤーの初期化
     player_ = std::make_unique<Player>();
     player_->Initialize(modelPlayer_.get());
@@ -69,6 +73,10 @@ void GameScene::Initialize() {
     auto stone = std::make_unique<Stone>();
     stone->Initialize(modelStone_.get());
     stones_.push_back(std::move(stone));
+
+    //スターの初期化
+    star_ = std::make_unique<Star>();
+    star_->Initialize(modelStar_.get());
 }
 
 void GameScene::Update() {
@@ -88,14 +96,15 @@ void GameScene::Update() {
         }
     }
 
-
-
     // 最後のストーンがStoppedになったら新しいストーンを追加
     if (!stones_.empty() && stones_.back()->GetState() == Stone::State::Stopped) {
         auto newStone = std::make_unique<Stone>();
         newStone->Initialize(modelStone_.get());
         stones_.push_back(std::move(newStone));
     }
+
+    //スターの更新
+    star_->Update();
 
     // カメラの更新
     camera_->Update();
@@ -188,6 +197,9 @@ void GameScene::Draw() {
     for (auto& stone : stones_) {
         stone->Draw(mainCamera_);
     }
+
+    //スターの描画
+    star_->Draw(mainCamera_);
 
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();

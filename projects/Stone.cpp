@@ -13,7 +13,6 @@ void Stone::Initialize(BaseModel* model_) {
     worldTransform_.rotation_ = { 0.0f, 3.0f, 0.0f };
     input_ = Input::GetInstance();
 }
-
 // 更新
 void Stone::Update() {
 
@@ -33,7 +32,6 @@ void Stone::Update() {
         angle_ = std::clamp(angle_, 0.0f, 180.0f);
 
         if (input_->TriggerKey(DIK_SPACE)) {
-
             state_ = State::PowerSetting;
             power_ = 0.0f;
             powerIncreasing_ = true;
@@ -74,7 +72,8 @@ void Stone::Update() {
             worldTransform_.translation_.x += speed_ * cos(radian) * easingFactor;
             worldTransform_.translation_.y += speed_ * sin(radian) * easingFactor;
 
-            speed_ *= 0.98f; //速度を徐々に減少
+            //速度を徐々に減少
+            speed_ *= 0.98f; 
 
             if (speed_ < 0.001f) {
                 speed_ = 0.0f;
@@ -104,7 +103,6 @@ void Stone::Update() {
     }
 #endif
 }
-
 // 描画
 void Stone::Draw(Camera* camera) {
     object_->CameraUpdate(camera);
@@ -135,18 +133,15 @@ void Stone::HandleCollision(Stone& other) {
     other.SetSpeed(transferSpeed);
     other.SetState(State::Flying);
     float moveDistance = transferSpeed * 1.5f;
-    // 衝突されたストーンを適切な方向へ移動
+    //衝突されたストーンを適切な方向へ移動
     other.SetPosition(other.GetPosition() + collisionDirection * transferSpeed);
 
-    // 摩擦による速度減少
+    //摩擦による速度減少
     float frictionCoefficient = 0.07f;
     float newSpeed = other.GetSpeed() - (other.GetSpeed() * frictionCoefficient);
     if (newSpeed < 0.0f) newSpeed = 0.0f;
     other.SetSpeed(newSpeed);
 }
-
-
-
 Stone::AABB Stone::GetAABB()const {
     AABB aabb;
     Vector3 halfScale = worldTransform_.scale_;//仮
