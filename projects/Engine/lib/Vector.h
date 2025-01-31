@@ -1,5 +1,6 @@
 #pragma once
 #include "Struct.h"
+#include "Camera.h"
 //#include <Novice.h>
 
 //減算
@@ -44,7 +45,7 @@ Vector3 Project(const Vector3& v1, const Vector3& v2);
 Vector3 Perpendicular(const Vector3& vector);
 
 //スクリーン座標に変換
-//Vector3 ConvertingToScreen(const Vector3& position, const ViewProjection& viewProjection);
+Vector3 ConvertingToScreen(const Vector3& position, Camera* camera);
 
 Vector3 operator+(const Vector3& v1, const Vector3& v2);
 

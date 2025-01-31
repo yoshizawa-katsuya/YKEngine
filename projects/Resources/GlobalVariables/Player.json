@@ -1,0 +1,22 @@
+{
+    "Player": {
+        "ArmL Translation": [
+            -1.2999999523162842,
+            2.799999952316284,
+            0.0
+        ],
+        "ArmR Translation": [
+            1.2999999523162842,
+            2.799999952316284,
+            0.0
+        ],
+        "Head Translation": [
+            0.0,
+            3.5,
+            0.0
+        ],
+        "floatingAmplitude": 0.30000001192092896,
+        "floatingCycle": 90,
+        "idleArmAngleMax": 0.5
+    }
+}

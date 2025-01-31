@@ -33,7 +33,7 @@ void GameScene::Initialize() {
 
 	//追従カメラの生成
 	followCamera_ = std::make_unique<FollowCamera>();
-	followCamera_->Initialize();
+	followCamera_->Initialize(camera_.get());
 
 	//衝突マネージャの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -44,24 +44,43 @@ void GameScene::Initialize() {
 
 	//3Dモデルの生成
 	//model_.reset(Model::Create());
-	modelSkydome_.reset(Model::CreateFromOBJ("Skydome03", true));
-	modelGround_.reset(Model::CreateFromOBJ("Ground01", true));
+	modelSkydome_ = std::make_unique<RigidModel>();
+	modelSkydome_->CreateModel("./Resources/Skydome03", "skydome03.obj");
+
+	modelGround_ = std::make_unique<RigidModel>();
+	modelGround_->CreateModel("./Resources/Ground01", "Ground01.obj");
 
 	//自キャラモデル
-	modelFighterBody_.reset(Model::CreateFromOBJ("float_Body", true));
-	modelFighterHead_.reset(Model::CreateFromOBJ("float_Head", true));
-	modelFighterL_arm_.reset(Model::CreateFromOBJ("float_L_arm", true));
-	modelFighterR_arm_.reset(Model::CreateFromOBJ("float_R_arm", true));
-	modelHammer_.reset(Model::CreateFromOBJ("Hammer01", true));
-	std::vector<Model*> playerModels = 
+	modelFighterBody_ = std::make_unique<RigidModel>();
+	modelFighterBody_->CreateModel("./Resources/float_Body", "float_Body.obj");
+
+	modelFighterHead_ = std::make_unique<RigidModel>();
+	modelFighterHead_->CreateModel("./Resources/float_Head", "float_Head.obj");
+
+	modelFighterL_arm_ = std::make_unique<RigidModel>();
+	modelFighterL_arm_->CreateModel("./Resources/float_L_arm", "float_L_arm.obj");
+
+	modelFighterR_arm_ = std::make_unique<RigidModel>();
+	modelFighterR_arm_->CreateModel("./Resources/float_R_arm", "float_R_arm.obj");
+
+	modelHammer_ = std::make_unique<RigidModel>();
+	modelHammer_->CreateModel("./Resources/Hammer01", "Hammer01.obj");
+
+	std::vector<RigidModel*> playerModels = 
 	{modelFighterBody_.get(), modelFighterHead_.get(), modelFighterL_arm_.get(),
 	 modelFighterR_arm_.get(), modelHammer_.get()};
 
 	//敵モデル
-	modelEnemyBody_.reset(Model::CreateFromOBJ("Enemy02_Body", true));
-	modelEnemyL_arm_.reset(Model::CreateFromOBJ("Enemy02_L_arm", true));
-	modelEnemyR_arm_.reset(Model::CreateFromOBJ("Enemy02_R_arm", true));
-	std::vector<Model*> enemyModels = {modelEnemyBody_.get(), modelEnemyL_arm_.get(), modelEnemyR_arm_.get()};
+	modelEnemyBody_ = std::make_unique<RigidModel>();
+	modelEnemyBody_->CreateModel("./Resources/Enemy02_Body", "Enemy02_Body.obj");
+
+	modelEnemyL_arm_ = std::make_unique<RigidModel>();
+	modelEnemyL_arm_->CreateModel("./Resources/Enemy02_L_arm", "Enemy02_L_arm.obj");
+
+	modelEnemyR_arm_ = std::make_unique<RigidModel>();
+	modelEnemyR_arm_->CreateModel("./Resources/Enemy02_R_arm", "Enemy02_R_arm.obj");
+
+	std::vector<RigidModel*> enemyModels = {modelEnemyBody_.get(), modelEnemyL_arm_.get(), modelEnemyR_arm_.get()};
 
 	//スカイドームの生成
 	skydome_ = std::make_unique<Skydome>();

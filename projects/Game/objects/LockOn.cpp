@@ -2,46 +2,45 @@
 #include "TextureManager.h"
 #include "Matrix.h"
 #include "Vector.h"
-#include "ViewProjection.h"
 #include <cmath>
 
 void LockOn::Initialize() {
 
-	uint32_t textureHandle = TextureManager::Load("./Resources/cursor.png");
-	lockOnMark_.reset(Sprite::Create(textureHandle, {640.0f, 360.0f}));
+	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/cursor.png");
+	
+	lockOnMark_ = std::make_unique<Sprite>();
+	lockOnMark_->Initialize(textureHandle);
+	lockOnMark_->SetPosition({ 640.0f, 360.0f });
 	
 }
 
-void LockOn::Update(const std::list<std::unique_ptr<Enemy>>& enemies, const ViewProjection& viewProjection) {
+void LockOn::Update(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* camera) {
 	
-	// ゲームパッドの状態を得る変数
-	XINPUT_STATE joyState;
-
-	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-		// ロックオン状態なら
-		if (target_) {
-			// ロックオン解除処理
-			// ロックオンボタンをトリガーしたら
-			if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER && !(prejoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
-				//ロックオンを外す
-				target_ = nullptr;
-			} 
-			//範囲外判定
-			else if (IsOutsideRange(viewProjection)) {
+	
+	// ロックオン状態なら
+	if (target_) {
+		// ロックオン解除処理
+		// ロックオンボタンをトリガーしたら
+		if (Input::GetInstance()->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+			//ロックオンを外す
+			target_ = nullptr;
+		} 
+		//範囲外判定
+		else if (IsOutsideRange(camera)) {
 			
-				//ロックオンを外す
-				target_ = nullptr;
+			//ロックオンを外す
+			target_ = nullptr;
 
-			}
-		} else {
+		}
+	} else {
 
-			// ロックオンボタンをトリガーしたら
-			if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER && !(prejoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
-				// ロックオン対象の検索
-				Search(enemies, viewProjection);
-			}
+		// ロックオンボタンをトリガーしたら
+		if (Input::GetInstance()->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+			// ロックオン対象の検索
+			Search(enemies, camera);
 		}
 	}
+	
 
 	// ロックオン継続
 	if (target_) {
@@ -50,7 +49,7 @@ void LockOn::Update(const std::list<std::unique_ptr<Enemy>>& enemies, const View
 		//敵のロックオン座標取得
 		Vector3 positionWorld = target_->GetCenterPosition();
 		//ワールド座標からスクリーン座標に変換
-		Vector3 positionScreen = ConvertingToScreen(positionWorld, viewProjection);
+		Vector3 positionScreen = ConvertingToScreen(positionWorld, camera);
 		//Vector2に格納
 		Vector2 positionScreenV2(positionScreen.x - lockOnMark_->GetSize().x / 2, positionScreen.y);
 		//スプライトの座標を設定
@@ -58,11 +57,10 @@ void LockOn::Update(const std::list<std::unique_ptr<Enemy>>& enemies, const View
 
 	}
 
-	prejoyState_ = joyState;
 
 }
 
-void LockOn::Search(const std::list<std::unique_ptr<Enemy>>& enemies, const ViewProjection& viewProjection) {
+void LockOn::Search(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* camera) {
 
 	//目標
 	std::list<std::pair<float, const Enemy*>> targets;
@@ -74,7 +72,7 @@ void LockOn::Search(const std::list<std::unique_ptr<Enemy>>& enemies, const View
 		Vector3 positionWorld = enemy->GetCenterPosition();
 
 		//ワールド→ビュー座標変換
-		Vector3 positionView = Transform(positionWorld, viewProjection.matView);
+		Vector3 positionView = Transform(positionWorld, camera->GetViewMatrix());
 
 		//距離条件チェック
 		if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {
@@ -104,13 +102,13 @@ void LockOn::Search(const std::list<std::unique_ptr<Enemy>>& enemies, const View
 
 }
 
-bool LockOn::IsOutsideRange(const ViewProjection& viewProjection) { 
+bool LockOn::IsOutsideRange(Camera* camera) {
 
 	// 敵のロックオン座標取得
 	Vector3 positionWorld = target_->GetCenterPosition();
 
 	// ワールド→ビュー座標変換
-	Vector3 positionView = Transform(positionWorld, viewProjection.matView);
+	Vector3 positionView = Transform(positionWorld, camera->GetViewMatrix());
 
 	// 距離条件チェック
 	if (minDistance_ <= positionView.z && positionView.z <= maxDistance_) {

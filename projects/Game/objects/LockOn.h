@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include <memory>
 #include <numbers>
+#include "Camera.h"
 
 /// <summary>
 /// ロックオン
@@ -21,13 +22,13 @@ public:
 	/// </summary>
 	/// <param name="enemies">敵リスト</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Update(const std::list<std::unique_ptr<Enemy>>& enemies, const ViewProjection& viewProjection);
+	void Update(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* camera);
 
 	//検索
-	void Search(const std::list<std::unique_ptr<Enemy>>& enemies, const ViewProjection& viewProjection);
+	void Search(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* camera);
 
 	//範囲外判定
-	bool IsOutsideRange(const ViewProjection& viewProjection);
+	bool IsOutsideRange(Camera* camera);
 
 	/// <summary>
 	/// 描画
