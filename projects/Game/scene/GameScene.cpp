@@ -102,6 +102,9 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	// 追従カメラの更新
+	followCamera_->Update();
+
 	//カメラの更新
 	camera_->Update();
 
@@ -131,27 +134,6 @@ void GameScene::Update() {
 
 	//衝突判定と応答
 	CheckAllCollisions();
-
-	// カメラの処理
-	if (isActiveDebugCamera_) {
-
-		// デバッグカメラの更新
-		debugCamera_->Update();
-
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
-		viewProjection_.TransferMatrix();
-	} else {
-
-		// 追従カメラの更新
-		followCamera_->Update();
-
-		viewProjection_.matView = followCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
-		// ビュープロジェクション行列の転送
-		viewProjection_.TransferMatrix();
-	}
 
 	ImGui::Begin("Window");
 	//メインカメラの切り替え

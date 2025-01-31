@@ -1,5 +1,5 @@
 #pragma once
-#include <ViewProjection.h>
+#include "Camera.h"
 #include <WorldTransform.h>
 class LockOn;
 
@@ -10,7 +10,7 @@ class FollowCamera {
 public:
 
 	//初期化
-	void Initialize();
+	void Initialize(Camera* camera);
 
 	void Reset();
 
@@ -23,15 +23,13 @@ public:
 	//オフセット計算
 	Vector3 OffsetCalculation();
 
-	const ViewProjection& GetViewProjection() { return viewProjection_; }
-
 	void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
 
 private:
 
-	//ビュープロジェクション
-	ViewProjection viewProjection_;
-
+	//カメラ
+	Camera* camera_;
+	
 	//追従対象
 	const WorldTransform* target_ = nullptr;
 
