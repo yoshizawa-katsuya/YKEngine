@@ -66,19 +66,7 @@ void GameScene::Initialize() {
 	
 	modelFloor_ = std::make_unique<RigidModel>();
 	modelFloor_->CreateModel("./resources/floor", "Floor.obj");
-	//
-	disappearBox1_ = std::make_unique<RigidModel>();
-	disappearBox1_->CreateModel("./resources/box", "box.obj");
-
-	disappearBox2_ = std::make_unique<RigidModel>();
-	disappearBox2_->CreateModel("./resources/box", "box.obj");
-
-	appearBox1_ = std::make_unique<RigidModel>();
-	appearBox1_->CreateModel("./resources/box", "box.obj");
-
-	appearBox2_ = std::make_unique<RigidModel>();
-	appearBox2_->CreateModel("./resources/box", "box.obj");
-
+	
 	stone_ = std::make_unique<RigidModel>();
 	stone_->CreateModel("./resources/stone", "stone.obj");
 	
@@ -300,14 +288,6 @@ void GameScene::GenerateObjects()
 				CreateObject(boxes_[i][j], modelBox_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::kFloor) {
 				AddToInstancing(floors_.get(), position);
-			} else if (mapChipType == MapChipType::disappearBox1) {
-				CreateObject(boxes_[i][j], disappearBox1_.get(), position, defaultScale);
-			} else if (mapChipType == MapChipType::disappearBox2) {
-				CreateObject(boxes_[i][j], disappearBox2_.get(), position, defaultScale);
-			} else if (mapChipType == MapChipType::appearBox1) {
-				CreateObject(boxes_[i][j], appearBox1_.get(), position, defaultScale);
-			} else if (mapChipType == MapChipType::appearBox2) {
-				CreateObject(boxes_[i][j], appearBox2_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::stone) {
 				CreateObject(boxes_[i][j], stone_.get(), position, { 0.7f, 0.7f, 0.7f });
 			} else if (mapChipType == MapChipType::star) {

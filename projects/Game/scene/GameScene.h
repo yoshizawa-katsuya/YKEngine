@@ -74,10 +74,6 @@ private:
 	std::unique_ptr<BaseModel> modelPlayer_;
 	std::unique_ptr<BaseModel> modelBox_;
 	std::unique_ptr<BaseModel> modelFloor_;
-	std::unique_ptr<BaseModel> disappearBox1_;
-	std::unique_ptr<BaseModel> disappearBox2_;
-	std::unique_ptr<BaseModel> appearBox1_;
-	std::unique_ptr<BaseModel> appearBox2_;
 	std::unique_ptr<BaseModel> stone_;
 	std::unique_ptr<BaseModel> star_;
 	std::unique_ptr<BaseModel> hole_;
