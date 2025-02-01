@@ -185,6 +185,8 @@ void GameScene::Update() {
 	//衝突判定と応答
 	CheckAllCollisions();
 
+#ifdef _DEBUG
+
 	ImGui::Begin("Window");
 	//メインカメラの切り替え
 	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
@@ -202,6 +204,7 @@ void GameScene::Update() {
 
 	}
 	ImGui::End();
+#endif // _DEBUG
 
 }
 
