@@ -7,6 +7,7 @@
 class Star
 {
 public:
+
 	void Initialize(BaseModel* model_);
 	void Update();
 	void Draw(Camera* camera);

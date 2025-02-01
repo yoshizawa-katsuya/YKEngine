@@ -42,7 +42,6 @@ public:
     Vector3 GetPosition()const { return worldTransform_.translation_; }
     //当たり判定
     bool CheckCollision(const Stone& stone1, const Stone& stone2);
-
 private:
 
     State state_ = State::Waiting;
