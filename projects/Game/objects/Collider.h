@@ -1,8 +1,8 @@
 #pragma once
-#include <Vector3.h>
 #include "WorldTransform.h"
-#include "ViewProjection.h"
-#include "Model.h"
+#include "Rigid3dObject.h"
+#include "RigidModel.h"
+#include "Camera.h"
 
 /// <summary>
 /// 衝突判定オブジェクト
@@ -13,12 +13,12 @@ public:
 	virtual ~Collider() = default;
 
 	//初期化
-	void Initialize();
+	void Initialize(RigidModel* model);
 
 	//ワールドトランスフォームの更新
 	void UpdateWorldTransform();
 	//描画
-	void Draw(Model* model, const ViewProjection& viewProjection);
+	void Draw(Camera* camera);
 
 	//衝突時に呼ばれる関数
 	virtual void OnCollision([[maybe_unused]] Collider* other) {}
@@ -41,6 +41,8 @@ private:
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
+
+	std::unique_ptr<Rigid3dObject> object_;
 
 	//衝突半径
 	float radius_ = 1.5f;

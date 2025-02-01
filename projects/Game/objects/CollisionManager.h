@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <list>
 #include "Collider.h"
-#include "Model.h"
 
 /// <summary>
 /// 衝突マネージャ
@@ -17,7 +16,7 @@ public:
 	void UpdateWorldTransform();
 
 	//描画
-	void Draw(const ViewProjection& viewProjection);
+	void Draw(Camera* camera);
 
 	//リセット
 	void Reset();
@@ -45,5 +44,4 @@ private:
 	bool isDrawCollider_ = false;
 
 	//デバッグ表示用モデル
-	std::unique_ptr<Model> model_;
 };

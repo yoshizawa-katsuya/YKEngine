@@ -4,15 +4,16 @@
 #include "CollisionTypeIdDef.h"
 #include "Enemy.h"
 
-void Hammer::Initialize(Model* model) {
+void Hammer::Initialize(RigidModel* model, RigidModel* colliderModel) {
 
-	Collider::Initialize();
+	Collider::Initialize(colliderModel);
 	Collider::SetRadius(3.0f);
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayerWeapon));
 
 	assert(model);
 
-	model_ = model;
+	object_ = std::make_unique<Rigid3dObject>();
+	object_->Initialize(model);
 	worldTransform_.Initialize();
 
 }
@@ -20,12 +21,13 @@ void Hammer::Initialize(Model* model) {
 void Hammer::UpdateWorldTransform() {
 
 	worldTransform_.UpdateMatrix();
-
+	object_->WorldTransformUpdate(worldTransform_);
 }
 
-void Hammer::Draw(const ViewProjection& viewProjection) {
+void Hammer::Draw(Camera* camera) {
 
-	model_->Draw(worldTransform_, viewProjection);
+	object_->CameraUpdate(camera);
+	object_->Draw();
 
 }
 
@@ -64,7 +66,7 @@ Vector3 Hammer::GetCenterPosition() const {
 	// ローカル座標でのオフセット
 	const Vector3 offset = {0.0f, 10.5f, 0.0f};
 	// ワールド座標に変換
-	Vector3 worldPos = Transform(offset, worldTransform_.matWorld_);
+	Vector3 worldPos = Transform(offset, worldTransform_.worldMatrix_);
 	return worldPos;
 
 }

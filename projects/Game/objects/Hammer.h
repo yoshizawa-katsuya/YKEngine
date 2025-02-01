@@ -9,13 +9,13 @@ class Hammer : public Collider {
 public:
 
 	//初期化
-	void Initialize(Model* model);
+	void Initialize(RigidModel* model, RigidModel* colliderModel);
 
 	// ワールドトランスフォームの更新
 	void UpdateWorldTransform();
 
 	//描画
-	void Draw(const ViewProjection& viewProjection);
+	void Draw(Camera* camera);
 
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision([[maybe_unused]] Collider* other) override;
@@ -35,7 +35,8 @@ public:
 
 private:
 
-	Model* model_ = nullptr;
+	std::unique_ptr<Rigid3dObject> object_;
+
 	WorldTransform worldTransform_;
 
 	//接触記録

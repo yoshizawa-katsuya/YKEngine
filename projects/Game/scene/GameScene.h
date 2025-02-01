@@ -18,11 +18,13 @@
 #include "FollowCamera.h"
 #include "CollisionManager.h"
 #include <memory>
+#include "BaseScene.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene {
+class GameScene : public BaseScene
+{
 
 public: // メンバ関数
 	/// <summary>
@@ -33,22 +35,24 @@ public: // メンバ関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameScene();
+	~GameScene() override;
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update();
+	void Update() override;
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw() override;
+
+	void Finalize() override;
 
 private:
 
@@ -89,8 +93,20 @@ private:
 	//テクスチャハンドル
 	uint32_t textureHnadle_ = 0;
 
+	//平行光源
+	std::unique_ptr<DirectionalLight> directionalLight_;
+
+	//点光源
+	std::unique_ptr<PointLight> pointLight_;
+
+	//スポットライト
+	std::unique_ptr<SpotLight> spotLight_;
+
 	//モデル
 	//std::unique_ptr<Model> model_;
+	std::unique_ptr<RigidModel> modelCollider_;
+	std::unique_ptr<RigidModel> modelSphere_;
+
 	std::unique_ptr<RigidModel> modelSkydome_;
 	std::unique_ptr<RigidModel> modelGround_;
 

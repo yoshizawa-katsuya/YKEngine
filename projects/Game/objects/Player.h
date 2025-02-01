@@ -1,5 +1,4 @@
 #pragma once
-#include "Model.h"
 #include "WorldTransform.h"
 #include "BaseCharacter.h"
 #include <optional>
@@ -14,8 +13,8 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="models_">モデルデータ配列</param>
-	void Initialize(const std::vector<Model*>& models, ViewProjection* viewProjection) override;
+	/// <param name="objects_">モデルデータ配列</param>
+	void Initialize(const std::vector<RigidModel*>& models, RigidModel* colliderModel) override;
 
 	//調整項目の適用
 	void ApplyGlobalVariables();
@@ -41,10 +40,10 @@ public:
 	/// <summary>
 	/// 更新
 	///  </summary>
-	void Update() override;
+	void Update(Camera* camera);
 
 	// 通常行動更新
-	void BehaviorRootUpdate();
+	void BehaviorRootUpdate(Camera* camera);
 
 	//攻撃行動更新
 	void BehaviorAttackUpdate();
@@ -64,7 +63,7 @@ public:
 	/// <summary>
 	/// 描画
 	///  </summary>
-	void Draw() override;
+	void Draw(Camera* camera) override;
 
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
@@ -73,8 +72,6 @@ public:
 
 	//中心座標を取得
 	Vector3 GetCenterPosition() const override;
-
-	void SetCameraViewProjection(const ViewProjection* cameraViewProjection) { cameraViewProjection_ = cameraViewProjection; }
 
 	void SetLockOn(LockOn* lockOn) { lockOn_ = lockOn; }
 
@@ -108,8 +105,6 @@ private:
 	const uint16_t kModelIndexR_arm = 3;
 	const uint16_t kModelIndexHammer = 4;
 
-	//カメラのビュープロジェクション
-	const ViewProjection* cameraViewProjection_ = nullptr;
 
 	//速度
 	Vector3 velocity_ = {};

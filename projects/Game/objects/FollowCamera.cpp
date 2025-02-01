@@ -37,7 +37,7 @@ void FollowCamera::SetTarget(const WorldTransform* target) {
 Vector3 FollowCamera::OffsetCalculation() {
 
 	// 追従対象からカメラまでのオフセット
-	Vector3 offset = {0.0f, 2.0f, -20.0f};
+	Vector3 offset = {0.0f, 2.0f, -40.0f};
 
 	Matrix4x4 rotationMatrix = MakeRotateYMatrix(camera_->GetRotate().y);
 

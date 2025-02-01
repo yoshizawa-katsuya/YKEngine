@@ -5,7 +5,7 @@
 
 void CollisionManager::Initialize() {
 
-	model_.reset(Model::CreateFromOBJ("Collider", true));
+	//model_.reset(Model::CreateFromOBJ("Collider", true));
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	
@@ -35,7 +35,7 @@ void CollisionManager::UpdateWorldTransform() {
 
 }
 
-void CollisionManager::Draw(const ViewProjection& viewProjection) {
+void CollisionManager::Draw(Camera* camera) {
 
 	// 非表示なら抜ける
 	if (!isDrawCollider_) {
@@ -45,7 +45,7 @@ void CollisionManager::Draw(const ViewProjection& viewProjection) {
 	// 全てのコライダーについて
 	for (Collider* collider : colliders_) {
 		// 描画
-		collider->Draw(model_.get(), viewProjection);
+		collider->Draw(camera);
 	}
 
 }

@@ -1,6 +1,9 @@
 #include "Collider.h"
 
-void Collider::Initialize() {
+void Collider::Initialize(RigidModel* model) {
+
+	object_ = std::make_unique<Rigid3dObject>();
+	object_->Initialize(model);
 
 	worldTransform_.Initialize();
 	worldTransform_.scale_ *= radius_;
@@ -12,12 +15,14 @@ void Collider::UpdateWorldTransform() {
 	worldTransform_.translation_ = GetCenterPosition();
 	worldTransform_.scale_ = {radius_, radius_, radius_};
 	worldTransform_.UpdateMatrix();
+	object_->WorldTransformUpdate(worldTransform_);
 
 }
 
-void Collider::Draw(Model* model, const ViewProjection& viewProjection) {
+void Collider::Draw(Camera* camera) {
 
 	//モデルの描画
-	model->Draw(worldTransform_, viewProjection);
+	object_->CameraUpdate(camera);
+	object_->Draw();
 
 }

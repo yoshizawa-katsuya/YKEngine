@@ -10,14 +10,14 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="models_">モデルデータ配列</param>
-	void Initialize(const std::vector<Model*>& models, ViewProjection* viewProjection) override;
+	/// <param name="objects_">モデルデータ配列</param>
+	void Initialize(const std::vector<RigidModel*>& models, RigidModel* colliderModel) override;
 
 	// 腕振りギミック初期化
 	void InitializeRollArmGimmick();
 
 	//ヒットエフェクト初期化
-	void InitializeHitEffect();
+	void InitializeHitEffect(RigidModel* model);
 
 	/// <summary>
 	/// 更新
@@ -33,10 +33,10 @@ public:
 	/// <summary>
 	/// 描画
 	///  </summary>
-	void Draw() override;
+	void Draw(Camera* camera) override;
 
 	//ヒットエフェクト描画
-	void DrawHitEffect();
+	void DrawHitEffect(Camera* camera);
 
 	//ヒット
 	void Hit();
@@ -66,7 +66,7 @@ private:
 	float hitEffectParameter_ = 0.0f;
 
 	//ヒットエフェクトモデル
-	std::unique_ptr<Model> modelHitEffect_;
+	std::unique_ptr<Rigid3dObject> objectHitEffect_;
 
 	//シリアルナンバー
 	uint32_t serialNumber_ = 0;

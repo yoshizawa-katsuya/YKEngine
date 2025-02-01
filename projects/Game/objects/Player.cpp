@@ -3,16 +3,16 @@
 #include "Input.h"
 #include "Vector.h"
 #include "Matrix.h"
-#include "ViewProjection.h"
 #include "ImGuiManager.h"
 #include <cmath>
 #include "GlobalVariables.h"
 #include "LockOn.h"
+#include "Lerp.h"
 
-void Player::Initialize(const std::vector<Model*>& models, ViewProjection* viewProjection) {
+void Player::Initialize(const std::vector<RigidModel*>& models, RigidModel* colliderModel) {
 	
 	
-	BaseCharacter::Initialize(models, viewProjection);
+	BaseCharacter::Initialize(models, colliderModel);
 
 	velocity_ = {0.0f, 0.0f, 0.0f};
 
@@ -32,11 +32,10 @@ void Player::Initialize(const std::vector<Model*>& models, ViewProjection* viewP
 	worldTransformR_arm_.parent_ = &worldTransformBody_;
 
 	hammer_ = std::make_unique<Hammer>();
-	hammer_->Initialize(models_[kModelIndexHammer]);
+	hammer_->Initialize(models[kModelIndexHammer], colliderModel);
 	//hammer_->SetTranslation(Vector3(0.0, 0.0f, 0.0f));
 	hammer_->SetParent(&worldTransformBody_);
 	
-	viewProjection_ = viewProjection;
 	targetAngle_ = worldTransform_.rotation_.y;
 
 	InitializeFloatingGimmick();
@@ -125,7 +124,7 @@ void Player::InitializeRollArmGimmick() {
 
 }
 
-void Player::Update() {
+void Player::Update(Camera* camera) {
 
 	if (behaviorRequest_) {
 		//振るまいを変更する
@@ -153,7 +152,7 @@ void Player::Update() {
 		//通常行動
 	case Behavior::kRoot:
 	default:
-		BehaviorRootUpdate();
+		BehaviorRootUpdate(camera);
 		break;
 	case Behavior::kAttack:
 		BehaviorAttackUpdate();
@@ -166,84 +165,90 @@ void Player::Update() {
 	}
 
 	//行列を更新
-	BaseCharacter::Update();
+	worldTransform_.UpdateMatrix();
+
 	worldTransformBody_.UpdateMatrix();
+	objects_[kModelIndexBody]->WorldTransformUpdate(worldTransformBody_);
+
 	worldTransformHead_.UpdateMatrix();
+	objects_[kModelIndexHead]->WorldTransformUpdate(worldTransformHead_);
+
 	worldTransformL_arm_.UpdateMatrix();
+	objects_[kModelIndexL_arm]->WorldTransformUpdate(worldTransformL_arm_);
+
 	worldTransformR_arm_.UpdateMatrix();
+	objects_[kModelIndexR_arm]->WorldTransformUpdate(worldTransformR_arm_);
+
 	hammer_->UpdateWorldTransform();
 }
 
-void Player::BehaviorRootUpdate() {
+void Player::BehaviorRootUpdate(Camera* camera) {
 
 	UpdateFloatingGimmick();
 
 	UpdateRollArmGimmick();
 
-	// ゲームパッドの状態を得る変数
-	XINPUT_STATE joyState;
+	
 
-	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+	if (Input::GetInstance()->GetLeftStickX() != 0.0f || Input::GetInstance()->GetLeftStickY() != 0.0f) {
+		const float thresholdValue = 0.7f;
+		bool isMoving = false;
 
-		if (static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX != 0.0f || static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX != 0.0f) {
-			const float thresholdValue = 0.7f;
-			bool isMoving = false;
+		// 移動量
+		velocity_ = {Input::GetInstance()->GetLeftStickX(), 0.0f, Input::GetInstance()->GetLeftStickY()};
 
-			// 移動量
-			velocity_ = {static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX, 0.0f, static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX};
+		if (Length(velocity_) > thresholdValue) {
+			isMoving = true;
+		}
 
-			if (Length(velocity_) > thresholdValue) {
-				isMoving = true;
-			}
+		if (isMoving) {
+			// 速さ
+			const float speed = 0.3f;
 
-			if (isMoving) {
-				// 速さ
-				const float speed = 0.3f;
+			// 移動量に速さを反映
+			velocity_ = Multiply(speed, Normalize(velocity_));
 
-				// 移動量に速さを反映
-				velocity_ = Multiply(speed, Normalize(velocity_));
+			Matrix4x4 rotationMatrix = MakeRotateYMatrix(camera->GetRotate().y);
 
-				Matrix4x4 rotationMatrix = MakeRotateYMatrix(cameraViewProjection_->rotation_.y);
+			velocity_ = TransformNormal(velocity_, rotationMatrix);
 
-				velocity_ = TransformNormal(velocity_, rotationMatrix);
+			// 移動
+			worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 
-				// 移動
-				worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+			// 目標角度の算出
+			targetAngle_ = std::atan2(velocity_.x, velocity_.z);
 
-				// 目標角度の算出
-				targetAngle_ = std::atan2(velocity_.x, velocity_.z);
+		}
 
-			}
-
-		} else if (lockOn_ && lockOn_->ExistTarget()) {
+	} else if (lockOn_ && lockOn_->ExistTarget()) {
 		
-			// ロックオン座標
-			Vector3 lockOnPosition = lockOn_->GetTargetPosition();
-			// 追従対象からロックオン対象へのベクトル
-			Vector3 sub = lockOnPosition - worldTransform_.translation_;
+		// ロックオン座標
+		Vector3 lockOnPosition = lockOn_->GetTargetPosition();
+		// 追従対象からロックオン対象へのベクトル
+		Vector3 sub = lockOnPosition - worldTransform_.translation_;
 
-			// Y軸周り角度
-			targetAngle_ = std::atan2(sub.x, sub.z);
+		// Y軸周り角度
+		targetAngle_ = std::atan2(sub.x, sub.z);
 
-		}
-
-		
-
-		//攻撃入力
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
-			behaviorRequest_.emplace(Behavior::kAttack);
-		}
-
-		//ダッシュボタンを押したら
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
-			behaviorRequest_.emplace(Behavior::kDash);
-		}
-
-		//ジャンプボタンを押したら
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
-			behaviorRequest_.emplace(Behavior::kJump);
-		}
 	}
+
+		
+
+	//攻撃入力
+	if (Input::GetInstance()->PushButton(XINPUT_GAMEPAD_B)) {
+		behaviorRequest_.emplace(Behavior::kAttack);
+	}
+
+	//ダッシュボタンを押したら
+	if (Input::GetInstance()->PushButton(XINPUT_GAMEPAD_LEFT_SHOULDER)) {
+		behaviorRequest_.emplace(Behavior::kDash);
+	}
+
+	//ジャンプボタンを押したら
+	if (Input::GetInstance()->PushButton(XINPUT_GAMEPAD_A)) {
+		behaviorRequest_.emplace(Behavior::kJump);
+	}
+	
 
 	// 最短角度補完
 	worldTransform_.rotation_.y = LeapShortAngle(worldTransform_.rotation_.y, targetAngle_, angleCompletionRate_);
@@ -386,12 +391,12 @@ void Player::UpdateFloatingGimmick() {
 
 	
 	//1フレームでのパラメーター加算値
-	const float step = 2.0f * static_cast<float>(M_PI) / floatingCycle_;
+	const float step = 2.0f * static_cast<float>(std::numbers::pi) / floatingCycle_;
 
 	//パラメーターを1ステップ分加算
 	floatingParameter_ += step;
 	//2πを超えたら0に戻す
-	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * static_cast<float>(M_PI));
+	floatingParameter_ = std::fmod(floatingParameter_, 2.0f * static_cast<float>(std::numbers::pi));
 
 	
 
@@ -410,12 +415,12 @@ void Player::UpdateRollArmGimmick() {
 	const uint16_t cycle = 90;
 
 	// 1フレームでのパラメーター加算値
-	const float step = 2.0f * static_cast<float>(M_PI) / cycle;
+	const float step = 2.0f * static_cast<float>(std::numbers::pi) / cycle;
 
 	// パラメーターを1ステップ分加算
 	rollArmParameter_ += step;
 	// 2πを超えたら0に戻す
-	rollArmParameter_ = std::fmod(rollArmParameter_, 2.0f * static_cast<float>(M_PI));
+	rollArmParameter_ = std::fmod(rollArmParameter_, 2.0f * static_cast<float>(std::numbers::pi));
 
 	
 
@@ -427,15 +432,22 @@ void Player::UpdateRollArmGimmick() {
 
 }
 
-void Player::Draw() {
-	models_[kModelIndexBody]->Draw(worldTransformBody_, *viewProjection_);
-	models_[kModelIndexHead]->Draw(worldTransformHead_, *viewProjection_);
-	models_[kModelIndexL_arm]->Draw(worldTransformL_arm_, *viewProjection_);
-	models_[kModelIndexR_arm]->Draw(worldTransformR_arm_, *viewProjection_);
+void Player::Draw(Camera* camera) {
+	objects_[kModelIndexBody]->CameraUpdate(camera);
+	objects_[kModelIndexBody]->Draw();
+
+	objects_[kModelIndexHead]->CameraUpdate(camera);
+	objects_[kModelIndexHead]->Draw();
+
+	objects_[kModelIndexL_arm]->CameraUpdate(camera);
+	objects_[kModelIndexL_arm]->Draw();
+
+	objects_[kModelIndexR_arm]->CameraUpdate(camera);
+	objects_[kModelIndexR_arm]->Draw();
 
 	if (behavior_ == Behavior::kAttack) {
-		hammer_->Draw(*viewProjection_);
-		//models_[kModelIndexHammer]->Draw(worldTransformHammer_, *viewProjection_);
+		hammer_->Draw(camera);
+		//objects_[kModelIndexHammer]->Draw(worldTransformHammer_, *viewProjection_);
 	}
 }
 
@@ -450,7 +462,7 @@ Vector3 Player::GetCenterPosition() const {
 	//ローカル座標でのオフセット
 	const Vector3 offset = {0.0f, 1.5f, 0.0f};
 	//ワールド座標に変換
-	Vector3 worldPos = Transform(offset, worldTransform_.matWorld_);
+	Vector3 worldPos = Transform(offset, worldTransform_.worldMatrix_);
 	return worldPos;
 
 }

@@ -10,11 +10,26 @@ GameScene::~GameScene() {}
 
 void GameScene::Initialize() {
 
+	//グローバル変数の読み込み
+	GlobalVariables::GetInstance()->LoadFiles();
+
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+
+	//平行光源の生成
+	directionalLight_ = std::make_unique<DirectionalLight>();
+	directionalLight_->Initialize(dxCommon_);
+
+	//点光源の生成
+	pointLight_ = std::make_unique<PointLight>();
+	pointLight_->Initialize(dxCommon_);
+
+	//スポットライトの生成
+	spotLight_ = std::make_unique<SpotLight>();
+	spotLight_->Initialize(dxCommon_);
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -31,6 +46,12 @@ void GameScene::Initialize() {
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
+	//モデルを描画する際ライトとカメラの設定は必須
+	modelPlatform_->SetDirectionalLight(directionalLight_.get());
+	modelPlatform_->SetPointLight(pointLight_.get());
+	modelPlatform_->SetCamera(mainCamera_);
+	modelPlatform_->SetSpotLight(spotLight_.get());
+
 	//追従カメラの生成
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize(camera_.get());
@@ -44,6 +65,12 @@ void GameScene::Initialize() {
 
 	//3Dモデルの生成
 	//model_.reset(Model::Create());
+	modelCollider_ = std::make_unique<RigidModel>();
+	modelCollider_->CreateModel("./Resources/Collider", "Collider.obj");
+
+	modelSphere_ = std::make_unique<RigidModel>();
+	modelSphere_->CreateSphere(TextureManager::GetInstance()->Load("./Resources/white.png"));
+
 	modelSkydome_ = std::make_unique<RigidModel>();
 	modelSkydome_->CreateModel("./Resources/Skydome03", "skydome03.obj");
 
@@ -84,17 +111,16 @@ void GameScene::Initialize() {
 
 	//スカイドームの生成
 	skydome_ = std::make_unique<Skydome>();
-	skydome_->Initialize(modelSkydome_.get(), &viewProjection_);
+	skydome_->Initialize(modelSkydome_.get());
 
 	//地面の生成
 	ground_ = std::make_unique<Ground>();
-	ground_->Initialize(modelGround_.get(), &viewProjection_);
+	ground_->Initialize(modelGround_.get());
 
 	//自キャラの生成
 	player_ = std::make_unique<Player>();
 	//自キャラの初期化
-	player_->Initialize(playerModels, &viewProjection_);
-	player_->SetCameraViewProjection(&followCamera_->GetViewProjection());
+	player_->Initialize(playerModels, modelCollider_.get());
 
 	//ロックオンの生成
 	lockOn_ = std::make_unique<LockOn>();
@@ -110,7 +136,8 @@ void GameScene::Initialize() {
 	//敵の生成
 	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
 	// 敵の初期化
-	enemy->Initialize(enemyModels, &viewProjection_);
+	enemy->Initialize(enemyModels, modelCollider_.get());
+	enemy->InitializeHitEffect(modelSphere_.get());
 
 	enemies_.push_back(std::move(enemy));
 	
@@ -120,6 +147,10 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
+	GlobalVariables::GetInstance()->Update();
+
+	input_->GamePadUpdate();
 
 	// 追従カメラの更新
 	followCamera_->Update();
@@ -138,10 +169,10 @@ void GameScene::Update() {
 	ground_->Update();
 
 	//自キャラの更新
-	player_->Update();
+	player_->Update(mainCamera_);
 
 	//ロックオンの更新
-	lockOn_->Update(enemies_, viewProjection_);
+	lockOn_->Update(enemies_, mainCamera_);
 
 	//敵の更新
 	for (const std::unique_ptr<Enemy>& enemy : enemies_) {
@@ -176,56 +207,49 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 
-	// コマンドリストの取得
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
-
+	
 #pragma region 背景スプライト描画
 	// 背景スプライト描画前処理
-	Sprite::PreDraw(commandList);
-
+	
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
 
 	// スプライト描画後処理
-	Sprite::PostDraw();
 	// 深度バッファクリア
-	dxCommon_->ClearDepthBuffer();
 #pragma endregion
 
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
-	Model::PreDraw(commandList);
+	modelPlatform_->PreDraw();
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	
 	//当たり判定の表示
-	collisionManager_->Draw(viewProjection_);
+	collisionManager_->Draw(mainCamera_);
 
 	// スカイドームの描画
-	skydome_->Draw();
+	skydome_->Draw(mainCamera_);
 
 	//地面の描画
-	ground_->Draw();
+	ground_->Draw(mainCamera_);
 
 	//自キャラの描画
-	player_->Draw();
+	player_->Draw(mainCamera_);
 
 	//敵の描画
 	for (const std::unique_ptr<Enemy>& enemy : enemies_) {
-		enemy->Draw();
+		enemy->Draw(mainCamera_);
 	}
 
 	// 3Dオブジェクト描画後処理
-	Model::PostDraw();
 #pragma endregion
 
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
-	Sprite::PreDraw(commandList);
-
+	spritePlatform_->PreDraw();
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
@@ -233,9 +257,12 @@ void GameScene::Draw() {
 	lockOn_->Draw();
 
 	// スプライト描画後処理
-	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::Finalize()
+{
 }
 
 void GameScene::CheckAllCollisions() {

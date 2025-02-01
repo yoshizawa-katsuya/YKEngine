@@ -1,7 +1,9 @@
 #pragma once
-#include "Model.h"
+#include "RigidModel.h"
+#include "Rigid3dObject.h"
 #include "WorldTransform.h"
 #include "Collider.h"
+#include "Camera.h"
 
 class BaseCharacter : public Collider{
 public:
@@ -9,8 +11,8 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="models_">モデルデータ配列</param>
-	virtual void Initialize(const std::vector<Model*>& models, ViewProjection* viewProjection);
+	/// <param name="objects_">モデルデータ配列</param>
+	virtual void Initialize(const std::vector<RigidModel*>& models, RigidModel* colliderModel);
 	
 	/// <summary>
 	/// 更新
@@ -21,7 +23,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション(参照渡し)</param>
-	virtual void Draw();
+	virtual void Draw(Camera* camera);
 
 	/// <summary>
 	/// ワールド変換データを取得
@@ -35,9 +37,8 @@ public:
 protected:
 	
 	//モデルデータ配列
-	std::vector<Model*> models_;
+	std::vector<std::unique_ptr<Rigid3dObject>> objects_;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 
-	ViewProjection* viewProjection_ = nullptr;
 };

@@ -2,8 +2,8 @@
 #include <variant>
 #include <string>
 #include <map>
-#include <Vector3.h>
 #include <json.hpp>
+#include "Struct.h"
 
 //グローバル変数
 class GlobalVariables {
