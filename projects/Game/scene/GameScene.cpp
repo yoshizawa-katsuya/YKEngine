@@ -105,9 +105,6 @@ void GameScene::Initialize() {
 	backgroundSprite_->Initialize(background_);
 	//backgroundSprite_->SetPosition({ 0.0f,0.0f });
 
-
-
-
 	//マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
 	mapChipField_->LoadMapChipCsv("./resources/csv/stage1.csv");
@@ -116,8 +113,11 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
-	GenerateObjects();
+	auto stone = std::make_unique<Stone>();
+	stone->Initialize(stone_.get());
+	stones_.push_back(std::move(stone));
 
+	GenerateObjects();
 
 	SceneData data = SceneManager::GetInstance()->GetSceneData();
 
@@ -140,7 +140,28 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	//player_->Update();
 
-	
+	//ストーン更新
+	for (size_t i = 0; i < stones_.size(); ++i) {
+		if (i == stones_.size() - 1) {
+			stones_[i]->Update();  // 現在のストーンのみ操作
+		}
+		else if (stones_[i]->GetState() == Stone::State::Flying) {
+			stones_[i]->Update();
+		}
+		//衝突判定
+		for (size_t j = 0; j < stones_.size(); ++j) {
+			if (i != j && stones_[i]->CheckCollision(*stones_[i], *stones_[j])) {
+				stones_[i]->HandleCollision(*stones_[j]);
+			}
+		}
+	}
+
+	// 最後のストーンがStoppedになったら新しいストーンを追加
+	if (!stones_.empty() && stones_.back()->GetState() == Stone::State::Stopped) {
+		auto newStone = std::make_unique<Stone>();
+		newStone->Initialize(stone_.get());
+		stones_.push_back(std::move(newStone));
+	}
 
 	//emitter_->Update(color_);
 
@@ -254,13 +275,19 @@ void GameScene::Draw() {
 		}
 	}
 
+	//ストーンの描画
+	for (auto& stone : stones_) {
+		stone->Draw(mainCamera_);
+	}
+
 	//instancingObject描画前処理
 	modelPlatform_->InstancingPreDraw();
 
 	//floorの描画
 	floors_->CameraUpdate(mainCamera_);
 	floors_->Draw();
-	
+
+
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
