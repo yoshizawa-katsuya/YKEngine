@@ -18,6 +18,7 @@
 #include "ParticleEmitter.h"
 #include "MapChipField.h"
 #include "InstancingObjects.h"
+#include "SelectScene.h"
 
 class GameScene : public BaseScene
 {
@@ -34,6 +35,8 @@ public:
 	void Finalize() override;
 
 	void GenerateObjects();
+
+
 
 private:
 
@@ -71,6 +74,15 @@ private:
 	std::unique_ptr<BaseModel> modelPlayer_;
 	std::unique_ptr<BaseModel> modelBox_;
 	std::unique_ptr<BaseModel> modelFloor_;
+	std::unique_ptr<BaseModel> disappearBox1_;
+	std::unique_ptr<BaseModel> disappearBox2_;
+	std::unique_ptr<BaseModel> appearBox1_;
+	std::unique_ptr<BaseModel> appearBox2_;
+	std::unique_ptr<BaseModel> stone_;
+	std::unique_ptr<BaseModel> star_;
+	std::unique_ptr<BaseModel> hole_;
+	std::unique_ptr<BaseModel> ice_;
+	
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
@@ -87,15 +99,31 @@ private:
 	//床
 	std::unique_ptr<InstancingObject> floors_;
 
+	//
+
+
+
+
+
 
 	//BackGround
 	uint32_t background_;
 	std::unique_ptr<Sprite> backgroundSprite_;
 
+	//
+	SelectScene* selectScene_ = nullptr;
+	uint32_t selectedTutorial_ = 0;
+	uint32_t selectedBundle_ = 0;
+	uint32_t selectedStage_ = 0;
 	//パーティクル
 	/*
 	std::unique_ptr<ParticleEmitter> emitter_;
 	std::unique_ptr<AccelerationField> field_;
 	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	*/
+
+
+	void CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale);
+	void AddToInstancing(InstancingObject* instancingObject, const Vector3& position);
+
 };
