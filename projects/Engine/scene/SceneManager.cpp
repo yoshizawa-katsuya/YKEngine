@@ -63,3 +63,10 @@ void SceneManager::ChengeScene(const std::string& sceneName)
 
 	}
 }
+
+BaseScene* SceneManager::GetCurrentScene()
+{
+	return scene_.get();
+}
+
+

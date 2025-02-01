@@ -3,6 +3,12 @@
 #include "AbstractSceneFactory.h"
 #include <memory>
 
+struct SceneData {
+	uint32_t selectedTutorial = 0;
+	uint32_t selectedBundle = 0;
+	uint32_t selectedStage = 0;
+};
+
 //シーン管理
 class SceneManager
 {
@@ -29,6 +35,13 @@ public:
 	//シーン切り替え
 	void ChengeScene(const std::string& sceneName);
 
+	BaseScene* GetCurrentScene();
+	
+	void SetSelectedTutorial(uint32_t value) { sceneData_.selectedTutorial = value; }
+	void SetSelectedBundle(uint32_t value) { sceneData_.selectedBundle = value; }
+	void SetSelectedStage(uint32_t value) { sceneData_.selectedStage = value; }
+	const SceneData& GetSceneData() const { return sceneData_; }
+
 private:
 
 	SceneManager() = default;
@@ -45,4 +58,5 @@ private:
 	//シーンファクトリー(借りてくる)
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 
+	SceneData sceneData_;
 };

@@ -19,6 +19,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+	
 
 	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
@@ -65,6 +66,31 @@ void GameScene::Initialize() {
 	
 	modelFloor_ = std::make_unique<RigidModel>();
 	modelFloor_->CreateModel("./resources/floor", "Floor.obj");
+	//
+	disappearBox1_ = std::make_unique<RigidModel>();
+	disappearBox1_->CreateModel("./resources/box", "box.obj");
+
+	disappearBox2_ = std::make_unique<RigidModel>();
+	disappearBox2_->CreateModel("./resources/box", "box.obj");
+
+	appearBox1_ = std::make_unique<RigidModel>();
+	appearBox1_->CreateModel("./resources/box", "box.obj");
+
+	appearBox2_ = std::make_unique<RigidModel>();
+	appearBox2_->CreateModel("./resources/box", "box.obj");
+
+	stone_ = std::make_unique<RigidModel>();
+	stone_->CreateModel("./resources/stone", "stone.obj");
+	
+	star_ = std::make_unique<RigidModel>();
+	star_->CreateModel("./resources/star", "star.obj");
+
+	hole_ = std::make_unique<RigidModel>();
+	hole_->CreateModel("./resources/hole", "hole.obj");
+
+	ice_ = std::make_unique<RigidModel>();
+	ice_->CreateModel("./resources/ice", "ice.obj");
+
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -91,7 +117,13 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_.get());
 
 	GenerateObjects();
-	
+
+
+	SceneData data = SceneManager::GetInstance()->GetSceneData();
+
+	selectedTutorial_ = data.selectedTutorial;
+	selectedBundle_ = data.selectedBundle;
+	selectedStage_ = data.selectedStage;
 }
 
 void GameScene::Update() {
@@ -106,7 +138,9 @@ void GameScene::Update() {
 	}
 
 	//プレイヤーの更新
-	player_->Update();
+	//player_->Update();
+
+	
 
 	//emitter_->Update(color_);
 
@@ -180,6 +214,17 @@ void GameScene::Update() {
 		ImGui::End();
 		
 
+		ImGui::Begin("GameScene Debug");
+
+
+			ImGui::Text("Selected Tutorial: %u", selectedTutorial_);
+			ImGui::Text("Selected Bundle: %u", selectedBundle_);
+			ImGui::Text("Selected Stage: %u", selectedStage_);
+		
+		
+
+		ImGui::End();
+
 #endif // _DEBUG
 	
 
@@ -197,16 +242,15 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	//player_->Draw(mainCamera_);
 
 	//boxの描画
-	for (std::vector<std::unique_ptr<Base3dObject>>& boxesLine : boxes_) {
-		for (std::unique_ptr<Base3dObject>& box : boxesLine) {
-			if (!box) {
-				continue;
+	for (auto& boxesLine : boxes_) {
+		for (auto& box : boxesLine) {
+			if (box) {
+				box->CameraUpdate(mainCamera_);
+				box->Draw();
 			}
-			box->CameraUpdate(mainCamera_);
-			box->Draw();
 		}
 	}
 
@@ -250,25 +294,53 @@ void GameScene::GenerateObjects()
 	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(j, i);
+			Vector3 position = mapChipField_->GetMapChipPositionByIndex(j, i);
+			Vector3 defaultScale = { 1.0f, 1.0f, 1.0f };
 			if (mapChipType == MapChipType::kBox) {
-				Base3dObject* objectBox = new Rigid3dObject;
-				objectBox->Initialize(modelBox_.get());
-				boxes_[i][j].reset(objectBox);
-				WorldTransform* worldTransform = new WorldTransform();
-				worldTransform->Initialize();
-				worldTransform->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
-				worldTransform->UpdateMatrix();
-				boxes_[i][j]->WorldTransformUpdate(*worldTransform);
-			}
-			else if (mapChipType == MapChipType::kFloor) {
-				WorldTransform* worldTransform = new WorldTransform();
-				worldTransform->Initialize();
-				worldTransform->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
-				worldTransform->UpdateMatrix();
-				floors_->AddWorldTransform(*worldTransform);
+				CreateObject(boxes_[i][j], modelBox_.get(), position, defaultScale);
+			} else if (mapChipType == MapChipType::kFloor) {
+				AddToInstancing(floors_.get(), position);
+			} else if (mapChipType == MapChipType::disappearBox1) {
+				CreateObject(boxes_[i][j], disappearBox1_.get(), position, defaultScale);
+			} else if (mapChipType == MapChipType::disappearBox2) {
+				CreateObject(boxes_[i][j], disappearBox2_.get(), position, defaultScale);
+			} else if (mapChipType == MapChipType::appearBox1) {
+				CreateObject(boxes_[i][j], appearBox1_.get(), position, defaultScale);
+			} else if (mapChipType == MapChipType::appearBox2) {
+				CreateObject(boxes_[i][j], appearBox2_.get(), position, defaultScale);
+			} else if (mapChipType == MapChipType::stone) {
+				CreateObject(boxes_[i][j], stone_.get(), position, { 0.7f, 0.7f, 0.7f });
+			} else if (mapChipType == MapChipType::star) {
+				CreateObject(boxes_[i][j], star_.get(), position, defaultScale);
+			} else if (mapChipType == MapChipType::hole) {
+				CreateObject(boxes_[i][j], hole_.get(), position, defaultScale);
+			} else if (mapChipType == MapChipType::ice) {
+				CreateObject(boxes_[i][j], ice_.get(), position, { 0.5f, 0.5f, 0.5f });
 			}
 		}
 	}
 
+
+}
+
+void GameScene::CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale)
+{
+	object = std::make_unique<Rigid3dObject>(); 
+	object->Initialize(model); 
+	WorldTransform* worldTransform = new WorldTransform();
+	worldTransform->Initialize();
+	worldTransform->translation_ = position; 
+	worldTransform->scale_ = scale;
+	worldTransform->UpdateMatrix();
+	object->WorldTransformUpdate(*worldTransform);
+}
+
+void GameScene::AddToInstancing(InstancingObject* instancingObject, const Vector3& position)
+{
+	WorldTransform* worldTransform = new WorldTransform();
+	worldTransform->Initialize();
+	worldTransform->translation_ = position;
+	worldTransform->UpdateMatrix();
+	instancingObject->AddWorldTransform(*worldTransform);
 
 }

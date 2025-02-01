@@ -5,8 +5,16 @@
 
 enum class MapChipType {
 	kFloor,//床
+	disappearBox1,
+	disappearBox2,
+	appearBox1,
+	appearBox2,
 	kBox, // ボックス
 	kBlank,
+	stone,
+	star,
+	hole,
+	ice,
 };
 
 class MapChipField
