@@ -146,9 +146,13 @@ void GameScene::Initialize() {
 	HitSE1_ = audio_->SoundLoadWave("./resources/sound/HitSE1.wav");
 	HitSE2_ = audio_->SoundLoadWave("./resources/sound/HitSE2.wav");
 	HitSE3_ = audio_->SoundLoadWave("./resources/sound/HitSE3.wav");
+	JumpSE1_ = audio_->SoundLoadWave("./resources/sound/JumpSE1.wav");
+	LandingSE1_ = audio_->SoundLoadWave("./resources/sound/LandingSE1.wav");
 
 	player_->SetHitSEData(&HitSE1_);
 	player_->SetHitSE2Data(&HitSE2_);
+	player_->SetJumpSE(&JumpSE1_);
+	player_->SetLandingSE(&LandingSE1_);
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
@@ -349,6 +353,8 @@ void GameScene::Draw() {
 	ground_->CameraUpdate(mainCamera_);
 	ground_->Draw();
 
+	//ParticleManager::GetInstance()->Draw();
+	
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
@@ -356,7 +362,7 @@ void GameScene::Draw() {
 
 	fade_->Draw();
 
-	//ParticleManager::GetInstance()->Draw();
+	
 
 }
 

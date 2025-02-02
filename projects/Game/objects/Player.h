@@ -7,6 +7,7 @@
 #include <numbers>
 #include "Collider.h"
 #include "ContactRecord.h"
+#include "Audio.h"
 class GameScene;
 class Camera;
 class MapChipField;
@@ -54,6 +55,8 @@ public:
 
 	void SetHitSEData(SoundData* hitSE) { HitSE1_ = hitSE; }
 	void SetHitSE2Data(SoundData* hitSE) { HitSE2_ = hitSE; }
+	void SetJumpSE(SoundData* jumpSE) { jumpSE_ = jumpSE; }
+	void SetLandingSE(SoundData* landingSE) { landingSE_ = landingSE; }
 
 private:
 
@@ -83,8 +86,12 @@ private:
 	//無敵時間更新
 	void InvincibleTimeUpdate();
 
+	Audio* audio_;
+
 	SoundData* HitSE1_;
 	SoundData* HitSE2_;
+	SoundData* jumpSE_;
+	SoundData* landingSE_;
 	bool isSE2Play_;
 
 	//ゲームシーン

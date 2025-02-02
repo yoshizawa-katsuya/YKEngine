@@ -11,6 +11,7 @@ Player::Player()
 	: input_(Input::GetInstance())
 	, lrDirection_(LRDirection::kRight)
 	, turnTimer_(1.0f)
+	, audio_(Audio::GetInstance())
 {
 	radius_ = 0.5f;
 }
@@ -137,7 +138,7 @@ void Player::OnCollision()
 	}
 	status_.remainingInvincibleTime_ = status_.maxInvincibleTime_;
 
-	Audio::GetInstance()->SoundPlayWave(*HitSE1_);
+	audio_->SoundPlayWave(*HitSE1_);
 
 }
 
@@ -174,7 +175,7 @@ void Player::HammerUpdate()
 	hammer_.object_->WorldTransformUpdate(hammer_.worldTransform_);
 
 	if (isSE2Play_) {
-		Audio::GetInstance()->SoundPlayWave(*HitSE2_);
+		audio_->SoundPlayWave(*HitSE2_);
 	}
 	isSE2Play_ = false;
 }
@@ -222,6 +223,7 @@ void Player::Jump()
 		moveWork_.onGround_ = false;
 		moveWork_.isJumping_ = true;
 		moveWork_.jumpHoldTime_ = 0;
+		audio_->SoundPlayWave(*jumpSE_, 0.7f);
 		return;
 	}
 	else if (!moveWork_.onGround_) {
@@ -271,6 +273,7 @@ void Player::GroundCollision()
 		moveWork_.velocity_.y = 0.0f;
 		moveWork_.onGround_ = true;
 		moveWork_.isJumping_ = false;
+		audio_->SoundPlayWave(*landingSE_);
 	}
 
 }
@@ -369,6 +372,6 @@ Player::MoveWork::MoveWork()
 	, kGravityAcceleration_(0.03f)
 	, speed_(0.1f)
 	, velocity_({ 0.0f, 0.0f, 0.0f })
-	, onGround_(false)
+	, onGround_(true)
 {
 }

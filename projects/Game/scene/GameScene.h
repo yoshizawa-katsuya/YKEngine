@@ -70,6 +70,8 @@ protected:
 	SoundData HitSE1_;
 	SoundData HitSE2_;
 	SoundData HitSE3_;
+	SoundData JumpSE1_;
+	SoundData LandingSE1_;
 
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
