@@ -5,6 +5,7 @@
 
 enum class MapChipType {
 	kFloor,//床
+	kBlank,
 	kBox, // ボックス
 	stone,
 	star,

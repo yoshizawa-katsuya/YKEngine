@@ -288,20 +288,13 @@ void SelectScene::Update()
 
 	if (!selectClick1) {
 		for (size_t i = 0; i < stageSprites_.size(); ++i) {
-			if (input_->PushMouseLeft() && IsMouseOverSprite(mousePos, stageSprites_[i])) {
-				selectClick2 = true;
-			}
-
-		}
-	}
-	if (selectClick2) {
-		for (size_t i = 0; i < stageSprites_.size(); ++i) {
-			if (input_->PushMouseLeft() && IsMouseOverSprite(input_->GetMousePosition(), stageSprites_[i])) {
+			if (input_->PushMouseLeft() && IsMouseOverSprite(mousePos, stageSprites_[i]) && !input_->TrigerMouseLeft()) {
 				sceneManager_->ChengeScene("GameScene");
 			}
 
 		}
 	}
+	
 
 
 #ifdef _DEBUG

@@ -125,6 +125,22 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 
+	if (input_->TriggerKey(DIK_SPACE)) {
+		uint32_t numBlockVertical = mapChipField_->GetNumBlockVertical();
+		uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+
+		for (uint32_t i = 0; i < numBlockVertical; ++i) {
+			for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
+				if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::stone) {
+
+					Vector3 position = mapChipField_->GetMapChipPositionByIndex(j, i);
+					CreateObject(boxes_[i][j], stone_.get(), position, { 0.7f, 0.7f, 0.7f });
+				}
+			}
+		}
+
+	}
 	//プレイヤーの更新
 	//player_->Update();
 
