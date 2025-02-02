@@ -10,6 +10,7 @@ enum class MapChipType {
 	star,
 	hole,
 	ice,
+	kBlank,
 };
 
 class MapChipField

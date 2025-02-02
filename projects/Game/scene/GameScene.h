@@ -19,6 +19,8 @@
 #include "MapChipField.h"
 #include "InstancingObjects.h"
 #include "SelectScene.h"
+#include "Stone.h"
+#include "Ice.h"
 
 class GameScene : public BaseScene
 {
@@ -95,18 +97,16 @@ private:
 	//床
 	std::unique_ptr<InstancingObject> floors_;
 
-	//
-
-
-
-
-
-
 	//BackGround
 	uint32_t background_;
 	std::unique_ptr<Sprite> backgroundSprite_;
 
-	//
+	//ストーン
+	std::vector<std::unique_ptr<Stone>>stones_;
+
+	//氷
+	std::vector<std::unique_ptr<Ice>>ices_;
+
 	SelectScene* selectScene_ = nullptr;
 	uint32_t selectedTutorial_ = 0;
 	uint32_t selectedBundle_ = 0;
