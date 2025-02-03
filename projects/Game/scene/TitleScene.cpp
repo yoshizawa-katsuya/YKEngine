@@ -35,7 +35,10 @@ void TitleScene::Initialize()
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
 	bgm1_ = audio_->LoopSoundLoadWave("./resources/sound/titleScene.wav");
-	audio_->SoundLoopPlayWave(bgm1_, 0.7f);
+	audio_->SoundLoopPlayWave(bgm1_, 0.5f);
+
+	SelectSE1_ = audio_->SoundLoadWave("./resources/sound/SelectSE1.wav");
+	DecideSE1_ = audio_->SoundLoadWave("./resources/sound/DecideSE1.wav");
 }
 
 void TitleScene::Update()
@@ -65,6 +68,7 @@ void TitleScene::Update()
 				selectNum_ = 3;
 			}
 			spriteCursor_->SetPosition({ 156.0f, 315.0f + selectNum_ * 85.0f});
+			audio_->SoundPlayWave(SelectSE1_);
 		}
 		else if (input_->TriggerKey(DIK_S) || input_->TriggerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input_->TrigerLeftStickDown()) {
 			selectNum_++;
@@ -72,11 +76,13 @@ void TitleScene::Update()
 				selectNum_ = 1;
 			}
 			spriteCursor_->SetPosition({ 156.0f, 315.0f + selectNum_ * 85.0f });
+			audio_->SoundPlayWave(SelectSE1_);
 		}
 
 		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 			phase_ = Phase::kFadoOut;
+			audio_->SoundPlayWave(DecideSE1_);
 		}
 		break;
 

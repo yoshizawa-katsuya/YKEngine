@@ -24,7 +24,10 @@ void GameOverScene::Initialize()
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
 	bgm1_ = audio_->LoopSoundLoadWave("./resources/sound/gameOverScene.wav");
-	audio_->SoundLoopPlayWave(bgm1_, 0.7f);
+	audio_->SoundLoopPlayWave(bgm1_, 0.5f);
+
+	DecideSE1_ = audio_->SoundLoadWave("./resources/sound/DecideSE1.wav");
+
 }
 
 void GameOverScene::Update()
@@ -43,6 +46,7 @@ void GameOverScene::Update()
 
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 			phase_ = Phase::kFadoOut;
+			audio_->SoundPlayWave(DecideSE1_);
 
 		}
 		break;

@@ -55,5 +55,8 @@ private:
 	std::unique_ptr<Sprite> spriteCursor_;
 
 	LoopSoundData bgm1_;
+
+	SoundData SelectSE1_;
+	SoundData DecideSE1_;
 };
 

@@ -20,7 +20,7 @@ void TutorialScene::Initialize()
 
 	GameScene::Initialize();
 
-	player_->SetTranslation({ -18.0f, 0.0f, 0.0f });
+	player_->SetTranslation({ -18.0f, player_->GetRadius(), 0.0f});
 }
 
 void TutorialScene::Update()

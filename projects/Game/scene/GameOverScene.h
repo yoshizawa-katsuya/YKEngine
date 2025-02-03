@@ -52,4 +52,6 @@ private:
 
 	LoopSoundData bgm1_;
 
+	SoundData DecideSE1_;
+
 };
