@@ -288,6 +288,7 @@ void Player::Attack()
 	}
 	workAttack_.isAttack_ = true;
 	hammer_.worldTransform_.rotation_.y = destinationRotationYTable[0];
+	audio_->SoundPlayWave(*swingSE_, 0.7f);
 }
 
 void Player::Fire()

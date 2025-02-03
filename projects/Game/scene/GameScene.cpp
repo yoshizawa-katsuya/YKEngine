@@ -141,18 +141,21 @@ void GameScene::Initialize() {
 	CreateLevel();
 
 	bgm1_ = audio_->LoopSoundLoadWave("./resources/sound/gameScene.wav");
-	audio_->SoundLoopPlayWave(bgm1_, 0.7f);
+	audio_->SoundLoopPlayWave(bgm1_, 0.5f);
 
 	HitSE1_ = audio_->SoundLoadWave("./resources/sound/HitSE1.wav");
 	HitSE2_ = audio_->SoundLoadWave("./resources/sound/HitSE2.wav");
 	HitSE3_ = audio_->SoundLoadWave("./resources/sound/HitSE3.wav");
 	JumpSE1_ = audio_->SoundLoadWave("./resources/sound/JumpSE1.wav");
 	LandingSE1_ = audio_->SoundLoadWave("./resources/sound/LandingSE1.wav");
+	SwingSE1_ = audio_->SoundLoadWave("./resources/sound/SwingSE1.wav");
+	ShotSE1_ = audio_->SoundLoadWave("./resources/sound/ShotSE1.wav");
 
 	player_->SetHitSEData(&HitSE1_);
 	player_->SetHitSE2Data(&HitSE2_);
 	player_->SetJumpSE(&JumpSE1_);
 	player_->SetLandingSE(&LandingSE1_);
+	player_->SetSwingSE(&SwingSE1_);
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
@@ -387,6 +390,7 @@ void GameScene::AddPlayerBullet(const Vector3& velocity)
 	playerBullets_.emplace_back();
 	std::unique_ptr<PlayerBullet>& playerBullet = playerBullets_.back();
 	playerBullet.reset(newBullet);
+	audio_->SoundPlayWave(ShotSE1_, 0.7f);
 }
 
 void GameScene::AddEnemyBullet(const Vector3& position, const Vector3& velocity)

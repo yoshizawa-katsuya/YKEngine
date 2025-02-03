@@ -57,6 +57,7 @@ public:
 	void SetHitSE2Data(SoundData* hitSE) { HitSE2_ = hitSE; }
 	void SetJumpSE(SoundData* jumpSE) { jumpSE_ = jumpSE; }
 	void SetLandingSE(SoundData* landingSE) { landingSE_ = landingSE; }
+	void SetSwingSE(SoundData* swingSE) { swingSE_ = swingSE; }
 
 private:
 
@@ -92,6 +93,8 @@ private:
 	SoundData* HitSE2_;
 	SoundData* jumpSE_;
 	SoundData* landingSE_;
+	SoundData* swingSE_;
+	SoundData* shotSE_;
 	bool isSE2Play_;
 
 	//ゲームシーン
