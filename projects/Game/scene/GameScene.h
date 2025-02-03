@@ -149,8 +149,7 @@ protected:
 
 	//パーティクル
 	std::unique_ptr<ParticleEmitter> emitter_;
-	/*
-	std::unique_ptr<AccelerationField> field_;
-	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
-	*/
+	//std::unique_ptr<AccelerationField> field_;
+	Vector4 blue_ = {0.5f, 0.5f, 1.0f, 1.0f};
+	
 };

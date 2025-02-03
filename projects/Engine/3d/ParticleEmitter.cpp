@@ -54,7 +54,7 @@ void ParticleEmitter::Emit()
 void ParticleEmitter::Emit(const Vector4& color)
 {
 
-	ParticleManager::GetInstance()->Emit(name_, transform_, count_, isRandomColor_, randTranslateMin_, randTranslateMax_);	//発生処理
+	ParticleManager::GetInstance()->Emit(name_, transform_, count_, isRandomColor_, color, randTranslateMin_, randTranslateMax_);	//発生処理
 
 }
 

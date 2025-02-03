@@ -531,7 +531,7 @@ void GameScene::CheckAllCollisions()
 				enemy->OnCollision();
 				isSE = true;
 				emitter_->SetTranslation(enemy->GetCenterPosition());
-				emitter_->Emit();
+				emitter_->Emit(blue_);
 			}
 		}
 	}
