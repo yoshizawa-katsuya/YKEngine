@@ -19,6 +19,7 @@
 #include "MapChipField.h"
 #include "InstancingObjects.h"
 #include "SelectScene.h"
+#include "Rigid3dObject.h"
 
 class GameScene : public BaseScene
 {
@@ -36,8 +37,7 @@ public:
 
 	void GenerateObjects();
 
-
-
+	
 private:
 
 	//デバイス
@@ -74,10 +74,11 @@ private:
 	std::unique_ptr<BaseModel> modelPlayer_;
 	std::unique_ptr<BaseModel> modelBox_;
 	std::unique_ptr<BaseModel> modelFloor_;
-	std::unique_ptr<BaseModel> stone_;
-	std::unique_ptr<BaseModel> star_;
-	std::unique_ptr<BaseModel> hole_;
-	std::unique_ptr<BaseModel> ice_;
+	std::unique_ptr<BaseModel> modelstone_;
+	std::unique_ptr<BaseModel> modelstar_;
+	std::unique_ptr<BaseModel> modelhole_;
+	std::unique_ptr<BaseModel> modelice_;
+	//
 	
 
 	uint32_t textureHandle_;
@@ -95,12 +96,16 @@ private:
 	//床
 	std::unique_ptr<InstancingObject> floors_;
 
-	//
-
-
-
-
-
+	//stone
+	std::unique_ptr<Rigid3dObject> stone_;
+	Vector3 stonePosition_;
+	Vector3 stoneScale_;
+	Vector3 velocity_;       
+	bool isDragging_ = false; 
+	Vector2 dragStartPos_;   
+	Vector2 dragCurrentPos_; 
+	float maxSpeed_ = 0.7f;  
+	float friction_ = 0.98f; 
 
 	//BackGround
 	uint32_t background_;
@@ -121,5 +126,5 @@ private:
 
 	void CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale);
 	void AddToInstancing(InstancingObject* instancingObject, const Vector3& position);
-
+	Vector3 ConvertScreenToWorld(const Vector2& screenPos);
 };

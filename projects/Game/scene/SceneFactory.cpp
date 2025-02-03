@@ -2,6 +2,8 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "SelectScene.h"
+#include "SelectStage.h"
+
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 {
 	//次のシーンを生成
@@ -10,8 +12,11 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 	if (sceneName == "TitleScene") {
 		newScene = new TitleScene();
 	}
-	if (sceneName == "SelectScene") {
+	else if (sceneName == "SelectScene") {
 		newScene = new SelectScene();
+	}
+	else if (sceneName == "SelectStage") {
+		newScene = new SelectStage();
 	}
 	else if (sceneName == "GameScene") {
 		newScene = new GameScene();

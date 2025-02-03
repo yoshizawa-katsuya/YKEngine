@@ -7,6 +7,7 @@
 #include "RigidModel.h"
 #include "Rigid3dObject.h"
 #include <numbers>
+#include "Collision.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -67,17 +68,17 @@ void GameScene::Initialize() {
 	modelFloor_ = std::make_unique<RigidModel>();
 	modelFloor_->CreateModel("./resources/floor", "Floor.obj");
 	
-	stone_ = std::make_unique<RigidModel>();
-	stone_->CreateModel("./resources/stone", "stone.obj");
+	modelstone_ = std::make_unique<RigidModel>();
+	modelstone_->CreateModel("./resources/stone", "stone.obj");
 	
-	star_ = std::make_unique<RigidModel>();
-	star_->CreateModel("./resources/star", "star.obj");
+	modelstar_ = std::make_unique<RigidModel>();
+	modelstar_->CreateModel("./resources/star", "star.obj");
 
-	hole_ = std::make_unique<RigidModel>();
-	hole_->CreateModel("./resources/hole", "hole.obj");
+	modelhole_ = std::make_unique<RigidModel>();
+	modelhole_->CreateModel("./resources/hole", "hole.obj");
 
-	ice_ = std::make_unique<RigidModel>();
-	ice_->CreateModel("./resources/ice", "ice.obj");
+	modelice_ = std::make_unique<RigidModel>();
+	modelice_->CreateModel("./resources/ice", "ice.obj");
 
 	/*
 	//テクスチャハンドルの生成
@@ -94,8 +95,6 @@ void GameScene::Initialize() {
 	//backgroundSprite_->SetPosition({ 0.0f,0.0f });
 
 
-
-
 	//マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
 	mapChipField_->LoadMapChipCsv("./resources/csv/stage1.csv");
@@ -104,6 +103,7 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+	
 	GenerateObjects();
 
 
@@ -112,39 +112,70 @@ void GameScene::Initialize() {
 	selectedTutorial_ = data.selectedTutorial;
 	selectedBundle_ = data.selectedBundle;
 	selectedStage_ = data.selectedStage;
+
+	
 }
 
 void GameScene::Update() {
-
+	input_->Update();
 	
 
 	//カメラの更新
 	camera_->Update();
 
+	
+
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
 	}
+	//stone move
 
-	if (input_->TriggerKey(DIK_SPACE)) {
-		uint32_t numBlockVertical = mapChipField_->GetNumBlockVertical();
-		uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+	Vector2 mousePos = input_->GetMousePosition();
 
+	if (input_->PushMouseLeft()) {
+		Vector3 clickPos = ConvertScreenToWorld(mousePos);
 
-		for (uint32_t i = 0; i < numBlockVertical; ++i) {
-			for (uint32_t j = 0; j < numBlockHorizontal; ++j) {
-				if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::stone) {
+		float distance = static_cast<float>(sqrt(pow(clickPos.x - stonePosition_.x, 2) + pow(clickPos.z - stonePosition_.z, 2)));
 
-					Vector3 position = mapChipField_->GetMapChipPositionByIndex(j, i);
-					CreateObject(boxes_[i][j], stone_.get(), position, { 0.7f, 0.7f, 0.7f });
-				}
-			}
+		if (distance < 1.0f) { 
+			isDragging_ = true;
+			dragStartPos_ = mousePos;
+		}
+	}
+	if (isDragging_ && input_->PushMouseLeft()) {
+		dragCurrentPos_ = input_->GetMousePosition();
+	}
+	if (isDragging_ && !input_->PushMouseLeft() && !input_->TrigerMouseLeft()) {
+		isDragging_ = false;
+		Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x  , dragStartPos_.y - dragCurrentPos_.y };
+
+		float length = sqrt(dragVector.x * dragVector.x + dragVector.y * dragVector.y);
+		if (length > 0) {
+			dragVector.x /= length;
+			dragVector.y /= length;
 		}
 
+		float speed = std::min(length * 0.03f, maxSpeed_);  
+		velocity_ = { dragVector.x * speed, 0.0f, -dragVector.y * speed };  
+
 	}
-	//プレイヤーの更新
-	//player_->Update();
+
+
+	stonePosition_ += velocity_;
+	velocity_ *= friction_;
+
+	if (fabs(velocity_.x) < 0.01f) velocity_.x = 0.0f;
+	if (fabs(velocity_.z) < 0.01f) velocity_.z = 0.0f;
+
+	WorldTransform worldTransform;
+	worldTransform.Initialize();
+	worldTransform.translation_ = stonePosition_;
+	worldTransform.UpdateMatrix();
+	stone_->WorldTransformUpdate(worldTransform);
 
 	
+	//player_->Update();
+
 
 	//emitter_->Update(color_);
 
@@ -224,9 +255,11 @@ void GameScene::Update() {
 			ImGui::Text("Selected Tutorial: %u", selectedTutorial_);
 			ImGui::Text("Selected Bundle: %u", selectedBundle_);
 			ImGui::Text("Selected Stage: %u", selectedStage_);
-		
-		
-
+			ImGui::Text("stonePosition_x: %f", stonePosition_.x);
+			ImGui::Text("stonePosition_y: %f", stonePosition_.y);
+			ImGui::Text("dragStartPos＿: %f %f", dragStartPos_.x, dragStartPos_.y);
+			ImGui::Text("dragCurrentPos＿: %f %f", dragCurrentPos_.x, dragCurrentPos_.y);
+			
 		ImGui::End();
 
 #endif // _DEBUG
@@ -257,6 +290,8 @@ void GameScene::Draw() {
 			}
 		}
 	}
+	stone_->CameraUpdate(mainCamera_);
+	stone_->Draw();
 
 	//instancingObject描画前処理
 	modelPlatform_->InstancingPreDraw();
@@ -304,20 +339,24 @@ void GameScene::GenerateObjects()
 				CreateObject(boxes_[i][j], modelBox_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::kFloor) {
 				AddToInstancing(floors_.get(), position);
-			} else if (mapChipType == MapChipType::stone) {
-				CreateObject(boxes_[i][j], stone_.get(), position, { 0.7f, 0.7f, 0.7f });
+			}  else if (mapChipType == MapChipType::stone) {
+				stone_ = std::make_unique<Rigid3dObject>();
+				stone_->Initialize(modelstone_.get());
+				stonePosition_ = mapChipField_->GetMapChipPositionByIndex(j, i);
 			} else if (mapChipType == MapChipType::star) {
-				CreateObject(boxes_[i][j], star_.get(), position, defaultScale);
+				CreateObject(boxes_[i][j], modelstar_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::hole) {
-				CreateObject(boxes_[i][j], hole_.get(), position, defaultScale);
+				CreateObject(boxes_[i][j], modelhole_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::ice) {
-				CreateObject(boxes_[i][j], ice_.get(), position, { 0.5f, 0.5f, 0.5f });
+				CreateObject(boxes_[i][j], modelice_.get(), position, { 0.5f, 0.5f, 0.5f });
 			}
 		}
 	}
 
 
 }
+
+
 
 void GameScene::CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale)
 {
@@ -339,4 +378,12 @@ void GameScene::AddToInstancing(InstancingObject* instancingObject, const Vector
 	worldTransform->UpdateMatrix();
 	instancingObject->AddWorldTransform(*worldTransform);
 
+}
+
+Vector3 GameScene::ConvertScreenToWorld(const Vector2& screenPos)
+{
+	float worldX = (screenPos.x / 990.0f) * 34.0f - 17.0f; 
+	float worldZ = (screenPos.y / 600.0f) * 30.0f - 15.0f; 
+
+	return Vector3(worldX, 0.0f, -worldZ);
 }
