@@ -211,7 +211,7 @@ void ParticleManager::Create()
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor, const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
 {
 	
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+	std::uniform_real_distribution<float> distribution(-5.0f, 5.0f);
 	std::uniform_real_distribution<float> distributionX(translateMin.x, translateMax.x);
 	std::uniform_real_distribution<float> distributionY(translateMin.y, translateMax.y);
 	std::uniform_real_distribution<float> distributionZ(translateMin.z, translateMax.z);
@@ -224,7 +224,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool 
 	Vector3 randomTranslate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
 	particle.transform.translation = transform.translation + randomTranslate;
 	//particle.velocity = { 0.0f, 1.0f, 0.0f };
-	particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
+	particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), 0.0f };
 
 	if (isRandomColor) {
 		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
@@ -233,7 +233,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool 
 	else {
 		particle.color = color;
 	}
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	std::uniform_real_distribution<float> distTime(0.5f, 0.5f);
 	particle.lifeTime = distTime(randomEngine_);
 	particle.currentTime = 0;
 

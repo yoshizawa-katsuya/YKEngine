@@ -157,6 +157,13 @@ void GameScene::Initialize() {
 	player_->SetLandingSE(&LandingSE1_);
 	player_->SetSwingSE(&SwingSE1_);
 
+	emitter_ = std::make_unique<ParticleEmitter>("bord", 5, 0.5f);
+	emitter_->Initialize(textureHandle_);
+	emitter_->SetRandTranslationMin({ 0.0f, 0.0f, 0.0f });
+	emitter_->SetRandTranslationMax({ 0.0f, 0.0f, 0.0f });
+	emitter_->SetScale({ 0.3f, 0.3f, 1.0f });
+	//emitter_->SetIsRandomColor(true);
+
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
@@ -204,10 +211,6 @@ void GameScene::Update() {
 		for (std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets_) {
 			enemyBullet->Update();
 		}
-
-		//emitter_->Update(color_);
-
-		//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
 		
 		CheckAllCollisions();
 
@@ -246,6 +249,10 @@ void GameScene::Update() {
 
 	//カメラの更新
 	camera_->Update();
+
+	//emitter_->Update();
+
+	ParticleManager::GetInstance()->Update(mainCamera_);
 
 #ifdef _DEBUG
 
@@ -356,7 +363,7 @@ void GameScene::Draw() {
 	ground_->CameraUpdate(mainCamera_);
 	ground_->Draw();
 
-	//ParticleManager::GetInstance()->Draw();
+	ParticleManager::GetInstance()->Draw();
 	
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
@@ -523,6 +530,8 @@ void GameScene::CheckAllCollisions()
 				playerBullet->OnCollision();
 				enemy->OnCollision();
 				isSE = true;
+				emitter_->SetTranslation(enemy->GetCenterPosition());
+				emitter_->Emit();
 			}
 		}
 	}
