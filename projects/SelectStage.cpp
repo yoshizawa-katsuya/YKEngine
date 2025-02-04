@@ -19,7 +19,7 @@ void SelectStage::Initialize()
 
 
 	//background
-	background_ = TextureManager::GetInstance()->Load("./resources/select/background3.png");
+	//background_ = TextureManager::GetInstance()->Load("./resources/select/background3.png");
 	background_ = TextureManager::GetInstance()->Load("./resources/select/titleBack2.png");
 	backgroundSprite_ = std::make_unique<Sprite>();
 	backgroundSprite_->Initialize(background_);

@@ -40,7 +40,7 @@ void TitleScene::Initialize()
 	startSprite2_->Initialize(start2_);
 	startSprite2_->SetPosition({ 0.0f, 0.0f });
 	
-
+	
 
 }
 
@@ -104,7 +104,7 @@ void TitleScene::Draw()
 		startSprite2_->Draw();
 	}
 	
-
+	
 	
 }
 
