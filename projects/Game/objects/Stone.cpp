@@ -54,12 +54,14 @@ void Stone::Move()
 
 		if (distance < 1.0f) {
 			dragStartPos_ = mousePos;
+			isDragging_ = true;
 		}
 	}
-	if (input_->HoldMouseLeft()) {
+	if (isDragging_ && input_->HoldMouseLeft()) {
 		dragCurrentPos_ = input_->GetMousePosition();
 	}
-	if (input_->ReleaseMouseLeft()) {
+	if (isDragging_ && input_->ReleaseMouseLeft()) {
+		isDragging_ = false;
 		Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x  , dragStartPos_.y - dragCurrentPos_.y };
 
 		float length = sqrt(dragVector.x * dragVector.x + dragVector.y * dragVector.y);

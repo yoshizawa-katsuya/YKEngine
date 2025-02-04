@@ -68,6 +68,7 @@ private:
 	std::unique_ptr<Rigid3dObject> object_;
 	WorldTransform worldTransform_;
 	Vector3 velocity_;
+	bool isDragging_ = false;
 	Vector2 dragStartPos_;
 	Vector2 dragCurrentPos_;
 	float maxSpeed_ = 0.7f;
