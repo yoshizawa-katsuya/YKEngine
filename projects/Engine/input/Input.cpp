@@ -119,6 +119,14 @@ bool Input::TrigerMouseLeft()
 	return false;
 }
 
+bool Input::ReleaseMouseLeft()
+{
+	if (preMouseState_.rgbButtons[0] & 0x80 && !(mouseState_.rgbButtons[0] & 0x80)) {
+		return true;
+	}
+	return false;
+}
+
 bool Input::HoldMouseLeft()
 {
 	if (preMouseState_.rgbButtons[0] & 0x80 && mouseState_.rgbButtons[0] & 0x80) {

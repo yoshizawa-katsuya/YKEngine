@@ -59,6 +59,8 @@ public:
 
 	bool TrigerMouseLeft();
 
+	bool ReleaseMouseLeft();
+
 	//マウスを左クリックし続けているかをチェック
 	bool HoldMouseLeft();
 
