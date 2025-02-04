@@ -1,6 +1,7 @@
 #pragma once
 #include "Rigid3dObject.h"
 #include "Input.h"
+#include "MapChipField.h"
 
 class Stone
 {
@@ -22,6 +23,12 @@ public:
 
 private:
 
+	//移動入力
+	void Move();
+
+	//移動
+	void MoveAppli();
+
 	Vector3 ConvertScreenToWorld(const Vector2& screenPos);
 
 	Input* input_;
@@ -35,5 +42,7 @@ private:
 	float maxSpeed_ = 0.7f;
 	float friction_ = 0.98f;
 
+	//マップチップによるフィールド
+	MapChipField* mapChipField_ = nullptr;
 };
 

@@ -16,6 +16,22 @@ void Stone::Initialize(BaseModel* model, const Vector3& position)
 
 void Stone::Update()
 {
+	//移動入力
+	Move();
+
+	//移動
+	MoveAppli();
+
+}
+
+void Stone::Draw(Camera* camera)
+{
+	object_->CameraUpdate(camera);
+	object_->Draw();
+}
+
+void Stone::Move()
+{
 	Vector2 mousePos = input_->GetMousePosition();
 
 	if (input_->PushMouseLeft()) {
@@ -43,23 +59,19 @@ void Stone::Update()
 		velocity_ = { dragVector.x * speed, 0.0f, -dragVector.y * speed };
 
 	}
+}
 
-
+void Stone::MoveAppli()
+{
 	worldTransform_.translation_ += velocity_;
 	velocity_ *= friction_;
 
 	if (fabs(velocity_.x) < 0.01f) velocity_.x = 0.0f;
 	if (fabs(velocity_.z) < 0.01f) velocity_.z = 0.0f;
 
-	
+
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
-}
-
-void Stone::Draw(Camera* camera)
-{
-	object_->CameraUpdate(camera);
-	object_->Draw();
 }
 
 Vector3 Stone::ConvertScreenToWorld(const Vector2& screenPos)
