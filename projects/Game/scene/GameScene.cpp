@@ -117,7 +117,6 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	input_->Update();
 	
 
 	//カメラの更新
@@ -129,50 +128,7 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 	//stone move
-
-	Vector2 mousePos = input_->GetMousePosition();
-
-	if (input_->PushMouseLeft()) {
-		Vector3 clickPos = ConvertScreenToWorld(mousePos);
-
-		float distance = static_cast<float>(sqrt(pow(clickPos.x - stonePosition_.x, 2) + pow(clickPos.z - stonePosition_.z, 2)));
-
-		if (distance < 1.0f) { 
-			isDragging_ = true;
-			dragStartPos_ = mousePos;
-		}
-	}
-	if (isDragging_ && input_->PushMouseLeft()) {
-		dragCurrentPos_ = input_->GetMousePosition();
-	}
-	if (isDragging_ && !input_->PushMouseLeft() && !input_->TrigerMouseLeft()) {
-		isDragging_ = false;
-		Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x  , dragStartPos_.y - dragCurrentPos_.y };
-
-		float length = sqrt(dragVector.x * dragVector.x + dragVector.y * dragVector.y);
-		if (length > 0) {
-			dragVector.x /= length;
-			dragVector.y /= length;
-		}
-
-		float speed = std::min(length * 0.03f, maxSpeed_);  
-		velocity_ = { dragVector.x * speed, 0.0f, -dragVector.y * speed };  
-
-	}
-
-
-	stonePosition_ += velocity_;
-	velocity_ *= friction_;
-
-	if (fabs(velocity_.x) < 0.01f) velocity_.x = 0.0f;
-	if (fabs(velocity_.z) < 0.01f) velocity_.z = 0.0f;
-
-	WorldTransform worldTransform;
-	worldTransform.Initialize();
-	worldTransform.translation_ = stonePosition_;
-	worldTransform.UpdateMatrix();
-	stone_->WorldTransformUpdate(worldTransform);
-
+	stone_->Update();
 	
 	//player_->Update();
 
@@ -255,10 +211,10 @@ void GameScene::Update() {
 			ImGui::Text("Selected Tutorial: %u", selectedTutorial_);
 			ImGui::Text("Selected Bundle: %u", selectedBundle_);
 			ImGui::Text("Selected Stage: %u", selectedStage_);
-			ImGui::Text("stonePosition_x: %f", stonePosition_.x);
-			ImGui::Text("stonePosition_y: %f", stonePosition_.y);
-			ImGui::Text("dragStartPos＿: %f %f", dragStartPos_.x, dragStartPos_.y);
-			ImGui::Text("dragCurrentPos＿: %f %f", dragCurrentPos_.x, dragCurrentPos_.y);
+			ImGui::Text("stonePosition_x: %f", stone_->GetPosition().x);
+			ImGui::Text("stonePosition_z: %f", stone_->GetPosition().z);
+			ImGui::Text("dragStartPos＿: %f %f", stone_->GetDragStartPos().x, stone_->GetDragStartPos().y);
+			ImGui::Text("dragCurrentPos＿: %f %f", stone_->GetDragCurrentPos().x, stone_->GetDragCurrentPos().y);
 			
 		ImGui::End();
 
@@ -290,8 +246,8 @@ void GameScene::Draw() {
 			}
 		}
 	}
-	stone_->CameraUpdate(mainCamera_);
-	stone_->Draw();
+
+	stone_->Draw(mainCamera_);
 
 	//instancingObject描画前処理
 	modelPlatform_->InstancingPreDraw();
@@ -340,9 +296,8 @@ void GameScene::GenerateObjects()
 			} else if (mapChipType == MapChipType::kFloor) {
 				AddToInstancing(floors_.get(), position);
 			}  else if (mapChipType == MapChipType::stone) {
-				stone_ = std::make_unique<Rigid3dObject>();
-				stone_->Initialize(modelstone_.get());
-				stonePosition_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+				stone_ = std::make_unique<Stone>();
+				stone_->Initialize(modelstone_.get(), mapChipField_->GetMapChipPositionByIndex(j, i));
 			} else if (mapChipType == MapChipType::star) {
 				CreateObject(boxes_[i][j], modelstar_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::hole) {
