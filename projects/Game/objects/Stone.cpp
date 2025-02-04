@@ -7,8 +7,8 @@ Stone::Stone()
 
 void Stone::Initialize(BaseModel* model, const Vector3& position)
 {
-	stone_ = std::make_unique<Rigid3dObject>();
-	stone_->Initialize(model);
+	object_ = std::make_unique<Rigid3dObject>();
+	object_->Initialize(model);
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
@@ -55,13 +55,13 @@ void Stone::Update()
 
 	
 	worldTransform_.UpdateMatrix();
-	stone_->WorldTransformUpdate(worldTransform_);
+	object_->WorldTransformUpdate(worldTransform_);
 }
 
 void Stone::Draw(Camera* camera)
 {
-	stone_->CameraUpdate(camera);
-	stone_->Draw();
+	object_->CameraUpdate(camera);
+	object_->Draw();
 }
 
 Vector3 Stone::ConvertScreenToWorld(const Vector2& screenPos)
