@@ -20,6 +20,7 @@
 #include "InstancingObjects.h"
 #include "SelectScene.h"
 #include "Rigid3dObject.h"
+#include "Stone.h"
 
 class GameScene : public BaseScene
 {
@@ -97,15 +98,7 @@ private:
 	std::unique_ptr<InstancingObject> floors_;
 
 	//stone
-	std::unique_ptr<Rigid3dObject> stone_;
-	Vector3 stonePosition_;
-	Vector3 stoneScale_;
-	Vector3 velocity_;       
-	bool isDragging_ = false; 
-	Vector2 dragStartPos_;   
-	Vector2 dragCurrentPos_; 
-	float maxSpeed_ = 0.7f;  
-	float friction_ = 0.98f; 
+	std::unique_ptr<Stone> stone_;
 
 	//BackGround
 	uint32_t background_;
