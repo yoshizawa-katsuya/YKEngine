@@ -33,6 +33,7 @@ public:
 
     void Finalize() override;
 
+    bool isItemBetween(const Stone& stone1, const Stone& stone2, const Star& item);
 private:
     // デバイス
     DirectXCommon* dxCommon_;
@@ -75,5 +76,5 @@ private:
     // ストーンのリスト
     std::vector<std::unique_ptr<Stone>> stones_;
     //スター
-    std::unique_ptr<Star>star_;
+   std::vector< std::unique_ptr<Star>>star_;
 };

@@ -75,8 +75,10 @@ void GameScene::Initialize() {
     stones_.push_back(std::move(stone));
 
     //スターの初期化
-    star_ = std::make_unique<Star>();
-    star_->Initialize(modelStar_.get());
+    auto star = std::make_unique<Star>();
+    star->Initialize(modelStar_.get());
+    star_.push_back(std::move(star));
+ 
 }
 
 void GameScene::Update() {
@@ -95,7 +97,23 @@ void GameScene::Update() {
             }
         }
     }
+    // ストーン間にアイテムが挟まれているか判定 (Stopped のストーンのみ対象)
+    for (size_t i = 0; i < stones_.size(); ++i) {
+        if (stones_[i]->GetState() != Stone::State::Stopped) continue; // Stopped 以外はスキップ
 
+        for (size_t j = i + 1; j < stones_.size(); ++j) {
+            if (stones_[j]->GetState() != Stone::State::Stopped) continue; // Stopped 以外はスキップ
+
+            for (size_t k = 0; k < star_.size(); ++k) {
+                if (isItemBetween(*stones_[i], *stones_[j], *star_[k])) {
+                    // アイテムが挟まれていたら処理（例えば取得・削除）
+                    star_.erase(star_.begin() + k);
+                    k--; // 削除したのでインデックス調整
+                    break; // 1つのアイテムにつき1回の処理で十分
+                }
+            }
+        }
+    }
     // 最後のストーンがStoppedになったら新しいストーンを追加
     if (!stones_.empty() && stones_.back()->GetState() == Stone::State::Stopped) {
         auto newStone = std::make_unique<Stone>();
@@ -104,8 +122,9 @@ void GameScene::Update() {
     }
 
     //スターの更新
-    star_->Update();
-
+    for (auto& star : star_) {
+        star->Update();
+    }
     // カメラの更新
     camera_->Update();
 
@@ -176,6 +195,9 @@ void GameScene::Update() {
 		audio_->SoundStopWave(bgm1_);
 	}
 	*/
+
+
+
 	ImGui::End();
 		
 
@@ -199,18 +221,44 @@ void GameScene::Draw() {
     }
 
     //スターの描画
-    star_->Draw(mainCamera_);
+    for (auto& star : star_) {
+        star->Draw(mainCamera_);
+ }
 
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
 	//ParticleManager::GetInstance()->Draw();
 
-    
-
-    // (残りの描画処理は省略)
 }
 
 void GameScene::Finalize() {
-    // 必要な後処理を行う
+    //必要な後処理を行う
+}
+
+bool GameScene::isItemBetween(const Stone& stone1, const Stone& stone2, const Star& item) {
+    Vector3 pos1 = stone1.GetPosition();
+    Vector3 pos2 = stone2.GetPosition();
+    Vector3 itemPos = item.GetPosition();
+
+    //ストーン同士を結ぶ直線の方向ベクトル
+    Vector3 direction = Normalize(pos2 - pos1);
+
+    //相対ベクトル
+    Vector3 toItem = itemPos - pos1;
+
+    //アイテムがストーン間の直線上
+    float projection = Dot(toItem, direction);
+
+    //ストーン間にあるか
+    bool withinRange = (0 <= projection && projection <= Length(pos2 - pos1));
+
+    //アイテムが直線からどのくらい離れているか
+    Vector3 closestPoint = pos1 + direction * projection;
+    float distanceToLine = Length(itemPos - closestPoint);
+
+    //トーンの半径以内であれば
+    float stoneRadius = 0.5f; //仮
+
+    return withinRange && distanceToLine <= stoneRadius;
 }
