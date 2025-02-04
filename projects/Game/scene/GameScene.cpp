@@ -297,7 +297,7 @@ void GameScene::GenerateObjects()
 				AddToInstancing(floors_.get(), position);
 			}  else if (mapChipType == MapChipType::stone) {
 				stone_ = std::make_unique<Stone>();
-				stone_->Initialize(modelstone_.get(), mapChipField_->GetMapChipPositionByIndex(j, i));
+				stone_->Initialize(modelstone_.get(), mapChipField_->GetMapChipPositionByIndex(j, i), mapChipField_.get());
 			} else if (mapChipType == MapChipType::star) {
 				CreateObject(boxes_[i][j], modelstar_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::hole) {
