@@ -59,6 +59,9 @@ public:
 
 	bool TrigerMouseLeft();
 
+	//マウスを左クリックし続けているかをチェック
+	bool HoldMouseLeft();
+
 	bool PushMouseCenter();
 
 	float GetMouseWheel();
@@ -81,6 +84,9 @@ public:
 	//ゲームパッドのボタンを離した瞬間をチェック
 	bool ReleaseButton(uint32_t xinput);
 
+	//右トリガーを押した瞬間をチェック
+	bool TrigerRT();
+
 	//ゲームパッドのボタンを押し続けているかをチェック
 	bool HoldButton(uint32_t xinput);
 
@@ -89,6 +95,12 @@ public:
 
 	//左スティックのY方向の入力。0.0f~1.0fの範囲
 	float GetLeftStickY();
+
+	//左スティックを下に倒した瞬間をチェック
+	bool TrigerLeftStickDown();
+
+	//左スティックを上に倒した瞬間をチェック
+	bool TrigerLeftStickUp();
 
 	//右スティックのX方向の入力。0.0f~1.0fの範囲
 	float GetRightStickX();

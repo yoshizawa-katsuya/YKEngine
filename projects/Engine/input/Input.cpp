@@ -119,6 +119,14 @@ bool Input::TrigerMouseLeft()
 	return false;
 }
 
+bool Input::HoldMouseLeft()
+{
+	if (preMouseState_.rgbButtons[0] & 0x80 && mouseState_.rgbButtons[0] & 0x80) {
+		return true;
+	}
+	return false;
+}
+
 bool Input::PushMouseCenter()
 {
 	if (mouseState_.rgbButtons[2] & 0x80) {
@@ -212,6 +220,15 @@ bool Input::ReleaseButton(uint32_t xinput)
 	return false;
 }
 
+bool Input::TrigerRT()
+{
+	if ((gamePadState_.Gamepad.bRightTrigger > 0) && !(preGamePadState_.Gamepad.bRightTrigger > 0)) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Input::HoldButton(uint32_t xinput)
 {
 	if ((gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) {
@@ -229,6 +246,22 @@ float Input::GetLeftStickX()
 float Input::GetLeftStickY()
 {
 	return static_cast<float>(gamePadState_.Gamepad.sThumbLY) / SHRT_MAX;
+}
+
+bool Input::TrigerLeftStickDown()
+{
+	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) < 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) < 0.0f)) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::TrigerLeftStickUp()
+{
+	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) > 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) > 0.0f)) {
+		return true;
+	}
+	return false;
 }
 
 float Input::GetRightStickX()
