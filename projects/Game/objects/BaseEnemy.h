@@ -31,8 +31,6 @@ public:
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
-	void SetHitSE3Data(SoundData* hitSE) { HitSE3_ = hitSE; }
-
 	bool isHavingBomb();
 
 protected:
@@ -44,8 +42,6 @@ protected:
 
 	//次のシリアルナンバー
 	static uint32_t nextSerialNumber_;
-
-	SoundData* HitSE3_;
 
 	GameScene* gameScene_;
 

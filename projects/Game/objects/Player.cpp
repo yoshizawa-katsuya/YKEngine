@@ -160,7 +160,9 @@ void Player::AttackHit(BaseEnemy* enemy, ParticleEmitter* emitter)
 	//接触履歴に追加
 	workAttack_.contactRecord_.AddRecord(enemy->GetSerialNumber());
 
-	isSE2Play_ = true;
+	if (!enemy->isHavingBomb()) {
+		isSE2Play_ = true;
+	}
 
 	enemy->TakeHammer(workAttack_.attackPower_);
 	emitter->SetTranslation(enemy->GetCenterPosition());

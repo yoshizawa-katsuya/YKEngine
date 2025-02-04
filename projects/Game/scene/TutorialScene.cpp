@@ -5,6 +5,7 @@
 #include "TutorialEnemy01.h"
 #include "RigidModel.h"
 #include "Rigid3dObject.h"
+#include "ParticleManager.h"
 
 TutorialScene::~TutorialScene()
 {
@@ -72,8 +73,6 @@ void TutorialScene::Update()
 
 		//emitter_->Update(color_);
 
-		//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
-
 		CheckAllCollisions();
 
 		if (player_->GetCenterPosition().x >= player_->GetMoveRengeMax()) {
@@ -113,6 +112,8 @@ void TutorialScene::Update()
 
 	//カメラの更新
 	camera_->Update();
+
+	ParticleManager::GetInstance()->Update(mainCamera_);
 
 #ifdef _DEBUG
 
@@ -230,6 +231,8 @@ void TutorialScene::Draw()
 		//plane->object_->Draw();
 	}
 
+	ParticleManager::GetInstance()->Draw();
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
@@ -237,7 +240,6 @@ void TutorialScene::Draw()
 
 	fade_->Draw();
 
-	//ParticleManager::GetInstance()->Draw();
 }
 
 void TutorialScene::CreateLevel()
@@ -253,7 +255,6 @@ void TutorialScene::CreateLevel()
 			enemy->Initialize(modelEnemy01_.get(), objectData.transform);
 			enemy->SetHPGaugeModel(modelHPGauge_.get(), modelHPGaugeFrame_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
-			enemy->SetHitSE3Data(&HitSE3_);
 		}
 		else if (objectData.fileName.find("Plane") != std::string::npos) {
 			planes_.emplace_back();

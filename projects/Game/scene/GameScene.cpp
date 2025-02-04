@@ -387,6 +387,7 @@ void GameScene::AddPlayerBullet(const Vector3& velocity)
 		return;
 	}
 	PlayerBullet* newBullet = new PlayerBullet();
+	newBullet->SetRadius(0.3f);
 	Vector3 position = player_->GetCenterPosition();
 	if (player_->GetLRDirection() == Collider::LRDirection::kRight) {
 		newBullet->Initialize(modelPlayerBullet_.get(), {position.x + 0.5f, position.y, position.z}, velocity);
@@ -429,7 +430,6 @@ void GameScene::CreateLevel()
 			enemy->Initialize(modelEnemy01_.get(), objectData.transform);
 			enemy->SetHPGaugeModel(modelHPGauge_.get(), modelHPGaugeFrame_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
-			enemy->SetHitSE3Data(&HitSE3_);
 		}
 		else if (objectData.fileName == "Enemy02") {
 			enemies_.emplace_back();
@@ -439,7 +439,6 @@ void GameScene::CreateLevel()
 			enemy->SetHPGaugeModel(modelHPGauge_.get(), modelHPGaugeFrame_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
 			enemy->SetGameScene(this);
-			enemy->SetHitSE3Data(&HitSE3_);
 
 		}
 		else if (objectData.fileName == "Enemy03") {
@@ -449,7 +448,6 @@ void GameScene::CreateLevel()
 			enemy->Initialize(modelEnemy03_.get(), objectData.transform);
 			enemy->SetHPGaugeModel(modelHPGauge_.get(), modelHPGaugeFrame_.get());
 			enemy->SetDarkRed(textureHandleDarkRed_);
-			enemy->SetHitSE3Data(&HitSE3_);
 		}
 		/*
 		//ファイルから登録済みモデルを検索

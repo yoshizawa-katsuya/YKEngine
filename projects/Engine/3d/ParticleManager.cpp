@@ -93,11 +93,13 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 		}
 
 	}
-
+#ifdef _DEBUG
 	ImGui::Begin("ParticleManager");
 	ImGui::Checkbox("useBillboard", &useBillboard_);
 	ImGui::Checkbox("useAccelerationField", &useAccelerationField_);
 	ImGui::End();
+#endif // _DEBUG
+
 }
 
 void ParticleManager::Draw()
