@@ -502,7 +502,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		break;
 	case BlendMode::kBlendModeAddParticle:
 		//Depthの機能を有効化する
-		depthStencilDesc.DepthEnable = true;
+		depthStencilDesc.DepthEnable = false;
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		break;
 
