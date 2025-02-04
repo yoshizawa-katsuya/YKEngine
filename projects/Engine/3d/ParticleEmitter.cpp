@@ -58,6 +58,13 @@ void ParticleEmitter::Emit(const Vector4& color)
 
 }
 
+void ParticleEmitter::Emit(const Vector4& color, uint32_t count)
+{
+
+	ParticleManager::GetInstance()->Emit(name_, transform_, count, isRandomColor_, color, randTranslateMin_, randTranslateMax_);	//発生処理
+
+}
+
 void ParticleEmitter::SetFrequency(float frequency)
 {
 

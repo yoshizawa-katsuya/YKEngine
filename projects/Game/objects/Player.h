@@ -8,6 +8,7 @@
 #include "Collider.h"
 #include "ContactRecord.h"
 #include "Audio.h"
+#include "ParticleEmitter.h"
 class GameScene;
 class Camera;
 class MapChipField;
@@ -35,7 +36,7 @@ public:
 	void HammerInitialize(BaseModel* model);
 
 	//攻撃が敵に当たった時の処理
-	void AttackHit(BaseEnemy* enemy);
+	void AttackHit(BaseEnemy* enemy, ParticleEmitter* emitter);
 
 	//void Draw(Camera* camera) override;
 

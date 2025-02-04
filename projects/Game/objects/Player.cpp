@@ -151,7 +151,7 @@ void Player::HammerInitialize(BaseModel* model)
 	hammer_.worldTransform_.parent_ = &worldTransform_;
 }
 
-void Player::AttackHit(BaseEnemy* enemy)
+void Player::AttackHit(BaseEnemy* enemy, ParticleEmitter* emitter)
 {
 	if (workAttack_.contactRecord_.HistoryCheck(enemy->GetSerialNumber())) {
 		return;
@@ -163,6 +163,8 @@ void Player::AttackHit(BaseEnemy* enemy)
 	isSE2Play_ = true;
 
 	enemy->TakeHammer(workAttack_.attackPower_);
+	emitter->SetTranslation(enemy->GetCenterPosition());
+	emitter->Emit({1.0f, 0.4f, 0.2f, 1.0f}, 20);
 }
 
 void Player::HammerUpdate()

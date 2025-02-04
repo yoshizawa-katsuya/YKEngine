@@ -151,5 +151,6 @@ protected:
 	std::unique_ptr<ParticleEmitter> emitter_;
 	//std::unique_ptr<AccelerationField> field_;
 	Vector4 blue_ = {0.5f, 0.5f, 1.0f, 1.0f};
-	
+	Vector4 red_ = { 1.0f, 0.1f, 0.2f, 1.0f };
+
 };

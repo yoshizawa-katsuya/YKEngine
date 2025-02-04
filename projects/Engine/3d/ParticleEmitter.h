@@ -17,6 +17,8 @@ public:
 
 	void Emit(const Vector4& color);
 
+	void Emit(const Vector4& color, uint32_t count);
+
 	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
 
 	void SetTranslation(const Vector3& translation) { transform_.translation = translation; }

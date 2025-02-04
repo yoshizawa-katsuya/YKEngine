@@ -570,8 +570,10 @@ void GameScene::CheackPlayerAttackCollision()
 		if (IsCollision(playerAttackCollider, { enemy->Get2DCenterPosition(), enemy->GetRadius() })) {
 			if (enemy->isHavingBomb()) {
 				isSE3 = true;
+				emitter_->SetTranslation(enemy->GetCenterPosition());
+				emitter_->Emit(red_, 20);
 			}
-			player_->AttackHit(enemy.get());
+			player_->AttackHit(enemy.get(), emitter_.get());
 		}
 	}
 
