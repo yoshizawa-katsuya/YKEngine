@@ -27,7 +27,7 @@ private:
 	Input* input_;
 
 	//stone
-	std::unique_ptr<Rigid3dObject> stone_;
+	std::unique_ptr<Rigid3dObject> object_;
 	WorldTransform worldTransform_;
 	Vector3 velocity_;
 	bool isDragging_ = false;
