@@ -24,15 +24,13 @@ void Stone::Update()
 		float distance = static_cast<float>(sqrt(pow(clickPos.x - worldTransform_.translation_.x, 2) + pow(clickPos.z - worldTransform_.translation_.z, 2)));
 
 		if (distance < 1.0f) {
-			isDragging_ = true;
 			dragStartPos_ = mousePos;
 		}
 	}
-	if (isDragging_ && input_->PushMouseLeft()) {
+	if (input_->HoldMouseLeft()) {
 		dragCurrentPos_ = input_->GetMousePosition();
 	}
-	if (isDragging_ && !input_->PushMouseLeft() && !input_->TrigerMouseLeft()) {
-		isDragging_ = false;
+	if (input_->ReleaseMouseLeft()) {
 		Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x  , dragStartPos_.y - dragCurrentPos_.y };
 
 		float length = sqrt(dragVector.x * dragVector.x + dragVector.y * dragVector.y);
