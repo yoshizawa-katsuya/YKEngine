@@ -57,6 +57,7 @@ private:
 
 	//壁に接触している場合の処理
 	void WallCollisionDepth();
+	void WallCollisionWidth();
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
