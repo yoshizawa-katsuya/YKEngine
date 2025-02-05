@@ -22,6 +22,7 @@
 #include "Rigid3dObject.h"
 #include "Stone.h"
 
+
 class GameScene : public BaseScene
 {
 public:
@@ -38,7 +39,7 @@ public:
 
 	void GenerateObjects();
 
-	
+	void ResetStage();
 private:
 
 	//デバイス
@@ -53,7 +54,6 @@ private:
 	ModelPlatform* modelPlatform_;
 
 	Camera* mainCamera_ = nullptr;
-
 
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;
@@ -79,9 +79,7 @@ private:
 	std::unique_ptr<BaseModel> modelstar_;
 	std::unique_ptr<BaseModel> modelhole_;
 	std::unique_ptr<BaseModel> modelice_;
-	//
 	
-
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
 
@@ -115,7 +113,6 @@ private:
 	std::unique_ptr<AccelerationField> field_;
 	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	*/
-
 	//setsumei
 	std::vector<uint32_t> setsumeies_;
 	std::vector<std::unique_ptr<Sprite>> setsumeiSprites_;

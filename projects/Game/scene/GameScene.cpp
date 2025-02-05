@@ -10,6 +10,7 @@
 #include <numbers>
 #include "Collision.h"
 #include <algorithm>
+#include "Vector.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -124,10 +125,6 @@ void GameScene::Initialize() {
 	
 	GenerateObjects();
 
-
-	
-
-	
 	//setsumei
 	std::vector<std::string> setsumeiPaths = {
 		"./resources/setsumei/setsumei.png",    //0
@@ -166,8 +163,6 @@ void GameScene::Initialize() {
 	setsumeiBacksp_->Initialize(setsumeiBack_);
 	setsumeiBacksp_->SetPosition({ 0.0f, 0.0f });
 
-	
-
 	//UI
 	stoneUI_ = TextureManager::GetInstance()->Load("./resources/UI/stoneUI.png");
 	stoneUIsp_ = std::make_unique<Sprite>();
@@ -181,10 +176,7 @@ void GameScene::Initialize() {
 	starUIsp_->SetPosition({ 8.0f, 78.0f });
 	starUIsp_->SetSize({ 60.0f,60.0f });
 
-
 	//menu
-
-	
 
 	menuUI1_ = TextureManager::GetInstance()->Load("./resources/menu/menuUI1.png");
 	menuUIsp1_ = std::make_unique<Sprite>();
@@ -199,11 +191,7 @@ void GameScene::Initialize() {
 	menuUI3_ = TextureManager::GetInstance()->Load("./resources/menu/menuUI3.png");
 	menuUIsp3_ = std::make_unique<Sprite>();
 	menuUIsp3_->Initialize(menuUI3_);
-	menuUIsp3_->SetPosition({ 887.0f, 110.0f });
-
-	
-
-	
+	menuUIsp3_->SetPosition({ 887.0f, 110.0f });	
 
 	std::vector<std::string> menuPaths = {
 		"./resources/menu/menu0.png",
@@ -230,23 +218,24 @@ void GameScene::Initialize() {
 		}
 		menuSpes_.push_back(std::move(sprite));
 	}
-
+	
 	for (size_t i = 0; i < menus_.size(); ++i) {
 		menuSpes_[i]->SetVisible(false);
 	}
 }
 
 void GameScene::Update() {
-	
-	
 
 	//カメラの更新
 	camera_->Update();
 
-	
-
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
+	}
+
+	Vector2 mousePos = input_->GetMousePosition();
+	if (input_->PushMouseLeft() && IsMouseOverSprite(mousePos, menuUIsp1_)) { // menuUIsp1_ が replay スプライト
+		ResetStage(); // ステージをリセットする関数を呼び出す
 	}
 
 	if (setsumei) {
@@ -332,8 +321,6 @@ void GameScene::Update() {
 			
 		}
 
-
-	
 		if (IsMouseOverSprite(mousePos, setsumeiSprites_[3])) {
 			setsumeiSprites_[3]->SetVisible(false);
 			setsumeiSprites_[4]->SetVisible(true);
@@ -375,8 +362,6 @@ void GameScene::Update() {
 	}
 
 	
-
-
 	if (!setsumei) {
 		//stone move
 		Vector2 mousePos = input_->GetMousePosition();
@@ -446,7 +431,7 @@ void GameScene::Update() {
 			menuSpes_[6]->SetVisible(false);
 		}
 	}
-
+	
 	//stone move
 	stone_->Update();
 	
@@ -608,8 +593,6 @@ void GameScene::Draw() {
 		}
 	}
 	
-
-
 }
 
 void GameScene::Finalize()
@@ -661,8 +644,6 @@ void GameScene::GenerateObjects()
 
 }
 
-
-
 void GameScene::CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale)
 {
 	object = std::make_unique<Rigid3dObject>(); 
@@ -706,4 +687,8 @@ bool GameScene::IsMouseOverSprite(const Vector2& mousePos, const std::unique_ptr
 
 	return (mousePos.x >= left && mousePos.x <= right &&
 		mousePos.y >= bottom && mousePos.y <= top);
+}
+void GameScene::ResetStage() {
+	mapChipField_->ResetMapChipDate();
+	GenerateObjects();
 }
