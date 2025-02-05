@@ -41,7 +41,6 @@ void TitleScene::Initialize()
 	startSprite2_->SetPosition({ 0.0f, 0.0f });
 	
 	
-
 }
 
 void TitleScene::Update()
@@ -60,10 +59,11 @@ void TitleScene::Update()
 		startSprite1_->SetVisible(true);
 	}
 	if (startSprite2_->IsVisible()) {
-		if (input_->TrigerMouseLeft()) {
+		if (input_->PushMouseLeft() && !input_->TrigerMouseLeft()) {
 			//シーン切り替え依頼
 			sceneManager_->ChengeScene("SelectScene");
 		}
+			
 
 
 	}

@@ -169,15 +169,59 @@ void GameScene::Initialize() {
 	starUIsp_->SetPosition({ 8.0f, 78.0f });
 	starUIsp_->SetSize({ 60.0f,60.0f });
 
-	menuUI1_ = TextureManager::GetInstance()->Load("./resources/UI/menuUI1.png");
+
+	//menu
+
+	
+
+	menuUI1_ = TextureManager::GetInstance()->Load("./resources/menu/menuUI1.png");
 	menuUIsp1_ = std::make_unique<Sprite>();
 	menuUIsp1_->Initialize(menuUI1_);
 	menuUIsp1_->SetPosition({ 888.0f, 17.0f });
 
-	menuUI2_ = TextureManager::GetInstance()->Load("./resources/UI/menuUI2.png");
+	menuUI2_ = TextureManager::GetInstance()->Load("./resources/menu/menuUI2.png");
 	menuUIsp2_ = std::make_unique<Sprite>();
 	menuUIsp2_->Initialize(menuUI2_);
 	menuUIsp2_->SetPosition({ 885.0f, 12.0f });
+
+	menuUI3_ = TextureManager::GetInstance()->Load("./resources/menu/menuUI3.png");
+	menuUIsp3_ = std::make_unique<Sprite>();
+	menuUIsp3_->Initialize(menuUI3_);
+	menuUIsp3_->SetPosition({ 887.0f, 110.0f });
+
+	
+
+	
+
+	std::vector<std::string> menuPaths = {
+		"./resources/menu/menu0.png",
+		"./resources/menu/menuRe.png",
+		"./resources/menu/menuRe1.png",
+		"./resources/menu/menuSe.png",
+		"./resources/menu/menuSe1.png",
+		"./resources/menu/menuTi.png",
+		"./resources/menu/menuTi1.png"
+		
+	};
+	for (const auto& path : menuPaths) {
+		menus_.push_back(TextureManager::GetInstance()->Load(path));
+	}
+	std::vector<Vector2> menuPositions = {
+		{338.0f,100.0f}, {395.0f,150.0f}, {393.0f,148.0f}, {395.0f,234.0f}, 
+		{ 393.0f,232.0f }, {395.0f,316.0f}, {393.0f,314.0f}
+	};
+	for (size_t i = 0; i < menus_.size(); ++i) {
+		auto sprite = std::make_unique<Sprite>();
+		sprite->Initialize(menus_[i]);
+		if (i < menuPositions.size()) {
+			sprite->SetPosition(menuPositions[i]);
+		}
+		menuSpes_.push_back(std::move(sprite));
+	}
+
+	for (size_t i = 0; i < menus_.size(); ++i) {
+		menuSpes_[i]->SetVisible(false);
+	}
 }
 
 void GameScene::Update() {
@@ -195,7 +239,7 @@ void GameScene::Update() {
 
 	if (setsumei) {
 		Vector2 mousePos = input_->GetMousePosition();
-
+		menuUIsp3_->SetVisible(false);
 		if (setsumeiPage1) {
 			
 			Vector2 mousePos = input_->GetMousePosition();
@@ -219,7 +263,7 @@ void GameScene::Update() {
 
 			if (isDragging_ && input_->PushMouseLeft()) {
 				dragCurrentPos_ = input_->GetMousePosition();
-				Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x, dragStartPos_.y - dragCurrentPos_.y }; // 반대 방향
+				Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x, dragStartPos_.y - dragCurrentPos_.y };
 
 
 				velocity.x += dragVector.x * speedFactor;
@@ -318,6 +362,8 @@ void GameScene::Update() {
 
 	}
 
+	
+
 
 	if (!setsumei) {
 		//stone move
@@ -360,18 +406,71 @@ void GameScene::Update() {
 
 
 		if (!isDragging_) {
+			
 			if (IsMouseOverSprite(mousePos, menuUIsp1_)) {
 				menuUIsp1_->SetVisible(false);
 				menuUIsp2_->SetVisible(true);
+				menuUIsp3_->SetVisible(true);
+				if (input_->PushMouseLeft()) {
+					isMenu = true;
+				}
 
 			} else {
 				menuUIsp1_->SetVisible(true);
 				menuUIsp2_->SetVisible(false);
+				menuUIsp3_->SetVisible(false);
 			}
 
 		}
 
 	}
+
+	if (isMenu) {
+		Vector2 mousePos = input_->GetMousePosition();
+		setsumeiBacksp_->SetVisible(true);
+		menuSpes_[0]->SetVisible(true);
+		menuSpes_[1]->SetVisible(true);
+		menuSpes_[3]->SetVisible(true);
+		menuSpes_[5]->SetVisible(true);
+		if (IsMouseOverSprite(mousePos, menuSpes_[1])) {
+			menuSpes_[1]->SetVisible(false);
+			menuSpes_[2]->SetVisible(true);
+
+		} else {
+			menuSpes_[1]->SetVisible(true);
+			menuSpes_[2]->SetVisible(false);
+		}
+		if (IsMouseOverSprite(mousePos, menuSpes_[3])) {
+			menuSpes_[3]->SetVisible(false);
+			menuSpes_[4]->SetVisible(true);
+			if (input_->PushMouseLeft() && !input_->TrigerMouseLeft()) {
+				SceneManager::GetInstance()->SetSelectedTutorial(0);
+				SceneManager::GetInstance()->SetSelectedBundle(0);
+				SceneManager::GetInstance()->SetSelectedStage(0);
+				SceneManager::GetInstance()->SetSelectClick(true);
+				sceneManager_->ChengeScene("SelectScene");
+			}
+		} else {
+			menuSpes_[3]->SetVisible(true);
+			menuSpes_[4]->SetVisible(false);
+		}
+		if (IsMouseOverSprite(mousePos, menuSpes_[5])) {
+			menuSpes_[5]->SetVisible(false);
+			menuSpes_[6]->SetVisible(true);
+			if (input_->PushMouseLeft()) {
+				sceneManager_->ChengeScene("TitleScene");
+				SceneManager::GetInstance()->SetSelectedTutorial(0);
+				SceneManager::GetInstance()->SetSelectedBundle(0);
+				SceneManager::GetInstance()->SetSelectedStage(0);
+				SceneManager::GetInstance()->SetSelectClick(true);
+			}
+		} else {
+			menuSpes_[5]->SetVisible(true);
+			menuSpes_[6]->SetVisible(false);
+		}
+	}
+
+
 		WorldTransform worldTransform;
 		worldTransform.Initialize();
 		worldTransform.translation_ = stonePosition_;
@@ -466,7 +565,7 @@ void GameScene::Update() {
 			ImGui::Text("dragStartPos＿: %f %f", dragStartPos_.x, dragStartPos_.y);
 			ImGui::Text("dragCurrentPos＿: %f %f", dragCurrentPos_.x, dragCurrentPos_.y);
 			ImGui::DragFloat2("stoneUIsp_[3]", &stoneUIsp_->GetPosition().x, 0.1f);
-			ImGui::DragFloat2("smenuUIsp2_s", &menuUIsp1_->GetPosition().x, 0.1f);
+			ImGui::DragFloat2("smenuUIsp2_s", &menuSpes_[1]->GetPosition().x, 1.0f);
 			
 
 			
@@ -524,8 +623,16 @@ void GameScene::Draw() {
 	if (menuUIsp2_->IsVisible()) {
 		menuUIsp2_->Draw();
 	}
+	if (menuUIsp3_->IsVisible()) {
+		menuUIsp3_->Draw();
+	}
 	if (setsumeiBacksp_->IsVisible()) {
 		setsumeiBacksp_->Draw();
+	}
+	for (std::unique_ptr<Sprite>& setsumeiSprite : menuSpes_) {
+		if (setsumeiSprite->IsVisible()) {
+			setsumeiSprite->Draw();
+		}
 	}
 
 	for (std::unique_ptr<Sprite>& setsumeiSprite : setsumeiSprites_) {

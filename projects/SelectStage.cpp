@@ -124,18 +124,22 @@ void SelectStage::Update()
 		reButtonSprite2_->SetVisible(false);
 		reButtonSprite1_->SetVisible(true);
 	}
-	if (reButtonInside && input_->TrigerMouseLeft()) {
+	if (reButtonInside && input_->TrigerMouseLeft() && input_->TrigerMouseLeft()) {
 		sceneManager_->ChengeScene("SelectScene");
 	}
 	for (size_t i = 0; i < 10; ++i) {
-		if (input_->PushMouseLeft()&&IsMouseOverSprite(input_->GetMousePosition(), stageSprites_[i])) {
+		if (input_->PushMouseLeft()&&IsMouseOverSprite(input_->GetMousePosition(), stageSprites_[i]) && input_->TrigerMouseLeft()) {
 			set = true;
 			selectedStage_ = static_cast<uint32_t>(i) + 1;
 			SceneManager::GetInstance()->SetSelectedStage(selectedStage_);
-			sceneManager_->ChengeScene("GameScene");
+			SceneManager::GetInstance()->SetSelectedTutorial(0);
 		}
 		
 		
+	}
+
+	if (set) {
+		sceneManager_->ChengeScene("GameScene");
 	}
 
 #ifdef _DEBUG
