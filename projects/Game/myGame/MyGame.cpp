@@ -13,6 +13,8 @@ void MyGame::Initialize()
 	//シーンマネージャに最初のシーンをセット
 	sceneManager_->ChengeScene("TitleScene");
 
+	bgm1_ = audio_->LoopSoundLoadWave("./resources/ClearCubes.wav");
+	audio_->SoundLoopPlayWave(bgm1_, 1.0f);
 	
 }
 

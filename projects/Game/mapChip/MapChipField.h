@@ -47,6 +47,10 @@ public:
 
 	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; }
 
+	void SetMapChipType(uint32_t xIndex, uint32_t zIndex, MapChipType type);
+
+	MapChipType GetMapChipTypeByPosition(const Vector3& position);
+
 private:
 
 	struct MapChipData {

@@ -38,9 +38,9 @@ void GameScene::Initialize() {
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
-	camera_->SetRotateX(0.741f);
+	camera_->SetRotateX(1.36f);
 	camera_->SetRotateZ(0.0f);
-	camera_->SetTranslate({ 0.0f, 31.31f, -33.19f });
+	camera_->SetTranslate({ 0.0f, 45.8f, -8.4f });
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -96,7 +96,11 @@ void GameScene::Initialize() {
 	backgroundSprite_->Initialize(background_);
 	//backgroundSprite_->SetPosition({ 0.0f,0.0f });
 
-
+	//claer
+	clear_ = TextureManager::GetInstance()->Load("./resources/scene/clear.png");
+	clearSprite_ = std::make_unique<Sprite>();
+	clearSprite_->Initialize(clear_);
+	clearSprite_->SetVisible(false);
 	SceneData data = SceneManager::GetInstance()->GetSceneData();
 
 	selectedTutorial_ = data.selectedTutorial;
@@ -212,15 +216,19 @@ void GameScene::Initialize() {
 		"./resources/menu/menuSe.png",
 		"./resources/menu/menuSe1.png",
 		"./resources/menu/menuTi.png",
-		"./resources/menu/menuTi1.png"
+		"./resources/menu/menuTi1.png",
+		"./resources/menu/menuOp.png",
+		"./resources/menu/menuOp1.png",
+		"./resources/menu/menuEx.png",
+		"./resources/menu/menuEx1.png"
 		
 	};
 	for (const auto& path : menuPaths) {
 		menus_.push_back(TextureManager::GetInstance()->Load(path));
 	}
 	std::vector<Vector2> menuPositions = {
-		{338.0f,100.0f}, {395.0f,150.0f}, {393.0f,148.0f}, {395.0f,234.0f}, 
-		{ 393.0f,232.0f }, {395.0f,316.0f}, {393.0f,314.0f}
+		{338.0f,90.0f}, {395.0f,135.0f}, {393.0f,133.0f}, {395.0f,209.0f}, { 393.0f,207.0f },
+		{395.0f,283.0f}, {393.0f,281.0f},{395.0f,357.0f}, {393.0f,355.0f},{395.0f,431.0f}, {393.0f,429.0f}
 	};
 	for (size_t i = 0; i < menus_.size(); ++i) {
 		auto sprite = std::make_unique<Sprite>();
@@ -234,6 +242,15 @@ void GameScene::Initialize() {
 	for (size_t i = 0; i < menus_.size(); ++i) {
 		menuSpes_[i]->SetVisible(false);
 	}
+
+	
+	clearCheak_ = false;
+	setsumei = true;
+	setsumeiPage1 = true;
+	setsumeiPage2 = false;
+	isDragging_ = false;
+	isMenu = false;
+
 }
 
 void GameScene::Update() {
@@ -252,6 +269,7 @@ void GameScene::Update() {
 	if (setsumei) {
 		Vector2 mousePos = input_->GetMousePosition();
 		menuUIsp3_->SetVisible(false);
+		menuSpes_[9]->SetVisible(false);
 		if (setsumeiPage1) {
 			
 			Vector2 mousePos = input_->GetMousePosition();
@@ -403,16 +421,21 @@ void GameScene::Update() {
 	}
 
 	if (isMenu) {
+		
 		Vector2 mousePos = input_->GetMousePosition();
 		setsumeiBacksp_->SetVisible(true);
 		menuSpes_[0]->SetVisible(true);
 		menuSpes_[1]->SetVisible(true);
 		menuSpes_[3]->SetVisible(true);
 		menuSpes_[5]->SetVisible(true);
+		menuSpes_[7]->SetVisible(true);
+		menuSpes_[9]->SetVisible(true);
 		if (IsMouseOverSprite(mousePos, menuSpes_[1])) {
 			menuSpes_[1]->SetVisible(false);
 			menuSpes_[2]->SetVisible(true);
-
+			if (input_->PushMouseLeft() && !input_->TrigerMouseLeft()) {
+				sceneManager_->ChengeScene("GameScene");
+			}
 		} else {
 			menuSpes_[1]->SetVisible(true);
 			menuSpes_[2]->SetVisible(false);
@@ -445,11 +468,146 @@ void GameScene::Update() {
 			menuSpes_[5]->SetVisible(true);
 			menuSpes_[6]->SetVisible(false);
 		}
+		if (IsMouseOverSprite(mousePos, menuSpes_[7])) {
+			menuSpes_[7]->SetVisible(false);
+			menuSpes_[8]->SetVisible(true);
+			if (input_->PushMouseLeft()) {
+				isMenu = false;
+				setsumeiBacksp_->SetVisible(true);
+				menuSpes_[0]->SetVisible(false);
+				menuSpes_[1]->SetVisible(false);
+				menuSpes_[3]->SetVisible(false);
+				menuSpes_[5]->SetVisible(false);
+				menuSpes_[7]->SetVisible(false);
+				menuSpes_[8]->SetVisible(false);
+				menuSpes_[9]->SetVisible(false); 
+				menuSpes_[10]->SetVisible(false);
+				setsumeiSprites_[0]->SetVisible(true);
+				setsumeiSprites_[1]->SetVisible(true);
+				setsumeiSprites_[2]->SetVisible(false);
+				setsumei = true;
+				setsumeiPage1 = true;
+				setsumeiPage2 = false;
+			}
+
+		} else {
+			menuSpes_[7]->SetVisible(true);
+			menuSpes_[8]->SetVisible(false);
+		}
+		if (IsMouseOverSprite(mousePos, menuSpes_[9])) {
+			menuSpes_[9]->SetVisible(false);
+			menuSpes_[10]->SetVisible(true);
+			if (input_->PushMouseLeft()) {
+				isMenu = false;
+				setsumeiBacksp_->SetVisible(false);
+				menuSpes_[0]->SetVisible(false);
+				menuSpes_[1]->SetVisible(false);
+				menuSpes_[3]->SetVisible(false);
+				menuSpes_[5]->SetVisible(false);
+				menuSpes_[7]->SetVisible(false);
+				menuSpes_[9]->SetVisible(false);
+				menuSpes_[10]->SetVisible(false);
+			}
+				
+		} else {
+			menuSpes_[9]->SetVisible(true);
+			menuSpes_[10]->SetVisible(false);
+		}
 	}
 
+	uint32_t maxStones = GetMaxStones();
 	//stone move
-	stone_->Update();
+	if (input_->TriggerKey(DIK_SPACE) && stones_.size() < maxStones) {
+		for (uint32_t zIndex = 0; zIndex < mapChipField_->GetNumBlockVertical(); ++zIndex) {
+			for (uint32_t xIndex = 0; xIndex < mapChipField_->GetNumBlockHorizontal(); ++xIndex) {
+				if (mapChipField_->GetMapChipTypeByIndex(xIndex, zIndex) == MapChipType::stone) {
+					Vector3 stonePos = mapChipField_->GetMapChipPositionByIndex(xIndex, zIndex);
+
+					bool alreadyExists = false;
+					for (const auto& stone : stones_) {
+						if (stone->GetPosition().x == stonePos.x &&
+							stone->GetPosition().y == stonePos.y &&
+							stone->GetPosition().z == stonePos.z) {
+							alreadyExists = true;
+							break;
+						}
+					}
+
+					if (!alreadyExists) {
+						auto newStone = std::make_unique<Stone>();
+						newStone->Initialize(modelstone_.get(), stonePos, mapChipField_.get());
+						stones_.push_back(std::move(newStone));
+
+						mapChipField_->SetMapChipType(xIndex, zIndex, MapChipType::stone);
+					}
+					return;
+				}
+			}
+		}
+	}
+
 	
+	for (auto& stone : stones_) {
+		stone->Update();
+	}
+
+	
+	stones_.erase(std::remove_if(stones_.begin(), stones_.end(),
+		[this](const std::unique_ptr<Stone>& stone) {
+			Vector3 pos = stone->GetPosition();
+			MapChipField::IndexSet index = mapChipField_->GetMapChipIndexSetByPosition(pos);
+			MapChipType chipType = mapChipField_->GetMapChipTypeByIndex(index.xIndex, index.zIndex);
+
+			if (index.xIndex >= mapChipField_->GetNumBlockHorizontal() ||
+				index.zIndex >= mapChipField_->GetNumBlockVertical()) {
+				return true;
+			}
+
+			if (IsStoneStopped(*stone) && chipType == MapChipType::hole) {
+				mapChipField_->SetMapChipType(index.xIndex, index.zIndex, MapChipType::kFloor); // 바닥으로 변경
+				return true;
+			}
+
+			return false;
+		}),
+		stones_.end());
+	
+	std::vector<int> starCounts;
+	bool allPairsValid = true;
+	int requiredStars = 0;
+
+	if (selectedTutorial_ == 1) {
+		requiredStars = 1;
+	} else if (selectedBundle_ == 1 || selectedBundle_ == 2) {
+		requiredStars = 1;
+	} else if (selectedBundle_ == 3 || selectedBundle_ == 4) {
+		requiredStars = 2;
+	} else if (selectedBundle_ == 5 || selectedBundle_ == 6 || selectedBundle_ == 7) {
+		requiredStars = 3;
+	}
+
+	if (!stones_.empty()) {
+		for (size_t i = 0; i < stones_.size(); ++i) {
+			for (size_t j = i + 1; j < stones_.size(); ++j) {
+				if (IsStoneStopped(*stones_[i]) && IsStoneStopped(*stones_[j])) {
+					int starCount = CountStarsBetween(stones_[i]->GetPosition(), stones_[j]->GetPosition());
+					starCounts.push_back(starCount);
+
+					if (starCount < requiredStars) {
+						allPairsValid = false;
+					}
+				}
+			}
+		}
+	}
+
+
+	clearCheak_ = (allPairsValid && !starCounts.empty());
+
+	if (clearCheak_) {
+	clearSprite_->SetVisible(true);
+	}
+
 	//player_->Update();
 
 
@@ -531,12 +689,21 @@ void GameScene::Update() {
 			ImGui::Text("Selected Tutorial: %u", selectedTutorial_);
 			ImGui::Text("Selected Bundle: %u", selectedBundle_);
 			ImGui::Text("Selected Stage: %u", selectedStage_);
-			//ImGui::Text("stonePosition_x: %f", stone_->GetPosition().x);
-			//ImGui::Text("stonePosition_z: %f", stone_->GetPosition().z);
-			//ImGui::Text("dragStartPos＿: %f %f", stone_->GetDragStartPos().x, stone_->GetDragStartPos().y);
-			//ImGui::Text("dragCurrentPos＿: %f %f", stone_->GetDragCurrentPos().x, stone_->GetDragCurrentPos().y);
-			
-		ImGui::End();
+			ImGui::Text("Selected setsumei: %u", setsumei);
+
+			for (size_t i = 0; i < stones_.size(); ++i) {
+				Vector3 pos = stones_[i]->GetPosition();
+				ImGui::Text("Stone[%zu] Pos: (%.2f, %.2f, %.2f)", i, pos.x, pos.y, pos.z);
+			}
+			if (!starCounts.empty()) {
+				ImGui::Separator();
+				ImGui::Text("Star Count Between Stones:");
+				int index = 0;
+				for (int count : starCounts) {
+					ImGui::Text("Pair[%d]: Stars = %d", index++, count);
+				}
+			}
+			ImGui::End();
 
 #endif // _DEBUG
 	
@@ -567,7 +734,9 @@ void GameScene::Draw() {
 		}
 	}
 
-	stone_->Draw(mainCamera_);
+	for (const auto& stone : stones_) {
+		stone->Draw(mainCamera_);
+	}
 
 	//instancingObject描画前処理
 	modelPlatform_->InstancingPreDraw();
@@ -596,12 +765,14 @@ void GameScene::Draw() {
 	if (setsumeiBacksp_->IsVisible()) {
 		setsumeiBacksp_->Draw();
 	}
+	if (clearSprite_->IsVisible()) {
+		clearSprite_->Draw();
+	}
 	for (std::unique_ptr<Sprite>& setsumeiSprite : menuSpes_) {
 		if (setsumeiSprite->IsVisible()) {
 			setsumeiSprite->Draw();
 		}
 	}
-
 	for (std::unique_ptr<Sprite>& setsumeiSprite : setsumeiSprites_) {
 		if (setsumeiSprite->IsVisible()) { 
 			setsumeiSprite->Draw();
@@ -622,6 +793,11 @@ void GameScene::GenerateObjects()
 
 	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVertical();
 	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	uint32_t maxStones = GetMaxStones();
+	uint32_t stoneCount = 0;
+
+	stones_.clear();
 
 	//要素数を変更する
 	boxes_.resize(numBlockVirtical);
@@ -645,8 +821,10 @@ void GameScene::GenerateObjects()
 			} else if (mapChipType == MapChipType::kFloor) {
 				AddToInstancing(floors_.get(), position);
 			} else if (mapChipType == MapChipType::stone) {
-				stone_ = std::make_unique<Stone>();
-				stone_->Initialize(modelstone_.get(), mapChipField_->GetMapChipPositionByIndex(j, i), mapChipField_.get());
+				auto newStone = std::make_unique<Stone>();
+				newStone->Initialize(modelstone_.get(), position, mapChipField_.get());
+				stones_.push_back(std::move(newStone));
+				stoneCount++;
 			} else if (mapChipType == MapChipType::star) {
 				CreateObject(boxes_[i][j], modelstar_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::hole) {
@@ -706,4 +884,40 @@ bool GameScene::IsMouseOverSprite(const Vector2& mousePos, const std::unique_ptr
 
 	return (mousePos.x >= left && mousePos.x <= right &&
 		mousePos.y >= bottom && mousePos.y <= top);
+}
+
+uint32_t GameScene::GetMaxStones() const {
+	if (selectedTutorial_ == 1 || selectedBundle_ == 1 || selectedBundle_ == 2) {
+		return 2; 
+	} else if (selectedBundle_ == 3 || selectedBundle_ == 4) {
+		return 3;  
+	} else if (selectedBundle_ == 5 || selectedBundle_ == 6 || selectedBundle_ == 7) {
+		return 4; 
+	}
+	return 1;  
+}
+
+bool GameScene::IsStoneStopped(const Stone& stone) {
+	Vector3 velocity = stone.GetVelocity();
+	return fabs(velocity.x) < 0.01f && fabs(velocity.z) < 0.01f;
+}
+
+int GameScene::CountStarsBetween(const Vector3& pos1, const Vector3& pos2) {
+	int starCount = 0;
+
+	float stepX = (pos2.x - pos1.x) / 10.0f;  
+	float stepZ = (pos2.z - pos1.z) / 10.0f;
+
+	for (int i = 1; i <= 10; ++i) {
+		Vector3 checkPos = { pos1.x + stepX * i, 0, pos1.z + stepZ * i };
+		MapChipField::IndexSet index = mapChipField_->GetMapChipIndexSetByPosition(checkPos);
+		MapChipType chipType = mapChipField_->GetMapChipTypeByIndex(index.xIndex, index.zIndex);
+
+		
+		if (chipType == MapChipType::star) {
+			starCount++;
+		} 
+	}
+
+	return starCount;
 }

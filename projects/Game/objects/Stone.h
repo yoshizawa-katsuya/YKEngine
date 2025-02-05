@@ -17,6 +17,8 @@ public:
 
 	Vector3& GetPosition() { return worldTransform_.translation_; }
 
+	const Vector3& GetVelocity() const { return velocity_; }
+
 	Vector2& GetDragStartPos() { return dragStartPos_; }
 
 	Vector2& GetDragCurrentPos() { return dragCurrentPos_; }
@@ -72,7 +74,7 @@ private:
 	bool isDragging_ = false;
 	Vector2 dragStartPos_;
 	Vector2 dragCurrentPos_;
-	float maxSpeed_ = 0.7f;
+	float maxSpeed_ = 0.5f;
 	float friction_ = 0.98f;
 
 	//マップチップによるフィールド

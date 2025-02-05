@@ -98,12 +98,16 @@ private:
 	std::unique_ptr<InstancingObject> floors_;
 
 	//stone
-	std::unique_ptr<Stone> stone_;
+	std::vector<std::unique_ptr<Stone>> stones_;
 
 	//BackGround
 	uint32_t background_;
 	std::unique_ptr<Sprite> backgroundSprite_;
 
+	//claer
+	uint32_t clear_;
+	std::unique_ptr<Sprite> clearSprite_;
+	bool clearCheak_ = false;
 	//
 	SelectScene* selectScene_ = nullptr;
 	uint32_t selectedTutorial_ = 0;
@@ -126,8 +130,6 @@ private:
 	bool setsumei = true;
 	bool setsumeiPage1 = true;
 	bool setsumeiPage2 = false;
-	
-	
 	bool isDragging_ = false;
 	Vector2 dragStartPos_;
 	Vector2 dragCurrentPos_;
@@ -151,10 +153,19 @@ private:
 	std::unique_ptr<Sprite> menuUIsp3_;
 	bool isMenu = false;
 
+	
+	///
+
 	void CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale);
 	void AddToInstancing(InstancingObject* instancingObject, const Vector3& position);
 	Vector3 ConvertScreenToWorld(const Vector2& screenPos);
 
 	bool IsMouseOverSprite(const Vector2& mousePos, const std::unique_ptr<Sprite>& sprite);
+
+	uint32_t GetMaxStones() const;
+
+	bool IsStoneStopped(const Stone& stone);
+
+	int CountStarsBetween(const Vector3& pos1, const Vector3& pos2);
 
 };

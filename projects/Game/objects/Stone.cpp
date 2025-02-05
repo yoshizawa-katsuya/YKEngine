@@ -310,8 +310,7 @@ Vector3 Stone::CornerPosition(const Vector3& center, Corner corner)
 
 Vector3 Stone::ConvertScreenToWorld(const Vector2& screenPos)
 {
-	float worldX = (screenPos.x / 990.0f) * 34.0f - 17.0f;
-	float worldZ = (screenPos.y / 600.0f) * 30.0f - 15.0f;
-
-	return Vector3(worldX, 0.0f, -worldZ);
+	float worldX = 0.0349f * (screenPos.x - 152.0f) - 12.0f;
+	float worldZ = -0.035f * (screenPos.y - 136.0f) + 7.5f;
+	return Vector3(worldX, 0.0f, worldZ);
 }

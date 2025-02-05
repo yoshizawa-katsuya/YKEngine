@@ -111,3 +111,14 @@ MapChipField::IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3&
 	indexSet.zIndex = kNumBlockVertical - 1 - indexSet.zIndex;
 	return indexSet;
 }
+
+void MapChipField::SetMapChipType(uint32_t xIndex, uint32_t zIndex, MapChipType type) {
+	if(xIndex < kNumBlockHorizontal && zIndex < kNumBlockVertical) {
+		mapChipData_.data[zIndex][xIndex] = type;
+	}
+}
+
+MapChipType MapChipField::GetMapChipTypeByPosition(const Vector3& position) {
+	IndexSet indexSet = GetMapChipIndexSetByPosition(position);
+	return GetMapChipTypeByIndex(indexSet.xIndex, indexSet.zIndex);
+}
