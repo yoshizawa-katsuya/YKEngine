@@ -7,6 +7,7 @@ struct SceneData {
 	uint32_t selectedTutorial = 0;
 	uint32_t selectedBundle = 0;
 	uint32_t selectedStage = 0;
+	bool selectClick = true;
 };
 
 //シーン管理
@@ -40,6 +41,7 @@ public:
 	void SetSelectedTutorial(uint32_t value) { sceneData_.selectedTutorial = value; }
 	void SetSelectedBundle(uint32_t value) { sceneData_.selectedBundle = value; }
 	void SetSelectedStage(uint32_t value) { sceneData_.selectedStage = value; }
+	void SetSelectClick(bool value) { sceneData_.selectClick = value; }
 	const SceneData& GetSceneData() const { return sceneData_; }
 
 private:

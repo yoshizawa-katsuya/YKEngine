@@ -78,121 +78,171 @@ void SelectScene::Initialize()
 		difficultySprites_.push_back(std::move(sprite));
 	}
 
+	std::vector<std::string> loadingPaths = {
+		"./resources/loading.png",
+		"./resources/loadingText.png",
+		"./resources/loading.png",
+		"./resources/UI/stoneUI.png"
+	};
+	for (const auto& path : loadingPaths) {
+		loadings_.push_back(TextureManager::GetInstance()->Load(path));
+	}
+	std::vector<Vector2> loadingPositions = {
+		{0.0f,0.0f}, {500.0f,260.0f}, {-945.0f,0.0f},{0.0f,255.0f}
+	};
+	for (size_t i = 0; i < loadings_.size(); ++i) {
+		auto sprite = std::make_unique<Sprite>();
+		sprite->Initialize(loadings_[i]);
+		if (i < loadingPositions.size()) {
+			sprite->SetPosition(loadingPositions[i]);
+		}
+		loadingSprites_.push_back(std::move(sprite));
+	}
+	
 
+	SceneData data = SceneManager::GetInstance()->GetSceneData();
+
+	selectClick1 = data.selectClick;
+
+	loading_ = true;
+	
 }
 
 void SelectScene::Update()
 {
+
 		Vector2 mousePos = input_->GetMousePosition();
-	if (selectClick1) {
-		if (input_->PushMouseLeft() && IsMouseOverSprite(mousePos, tutorialSprite_)) {
-			selectedTutorial_ = 1;
-			SceneManager::GetInstance()->SetSelectedTutorial(selectedTutorial_);
-			sceneManager_->ChengeScene("GameScene");
-		}
-	}
 
-	if (selectClick1) {
-		if (input_->TrigerMouseLeft()) {
-			Square square;
-			square.min = selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->GetPosition();
-			square.max = square.min + selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->GetSize();
-			if (IsCollision(square, input_->GetMousePosition())) {
-				selectStageNum_++;
-				if (selectStageNum_ > kMaxStageNum_) {
-					selectStageNum_ = 1;
-				}
-				uint32_t leftSelectStageNum = selectStageNum_ - 1;
-				uint32_t rightSelectStageNum = selectStageNum_ + 1;
-				if (leftSelectStageNum < 1) {
-					leftSelectStageNum = kMaxStageNum_;
-				}
-				if (rightSelectStageNum > kMaxStageNum_) {
-					rightSelectStageNum = 1;
-				}
 
-				selectSprites_[static_cast<uint32_t>(positionType::kLeftSide)]->SetTexture(selectTextureHandles_[leftSelectStageNum - 1]);
-				selectSprites_[static_cast<uint32_t>(positionType::kCenter)]->SetTexture(selectTextureHandles_[selectStageNum_ - 1]);
-				selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->SetTexture(selectTextureHandles_[rightSelectStageNum - 1]);
+		if (loading_) {
+			
+			static float moveSpeed = 3.0f;
 
-			} else {
-				square.min = selectSprites_[static_cast<uint32_t>(positionType::kLeftSide)]->GetPosition();
-				square.max = square.min + selectSprites_[static_cast<uint32_t>(positionType::kLeftSide)]->GetSize();
-				if (IsCollision(square, input_->GetMousePosition())) {
-					selectStageNum_--;
-					if (selectStageNum_ < 1) {
-						selectStageNum_ = kMaxStageNum_;
-					}
-					uint32_t leftSelectStageNum = selectStageNum_ - 1;
-					uint32_t rightSelectStageNum = selectStageNum_ + 1;
-					if (leftSelectStageNum < 1) {
-						leftSelectStageNum = kMaxStageNum_;
-					}
-					if (rightSelectStageNum > kMaxStageNum_) {
-						rightSelectStageNum = 1;
-					}
+			Vector2 pos2 = loadingSprites_[2]->GetPosition();
+			pos2.x += moveSpeed;
+			loadingSprites_[2]->SetPosition(pos2);
+			Vector2 pos3 = loadingSprites_[3]->GetPosition();
+			pos3.x += moveSpeed;
+			loadingSprites_[3]->SetPosition(pos3);
 
-					selectSprites_[static_cast<uint32_t>(positionType::kLeftSide)]->SetTexture(selectTextureHandles_[leftSelectStageNum - 1]);
-					selectSprites_[static_cast<uint32_t>(positionType::kCenter)]->SetTexture(selectTextureHandles_[selectStageNum_ - 1]);
-					selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->SetTexture(selectTextureHandles_[rightSelectStageNum - 1]);
-
-				}
+			if (loadingSprites_[2]->GetPosition().x >= 0.0f) {
+				loading_ = false;
 			}
 
 		}
-		Square difficultySizeL;
-		difficultySizeL.min = { 0.0f,128.0f };
-		difficultySizeL.max = { 144.0f,391.0f };
-
-		Square difficultySizeR;
-		difficultySizeR.min = { 846.0f,128.0f };
-		difficultySizeR.max = { 990.0f,391.0f };
-
-		bool isMouseInsideL = IsCollision(difficultySizeL, input_->GetMousePosition());
-		bool isMouseInsideR = IsCollision(difficultySizeR, input_->GetMousePosition());
-
-		if (isMouseInsideL) {
-			difficultySprites_[2]->SetVisible(true);
-			difficultySprites_[1]->SetVisible(false);
-		} else {
-			difficultySprites_[2]->SetVisible(false);
-			difficultySprites_[1]->SetVisible(true);
-		}
-
-		if (isMouseInsideR) {
-			difficultySprites_[4]->SetVisible(true);
-			difficultySprites_[3]->SetVisible(false);
-		} else {
-			difficultySprites_[4]->SetVisible(false);
-			difficultySprites_[3]->SetVisible(true);
-		}
-		if (input_->PushMouseLeft() && IsMouseOverSprite(input_->GetMousePosition(), selectSprites_[1])) {
-
-			uint32_t currentTexture = selectSprites_[1]->GetTeture();
-			for (size_t i = 0; i < selectTextureHandles_.size(); ++i) {
-				if (currentTexture == selectTextureHandles_[i]) {
-					selectedBundle_ = static_cast<uint32_t>(i) + 1;
-					SceneManager::GetInstance()->SetSelectedBundle(selectedBundle_);
-					break;
+		if (!loading_){
+			if (selectClick1) {
+				if (input_->PushMouseLeft() && IsMouseOverSprite(mousePos, tutorialSprite_)) {
+					selectedTutorial_ = 1;
+					SceneManager::GetInstance()->SetSelectedTutorial(selectedTutorial_);
+					sceneManager_->ChengeScene("GameScene");
 				}
 			}
 
-			selectClick1 = false;
-		}
-	}
+			if (selectClick1) {
+				if (input_->TrigerMouseLeft()) {
+					Square square;
+					square.min = selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->GetPosition();
+					square.max = square.min + selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->GetSize();
+					if (IsCollision(square, input_->GetMousePosition())) {
+						selectStageNum_++;
+						if (selectStageNum_ > kMaxStageNum_) {
+							selectStageNum_ = 1;
+						}
+						uint32_t leftSelectStageNum = selectStageNum_ - 1;
+						uint32_t rightSelectStageNum = selectStageNum_ + 1;
+						if (leftSelectStageNum < 1) {
+							leftSelectStageNum = kMaxStageNum_;
+						}
+						if (rightSelectStageNum > kMaxStageNum_) {
+							rightSelectStageNum = 1;
+						}
 
-	if (!selectClick1) {
-		sceneManager_->ChengeScene("SelectStage");
-	}
+						selectSprites_[static_cast<uint32_t>(positionType::kLeftSide)]->SetTexture(selectTextureHandles_[leftSelectStageNum - 1]);
+						selectSprites_[static_cast<uint32_t>(positionType::kCenter)]->SetTexture(selectTextureHandles_[selectStageNum_ - 1]);
+						selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->SetTexture(selectTextureHandles_[rightSelectStageNum - 1]);
+
+					} else {
+						square.min = selectSprites_[static_cast<uint32_t>(positionType::kLeftSide)]->GetPosition();
+						square.max = square.min + selectSprites_[static_cast<uint32_t>(positionType::kLeftSide)]->GetSize();
+						if (IsCollision(square, input_->GetMousePosition())) {
+							selectStageNum_--;
+							if (selectStageNum_ < 1) {
+								selectStageNum_ = kMaxStageNum_;
+							}
+							uint32_t leftSelectStageNum = selectStageNum_ - 1;
+							uint32_t rightSelectStageNum = selectStageNum_ + 1;
+							if (leftSelectStageNum < 1) {
+								leftSelectStageNum = kMaxStageNum_;
+							}
+							if (rightSelectStageNum > kMaxStageNum_) {
+								rightSelectStageNum = 1;
+							}
+
+							selectSprites_[static_cast<uint32_t>(positionType::kLeftSide)]->SetTexture(selectTextureHandles_[leftSelectStageNum - 1]);
+							selectSprites_[static_cast<uint32_t>(positionType::kCenter)]->SetTexture(selectTextureHandles_[selectStageNum_ - 1]);
+							selectSprites_[static_cast<uint32_t>(positionType::kRightSide)]->SetTexture(selectTextureHandles_[rightSelectStageNum - 1]);
+
+						}
+					}
+
+				}
+				Square difficultySizeL;
+				difficultySizeL.min = { 0.0f,128.0f };
+				difficultySizeL.max = { 144.0f,391.0f };
+
+				Square difficultySizeR;
+				difficultySizeR.min = { 846.0f,128.0f };
+				difficultySizeR.max = { 990.0f,391.0f };
+
+				bool isMouseInsideL = IsCollision(difficultySizeL, input_->GetMousePosition());
+				bool isMouseInsideR = IsCollision(difficultySizeR, input_->GetMousePosition());
+
+				if (isMouseInsideL) {
+					difficultySprites_[2]->SetVisible(true);
+					difficultySprites_[1]->SetVisible(false);
+				} else {
+					difficultySprites_[2]->SetVisible(false);
+					difficultySprites_[1]->SetVisible(true);
+				}
+
+				if (isMouseInsideR) {
+					difficultySprites_[4]->SetVisible(true);
+					difficultySprites_[3]->SetVisible(false);
+				} else {
+					difficultySprites_[4]->SetVisible(false);
+					difficultySprites_[3]->SetVisible(true);
+				}
+
+			}
+
+			if (!input_->TrigerMouseLeft() && input_->PushMouseLeft() && IsMouseOverSprite(input_->GetMousePosition(), selectSprites_[1])) {
+
+				uint32_t currentTexture = selectSprites_[1]->GetTeture();
+				for (size_t i = 0; i < selectTextureHandles_.size(); ++i) {
+					if (currentTexture == selectTextureHandles_[i]) {
+						selectedBundle_ = static_cast<uint32_t>(i) + 1;
+						SceneManager::GetInstance()->SetSelectedBundle(selectedBundle_);
+						break;
+					}
+				}
+
+				selectClick1 = false;
+			}
+
+			if (!selectClick1) {
+				sceneManager_->ChengeScene("SelectStage");
+			}
+}
 	
-
+	
 
 #ifdef _DEBUG
 	ImGui::Begin("Window");
 	ImGui::Text("SelectScene");
-	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
+	ImGui::DragFloat2("loadingSprites_", &loadingSprites_[1]->GetPosition().x,1.0f);
+	ImGui::DragFloat2("loadingSprites_1", &loadingSprites_[1]->GetSize().x, 1.0f);
 	ImGui::Text("selectClick1: %u", selectClick1);
-	ImGui::Text("selectClick2: %u", selectClick2);
 	ImGui::Text("PushMouseLeft: %u", input_->PushMouseLeft());
 	/*
 	ImGui::DragFloat2("selectdSprite1_", &selectdSprite1_->GetPosition().x, 0.11f);
@@ -207,12 +257,11 @@ void SelectScene::Draw()
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
+	
 
 	backgroundSprite_->Draw();
 
 	difficultySprites_[0]->Draw();
-
-
 	
 	tutorialSprite_->Draw();
 
@@ -221,7 +270,12 @@ void SelectScene::Draw()
 			selectSprite->Draw();
 		}
 	}
-
+	if (loading_) {
+		for (std::unique_ptr<Sprite>& loadingSprite : loadingSprites_) {
+			loadingSprite->Draw();
+		}
+	}
+	
 }
 
 

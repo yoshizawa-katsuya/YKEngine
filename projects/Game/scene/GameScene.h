@@ -116,8 +116,40 @@ private:
 	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	*/
 
+	//setsumei
+	std::vector<uint32_t> setsumeies_;
+	std::vector<std::unique_ptr<Sprite>> setsumeiSprites_;
+
+	uint32_t setsumeiBack_;
+	std::unique_ptr<Sprite> setsumeiBacksp_;
+
+	bool setsumei = true;
+	bool setsumeiPage1 = true;
+	bool setsumeiPage2 = false;
+	
+	//UI
+	uint32_t stoneUI_;
+	std::unique_ptr<Sprite> stoneUIsp_;
+
+	uint32_t starUI_;
+	std::unique_ptr<Sprite> starUIsp_;
+
+	//menu
+	std::vector<uint32_t> menus_;
+	std::vector<std::unique_ptr<Sprite>> menuSpes_;
+
+	uint32_t menuUI1_;
+	std::unique_ptr<Sprite> menuUIsp1_;
+	uint32_t menuUI2_;
+	std::unique_ptr<Sprite> menuUIsp2_;
+	uint32_t menuUI3_;
+	std::unique_ptr<Sprite> menuUIsp3_;
+	bool isMenu = false;
 
 	void CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale);
 	void AddToInstancing(InstancingObject* instancingObject, const Vector3& position);
 	Vector3 ConvertScreenToWorld(const Vector2& screenPos);
+
+	bool IsMouseOverSprite(const Vector2& mousePos, const std::unique_ptr<Sprite>& sprite);
+
 };
