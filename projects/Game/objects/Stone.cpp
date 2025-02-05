@@ -1,4 +1,6 @@
 #include "Stone.h"
+#include "Vector.h"
+#include "imgui.h"
 
 Stone::Stone()
 	:input_(Input::GetInstance())
@@ -18,10 +20,6 @@ void Stone::Update()
 {
 	//移動入力
 	Move();
-
-	//移動
-	MoveAppli();
-
 }
 
 void Stone::Draw(Camera* camera)
@@ -32,52 +30,150 @@ void Stone::Draw(Camera* camera)
 
 void Stone::Move()
 {
-	Vector2 mousePos = input_->GetMousePosition();
+    switch (state_) {
+    case State::Waiting: {
+        //角度を決める
+        if (input_->PushKey(DIK_LEFT)) {
+            angle_ -= 1.0f;
+            if (angle_ < 0.0f) angle_ = 0.0f;
+        }
+        if (input_->PushKey(DIK_RIGHT)) {
+            angle_ += 1.0f;
+            if (angle_ > 180.0f) angle_ = 180.0f;
+        }
 
-	if (input_->PushMouseLeft()) {
-		Vector3 clickPos = ConvertScreenToWorld(mousePos);
+        //角度を0度から180度の範囲に制限
+        angle_ = std::clamp(angle_, 0.0f, 180.0f);
 
-		float distance = static_cast<float>(sqrt(pow(clickPos.x - worldTransform_.translation_.x, 2) + pow(clickPos.z - worldTransform_.translation_.z, 2)));
+        if (input_->TriggerKey(DIK_SPACE)) {
+            state_ = State::PowerSetting;
+            power_ = 0.0f;
+            powerIncreasing_ = true;
+        }
+        break;
+    }
+    case State::PowerSetting: {
 
-		if (distance < 1.0f) {
-			dragStartPos_ = mousePos;
-		}
-	}
-	if (input_->HoldMouseLeft()) {
-		dragCurrentPos_ = input_->GetMousePosition();
-	}
-	if (input_->ReleaseMouseLeft()) {
-		Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x  , dragStartPos_.y - dragCurrentPos_.y };
+        if (powerIncreasing_) {
+            power_ += powerChangeRate_;
+            if (power_ >= 1.0f) {
+                power_ = 1.0f;
+                powerIncreasing_ = false;
+            }
+        }
+        else {
+            power_ -= powerChangeRate_;
+            if (power_ <= 0.0f) {
+                power_ = 0.0f;
+                powerIncreasing_ = true;
+            }
+        }
 
-		float length = sqrt(dragVector.x * dragVector.x + dragVector.y * dragVector.y);
-		if (length > 0) {
-			dragVector.x /= length;
-			dragVector.y /= length;
-		}
+        if (input_->TriggerKey(DIK_SPACE)) {
 
-		float speed = std::min(length * 0.03f, maxSpeed_);
-		velocity_ = { dragVector.x * speed, 0.0f, -dragVector.y * speed };
+            speed_ = maxSpeed * pow(power_, 2.0f);
 
-	}
+            state_ = State::Flying;
+        }
+        break;
+    }
+    case State::Flying: {
+        if (speed_ > 0.0f) {
+            float radian = angle_ * (3.14159265f / 180.0f);
+            //イージング
+            float easingFactor = 1.0f - pow(1.0f - (1.0f - speed_ / maxSpeed), 3.0f);
+
+            worldTransform_.translation_.x += speed_ * cos(radian) * easingFactor;
+            worldTransform_.translation_.y += speed_ * sin(radian) * easingFactor;
+
+            //速度を徐々に減少
+            speed_ *= 0.98f;
+
+            if (speed_ < 0.001f) {
+                speed_ = 0.0f;
+                state_ = State::Stopped;
+            }
+        }
+        break;
+    }
+
+
+    case State::Stopped: {
+        break;
+    }
+    }
+    worldTransform_.UpdateMatrix();
+
+#ifdef _DEBUG
+    if (state_ != State::Stopped) {
+        ImGui::Begin("Stone");
+        ImGui::Text("State: %s",
+            state_ == State::Waiting ? "Waiting" :
+            state_ == State::PowerSetting ? "PowerSetting" : "Flying");
+        ImGui::Text("Angle: %.2f", angle_);
+        ImGui::Text("Power: %.2f", power_);
+        ImGui::DragFloat3("Translate", &worldTransform_.translation_.x, 0.01f);
+        ImGui::End();
+    }
+#endif
+
 }
 
-void Stone::MoveAppli()
-{
-	worldTransform_.translation_ += velocity_;
-	velocity_ *= friction_;
+void Stone::HandleCollision(Stone& other) {
+    if (this->GetState() != State::Flying || other.GetState() != State::Stopped) {
+        return;
+    }
 
-	if (fabs(velocity_.x) < 0.01f) velocity_.x = 0.0f;
-	if (fabs(velocity_.z) < 0.01f) velocity_.z = 0.0f;
+    Vector3 collisionDirection = other.GetPosition() - this->GetPosition();
+    float distance = Length(collisionDirection);
 
+    if (distance == 0.0f) {
+        return;
+    }
 
-	worldTransform_.UpdateMatrix();
-	object_->WorldTransformUpdate(worldTransform_);
+    collisionDirection = Normalize(collisionDirection);
+
+    //速度のいくつかを他のストーンに渡す
+    float transferSpeed = this->GetSpeed() * 0.7f;
+    //衝突後に残る速度
+    float remainingSpeed = this->GetSpeed() * 0.3f;
+
+    this->SetSpeed(remainingSpeed);
+    other.SetSpeed(transferSpeed);
+    other.SetState(State::Flying);
+    float moveDistance = transferSpeed * 1.5f;
+    //衝突されたストーンを適切な方向へ移動
+    other.SetPosition(other.GetPosition() + collisionDirection * transferSpeed);
+
+    //摩擦による速度減少
+    float frictionCoefficient = 0.07f;
+    float newSpeed = other.GetSpeed() - (other.GetSpeed() * frictionCoefficient);
+    if (newSpeed < 0.0f) newSpeed = 0.0f;
+    other.SetSpeed(newSpeed);
 }
 
-Vector3 Stone::ConvertScreenToWorld(const Vector2& screenPos)
-{
-	float worldX = (screenPos.x / 990.0f) * 34.0f - 17.0f;
-	float worldZ = (screenPos.y / 600.0f) * 30.0f - 15.0f;
+Stone::AABB Stone::GetAABB()const {
+    AABB aabb;
+    Vector3 halfScale = worldTransform_.scale_;//仮
 
-	return Vector3(worldX, 0.0f, -worldZ);
+    aabb.min = {
+        worldTransform_.translation_.x - halfScale.x,
+        worldTransform_.translation_.y - halfScale.y,
+        worldTransform_.translation_.z - halfScale.z
+    };
+    aabb.max = {
+        worldTransform_.translation_.x + halfScale.x,
+        worldTransform_.translation_.y + halfScale.y,
+        worldTransform_.translation_.z + halfScale.z
+    };
+    return aabb;
+}
+
+bool Stone::CheckCollision(const Stone& stone1, const Stone& stone2) {
+    const AABB aabb1 = stone1.GetAABB();
+    const AABB aabb2 = stone2.GetAABB();
+
+    return (aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) &&
+        (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) &&
+        (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z);
 }

@@ -21,7 +21,6 @@ void GameScene::Initialize() {
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 	
-
 	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize(dxCommon_);
@@ -33,7 +32,7 @@ void GameScene::Initialize() {
 	//スポットライトの生成
 	spotLight_ = std::make_unique<SpotLight>();
 	spotLight_->Initialize(dxCommon_);
-
+	
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotateX(0.741f);
@@ -94,7 +93,6 @@ void GameScene::Initialize() {
 	backgroundSprite_->Initialize(background_);
 	//backgroundSprite_->SetPosition({ 0.0f,0.0f });
 
-
 	//マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
 	mapChipField_->LoadMapChipCsv("./resources/csv/stage1.csv");
@@ -103,42 +101,51 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
-	
 	GenerateObjects();
-
 
 	SceneData data = SceneManager::GetInstance()->GetSceneData();
 
 	selectedTutorial_ = data.selectedTutorial;
 	selectedBundle_ = data.selectedBundle;
 	selectedStage_ = data.selectedStage;
-
-	
 }
 
 void GameScene::Update() {
 	
-
 	//カメラの更新
 	camera_->Update();
-
-	
 
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
 	}
-	//stone move
-	stone_->Update();
-	
-	//player_->Update();
 
+	for (size_t i = 0; i < stones_.size(); ++i) {
+		if (i == stones_.size() - 1) {
+			stones_[i]->Update();  // 現在のストーンのみ操作
+		}
+		else if (stones_[i]->GetState() == Stone::State::Flying) {
+			stones_[i]->Update();
+		}
+		//衝突判定
+		for (size_t j = 0; j < stones_.size(); ++j) {
+			if (i != j && stones_[i]->CheckCollision(*stones_[i], *stones_[j])) {
+				stones_[i]->HandleCollision(*stones_[j]);
+			}
+		}
+	}
+	// 最後のストーンがStoppedになったら新しいストーンを追加
+	if (!stones_.empty() && stones_.back()->GetState() == Stone::State::Stopped) {
+		auto newStone = std::make_unique<Stone>();
+		newStone->Initialize(modelstone_.get(),{0.0f,0.0f,0.0f});
+		stones_.push_back(std::move(newStone));
+	}
+	//player_->Update();
 
 	//emitter_->Update(color_);
 
 	//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
 
 #ifdef _DEBUG
-
 
 		ImGui::Begin("Window");
 		if (ImGui::TreeNode("camera")) {
@@ -206,21 +213,13 @@ void GameScene::Update() {
 		
 
 		ImGui::Begin("GameScene Debug");
-
-
 			ImGui::Text("Selected Tutorial: %u", selectedTutorial_);
 			ImGui::Text("Selected Bundle: %u", selectedBundle_);
 			ImGui::Text("Selected Stage: %u", selectedStage_);
-			ImGui::Text("stonePosition_x: %f", stone_->GetPosition().x);
-			ImGui::Text("stonePosition_z: %f", stone_->GetPosition().z);
-			ImGui::Text("dragStartPos＿: %f %f", stone_->GetDragStartPos().x, stone_->GetDragStartPos().y);
-			ImGui::Text("dragCurrentPos＿: %f %f", stone_->GetDragCurrentPos().x, stone_->GetDragCurrentPos().y);
-			
+		
 		ImGui::End();
 
 #endif // _DEBUG
-	
-
 }
 
 void GameScene::Draw() {
@@ -247,7 +246,9 @@ void GameScene::Draw() {
 		}
 	}
 
-	stone_->Draw(mainCamera_);
+	for (auto& stone : stones_) {
+		stone->Draw(mainCamera_);
+	}
 
 	//instancingObject描画前処理
 	modelPlatform_->InstancingPreDraw();
@@ -296,9 +297,15 @@ void GameScene::GenerateObjects()
 			} else if (mapChipType == MapChipType::kFloor) {
 				AddToInstancing(floors_.get(), position);
 			}  else if (mapChipType == MapChipType::stone) {
-				stone_ = std::make_unique<Stone>();
+				auto stone_ = std::make_unique<Stone>();
 				stone_->Initialize(modelstone_.get(), mapChipField_->GetMapChipPositionByIndex(j, i));
+				stones_.push_back(std::move(stone_));
 			} else if (mapChipType == MapChipType::star) {
+				/*
+				auto star = std::make_unique<Star>();
+				star->Initialize(modelstar_.get(), );
+				star_.push_back(std::move(star));
+			    */
 				CreateObject(boxes_[i][j], modelstar_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::hole) {
 				CreateObject(boxes_[i][j], modelhole_.get(), position, defaultScale);

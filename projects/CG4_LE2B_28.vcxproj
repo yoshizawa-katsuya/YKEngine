@@ -158,6 +158,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="SelectStage.cpp" />
     <ClCompile Include="Game\objects\Stone.cpp" />
+    <ClCompile Include="Star.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\InstancingObject3d.VS.hlsl">
@@ -294,6 +295,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="SelectStage.h" />
     <ClInclude Include="Game\objects\Stone.h" />
+    <ClInclude Include="Star.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <memory>
 #include <map>
+#include <vector>
 #include "BaseScene.h"
 #include "Audio.h"
 #include "Input.h"
@@ -21,6 +22,7 @@
 #include "SelectScene.h"
 #include "Rigid3dObject.h"
 #include "Stone.h"
+#include "Star.h"
 
 class GameScene : public BaseScene
 {
@@ -38,7 +40,7 @@ public:
 
 	void GenerateObjects();
 
-	
+	bool isItemBetween(const Stone& stone1, const Stone& stone2, const Star& item);
 private:
 
 	//デバイス
@@ -98,13 +100,15 @@ private:
 	std::unique_ptr<InstancingObject> floors_;
 
 	//stone
-	std::unique_ptr<Stone> stone_;
+	std::vector<std::unique_ptr<Stone>> stones_;
 
+	//アイテム
+	std::vector<std::unique_ptr<Star>>star_;
+	
 	//BackGround
 	uint32_t background_;
 	std::unique_ptr<Sprite> backgroundSprite_;
 
-	//
 	SelectScene* selectScene_ = nullptr;
 	uint32_t selectedTutorial_ = 0;
 	uint32_t selectedBundle_ = 0;
@@ -115,7 +119,6 @@ private:
 	std::unique_ptr<AccelerationField> field_;
 	Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	*/
-
 
 	void CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale);
 	void AddToInstancing(InstancingObject* instancingObject, const Vector3& position);
