@@ -381,41 +381,6 @@ void GameScene::Update() {
 		//stone move
 		Vector2 mousePos = input_->GetMousePosition();
 
-		if (input_->PushMouseLeft()) {
-			Vector3 clickPos = ConvertScreenToWorld(mousePos);
-
-			float distance = static_cast<float>(sqrt(pow(clickPos.x - stonePosition_.x, 2) + pow(clickPos.z - stonePosition_.z, 2)));
-
-			if (distance < 1.0f) {
-				isDragging_ = true;
-				dragStartPos_ = mousePos;
-			}
-		}
-		if (isDragging_ && input_->PushMouseLeft()) {
-			dragCurrentPos_ = input_->GetMousePosition();
-		}
-		if (isDragging_ && !input_->PushMouseLeft() && !input_->TrigerMouseLeft()) {
-			isDragging_ = false;
-			Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x  , dragStartPos_.y - dragCurrentPos_.y };
-
-			float length = sqrt(dragVector.x * dragVector.x + dragVector.y * dragVector.y);
-			if (length > 0) {
-				dragVector.x /= length;
-				dragVector.y /= length;
-			}
-
-			float speed = std::min(length * 0.03f, maxSpeed_);
-			velocity_ = { dragVector.x * speed, 0.0f, -dragVector.y * speed };
-
-		}
-
-
-		stonePosition_ += velocity_;
-		velocity_ *= friction_;
-
-		if (fabs(velocity_.x) < 0.01f) velocity_.x = 0.0f;
-		if (fabs(velocity_.z) < 0.01f) velocity_.z = 0.0f;
-
 
 		if (!isDragging_) {
 			
@@ -482,14 +447,8 @@ void GameScene::Update() {
 		}
 	}
 
-
-		WorldTransform worldTransform;
-		worldTransform.Initialize();
-		worldTransform.translation_ = stonePosition_;
-		worldTransform.UpdateMatrix();
-		stone_->WorldTransformUpdate(worldTransform);
-	
-
+	//stone move
+	stone_->Update();
 	
 	//player_->Update();
 
@@ -572,10 +531,10 @@ void GameScene::Update() {
 			ImGui::Text("Selected Tutorial: %u", selectedTutorial_);
 			ImGui::Text("Selected Bundle: %u", selectedBundle_);
 			ImGui::Text("Selected Stage: %u", selectedStage_);
-			ImGui::Text("stonePosition_x: %f", stone_->GetPosition().x);
-			ImGui::Text("stonePosition_z: %f", stone_->GetPosition().z);
-			ImGui::Text("dragStartPos＿: %f %f", stone_->GetDragStartPos().x, stone_->GetDragStartPos().y);
-			ImGui::Text("dragCurrentPos＿: %f %f", stone_->GetDragCurrentPos().x, stone_->GetDragCurrentPos().y);
+			//ImGui::Text("stonePosition_x: %f", stone_->GetPosition().x);
+			//ImGui::Text("stonePosition_z: %f", stone_->GetPosition().z);
+			//ImGui::Text("dragStartPos＿: %f %f", stone_->GetDragStartPos().x, stone_->GetDragStartPos().y);
+			//ImGui::Text("dragCurrentPos＿: %f %f", stone_->GetDragCurrentPos().x, stone_->GetDragCurrentPos().y);
 			
 		ImGui::End();
 
@@ -685,7 +644,7 @@ void GameScene::GenerateObjects()
 				CreateObject(boxes_[i][j], modelBox_.get(), position, defaultScale);
 			} else if (mapChipType == MapChipType::kFloor) {
 				AddToInstancing(floors_.get(), position);
-			}  else if (mapChipType == MapChipType::stone) {
+			} else if (mapChipType == MapChipType::stone) {
 				stone_ = std::make_unique<Stone>();
 				stone_->Initialize(modelstone_.get(), mapChipField_->GetMapChipPositionByIndex(j, i), mapChipField_.get());
 			} else if (mapChipType == MapChipType::star) {
@@ -697,6 +656,7 @@ void GameScene::GenerateObjects()
 			}
 		}
 	}
+
 
 
 }
@@ -731,4 +691,19 @@ Vector3 GameScene::ConvertScreenToWorld(const Vector2& screenPos)
 	float worldZ = (screenPos.y / 600.0f) * 30.0f - 15.0f; 
 
 	return Vector3(worldX, 0.0f, -worldZ);
+}
+
+bool GameScene::IsMouseOverSprite(const Vector2& mousePos, const std::unique_ptr<Sprite>& sprite) {
+	if(!sprite) return false;
+
+	Vector2 spritePos = sprite->GetPosition();
+	Vector2 spriteSize = sprite->GetTextureSize();
+
+	float left = spritePos.x;
+	float right = spritePos.x + spriteSize.x;
+	float bottom = spritePos.y;
+	float top = spritePos.y + spriteSize.y;
+
+	return (mousePos.x >= left && mousePos.x <= right &&
+		mousePos.y >= bottom && mousePos.y <= top);
 }

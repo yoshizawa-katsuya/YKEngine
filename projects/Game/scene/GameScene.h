@@ -127,6 +127,11 @@ private:
 	bool setsumeiPage1 = true;
 	bool setsumeiPage2 = false;
 	
+	
+	bool isDragging_ = false;
+	Vector2 dragStartPos_;
+	Vector2 dragCurrentPos_;
+
 	//UI
 	uint32_t stoneUI_;
 	std::unique_ptr<Sprite> stoneUIsp_;
