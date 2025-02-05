@@ -97,9 +97,25 @@ void GameScene::Initialize() {
 	//backgroundSprite_->SetPosition({ 0.0f,0.0f });
 
 
+	SceneData data = SceneManager::GetInstance()->GetSceneData();
+
+	selectedTutorial_ = data.selectedTutorial;
+	selectedBundle_ = data.selectedBundle;
+	selectedStage_ = data.selectedStage;
+
 	//マップチップフィールドの生成
+	if (selectedTutorial_ == 1) {
 	mapChipField_ = std::make_unique<MapChipField>();
-	mapChipField_->LoadMapChipCsv("./resources/csv/stage1.csv");
+	mapChipField_->LoadMapChipCsv("./resources/csv/stage0.csv");
+	} else {
+		int stageIndex = (selectedBundle_ - 1) * 10 + selectedStage_;
+		std::stringstream stagePath;
+		stagePath << "./resources/csv/stage" << stageIndex << ".csv";
+
+		mapChipField_ = std::make_unique<MapChipField>();
+		mapChipField_->LoadMapChipCsv(stagePath.str());
+
+	}
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -109,11 +125,7 @@ void GameScene::Initialize() {
 	GenerateObjects();
 
 
-	SceneData data = SceneManager::GetInstance()->GetSceneData();
-
-	selectedTutorial_ = data.selectedTutorial;
-	selectedBundle_ = data.selectedBundle;
-	selectedStage_ = data.selectedStage;
+	
 
 	
 	//setsumei
