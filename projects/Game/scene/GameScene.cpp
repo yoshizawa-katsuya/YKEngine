@@ -70,6 +70,9 @@ void GameScene::Initialize() {
 	textureHandleDarkRed_ = TextureManager::GetInstance()->Load("./resources/darkRed1x1.png");
 	textureHandleRed_ = TextureManager::GetInstance()->Load("./resources/red1x1.png");
 
+	std::chrono::system_clock::time_point  start, end;
+	start = std::chrono::system_clock::now(); // 計測開始時間
+
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
 	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
@@ -93,15 +96,15 @@ void GameScene::Initialize() {
 
 	modelSkyDome_ = std::make_unique<RigidModel>();
 	modelSkyDome_->CreateModel("./resources/skyDome", "skydome.obj");
-	modelSkyDome_->SetEnableLighting(false);
+	//modelSkyDome_->SetEnableLighting(false);
 
 	modelHPGauge_ = std::make_unique<RigidModel>();
 	modelHPGauge_->CreateModel("./resources/HPGauge", "HPGauge.obj");
-	modelHPGauge_->SetEnableLighting(false);
+	//modelHPGauge_->SetEnableLighting(false);
 
 	modelHPGaugeFrame_ = std::make_unique<RigidModel>();
 	modelHPGaugeFrame_->CreateModel("./resources/HPGaugeFrame", "HPGaugeFrame.obj");
-	modelHPGaugeFrame_->SetEnableLighting(false);
+	//modelHPGaugeFrame_->SetEnableLighting(false);
 
 	modelPlayerBullet_ = std::make_unique<RigidModel>();
 	modelPlayerBullet_->CreateSphere(textureHandleBlue_);
@@ -109,6 +112,11 @@ void GameScene::Initialize() {
 
 	modelEnemyBullet_ = std::make_unique<RigidModel>();
 	modelEnemyBullet_->CreateSphere(textureHandleRed_);
+
+	threadPool_->waitForCompletion();
+	end = std::chrono::system_clock::now();  // 計測終了時間
+
+	uint32_t time = static_cast<uint32_t>(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
 
 	ground_ = std::make_unique<Rigid3dObject>();
 	ground_->Initialize(modelGround_.get());
