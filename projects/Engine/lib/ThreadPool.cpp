@@ -9,44 +9,44 @@ ThreadPool* ThreadPool::GetInstance()
 
 void ThreadPool::Initlaize()
 {
-    stop = false;
-    activeTasks = 0;
+    isStop_ = false;
+    activeTasks_ = 0;
 
     uint32_t numThreads = std::thread::hardware_concurrency() - 1;
     assert(numThreads > 0);
 
     for (size_t i = 0; i < numThreads; ++i) {
-        workers.emplace_back([this] { worker(); });
+        workers_.emplace_back([this] { worker(); });
     }
 }
 
 void ThreadPool::Finalize()
 {
     {
-        std::unique_lock<std::mutex> lock(queueMutex);
-        stop = true;
+        std::unique_lock<std::mutex> lock(queueMutex_);
+        isStop_ = true;
     }
-    condition.notify_all();
+    condition_.notify_all();
 
-    for (std::thread& worker : workers) {
+    for (std::thread& worker : workers_) {
         worker.join();
     }
 }
 
 void ThreadPool::enqueueTask(std::function<void()> task) {
     {
-        std::unique_lock<std::mutex> lock(queueMutex);
-        tasks.push(task);
-        activeTasks++; // タスクが追加されるたびにカウントをインクリメント
+        std::unique_lock<std::mutex> lock(queueMutex_);
+        tasks_.push(task);
+        activeTasks_++; // タスクが追加されるたびにカウントをインクリメント
     }
-    condition.notify_one();
+    condition_.notify_one();
 }
 
 void ThreadPool::waitForCompletion() {
-    std::unique_lock<std::mutex> lock(queueMutex);
-    finishedCondition.wait(lock, [this] {
+    std::unique_lock<std::mutex> lock(queueMutex_);
+    finishedCondition_.wait(lock, [this] {
         // タスクキューが空であり、すべてのタスクが完了しているか確認
-        return tasks.empty() && (activeTasks == 0);
+        return tasks_.empty() && (activeTasks_ == 0);
     });
 }
 
@@ -54,15 +54,15 @@ void ThreadPool::worker() {
     while (true) {
         std::function<void()> task;
         {
-            std::unique_lock<std::mutex> lock(queueMutex);
-            condition.wait(lock, [this] {
-                return stop || !tasks.empty();
+            std::unique_lock<std::mutex> lock(queueMutex_);
+            condition_.wait(lock, [this] {
+                return isStop_ || !tasks_.empty();
             });
 
-            if (stop && tasks.empty()) return;
+            if (isStop_ && tasks_.empty()) return;
 
-            task = std::move(tasks.front());
-            tasks.pop();
+            task = std::move(tasks_.front());
+            tasks_.pop();
         }
 
         // タスクを実行
@@ -70,9 +70,9 @@ void ThreadPool::worker() {
 
         // タスク完了を通知
         {
-            std::unique_lock<std::mutex> lock(queueMutex);
-            activeTasks--; // 実行中のタスクカウントをデクリメント
+            std::unique_lock<std::mutex> lock(queueMutex_);
+            activeTasks_--; // 実行中のタスクカウントをデクリメント
         }
-        finishedCondition.notify_one(); // すべてのタスクが完了した可能性を通知
+        finishedCondition_.notify_one(); // すべてのタスクが完了した可能性を通知
     }
 }
