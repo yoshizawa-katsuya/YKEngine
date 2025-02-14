@@ -26,10 +26,6 @@ public:
 
 	virtual void CreateSphere(uint32_t textureHandle);
 
-	virtual void Update() = 0;
-
-	virtual void Update(Animation* animation = nullptr);
-
 	//3dObjectクラス経由で呼び出す
 	virtual void Draw();
 

@@ -48,10 +48,6 @@ void BaseModel::CreateSphere(uint32_t textureHandle)
 {
 }
 
-void BaseModel::Update(Animation* animation)
-{
-}
-
 void BaseModel::Draw() {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
