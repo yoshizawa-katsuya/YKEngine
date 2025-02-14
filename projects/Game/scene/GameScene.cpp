@@ -4,7 +4,6 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
-#include "RigidModel.h"
 
 GameScene::~GameScene() {
 	//Finalize();

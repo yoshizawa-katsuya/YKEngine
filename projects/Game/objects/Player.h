@@ -1,5 +1,5 @@
 #pragma once
-#include "Base3dObject.h"
+#include "Rigid3dObject.h"
 #include "WorldTransform.h"
 #include "Animation.h"
 class Camera;
@@ -20,7 +20,7 @@ private:
 	//Transform変数を作る
 	WorldTransform worldTransform_;
 
-	std::unique_ptr<Base3dObject> object_;
+	std::unique_ptr<Rigid3dObject> object_;
 
 };
 

@@ -17,6 +17,7 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
+#include "RigidModel.h"
 
 class GameScene : public BaseScene
 {
@@ -64,7 +65,7 @@ private:
 	//スポットライト
 	std::unique_ptr<SpotLight> spotLight_;
 
-	std::unique_ptr<BaseModel> modelPlayer_;
+	std::unique_ptr<RigidModel> modelPlayer_;
 
 
 	uint32_t textureHandle_;
