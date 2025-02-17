@@ -54,9 +54,12 @@ void GameScene::Initialize() {
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
-	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
+	modelPlayer_->CreateModel("./resources/AnimatedCube", "AnimatedCube.gltf");
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
+	animation_ = std::make_unique<Animation>();
+	animation_->LoadAnimationFile("./resources/AnimatedCube", "AnimatedCube.gltf");
+
 	/*
 	//テクスチャハンドルの生成
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
@@ -68,7 +71,7 @@ void GameScene::Initialize() {
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
+	player_->Initialize(modelPlayer_.get(), animation_.get());
 
 }
 

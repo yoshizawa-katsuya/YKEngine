@@ -9,7 +9,7 @@ class Player
 {
 public:
 
-	void Initialize(BaseModel* model);
+	void Initialize(BaseModel* model, Animation* animation);
 
 	void Update();
 
@@ -21,6 +21,6 @@ private:
 	WorldTransform worldTransform_;
 
 	std::unique_ptr<Rigid3dObject> object_;
-
+	Animation* animation_;
 };
 

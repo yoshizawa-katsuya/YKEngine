@@ -67,6 +67,7 @@ private:
 
 	std::unique_ptr<RigidModel> modelPlayer_;
 
+	std::unique_ptr<Animation> animation_;
 
 	uint32_t textureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
