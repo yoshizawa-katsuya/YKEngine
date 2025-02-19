@@ -268,7 +268,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\2d\SpritePlatform.h" />
     <ClInclude Include="Engine\base\ImGuiManager.h" />
     <ClInclude Include="Engine\3d\ParticleEmitter.h" />
-    <ClInclude Include="Engine\base\ParticleManager.h" />
+    <ClInclude Include="Engine\3d\ParticleManager.h" />
     <ClInclude Include="Engine\base\SrvHeapManager.h" />
     <ClInclude Include="Game\myGame\MyGame.h" />
     <ClInclude Include="Engine\base\YKFramework.h" />
