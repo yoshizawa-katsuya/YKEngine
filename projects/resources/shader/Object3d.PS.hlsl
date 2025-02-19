@@ -91,35 +91,35 @@ PixelShaderOutput main(VertexShaderOutput input)
         
         //ブリン・フォン反射モデル
         //平行光源
-        //float32_t3 halfVector = normalize(-gDirectionalLight.direction + toEye);
-        //float NDotH = dot(normalize(input.normal), halfVector);
-        //float specularPow = pow(saturate(NDotH), gMaterial.shininess);
+        float32_t3 halfVector = normalize(-gDirectionalLight.direction + toEye);
+        float NDotH = dot(normalize(input.normal), halfVector);
+        float specularPow = pow(saturate(NDotH), gMaterial.shininess);
         
         //拡散反射
         float32_t3 diffuseDirectionalLight = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
         
         //鏡面反射
-        //float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+        float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
         
         //ポイントライト
         float32_t3 pointLightDirection = normalize(input.worldPosition - gPointLight.position);
         
-        //halfVector = normalize(-pointLightDirection + toEye);
-        //NDotH = dot(normalize(input.normal), halfVector);
-        //specularPow = pow(saturate(NDotH), gMaterial.shininess);
+        halfVector = normalize(-pointLightDirection + toEye);
+        NDotH = dot(normalize(input.normal), halfVector);
+        specularPow = pow(saturate(NDotH), gMaterial.shininess);
         
         float32_t distance = length(gPointLight.position - input.worldPosition); //ポイントライトへの距離
         float32_t factor = pow(saturate(-distance / gPointLight.radius + 1.0), gPointLight.decay); //指数によるコントロール
         
         float32_t3 diffusePointLight = gMaterial.color.rgb * textureColor.rgb * gPointLight.color.rgb * gPointLight.intensity * factor;
-        //float32_t3 specularPointLight = gPointLight.color.rgb * gPointLight.intensity * factor * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+        float32_t3 specularPointLight = gPointLight.color.rgb * gPointLight.intensity * factor * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
         
         //スポットライト
         float32_t3 spotLightDirectionOnSurface = normalize(input.worldPosition - gSpotLight.position);
         
-        //halfVector = normalize(-spotLightDirectionOnSurface + toEye);
-        //NDotH = dot(normalize(input.normal), halfVector);
-        //specularPow = pow(saturate(NDotH), gMaterial.shininess);
+        halfVector = normalize(-spotLightDirectionOnSurface + toEye);
+        NDotH = dot(normalize(input.normal), halfVector);
+        specularPow = pow(saturate(NDotH), gMaterial.shininess);
         
         distance = length(gSpotLight.position - input.worldPosition); //スポットライトへの距離
         float32_t attenuationfactor = pow(saturate(-distance / gSpotLight.distance + 1.0), gSpotLight.decay); //指数によるコントロール
@@ -128,13 +128,13 @@ PixelShaderOutput main(VertexShaderOutput input)
         float32_t falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) / (gSpotLight.cosFalloffStart - gSpotLight.cosAngle));
         
         float32_t3 diffuseSpotLight = gMaterial.color.rgb * textureColor.rgb * gSpotLight.color.rgb * gSpotLight.intensity * attenuationfactor * falloffFactor;
-        //float32_t3 specularSpotLight = gSpotLight.color.rgb * gSpotLight.intensity * attenuationfactor * falloffFactor * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+        float32_t3 specularSpotLight = gSpotLight.color.rgb * gSpotLight.intensity * attenuationfactor * falloffFactor * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
         
         
         //拡散反射+鏡面反射
-        //output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffusePointLight + specularPointLight + diffuseSpotLight + specularSpotLight;
+        output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffusePointLight + specularPointLight + diffuseSpotLight + specularSpotLight;
         //拡散反射のみ
-        output.color.rgb = diffuseDirectionalLight + diffusePointLight + diffuseSpotLight;
+        //output.color.rgb = diffuseDirectionalLight + diffusePointLight + diffuseSpotLight;
         
         //アルファは今まで通り
         output.color.a = gMaterial.color.a * textureColor.a;

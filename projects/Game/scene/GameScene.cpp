@@ -50,7 +50,8 @@ void GameScene::Initialize() {
 	modelPlatform_->SetCamera(mainCamera_);
 	modelPlatform_->SetSpotLight(spotLight_.get());
 
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<RigidModel>();
