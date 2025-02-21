@@ -74,9 +74,6 @@ public:
 
 	bool IsPushKeyPre(BYTE keyNumber);
 
-	//ゲームパッドの状態を得る。毎フレームの最初に一度だけやれば良い
-	bool GamePadUpdate(uint32_t padNo = 0);
-
 	//ゲームパッドのボタンを押しているかチェック
 	bool PushButton(uint32_t xinput);
 
@@ -134,6 +131,9 @@ private:
 	~Input() = default;
 	Input(Input&) = default;
 	Input& operator=(Input&) = default;
+
+	//ゲームパッドの状態を得る
+	bool GamePadUpdate(uint32_t padNo = 0);
 
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;

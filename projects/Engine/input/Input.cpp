@@ -61,6 +61,9 @@ void Input::Update()
 	mouse_->Acquire();
 	mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState_);
 
+	//ゲームパッドの更新
+	GamePadUpdate();
+
 }
 
 bool Input::PushKey(BYTE keyNumber)
