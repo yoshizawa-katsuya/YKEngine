@@ -10,7 +10,11 @@ public:
 	//RigidModelのみに対応
 	void Initialize(BaseModel* model, uint32_t maxInstances);
 
-	void AddWorldTransform(const WorldTransform& worldTransform);
+	void PreUpdate();
+
+	void WorldTransformUpdate(const WorldTransform& worldTransform);
+
+	//void AddWorldTransform(const WorldTransform& worldTransform);
 
 	void CameraUpdate(Camera* camera);
 
