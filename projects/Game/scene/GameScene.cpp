@@ -52,7 +52,8 @@ void GameScene::Initialize() {
 	modelPlatform_->SetCamera(mainCamera_);
 	modelPlatform_->SetSpotLight(spotLight_.get());
 
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
 	modelPlayer_ = std::make_unique<SkinModel>();
@@ -75,6 +76,18 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get(), animationPlayer_.get());
 
+	/*
+	objects_ = std::make_unique<InstancingObjects>();
+	objects_->Initialize(modelPlayer_.get(), 10);
+
+	worldTransform1_.Initialize();
+	worldTransform1_.translation_.x = -1.0f;
+	worldTransform1_.UpdateMatrix();
+
+	worldTransform2_.Initialize();
+	worldTransform2_.translation_.x = 1.0f;
+	worldTransform2_.UpdateMatrix();
+	*/
 }
 
 void GameScene::Update() {
@@ -90,6 +103,14 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	/*
+	objects_->PreUpdate();
+	worldTransform1_.translation_.x += 0.01f;
+	worldTransform1_.UpdateMatrix();
+	objects_->WorldTransformUpdate(worldTransform1_);
+	objects_->WorldTransformUpdate(worldTransform2_);
+	*/
 
 	//emitter_->Update(color_);
 
@@ -182,7 +203,12 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	/*
+	modelPlatform_->InstancingPreDraw();
 
+	objects_->CameraUpdate(mainCamera_);
+	objects_->Draw();
+	*/
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 

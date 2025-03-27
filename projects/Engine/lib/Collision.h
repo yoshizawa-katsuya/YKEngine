@@ -5,6 +5,9 @@ bool CapsuleCollision(Vector2 capsuleA, Vector2 capsuleB, Vector2 CircleC, float
 
 bool BoxCollision(Vector2 boxA, int boxAwidht, int boxAhight, Vector2 boxB, int boxBwidht, int boxBhight);
 
+//四角と点の衝突判定
+bool IsCollision(const Square& square, const Vector2 point);
+
 //円と四角の衝突判定
 bool IsCollision(const Square& square, const Circle& circle);
 

@@ -17,6 +17,7 @@
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
+#include "RigidModel.h"
 
 class GameScene : public BaseScene
 {
@@ -75,6 +76,13 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	/*
+	std::unique_ptr<InstancingObjects> objects_;
+
+	WorldTransform worldTransform1_;
+	WorldTransform worldTransform2_;
+	*/
 
 	//パーティクル
 	/*

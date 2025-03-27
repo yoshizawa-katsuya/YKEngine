@@ -22,13 +22,9 @@ public:
 	//void Initialize(ModelPlatform* modelPlatform);
 
 	//三角面化しているモデルのみ読み込み可能
-	virtual void CreateModel(const std::string& directoryPath, const std::string& filename);
+	virtual void CreateModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
 	virtual void CreateSphere(uint32_t textureHandle);
-
-	virtual void Update() = 0;
-
-	virtual void Update(Animation* animation = nullptr);
 
 	//3dObjectクラス経由で呼び出す
 	virtual void Draw();
@@ -67,7 +63,7 @@ protected:
 	void CreateIndexData();
 
 	//マテリアルデータ作成
-	void CreateMaterialData();
+	void CreateMaterialData(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 	/*
 	//座標行列変換データ作成
 	void CreateTransformData();

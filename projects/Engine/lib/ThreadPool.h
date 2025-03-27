@@ -35,23 +35,23 @@ private:
     // ワーカースレッドの関数
     void worker();
 
-    std::vector<std::thread> workers;
-    std::queue<std::function<void()>> tasks;
-    std::mutex queueMutex;
-    std::condition_variable condition;
-    std::condition_variable finishedCondition; // タスク完了を通知するための条件変数
-    bool stop;
+    std::vector<std::thread> workers_;
+    std::queue<std::function<void()>> tasks_;
+    std::mutex queueMutex_;
+    std::condition_variable condition_;
+    std::condition_variable finishedCondition_; // タスク完了を通知するための条件変数
+    bool isStop_;
 
-    std::atomic<int> activeTasks; // 実行中または待機中のタスクのカウンター
+    std::atomic<int> activeTasks_; // 実行中または待機中のタスクのカウンター
 };
 
 template<class F, class ...Args>
 inline void ThreadPool::enqueueTask(F&& f, Args && ...args)
 {
     {
-        std::unique_lock<std::mutex> lock(queueMutex);
-        tasks.emplace(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
-        activeTasks++; // タスクが追加されるたびにカウントをインクリメント
+        std::unique_lock<std::mutex> lock(queueMutex_);
+        tasks_.emplace(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+        activeTasks_++; // タスクが追加されるたびにカウントをインクリメント
     }
-    condition.notify_one();
+    condition_.notify_one();
 }

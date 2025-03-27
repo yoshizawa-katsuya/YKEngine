@@ -325,7 +325,7 @@
     <ClInclude Include="Engine\base\ImGuiManager.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\ParticleManager.h">
+    <ClInclude Include="Engine\3d\ParticleManager.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\ParticleEmitter.h">

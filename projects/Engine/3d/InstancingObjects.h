@@ -1,17 +1,20 @@
 #pragma once
 #include "BaseModel.h"
 
-class InstancingObject
+class InstancingObjects
 {
 public:
 
-	InstancingObject();
+	InstancingObjects();
 	
 	//RigidModelのみに対応
 	void Initialize(BaseModel* model, uint32_t maxInstances);
 
-	//indexを返す
-	uint32_t AddWorldTransform(const WorldTransform& worldTransform);
+	void PreUpdate();
+
+	void WorldTransformUpdate(const WorldTransform& worldTransform);
+
+	//void AddWorldTransform(const WorldTransform& worldTransform);
 
 	void CameraUpdate(Camera* camera);
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Base3dObject.h"
+#include "Rigid3dObject.h"
 #include "WorldTransform.h"
 #include "Animation.h"
 class Camera;

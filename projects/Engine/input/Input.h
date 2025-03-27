@@ -59,6 +59,11 @@ public:
 
 	bool TrigerMouseLeft();
 
+	bool ReleaseMouseLeft();
+
+	//マウスを左クリックし続けているかをチェック
+	bool HoldMouseLeft();
+
 	bool PushMouseCenter();
 
 	float GetMouseWheel();
@@ -69,9 +74,6 @@ public:
 
 	bool IsPushKeyPre(BYTE keyNumber);
 
-	//ゲームパッドの状態を得る。毎フレームの最初に一度だけやれば良い
-	bool GamePadUpdate(uint32_t padNo = 0);
-
 	//ゲームパッドのボタンを押しているかチェック
 	bool PushButton(uint32_t xinput);
 
@@ -81,6 +83,9 @@ public:
 	//ゲームパッドのボタンを離した瞬間をチェック
 	bool ReleaseButton(uint32_t xinput);
 
+	//右トリガーを押した瞬間をチェック
+	bool TrigerRT();
+
 	//ゲームパッドのボタンを押し続けているかをチェック
 	bool HoldButton(uint32_t xinput);
 
@@ -89,6 +94,12 @@ public:
 
 	//左スティックのY方向の入力。0.0f~1.0fの範囲
 	float GetLeftStickY();
+
+	//左スティックを下に倒した瞬間をチェック
+	bool TrigerLeftStickDown();
+
+	//左スティックを上に倒した瞬間をチェック
+	bool TrigerLeftStickUp();
 
 	//右スティックのX方向の入力。0.0f~1.0fの範囲
 	float GetRightStickX();
@@ -120,6 +131,9 @@ private:
 	~Input() = default;
 	Input(Input&) = default;
 	Input& operator=(Input&) = default;
+
+	//ゲームパッドの状態を得る
+	bool GamePadUpdate(uint32_t padNo = 0);
 
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;
