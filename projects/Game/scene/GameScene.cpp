@@ -19,8 +19,8 @@ void GameScene::Initialize() {
 
 	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
-	directionalLight_->Initialize(dxCommon_);
-
+	directionalLight_->Initialize();
+	
 	//点光源の生成
 	pointLight_ = std::make_unique<PointLight>();
 	pointLight_->Initialize(dxCommon_);
@@ -45,7 +45,7 @@ void GameScene::Initialize() {
 	mainCamera_ = camera_.get();
 
 	//モデルを描画する際ライトとカメラの設定は必須
-	modelPlatform_->SetDirectionalLight(directionalLight_.get());
+	//modelPlatform_->SetDirectionalLight(directionalLight_.get());
 	modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
 	modelPlatform_->SetSpotLight(spotLight_.get());
@@ -98,6 +98,9 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	modelPlatform_->LightPreUpdate();
+	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
 
 	/*
 	objects_->PreUpdate();

@@ -36,16 +36,24 @@ struct SpotLight
     float32_t cosFalloffStart; //falloff開始の角度
 };
 
+struct LightCount
+{
+    uint directional;
+    uint points;
+    uint spot;
+};
+
 struct Camera
 {
     float32_t3 worldPosition;
 };
 
 ConstantBuffer<Material> gMaterial : register(b0);
-ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
+StructuredBuffer<DirectionalLight> gDirectionalLight : register(t1);
 ConstantBuffer<Camera> gCamera : register(b2);
 ConstantBuffer<PointLight> gPointLight : register(b3);
 ConstantBuffer<SpotLight> gSpotLight : register(b4);
+ConstantBuffer<LightCount> gLightCount : register(b5);
 Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 
@@ -70,17 +78,39 @@ PixelShaderOutput main(VertexShaderOutput input)
     if (gMaterial.enableLighting != 0)
     {
         
+        float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
         
-        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
-        float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+        float NdotL, cos, NDotH, specularPow;
+        uint count;
+        float32_t3 halfVector, diffuseDirectionalLight, specularDirectionalLight;
+        diffuseDirectionalLight = float32_t3(0.0f, 0.0f, 0.0f);
+        specularDirectionalLight = float32_t3(0.0f, 0.0f, 0.0f);
         
+        for (int i = 0; i < gLightCount.directional; i++)
+        {
+            NdotL = dot(normalize(input.normal), -gDirectionalLight[i].direction);
+            cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+            
+            halfVector = normalize(-gDirectionalLight[i].direction + toEye);
+            NDotH = dot(normalize(input.normal), halfVector);
+            specularPow = pow(saturate(NDotH), gMaterial.shininess);
+        
+            //拡散反射
+            diffuseDirectionalLight += gMaterial.color.rgb * textureColor.rgb * gDirectionalLight[i].color.rgb * cos * gDirectionalLight[i].intensity;
+        
+            //鏡面反射
+            specularDirectionalLight += gDirectionalLight[i].color.rgb * gDirectionalLight[i].intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+        
+        }
+        /*
+        NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+        cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+        */
         //half lambert
         /*
         output.color.rgb = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
         */
         
-        
-        float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
         
         //フォン反射モデル
         /*
@@ -88,7 +118,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         float RdotE = dot(reflectLight, toEye);
         float specularPow = pow(saturate(RdotE), gMaterial.shininess);  //反射強度
         */
-        
+        /*
         //ブリン・フォン反射モデル
         //平行光源
         float32_t3 halfVector = normalize(-gDirectionalLight.direction + toEye);
@@ -100,7 +130,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         
         //鏡面反射
         float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
-        
+        */
         //ポイントライト
         float32_t3 pointLightDirection = normalize(input.worldPosition - gPointLight.position);
         

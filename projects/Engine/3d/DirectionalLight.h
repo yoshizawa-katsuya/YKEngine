@@ -6,17 +6,26 @@ class DirectionalLight
 {
 public:
 
+	struct DirectionalLightData {
+		Vector4 color;	//ライトの色
+		Vector3 direction;	//ライトの向き
+		float intensity;	//輝度
+	};
+
 	//初期化
-	void Initialize(DirectXCommon* dxCommon);
+	void Initialize();
 
 	//描画
-	void Draw();
+	//void Draw();
 
 	Vector4& GetColor() { return data_->color; }
 	const Vector4& GetColor() const { return data_->color; }
 
 	Vector3& GetDirection() { return data_->direction; }
 	const Vector3& GetDirection() const { return data_->direction; }
+
+	DirectionalLightData& GetDirectionalLightData() { return *data_; }
+	const DirectionalLightData& GetDirectionalLightData() const { return *data_; }
 
 	float& GetIntensity() { return data_->intensity; }
 	float GetIntensity() const { return data_->intensity; }
@@ -29,16 +38,10 @@ public:
 
 private:
 
-	struct DirectionalLightData {
-		Vector4 color;	//ライトの色
-		Vector3 direction;	//ライトの向き
-		float intensity;	//輝度
-	};
-
-	DirectXCommon* dxCommon_;
+	//DirectXCommon* dxCommon_;
 
 	//平行光源用のResourceを作成
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
+	//Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 	//データを書き込む
 	DirectionalLightData* data_;
 

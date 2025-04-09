@@ -42,7 +42,11 @@ public:
 
 	SrvHeapManager* GetSrvHeapManager() const { return srvHeapManager_; }
 
-	void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
+	//void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
+
+	void LightPreUpdate();
+
+	void DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight);
 
 	void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
 
@@ -58,6 +62,14 @@ private:
 		Matrix4x4 WVP2;
 	};
 
+	struct LightCount
+	{
+		uint32_t directional;
+		uint32_t point;
+		uint32_t spot;
+		float padding;
+	};
+
 	ModelPlatform() = default;
 	~ModelPlatform() = default;
 	ModelPlatform(ModelPlatform&) = default;
@@ -69,7 +81,16 @@ private:
 
 	PrimitiveDrawer* primitiveDrawer_;
 
-	DirectionalLight* directionalLight_ = nullptr;
+	//DirectionalLight* directionalLight_ = nullptr;
+
+	LightCount* lightCount_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> lightCountResource_;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResouce_;
+	DirectionalLight::DirectionalLightData* directionalLightDatas_ = nullptr;
+	uint32_t kNumMaxDirectionalLight_ = 100;
+	//uint32_t numDirectionalLight_ = 0;
+	uint32_t DirectionalLightSrvIndex_;
 
 	PointLight* pointLight_ = nullptr;
 

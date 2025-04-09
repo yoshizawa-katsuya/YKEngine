@@ -55,6 +55,13 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	descriptorRange[0].NumDescriptors = 1;	//数は1つ
 	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+	
+	D3D12_DESCRIPTOR_RANGE descriptorRangeDirectionalLight[1] = {};
+	descriptorRangeDirectionalLight[0].BaseShaderRegister = 1;	//1から始まる t1
+	descriptorRangeDirectionalLight[0].NumDescriptors = 1;	//数は1つ
+	descriptorRangeDirectionalLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
+	descriptorRangeDirectionalLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+
 	/*
 	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
 	descriptorRangeForInstancing[0].BaseShaderRegister = 0;	//0から始まる
@@ -87,7 +94,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	case BlendMode::kSkinModelMode:
 
-		rootParameters.resize(8);
+		rootParameters.resize(9);
 
 		//マテリアル
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -106,9 +113,10 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
 
 		//平行光源
-		rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
 		rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[3].Descriptor.ShaderRegister = 1;	//レジスタ番号1を使う
+		rootParameters[3].DescriptorTable.pDescriptorRanges = descriptorRangeDirectionalLight;	//Tableの中身の配列を指定
+		rootParameters[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDirectionalLight);	//Tableで利用する数
 
 		//カメラ
 		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -125,16 +133,21 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 		rootParameters[6].Descriptor.ShaderRegister = 4;
 
+		//ライトカウント
+		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[7].Descriptor.ShaderRegister = 5;
+
 		//Well
-		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		rootParameters[7].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		rootParameters[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+		rootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		rootParameters[8].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		rootParameters[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
 
 		break;
 
 	default:
-		rootParameters.resize(7);
+		rootParameters.resize(8);
 
 		//マテリアル
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -168,9 +181,10 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
 
 		//平行光源
-		rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
 		rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[3].Descriptor.ShaderRegister = 1;	//レジスタ番号1を使う
+		rootParameters[3].DescriptorTable.pDescriptorRanges = descriptorRangeDirectionalLight;	//Tableの中身の配列を指定
+		rootParameters[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDirectionalLight);	//Tableで利用する数
 
 		//カメラ
 		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -186,6 +200,11 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 		rootParameters[6].Descriptor.ShaderRegister = 4;
+
+		//ライトカウント
+		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[7].Descriptor.ShaderRegister = 5;
 
 		break;
 	}
