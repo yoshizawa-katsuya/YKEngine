@@ -50,10 +50,10 @@ struct Camera
 
 ConstantBuffer<Material> gMaterial : register(b0);
 StructuredBuffer<DirectionalLight> gDirectionalLight : register(t1);
-ConstantBuffer<Camera> gCamera : register(b2);
+ConstantBuffer<Camera> gCamera : register(b1);
 ConstantBuffer<PointLight> gPointLight : register(b3);
 ConstantBuffer<SpotLight> gSpotLight : register(b4);
-ConstantBuffer<LightCount> gLightCount : register(b5);
+ConstantBuffer<LightCount> gLightCount : register(b2);
 Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 

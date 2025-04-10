@@ -121,7 +121,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		//カメラ
 		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[4].Descriptor.ShaderRegister = 2;
+		rootParameters[4].Descriptor.ShaderRegister = 1;
 
 		//点光源
 		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -136,7 +136,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		//ライトカウント
 		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[7].Descriptor.ShaderRegister = 5;
+		rootParameters[7].Descriptor.ShaderRegister = 2;
 
 		//Well
 		rootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
@@ -189,7 +189,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		//カメラ
 		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[4].Descriptor.ShaderRegister = 2;
+		rootParameters[4].Descriptor.ShaderRegister = 1;
 
 		//点光源
 		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -204,7 +204,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		//ライトカウント
 		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[7].Descriptor.ShaderRegister = 5;
+		rootParameters[7].Descriptor.ShaderRegister = 2;
 
 		break;
 	}
