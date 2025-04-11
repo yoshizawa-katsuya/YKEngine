@@ -18,14 +18,14 @@ public:
 	//描画
 	//void Draw();
 
+	DirectionalLightData& GetDirectionalLightData() { return *data_; }
+	const DirectionalLightData& GetDirectionalLightData() const { return *data_; }
+
 	Vector4& GetColor() { return data_->color; }
 	const Vector4& GetColor() const { return data_->color; }
 
 	Vector3& GetDirection() { return data_->direction; }
 	const Vector3& GetDirection() const { return data_->direction; }
-
-	DirectionalLightData& GetDirectionalLightData() { return *data_; }
-	const DirectionalLightData& GetDirectionalLightData() const { return *data_; }
 
 	float& GetIntensity() { return data_->intensity; }
 	float GetIntensity() const { return data_->intensity; }

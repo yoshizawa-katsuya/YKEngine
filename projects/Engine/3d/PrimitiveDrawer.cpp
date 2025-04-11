@@ -51,16 +51,28 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	descriptorRange[0].BaseShaderRegister = 0;	//0から始まる
+	descriptorRange[0].BaseShaderRegister = 0;	//0から始まる t0
 	descriptorRange[0].NumDescriptors = 1;	//数は1つ
 	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
 	
 	D3D12_DESCRIPTOR_RANGE descriptorRangeDirectionalLight[1] = {};
-	descriptorRangeDirectionalLight[0].BaseShaderRegister = 1;	//1から始まる t1
+	descriptorRangeDirectionalLight[0].BaseShaderRegister = 1;	//t1
 	descriptorRangeDirectionalLight[0].NumDescriptors = 1;	//数は1つ
 	descriptorRangeDirectionalLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
 	descriptorRangeDirectionalLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+
+	D3D12_DESCRIPTOR_RANGE descriptorRangePointLight[1] = {};
+	descriptorRangePointLight[0].BaseShaderRegister = 2;	//t2
+	descriptorRangePointLight[0].NumDescriptors = 1;	//数は1つ
+	descriptorRangePointLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
+	descriptorRangePointLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+
+	D3D12_DESCRIPTOR_RANGE descriptorRangeSpotLight[1] = {};
+	descriptorRangeSpotLight[0].BaseShaderRegister = 3;	//t3
+	descriptorRangeSpotLight[0].NumDescriptors = 1;	//数は1つ
+	descriptorRangeSpotLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
+	descriptorRangeSpotLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
 
 	/*
 	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
@@ -124,14 +136,16 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[4].Descriptor.ShaderRegister = 1;
 
 		//点光源
-		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
 		rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[5].Descriptor.ShaderRegister = 3;
+		rootParameters[5].DescriptorTable.pDescriptorRanges = descriptorRangePointLight;	//Tableの中身の配列を指定
+		rootParameters[5].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangePointLight);	//Tableで利用する数
 
 		//スポットライト
-		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
 		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[6].Descriptor.ShaderRegister = 4;
+		rootParameters[6].DescriptorTable.pDescriptorRanges = descriptorRangeSpotLight;	//Tableの中身の配列を指定
+		rootParameters[6].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSpotLight);	//Tableで利用する数
 
 		//ライトカウント
 		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -192,14 +206,16 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[4].Descriptor.ShaderRegister = 1;
 
 		//点光源
-		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
 		rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[5].Descriptor.ShaderRegister = 3;
+		rootParameters[5].DescriptorTable.pDescriptorRanges = descriptorRangePointLight;	//Tableの中身の配列を指定
+		rootParameters[5].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangePointLight);	//Tableで利用する数
 
 		//スポットライト
-		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
 		rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		rootParameters[6].Descriptor.ShaderRegister = 4;
+		rootParameters[6].DescriptorTable.pDescriptorRanges = descriptorRangeSpotLight;	//Tableの中身の配列を指定
+		rootParameters[6].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSpotLight);	//Tableで利用する数
 
 		//ライトカウント
 		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う

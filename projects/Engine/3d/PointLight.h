@@ -6,11 +6,23 @@ class PointLight
 {
 public:
 
+	struct PointLightData {
+		Vector4 color;	//ライトの色
+		Vector3 position;	//ライトの位置
+		float intensity;	//輝度
+		float radius;	//ライトの届く最大距離
+		float decay;	//減衰率
+		float padding[2];
+	};
+
 	//初期化
-	void Initialize(DirectXCommon* dxCommon);
+	void Initialize();
 
 	//描画
-	void Draw();
+	//void Draw();
+
+	PointLightData& GetPointLightData() { return *data_; }
+	const PointLightData& GetPointLightData() const { return *data_; }
 
 	Vector4& GetColor() { return data_->color; }
 	const Vector4& GetColor() const { return data_->color; }
@@ -39,19 +51,6 @@ public:
 
 private:
 
-	struct PointLightData {
-		Vector4 color;	//ライトの色
-		Vector3 position;	//ライトの位置
-		float intensity;	//輝度
-		float radius;	//ライトの届く最大距離
-		float decay;	//減衰率
-		float padding[2];
-	};
-
-	DirectXCommon* dxCommon_;
-
-	//平行光源用のResourceを作成
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 	//データを書き込む
 	PointLightData* data_;
 

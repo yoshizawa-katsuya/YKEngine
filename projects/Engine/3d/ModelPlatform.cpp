@@ -65,9 +65,25 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 	directionalLightResouce_ = dxCommon_->CreateBufferResource(sizeof(DirectionalLight::DirectionalLightData) * kNumMaxDirectionalLight_);
 	directionalLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDatas_));
 
-	DirectionalLightSrvIndex_ = srvHeapManager_->Allocate();
+	directionalLightSrvIndex_ = srvHeapManager_->Allocate();
 
-	srvHeapManager_->CreateSRVforStructuredBuffer(DirectionalLightSrvIndex_, directionalLightResouce_.Get(), kNumMaxDirectionalLight_, sizeof(DirectionalLight::DirectionalLightData));
+	srvHeapManager_->CreateSRVforStructuredBuffer(directionalLightSrvIndex_, directionalLightResouce_.Get(), kNumMaxDirectionalLight_, sizeof(DirectionalLight::DirectionalLightData));
+
+	//点光源
+	pointLightResouce_ = dxCommon_->CreateBufferResource(sizeof(PointLight::PointLightData) * kNumMaxPointLight_);
+	pointLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightDatas_));
+
+	pointLightSrvIndex_ = srvHeapManager_->Allocate();
+
+	srvHeapManager_->CreateSRVforStructuredBuffer(pointLightSrvIndex_, pointLightResouce_.Get(), kNumMaxPointLight_, sizeof(PointLight::PointLightData));
+
+	//スポットライト
+	spotLightResouce_ = dxCommon_->CreateBufferResource(sizeof(SpotLight::SpotLightData) * kNumMaxSpotLight_);
+	spotLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightDatas_));
+
+	spotLightSrvIndex_ = srvHeapManager_->Allocate();
+
+	srvHeapManager_->CreateSRVforStructuredBuffer(spotLightSrvIndex_, spotLightResouce_.Get(), kNumMaxSpotLight_, sizeof(SpotLight::SpotLightData));
 
 }
 
@@ -87,9 +103,9 @@ void ModelPlatform::PreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNormal);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, DirectionalLightSrvIndex_);
-	pointLight_->Draw();
-	spotLight_->Draw();
+	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
 	camera_->SetCameraReaource();
 
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
@@ -102,9 +118,9 @@ void ModelPlatform::SkinPreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSkinModelMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, DirectionalLightSrvIndex_);
-	pointLight_->Draw();
-	spotLight_->Draw();
+	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
 	camera_->SetCameraReaource();
 
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
@@ -118,9 +134,9 @@ void ModelPlatform::InstancingPreDraw()
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//directionalLight_->Draw();
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, DirectionalLightSrvIndex_);
-	pointLight_->Draw();
-	spotLight_->Draw();
+	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
 	camera_->SetCameraReaource();
 
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
@@ -210,6 +226,23 @@ void ModelPlatform::DirectionalLightUpdate(const DirectionalLight::DirectionalLi
 	directionalLightDatas_[lightCount_->directional] = directionalLight;
 	directionalLightDatas_[lightCount_->directional].direction = Normalize(directionalLightDatas_[lightCount_->directional].direction);
 	lightCount_->directional++;
+
+	return;
+}
+
+void ModelPlatform::PointLightUpdate(const PointLight::PointLightData& pointLight)
+{
+	pointLightDatas_[lightCount_->point] = pointLight;
+	lightCount_->point++;
+
+	return;
+}
+
+void ModelPlatform::SpotLightUpdate(const SpotLight::SpotLightData& spotLight)
+{
+	spotLightDatas_[lightCount_->spot] = spotLight;
+	spotLightDatas_[lightCount_->spot].direction = Normalize(spotLightDatas_[lightCount_->spot].direction);
+	lightCount_->spot++;
 
 	return;
 }

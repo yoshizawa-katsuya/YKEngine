@@ -23,11 +23,11 @@ void GameScene::Initialize() {
 	
 	//点光源の生成
 	pointLight_ = std::make_unique<PointLight>();
-	pointLight_->Initialize(dxCommon_);
-
+	pointLight_->Initialize();
+	
 	//スポットライトの生成
 	spotLight_ = std::make_unique<SpotLight>();
-	spotLight_->Initialize(dxCommon_);
+	spotLight_->Initialize();
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -44,11 +44,11 @@ void GameScene::Initialize() {
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
-	//モデルを描画する際ライトとカメラの設定は必須
+	//モデルを描画する際カメラの設定は必須
 	//modelPlatform_->SetDirectionalLight(directionalLight_.get());
-	modelPlatform_->SetPointLight(pointLight_.get());
+	//modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
-	modelPlatform_->SetSpotLight(spotLight_.get());
+	//modelPlatform_->SetSpotLight(spotLight_.get());
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
@@ -101,6 +101,8 @@ void GameScene::Update() {
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
+	//modelPlatform_->PointLightUpdate(pointLight_->GetPointLightData());
+	//modelPlatform_->SpotLightUpdate(spotLight_->GetSpotLightData());
 
 	/*
 	objects_->PreUpdate();

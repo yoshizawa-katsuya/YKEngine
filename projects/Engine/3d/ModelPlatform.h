@@ -48,9 +48,13 @@ public:
 
 	void DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight);
 
-	void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
+	//void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
 
-	void SetSpotLight(SpotLight* spotLight) { spotLight_ = spotLight; }
+	void PointLightUpdate(const PointLight::PointLightData& pointLight);
+
+	//void SetSpotLight(SpotLight* spotLight) { spotLight_ = spotLight; }
+
+	void SpotLightUpdate(const SpotLight::SpotLightData& spotLight);
 
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
@@ -90,11 +94,22 @@ private:
 	DirectionalLight::DirectionalLightData* directionalLightDatas_ = nullptr;
 	uint32_t kNumMaxDirectionalLight_ = 100;
 	//uint32_t numDirectionalLight_ = 0;
-	uint32_t DirectionalLightSrvIndex_;
+	uint32_t directionalLightSrvIndex_;
 
-	PointLight* pointLight_ = nullptr;
+	//PointLight* pointLight_ = nullptr;
 
-	SpotLight* spotLight_ = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResouce_;
+	PointLight::PointLightData* pointLightDatas_ = nullptr;
+	uint32_t kNumMaxPointLight_ = 100;
+	uint32_t pointLightSrvIndex_;
+
+	//SpotLight* spotLight_ = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResouce_;
+	SpotLight::SpotLightData* spotLightDatas_ = nullptr;
+	uint32_t kNumMaxSpotLight_ = 100;
+	uint32_t spotLightSrvIndex_;
+
 
 	Camera* camera_;
 
