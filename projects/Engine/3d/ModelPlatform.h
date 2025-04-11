@@ -42,11 +42,19 @@ public:
 
 	SrvHeapManager* GetSrvHeapManager() const { return srvHeapManager_; }
 
-	void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
+	//void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
 
-	void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
+	void LightPreUpdate();
 
-	void SetSpotLight(SpotLight* spotLight) { spotLight_ = spotLight; }
+	void DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight);
+
+	//void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
+
+	void PointLightUpdate(const PointLight::PointLightData& pointLight);
+
+	//void SetSpotLight(SpotLight* spotLight) { spotLight_ = spotLight; }
+
+	void SpotLightUpdate(const SpotLight::SpotLightData& spotLight);
 
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
@@ -56,6 +64,14 @@ private:
 	{
 		Matrix4x4 WVP1;
 		Matrix4x4 WVP2;
+	};
+
+	struct LightCount
+	{
+		uint32_t directional;
+		uint32_t point;
+		uint32_t spot;
+		float padding;
 	};
 
 	ModelPlatform() = default;
@@ -69,11 +85,31 @@ private:
 
 	PrimitiveDrawer* primitiveDrawer_;
 
-	DirectionalLight* directionalLight_ = nullptr;
+	//DirectionalLight* directionalLight_ = nullptr;
 
-	PointLight* pointLight_ = nullptr;
+	LightCount* lightCount_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> lightCountResource_;
 
-	SpotLight* spotLight_ = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResouce_;
+	DirectionalLight::DirectionalLightData* directionalLightDatas_ = nullptr;
+	uint32_t kNumMaxDirectionalLight_ = 100;
+	//uint32_t numDirectionalLight_ = 0;
+	uint32_t directionalLightSrvIndex_;
+
+	//PointLight* pointLight_ = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResouce_;
+	PointLight::PointLightData* pointLightDatas_ = nullptr;
+	uint32_t kNumMaxPointLight_ = 100;
+	uint32_t pointLightSrvIndex_;
+
+	//SpotLight* spotLight_ = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResouce_;
+	SpotLight::SpotLightData* spotLightDatas_ = nullptr;
+	uint32_t kNumMaxSpotLight_ = 100;
+	uint32_t spotLightSrvIndex_;
+
 
 	Camera* camera_;
 

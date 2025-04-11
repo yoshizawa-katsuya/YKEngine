@@ -6,11 +6,26 @@ class SpotLight
 {
 public:
 
+	struct SpotLightData {
+		Vector4 color;	//ライトの色
+		Vector3 position;	//ライトの位置
+		float intensity;	//輝度
+		Vector3 direction;	//ライトの向き
+		float distance;	//ライトの届く最大距離
+		float decay;	//減衰率
+		float cosAngle;	//スポットライトの余弦
+		float cosFalloffStart;	//falloff開始の角度
+		float padding;
+	};
+
 	//初期化
-	void Initialize(DirectXCommon* dxCommon);
+	void Initialize();
 
 	//描画
-	void Draw();
+	//void Draw();
+
+	SpotLightData& GetSpotLightData() { return *data_; }
+	const SpotLightData& GetSpotLightData() const { return *data_; }
 
 	Vector4& GetColor() { return data_->color; }
 	const Vector4& GetColor() const { return data_->color; }
@@ -54,22 +69,6 @@ public:
 
 private:
 
-	struct SpotLightData {
-		Vector4 color;	//ライトの色
-		Vector3 position;	//ライトの位置
-		float intensity;	//輝度
-		Vector3 direction;	//ライトの向き
-		float distance;	//ライトの届く最大距離
-		float decay;	//減衰率
-		float cosAngle;	//スポットライトの余弦
-		float cosFalloffStart;	//falloff開始の角度
-		float padding;
-	};
-
-	DirectXCommon* dxCommon_;
-
-	//平行光源用のResourceを作成
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 	//データを書き込む
 	SpotLightData* data_;
 

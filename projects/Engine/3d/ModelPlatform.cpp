@@ -1,6 +1,7 @@
 #include "ModelPlatform.h"
 #include "Matrix.h"
 #include "Camera.h"
+#include "Vector.h"
 
 ModelPlatform* ModelPlatform::GetInstance()
 {
@@ -53,6 +54,37 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 		*SphereWVPDatas_[i] = MakeIdentity4x4();
 	}
 	
+	//ライトカウント
+	lightCountResource_ = dxCommon_->CreateBufferResource(sizeof(LightCount));
+	lightCountResource_->Map(0, nullptr, reinterpret_cast<void**>(&lightCount_));
+	lightCount_->directional = 0;
+	lightCount_->point = 0;
+	lightCount_->spot = 0;
+
+	//平行光源
+	directionalLightResouce_ = dxCommon_->CreateBufferResource(sizeof(DirectionalLight::DirectionalLightData) * kNumMaxDirectionalLight_);
+	directionalLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDatas_));
+
+	directionalLightSrvIndex_ = srvHeapManager_->Allocate();
+
+	srvHeapManager_->CreateSRVforStructuredBuffer(directionalLightSrvIndex_, directionalLightResouce_.Get(), kNumMaxDirectionalLight_, sizeof(DirectionalLight::DirectionalLightData));
+
+	//点光源
+	pointLightResouce_ = dxCommon_->CreateBufferResource(sizeof(PointLight::PointLightData) * kNumMaxPointLight_);
+	pointLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightDatas_));
+
+	pointLightSrvIndex_ = srvHeapManager_->Allocate();
+
+	srvHeapManager_->CreateSRVforStructuredBuffer(pointLightSrvIndex_, pointLightResouce_.Get(), kNumMaxPointLight_, sizeof(PointLight::PointLightData));
+
+	//スポットライト
+	spotLightResouce_ = dxCommon_->CreateBufferResource(sizeof(SpotLight::SpotLightData) * kNumMaxSpotLight_);
+	spotLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightDatas_));
+
+	spotLightSrvIndex_ = srvHeapManager_->Allocate();
+
+	srvHeapManager_->CreateSRVforStructuredBuffer(spotLightSrvIndex_, spotLightResouce_.Get(), kNumMaxSpotLight_, sizeof(SpotLight::SpotLightData));
+
 }
 
 void ModelPlatform::EndFrame()
@@ -71,10 +103,12 @@ void ModelPlatform::PreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNormal);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	directionalLight_->Draw();
-	pointLight_->Draw();
-	spotLight_->Draw();
+	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
 	camera_->SetCameraReaource();
+
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
 
 }
 
@@ -84,10 +118,12 @@ void ModelPlatform::SkinPreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSkinModelMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	directionalLight_->Draw();
-	pointLight_->Draw();
-	spotLight_->Draw();
+	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
 	camera_->SetCameraReaource();
+
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
 
 }
 
@@ -97,10 +133,13 @@ void ModelPlatform::InstancingPreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNormalinstancing);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	directionalLight_->Draw();
-	pointLight_->Draw();
-	spotLight_->Draw();
+	//directionalLight_->Draw();
+	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
 	camera_->SetCameraReaource();
+
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
 
 }
 
@@ -173,4 +212,37 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
 
 	sphereIndex_++;
+}
+
+void ModelPlatform::LightPreUpdate()
+{
+	lightCount_->directional = 0;
+	lightCount_->point = 0;
+	lightCount_->spot = 0;
+}
+
+void ModelPlatform::DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight)
+{
+	directionalLightDatas_[lightCount_->directional] = directionalLight;
+	directionalLightDatas_[lightCount_->directional].direction = Normalize(directionalLightDatas_[lightCount_->directional].direction);
+	lightCount_->directional++;
+
+	return;
+}
+
+void ModelPlatform::PointLightUpdate(const PointLight::PointLightData& pointLight)
+{
+	pointLightDatas_[lightCount_->point] = pointLight;
+	lightCount_->point++;
+
+	return;
+}
+
+void ModelPlatform::SpotLightUpdate(const SpotLight::SpotLightData& spotLight)
+{
+	spotLightDatas_[lightCount_->spot] = spotLight;
+	spotLightDatas_[lightCount_->spot].direction = Normalize(spotLightDatas_[lightCount_->spot].direction);
+	lightCount_->spot++;
+
+	return;
 }
