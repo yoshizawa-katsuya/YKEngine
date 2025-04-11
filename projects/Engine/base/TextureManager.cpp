@@ -129,7 +129,7 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 	}
 
 	//ミップマップ付きのデータを返す
-	//texture.filePath = filePath;
+	//textureResource.filePath = filePath;
 	texture.metadata = image.GetMetadata();
 	texture.resource = dxCommon_->CreateTextureResource(texture.metadata);
 
@@ -140,14 +140,20 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 	srvHeapManager_->CreateSRVforTexture2D(index, texture.resource.Get(), texture.metadata.format, UINT(texture.metadata.mipLevels));
 
 
+	UploadTextureData(texture.resource.Get(), image);
+
+}
+
+void TextureManager::UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages)
+{
 	//Meta情報を取得
-	const DirectX::TexMetadata& metadata = image.GetMetadata();
+	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	//全MipMapについて
 	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
 		//MipMapLevelを指定して各Imageを取得
-		const DirectX::Image* img = image.GetImage(mipLevel, 0, 0);
+		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
 		//Textureに転送
-		HRESULT hr = texture.resource->WriteToSubresource(
+		HRESULT hr = textureResource->WriteToSubresource(
 			UINT(mipLevel),
 			nullptr,				//全領域へコピー
 			img->pixels,			//元データアドレス
@@ -156,5 +162,4 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 		);
 		assert(SUCCEEDED(hr));
 	}
-
 }

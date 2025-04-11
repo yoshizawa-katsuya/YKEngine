@@ -41,6 +41,9 @@ private:
 	//Textureデータを読む
 	void LoadTexture(const std::string& filePath, uint32_t index);
 
+	//データを転送
+	void UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages);
+
 	TextureManager() = default;
 	~TextureManager() = default;
 	TextureManager(TextureManager&) = default;
