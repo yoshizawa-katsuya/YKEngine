@@ -21,7 +21,9 @@ public:
 	//初期化
 	void Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager);
 
-	
+	//描画後処理
+	void PostDraw();
+
 	//読み込み
 	uint32_t Load(const std::string& fileName);
 
@@ -42,7 +44,7 @@ private:
 	void LoadTexture(const std::string& filePath, uint32_t index);
 
 	//データを転送
-	void UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages);
+	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages);
 
 	TextureManager() = default;
 	~TextureManager() = default;
@@ -70,5 +72,7 @@ private:
 	//std::array<Texture, SrvHeapManager::kMaxSrvDescriptors_> textures_;
 	std::unordered_map<uint32_t, Texture> textures_;
 	std::unordered_map<std::string, uint32_t> textureHandles_;
+
+	std::list<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
 
 };

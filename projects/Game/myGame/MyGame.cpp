@@ -73,5 +73,5 @@ void MyGame::Draw()
 
 	dxCommon_->PostDraw();
 
-
+	TextureManager::GetInstance()->PostDraw();
 }
