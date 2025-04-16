@@ -2,6 +2,7 @@
 #include <dxcapi.h>
 #include <cassert>
 #include "dx12.h"
+#include "DirectXTex/d3dx12.h"
 
 TextureManager* TextureManager::GetInstance()
 {
@@ -25,6 +26,13 @@ void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeap
 	//全テクスチャリセット
 	//ResetAll();
 
+}
+
+void TextureManager::PostDraw()
+{
+	if (!intermediateResources_.empty()) {
+		intermediateResources_.clear(); // 必要なときだけ呼ぶ
+	}
 }
 
 uint32_t TextureManager::Load(const std::string& fileName) {
@@ -129,7 +137,7 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 	}
 
 	//ミップマップ付きのデータを返す
-	//texture.filePath = filePath;
+	//textureResource.filePath = filePath;
 	texture.metadata = image.GetMetadata();
 	texture.resource = dxCommon_->CreateTextureResource(texture.metadata);
 
@@ -139,15 +147,42 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 
 	srvHeapManager_->CreateSRVforTexture2D(index, texture.resource.Get(), texture.metadata.format, UINT(texture.metadata.mipLevels));
 
+	intermediateResources_.push_back(UploadTextureData(texture.resource.Get(), image));
+}
 
+[[nodiscard]]
+Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages)
+{
+	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
+	ID3D12Device* device = dxCommon_->GetDevice();
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+
+	DirectX::PrepareUpload(device, mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
+	uint64_t intermediateSize = GetRequiredIntermediateSize(textureResource, 0, UINT(subresources.size()));
+	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = dxCommon_->CreateBufferResource(intermediateSize);
+	UpdateSubresources(commandList, textureResource, intermediateResource.Get(), 0, 0, UINT(subresources.size()), subresources.data());
+	
+	//Textureへの転送後利用できるよう、D3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_READへResourceStateを変更する
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = textureResource;
+	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;;
+	
+	dxCommon_->GetCommandList()->ResourceBarrier(1, &barrier);
+
+	return intermediateResource;
+	/*
 	//Meta情報を取得
-	const DirectX::TexMetadata& metadata = image.GetMetadata();
+	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	//全MipMapについて
 	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
 		//MipMapLevelを指定して各Imageを取得
-		const DirectX::Image* img = image.GetImage(mipLevel, 0, 0);
+		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
 		//Textureに転送
-		HRESULT hr = texture.resource->WriteToSubresource(
+		HRESULT hr = textureResource->WriteToSubresource(
 			UINT(mipLevel),
 			nullptr,				//全領域へコピー
 			img->pixels,			//元データアドレス
@@ -156,5 +191,5 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 		);
 		assert(SUCCEEDED(hr));
 	}
-
+	*/
 }
