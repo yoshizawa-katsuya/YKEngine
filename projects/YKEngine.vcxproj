@@ -129,7 +129,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\InstancingObjects.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
-    <ClCompile Include="Engine\lib\Vector.cpp" />
+    <ClCompile Include="Engine\lib\Vector3.cpp" />
     <ClCompile Include="Engine\3d\BaseModel.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
@@ -155,6 +155,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\PointLight.cpp" />
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
     <ClCompile Include="Engine\lib\ThreadPool.cpp" />
+    <ClCompile Include="Engine\lib\Vector2.cpp" />
+    <ClCompile Include="Engine\lib\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\InstancingObject3d.VS.hlsl">
@@ -256,7 +258,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\dx12.h" />
     <ClInclude Include="Engine\lib\Matrix.h" />
     <ClInclude Include="Engine\lib\Struct.h" />
-    <ClInclude Include="Engine\lib\Vector.h" />
+    <ClInclude Include="Engine\lib\Vector3.h" />
     <ClInclude Include="Engine\3d\BaseModel.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
@@ -287,6 +289,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\SpotLight.h" />
     <ClInclude Include="Engine\lib\ThreadPool.h" />
     <ClInclude Include="Engine\3d\InstancingObjects.h" />
+    <ClInclude Include="Engine\lib\Vector2.h" />
+    <ClInclude Include="Engine\lib\Vector4.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

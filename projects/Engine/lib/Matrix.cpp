@@ -1,7 +1,5 @@
 #include "Matrix.h"
 #include <algorithm>
-#include "Vector.h"
-#include "Quaternion.h"
 
 Matrix3x3 MakeTranslateMatrix(Vector2 translate) {
 	Matrix3x3 matrix;

@@ -1,7 +1,7 @@
 #include <math.h>
 #include "Collision.h"
 #include "Matrix.h"
-#include "Vector.h"
+#include "Vector3.h"
 #include <algorithm>
 
 bool CapsuleCollision(Vector2 capsuleA, Vector2 capsuleB, Vector2 CircleC, float radiusC, float radiusA) {

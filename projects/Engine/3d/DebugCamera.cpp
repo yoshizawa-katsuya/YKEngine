@@ -2,7 +2,6 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Matrix.h"
-#include "Vector.h"
 
 void DebugCamera::Initialize(Camera* camera, Input* input)
 {

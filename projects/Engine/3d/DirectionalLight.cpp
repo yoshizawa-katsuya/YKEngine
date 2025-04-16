@@ -1,5 +1,4 @@
 #include "DirectionalLight.h"
-#include "Vector.h"
 
 void DirectionalLight::Initialize()
 {
