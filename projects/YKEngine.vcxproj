@@ -157,6 +157,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\lib\ThreadPool.cpp" />
     <ClCompile Include="Engine\lib\Vector2.cpp" />
     <ClCompile Include="Engine\lib\Vector4.cpp" />
+    <ClCompile Include="SRTAnimator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\InstancingObject3d.VS.hlsl">
@@ -291,6 +292,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\InstancingObjects.h" />
     <ClInclude Include="Engine\lib\Vector2.h" />
     <ClInclude Include="Engine\lib\Vector4.h" />
+    <ClInclude Include="SRTAnimator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

@@ -225,6 +225,9 @@
     <ClCompile Include="Engine\lib\Vector4.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
+    <ClCompile Include="SRTAnimator.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -419,6 +422,9 @@
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
     <ClInclude Include="Engine\lib\Vector4.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="SRTAnimator.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>
