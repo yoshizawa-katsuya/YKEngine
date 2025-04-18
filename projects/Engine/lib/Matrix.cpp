@@ -359,6 +359,12 @@ Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix)
 	}
 }*/
 
+Matrix4x4 MakeRotateMatrix(const Vector3& rotate)
+{
+	return (MakeRotateXMatrix(rotate.x) * MakeRotateYMatrix(rotate.y) * MakeRotateZMatrix(rotate.z));
+
+}
+
 Matrix4x4 MakeRotateXMatrix(float radian) {
 
 	Matrix4x4 m = { 0 };

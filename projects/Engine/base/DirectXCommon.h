@@ -87,6 +87,8 @@ public:
 	//前のフレームからの経過時間を取得
 	float GetDeltaTime() { return deltaTime_; }
 
+	void ResetDeltaTime() { deltaTime_ = 0.0f; }
+
 private:
 
 	//static DirectXCommon* instance_;

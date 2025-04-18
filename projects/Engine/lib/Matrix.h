@@ -51,6 +51,9 @@ Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix);
 
 //void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label);
 
+//回転行列 XYZの順
+Matrix4x4 MakeRotateMatrix(const Vector3& rotate);
+
 //X軸回転行列
 Matrix4x4 MakeRotateXMatrix(float radian);
 

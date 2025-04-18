@@ -5,17 +5,19 @@ class ParticleEmitter
 {
 public:
 
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name = 'name'>パーティクルグループの名前</param>
+	/// <param name = 'count'>発生数</param>
+	/// <param name = 'frequency'>発生頻度</param>
 	ParticleEmitter(const std::string& name, uint32_t count, float frequency);
 
 	void Initialize(uint32_t textureHandle);
 
-	void Update();
+	void Update(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
-	void Update(const Vector4& color);
-
-	void Emit();
-
-	void Emit(const Vector4& color);
+	void Emit(const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
 	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
 
@@ -28,6 +30,14 @@ public:
 	void SetRandTranslationMax(const Vector3& translationMax) { randTranslateMax_ = translationMax; }
 
 	void SetIsRandomColor(bool isRandomColor) { isRandomColor_ = isRandomColor; }
+
+	void SetIsRandomTranslate(bool isRandomTranslate) { isRandomTranslate_ = isRandomTranslate; }
+
+	void SetIsRandomVelocity(bool isRandomVelocity) { isRandomVelocity_ = isRandomVelocity; }
+
+	void SetIsRandomRotate(bool isRandomRotate) { isRandomRotate_ = isRandomRotate; }
+
+	void SetIsRandomScele(bool isRandomScale) { isRandomScale_ = isRandomScale; }
 
 	void SetCount(uint32_t count) { count_ = count; }
 
@@ -54,6 +64,18 @@ public:
 	bool& GetIsRandomColor() { return isRandomColor_; }
 	bool GetIsRandomColor() const { return isRandomColor_; }
 
+	bool& GetIsRandomTranslate() { return isRandomTranslate_; }
+	bool GetIsRandomTranslate() const { return isRandomTranslate_; }
+
+	bool& GetIsRandomVelocity() { return isRandomVelocity_; }
+	bool GetIsRandomVelocity() const { return isRandomVelocity_; }
+
+	bool& GetIsRandomRotate() { return isRandomRotate_; }
+	bool GetIsRandomRotate() const { return isRandomRotate_; }
+
+	bool& GetIsRandomScele() { return isRandomScale_; }
+	bool GetIsRandomScele() const { return isRandomScale_; }
+
 private:
 
 	std::string name_;
@@ -63,8 +85,14 @@ private:
 	float frequencyTime_; //!<頻度用時刻
 	const float kDeltaTime_ = 1.0f / 60.0f;
 
+	//TODO: 構造体にまとめる
 	bool isRandomColor_ = false;
+	bool isRandomTranslate_ = false;
+	bool isRandomVelocity_ = false;
+	bool isRandomRotate_ = false;
+	bool isRandomScale_ = false;
 
+	//TODO: 構造体にまとめる
 	Vector3 randTranslateMin_ = { -1.0f, -1.0f, -1.0f };
 	Vector3 randTranslateMax_ = { 1.0f, 1.0f, 1.0f };
 

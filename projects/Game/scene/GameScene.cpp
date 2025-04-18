@@ -59,13 +59,24 @@ void GameScene::Initialize() {
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
 	/*
-	//テクスチャハンドルの生成
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
-
 	//スプライトの生成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	*/
+
+	//パーティクルエミッターの生成
+	emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
+	emitter_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"));
+	emitter_->SetTranslation({ 1.0f, 0.0f, 0.0f });
+	emitter_->SetScale({ 0.05f, 1.0f, 1.0f });
+	emitter_->SetIsRandomRotate(true);
+
+	emitter2_ = std::make_unique<ParticleEmitter>("Effect2", 3, 1.5f);
+	emitter2_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"));
+	emitter2_->SetTranslation({ -1.0f, 0.0f, 0.0f });
+	emitter2_->SetScale({ 0.05f, 1.0f, 1.0f });
+	emitter2_->SetIsRandomRotate(true);
+	emitter2_->SetIsRandomScele(true);
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -112,9 +123,10 @@ void GameScene::Update() {
 	objects_->WorldTransformUpdate(worldTransform2_);
 	*/
 
-	//emitter_->Update(color_);
+	emitter_->Update();
+	emitter2_->Update();
 
-	//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
+	ParticleManager::GetInstance()->Update(mainCamera_);
 
 #ifdef _DEBUG
 
@@ -201,7 +213,7 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	//player_->Draw(mainCamera_);
 
 	/*
 	modelPlatform_->InstancingPreDraw();
@@ -212,7 +224,7 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
-	//ParticleManager::GetInstance()->Draw();
+	ParticleManager::GetInstance()->Draw();
 
 }
 

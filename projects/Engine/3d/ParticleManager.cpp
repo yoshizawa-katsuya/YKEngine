@@ -73,8 +73,9 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 			if (particleGroupIterator->second.numInstance < particleGroupIterator->second.kNumMaxInstance) {
 				Matrix4x4 scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
 				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
+				Matrix4x4 rotateMatrix = MakeRotateMatrix(particleIterator->transform.rotation);
 				//Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
-				Matrix4x4 worldMatrix = scaleMatrix * billboardMatrix * translateMatrix;
+				Matrix4x4 worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
 
 				Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, viewprojectionMatrix);
 				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].WVP = worldViewProjectionMatrix;
@@ -154,19 +155,13 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 }
 
-void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector3& translateMin, const Vector3& translateMax)
+void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor,
+	bool isRandomTranslate, bool isRandomVelocity, bool isRandomRotate, bool isRandomScale,
+	const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
 {
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, {1.0f, 1.0f, 1.0f, 1.0f}, translateMin, translateMax));
-	}
-}
-
-void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
-{
-	assert(particleGroups_.contains(name));
-	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, color, translateMin, translateMax));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, isRandomTranslate, isRandomVelocity, isRandomRotate, isRandomScale, color, translateMin, translateMax));
 	}
 }
 
@@ -207,32 +202,69 @@ void ParticleManager::Create()
 
 }
 
-Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor, const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
+Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor, bool isRandomTranslate,
+	bool isRandomVelocity, bool isRandomRotate, bool isRandomScale, const Vector4& color, 
+	const Vector3& translateMin, const Vector3& translateMax)
 {
-	
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
-	std::uniform_real_distribution<float> distributionX(translateMin.x, translateMax.x);
-	std::uniform_real_distribution<float> distributionY(translateMin.y, translateMax.y);
-	std::uniform_real_distribution<float> distributionZ(translateMin.z, translateMax.z);
 
 	Particle particle;
 
-	particle.transform.scale = transform.scale;
-	particle.transform.rotation = { 0.0f, 0.0f, 0.0f };
-	//particle.transform.translate = { index * 0.1f, index * 0.1f, index * 0.1f };
-	Vector3 randomTranslate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
-	particle.transform.translation = transform.translation + randomTranslate;
-	//particle.velocity = { 0.0f, 1.0f, 0.0f };
-	particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
+	if (isRandomScale) 
+	{
+		std::uniform_real_distribution<float> distScale(-0.6f, 0.5f);
 
-	if (isRandomColor) {
+		particle.transform.scale = transform.scale + Vector3{0.0f, distScale(randomEngine_), 0.0f};
+	}
+	else
+	{
+		particle.transform.scale = transform.scale;
+	}
+	if (isRandomRotate) 
+	{
+		std::uniform_real_distribution<float> diatRotate(-std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+
+		particle.transform.rotation = { 0.0f, 0.0f, diatRotate(randomEngine_) };
+	}
+	else 
+	{
+		particle.transform.rotation = { 0.0f, 0.0f, 0.0f };
+	}
+
+	if (isRandomTranslate) 
+	{
+		std::uniform_real_distribution<float> distributionX(translateMin.x, translateMax.x);
+		std::uniform_real_distribution<float> distributionY(translateMin.y, translateMax.y);
+		std::uniform_real_distribution<float> distributionZ(translateMin.z, translateMax.z);
+
+		Vector3 randomTranslate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		particle.transform.translation = transform.translation + randomTranslate;
+	}
+	else
+	{
+		particle.transform.translation = transform.translation;
+	}
+
+	if (isRandomVelocity)
+	{
+		std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+
+		particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
+	}
+	else 
+	{
+		particle.velocity = { 0.0f, 0.0f, 0.0f };
+	}
+
+	if (isRandomColor) 
+	{
 		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
 		particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
 	}
-	else {
+	else 
+	{
 		particle.color = color;
 	}
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	std::uniform_real_distribution<float> distTime(1.0f, 1.0f);
 	particle.lifeTime = distTime(randomEngine_);
 	particle.currentTime = 0;
 
