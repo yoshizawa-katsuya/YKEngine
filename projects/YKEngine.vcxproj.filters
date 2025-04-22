@@ -225,7 +225,7 @@
     <ClCompile Include="Engine\lib\Vector4.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="SRTAnimator.cpp">
+    <ClCompile Include="Engine\lib\SRTAnimator.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
   </ItemGroup>
@@ -424,7 +424,10 @@
     <ClInclude Include="Engine\lib\Vector4.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="SRTAnimator.h">
+    <ClInclude Include="Engine\lib\SRTAnimator.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\ParticleTypes.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>

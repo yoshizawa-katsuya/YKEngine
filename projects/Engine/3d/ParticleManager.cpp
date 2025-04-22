@@ -107,6 +107,7 @@ void ParticleManager::Draw()
 
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	//TODO: indexBufferを使う
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
@@ -155,13 +156,12 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 }
 
-void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor,
-	bool isRandomTranslate, bool isRandomVelocity, bool isRandomRotate, bool isRandomScale,
+void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
 	const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
 {
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, isRandomColor, isRandomTranslate, isRandomVelocity, isRandomRotate, isRandomScale, color, translateMin, translateMax));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, translateMin, translateMax));
 	}
 }
 
@@ -202,14 +202,13 @@ void ParticleManager::Create()
 
 }
 
-Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool isRandomColor, bool isRandomTranslate,
-	bool isRandomVelocity, bool isRandomRotate, bool isRandomScale, const Vector4& color, 
-	const Vector3& translateMin, const Vector3& translateMax)
+Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
+	const Vector4& color,const Vector3& translateMin, const Vector3& translateMax)
 {
 
 	Particle particle;
 
-	if (isRandomScale) 
+	if (randomFlags.scale) 
 	{
 		std::uniform_real_distribution<float> distScale(-0.6f, 0.5f);
 
@@ -219,7 +218,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool 
 	{
 		particle.transform.scale = transform.scale;
 	}
-	if (isRandomRotate) 
+	if (randomFlags.rotate)
 	{
 		std::uniform_real_distribution<float> diatRotate(-std::numbers::pi_v<float>, std::numbers::pi_v<float>);
 
@@ -230,7 +229,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool 
 		particle.transform.rotation = { 0.0f, 0.0f, 0.0f };
 	}
 
-	if (isRandomTranslate) 
+	if (randomFlags.translate)
 	{
 		std::uniform_real_distribution<float> distributionX(translateMin.x, translateMax.x);
 		std::uniform_real_distribution<float> distributionY(translateMin.y, translateMax.y);
@@ -244,7 +243,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool 
 		particle.transform.translation = transform.translation;
 	}
 
-	if (isRandomVelocity)
+	if (randomFlags.velocity)
 	{
 		std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
 
@@ -255,7 +254,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool 
 		particle.velocity = { 0.0f, 0.0f, 0.0f };
 	}
 
-	if (isRandomColor) 
+	if (randomFlags.color)
 	{
 		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
 		particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
@@ -264,7 +263,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, bool 
 	{
 		particle.color = color;
 	}
-	std::uniform_real_distribution<float> distTime(1.0f, 1.0f);
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 	particle.lifeTime = distTime(randomEngine_);
 	particle.currentTime = 0;
 

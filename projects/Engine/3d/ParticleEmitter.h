@@ -1,5 +1,6 @@
 #pragma once
 #include "Struct.h"
+#include "ParticleTypes.h"
 
 class ParticleEmitter
 {
@@ -29,15 +30,15 @@ public:
 
 	void SetRandTranslationMax(const Vector3& translationMax) { randTranslateMax_ = translationMax; }
 
-	void SetIsRandomColor(bool isRandomColor) { isRandomColor_ = isRandomColor; }
+	void SetIsRandomColor(bool isRandomColor) { randomFlags_.color = isRandomColor; }
 
-	void SetIsRandomTranslate(bool isRandomTranslate) { isRandomTranslate_ = isRandomTranslate; }
+	void SetIsRandomTranslate(bool isRandomTranslate) { randomFlags_.translate = isRandomTranslate; }
 
-	void SetIsRandomVelocity(bool isRandomVelocity) { isRandomVelocity_ = isRandomVelocity; }
+	void SetIsRandomVelocity(bool isRandomVelocity) { randomFlags_.velocity = isRandomVelocity; }
 
-	void SetIsRandomRotate(bool isRandomRotate) { isRandomRotate_ = isRandomRotate; }
+	void SetIsRandomRotate(bool isRandomRotate) { randomFlags_.rotate = isRandomRotate; }
 
-	void SetIsRandomScele(bool isRandomScale) { isRandomScale_ = isRandomScale; }
+	void SetIsRandomScele(bool isRandomScale) { randomFlags_.scale = isRandomScale; }
 
 	void SetCount(uint32_t count) { count_ = count; }
 
@@ -61,20 +62,20 @@ public:
 	uint32_t& GetCount() { return count_; }
 	uint32_t GetCount() const { return count_; }
 
-	bool& GetIsRandomColor() { return isRandomColor_; }
-	bool GetIsRandomColor() const { return isRandomColor_; }
+	bool& GetIsRandomColor() { return randomFlags_.color; }
+	bool GetIsRandomColor() const { return randomFlags_.color; }
 
-	bool& GetIsRandomTranslate() { return isRandomTranslate_; }
-	bool GetIsRandomTranslate() const { return isRandomTranslate_; }
+	bool& GetIsRandomTranslate() { return randomFlags_.translate; }
+	bool GetIsRandomTranslate() const { return randomFlags_.translate; }
 
-	bool& GetIsRandomVelocity() { return isRandomVelocity_; }
-	bool GetIsRandomVelocity() const { return isRandomVelocity_; }
+	bool& GetIsRandomVelocity() { return randomFlags_.velocity; }
+	bool GetIsRandomVelocity() const { return randomFlags_.velocity; }
 
-	bool& GetIsRandomRotate() { return isRandomRotate_; }
-	bool GetIsRandomRotate() const { return isRandomRotate_; }
+	bool& GetIsRandomRotate() { return randomFlags_.rotate; }
+	bool GetIsRandomRotate() const { return randomFlags_.rotate; }
 
-	bool& GetIsRandomScele() { return isRandomScale_; }
-	bool GetIsRandomScele() const { return isRandomScale_; }
+	bool& GetIsRandomScele() { return randomFlags_.scale; }
+	bool GetIsRandomScele() const { return randomFlags_.scale; }
 
 private:
 
@@ -85,14 +86,9 @@ private:
 	float frequencyTime_; //!<頻度用時刻
 	const float kDeltaTime_ = 1.0f / 60.0f;
 
-	//TODO: 構造体にまとめる
-	bool isRandomColor_ = false;
-	bool isRandomTranslate_ = false;
-	bool isRandomVelocity_ = false;
-	bool isRandomRotate_ = false;
-	bool isRandomScale_ = false;
+	ParticleRandomizationFlags randomFlags_;
 
-	//TODO: 構造体にまとめる
+	//TODO: 構造体にまとめる 拡縮や回転にも対応させる
 	Vector3 randTranslateMin_ = { -1.0f, -1.0f, -1.0f };
 	Vector3 randTranslateMax_ = { 1.0f, 1.0f, 1.0f };
 
