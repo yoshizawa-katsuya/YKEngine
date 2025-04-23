@@ -71,7 +71,7 @@ void GameScene::Initialize() {
 	emitter_->SetScale({ 0.05f, 1.0f, 1.0f });
 	emitter_->SetIsRandomRotate(true);
 
-	emitter2_ = std::make_unique<ParticleEmitter>("Effect2", 3, 1.5f);
+	emitter2_ = std::make_unique<ParticleEmitter>("Effect", 3, 1.5f);
 	emitter2_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"));
 	emitter2_->SetTranslation({ -1.0f, 0.0f, 0.0f });
 	emitter2_->SetScale({ 0.05f, 1.0f, 1.0f });
@@ -127,6 +127,11 @@ void GameScene::Update() {
 	emitter2_->Update();
 
 	ParticleManager::GetInstance()->Update(mainCamera_);
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+		//シーン切り替え依頼
+		sceneManager_->ChengeScene("TitleScene");
+	}
 
 #ifdef _DEBUG
 

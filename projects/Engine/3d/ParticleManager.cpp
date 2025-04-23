@@ -133,8 +133,15 @@ void ParticleManager::Draw()
 
 void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textureHandle)
 {
+	//名前とテクスチャが同じ場合パーティクルを使いまわす
+	if (particleGroups_.contains(name))
+	{
+		assert(particleGroups_[name].textureHandle == textureHandle);
 
-	assert(!particleGroups_.contains(name));
+		particleGroups_[name].particles.clear();
+		particleGroups_[name].numInstance = 0;
+		return;
+	}
 
 	ParticleGroup& particleGroup = particleGroups_[name];
 
@@ -265,7 +272,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	}
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 	particle.lifeTime = distTime(randomEngine_);
-	particle.currentTime = 0;
+	particle.currentTime = 0.0f;
 
 	return particle;
 

@@ -20,6 +20,7 @@ void InstancingObjects::Initialize(BaseModel* model, uint32_t maxInstances)
 	instancingResouce_ = dxCommon_->CreateBufferResource(sizeof(TransformationMatrix) * kNumMaxInstance_);
 	instancingResouce_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
+	//TODO: ゲームループなどで初期化するたびにsrvIndexが先に進んでいくので改善する
 	instancingSrvIndex_ = srvHeapManager_->Allocate();
 
 	srvHeapManager_->CreateSRVforStructuredBuffer(instancingSrvIndex_, instancingResouce_.Get(), kNumMaxInstance_, sizeof(TransformationMatrix));
