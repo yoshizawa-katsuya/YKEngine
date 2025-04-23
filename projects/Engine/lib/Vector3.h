@@ -1,16 +1,18 @@
 #pragma once
-#include "Struct.h"
-#include "Camera.h"
-//#include <Novice.h>
+class Camera;
 
-//減算
-Vector2 Subtract(const Vector2& v1, const Vector2& v2);
+struct Vector3 {
+	float x;
+	float y;
+	float z;
 
-//長さ
-float Length(const Vector2& v);
+	Vector3& operator*=(float s) { x *= s;  y *= s; z *= s; return *this; }
+	Vector3& operator-=(const Vector3& v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
+	Vector3& operator+=(const Vector3& v) { x += v.x; y += v.y; z += v.z; return *this; }
+	Vector3& operator/=(float s) { x /= s;  y /= s; z /= s; return *this; }
 
-//内積
-float Dot(const Vector2& v1, const Vector2& v2);
+};
+
 
 //加算
 Vector3 Add(const Vector3& v1, const Vector3& v2);

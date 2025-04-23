@@ -1,9 +1,7 @@
 #include "Slerp.h"
-#include "Vector.h"
 #include <algorithm>
 #include <cmath>
 #include "Lerp.h"
-#include "Quaternion.h"
 
 Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 

@@ -61,6 +61,9 @@ void Input::Update()
 	mouse_->Acquire();
 	mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState_);
 
+	//ゲームパッドの更新
+	GamePadUpdate();
+
 }
 
 bool Input::PushKey(BYTE keyNumber)
@@ -114,6 +117,22 @@ bool Input::PushMouseLeft()
 bool Input::TrigerMouseLeft()
 {
 	if (!(preMouseState_.rgbButtons[0] & 0x80) && mouseState_.rgbButtons[0] & 0x80) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::ReleaseMouseLeft()
+{
+	if (preMouseState_.rgbButtons[0] & 0x80 && !(mouseState_.rgbButtons[0] & 0x80)) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::HoldMouseLeft()
+{
+	if (preMouseState_.rgbButtons[0] & 0x80 && mouseState_.rgbButtons[0] & 0x80) {
 		return true;
 	}
 	return false;

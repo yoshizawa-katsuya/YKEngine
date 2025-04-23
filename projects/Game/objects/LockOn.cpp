@@ -1,7 +1,6 @@
 #include "LockOn.h"
 #include "TextureManager.h"
 #include "Matrix.h"
-#include "Vector.h"
 #include <cmath>
 
 void LockOn::Initialize() {

@@ -3,6 +3,9 @@
 #include <cassert>
 #include "GlobalVariables.h"
 #include "imgui/imgui.h"
+#include "ParticleManager.h"
+#include "SceneManager.h"
+#include "Input.h"
 
 GameScene::GameScene() {}
 
@@ -21,15 +24,15 @@ void GameScene::Initialize() {
 
 	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
-	directionalLight_->Initialize(dxCommon_);
-
+	directionalLight_->Initialize();
+	
 	//点光源の生成
 	pointLight_ = std::make_unique<PointLight>();
-	pointLight_->Initialize(dxCommon_);
-
+	pointLight_->Initialize();
+	
 	//スポットライトの生成
 	spotLight_ = std::make_unique<SpotLight>();
-	spotLight_->Initialize(dxCommon_);
+	spotLight_->Initialize();
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -46,11 +49,13 @@ void GameScene::Initialize() {
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 
-	//モデルを描画する際ライトとカメラの設定は必須
-	modelPlatform_->SetDirectionalLight(directionalLight_.get());
-	modelPlatform_->SetPointLight(pointLight_.get());
+	//モデルを描画する際カメラの設定は必須
+	//modelPlatform_->SetDirectionalLight(directionalLight_.get());
+	//modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
-	modelPlatform_->SetSpotLight(spotLight_.get());
+	//modelPlatform_->SetSpotLight(spotLight_.get());
+
+	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 
 	//追従カメラの生成
 	followCamera_ = std::make_unique<FollowCamera>();
@@ -150,8 +155,6 @@ void GameScene::Update() {
 
 	GlobalVariables::GetInstance()->Update();
 
-	input_->GamePadUpdate();
-
 	// 追従カメラの更新
 	followCamera_->Update();
 
@@ -167,6 +170,97 @@ void GameScene::Update() {
 
 	//地面の更新
 	ground_->Update();
+	modelPlatform_->LightPreUpdate();
+	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
+	//modelPlatform_->PointLightUpdate(pointLight_->GetPointLightData());
+	//modelPlatform_->SpotLightUpdate(spotLight_->GetSpotLightData());
+
+	/*
+	objects_->PreUpdate();
+	worldTransform1_.translation_.x += 0.01f;
+	worldTransform1_.UpdateMatrix();
+	objects_->WorldTransformUpdate(worldTransform1_);
+	objects_->WorldTransformUpdate(worldTransform2_);
+	*/
+
+	//emitter_->Update();
+
+	//ParticleManager::GetInstance()->Update(mainCamera_);
+
+	
+
+#ifdef _DEBUG
+
+
+	ImGui::Begin("Window");
+	if (ImGui::TreeNode("camera")) 
+	{
+		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
+		ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
+		//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("DirectionalLight")) 
+	{
+		ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
+		ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
+		ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("PointLight"))
+	{
+		ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
+		ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
+		ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
+		ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
+		ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
+
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("SpotLight")) 
+	{
+		ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
+		ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
+		ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
+		ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
+		ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
+		ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
+		ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
+		ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
+
+		ImGui::TreePop();
+	}
+	//メインカメラの切り替え
+	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) 
+	{
+		isActiveDebugCamera_ = false;
+
+		mainCamera_ = camera_.get();
+		modelPlatform_->SetCamera(mainCamera_);
+
+	}
+	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) 
+	{
+		isActiveDebugCamera_ = true;
+
+		mainCamera_ = camera2_.get();
+		modelPlatform_->SetCamera(mainCamera_);
+
+	}
+
+	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
+
+	/*
+	if (ImGui::Button("BGMstop")) {
+		audio_->SoundStopWave(bgm1_);
+	}
+	*/
+	ImGui::End();
+
+#endif // _DEBUG
 
 	//自キャラの更新
 	player_->Update(mainCamera_);
@@ -185,26 +279,6 @@ void GameScene::Update() {
 	//衝突判定と応答
 	CheckAllCollisions();
 
-#ifdef _DEBUG
-
-	ImGui::Begin("Window");
-	//メインカメラの切り替え
-	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
-		isActiveDebugCamera_ = false;
-
-		mainCamera_ = camera_.get();
-		modelPlatform_->SetCamera(mainCamera_);
-
-	}
-	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
-		isActiveDebugCamera_ = true;
-
-		mainCamera_ = camera2_.get();
-		modelPlatform_->SetCamera(mainCamera_);
-
-	}
-	ImGui::End();
-#endif // _DEBUG
 
 }
 

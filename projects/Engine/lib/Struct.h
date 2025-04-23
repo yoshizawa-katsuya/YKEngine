@@ -11,46 +11,16 @@
 #include <span>
 #include <Windows.h>
 #include <d3d12.h>
-
-struct Vector2 {
-	float x;
-	float y;
-};
-
-struct Vector3{
-	float x;
-	float y;
-	float z;
-
-	Vector3& operator*=(float s) { x *= s;  y *= s; z *= s; return *this; }
-	Vector3& operator-=(const Vector3& v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
-	Vector3& operator+=(const Vector3& v) { x += v.x; y += v.y; z += v.z; return *this; }
-	Vector3& operator/=(float s) { x /= s;  y /= s; z /= s; return *this; }
-
-};
-
-struct Vector4 {
-	float x;
-	float y;
-	float z;
-	float w;
-};
-
-struct  Quaternion
-{
-	float x;
-	float y;
-	float z;
-	float w;
-};
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Quaternion.h"
 
 struct VertexData {
 	Vector4 position;
 	Vector2 texcoord;
 	Vector3 normal;
 };
-
-
 
 struct Matrix3x3
 {

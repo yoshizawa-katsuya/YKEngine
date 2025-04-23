@@ -87,7 +87,7 @@
     <ClCompile Include="Engine\lib\Matrix.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\lib\Vector.cpp">
+    <ClCompile Include="Engine\lib\Vector3.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\BaseModel.cpp">
@@ -252,6 +252,15 @@
     <ClCompile Include="Game\objects\Skydome.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\lib\Vector2.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\lib\Vector4.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\lib\SRTAnimator.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -322,7 +331,7 @@
     <ClInclude Include="Engine\lib\Struct.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\lib\Vector.h">
+    <ClInclude Include="Engine\lib\Vector3.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\Player.h">
@@ -358,7 +367,7 @@
     <ClInclude Include="Engine\base\ImGuiManager.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\ParticleManager.h">
+    <ClInclude Include="Engine\3d\ParticleManager.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\ParticleEmitter.h">
@@ -477,6 +486,18 @@
     </ClInclude>
     <ClInclude Include="Game\objects\Skydome.h">
       <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Vector2.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Vector4.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\SRTAnimator.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\ParticleTypes.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

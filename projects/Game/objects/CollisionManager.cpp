@@ -1,5 +1,4 @@
 #include "CollisionManager.h"
-#include "Vector.h"
 #include "Matrix.h"
 #include "GlobalVariables.h"
 

@@ -1,6 +1,7 @@
 #include "Base3dObject.h"
 #include "Matrix.h"
 #include "Camera.h"
+#include "Animation.h"
 
 Base3dObject::Base3dObject()
 	: dxCommon_(DirectXCommon::GetInstance())
@@ -32,6 +33,11 @@ void Base3dObject::WorldTransformUpdate(const WorldTransform& worldTransform)
 
 }
 
+void Base3dObject::AnimationUpdate(Animation* animation)
+{
+	TransformationData_->World = Multiply(TransformationData_->World, animation->Reproducing(model_));
+}
+
 void Base3dObject::CameraUpdate(Camera* camera)
 {
 
@@ -46,10 +52,6 @@ void Base3dObject::CameraUpdate(Camera* camera)
 	TransformationData_->WVP = worldViewProjectionMatrix;
 	TransformationData_->WorldInverseTranspose = Transpose(Inverse(TransformationData_->World));
 
-}
-
-void Base3dObject::AnimationUpdate(Animation* animation)
-{
 }
 
 void Base3dObject::Draw()

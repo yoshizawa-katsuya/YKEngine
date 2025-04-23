@@ -395,15 +395,27 @@ void DirectXCommon::UpdateFixFPS()
 	std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - referance_);
 
 	// 1/60秒(よりわずかに短い時間)経っていない場合
-	if (elapsed < kMinCheckTime) {
+	if (elapsed < kMinCheckTime) 
+	{
 		// 1/60秒経過するまで微小なスリープを繰り返す
-		while (std::chrono::steady_clock::now() - referance_ < kMinTime) {
+		while (std::chrono::steady_clock::now() - referance_ < kMinTime) 
+		{
 			//1マイクロ秒スリープ
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
 	}
 	//現在の時間を記録する
 	referance_ = std::chrono::steady_clock::now();
+
+	// DeltaTime（秒単位）を保存
+	if (elapsed < kMinCheckTime) 
+	{
+		deltaTime_ = 1.0f / 60.0f;
+	}
+	else 
+	{
+		deltaTime_ = elapsed.count() / 1'000'000.0f;
+	}
 
 }
 
@@ -619,11 +631,11 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateTextureResource(cons
 	resourceDesc.SampleDesc.Count = 1;	//サンプリングカウント。1固定。
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);	//Textureの次元数。普段使っているのは2次元
 
-	//利用するHeapの設定。非常に特殊な運用。
+	//利用するHeapの設定
 	D3D12_HEAP_PROPERTIES heapProperties{};
-	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;	//細かい設定を行う
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;	//WriteBackポリシーでCPUアクセス可能
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;	//プロセッサの近くに配置
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;	//細かい設定を行う
+	//heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;	//WriteBackポリシーでCPUアクセス可能
+	//heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;	//プロセッサの近くに配置
 
 	//Resourceの生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
@@ -631,7 +643,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateTextureResource(cons
 		&heapProperties,	//Heapの設定
 		D3D12_HEAP_FLAG_NONE,	//Heapの特殊な設定。特になし
 		&resourceDesc,	//Resourceの設定
-		D3D12_RESOURCE_STATE_GENERIC_READ,	//初回のResourceState。Textureは基本読むだけ
+		D3D12_RESOURCE_STATE_COPY_DEST,	//データ転送される設定
 		nullptr,	//Clear最適値。使わないのでnullptr
 		IID_PPV_ARGS(&resource));	//作成するresourceポインタへのポインタ
 	assert(SUCCEEDED(hr));

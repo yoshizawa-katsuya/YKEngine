@@ -1,5 +1,9 @@
 #pragma once
+#include "Rigid3dObject.h"
 #include "WorldTransform.h"
+#include "SRTAnimator.h"
+class Camera;
+class MapChipField;
 #include "BaseCharacter.h"
 #include <optional>
 class LockOn;

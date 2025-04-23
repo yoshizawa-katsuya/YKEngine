@@ -1,5 +1,4 @@
 #include "FollowCamera.h"
-#include "Vector.h"
 #include "Matrix.h"
 #include "Input.h"
 #include "Lerp.h"

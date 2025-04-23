@@ -13,9 +13,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c0eaf92e-b45e-4d5c-b3da-8c9149675f01}</ProjectGuid>
+    <ProjectGuid>{C937FE25-B27C-4DFE-A9D5-982E1EA6673A}</ProjectGuid>
     <RootNamespace>CG2LE2B28</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>YKEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -139,7 +140,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\InstancingObjects.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
-    <ClCompile Include="Engine\lib\Vector.cpp" />
+    <ClCompile Include="Engine\lib\Vector3.cpp" />
     <ClCompile Include="Engine\3d\BaseModel.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
@@ -165,6 +166,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\PointLight.cpp" />
     <ClCompile Include="Engine\3d\SpotLight.cpp" />
     <ClCompile Include="Engine\lib\ThreadPool.cpp" />
+    <ClCompile Include="Engine\lib\Vector2.cpp" />
+    <ClCompile Include="Engine\lib\Vector4.cpp" />
+    <ClCompile Include="Engine\lib\SRTAnimator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\InstancingObject3d.VS.hlsl">
@@ -266,7 +270,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\dx12.h" />
     <ClInclude Include="Engine\lib\Matrix.h" />
     <ClInclude Include="Engine\lib\Struct.h" />
-    <ClInclude Include="Engine\lib\Vector.h" />
+    <ClInclude Include="Engine\lib\Vector3.h" />
     <ClInclude Include="Engine\3d\BaseModel.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
@@ -291,7 +295,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\2d\SpritePlatform.h" />
     <ClInclude Include="Engine\base\ImGuiManager.h" />
     <ClInclude Include="Engine\3d\ParticleEmitter.h" />
-    <ClInclude Include="Engine\base\ParticleManager.h" />
+    <ClInclude Include="Engine\3d\ParticleManager.h" />
     <ClInclude Include="Engine\base\SrvHeapManager.h" />
     <ClInclude Include="Game\myGame\MyGame.h" />
     <ClInclude Include="Engine\base\YKFramework.h" />
@@ -309,6 +313,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\SpotLight.h" />
     <ClInclude Include="Engine\lib\ThreadPool.h" />
     <ClInclude Include="Engine\3d\InstancingObjects.h" />
+    <ClInclude Include="Engine\lib\Vector2.h" />
+    <ClInclude Include="Engine\lib\Vector4.h" />
+    <ClInclude Include="Engine\lib\ParticleTypes.h" />
+    <ClInclude Include="Engine\lib\SRTAnimator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

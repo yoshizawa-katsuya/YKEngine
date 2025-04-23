@@ -17,9 +17,10 @@ public:
 
 	virtual void WorldTransformUpdate(const WorldTransform& worldTransform);
 
-	virtual void CameraUpdate(Camera* camera);
-
+	//WorldTransformUpdateの後に実行する
 	virtual void AnimationUpdate(Animation* animation);
+
+	virtual void CameraUpdate(Camera* camera);
 
 	virtual void Draw();
 
