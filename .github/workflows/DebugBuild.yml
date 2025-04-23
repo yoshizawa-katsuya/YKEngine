@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 env:
   #リポジトリのルートディレクトリを基点としたソリューションファイルのパス
-  SOULUTION_FILE_PATH: projects/CG4_LE2B_28.sln
+  SOULUTION_FILE_PATH: projects/YKEngine.sln
   #Visual Studio の構成(Debud / Release )
   CONFIGURATION: Debug
 jobs:
