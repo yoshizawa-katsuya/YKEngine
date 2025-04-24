@@ -110,6 +110,8 @@ void ParticleManager::Draw()
 	//TODO: indexBufferを使う
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
+	dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
+
 	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
 		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) {
 
@@ -122,8 +124,9 @@ void ParticleManager::Draw()
 		//instancing用のDataを読むためにStructBufferのSRVを設定する
 		srvHeapManager_->SetGraphicsRootDescriptorTable(1, particleGroupIterator->second.instancingSrvIndex);
 		
-		//描画!6頂点のポリゴンを、kNumInstance(今回は10)だけInstance描画を行う
-		dxCommon_->GetCommandList()->DrawInstanced(6, particleGroupIterator->second.numInstance, 0, 0);
+		//描画!6頂点のポリゴンを、numInstanceだけInstance描画を行う
+		//dxCommon_->GetCommandList()->DrawInstanced(6, particleGroupIterator->second.numInstance, 0, 0);
+		dxCommon_->GetCommandList()->DrawIndexedInstanced(6, particleGroupIterator->second.numInstance, 0, 0, 0);
 
 
 	}
@@ -177,12 +180,12 @@ void ParticleManager::Create()
 
 	
 	//VertexResourceを生成
-	vertexResource_ = dxCommon_->CreateBufferResource(sizeof(VertexData) * 6);
+	vertexResource_ = dxCommon_->CreateBufferResource(sizeof(VertexData) * 4);
 	
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * 6);
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * 4);
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
@@ -192,10 +195,33 @@ void ParticleManager::Create()
 	vertexData_[0] = { .position = {1.0f, 1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左上
 	vertexData_[1] = { .position = {-1.0f, 1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右上
 	vertexData_[2] = { .position = {1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
+	vertexData_[3] = { .position = {-1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右下
+
+	
+	/*
+	vertexData_[0] = { .position = {1.0f, 1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左上
+	vertexData_[1] = { .position = {-1.0f, 1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右上
+	vertexData_[2] = { .position = {1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
 	vertexData_[3] = { .position = {1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
 	vertexData_[4] = { .position = {-1.0f, 1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右上
 	vertexData_[5] = { .position = {-1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右下
+	*/
 
+	//IndexResources作成
+	indexResource_ = dxCommon_->CreateBufferResource(sizeof(uint32_t) * 6);
+
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * 6);
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+
+	indexData_[0] = 0;	//左上
+	indexData_[1] = 1;	//右上
+	indexData_[2] = 2;	//左下
+	indexData_[3] = 2;	//左下
+	indexData_[4] = 1;	//右上
+	indexData_[5] = 3;	//右下
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_ = dxCommon_->CreateBufferResource(sizeof(Material));

@@ -77,6 +77,11 @@ private:
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
+	//indexResouceを生成
+	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
+	uint32_t* indexData_ = nullptr;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
+
 	//マテリアル用のリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	//マテリアルにデータを書き込む
