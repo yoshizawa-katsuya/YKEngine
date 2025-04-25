@@ -21,7 +21,7 @@ void SkinModel::Draw()
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_->indeces.size()), 1, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 }
 
 void SkinModel::Draw(uint32_t textureHandle)
@@ -38,7 +38,7 @@ void SkinModel::Draw(uint32_t textureHandle)
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_->indeces.size()), 1, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 
 }
 
@@ -58,6 +58,8 @@ void SkinModel::SetSkinCluster(const SkinCluster& skinCluster)
 
 void SkinModel::LoadModelFile(const std::string& directoryPath, const std::string& filename)
 {
+	modelData_ = std::make_unique<ModelData>();
+
 	Assimp::Importer importer;
 	std::string filepath = directoryPath + "/" + filename;
 	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
