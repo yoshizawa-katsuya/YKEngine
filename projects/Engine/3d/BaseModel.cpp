@@ -38,7 +38,7 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 		CreateVertexData();
 		CreateIndexData();
 		CreateMaterialData(color);
-		textureHandle_ = TextureManager::GetInstance()->Load(modelData_.material.textureFilePath);
+		textureHandle_ = TextureManager::GetInstance()->Load(modelData_->material.textureFilePath);
 	});
 
 	
@@ -63,7 +63,7 @@ void BaseModel::Draw() {
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 
 
 }
@@ -84,7 +84,7 @@ void BaseModel::Draw(uint32_t textureHandle)
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 
 }
 
@@ -103,7 +103,7 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), numInstance, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_->indeces.size()), numInstance, 0, 0, 0);
 }
 
 void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
@@ -128,12 +128,12 @@ void BaseModel::CreateVertexData()
 {
 
 	//VertexResourceを生成
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData_->vertices.size());
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点数分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_->vertices.size());
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
@@ -141,22 +141,24 @@ void BaseModel::CreateVertexData()
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//頂点データをリソースにコピー
-	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
-
+	std::memcpy(vertexData_, modelData_->vertices.data(), sizeof(VertexData) * modelData_->vertices.size());
+	verticesNum_ = static_cast<uint32_t>(modelData_->vertices.size());
+	modelData_->vertices.clear();
 }
 
 void BaseModel::CreateIndexData()
 {
 
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData_.indeces.size());
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData_->indeces.size());
 
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
-	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * modelData_.indeces.size());
+	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * modelData_->indeces.size());
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
-	std::memcpy(indexData_, modelData_.indeces.data(), sizeof(uint32_t) * modelData_.indeces.size());
-
+	std::memcpy(indexData_, modelData_->indeces.data(), sizeof(uint32_t) * modelData_->indeces.size());
+	indecesNum_ = static_cast<uint32_t>(modelData_->indeces.size());
+	modelData_->indeces.clear();
 }
 
 void BaseModel::CreateMaterialData(const Vector4& color)
@@ -190,6 +192,8 @@ void Model::CreateTransformData()
 */
 void BaseModel::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
 
+	modelData_ = std::make_unique<ModelData>();
+
 	Assimp::Importer importer;
 	std::string filepath = directoryPath + "/" + filename;
 	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
@@ -200,7 +204,7 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
-		modelData_.vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
+		modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
 
 		LoadVertexData(mesh);
 
@@ -213,15 +217,15 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			modelData_.material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
+			modelData_->material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
 			
 		}
 		else {
-			modelData_.material.textureFilePath = "./resources/white.png";
+			modelData_->material.textureFilePath = "./resources/white.png";
 		}
 	}
 
-	modelData_.rootNode = ReadNode(scene->mRootNode);
+	modelData_->rootNode = ReadNode(scene->mRootNode);
 
 	/*
 	//1.中で必要となる変数の宣言
@@ -306,9 +310,9 @@ void BaseModel::LoadVertexData(aiMesh* mesh)
 		aiVector3D& normal = mesh->mNormals[vertexIndex];
 		aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
 		//右手系->左手系の変換
-		modelData_.vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
-		modelData_.vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
-		modelData_.vertices[vertexIndex].texcoord = { texcord.x, texcord.y };
+		modelData_->vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
+		modelData_->vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
+		modelData_->vertices[vertexIndex].texcoord = { texcord.x, texcord.y };
 	}
 }
 
@@ -320,7 +324,7 @@ void BaseModel::LoadIndexData(aiMesh* mesh)
 
 		for (uint32_t element = 0; element < face.mNumIndices; ++element) {
 			uint32_t vertexIndex = face.mIndices[element];
-			modelData_.indeces.push_back(vertexIndex);
+			modelData_->indeces.push_back(vertexIndex);
 		}
 	}
 }

@@ -90,7 +90,7 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 		}
 	}
 
-	modelData_.vertices.resize(kSubdivision * kSubdivision * 4);
+	modelData_->vertices.resize(kSubdivision * kSubdivision * 4);
 
 
 	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * (kSubdivision * kSubdivision * 6));
@@ -124,7 +124,7 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 		}
 	}
 
-	modelData_.indeces.resize(kSubdivision * kSubdivision * 6);
+	modelData_->indeces.resize(kSubdivision * kSubdivision * 6);
 
 	CreateMaterialData();
 

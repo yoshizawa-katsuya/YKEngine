@@ -133,18 +133,6 @@ struct QuaternionTransform
 	Vector3 translation;
 };
 
-struct MaterialData
-{
-	std::string textureFilePath;
-};
-
-struct Node {
-	QuaternionTransform transform;
-	Matrix4x4 localMatrix;
-	std::string name;
-	std::vector<Node> children;
-};
-
 const uint32_t kNumMaxInfluence = 4;
 struct VertexInfluence {
 	std::array<float, kNumMaxInfluence> weights;
@@ -164,24 +152,6 @@ struct SkinCluster {
 	Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
 	std::span<WellForGPU> mappedPalette;
 	std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
-};
-
-struct VertexWeightData {
-	float weight;
-	uint32_t vertexIndex;
-};
-
-struct JointWeightData {
-	Matrix4x4 inverseBindPoseMatrix;
-	std::vector<VertexWeightData> vertexWeights;
-};
-
-struct ModelData {
-	std::map<std::string, JointWeightData> skinClusterData;
-	std::vector<VertexData> vertices;
-	std::vector<uint32_t> indeces;
-	MaterialData material;
-	Node rootNode;
 };
 
 struct Particle {

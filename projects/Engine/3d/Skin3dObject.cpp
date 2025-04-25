@@ -149,6 +149,7 @@ void Skin3dObject::CreateSkinCluster()
 	ModelPlatform* modelPlatform = model_->GetModelPlatform();
 	SrvHeapManager* srvHeapManager = modelPlatform->GetSrvHeapManager();
 	ModelData& modelData = model_->GetModelData();
+	uint32_t verticesNum = model_->GetVerticesNum();
 
 	//palette用のResourceを確保
 	skinCluster_.paletteResource = modelPlatform->GetDxCommon()->CreateBufferResource(sizeof(WellForGPU) * skeleton_.joints.size());
@@ -173,15 +174,15 @@ void Skin3dObject::CreateSkinCluster()
 	modelPlatform->GetDxCommon()->GetDevice()->CreateShaderResourceView(skinCluster_.paletteResource.Get(), &palletteSrvDesc, skinCluster_.paletteSrvHandle.first);
 
 	//influence用のResourceを確保。頂点ごとにinfluence情報を追加できるようにする
-	skinCluster_.influenceResource = modelPlatform->GetDxCommon()->CreateBufferResource(sizeof(VertexInfluence) * modelData.vertices.size());
+	skinCluster_.influenceResource = modelPlatform->GetDxCommon()->CreateBufferResource(sizeof(VertexInfluence) * verticesNum);
 	VertexInfluence* mappedInfluence = nullptr;
 	skinCluster_.influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
-	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * modelData.vertices.size());	//0埋め。weightを0にしておく
-	skinCluster_.mappedInfluence = { mappedInfluence, modelData.vertices.size() };
+	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * verticesNum);	//0埋め。weightを0にしておく
+	skinCluster_.mappedInfluence = { mappedInfluence, verticesNum };
 
 	//Influence用のVBVを確保
 	skinCluster_.influenceBufferView.BufferLocation = skinCluster_.influenceResource->GetGPUVirtualAddress();
-	skinCluster_.influenceBufferView.SizeInBytes = UINT(sizeof(VertexInfluence) * modelData.vertices.size());
+	skinCluster_.influenceBufferView.SizeInBytes = UINT(sizeof(VertexInfluence) * verticesNum);
 	skinCluster_.influenceBufferView.StrideInBytes = sizeof(VertexInfluence);
 
 	//InverseBindPoseMatrixを格納する場所を作成して、単位行列で埋める
