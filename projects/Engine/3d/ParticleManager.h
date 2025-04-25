@@ -70,10 +70,9 @@ private:
 	std::random_device seedGenerator_;
 	std::mt19937 randomEngine_;
 
-	VertexData* vertexData_;
-
 	//VertexResourceを生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
+	VertexData* vertexData_ = nullptr;
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 

@@ -87,7 +87,7 @@ public:
 	//前のフレームからの経過時間を取得
 	float GetDeltaTime() { return deltaTime_; }
 
-	void ResetDeltaTime() { deltaTime_ = 0.0f; }
+	void ResetDeltaTime() { deltaTimeReset_ = true; }
 
 private:
 
@@ -181,6 +181,7 @@ private:
 	std::chrono::steady_clock::time_point referance_;
 
 	// 秒単位の経過時間
-	float deltaTime_ = 0.0f; 
+	float deltaTime_ = 0.0f;
+	bool deltaTimeReset_ = false;
 };
 

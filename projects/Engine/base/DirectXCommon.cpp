@@ -408,7 +408,7 @@ void DirectXCommon::UpdateFixFPS()
 	referance_ = std::chrono::steady_clock::now();
 
 	// DeltaTime（秒単位）を保存
-	if (elapsed < kMinCheckTime) 
+	if (elapsed < kMinCheckTime || deltaTimeReset_)
 	{
 		deltaTime_ = 1.0f / 60.0f;
 	}
