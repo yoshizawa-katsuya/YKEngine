@@ -2,6 +2,7 @@
 #include "Rigid3dObject.h"
 #include "WorldTransform.h"
 #include "SRTAnimator.h"
+#include "Animation.h"
 class Camera;
 class MapChipField;
 
