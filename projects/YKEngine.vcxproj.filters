@@ -90,7 +90,7 @@
     <ClCompile Include="Engine\lib\Matrix.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\lib\Vector.cpp">
+    <ClCompile Include="Engine\lib\Vector3.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\BaseModel.cpp">
@@ -219,6 +219,15 @@
     <ClCompile Include="Engine\lib\Collision.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\lib\Vector2.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\lib\Vector4.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\lib\SRTAnimator.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -289,7 +298,7 @@
     <ClInclude Include="Engine\lib\Struct.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\lib\Vector.h">
+    <ClInclude Include="Engine\lib\Vector3.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\Player.h">
@@ -407,6 +416,18 @@
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\lib\Collision.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Vector2.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Vector4.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\SRTAnimator.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\ParticleTypes.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>

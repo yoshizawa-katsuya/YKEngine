@@ -21,7 +21,7 @@ void SkinModel::Draw()
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_->indeces.size()), 1, 0, 0, 0);
 }
 
 void SkinModel::Draw(uint32_t textureHandle)
@@ -38,7 +38,7 @@ void SkinModel::Draw(uint32_t textureHandle)
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indeces.size()), 1, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_->indeces.size()), 1, 0, 0, 0);
 
 }
 
@@ -68,7 +68,7 @@ void SkinModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
-		modelData_.vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
+		modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
 
 		LoadVertexData(mesh);
 
@@ -83,15 +83,15 @@ void SkinModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			modelData_.material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
+			modelData_->material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
 			break;
 		}
 		else {
-			modelData_.material.textureFilePath = "./resources/white.png";
+			modelData_->material.textureFilePath = "./resources/white.png";
 		}
 	}
 
-	modelData_.rootNode = ReadNode(scene->mRootNode);
+	modelData_->rootNode = ReadNode(scene->mRootNode);
 
 }
 
@@ -102,7 +102,7 @@ void SkinModel::LoadSkinCluster(aiMesh* mesh)
 	for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
 		aiBone* bone = mesh->mBones[boneIndex];
 		std::string jointName = bone->mName.C_Str();
-		JointWeightData& jointWeightData = modelData_.skinClusterData[jointName];
+		JointWeightData& jointWeightData = modelData_->skinClusterData[jointName];
 
 		aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();	//BindPoseMatrixに戻す
 		aiVector3D scale, translate;

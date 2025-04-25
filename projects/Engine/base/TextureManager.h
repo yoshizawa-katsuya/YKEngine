@@ -75,4 +75,5 @@ private:
 
 	std::list<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
 
+	std::mutex mutex_;
 };

@@ -1,4 +1,5 @@
 #include "Quaternion.h"
+#include <cmath>
 
 Quaternion Add(const Quaternion& q1, const Quaternion& q2)
 {

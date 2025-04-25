@@ -4,6 +4,7 @@
 #include "Struct.h"
 #include "Camera.h"
 #include <random>
+#include "ParticleTypes.h"
 
 class ParticleManager
 {
@@ -27,11 +28,8 @@ public:
 
 	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color);
 
-	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, 
-		const Vector3& translateMin, const Vector3& translateMax);
-
-	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color,
-		const Vector3& translateMin, const Vector3& translateMax);
+	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
+		const Vector4& color,const Vector3& translateMin, const Vector3& translateMax);
 
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 
@@ -47,9 +45,8 @@ private:
 
 	void Create();
 
-	Particle MakeNewParticle(const EulerTransform& transform, bool isRandomColor, 
-		const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, const Vector3& translateMin = { -1.0f, -1.0f, -1.0f }, 
-		const Vector3& translateMax = { 1.0f, 1.0f, 1.0f });
+	Particle MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
+		const Vector4& color, const Vector3& translateMin = { -1.0f, -1.0f, -1.0f }, const Vector3& translateMax = { 1.0f, 1.0f, 1.0f });
 
 
 	struct ParticleGroup {
@@ -73,12 +70,16 @@ private:
 	std::random_device seedGenerator_;
 	std::mt19937 randomEngine_;
 
-	VertexData* vertexData_;
-
 	//VertexResourceを生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
+	VertexData* vertexData_ = nullptr;
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
+
+	//indexResouceを生成
+	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
+	uint32_t* indexData_ = nullptr;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 
 	//マテリアル用のリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;

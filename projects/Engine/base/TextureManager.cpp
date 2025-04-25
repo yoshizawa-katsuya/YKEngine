@@ -153,6 +153,8 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 [[nodiscard]]
 Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages)
 {
+	std::unique_lock<std::mutex> lock(mutex_);
+
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 	ID3D12Device* device = dxCommon_->GetDevice();
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
@@ -171,7 +173,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureData(ID3D12R
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;;
 	
-	dxCommon_->GetCommandList()->ResourceBarrier(1, &barrier);
+	commandList->ResourceBarrier(1, &barrier);
 
 	return intermediateResource;
 	/*

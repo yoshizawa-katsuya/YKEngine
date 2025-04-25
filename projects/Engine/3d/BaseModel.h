@@ -11,6 +11,36 @@ class ModelPlatform;
 class Camera;
 class Animation;
 
+struct VertexWeightData {
+	float weight;
+	uint32_t vertexIndex;
+};
+
+struct JointWeightData {
+	Matrix4x4 inverseBindPoseMatrix;
+	std::vector<VertexWeightData> vertexWeights;
+};
+
+struct MaterialData
+{
+	std::string textureFilePath;
+};
+
+struct Node {
+	QuaternionTransform transform;
+	Matrix4x4 localMatrix;
+	std::string name;
+	std::vector<Node> children;
+};
+
+struct ModelData {
+	std::map<std::string, JointWeightData> skinClusterData;
+	std::vector<VertexData> vertices;
+	std::vector<uint32_t> indeces;
+	MaterialData material;
+	Node rootNode;
+};
+
 class BaseModel
 {
 public:
@@ -43,10 +73,12 @@ public:
 
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
-	const Node& GetRootNode() const { return modelData_.rootNode; }
+	const Node& GetRootNode() const { return modelData_->rootNode; }
 
-	const ModelData& GetModelData() const { return modelData_; }
-	ModelData& GetModelData() { return modelData_; }
+	const ModelData& GetModelData() const { return *modelData_; }
+	ModelData& GetModelData() { return *modelData_; }
+
+	uint32_t GetVerticesNum() { return verticesNum_; }
 
 	ModelPlatform* GetModelPlatform() { return modelPlatform_; }
 
@@ -81,7 +113,7 @@ protected:
 	
 	ModelPlatform* modelPlatform_ = nullptr;
 
-	ModelData modelData_;
+	std::unique_ptr<ModelData> modelData_;
 
 	//VertexResourceを生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
@@ -107,6 +139,8 @@ protected:
 	TransformationMatrix* transformationMatrixData_ = nullptr;
 	*/
 
+	uint32_t verticesNum_;
+	uint32_t indecesNum_;
 	uint32_t textureHandle_;
 
 };

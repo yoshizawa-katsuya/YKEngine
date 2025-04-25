@@ -1,7 +1,6 @@
 #include "ModelPlatform.h"
 #include "Matrix.h"
 #include "Camera.h"
-#include "Vector.h"
 
 ModelPlatform* ModelPlatform::GetInstance()
 {

@@ -1,6 +1,12 @@
 #pragma once
-#include <cmath>
-#include "Struct.h"
+
+struct  Quaternion
+{
+	float x;
+	float y;
+	float z;
+	float w;
+};
 
 //加算
 Quaternion Add(const Quaternion& q1, const Quaternion& q2);

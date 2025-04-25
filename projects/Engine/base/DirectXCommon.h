@@ -84,7 +84,11 @@ public:
 	/// </summary>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetDSVGPUDescriptorHandle(uint32_t index);
 
-	
+	//前のフレームからの経過時間を取得
+	float GetDeltaTime() { return deltaTime_; }
+
+	void ResetDeltaTime() { deltaTimeReset_ = true; }
+
 private:
 
 	//static DirectXCommon* instance_;
@@ -176,5 +180,8 @@ private:
 	//記録時間(FPS固定用)
 	std::chrono::steady_clock::time_point referance_;
 
+	// 秒単位の経過時間
+	float deltaTime_ = 0.0f;
+	bool deltaTimeReset_ = false;
 };
 

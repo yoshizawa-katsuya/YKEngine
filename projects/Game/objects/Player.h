@@ -1,7 +1,7 @@
 #pragma once
 #include "Rigid3dObject.h"
 #include "WorldTransform.h"
-#include "Animation.h"
+#include "SRTAnimator.h"
 class Camera;
 class MapChipField;
 

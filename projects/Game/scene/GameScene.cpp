@@ -64,13 +64,15 @@ void GameScene::Initialize() {
 	animationPlayer_ = std::make_unique<Animation>();
 	animationPlayer_->LoadAnimationFile("./resources/human", "walk.gltf");
 	/*
-	//テクスチャハンドルの生成
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/player/Player.png");
-
 	//スプライトの生成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	*/
+
+	//パーティクルエミッターの生成
+	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
+	//emitter_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"));
+	
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -117,9 +119,14 @@ void GameScene::Update() {
 	objects_->WorldTransformUpdate(worldTransform2_);
 	*/
 
-	//emitter_->Update(color_);
+	//emitter_->Update();
 
-	//ParticleManager::GetInstance()->Update(mainCamera_, field_.get());
+	//ParticleManager::GetInstance()->Update(mainCamera_);
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+		//シーン切り替え依頼
+		sceneManager_->ChengeScene("TitleScene");
+	}
 
 #ifdef _DEBUG
 
