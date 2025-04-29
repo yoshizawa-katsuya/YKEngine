@@ -54,8 +54,9 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
-	modelPlayer_ = std::make_unique<RigidModel>();
-	modelPlayer_->CreateModel("./resources/Player", "Player.obj");
+	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
+	//modelPlayer_ = std::make_unique<RigidModel>();
+	//modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
 	/*

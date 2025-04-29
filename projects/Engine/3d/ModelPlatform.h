@@ -6,6 +6,7 @@
 #include "SpotLight.h"
 #include <array>
 #include "SrvHeapManager.h"
+#include "BaseModel.h"
 class Camera;
 
 class ModelPlatform
@@ -37,6 +38,8 @@ public:
 	void SpherePreDraw();
 
 	void SphereDraw(const Matrix4x4& worldMatrix, Camera* camera);
+
+	std::shared_ptr<BaseModel> CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
@@ -86,6 +89,8 @@ private:
 	PrimitiveDrawer* primitiveDrawer_;
 
 	//DirectionalLight* directionalLight_ = nullptr;
+
+	std::unordered_map<std::string, std::shared_ptr<BaseModel>> models_;
 
 	LightCount* lightCount_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> lightCountResource_;

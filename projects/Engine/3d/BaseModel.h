@@ -51,7 +51,7 @@ public:
 
 	//void Initialize(ModelPlatform* modelPlatform);
 
-	//三角面化しているモデルのみ読み込み可能
+	//ModelPlatformから呼び出す
 	virtual void CreateModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
 	virtual void CreateSphere(uint32_t textureHandle);

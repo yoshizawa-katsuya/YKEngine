@@ -65,7 +65,7 @@ private:
 	//スポットライト
 	std::unique_ptr<SpotLight> spotLight_;
 
-	std::unique_ptr<RigidModel> modelPlayer_;
+	std::shared_ptr<BaseModel> modelPlayer_;
 
 
 	uint32_t textureHandle_;
