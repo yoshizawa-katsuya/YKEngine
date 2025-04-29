@@ -1,6 +1,7 @@
 #include "ModelPlatform.h"
 #include "Matrix.h"
 #include "Camera.h"
+#include "RigidModel.h"
 
 ModelPlatform* ModelPlatform::GetInstance()
 {
@@ -211,6 +212,17 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
 
 	sphereIndex_++;
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
+{
+	if (models_.contains(filename)) {
+		return models_[filename];
+	}
+	models_[filename] = std::make_shared<RigidModel>();
+	models_[filename]->CreateModel(directoryPath, filename, color);
+
+	return models_[filename];
 }
 
 void ModelPlatform::LightPreUpdate()
