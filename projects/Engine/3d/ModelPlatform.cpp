@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include "Camera.h"
 #include "RigidModel.h"
+#include "SkinModel.h"
 
 ModelPlatform* ModelPlatform::GetInstance()
 {
@@ -220,6 +221,17 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateRigidModel(const std::string& di
 		return models_[filename];
 	}
 	models_[filename] = std::make_shared<RigidModel>();
+	models_[filename]->CreateModel(directoryPath, filename, color);
+
+	return models_[filename];
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
+{
+	if (models_.contains(filename)) {
+		return models_[filename];
+	}
+	models_[filename] = std::make_shared<SkinModel>();
 	models_[filename]->CreateModel(directoryPath, filename, color);
 
 	return models_[filename];
