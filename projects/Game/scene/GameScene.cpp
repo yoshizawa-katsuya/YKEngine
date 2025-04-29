@@ -56,8 +56,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
-	modelPlayer_ = std::make_unique<SkinModel>();
-	modelPlayer_->CreateModel("./resources/human", "walk.gltf");
+	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/human", "walk.gltf");
 	//modelPlayer_->CreateSphere(textureHandle_);
 	
 	//アニメーションの生成

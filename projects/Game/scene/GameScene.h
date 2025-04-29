@@ -66,7 +66,7 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	//モデル
-	std::unique_ptr<BaseModel> modelPlayer_;
+	std::shared_ptr<BaseModel> modelPlayer_;
 
 	//アニメーション
 	std::unique_ptr<Animation> animationPlayer_;
