@@ -249,8 +249,17 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	{
 		particle.color = color;
 	}
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
-	particle.lifeTime = distTime(randomEngine_);
+
+	if (randomFlags.lifeTime)
+	{
+		std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+		particle.lifeTime = distTime(randomEngine_);
+	}
+	else
+	{
+		particle.lifeTime = 1.0f;
+	}
+	
 	particle.currentTime = 0.0f;
 
 	return particle;

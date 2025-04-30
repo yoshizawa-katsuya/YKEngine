@@ -6,4 +6,5 @@ struct ParticleRandomizationFlags {
 	bool velocity = false;
 	bool rotate = false;
 	bool scale = false;
+	bool lifeTime = false;
 };
