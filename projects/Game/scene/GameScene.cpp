@@ -71,6 +71,9 @@ void GameScene::Initialize() {
 	//パーティクルエミッターの生成
 	emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
 	emitter_->Initialize(textureHandle2, modelPlayer_, true);
+	emitter_->SetIsRandomTranslate(true);
+	emitter_->SetIsRandomRotate(true);
+	emitter_->SetIsRandomScele(true);
 	emitter_->SetTranslation({ -1.0f, 0.0f, 0.0f });
 
 	//プレイヤーの初期化

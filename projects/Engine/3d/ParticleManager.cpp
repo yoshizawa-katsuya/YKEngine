@@ -180,25 +180,28 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 }
 
 void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const Vector3& translateMin, const Vector3& translateMax)
+	const Vector4& color, const EmitterRangeParams& rangeParams)
 {
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, translateMin, translateMax));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams));
 	}
 }
 
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color,const Vector3& translateMin, const Vector3& translateMax)
+	const Vector4& color, const EmitterRangeParams& rangeParams)
 {
 
 	Particle particle;
 
 	if (randomFlags.scale) 
 	{
-		std::uniform_real_distribution<float> distScale(-0.6f, 0.5f);
+		std::uniform_real_distribution<float> distributionX(rangeParams.rotate.min.x, rangeParams.rotate.max.x);
+		std::uniform_real_distribution<float> distributionY(rangeParams.rotate.min.y, rangeParams.rotate.max.y);
+		std::uniform_real_distribution<float> distributionZ(rangeParams.rotate.min.z, rangeParams.rotate.max.z);
 
-		particle.transform.scale = transform.scale + Vector3{0.0f, distScale(randomEngine_), 0.0f};
+		Vector3 randomscale{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		particle.transform.scale = transform.scale + randomscale;
 	}
 	else
 	{
@@ -206,20 +209,23 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	}
 	if (randomFlags.rotate)
 	{
-		std::uniform_real_distribution<float> diatRotate(-std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+		std::uniform_real_distribution<float> distributionX(rangeParams.rotate.min.x, rangeParams.rotate.max.x);
+		std::uniform_real_distribution<float> distributionY(rangeParams.rotate.min.y, rangeParams.rotate.max.y);
+		std::uniform_real_distribution<float> distributionZ(rangeParams.rotate.min.z, rangeParams.rotate.max.z);
 
-		particle.transform.rotation = { 0.0f, 0.0f, diatRotate(randomEngine_) };
+		Vector3 randomrotate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		particle.transform.rotation = transform.rotation + randomrotate;
 	}
 	else 
 	{
-		particle.transform.rotation = { 0.0f, 0.0f, 0.0f };
+		particle.transform.rotation = transform.rotation;
 	}
 
 	if (randomFlags.translate)
 	{
-		std::uniform_real_distribution<float> distributionX(translateMin.x, translateMax.x);
-		std::uniform_real_distribution<float> distributionY(translateMin.y, translateMax.y);
-		std::uniform_real_distribution<float> distributionZ(translateMin.z, translateMax.z);
+		std::uniform_real_distribution<float> distributionX(rangeParams.translate.min.x, rangeParams.translate.max.x);
+		std::uniform_real_distribution<float> distributionY(rangeParams.translate.min.y, rangeParams.translate.max.y);
+		std::uniform_real_distribution<float> distributionZ(rangeParams.translate.min.z, rangeParams.translate.max.z);
 
 		Vector3 randomTranslate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
 		particle.transform.translation = transform.translation + randomTranslate;

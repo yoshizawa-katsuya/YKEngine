@@ -28,9 +28,9 @@ public:
 
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
-	void SetRandTranslationMin(const Vector3& translationMin) { randTranslateMin_ = translationMin; }
+	void SetRandTranslationMin(const Vector3& translationMin) { rangeParams_.translate.min = translationMin; }
 
-	void SetRandTranslationMax(const Vector3& translationMax) { randTranslateMax_ = translationMax; }
+	void SetRandTranslationMax(const Vector3& translationMax) { rangeParams_.translate.max = translationMax; }
 
 	void SetIsRandomColor(bool isRandomColor) { randomFlags_.color = isRandomColor; }
 
@@ -52,11 +52,11 @@ public:
 	Vector3& GetScele() { return transform_.scale; }
 	const Vector3& GetScele() const { return transform_.scale; }
 
-	Vector3& GetRandTranslateMin(){ return randTranslateMin_; }
-	const Vector3& GetRandTranslateMin() const { return randTranslateMin_; }
+	Vector3& GetRandTranslateMin(){ return rangeParams_.translate.min; }
+	const Vector3& GetRandTranslateMin() const { return rangeParams_.translate.min; }
 
-	Vector3& GetRandTranslateMax() { return randTranslateMax_; }
-	const Vector3& GetRandTranslateMax() const { return randTranslateMax_; }
+	Vector3& GetRandTranslateMax() { return rangeParams_.translate.max; }
+	const Vector3& GetRandTranslateMax() const { return rangeParams_.translate.max; }
 
 	float& GetFrequency() { return frequency_; }
 	float GetFrequency() const { return frequency_; }
@@ -90,9 +90,8 @@ private:
 
 	ParticleRandomizationFlags randomFlags_;
 
-	//TODO: 構造体にまとめる 拡縮や回転にも対応させる
-	Vector3 randTranslateMin_ = { -1.0f, -1.0f, -1.0f };
-	Vector3 randTranslateMax_ = { 1.0f, 1.0f, 1.0f };
+	//ランダム化の上限下限を管理
+	EmitterRangeParams rangeParams_;
 
 };
 
