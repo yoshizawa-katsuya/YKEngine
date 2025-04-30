@@ -11,6 +11,8 @@ public:
 
 	void CreatePlane(uint32_t textureHandle) override;
 
+	void CreateRing(uint32_t textureHandle) override;
+
 private:
 
 

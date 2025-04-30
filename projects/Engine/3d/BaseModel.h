@@ -58,6 +58,8 @@ public:
 
 	virtual void CreatePlane(uint32_t textureHandle);
 
+	virtual void CreateRing(uint32_t textureHandle);
+
 	//3dObjectクラス経由で呼び出す
 	virtual void Draw();
 

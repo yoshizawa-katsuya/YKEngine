@@ -52,6 +52,10 @@ void BaseModel::CreatePlane(uint32_t textureHandle)
 {
 }
 
+void BaseModel::CreateRing(uint32_t textureHandle)
+{
+}
+
 void BaseModel::Draw() {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);

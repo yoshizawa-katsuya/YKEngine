@@ -54,7 +54,7 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
+	modelPlayer_ = modelPlatform_->CreateRing(textureHandle_);
 	//modelPlayer_ = std::make_unique<RigidModel>();
 	//modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
@@ -209,7 +209,7 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	//player_->Draw(mainCamera_);
+	player_->Draw(mainCamera_);
 
 	/*
 	modelPlatform_->InstancingPreDraw();
@@ -220,7 +220,7 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
-	ParticleManager::GetInstance()->Draw();
+	//ParticleManager::GetInstance()->Draw();
 
 }
 

@@ -194,3 +194,78 @@ void RigidModel::CreatePlane(uint32_t textureHandle)
 
 	textureHandle_ = textureHandle;
 }
+
+void RigidModel::CreateRing(uint32_t textureHandle)
+{
+
+	modelData_ = std::make_unique<ModelData>();
+
+	//分割数
+	const uint32_t kRingDivide = 32;
+	//外側の半径
+	const float kOuterRadius = 1.0f;
+	//内側の半径
+	const float kInnerRadius = 0.2f;
+	//一欠けらごとの円周
+	const float radianPerDivide = 2.0f * std::numbers::pi_v<float> / static_cast<float>(kRingDivide);
+
+	//VertexResourceを生成
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kRingDivide * 4);
+
+	//リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点6つ分のサイズ
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kRingDivide * 4);
+	//1頂点当たりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+	//書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kRingDivide * 6);
+
+	//リソースの先頭のアドレスから使う
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kRingDivide * 6;
+	//インデックスはuint32_tとする
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+
+	for (uint32_t index = 0; index < kRingDivide; ++index)
+	{
+		uint32_t vertexIndex = index * 4;
+		uint32_t indecesIndex = index * 6;
+
+		float sin = std::sin(index * radianPerDivide);
+		float cos = std::cos(index * radianPerDivide);
+		float sinNext = std::sin((index + 1)* radianPerDivide);
+		float cosNext = std::cos((index + 1)* radianPerDivide);
+		float u = static_cast<float>(index) / static_cast<float>(kRingDivide);
+		float uNext = static_cast<float>(index + 1) / static_cast<float>(kRingDivide);
+
+		vertexData_[vertexIndex] = { .position = {-sin * kOuterRadius, cos * kOuterRadius, 0.0f, 1.0f}, .texcoord = {u, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左上
+		vertexData_[vertexIndex + 1] = { .position = {-sinNext * kOuterRadius, cosNext * kOuterRadius, 0.0f, 1.0f}, .texcoord = {uNext, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右上
+		vertexData_[vertexIndex + 2] = { .position = {-sin * kInnerRadius, cos * kInnerRadius, 0.0f, 1.0f}, .texcoord = {u, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
+		vertexData_[vertexIndex + 3] = { .position = {-sinNext * kInnerRadius, cosNext * kInnerRadius, 0.0f, 1.0f}, .texcoord = {uNext, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右下
+
+		indexData_[indecesIndex] = vertexIndex;
+		indexData_[indecesIndex + 1] = vertexIndex + 1;
+		indexData_[indecesIndex + 2] = vertexIndex + 2;
+		indexData_[indecesIndex + 3] = vertexIndex + 1;
+		indexData_[indecesIndex + 4] = vertexIndex + 3;
+		indexData_[indecesIndex + 5] = vertexIndex + 2;
+
+	}
+
+	modelData_->vertices.resize(kRingDivide * 4);
+	SetVerticesNum();
+
+	modelData_->indeces.resize(kRingDivide * 6);
+	SetIndecesNum();
+
+	CreateMaterialData();
+
+	textureHandle_ = textureHandle;
+}
