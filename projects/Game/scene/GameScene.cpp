@@ -52,9 +52,10 @@ void GameScene::Initialize() {
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
+	uint32_t textureHandle2 = TextureManager::GetInstance()->Load("./resources/gradationLine.png");
 
 	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRing(textureHandle_);
+	modelPlayer_ = modelPlatform_->CreateRing(textureHandle2);
 	//modelPlayer_ = std::make_unique<RigidModel>();
 	//modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);

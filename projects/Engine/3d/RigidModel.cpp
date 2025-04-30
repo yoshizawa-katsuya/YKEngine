@@ -247,8 +247,8 @@ void RigidModel::CreateRing(uint32_t textureHandle)
 
 		vertexData_[vertexIndex] = { .position = {-sin * kOuterRadius, cos * kOuterRadius, 0.0f, 1.0f}, .texcoord = {u, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左上
 		vertexData_[vertexIndex + 1] = { .position = {-sinNext * kOuterRadius, cosNext * kOuterRadius, 0.0f, 1.0f}, .texcoord = {uNext, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右上
-		vertexData_[vertexIndex + 2] = { .position = {-sin * kInnerRadius, cos * kInnerRadius, 0.0f, 1.0f}, .texcoord = {u, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
-		vertexData_[vertexIndex + 3] = { .position = {-sinNext * kInnerRadius, cosNext * kInnerRadius, 0.0f, 1.0f}, .texcoord = {uNext, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右下
+		vertexData_[vertexIndex + 2] = { .position = {-sin * kInnerRadius, cos * kInnerRadius, 0.0f, 1.0f}, .texcoord = {u, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
+		vertexData_[vertexIndex + 3] = { .position = {-sinNext * kInnerRadius, cosNext * kInnerRadius, 0.0f, 1.0f}, .texcoord = {uNext, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右下
 
 		indexData_[indecesIndex] = vertexIndex;
 		indexData_[indecesIndex + 1] = vertexIndex + 1;
