@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include <random>
 #include "ParticleTypes.h"
+#include "BaseModel.h"
 
 class ParticleManager
 {
@@ -22,7 +23,7 @@ public:
 
 	void Draw();
 
-	void CreateParticleGroup(const std::string name, uint32_t textureHandle);
+	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model);
 
 	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor);
 
@@ -43,13 +44,12 @@ private:
 	ParticleManager(ParticleManager&) = default;
 	ParticleManager& operator=(ParticleManager&) = default;
 
-	void Create();
-
 	Particle MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
 		const Vector4& color, const Vector3& translateMin = { -1.0f, -1.0f, -1.0f }, const Vector3& translateMax = { 1.0f, 1.0f, 1.0f });
 
 
 	struct ParticleGroup {
+		std::shared_ptr<BaseModel> model;
 		uint32_t textureHandle;
 		std::list<Particle> particles;
 		uint32_t instancingSrvIndex;
@@ -69,22 +69,6 @@ private:
 	//ランダムエンジン
 	std::random_device seedGenerator_;
 	std::mt19937 randomEngine_;
-
-	//VertexResourceを生成
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
-	VertexData* vertexData_ = nullptr;
-	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
-
-	//indexResouceを生成
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
-	uint32_t* indexData_ = nullptr;
-	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
-
-	//マテリアル用のリソースを作る
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-	//マテリアルにデータを書き込む
-	Material* materialData_ = nullptr;
 
 	std::unordered_map<std::string, ParticleGroup> particleGroups_;
 

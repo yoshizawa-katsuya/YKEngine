@@ -66,6 +66,8 @@ public:
 
 	virtual void InstancingDraw(uint32_t numInstance);
 
+	virtual void InstancingDraw(uint32_t numInstance, uint32_t textureHandle);
+
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
 	//TODO:mtlファイルからuvTransform情報を読み込めるようにする

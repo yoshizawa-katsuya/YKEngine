@@ -17,10 +17,10 @@ ParticleEmitter::ParticleEmitter(const std::string& name, uint32_t count, float 
 	
 }
 
-void ParticleEmitter::Initialize(uint32_t textureHandle)
+void ParticleEmitter::Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model)
 {
 
-	ParticleManager::GetInstance()->CreateParticleGroup(name_, textureHandle);
+	ParticleManager::GetInstance()->CreateParticleGroup(name_, textureHandle, model);
 
 }
 

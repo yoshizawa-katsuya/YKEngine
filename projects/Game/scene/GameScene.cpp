@@ -66,9 +66,9 @@ void GameScene::Initialize() {
 	*/
 
 	//パーティクルエミッターの生成
-	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
-	//emitter_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"));
-	
+	emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
+	emitter_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"), modelPlatform_->CreatePlane(textureHandle_));
+	emitter_->SetIsRandomTranslate(true);
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -115,9 +115,9 @@ void GameScene::Update() {
 	objects_->WorldTransformUpdate(worldTransform2_);
 	*/
 
-	//emitter_->Update();
+	emitter_->Update();
 
-	//ParticleManager::GetInstance()->Update(mainCamera_);
+	ParticleManager::GetInstance()->Update(mainCamera_);
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
@@ -209,7 +209,7 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	//player_->Draw(mainCamera_);
 
 	/*
 	modelPlatform_->InstancingPreDraw();
@@ -220,7 +220,7 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
-	//ParticleManager::GetInstance()->Draw();
+	ParticleManager::GetInstance()->Draw();
 
 }
 

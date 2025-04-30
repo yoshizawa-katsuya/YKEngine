@@ -1,6 +1,8 @@
 #pragma once
 #include "Struct.h"
 #include "ParticleTypes.h"
+#include <memory>
+#include "BaseModel.h"
 
 class ParticleEmitter
 {
@@ -14,7 +16,7 @@ public:
 	/// <param name = 'frequency'>発生頻度</param>
 	ParticleEmitter(const std::string& name, uint32_t count, float frequency);
 
-	void Initialize(uint32_t textureHandle);
+	void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model);
 
 	void Update(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 

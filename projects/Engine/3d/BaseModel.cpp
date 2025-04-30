@@ -110,6 +110,22 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }
 
+void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
+{
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
+	//マテリアルのCBufferの場所を設定
+	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+
+	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
+		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
+	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
+}
+
 void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
 {
 }
