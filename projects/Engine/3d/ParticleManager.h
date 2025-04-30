@@ -23,7 +23,7 @@ public:
 
 	void Draw();
 
-	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model);
+	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard);
 
 	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor);
 
@@ -51,6 +51,7 @@ private:
 	struct ParticleGroup {
 		std::shared_ptr<BaseModel> model;
 		uint32_t textureHandle;
+		bool useBillboard;
 		std::list<Particle> particles;
 		uint32_t instancingSrvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResouce;
@@ -71,8 +72,6 @@ private:
 	std::mt19937 randomEngine_;
 
 	std::unordered_map<std::string, ParticleGroup> particleGroups_;
-
-	bool useBillboard_ = true;
 
 	//AccelerationField accelerationField_;
 	bool useAccelerationField_ = false;

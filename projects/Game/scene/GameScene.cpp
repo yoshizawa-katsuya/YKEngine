@@ -70,7 +70,7 @@ void GameScene::Initialize() {
 
 	//パーティクルエミッターの生成
 	emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
-	emitter_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"), modelPlatform_->CreatePlane(textureHandle_));
+	emitter_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"), modelPlatform_->CreatePlane(textureHandle_), true);
 	emitter_->SetIsRandomTranslate(true);
 
 	//プレイヤーの初期化
@@ -224,7 +224,7 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
-	//ParticleManager::GetInstance()->Draw();
+	ParticleManager::GetInstance()->Draw();
 
 }
 

@@ -43,9 +43,6 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 	billboardMatrix.m[3][0] = 0.0f;	//平行移動成分はいらない
 	billboardMatrix.m[3][1] = 0.0f;
 	billboardMatrix.m[3][2] = 0.0f;
-	if (!useBillboard_) {
-		billboardMatrix = MakeIdentity4x4();
-	}
 
 	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
 		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) {
@@ -75,7 +72,15 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
 				Matrix4x4 rotateMatrix = MakeRotateMatrix(particleIterator->transform.rotation);
 				//Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
-				Matrix4x4 worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
+				Matrix4x4 worldMatrix;
+				if (particleGroupIterator->second.useBillboard) 
+				{
+					worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
+				}
+				else
+				{
+					worldMatrix = scaleMatrix * rotateMatrix * translateMatrix;
+				}
 
 				Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, viewprojectionMatrix);
 				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].WVP = worldViewProjectionMatrix;
@@ -94,10 +99,14 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 
 	}
 
+#ifdef _DEBUG
+
 	ImGui::Begin("ParticleManager");
-	ImGui::Checkbox("useBillboard", &useBillboard_);
 	ImGui::Checkbox("useAccelerationField", &useAccelerationField_);
 	ImGui::End();
+
+#endif // _DEBUG
+
 }
 
 void ParticleManager::Draw()
@@ -136,7 +145,7 @@ void ParticleManager::Draw()
 }
 
 
-void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model)
+void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard)
 {
 	//名前とテクスチャが同じ場合パーティクルを使いまわす
 	if (particleGroups_.contains(name))
@@ -151,6 +160,7 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 	ParticleGroup& particleGroup = particleGroups_[name];
 
 	particleGroup.model = model;
+	particleGroup.useBillboard = useBillboard;
 	particleGroup.textureHandle = textureHandle;
 
 	particleGroup.instancingResouce = dxCommon_->CreateBufferResource(sizeof(ParticleForGPU) * particleGroup.kNumMaxInstance);
