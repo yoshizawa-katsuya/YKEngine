@@ -56,6 +56,8 @@ void GameScene::Initialize() {
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRing(textureHandle2);
+	modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
+	modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
 	//modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
@@ -208,6 +210,7 @@ void GameScene::Draw() {
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//modelPlatform_->SkinPreDraw();
+	
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);

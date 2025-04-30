@@ -148,6 +148,12 @@ void BaseModel::SetUVTransform(const EulerTransform& uvTransform)
 	materialData_->uvTransform = uvTransformMatrix;
 }
 
+void BaseModel::SetEnableLighting(bool enableLighting)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	materialData_->enableLighting = enableLighting;
+}
+
 void BaseModel::CreateVertexData()
 {
 
