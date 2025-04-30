@@ -249,6 +249,18 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle)
 	return models_[name];
 }
 
+std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle)
+{
+	std::string name = "PrimitivePlane";
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreatePlane(textureHandle);
+
+	return models_[name];
+}
+
 void ModelPlatform::LightPreUpdate()
 {
 	lightCount_->directional = 0;

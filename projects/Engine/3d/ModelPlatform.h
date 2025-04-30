@@ -45,6 +45,8 @@ public:
 
 	std::shared_ptr<BaseModel> CreateSphere(uint32_t textureHandle);
 
+	std::shared_ptr<BaseModel> CreatePlane(uint32_t textureHandle);
+
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
 	SrvHeapManager* GetSrvHeapManager() const { return srvHeapManager_; }

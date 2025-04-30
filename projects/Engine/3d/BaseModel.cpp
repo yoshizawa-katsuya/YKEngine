@@ -48,6 +48,10 @@ void BaseModel::CreateSphere(uint32_t textureHandle)
 {
 }
 
+void BaseModel::CreatePlane(uint32_t textureHandle)
+{
+}
+
 void BaseModel::Draw() {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
