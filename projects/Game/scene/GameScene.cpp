@@ -56,8 +56,8 @@ void GameScene::Initialize() {
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRing(textureHandle2);
-	modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
-	modelPlayer_->SetEnableLighting(false);
+	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
+	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
 	//modelPlayer_->CreateModel("./resources/Player", "Player.obj");
 	//modelPlayer_->CreateSphere(textureHandle_);
@@ -70,8 +70,8 @@ void GameScene::Initialize() {
 
 	//パーティクルエミッターの生成
 	emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
-	emitter_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"), modelPlatform_->CreatePlane(textureHandle_), true);
-	emitter_->SetIsRandomTranslate(true);
+	emitter_->Initialize(textureHandle2, modelPlayer_, true);
+	emitter_->SetTranslation({ -1.0f, 0.0f, 0.0f });
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();

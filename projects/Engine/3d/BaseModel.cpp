@@ -56,15 +56,19 @@ void BaseModel::CreateRing(uint32_t textureHandle)
 {
 }
 
-void BaseModel::Draw() {
+void BaseModel::Draw(bool usedMaterial) {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 	
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	if (!usedMaterial) 
+	{
+		//マテリアルのCBufferの場所を設定
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+
+	}
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
 
@@ -76,7 +80,7 @@ void BaseModel::Draw() {
 
 }
 
-void BaseModel::Draw(uint32_t textureHandle)
+void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
@@ -84,8 +88,12 @@ void BaseModel::Draw(uint32_t textureHandle)
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	if (!usedMaterial)
+	{
+		//マテリアルのCBufferの場所を設定
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+
+	}
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
 

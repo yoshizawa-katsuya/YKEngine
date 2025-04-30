@@ -56,7 +56,15 @@ void Skin3dObject::Draw()
 
 	model_->SetSkinCluster(skinCluster_);
 
-	model_->Draw();
+	if (materialData_)
+	{
+		//マテリアルのCBufferの場所を設定
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		model_->Draw(true);
+		return;
+	}
+
+	model_->Draw(false);
 
 }
 
@@ -67,7 +75,15 @@ void Skin3dObject::Draw(uint32_t textureHandle)
 
 	model_->SetSkinCluster(skinCluster_);
 
-	model_->Draw(textureHandle);
+	if (materialData_)
+	{
+		//マテリアルのCBufferの場所を設定
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		model_->Draw(textureHandle, true);
+		return;
+	}
+
+	model_->Draw(textureHandle, false);
 }
 
 void Skin3dObject::BoneDraw(const EulerTransform& transform, Camera* camera)
