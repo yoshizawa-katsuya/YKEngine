@@ -237,6 +237,18 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& dir
 	return models_[filename];
 }
 
+std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle)
+{
+	std::string name = "PrimitiveSphere";
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreateSphere(textureHandle);
+
+	return models_[name];
+}
+
 void ModelPlatform::LightPreUpdate()
 {
 	lightCount_->directional = 0;

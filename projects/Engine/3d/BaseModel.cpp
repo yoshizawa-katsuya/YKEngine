@@ -103,7 +103,7 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_->indeces.size()), numInstance, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }
 
 void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
@@ -142,8 +142,7 @@ void BaseModel::CreateVertexData()
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//頂点データをリソースにコピー
 	std::memcpy(vertexData_, modelData_->vertices.data(), sizeof(VertexData) * modelData_->vertices.size());
-	verticesNum_ = static_cast<uint32_t>(modelData_->vertices.size());
-	modelData_->vertices.clear();
+	SetVerticesNum();
 }
 
 void BaseModel::CreateIndexData()
@@ -157,8 +156,7 @@ void BaseModel::CreateIndexData()
 
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
 	std::memcpy(indexData_, modelData_->indeces.data(), sizeof(uint32_t) * modelData_->indeces.size());
-	indecesNum_ = static_cast<uint32_t>(modelData_->indeces.size());
-	modelData_->indeces.clear();
+	SetIndecesNum();
 }
 
 void BaseModel::CreateMaterialData(const Vector4& color)
@@ -327,6 +325,18 @@ void BaseModel::LoadIndexData(aiMesh* mesh)
 			modelData_->indeces.push_back(vertexIndex);
 		}
 	}
+}
+
+void BaseModel::SetVerticesNum()
+{
+	verticesNum_ = static_cast<uint32_t>(modelData_->vertices.size());
+	modelData_->vertices.clear();
+}
+
+void BaseModel::SetIndecesNum()
+{
+	indecesNum_ = static_cast<uint32_t>(modelData_->indeces.size());
+	modelData_->indeces.clear();
 }
 
 /*

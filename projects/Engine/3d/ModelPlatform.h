@@ -43,6 +43,8 @@ public:
 
 	std::shared_ptr<BaseModel> CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
+	std::shared_ptr<BaseModel> CreateSphere(uint32_t textureHandle);
+
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
 	SrvHeapManager* GetSrvHeapManager() const { return srvHeapManager_; }

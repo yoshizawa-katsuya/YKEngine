@@ -109,6 +109,10 @@ protected:
 	//インデックスデータ読み込み
 	void LoadIndexData(aiMesh* mesh);
 
+	void SetVerticesNum();
+
+	void SetIndecesNum();
+
 	Node ReadNode(aiNode* node);
 	
 	ModelPlatform* modelPlatform_ = nullptr;

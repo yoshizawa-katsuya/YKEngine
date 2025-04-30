@@ -8,6 +8,7 @@ RigidModel::~RigidModel()
 
 void RigidModel::CreateSphere(uint32_t textureHandle)
 {
+	modelData_ = std::make_unique<ModelData>();
 
 	//球の分割数
 	const uint32_t kSubdivision = 16;
@@ -91,7 +92,7 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 	}
 
 	modelData_->vertices.resize(kSubdivision * kSubdivision * 4);
-
+	SetVerticesNum();
 
 	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * (kSubdivision * kSubdivision * 6));
 
@@ -125,6 +126,7 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 	}
 
 	modelData_->indeces.resize(kSubdivision * kSubdivision * 6);
+	SetIndecesNum();
 
 	CreateMaterialData();
 
