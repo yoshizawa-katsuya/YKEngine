@@ -32,6 +32,14 @@ public:
 
 	void SetRandTranslationMax(const Vector3& translationMax) { rangeParams_.translate.max = translationMax; }
 
+	void SetRandRotateMin(const Vector3& rotateMin) { rangeParams_.rotate.min = rotateMin; }
+
+	void SetRandRotateMax(const Vector3& rotateMax) { rangeParams_.rotate.max = rotateMax; }
+
+	void SetRandScaleMin(const Vector3& scaleMin) { rangeParams_.scale.min = scaleMin; }
+
+	void SetRandScaleMax(const Vector3& scaleMax) { rangeParams_.scale.max = scaleMax; }
+
 	void SetIsRandomColor(bool isRandomColor) { randomFlags_.color = isRandomColor; }
 
 	void SetIsRandomTranslate(bool isRandomTranslate) { randomFlags_.translate = isRandomTranslate; }
@@ -57,6 +65,18 @@ public:
 
 	Vector3& GetRandTranslateMax() { return rangeParams_.translate.max; }
 	const Vector3& GetRandTranslateMax() const { return rangeParams_.translate.max; }
+
+	Vector3& GetRandRotateMin() { return rangeParams_.rotate.min; }
+	const Vector3& GetRandRotateMin() const { return rangeParams_.rotate.min; }
+
+	Vector3& GetRandRotateMax() { return rangeParams_.rotate.max; }
+	const Vector3& GetRandRotateMax() const { return rangeParams_.rotate.max; }
+
+	Vector3& GetRandScaleMin() { return rangeParams_.scale.min; }
+	const Vector3& GetRandScaleMin() const { return rangeParams_.scale.min; }
+
+	Vector3& GetRandScaleMax() { return rangeParams_.scale.max; }
+	const Vector3& GetRandScaleMax() const { return rangeParams_.scale.max; }
 
 	float& GetFrequency() { return frequency_; }
 	float GetFrequency() const { return frequency_; }

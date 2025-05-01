@@ -53,6 +53,7 @@ void GameScene::Initialize() {
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 	uint32_t textureHandle2 = TextureManager::GetInstance()->Load("./resources/gradationLine.png");
+	uint32_t textureHandle3 = TextureManager::GetInstance()->Load("./Resources/circle2.png");
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRing(textureHandle2);
@@ -69,12 +70,25 @@ void GameScene::Initialize() {
 	*/
 
 	//パーティクルエミッターの生成
-	emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
+	emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
 	emitter_->Initialize(textureHandle2, modelPlayer_, true);
-	emitter_->SetIsRandomTranslate(true);
-	emitter_->SetIsRandomRotate(true);
-	emitter_->SetIsRandomScele(true);
-	emitter_->SetTranslation({ -1.0f, 0.0f, 0.0f });
+	emitter_->SetTranslation({ -2.0f, 0.0f, 0.0f });
+
+	emitter2_ = std::make_unique<ParticleEmitter>("Slash", 3, 1.5f);
+	emitter2_->Initialize(textureHandle3, modelPlatform_->CreatePlane(textureHandle3), true);
+	emitter2_->SetTranslation({ -2.0f, 0.0f, 0.0f });
+	emitter2_->SetScale({ 0.05f, 1.0f, 1.0f });
+	emitter2_->SetIsRandomScele(true);
+	emitter2_->SetIsRandomRotate(true);
+	emitter2_->SetRandRotateMax({ 0.0f, 0.0f, std::numbers::pi_v<float> });
+	emitter2_->SetRandRotateMin({ 0.0f, 0.0f, -std::numbers::pi_v<float> });
+	emitter2_->SetRandScaleMax({ 0.0f, 1.0f, 0.0f });
+	emitter2_->SetRandScaleMin({ 0.0f, -0.6f, 0.0f });
+
+	emitter3_ = std::make_unique<ParticleEmitter>("Effect2", 10, 1.5f);
+	emitter3_->Initialize(textureHandle2, modelPlayer_, false);
+	emitter3_->SetTranslation({ 2.0f, 0.0f, 0.0f });
+	emitter3_->SetIsRandomRotate(true);
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -122,6 +136,8 @@ void GameScene::Update() {
 	*/
 
 	emitter_->Update();
+	emitter2_->Update();
+	emitter3_->Update();
 
 	ParticleManager::GetInstance()->Update(mainCamera_);
 

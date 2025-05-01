@@ -196,9 +196,9 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 
 	if (randomFlags.scale) 
 	{
-		std::uniform_real_distribution<float> distributionX(rangeParams.rotate.min.x, rangeParams.rotate.max.x);
-		std::uniform_real_distribution<float> distributionY(rangeParams.rotate.min.y, rangeParams.rotate.max.y);
-		std::uniform_real_distribution<float> distributionZ(rangeParams.rotate.min.z, rangeParams.rotate.max.z);
+		std::uniform_real_distribution<float> distributionX(rangeParams.scale.min.x, rangeParams.scale.max.x);
+		std::uniform_real_distribution<float> distributionY(rangeParams.scale.min.y, rangeParams.scale.max.y);
+		std::uniform_real_distribution<float> distributionZ(rangeParams.scale.min.z, rangeParams.scale.max.z);
 
 		Vector3 randomscale{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
 		particle.transform.scale = transform.scale + randomscale;
