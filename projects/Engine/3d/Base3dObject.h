@@ -32,6 +32,8 @@ public:
 
 	void SetEnableLighting(bool enableLighting);
 
+	void SetColor(const Vector4& color);
+
 	const BaseModel& GetModel() const { return *model_; }
 	BaseModel& GetModel() { return *model_; }
 

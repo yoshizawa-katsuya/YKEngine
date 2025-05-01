@@ -117,6 +117,15 @@ void Base3dObject::SetEnableLighting(bool enableLighting)
 	materialData_->enableLighting = enableLighting;
 }
 
+void Base3dObject::SetColor(const Vector4& color)
+{
+	if (!materialData_)
+	{
+		CreateMaterialData();
+	}
+	materialData_->color = color;
+}
+
 void Base3dObject::CreateMaterialData()
 {
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
