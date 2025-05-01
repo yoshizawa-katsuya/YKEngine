@@ -56,12 +56,10 @@ void GameScene::Initialize() {
 	uint32_t textureHandle3 = TextureManager::GetInstance()->Load("./Resources/circle2.png");
 
 	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateCylinder(textureHandle2);
+	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
-	//modelPlayer_->CreateModel("./resources/Player", "Player.obj");
-	//modelPlayer_->CreateSphere(textureHandle_);
 	
 	/*
 	//スプライトの生成
