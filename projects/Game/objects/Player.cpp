@@ -11,7 +11,7 @@ void Player::Initialize(BaseModel* model) {
 	object_->SetEnableLighting(false);
 
 	worldTransform_.Initialize();
-
+	worldTransform_.rotation_.y = 3.15f;
 }
 
 void Player::Update() {
