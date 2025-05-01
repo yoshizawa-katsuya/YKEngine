@@ -13,6 +13,8 @@ public:
 
 	void CreateRing(uint32_t textureHandle) override;
 
+	void CreateCylinder(uint32_t textureHandle) override;
+
 private:
 
 

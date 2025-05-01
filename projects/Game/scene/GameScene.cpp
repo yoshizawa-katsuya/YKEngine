@@ -56,7 +56,7 @@ void GameScene::Initialize() {
 	uint32_t textureHandle3 = TextureManager::GetInstance()->Load("./Resources/circle2.png");
 
 	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRing(textureHandle2);
+	modelPlayer_ = modelPlatform_->CreateCylinder(textureHandle2);
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
@@ -70,25 +70,8 @@ void GameScene::Initialize() {
 	*/
 
 	//パーティクルエミッターの生成
-	emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
-	emitter_->Initialize(textureHandle2, modelPlayer_, true);
-	emitter_->SetTranslation({ -2.0f, 0.0f, 0.0f });
-
-	emitter2_ = std::make_unique<ParticleEmitter>("Slash", 3, 1.5f);
-	emitter2_->Initialize(textureHandle3, modelPlatform_->CreatePlane(textureHandle3), true);
-	emitter2_->SetTranslation({ -2.0f, 0.0f, 0.0f });
-	emitter2_->SetScale({ 0.05f, 1.0f, 1.0f });
-	emitter2_->SetIsRandomScele(true);
-	emitter2_->SetIsRandomRotate(true);
-	emitter2_->SetRandRotateMax({ 0.0f, 0.0f, std::numbers::pi_v<float> });
-	emitter2_->SetRandRotateMin({ 0.0f, 0.0f, -std::numbers::pi_v<float> });
-	emitter2_->SetRandScaleMax({ 0.0f, 1.0f, 0.0f });
-	emitter2_->SetRandScaleMin({ 0.0f, -0.6f, 0.0f });
-
-	emitter3_ = std::make_unique<ParticleEmitter>("Effect2", 10, 1.5f);
-	emitter3_->Initialize(textureHandle2, modelPlayer_, false);
-	emitter3_->SetTranslation({ 2.0f, 0.0f, 0.0f });
-	emitter3_->SetIsRandomRotate(true);
+	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
+	//emitter_->Initialize(textureHandle2, modelPlayer_, true);
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -135,11 +118,9 @@ void GameScene::Update() {
 	objects_->WorldTransformUpdate(worldTransform2_);
 	*/
 
-	emitter_->Update();
-	emitter2_->Update();
-	emitter3_->Update();
+	//emitter_->Update();
 
-	ParticleManager::GetInstance()->Update(mainCamera_);
+	//ParticleManager::GetInstance()->Update(mainCamera_);
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
@@ -243,7 +224,7 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
-	ParticleManager::GetInstance()->Draw();
+	//ParticleManager::GetInstance()->Draw();
 
 }
 

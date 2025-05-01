@@ -240,8 +240,8 @@ void RigidModel::CreateRing(uint32_t textureHandle)
 
 		float sin = std::sin(index * radianPerDivide);
 		float cos = std::cos(index * radianPerDivide);
-		float sinNext = std::sin((index + 1)* radianPerDivide);
-		float cosNext = std::cos((index + 1)* radianPerDivide);
+		float sinNext = std::sin((index + 1) * radianPerDivide);
+		float cosNext = std::cos((index + 1) * radianPerDivide);
 		float u = static_cast<float>(index) / static_cast<float>(kRingDivide);
 		float uNext = static_cast<float>(index + 1) / static_cast<float>(kRingDivide);
 
@@ -263,6 +263,82 @@ void RigidModel::CreateRing(uint32_t textureHandle)
 	SetVerticesNum();
 
 	modelData_->indeces.resize(kRingDivide * 6);
+	SetIndecesNum();
+
+	CreateMaterialData();
+
+	textureHandle_ = textureHandle;
+}
+
+void RigidModel::CreateCylinder(uint32_t textureHandle)
+{
+	modelData_ = std::make_unique<ModelData>();
+
+	//分割数
+	const uint32_t kCylinderDivide = 32;
+	//上側の半径
+	const float kTopRadius = 1.0f;
+	//下側の半径
+	const float kBottomRadius = 1.0f;
+	//高さ
+	const float kHeight = 3.0f;
+	//一欠けらごとの円周
+	const float radianPerDivide = 2.0f * std::numbers::pi_v<float> / static_cast<float>(kCylinderDivide);
+
+	//VertexResourceを生成
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kCylinderDivide * 4);
+
+	//リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点6つ分のサイズ
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kCylinderDivide * 4);
+	//1頂点当たりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+	//書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kCylinderDivide * 6);
+
+	//リソースの先頭のアドレスから使う
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kCylinderDivide * 6;
+	//インデックスはuint32_tとする
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+
+	for (uint32_t index = 0; index < kCylinderDivide; ++index)
+	{
+		uint32_t vertexIndex = index * 4;
+		uint32_t indecesIndex = index * 6;
+
+		float sin = std::sin(index * radianPerDivide);
+		float cos = std::cos(index * radianPerDivide);
+		float sinNext = std::sin((index + 1) * radianPerDivide);
+		float cosNext = std::cos((index + 1) * radianPerDivide);
+		float u = static_cast<float>(index) / static_cast<float>(kCylinderDivide);
+		float uNext = static_cast<float>(index + 1) / static_cast<float>(kCylinderDivide);
+
+		vertexData_[vertexIndex] = { .position = {-sin * kTopRadius, kHeight, cos * kTopRadius, 1.0f}, .texcoord = {u, 0.0f}, .normal = {-sin, 0.0f, cos} };	//左上
+		vertexData_[vertexIndex + 1] = { .position = {-sinNext * kTopRadius, kHeight, cosNext * kTopRadius, 1.0f}, .texcoord = {uNext, 0.0f}, .normal = {-sinNext, 0.0f, cosNext} };	//右上
+		vertexData_[vertexIndex + 2] = { .position = {-sin * kBottomRadius, 0.0f, cos * kBottomRadius, 1.0f}, .texcoord = {u, 1.0f}, .normal = {-sin, 0.0f, cos} };	//左下
+		vertexData_[vertexIndex + 3] = { .position = {-sinNext * kBottomRadius, 0.0f, cosNext * kBottomRadius, 1.0f}, .texcoord = {uNext, 1.0f}, .normal = {-sinNext, 0.0f, cosNext} };	//右下
+
+		indexData_[indecesIndex] = vertexIndex;
+		indexData_[indecesIndex + 1] = vertexIndex + 1;
+		indexData_[indecesIndex + 2] = vertexIndex + 2;
+		indexData_[indecesIndex + 3] = vertexIndex + 1;
+		indexData_[indecesIndex + 4] = vertexIndex + 3;
+		indexData_[indecesIndex + 5] = vertexIndex + 2;
+
+	}
+
+	modelData_->vertices.resize(kCylinderDivide * 4);
+	SetVerticesNum();
+
+	modelData_->indeces.resize(kCylinderDivide * 6);
 	SetIndecesNum();
 
 	CreateMaterialData();

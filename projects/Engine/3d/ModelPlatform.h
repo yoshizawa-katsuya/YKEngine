@@ -49,6 +49,8 @@ public:
 
 	std::shared_ptr<BaseModel> CreateRing(uint32_t textureHandle);
 
+	std::shared_ptr<BaseModel> CreateCylinder(uint32_t textureHandle);
+
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
 	SrvHeapManager* GetSrvHeapManager() const { return srvHeapManager_; }
