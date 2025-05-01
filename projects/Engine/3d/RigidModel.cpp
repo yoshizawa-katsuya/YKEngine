@@ -321,10 +321,10 @@ void RigidModel::CreateCylinder(uint32_t textureHandle)
 		float u = static_cast<float>(index) / static_cast<float>(kCylinderDivide);
 		float uNext = static_cast<float>(index + 1) / static_cast<float>(kCylinderDivide);
 
-		vertexData_[vertexIndex] = { .position = {-sin * kTopRadius, kHeight, cos * kTopRadius, 1.0f}, .texcoord = {u, 0.0f}, .normal = {-sin, 0.0f, cos} };	//左上
-		vertexData_[vertexIndex + 1] = { .position = {-sinNext * kTopRadius, kHeight, cosNext * kTopRadius, 1.0f}, .texcoord = {uNext, 0.0f}, .normal = {-sinNext, 0.0f, cosNext} };	//右上
-		vertexData_[vertexIndex + 2] = { .position = {-sin * kBottomRadius, 0.0f, cos * kBottomRadius, 1.0f}, .texcoord = {u, 1.0f}, .normal = {-sin, 0.0f, cos} };	//左下
-		vertexData_[vertexIndex + 3] = { .position = {-sinNext * kBottomRadius, 0.0f, cosNext * kBottomRadius, 1.0f}, .texcoord = {uNext, 1.0f}, .normal = {-sinNext, 0.0f, cosNext} };	//右下
+		vertexData_[vertexIndex] = { .position = {-sin * kTopRadius, kHeight, cos * kTopRadius, 1.0f}, .texcoord = {u, 1.0f}, .normal = {-sin, 0.0f, cos} };	//左上
+		vertexData_[vertexIndex + 1] = { .position = {-sinNext * kTopRadius, kHeight, cosNext * kTopRadius, 1.0f}, .texcoord = {uNext, 1.0f}, .normal = {-sinNext, 0.0f, cosNext} };	//右上
+		vertexData_[vertexIndex + 2] = { .position = {-sin * kBottomRadius, 0.0f, cos * kBottomRadius, 1.0f}, .texcoord = {u, 0.0f}, .normal = {-sin, 0.0f, cos} };	//左下
+		vertexData_[vertexIndex + 3] = { .position = {-sinNext * kBottomRadius, 0.0f, cosNext * kBottomRadius, 1.0f}, .texcoord = {uNext, 0.0f}, .normal = {-sinNext, 0.0f, cosNext} };	//右下
 
 		indexData_[indecesIndex] = vertexIndex;
 		indexData_[indecesIndex + 1] = vertexIndex + 1;

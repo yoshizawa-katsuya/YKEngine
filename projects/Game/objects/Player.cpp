@@ -6,6 +6,7 @@ void Player::Initialize(BaseModel* model) {
 
 	object_ = std::make_unique<Rigid3dObject>();
 	object_->Initialize(model);
+	object_->SetEnableLighting(false);
 
 	worldTransform_.Initialize();
 
@@ -29,9 +30,10 @@ void Player::Update() {
 
 
 #endif // _DEBUG	
-
+	x_ += 0.0002f;
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
+	object_->SetUVTransform({ 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { x_, 0.0f, 0.0f });
 
 }
 

@@ -20,7 +20,7 @@ private:
 
 	//Transform変数を作る
 	WorldTransform worldTransform_;
-
+	float x_;
 	std::unique_ptr<Rigid3dObject> object_;
 
 };

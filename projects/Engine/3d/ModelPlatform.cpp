@@ -101,7 +101,7 @@ void ModelPlatform::PreDraw()
 {
 
 	
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNormal);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeAdd);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
