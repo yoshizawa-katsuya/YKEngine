@@ -11,6 +11,9 @@
 
 #include "WinApp.h"
 #include "DirectXTex/DirectXTex.h"
+#include "Vector4.h"
+class SrvHeapManager;
+class PrimitiveDrawer;
 
 class DirectXCommon
 {
@@ -24,6 +27,10 @@ public:
 
 	//初期化
 	void Initialize(WinApp* winApp);
+
+	void PreDrawRenderTexture();
+
+	void PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
 
 	//描画前処理
 	void PreDraw();
@@ -46,6 +53,7 @@ public:
 	//DiscriptorHeap作成の関数
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisiblr);
 
+	void CreateRenderTextureSRV(SrvHeapManager* srvHeapManager);
 
 	// デバイスの取得
 	ID3D12Device* GetDevice() const { return device_.Get(); }
@@ -113,6 +121,9 @@ private:
 	//深度バッファ生成
 	void CreateDepthBuffer();
 
+	//RecderTexture作成
+	void CreateRenderTexture();
+
 	//各種デスクリプタヒープの生成
 	void CreateDescriptorHeaps();
 
@@ -140,7 +151,8 @@ private:
 	//DepthStencilTextureを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(int32_t width, int32_t height);
 
-	
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(int32_t width, int32_t height, DXGI_FORMAT format, const Vector4& clearColor);
+
 	//DescriptorHandleを取得する関数。CPU
 	static D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
@@ -158,6 +170,9 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_ = nullptr;
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, 2> swapChainResources_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource_ = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource_ = nullptr;
+	uint32_t renderTextureSRVIndex_;
+	D3D12_CPU_DESCRIPTOR_HANDLE renderTextureRtvHandle_;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_ = nullptr;
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;

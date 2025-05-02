@@ -22,6 +22,8 @@ void YKFramework::Initialize()
 	srvHeapManager_ = std::make_unique<SrvHeapManager>();
 	srvHeapManager_->Initialize(dxCommon_);
 
+	dxCommon_->CreateRenderTextureSRV(srvHeapManager_.get());
+
 #ifdef _DEBUG
 
 	imGuiManager_ = std::make_unique<ImGuiManager>();
