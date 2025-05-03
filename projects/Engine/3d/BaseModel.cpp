@@ -62,7 +62,7 @@ void BaseModel::CreateCylinder(uint32_t textureHandle)
 
 void BaseModel::Draw(bool usedMaterial) {
 
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera_);
 	
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
@@ -87,7 +87,7 @@ void BaseModel::Draw(bool usedMaterial) {
 void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera_);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
@@ -110,7 +110,7 @@ void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 
 void BaseModel::InstancingDraw(uint32_t numInstance)
 {
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
+	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera_);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 

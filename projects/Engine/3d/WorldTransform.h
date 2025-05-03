@@ -24,5 +24,9 @@ public:
 	/// 行列を計算する
 	/// </summary>
 	void UpdateMatrix();
+	/// <summary>
+	/// ワールド座標の取得
+	/// </summary>
+	Vector3 GetWorldPosition();
 };
 

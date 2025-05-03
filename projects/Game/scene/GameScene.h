@@ -18,6 +18,10 @@
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
+#include "RailCamera.h"
+#include "Enemy.h"
+#include "EnemyBullet.h"
+#include "Skydome.h"
 
 class GameScene : public BaseScene
 {
@@ -32,6 +36,36 @@ public:
 	void Draw() override;
 
 	void Finalize() override;
+
+	/// <summary>
+	/// 衝突判定と応答
+	/// </summary>
+	void CheckAllColision();
+
+	/// <summary>
+	/// 敵発生
+	/// </summary>
+	void EnemyPop(const Vector3& position);
+
+	/// <summary>
+	/// プレイヤーの弾を追加する
+	/// </summary>
+	void AddPlayerbullet(const Vector3& worldPosition, const Vector3& velocity);
+
+	/// <summary>
+	/// 敵弾を追加する
+	/// </summary>
+	void AddEnemybullet(const Vector3& worldPosition, const Vector3& velocity);
+
+	/// <summary>
+	/// 敵発生データの読み込み
+	/// </summary>
+	void LoadEnemyPopData();
+
+	/// <summary>
+	/// 敵発生コマンドの更新
+	/// </summary>
+	void UpdateEnemyPopCommands();
 
 private:
 
@@ -65,15 +99,40 @@ private:
 	//スポットライト
 	std::unique_ptr<SpotLight> spotLight_;
 
+	//3Dモデル
+	std::shared_ptr<BaseModel> modelSkydome_;
 	std::shared_ptr<BaseModel> modelPlayer_;
 
+	//待機
+	bool isWait_;
+	int32_t waitTimer_;
 
+	//テクスチャハンドル
 	uint32_t textureHandle_;
+	uint32_t enemyTextureHandle_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	//弾
+	std::list<std::unique_ptr<PlayerBullet>> playerBullets_;
+
+	//敵発生コマンド
+	std::stringstream enemyPopCommands;
+
+	//敵
+	//Enemy* enemy_ = nullptr;
+	std::list<std::unique_ptr<Enemy>> enemys_;
+
+	// 敵の弾
+	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+
+	//天球
+	std::unique_ptr<Skydome> skydome_;
+
+	//レールカメラ
+	std::unique_ptr<RailCamera> railCamera_;
 	/*
 	std::unique_ptr<InstancingObjects> objects_;
 

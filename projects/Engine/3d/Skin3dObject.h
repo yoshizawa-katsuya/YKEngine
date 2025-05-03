@@ -9,9 +9,9 @@ public:
 
 	void Initialize(BaseModel* model) override;
 
-	//void Update(const WorldTransform& worldTransform, Camera* camera) override;
+	//void Update(const WorldTransform& worldTransform, Camera* camera_) override;
 
-	//void Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation) override;
+	//void Update(const WorldTransform& worldTransform, Camera* camera_, Animation* animation) override;
 
 	void AnimationUpdate(Animation* animation) override;
 

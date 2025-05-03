@@ -29,10 +29,10 @@ void Skin3dObject::AnimationUpdate(Animation* animation)
 }
 
 /*
-void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera)
+void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera_)
 {
 
-	Base3dObject::Update(worldTransform, camera);
+	Base3dObject::Update(worldTransform, camera_);
 
 	SkeletonUpdate();
 
@@ -40,12 +40,12 @@ void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera)
 
 }
 
-void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation)
+void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera_, Animation* animation)
 {
 
 	ApplyAnimation(animation);
 
-	Update(worldTransform, camera);
+	Update(worldTransform, camera_);
 
 }
 */
