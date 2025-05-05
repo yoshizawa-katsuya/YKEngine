@@ -129,11 +129,6 @@ void Player::Update(Camera* railCamera) {
 	//キャラクター攻撃処理
 	Attack();
 
-	// キャラクターの座標を画面表示する処理
-	ImGui::Begin("player");
-	ImGui::DragFloat3("player.translate", &worldTransform_.translation_.x, 0.01f);
-	ImGui::End();
-
 	
 }
 

@@ -80,6 +80,20 @@ void GameScene::Initialize() {
 	//自キャラとレールカメラの親子関係を結ぶ
 	player_->SetParent(railCamera_->GetWorldTransform());
 	player_->SetGameScene(this);
+
+	//パーティクル
+	emitter_ = std::make_unique<ParticleEmitter>("HitEffect01", 3, 1.5f);
+	uint32_t textureHandle3 = TextureManager::GetInstance()->Load("./Resources/circle2.png");
+	emitter_->Initialize(textureHandle3, modelPlatform_->CreatePlane(textureHandle3), true);
+	emitter_->SetScale({ 0.1f, 2.0f, 2.0f });
+	emitter_->SetIsRandomScele(true);
+	emitter_->SetIsRandomRotate(true);
+	emitter_->SetRandRotateMax({ 0.0f, 0.0f, std::numbers::pi_v<float> });
+	emitter_->SetRandRotateMin({ 0.0f, 0.0f, -std::numbers::pi_v<float> });
+	emitter_->SetRandScaleMax({ 0.0f, 1.0f, 0.0f });
+	emitter_->SetRandScaleMin({ 0.0f, -0.6f, 0.0f });
+
+
 }
 
 void GameScene::Update() {
@@ -145,7 +159,7 @@ void GameScene::Update() {
 	//modelPlatform_->SpotLightUpdate(spotLight_->GetSpotLightData());
 
 	
-	//ParticleManager::GetInstance()->Update(mainCamera_);
+	ParticleManager::GetInstance()->Update(mainCamera_);
 
 	/*
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -268,7 +282,7 @@ void GameScene::Draw() {
 
 	player_->DrawUI();
 
-	//ParticleManager::GetInstance()->Draw();
+	ParticleManager::GetInstance()->Draw();
 
 }
 
@@ -333,6 +347,9 @@ void GameScene::CheckAllColision() {
 				enemy->OnCollision();
 				// 自弾の衝突時コールバックを呼び出す
 				bullet->OnCollision();
+
+				emitter_->SetTranslation(posA);
+				emitter_->Emit();
 			}
 		}
 	}
