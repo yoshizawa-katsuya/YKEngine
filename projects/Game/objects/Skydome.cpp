@@ -8,6 +8,7 @@ void Skydome::Initialize(BaseModel* model) {
 
 	object_ = std::make_unique<Rigid3dObject>();
 	object_->Initialize(model);
+	object_->SetEnableLighting(false);
 
 	worldTransform_.Initialize();
 	worldTransform_.UpdateMatrix();
