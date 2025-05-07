@@ -284,6 +284,12 @@
     <FxCompile Include="Resources\shader\Vignette.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shader\BoxFilter.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">
