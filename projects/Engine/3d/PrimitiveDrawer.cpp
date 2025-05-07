@@ -469,7 +469,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 
-		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/GrayScele.PS.hlsl",
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Vignette.PS.hlsl",
 			L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 
