@@ -27,6 +27,8 @@ public:
 	//共通描画設定
 	void PreDraw();
 
+	void SkyBoxPreDraw();
+
 	void SkinPreDraw();
 
 	void InstancingPreDraw();
@@ -42,6 +44,16 @@ public:
 	std::shared_ptr<BaseModel> CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
 	std::shared_ptr<BaseModel> CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+
+	std::shared_ptr<BaseModel> CreateSphere(uint32_t textureHandle);
+
+	std::shared_ptr<BaseModel> CreatePlane(uint32_t textureHandle);
+
+	std::shared_ptr<BaseModel> CreateRing(uint32_t textureHandle);
+
+	std::shared_ptr<BaseModel> CreateCylinder(uint32_t textureHandle);
+
+	std::shared_ptr<BaseModel> CreateSkyBox(uint32_t textureHandle);
 
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 

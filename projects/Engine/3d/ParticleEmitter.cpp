@@ -17,10 +17,10 @@ ParticleEmitter::ParticleEmitter(const std::string& name, uint32_t count, float 
 	
 }
 
-void ParticleEmitter::Initialize(uint32_t textureHandle)
+void ParticleEmitter::Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard)
 {
 
-	ParticleManager::GetInstance()->CreateParticleGroup(name_, textureHandle);
+	ParticleManager::GetInstance()->CreateParticleGroup(name_, textureHandle, model, useBillboard);
 
 }
 
@@ -29,7 +29,7 @@ void ParticleEmitter::Update(const Vector4& color)
 	frequencyTime_ += kDeltaTime_;	//時刻を進める
 	if (frequency_ <= frequencyTime_) {	//頻度より大きいなら発生
 		ParticleManager::GetInstance()->Emit(name_, transform_, count_, randomFlags_,
-			color, randTranslateMin_, randTranslateMax_);	//発生処理
+			color, rangeParams_);	//発生処理
 		frequencyTime_ -= frequency_;	//余計に過ぎた時間も加味して頻度計算する
 	}
 }
@@ -38,7 +38,7 @@ void ParticleEmitter::Emit(const Vector4& color)
 {
 
 	ParticleManager::GetInstance()->Emit(name_, transform_, count_, randomFlags_,
-		color, randTranslateMin_, randTranslateMax_);	//発生処理
+		color, rangeParams_);	//発生処理
 
 }
 

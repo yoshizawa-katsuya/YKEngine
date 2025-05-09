@@ -54,6 +54,7 @@ void GameScene::Initialize() {
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
+	uint32_t textureHandle2 = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/human", "walk.gltf");
@@ -69,9 +70,8 @@ void GameScene::Initialize() {
 	*/
 
 	//パーティクルエミッターの生成
-	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 8, 1.5f);
-	//emitter_->Initialize(TextureManager::GetInstance()->Load("./resources/circle2.png"));
-	
+	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
+	//emitter_->Initialize(textureHandle2, modelPlayer_, true);
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -213,6 +213,9 @@ void GameScene::Draw() {
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+	modelPlatform_->SkyBoxPreDraw();
+
 
 	/*
 	modelPlatform_->InstancingPreDraw();

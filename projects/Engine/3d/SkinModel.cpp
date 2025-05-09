@@ -8,13 +8,17 @@ SkinModel::~SkinModel()
 {
 }
 
-void SkinModel::Draw()
+void SkinModel::Draw(bool usedMaterial)
 {
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	if (!usedMaterial)
+	{
+		//マテリアルのCBufferの場所を設定
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+
+	}
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
 
@@ -24,14 +28,18 @@ void SkinModel::Draw()
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 }
 
-void SkinModel::Draw(uint32_t textureHandle)
+void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	if (!usedMaterial)
+	{
+		//マテリアルのCBufferの場所を設定
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+
+	}
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
 

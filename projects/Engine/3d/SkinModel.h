@@ -7,9 +7,9 @@ public:
 
 	~SkinModel() override;
 
-	void Draw() override;
+	void Draw(bool usedMaterial) override;
 
-	void Draw(uint32_t textureHandle) override;
+	void Draw(uint32_t textureHandle, bool usedMaterial) override;
 
 	void SetSkinCluster(const SkinCluster& skinCluster) override;
 

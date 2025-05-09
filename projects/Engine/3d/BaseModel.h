@@ -56,13 +56,23 @@ public:
 
 	virtual void CreateSphere(uint32_t textureHandle);
 
-	//3dObjectクラス経由で呼び出す
-	virtual void Draw();
+	virtual void CreatePlane(uint32_t textureHandle);
+
+	virtual void CreateRing(uint32_t textureHandle);
+
+	virtual void CreateCylinder(uint32_t textureHandle);
+
+	virtual void CreateSkyBox(uint32_t textureHandle);
 
 	//3dObjectクラス経由で呼び出す
-	virtual void Draw(uint32_t textureHandle);
+	virtual void Draw(bool usedMaterial);
+
+	//3dObjectクラス経由で呼び出す
+	virtual void Draw(uint32_t textureHandle, bool usedMaterial);
 
 	virtual void InstancingDraw(uint32_t numInstance);
+
+	virtual void InstancingDraw(uint32_t numInstance, uint32_t textureHandle);
 
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
@@ -70,6 +80,8 @@ public:
 	virtual void SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
 	virtual void SetUVTransform(const EulerTransform& uvTransform);
+
+	virtual void SetEnableLighting(bool enableLighting);
 
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
@@ -108,6 +120,10 @@ protected:
 
 	//インデックスデータ読み込み
 	void LoadIndexData(aiMesh* mesh);
+
+	void SetVerticesNum();
+
+	void SetIndecesNum();
 
 	Node ReadNode(aiNode* node);
 	

@@ -48,15 +48,35 @@ void BaseModel::CreateSphere(uint32_t textureHandle)
 {
 }
 
-void BaseModel::Draw() {
+void BaseModel::CreatePlane(uint32_t textureHandle)
+{
+}
+
+void BaseModel::CreateRing(uint32_t textureHandle)
+{
+}
+
+void BaseModel::CreateCylinder(uint32_t textureHandle)
+{
+}
+
+void BaseModel::CreateSkyBox(uint32_t textureHandle)
+{
+}
+
+void BaseModel::Draw(bool usedMaterial) {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 	
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	if (!usedMaterial) 
+	{
+		//マテリアルのCBufferの場所を設定
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+
+	}
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
 
@@ -68,7 +88,7 @@ void BaseModel::Draw() {
 
 }
 
-void BaseModel::Draw(uint32_t textureHandle)
+void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
@@ -76,8 +96,12 @@ void BaseModel::Draw(uint32_t textureHandle)
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	if (!usedMaterial)
+	{
+		//マテリアルのCBufferの場所を設定
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+
+	}
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
 
@@ -103,7 +127,23 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
 	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_->indeces.size()), numInstance, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
+}
+
+void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
+{
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
+	//マテリアルのCBufferの場所を設定
+	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+
+	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
+		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
+	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }
 
 void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
@@ -124,6 +164,12 @@ void BaseModel::SetUVTransform(const EulerTransform& uvTransform)
 	materialData_->uvTransform = uvTransformMatrix;
 }
 
+void BaseModel::SetEnableLighting(bool enableLighting)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	materialData_->enableLighting = enableLighting;
+}
+
 void BaseModel::CreateVertexData()
 {
 
@@ -142,8 +188,7 @@ void BaseModel::CreateVertexData()
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//頂点データをリソースにコピー
 	std::memcpy(vertexData_, modelData_->vertices.data(), sizeof(VertexData) * modelData_->vertices.size());
-	verticesNum_ = static_cast<uint32_t>(modelData_->vertices.size());
-	modelData_->vertices.clear();
+	SetVerticesNum();
 }
 
 void BaseModel::CreateIndexData()
@@ -157,8 +202,7 @@ void BaseModel::CreateIndexData()
 
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
 	std::memcpy(indexData_, modelData_->indeces.data(), sizeof(uint32_t) * modelData_->indeces.size());
-	indecesNum_ = static_cast<uint32_t>(modelData_->indeces.size());
-	modelData_->indeces.clear();
+	SetIndecesNum();
 }
 
 void BaseModel::CreateMaterialData(const Vector4& color)
@@ -327,6 +371,18 @@ void BaseModel::LoadIndexData(aiMesh* mesh)
 			modelData_->indeces.push_back(vertexIndex);
 		}
 	}
+}
+
+void BaseModel::SetVerticesNum()
+{
+	verticesNum_ = static_cast<uint32_t>(modelData_->vertices.size());
+	modelData_->vertices.clear();
+}
+
+void BaseModel::SetIndecesNum()
+{
+	indecesNum_ = static_cast<uint32_t>(modelData_->indeces.size());
+	modelData_->indeces.clear();
 }
 
 /*

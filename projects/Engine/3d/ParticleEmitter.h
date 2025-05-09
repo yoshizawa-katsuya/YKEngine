@@ -1,6 +1,8 @@
 #pragma once
 #include "Struct.h"
 #include "ParticleTypes.h"
+#include <memory>
+#include "BaseModel.h"
 
 class ParticleEmitter
 {
@@ -14,7 +16,7 @@ public:
 	/// <param name = 'frequency'>発生頻度</param>
 	ParticleEmitter(const std::string& name, uint32_t count, float frequency);
 
-	void Initialize(uint32_t textureHandle);
+	void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard);
 
 	void Update(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
@@ -26,9 +28,17 @@ public:
 
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
-	void SetRandTranslationMin(const Vector3& translationMin) { randTranslateMin_ = translationMin; }
+	void SetRandTranslationMin(const Vector3& translationMin) { rangeParams_.translate.min = translationMin; }
 
-	void SetRandTranslationMax(const Vector3& translationMax) { randTranslateMax_ = translationMax; }
+	void SetRandTranslationMax(const Vector3& translationMax) { rangeParams_.translate.max = translationMax; }
+
+	void SetRandRotateMin(const Vector3& rotateMin) { rangeParams_.rotate.min = rotateMin; }
+
+	void SetRandRotateMax(const Vector3& rotateMax) { rangeParams_.rotate.max = rotateMax; }
+
+	void SetRandScaleMin(const Vector3& scaleMin) { rangeParams_.scale.min = scaleMin; }
+
+	void SetRandScaleMax(const Vector3& scaleMax) { rangeParams_.scale.max = scaleMax; }
 
 	void SetIsRandomColor(bool isRandomColor) { randomFlags_.color = isRandomColor; }
 
@@ -50,11 +60,23 @@ public:
 	Vector3& GetScele() { return transform_.scale; }
 	const Vector3& GetScele() const { return transform_.scale; }
 
-	Vector3& GetRandTranslateMin(){ return randTranslateMin_; }
-	const Vector3& GetRandTranslateMin() const { return randTranslateMin_; }
+	Vector3& GetRandTranslateMin(){ return rangeParams_.translate.min; }
+	const Vector3& GetRandTranslateMin() const { return rangeParams_.translate.min; }
 
-	Vector3& GetRandTranslateMax() { return randTranslateMax_; }
-	const Vector3& GetRandTranslateMax() const { return randTranslateMax_; }
+	Vector3& GetRandTranslateMax() { return rangeParams_.translate.max; }
+	const Vector3& GetRandTranslateMax() const { return rangeParams_.translate.max; }
+
+	Vector3& GetRandRotateMin() { return rangeParams_.rotate.min; }
+	const Vector3& GetRandRotateMin() const { return rangeParams_.rotate.min; }
+
+	Vector3& GetRandRotateMax() { return rangeParams_.rotate.max; }
+	const Vector3& GetRandRotateMax() const { return rangeParams_.rotate.max; }
+
+	Vector3& GetRandScaleMin() { return rangeParams_.scale.min; }
+	const Vector3& GetRandScaleMin() const { return rangeParams_.scale.min; }
+
+	Vector3& GetRandScaleMax() { return rangeParams_.scale.max; }
+	const Vector3& GetRandScaleMax() const { return rangeParams_.scale.max; }
 
 	float& GetFrequency() { return frequency_; }
 	float GetFrequency() const { return frequency_; }
@@ -88,9 +110,8 @@ private:
 
 	ParticleRandomizationFlags randomFlags_;
 
-	//TODO: 構造体にまとめる 拡縮や回転にも対応させる
-	Vector3 randTranslateMin_ = { -1.0f, -1.0f, -1.0f };
-	Vector3 randTranslateMax_ = { 1.0f, 1.0f, 1.0f };
+	//ランダム化の上限下限を管理
+	EmitterRangeParams rangeParams_;
 
 };
 

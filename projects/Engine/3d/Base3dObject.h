@@ -26,10 +26,21 @@ public:
 
 	virtual void Draw(uint32_t textureHandle);
 
+	void SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+
+	void SetUVTransform(const EulerTransform& uvTransform);
+
+	void SetEnableLighting(bool enableLighting);
+
+	void SetColor(const Vector4& color);
+
 	const BaseModel& GetModel() const { return *model_; }
 	BaseModel& GetModel() { return *model_; }
 
 protected:
+
+	//マテリアルデータ作成
+	void CreateMaterialData();
 
 	DirectXCommon* dxCommon_;
 
@@ -38,6 +49,11 @@ protected:
 	//データを書き込む
 	TransformationMatrix* TransformationData_;
 	//Matrix4x4* WVPData_ = nullptr;
+
+	//マテリアル用のリソースを作る
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
+	//マテリアルにデータを書き込む
+	Material* materialData_ = nullptr;
 
 	BaseModel* model_;
 

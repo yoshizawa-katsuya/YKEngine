@@ -34,6 +34,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormalinstancing)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormalinstancing, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSkyboxMode)) = CreateGraphicsPipeline(BlendMode::kSkyboxMode, dxCommon);
+
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(BlendMode blendMode, DirectXCommon* dxCommon) {
@@ -101,6 +103,28 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	//VSとGSで使う
 		rootParameters[0].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+
+		break;
+
+	case BlendMode::kSkyboxMode:
+
+		rootParameters.resize(3);
+
+		//マテリアル
+		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[0].Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+		//TransformationMatrix
+		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		rootParameters[1].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+
+		//テクスチャ
+		rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
 
 		break;
 
@@ -513,6 +537,18 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		assert(pixelShaderBlob != nullptr);
 
 		break;
+
+	case BlendMode::kSkyboxMode:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Skybox.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Skybox.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
 	}
 
 	
@@ -544,8 +580,13 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case BlendMode::kBackGroundSprite:
 		depthStencilDesc.DepthEnable = FALSE;  // 深度バッファ無効化
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;  // 深度への書き込み無効
-		depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 		depthStencilDesc.StencilEnable = FALSE;
+		break;
+
+	case BlendMode::kSkyboxMode:
+		depthStencilDesc.DepthEnable = true;	//比較はするのでDepth自体は有効
+		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;	//全ピクセルがz=1に出力されるので、書き込む必要はない
+
 		break;
 	}
 	//比較関数はLessEqual。つまり、近ければ描画される

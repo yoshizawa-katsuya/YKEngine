@@ -113,6 +113,12 @@ void ModelPlatform::PreDraw()
 
 }
 
+void ModelPlatform::SkyBoxPreDraw()
+{
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSkyboxMode);
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
 void ModelPlatform::SkinPreDraw()
 {
 
@@ -235,6 +241,66 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& dir
 	models_[filename]->CreateModel(directoryPath, filename, color);
 
 	return models_[filename];
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle)
+{
+	std::string name = "PrimitiveSphere";
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreateSphere(textureHandle);
+
+	return models_[name];
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle)
+{
+	std::string name = "PrimitivePlane";
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreatePlane(textureHandle);
+
+	return models_[name];
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle)
+{
+	std::string name = "PrimitiveRing";
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreateRing(textureHandle);
+
+	return models_[name];
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle)
+{
+	std::string name = "PrimitiveCylinder";
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreateCylinder(textureHandle);
+
+	return models_[name];
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle)
+{
+	std::string name = "PrimitiveSkyBox";
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreateSkyBox(textureHandle);
+
+	return models_[name];
 }
 
 void ModelPlatform::LightPreUpdate()
