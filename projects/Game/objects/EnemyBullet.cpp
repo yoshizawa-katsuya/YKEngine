@@ -3,7 +3,7 @@
 #include "TextureManager.h"
 #include "Vector3.h"
 
-void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity) {
+void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle) {
 
 	// NULLポインタチェック
 	assert(model);
@@ -11,7 +11,7 @@ void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Ve
 	object_ = std::make_unique<Rigid3dObject>();
 	object_->Initialize(model);
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/red.png");
+	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
 	// 引数で受け取った初期座標をセット

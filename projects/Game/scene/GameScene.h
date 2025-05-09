@@ -102,6 +102,8 @@ private:
 	//3Dモデル
 	std::shared_ptr<BaseModel> modelSkydome_;
 	std::shared_ptr<BaseModel> modelPlayer_;
+	std::shared_ptr<BaseModel> modelEnemy_;
+	std::shared_ptr<BaseModel> modelBullet_;
 
 	//待機
 	bool isWait_;
@@ -109,7 +111,8 @@ private:
 
 	//テクスチャハンドル
 	uint32_t textureHandle_;
-	uint32_t enemyTextureHandle_;
+	uint32_t textureHandlePlayerBullet_;
+	uint32_t textureHandleEnemyBullet_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー

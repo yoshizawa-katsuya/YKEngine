@@ -14,17 +14,17 @@ Enemy::~Enemy() {
 	*/
 }
 
-void Enemy::Initialize(BaseModel* model, uint32_t textureHandle, const Vector3& position) {
+void Enemy::Initialize(BaseModel* model, const Vector3& position) {
 
 	// NULLポインタチェック
 	assert(model);
 
 	object_ = std::make_unique<Rigid3dObject>();
 	object_->Initialize(model);
-	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
+	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 
 	ApproachInitialize();
 }
@@ -119,7 +119,7 @@ void Enemy::Draw(Camera* camera) {
 
 	// 3Dモデルを描画
 	object_->CameraUpdate(camera);
-	object_->Draw(textureHandle_);
+	object_->Draw();
 
 	//弾描画
 	/*

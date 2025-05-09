@@ -7,7 +7,7 @@
 class EnemyBullet {
 public:
 	//初期化
-	void Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity);
+	void Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle);
 
 	void Update();
 

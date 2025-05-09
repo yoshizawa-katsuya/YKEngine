@@ -62,11 +62,14 @@ void GameScene::Initialize() {
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
-	enemyTextureHandle_ = TextureManager::GetInstance()->Load("./Resources/enemy.png");
+	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/black.png");
+	textureHandleEnemyBullet_ = TextureManager::GetInstance()->Load("./Resources/red.png");
 
 	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
-	modelSkydome_ = modelPlatform_->CreateRigidModel("./resources/skydome", "skydome.obj");
+	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
+	modelSkydome_ = modelPlatform_->CreateRigidModel("./Resources/skydome", "skydome.obj");
+	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
+	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_);
 
 	//スカイドームの生成
 	skydome_ = std::make_unique<Skydome>();
@@ -408,7 +411,7 @@ void GameScene::EnemyPop(const Vector3& position) {
 	std::unique_ptr<Enemy>& enemy = enemys_.emplace_back();
 	// 敵の初期化
 	enemy = std::make_unique<Enemy>();
-	enemy->Initialize(modelPlayer_.get(), enemyTextureHandle_, position);
+	enemy->Initialize(modelEnemy_.get(), position);
 	enemy->SetPlayer(player_.get());
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetGameScene(this);
@@ -421,7 +424,7 @@ void GameScene::AddPlayerbullet(const Vector3& worldPosition, const Vector3& vel
 	//弾を生成し、初期化
 	std::unique_ptr<PlayerBullet>& bullet = playerBullets_.emplace_back();
 	bullet = std::make_unique<PlayerBullet>();
-	bullet->Initialize(modelPlayer_.get(), worldPosition, velocity);
+	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandlePlayerBullet_);
 }
 
 void GameScene::AddEnemybullet(const Vector3& worldPosition, const Vector3& velocity) {
@@ -430,7 +433,7 @@ void GameScene::AddEnemybullet(const Vector3& worldPosition, const Vector3& velo
 	//弾を生成し、初期化
 	std::unique_ptr<EnemyBullet>& bullet = enemyBullets_.emplace_back();
 	bullet = std::make_unique<EnemyBullet>();
-	bullet->Initialize(modelPlayer_.get(), worldPosition, velocity);
+	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandleEnemyBullet_);
 
 }
 

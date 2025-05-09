@@ -14,7 +14,7 @@ public:
 	~Enemy();
 
 	// 初期化
-	void Initialize(BaseModel* model, uint32_t textureHandle, const Vector3& position);
+	void Initialize(BaseModel* model, const Vector3& position);
 
 	void ApproachInitialize();
 
@@ -56,9 +56,7 @@ private:
 	WorldTransform worldTransform_;
 	// モデル
 	std::unique_ptr<Rigid3dObject> object_;
-	// テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
-
+	
 	//自キャラ
 	Player* player_ = nullptr;
 	//ゲームシーン
