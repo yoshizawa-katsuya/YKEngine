@@ -33,6 +33,8 @@ enum class BlendMode {
 
 	kBlendModeNormalinstancing,
 
+	kSkyboxMode,
+
 	kCountOfBlendMode,	//利用してはいけない
 };
 

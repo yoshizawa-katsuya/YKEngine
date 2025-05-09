@@ -145,7 +145,7 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 	texture.cpuDescHandleSRV = srvHeapManager_->GetCPUDescriptorHandle(index);
 	texture.gpuDescHandleSRV = srvHeapManager_->GetGPUDescriptorHandle(index);
 
-	srvHeapManager_->CreateSRVforTexture2D(index, texture.resource.Get(), texture.metadata.format, UINT(texture.metadata.mipLevels));
+	srvHeapManager_->CreateSRVforTexture2D(index, texture.resource.Get(), texture.metadata);
 
 	intermediateResources_.push_back(UploadTextureData(texture.resource.Get(), image));
 }

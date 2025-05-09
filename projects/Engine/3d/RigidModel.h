@@ -15,6 +15,8 @@ public:
 
 	void CreateCylinder(uint32_t textureHandle) override;
 
+	void CreateSkyBox(uint32_t textureHandle) override;
+
 private:
 
 

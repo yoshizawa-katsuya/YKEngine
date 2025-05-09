@@ -113,6 +113,12 @@ void ModelPlatform::PreDraw()
 
 }
 
+void ModelPlatform::SkyBoxPreDraw()
+{
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSkyboxMode);
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
 void ModelPlatform::SkinPreDraw()
 {
 
@@ -281,6 +287,18 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle)
 	}
 	models_[name] = std::make_shared<RigidModel>();
 	models_[name]->CreateCylinder(textureHandle);
+
+	return models_[name];
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle)
+{
+	std::string name = "PrimitiveSkyBox";
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreateSkyBox(textureHandle);
 
 	return models_[name];
 }

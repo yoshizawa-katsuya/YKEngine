@@ -27,6 +27,8 @@ public:
 	//共通描画設定
 	void PreDraw();
 
+	void SkyBoxPreDraw();
+
 	void SkinPreDraw();
 
 	void InstancingPreDraw();
@@ -50,6 +52,8 @@ public:
 	std::shared_ptr<BaseModel> CreateRing(uint32_t textureHandle);
 
 	std::shared_ptr<BaseModel> CreateCylinder(uint32_t textureHandle);
+
+	std::shared_ptr<BaseModel> CreateSkyBox(uint32_t textureHandle);
 
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
