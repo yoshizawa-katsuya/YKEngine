@@ -212,8 +212,7 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
-	modelPlatform_->SkyBoxPreDraw();
-
+	
 
 	/*
 	modelPlatform_->InstancingPreDraw();
