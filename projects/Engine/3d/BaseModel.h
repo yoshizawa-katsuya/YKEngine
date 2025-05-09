@@ -62,6 +62,8 @@ public:
 
 	virtual void CreateCylinder(uint32_t textureHandle);
 
+	virtual void CreateSkyBox(uint32_t textureHandle);
+
 	//3dObjectクラス経由で呼び出す
 	virtual void Draw(bool usedMaterial);
 

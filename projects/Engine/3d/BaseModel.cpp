@@ -60,6 +60,10 @@ void BaseModel::CreateCylinder(uint32_t textureHandle)
 {
 }
 
+void BaseModel::CreateSkyBox(uint32_t textureHandle)
+{
+}
+
 void BaseModel::Draw(bool usedMaterial) {
 
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);

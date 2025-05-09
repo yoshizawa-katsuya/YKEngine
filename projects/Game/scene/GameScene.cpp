@@ -52,8 +52,7 @@ void GameScene::Initialize() {
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
-	uint32_t textureHandle2 = TextureManager::GetInstance()->Load("./resources/gradationLine.png");
-	uint32_t textureHandle3 = TextureManager::GetInstance()->Load("./Resources/circle2.png");
+	uint32_t textureHandle2 = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
@@ -75,6 +74,12 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+	skyBox_ = std::make_unique<Rigid3dObject>();
+	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2).get());
+	skyBoxWorldTransform_.Initialize();
+	skyBoxWorldTransform_.scale_ = { 50.0f, 50.0f, 50.0f };
+	skyBoxWorldTransform_.UpdateMatrix();
+	skyBox_->WorldTransformUpdate(skyBoxWorldTransform_);
 	/*
 	objects_ = std::make_unique<InstancingObjects>();
 	objects_->Initialize(modelPlayer_.get(), 10);
@@ -212,6 +217,11 @@ void GameScene::Draw() {
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+	modelPlatform_->SkyBoxPreDraw();
+
+	skyBox_->CameraUpdate(mainCamera_);
+	skyBox_->Draw();
 
 	/*
 	modelPlatform_->InstancingPreDraw();
