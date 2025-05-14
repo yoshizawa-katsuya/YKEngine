@@ -9,12 +9,10 @@
 
 void Player::Initialize(BaseModel* model) {
 
+	BaseCharacter::Initialize(model);
+
 	input_ = Input::GetInstance();
 
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
-
-	worldTransform_.Initialize();
 	worldTransform_.translation_.z = 20.0f;
 
 	//3Dレティクルのワールドトランスフォーム初期化
@@ -87,9 +85,7 @@ void Player::Update(Camera* railCamera) {
 	worldTransform_.translation_.y = (std::max)(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = (std::min)(worldTransform_.translation_.y, kMoveLimitY);
 
-	worldTransform_.UpdateMatrix();
-	object_->WorldTransformUpdate(worldTransform_);
-
+	BaseCharacter::Update();
 
 	//自機のワールド座標から3Dレティクルのワールド座標を計算
 	{
@@ -130,13 +126,6 @@ void Player::Update(Camera* railCamera) {
 	Attack();
 
 	
-}
-
-void Player::Draw(Camera* camera) {
-
-	object_->CameraUpdate(camera);
-	object_->Draw();
-
 }
 
 void Player::Rotate() {

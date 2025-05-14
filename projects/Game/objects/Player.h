@@ -1,23 +1,19 @@
 #pragma once
-#include "Rigid3dObject.h"
-#include "WorldTransform.h"
 #include "SRTAnimator.h"
 #include "Animation.h"
 #include "Input.h"
-#include "PlayerBullet.h"
 #include "Sprite.h"
+#include "BaseCharacter.h"
 class Camera;
 class GameScene;
 
-class Player
+class Player : public BaseCharacter
 {
 public:
 
-	void Initialize(BaseModel* model);
+	void Initialize(BaseModel* model) override;
 
 	void Update(Camera* railCamera);
-
-	void Draw(Camera* camera);
 
 	//旋回
 	void Rotate();
@@ -46,8 +42,6 @@ public:
 
 	Vector2 Get2DReticleSize() { return sprite2DReticle_->GetSize(); }
 
-	const float GetRadius() const { return radius_; }
-
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 private:
@@ -58,19 +52,11 @@ private:
 	//ゲームシーン
 	GameScene* gameScene_ = nullptr;
 
-	//Transform変数を作る
-	WorldTransform worldTransform_;
-
-	std::unique_ptr<Rigid3dObject> object_;
-
 	//3Dレティクル用ワールドトランスフォーム
 	WorldTransform worldTransform3DReticle_;
 
 	//2Dレティクル用スプライト
 	std::unique_ptr<Sprite> sprite2DReticle_;
-
-	// 半径
-	const float radius_ = 1.0f;
 
 	bool isLockOn_ = false;
 

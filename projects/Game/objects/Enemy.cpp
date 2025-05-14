@@ -16,13 +16,8 @@ Enemy::~Enemy() {
 
 void Enemy::Initialize(BaseModel* model, const Vector3& position) {
 
-	// NULLポインタチェック
-	assert(model);
-
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
-
-	worldTransform_.Initialize();
+	BaseCharacter::Initialize(model);
+	
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 
@@ -62,8 +57,7 @@ void Enemy::Update() {
 		bullet->Update();
 	}
 	*/
-	worldTransform_.UpdateMatrix();
-	object_->WorldTransformUpdate(worldTransform_);
+	BaseCharacter::Update();
 }
 
 void Enemy::ApproachUpdate() {
@@ -113,20 +107,6 @@ void Enemy::OnCollision() {
 
 	isDead_ = true;
 
-}
-
-void Enemy::Draw(Camera* camera) {
-
-	// 3Dモデルを描画
-	object_->CameraUpdate(camera);
-	object_->Draw();
-
-	//弾描画
-	/*
-	for (EnemyBullet* bullet : enemyBullets_) {
-		bullet->Draw(viewProjection);
-	}
-	*/
 }
 
 Vector3 Enemy::GetWorldPosition() {

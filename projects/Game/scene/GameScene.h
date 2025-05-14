@@ -22,6 +22,7 @@
 #include "Enemy.h"
 #include "EnemyBullet.h"
 #include "Skydome.h"
+#include "PlayerBullet.h"
 
 class GameScene : public BaseScene
 {

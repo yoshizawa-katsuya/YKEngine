@@ -1,13 +1,11 @@
 #pragma once
-#include "BaseModel.h"
-#include "WorldTransform.h"
-#include "Camera.h"
-#include "Rigid3dObject.h"
+#include "BaseCharacter.h"
 class Player;
 class GameScene;
 
 //敵
-class Enemy {
+class Enemy : public BaseCharacter
+{
 public:
 
 	//デストラクタ
@@ -19,7 +17,7 @@ public:
 	void ApproachInitialize();
 
 	// 更新
-	void Update();
+	void Update() override;
 
 	void ApproachUpdate();
 	void LeaveUpdate();
@@ -29,9 +27,6 @@ public:
 
 	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
-
-	// 描画
-	void Draw(Camera* camera);
 
 	void SetPlayer(Player* player) { player_ = player; }
 
@@ -51,11 +46,6 @@ public:
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 private:
-
-	// ワールド変換データ
-	WorldTransform worldTransform_;
-	// モデル
-	std::unique_ptr<Rigid3dObject> object_;
 	
 	//自キャラ
 	Player* player_ = nullptr;
@@ -79,11 +69,5 @@ private:
 	// キャラクターの移動速さ
 	Vector3 ApproachVelocity_ = {0.0f, 0.0f, -0.1f};
 	Vector3 LeaveVelocity_ = {0.1f, -0.1f, 0.0f};
-
-	// 半径
-	const float radius_ = 1.0f;
-
-	//デスフラグ
-	bool isDead_ = false;
 
 };

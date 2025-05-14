@@ -5,15 +5,11 @@
 
 void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle) {
 
-	// NULLポインタチェック
-	assert(model);
+	BaseCharacter::Initialize(model);
 
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
 	// テクスチャ読み込み
 	textureHandle_ = textureHandle;
 
-	worldTransform_.Initialize();
 	// 引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
 
@@ -31,18 +27,15 @@ void EnemyBullet::Update() {
 	// 座標を移動させる
 	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 
-	worldTransform_.UpdateMatrix();
-	object_->WorldTransformUpdate(worldTransform_);
+	BaseCharacter::Update();
 }
 
 void EnemyBullet::OnCollision() { isDead_ = true; }
 
-void EnemyBullet::Draw(Camera* camera) {
-
-	// 3Dモデルを描画
+void EnemyBullet::Draw(Camera* camera)
+{
 	object_->CameraUpdate(camera);
 	object_->Draw(textureHandle_);
-
 }
 
 Vector3 EnemyBullet::GetWorldPosition() {
