@@ -23,6 +23,7 @@
 #include "EnemyBullet.h"
 #include "Skydome.h"
 #include "PlayerBullet.h"
+#include "CollisionManager.h"
 
 class GameScene : public BaseScene
 {
@@ -115,6 +116,9 @@ private:
 	uint32_t textureHandlePlayerBullet_;
 	uint32_t textureHandleEnemyBullet_;
 	//std::unique_ptr<Sprite> sprite_;
+
+	//衝突マネージャー
+	std::unique_ptr<CollisionManager> collisionManager_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;

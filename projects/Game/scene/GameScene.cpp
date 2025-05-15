@@ -71,6 +71,10 @@ void GameScene::Initialize() {
 	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_);
 
+	//衝突マネージャの生成
+	collisionManager_ = std::make_unique<CollisionManager>();
+	collisionManager_->Initialize();
+
 	//スカイドームの生成
 	skydome_ = std::make_unique<Skydome>();
 	//スカイドームの初期化
@@ -296,93 +300,110 @@ void GameScene::Finalize()
 
 void GameScene::CheckAllColision() {
 
-	//判定対象AとBの座標
-	Vector3 posA, posB;
+	//衝突マネージャのリセット
+	collisionManager_->Reset();
 
-	//自弾リストの取得
-	//const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
-	//敵弾リストの取得
-	//const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
-
-#pragma region
-
-//自キャラと敵弾の当たり判定
-
-//自キャラの座標
-	posA = player_->GetWorldPosition();
-
-	//自キャラと敵弾すべての当たり判定
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
-
-		//敵弾の座標
-		posB = bullet->GetWorldPosition();
-		float distance = Length(Subtract(posA, posB));
-		//球と球の交差判定
-		if (distance <= player_->GetRadius() + bullet->GetRadius()) {
-			//自キャラ衝突時コールバックを呼び出す
-			player_->OnCollision();
-			//敵弾の衝突時コールバックを呼び出す
-			bullet->OnCollision();
-		}
-
+	//コライダーをリストに登録
+	collisionManager_->AddCollider(player_.get());
+	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
+		collisionManager_->AddCollider(bullet.get());
 	}
-
-#pragma endregion
-
-#pragma region
-
-	//自弾と敵キャラの当たり判定
-
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
-
-		// 敵キャラの座標
-		posA = enemy->GetWorldPosition();
-
-		// 敵キャラと自弾すべての当たり判定
-		for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
-
-			// 自弾の座標
-			posB = bullet->GetWorldPosition();
-			float distance = Length(Subtract(posA, posB));
-			// 球と球の交差判定
-			if (distance <= enemy->GetRadius() + bullet->GetRadius()) {
-				// 敵キャラ衝突時コールバックを呼び出す
-				enemy->OnCollision();
-				// 自弾の衝突時コールバックを呼び出す
-				bullet->OnCollision();
-
-				emitter_->SetTranslation(posA);
-				emitter_->Emit();
-			}
-		}
+		collisionManager_->AddCollider(enemy.get());
 	}
-#pragma endregion
-
-#pragma region
-
-	//自弾と敵弾の当たり判定
-	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
-		// 自弾の座標
-		posA = playerBullet->GetWorldPosition();
-
-		for (std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets_) {
-			// 敵弾の座標
-			posB = enemyBullet->GetWorldPosition();
-			float distance = Length(Subtract(posA, posB));
-			// 球と球の交差判定
-			if (distance <= playerBullet->GetRadius() + enemyBullet->GetRadius()) {
-				// 敵弾の衝突時コールバックを呼び出す
-				enemyBullet->OnCollision();
-				// 自弾の衝突時コールバックを呼び出す
-				playerBullet->OnCollision();
-			}
-
-		}
-
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+		collisionManager_->AddCollider(bullet.get());
 	}
 
-#pragma endregion
+	collisionManager_->CheckAllCollisions();
 
+//	//判定対象AとBの座標
+//	Vector3 posA, posB;
+//
+//	//自弾リストの取得
+//	//const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
+//	//敵弾リストの取得
+//	//const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+//
+//#pragma region
+//
+////自キャラと敵弾の当たり判定
+//
+////自キャラの座標
+//	posA = player_->GetWorldPosition();
+//
+//	//自キャラと敵弾すべての当たり判定
+//	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+//
+//		//敵弾の座標
+//		posB = bullet->GetWorldPosition();
+//		float distance = Length(Subtract(posA, posB));
+//		//球と球の交差判定
+//		if (distance <= player_->GetRadius() + bullet->GetRadius()) {
+//			//自キャラ衝突時コールバックを呼び出す
+//			player_->OnCollision();
+//			//敵弾の衝突時コールバックを呼び出す
+//			bullet->OnCollision();
+//		}
+//
+//	}
+//
+//#pragma endregion
+//
+//#pragma region
+//
+//	//自弾と敵キャラの当たり判定
+//
+//	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+//
+//		// 敵キャラの座標
+//		posA = enemy->GetWorldPosition();
+//
+//		// 敵キャラと自弾すべての当たり判定
+//		for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
+//
+//			// 自弾の座標
+//			posB = bullet->GetWorldPosition();
+//			float distance = Length(Subtract(posA, posB));
+//			// 球と球の交差判定
+//			if (distance <= enemy->GetRadius() + bullet->GetRadius()) {
+//				// 敵キャラ衝突時コールバックを呼び出す
+//				enemy->OnCollision();
+//				// 自弾の衝突時コールバックを呼び出す
+//				bullet->OnCollision();
+//
+//				emitter_->SetTranslation(posA);
+//				emitter_->Emit();
+//			}
+//		}
+//	}
+//#pragma endregion
+//
+//#pragma region
+//
+//	//自弾と敵弾の当たり判定
+//	for (std::unique_ptr<PlayerBullet>& playerBullet : playerBullets_) {
+//		// 自弾の座標
+//		posA = playerBullet->GetWorldPosition();
+//
+//		for (std::unique_ptr<EnemyBullet>& enemyBullet : enemyBullets_) {
+//			// 敵弾の座標
+//			posB = enemyBullet->GetWorldPosition();
+//			float distance = Length(Subtract(posA, posB));
+//			// 球と球の交差判定
+//			if (distance <= playerBullet->GetRadius() + enemyBullet->GetRadius()) {
+//				// 敵弾の衝突時コールバックを呼び出す
+//				enemyBullet->OnCollision();
+//				// 自弾の衝突時コールバックを呼び出す
+//				playerBullet->OnCollision();
+//			}
+//
+//		}
+//
+//	}
+//
+//#pragma endregion
+//
 #pragma region
 
 	Vector2 ScreenPosA = player_->Get2DReticlePosition();

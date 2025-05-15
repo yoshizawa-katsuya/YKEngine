@@ -6,10 +6,12 @@
 #include "Camera.h"
 #include "Lerp.h"
 #include "GameScene.h"
+#include "CollisionTypeIdDef.h"
 
 void Player::Initialize(BaseModel* model) {
 
 	BaseCharacter::Initialize(model);
+	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayer));
 
 	input_ = Input::GetInstance();
 
@@ -73,7 +75,7 @@ void Player::Update(Camera* railCamera) {
 	}
 
 	//座標移動(ベクトルの加算)
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+	worldTransform_.translation_ += move;
 
 	//移動限界座標
 	const float kMoveLimitX = 34;
@@ -175,8 +177,8 @@ void Player::Attack() {
 
 }
 
-void Player::OnCollision() {
-
+void Player::OnCollision(Collider* other)
+{
 }
 
 void Player::DrawUI() {

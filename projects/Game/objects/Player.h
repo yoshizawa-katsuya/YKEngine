@@ -21,8 +21,8 @@ public:
 	//攻撃
 	void Attack();
 
-	//衝突を検出したら呼び出されるコールバック関数
-	void OnCollision();
+	//衝突時に呼ばれる関数
+	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	//UI描画
 	void DrawUI();

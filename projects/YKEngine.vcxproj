@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\CollisionManager.cpp" />
     <ClCompile Include="Game\objects\BaseCharacter.cpp" />
     <ClCompile Include="Game\objects\Collider.cpp" />
     <ClCompile Include="Engine\3d\Base3dObject.cpp" />
@@ -261,6 +262,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\CollisionManager.h" />
     <ClInclude Include="Game\objects\BaseCharacter.h" />
     <ClInclude Include="Game\objects\Collider.h" />
     <ClInclude Include="Engine\3d\Base3dObject.h" />
@@ -286,6 +288,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3d\PrimitiveDrawer.h" />
+    <ClInclude Include="Game\objects\CollisionTypeIdDef.h" />
     <ClInclude Include="Game\objects\Enemy.h" />
     <ClInclude Include="Game\objects\EnemyBullet.h" />
     <ClInclude Include="Game\objects\PlayerBullet.h" />

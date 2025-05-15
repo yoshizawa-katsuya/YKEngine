@@ -12,8 +12,8 @@ public:
 	// 更新
 	void Update() override;
 
-	// 衝突を検出したら呼び出されるコールバック関数
-	void OnCollision();
+	//衝突時に呼ばれる関数
+	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	// 描画
 	void Draw(Camera* camera);

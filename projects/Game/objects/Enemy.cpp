@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "GameScene.h"
 #include "WinApp.h"
+#include "CollisionTypeIdDef.h"
 
 Enemy::~Enemy() {
 	/*
@@ -17,7 +18,8 @@ Enemy::~Enemy() {
 void Enemy::Initialize(BaseModel* model, const Vector3& position) {
 
 	BaseCharacter::Initialize(model);
-	
+	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemy));
+
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 
@@ -103,10 +105,12 @@ void Enemy::Fire() {
 
 }
 
-void Enemy::OnCollision() {
-
-	isDead_ = true;
-
+void Enemy::OnCollision(Collider* other)
+{
+	if (other->GetTypeID() == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) 
+	{
+		isDead_ = true;
+	}
 }
 
 Vector3 Enemy::GetWorldPosition() {
