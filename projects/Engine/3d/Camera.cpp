@@ -4,7 +4,7 @@
 
 Camera::Camera()
 	: transform_({ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} })
-	, fovY_(0.45f)
+	, fovY_(45.0f * 3.141592654f / 180.0f)
 	, aspectRatio_(static_cast<float>(WinApp::kClientWidth) / static_cast<float>(WinApp::kClientHeight))
 	, nearClip_(0.1f)
 	, farClip_(100.0f)
