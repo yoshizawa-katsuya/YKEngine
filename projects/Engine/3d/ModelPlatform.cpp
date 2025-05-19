@@ -243,9 +243,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& dir
 	return models_[filename];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitiveSphere";
+	std::string name = "PrimitiveSphere" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
@@ -255,9 +255,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle)
 	return models_[name];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitivePlane";
+	std::string name = "PrimitivePlane" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
@@ -267,9 +267,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle)
 	return models_[name];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitiveRing";
+	std::string name = "PrimitiveRing" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
@@ -279,9 +279,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle)
 	return models_[name];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitiveCylinder";
+	std::string name = "PrimitiveCylinder" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
@@ -291,9 +291,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle)
 	return models_[name];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitiveSkyBox";
+	std::string name = "PrimitiveSkyBox" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
