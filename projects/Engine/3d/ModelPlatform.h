@@ -45,15 +45,15 @@ public:
 
 	std::shared_ptr<BaseModel> CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
-	std::shared_ptr<BaseModel> CreateSphere(uint32_t textureHandle);
+	std::shared_ptr<BaseModel> CreateSphere(uint32_t textureHandle, const std::string& modelName = "");
 
-	std::shared_ptr<BaseModel> CreatePlane(uint32_t textureHandle);
+	std::shared_ptr<BaseModel> CreatePlane(uint32_t textureHandle, const std::string& modelName = "");
 
-	std::shared_ptr<BaseModel> CreateRing(uint32_t textureHandle);
+	std::shared_ptr<BaseModel> CreateRing(uint32_t textureHandle, const std::string& modelName = "");
 
-	std::shared_ptr<BaseModel> CreateCylinder(uint32_t textureHandle);
+	std::shared_ptr<BaseModel> CreateCylinder(uint32_t textureHandle, const std::string& modelName = "");
 
-	std::shared_ptr<BaseModel> CreateSkyBox(uint32_t textureHandle);
+	std::shared_ptr<BaseModel> CreateSkyBox(uint32_t textureHandle, const std::string& modelName = "");
 
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
