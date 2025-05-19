@@ -69,7 +69,7 @@ void GameScene::Initialize() {
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
 	modelSkydome_ = modelPlatform_->CreateRigidModel("./Resources/skydome", "skydome.obj");
 	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
-	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_);
+	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_, "Bullet");
 
 	//衝突マネージャの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -278,12 +278,15 @@ void GameScene::Draw() {
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 		bullet->Draw(mainCamera_);
 	}
-	/*
+
 	modelPlatform_->InstancingPreDraw();
 
-	objects_->CameraUpdate(mainCamera_);
-	objects_->Draw();
-	*/
+	//衝突マネージャの描画
+	collisionManager_->Draw(mainCamera_);
+
+	/*objects_->CameraUpdate(mainCamera_);
+	objects_->Draw();*/
+	
 	//Spriteの前景描画前処理
 	spritePlatform_->PreDraw();
 
@@ -315,6 +318,7 @@ void GameScene::CheckAllColision() {
 		collisionManager_->AddCollider(bullet.get());
 	}
 
+	collisionManager_->Update();
 	collisionManager_->CheckAllCollisions();
 
 #pragma region

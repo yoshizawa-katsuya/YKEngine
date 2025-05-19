@@ -1,12 +1,44 @@
 #include "CollisionManager.h"
 #include "Collision.h"
+#include "ModelPlatform.h"
 
 void CollisionManager::Initialize()
 {
+	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");
+	model_ = ModelPlatform::GetInstance()->CreateSphere(textureHandle, "Collider");
+
+	objects_ = std::make_unique<InstancingObjects>();
+	objects_->Initialize(model_.get(), 255);
+
+	// グループを追加
+	globalVariables_->CreateGroup(groupName_);
+	globalVariables_->AddItem(groupName_, "isDrawCollider", isDrawCollider_);
+	isDrawCollider_ = globalVariables_->GetBoolValue(groupName_, "isDrawCollider");
 }
 
-void CollisionManager::UpdateWorldTransform()
+void CollisionManager::Update()
 {
+	isDrawCollider_ = globalVariables_->GetBoolValue(groupName_, "isDrawCollider");
+
+}
+
+void CollisionManager::Draw(Camera* camera)
+{
+	// 非表示なら抜ける
+	if (!isDrawCollider_) {
+		return;
+	}
+
+	objects_->PreUpdate();
+	for (Collider* collider : colliders_) {
+		// コライダーのワールドトランスフォームを取得
+		WorldTransform worldTransform = collider->GetWorldTransform();
+
+		// ワールドトランスフォームをインスタンシングオブジェクトに追加
+		objects_->WorldTransformUpdate(worldTransform);
+	}
+	objects_->CameraUpdate(camera);
+	objects_->Draw();
 }
 
 void CollisionManager::Reset()

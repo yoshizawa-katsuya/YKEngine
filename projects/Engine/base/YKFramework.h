@@ -16,6 +16,7 @@
 #include "dx12.h"
 #include "SceneManager.h"
 #include "AbstractSceneFactory.h"
+#include "GlobalVariables.h"
 #include <format>
 #include <dxgidebug.h>
 #include <dxcapi.h>
@@ -61,6 +62,7 @@ protected:
 	std::unique_ptr<PrimitiveDrawer> primitiveDrawer_;
 	SpritePlatform* spritePlatform_ = nullptr;
 	ModelPlatform* modelPlatform_ = nullptr;
+	GlobalVariables* globalVariables_ = nullptr;
 
 	SceneManager* sceneManager_ = nullptr;
 

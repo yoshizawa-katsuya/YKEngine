@@ -32,6 +32,8 @@ public:
 	//種別IDを設定
 	void SetTypeID(uint32_t typeID) { typeID_ = typeID; }
 
+	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
+
 protected:
 
 	//Transform変数を作る

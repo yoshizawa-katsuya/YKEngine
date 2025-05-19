@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\lib\GlobalVariables.cpp" />
     <ClCompile Include="Game\objects\CollisionManager.cpp" />
     <ClCompile Include="Game\objects\BaseCharacter.cpp" />
     <ClCompile Include="Game\objects\Collider.cpp" />
@@ -262,6 +263,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\lib\GlobalVariables.h" />
     <ClInclude Include="Game\objects\CollisionManager.h" />
     <ClInclude Include="Game\objects\BaseCharacter.h" />
     <ClInclude Include="Game\objects\Collider.h" />

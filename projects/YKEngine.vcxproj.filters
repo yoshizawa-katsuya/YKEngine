@@ -252,6 +252,9 @@
     <ClCompile Include="Game\objects\CollisionManager.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\lib\GlobalVariables.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -484,8 +487,11 @@
     <ClInclude Include="Game\objects\CollisionManager.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\lib\GlobalVariables.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
     <ClInclude Include="Game\objects\CollisionTypeIdDef.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,8 @@
 #pragma once
 #include "Collider.h"
+#include "BaseModel.h"
+#include "InstancingObjects.h"
+#include "GlobalVariables.h"
 
 /// <summary>
 /// 衝突マネージャ
@@ -11,11 +14,11 @@ public:
 	//初期化
 	void Initialize();
 
-	//ワールドトランスフォームの更新
-	void UpdateWorldTransform();
+	//更新
+	void Update();
 
 	//描画
-	//void Draw(const ViewProjection& viewProjection);
+	void Draw(Camera* camera);
 
 	//リセット
 	void Reset();
@@ -34,15 +37,19 @@ private:
 	/// <param name="colliderB">コライダーB</param>
 	void CheckColliderPair(Collider* colliderA, Collider* colliderB);
 
+	//グローバル変数
+	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();
+
 	const char* groupName_ = "Colliders";
 
 	//コライダー
 	std::list<Collider*> colliders_;
 
-	//コライダー表示
-	bool isDrawCollider_ = false;
+	//コライダー表示フラグ
+	bool isDrawCollider_ = true;
 
 	//デバッグ表示用モデル
-	//std::unique_ptr<Model> model_;
+	std::shared_ptr<BaseModel> model_;
+	std::unique_ptr<InstancingObjects> objects_;
 };
 
