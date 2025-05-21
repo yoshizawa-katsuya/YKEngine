@@ -52,14 +52,14 @@ private:
 	};
 
 	//カメラの変数
+	float fovY_;	//垂直方向視野角
+	float aspectRatio_;	//アスペクト比
+	float nearClip_;	//ニアクリップ距離
+	float farClip_;	//ファークリップ距離
 	EulerTransform transform_;
 	Matrix4x4 worldMatrix_;
 	Matrix4x4 viewMatrix_;
 	Matrix4x4 projectionMatrix_;
-	float fovY_;	//水平方向視野角
-	float aspectRatio_;	//アスペクト比
-	float nearClip_;	//ニアクリップ距離
-	float farClip_;	//ファークリップ距離
 	Matrix4x4 viewProjectionMatrix_;
 
 	Matrix4x4 backToFrontMatrix_;
