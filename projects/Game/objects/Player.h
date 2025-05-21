@@ -11,7 +11,7 @@ class Player : public BaseCharacter
 {
 public:
 
-	void Initialize(BaseModel* model) override;
+	void Initialize(BaseModel* model, Matrix4x4* viewPortMatrix);
 
 	void Update(Camera* railCamera);
 
@@ -61,5 +61,8 @@ private:
 	bool isLockOn_ = false;
 
 	Vector3 target_;
+
+	//ビューポート行列
+	Matrix4x4* viewPortMatrix_ = nullptr;
 };
 

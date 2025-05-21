@@ -84,6 +84,7 @@ private:
 
 	Camera* mainCamera_ = nullptr;
 
+	Matrix4x4 viewPortMatrix_;
 
 	std::unique_ptr<Camera> camera_;
 	std::unique_ptr<Camera> camera2_;

@@ -8,12 +8,14 @@
 #include "GameScene.h"
 #include "CollisionTypeIdDef.h"
 
-void Player::Initialize(BaseModel* model) {
+void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix) {
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayer));
 
 	input_ = Input::GetInstance();
+
+	viewPortMatrix_ = viewPortMatrix;
 
 	worldTransform_.translation_.z = 20.0f;
 
@@ -109,11 +111,8 @@ void Player::Update(Camera* railCamera) {
 	{
 		Vector3 positionReticle = worldTransform3DReticle_.GetWorldPosition();
 
-		//ビューポート行列
-		Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kClientWidth, WinApp::kClientHeight, 0, 1);
-
 		//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-		Matrix4x4 matViewProjectionViewport = Multiply(railCamera->GetViewProjection(), matViewport);
+		Matrix4x4 matViewProjectionViewport = Multiply(railCamera->GetViewProjection(), *viewPortMatrix_);
 
 		//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
 		positionReticle = Transform(positionReticle, matViewProjectionViewport);

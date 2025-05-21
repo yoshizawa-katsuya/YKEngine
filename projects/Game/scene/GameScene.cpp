@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include <fstream>
+#include "Matrix.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -17,6 +18,15 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+
+	viewPortMatrix_ = MakeViewportMatrix(
+		0.0f,
+		0.0f,
+		static_cast<float>(WinApp::kClientWidth),
+		static_cast<float>(WinApp::kClientHeight),
+		0.0f,
+		1.0f
+	);
 
 	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
@@ -83,7 +93,7 @@ void GameScene::Initialize() {
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
+	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_);
 	//自キャラとレールカメラの親子関係を結ぶ
 	player_->SetParent(railCamera_->GetWorldTransform());
 	player_->SetGameScene(this);
@@ -349,7 +359,7 @@ void GameScene::EnemyPop(const Vector3& position) {
 	std::unique_ptr<Enemy>& enemy = enemys_.emplace_back();
 	// 敵の初期化
 	enemy = std::make_unique<Enemy>();
-	enemy->Initialize(modelEnemy_.get(), position);
+	enemy->Initialize(modelEnemy_.get(), position, &viewPortMatrix_);
 	enemy->SetPlayer(player_.get());
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetGameScene(this);

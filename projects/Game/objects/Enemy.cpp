@@ -15,10 +15,12 @@ Enemy::~Enemy() {
 	*/
 }
 
-void Enemy::Initialize(BaseModel* model, const Vector3& position) {
+void Enemy::Initialize(BaseModel* model, const Vector3& position, Matrix4x4* viewPortMatrix) {
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemy));
+
+	viewPortMatrix_ = viewPortMatrix;
 
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
@@ -121,12 +123,8 @@ Vector3 Enemy::GetWorldPosition() {
 
 Vector3 Enemy::GetScreenPosition(Camera* camera) {
 	
-	
-	// ビューポート行列
-	Matrix4x4 matViewport = MakeViewportMatrix(0, 0, WinApp::kClientWidth, WinApp::kClientHeight, 0, 1);
-
 	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	Matrix4x4 matViewProjectionViewport = Multiply(camera->GetViewProjection(), matViewport);
+	Matrix4x4 matViewProjectionViewport = Multiply(camera->GetViewProjection(), *viewPortMatrix_);
 
 	// ワールド→スクリーン座標変換(ここで3Dから2Dになる)
 	Vector3 screenPosition = Transform(GetWorldPosition(), matViewProjectionViewport);

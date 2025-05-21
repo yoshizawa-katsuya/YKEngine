@@ -12,7 +12,7 @@ public:
 	~Enemy();
 
 	// 初期化
-	void Initialize(BaseModel* model, const Vector3& position);
+	void Initialize(BaseModel* model, const Vector3& position, Matrix4x4* viewPortMatrix);
 
 	void ApproachInitialize();
 
@@ -70,4 +70,6 @@ private:
 	Vector3 ApproachVelocity_ = {0.0f, 0.0f, -0.1f};
 	Vector3 LeaveVelocity_ = {0.1f, -0.1f, 0.0f};
 
+	//ビューポート行列
+	Matrix4x4* viewPortMatrix_ = nullptr;
 };
