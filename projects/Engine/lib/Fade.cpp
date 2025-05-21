@@ -64,9 +64,6 @@ void Fade::Draw() {
 		return;
 	}
 
-	// コマンドリストの取得
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
-
 	sprite_->Draw();
 
 }
