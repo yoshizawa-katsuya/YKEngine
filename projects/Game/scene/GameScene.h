@@ -40,6 +40,18 @@ public:
 	void Finalize() override;
 
 	/// <summary>
+	/// プレイヤーの弾を追加する
+	/// </summary>
+	void AddPlayerbullet(const Vector3& worldPosition, const Vector3& velocity);
+
+	/// <summary>
+	/// 敵弾を追加する
+	/// </summary>
+	void AddEnemybullet(const Vector3& worldPosition, const Vector3& velocity);
+
+private:
+
+	/// <summary>
 	/// 衝突判定と応答
 	/// </summary>
 	void CheckAllColision();
@@ -50,16 +62,6 @@ public:
 	void EnemyPop(const Vector3& position);
 
 	/// <summary>
-	/// プレイヤーの弾を追加する
-	/// </summary>
-	void AddPlayerbullet(const Vector3& worldPosition, const Vector3& velocity);
-
-	/// <summary>
-	/// 敵弾を追加する
-	/// </summary>
-	void AddEnemybullet(const Vector3& worldPosition, const Vector3& velocity);
-
-	/// <summary>
 	/// 敵発生データの読み込み
 	/// </summary>
 	void LoadEnemyPopData();
@@ -68,8 +70,6 @@ public:
 	/// 敵発生コマンドの更新
 	/// </summary>
 	void UpdateEnemyPopCommands();
-
-private:
 
 	//デバイス
 	DirectXCommon* dxCommon_;
