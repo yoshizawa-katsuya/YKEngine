@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include <numbers>
 
+//コロンを使って初期化する際順番はヘッダーで定義した順になる
 Camera::Camera()
 	: transform_({ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} })
 	, fovY_(45.0f * 3.141592654f / 180.0f)
