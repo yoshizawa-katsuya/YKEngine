@@ -52,7 +52,7 @@ void Player::Update(Camera* railCamera) {
 
 #endif // _DEBUG	
 
-	Rotate();
+	//Rotate();
 
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
@@ -61,18 +61,18 @@ void Player::Update(Camera* railCamera) {
 	const float kCharacterSpeed = 0.2f;
 
 	//押した方向で移動ベクトルを変更(左右)
-	if (input_->PushKey(DIK_LEFT)) {
+	if (input_->PushKey(DIK_A)) {
 		move.x -= kCharacterSpeed;
 	}
-	else if (input_->PushKey(DIK_RIGHT)) {
+	else if (input_->PushKey(DIK_D)) {
 		move.x += kCharacterSpeed;
 	}
 
 	// 押した方向で移動ベクトルを変更(上下)
-	if (input_->PushKey(DIK_DOWN)) {
+	if (input_->PushKey(DIK_S)) {
 		move.y -= kCharacterSpeed;
 	}
-	else if (input_->PushKey(DIK_UP)) {
+	else if (input_->PushKey(DIK_W)) {
 		move.y += kCharacterSpeed;
 	}
 
@@ -129,22 +129,22 @@ void Player::Update(Camera* railCamera) {
 	
 }
 
-void Player::Rotate() {
-
-
-
-	//回転速さ
-	const float kRotSpeed = 0.02f;
-
-	//押した方向で移動ベクトルを変更
-	if (input_->PushKey(DIK_A)) {
-		worldTransform_.rotation_.y -= kRotSpeed;
-	}
-	else if (input_->PushKey(DIK_D)) {
-		worldTransform_.rotation_.y += kRotSpeed;
-	}
-
-}
+//void Player::Rotate() {
+//
+//
+//
+//	//回転速さ
+//	const float kRotSpeed = 0.02f;
+//
+//	//押した方向で移動ベクトルを変更
+//	if (input_->PushKey(DIK_A)) {
+//		worldTransform_.rotation_.y -= kRotSpeed;
+//	}
+//	else if (input_->PushKey(DIK_D)) {
+//		worldTransform_.rotation_.y += kRotSpeed;
+//	}
+//
+//}
 
 void Player::Attack() {
 

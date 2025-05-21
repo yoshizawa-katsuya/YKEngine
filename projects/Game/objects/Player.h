@@ -16,7 +16,7 @@ public:
 	void Update(Camera* railCamera);
 
 	//旋回
-	void Rotate();
+	//void Rotate();
 
 	//攻撃
 	void Attack();
