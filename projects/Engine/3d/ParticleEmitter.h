@@ -48,7 +48,7 @@ public:
 
 	void SetIsRandomRotate(bool isRandomRotate) { randomFlags_.rotate = isRandomRotate; }
 
-	void SetIsRandomScele(bool isRandomScale) { randomFlags_.scale = isRandomScale; }
+	void SetIsRandomScale(bool isRandomScale) { randomFlags_.scale = isRandomScale; }
 
 	void SetCount(uint32_t count) { count_ = count; }
 
