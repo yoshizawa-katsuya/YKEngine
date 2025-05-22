@@ -40,6 +40,10 @@ public:
 
 	void SetRandScaleMax(const Vector3& scaleMax) { rangeParams_.scale.max = scaleMax; }
 
+	void SetRandVelocityMin(const Vector3& velocityMin) { rangeParams_.velocity.min = velocityMin; }
+
+	void SetRandVelocityMax(const Vector3& velocityMax) { rangeParams_.velocity.max = velocityMax; }
+
 	void SetIsRandomColor(bool isRandomColor) { randomFlags_.color = isRandomColor; }
 
 	void SetIsRandomTranslate(bool isRandomTranslate) { randomFlags_.translate = isRandomTranslate; }
