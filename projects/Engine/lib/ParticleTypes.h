@@ -23,9 +23,11 @@ struct EmitterRangeParams
 		: translate({ Vector3{ 1.0f, 1.0f, 1.0f }, Vector3{ -1.0f, -1.0f, -1.0f } })
 		, scale ({ { 1.0f, 1.0f, 1.0f } , { -1.0f, -1.0f, -1.0f } })
 		, rotate ({ { std::numbers::pi_v<float>, std::numbers::pi_v<float>, std::numbers::pi_v<float> } ,{ -std::numbers::pi_v<float>, -std::numbers::pi_v<float>, -std::numbers::pi_v<float> } })
+		, velocity({ Vector3{ 1.0f, 1.0f, 1.0f }, Vector3{ -1.0f, -1.0f, -1.0f } })
 	{
 	}
 	RandomRange<Vector3> translate;
 	RandomRange<Vector3> scale;
 	RandomRange<Vector3> rotate;
+	RandomRange<Vector3> velocity;
 };
