@@ -3,6 +3,7 @@
 #include "Matrix.h"
 #include <numbers>
 #include "imgui/imgui.h"
+#include "TransformHelpers.h"
 
 ParticleManager* ParticleManager::GetInstance()
 {
@@ -180,19 +181,32 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 }
 
 void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams)
+	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams, behavior));
 	}
 }
 
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams)
+	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
 
 	Particle particle;
+
+	if (randomFlags.velocity)
+	{
+		std::uniform_real_distribution<float> distributionX(rangeParams.velocity.min.x, rangeParams.velocity.max.x);
+		std::uniform_real_distribution<float> distributionY(rangeParams.velocity.min.y, rangeParams.velocity.max.y);
+		std::uniform_real_distribution<float> distributionZ(rangeParams.velocity.min.z, rangeParams.velocity.max.z);
+
+		particle.velocity = { distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+	}
+	else
+	{
+		particle.velocity = { 0.0f, 0.0f, 0.0f };
+	}
 
 	if (randomFlags.scale) 
 	{
@@ -216,6 +230,11 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		Vector3 randomrotate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
 		particle.transform.rotation = transform.rotation + randomrotate;
 	}
+	else if (behavior.isFaceToVelocityDirection)
+	{
+		//進行方向を向く
+		particle.transform.rotation = TransformHelpers::FaceToVelocityDirection(particle.transform.rotation, particle.velocity);
+	}
 	else 
 	{
 		particle.transform.rotation = transform.rotation;
@@ -233,19 +252,6 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	else
 	{
 		particle.transform.translation = transform.translation;
-	}
-
-	if (randomFlags.velocity)
-	{
-		std::uniform_real_distribution<float> distributionX(rangeParams.velocity.min.x, rangeParams.velocity.max.x);
-		std::uniform_real_distribution<float> distributionY(rangeParams.velocity.min.y, rangeParams.velocity.max.y);
-		std::uniform_real_distribution<float> distributionZ(rangeParams.velocity.min.z, rangeParams.velocity.max.z);
-
-		particle.velocity = { distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
-	}
-	else 
-	{
-		particle.velocity = { 0.0f, 0.0f, 0.0f };
 	}
 
 	if (randomFlags.color)

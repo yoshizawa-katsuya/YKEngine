@@ -30,7 +30,7 @@ public:
 	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color);
 
 	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-		const Vector4& color, const EmitterRangeParams& rangeParams);
+		const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
 
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 
@@ -45,7 +45,7 @@ private:
 	ParticleManager& operator=(ParticleManager&) = default;
 
 	Particle MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
-		const Vector4& color, const EmitterRangeParams& rangeParams);
+		const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
 
 
 	struct ParticleGroup {
