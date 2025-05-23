@@ -77,9 +77,11 @@ void GameScene::Initialize() {
 	emitter_->SetRandRotateMin({ 0.0f, 0.0f, -std::numbers::pi_v<float> });
 
 	emitter2_ = std::make_unique<ParticleEmitter>("Effect2", 5, 1.5f);
-	emitter2_->Initialize(textureHandle_, modelPlatform_->CreateSphere(textureHandle_), true);
+	emitter2_->Initialize(textureHandle_, modelPlayer_, true);
 	emitter2_->SetIsRandomRotate(true);
 	emitter2_->SetIsRandomVelocity(true);
+	emitter2_->SetRandVelocityMax({ 2.0f, 2.0f, 2.0f });
+	emitter2_->SetRandVelocityMin({ -2.0f, -2.0f, -2.0f });
 	emitter2_->SetScale({ 0.1f, 0.1f, 0.1f });
 
 	//プレイヤーの初期化
