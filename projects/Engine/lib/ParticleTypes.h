@@ -31,3 +31,9 @@ struct EmitterRangeParams
 	RandomRange<Vector3> rotate;
 	RandomRange<Vector3> velocity;
 };
+
+struct ParticleBehavior
+{
+	//進行方向を向くかどうか
+	bool isFaceToVelocityDirection = false;
+};

@@ -159,6 +159,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\lib\Vector2.cpp" />
     <ClCompile Include="Engine\lib\Vector4.cpp" />
     <ClCompile Include="Engine\lib\SRTAnimator.cpp" />
+    <ClCompile Include="Engine\lib\TransformHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\InstancingObject3d.VS.hlsl">
@@ -308,6 +309,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\Vector4.h" />
     <ClInclude Include="Engine\lib\ParticleTypes.h" />
     <ClInclude Include="Engine\lib\SRTAnimator.h" />
+    <ClInclude Include="Engine\lib\TransformHelpers.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

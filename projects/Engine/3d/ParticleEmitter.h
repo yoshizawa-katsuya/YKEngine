@@ -54,6 +54,8 @@ public:
 
 	void SetIsRandomScale(bool isRandomScale) { randomFlags_.scale = isRandomScale; }
 
+	void SetIsFaceToVelocityDirection(bool isFaceToVelocityDirection) { behavior_.isFaceToVelocityDirection = isFaceToVelocityDirection; }
+
 	void SetCount(uint32_t count) { count_ = count; }
 
 	void SetFrequency(float frequency);
@@ -113,6 +115,8 @@ private:
 	const float kDeltaTime_ = 1.0f / 60.0f;
 
 	ParticleRandomizationFlags randomFlags_;
+
+	ParticleBehavior behavior_;
 
 	//ランダム化の上限下限を管理
 	EmitterRangeParams rangeParams_;
