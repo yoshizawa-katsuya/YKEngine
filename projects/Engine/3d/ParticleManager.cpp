@@ -202,6 +202,11 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		std::uniform_real_distribution<float> distributionZ(rangeParams.velocity.min.z, rangeParams.velocity.max.z);
 
 		particle.velocity = { distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+
+		if (behavior.isConstantVelocity) 
+		{
+			particle.velocity = Normalize(particle.velocity) * behavior.speed;
+		}
 	}
 	else
 	{

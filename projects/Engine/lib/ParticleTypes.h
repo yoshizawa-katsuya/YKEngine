@@ -36,4 +36,7 @@ struct ParticleBehavior
 {
 	//進行方向を向くかどうか
 	bool isFaceToVelocityDirection = false;
+	//速さを一定にするかどうか
+	bool isConstantVelocity = false;
+	float speed = 1.0f;
 };

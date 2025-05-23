@@ -56,6 +56,9 @@ Vector3 Normalize(const Vector3& v) {
 
 	Vector3 anser;
 	float length = Length(v);
+	if (length == 0.0f) {
+		return { 0.0f, 0.0f, 0.0f };
+	}
 	anser.x = v.x / length;
 	anser.y = v.y / length;
 	anser.z = v.z / length;

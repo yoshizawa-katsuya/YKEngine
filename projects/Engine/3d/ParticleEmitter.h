@@ -56,6 +56,10 @@ public:
 
 	void SetIsFaceToVelocityDirection(bool isFaceToVelocityDirection) { behavior_.isFaceToVelocityDirection = isFaceToVelocityDirection; }
 
+	void SetIsConstantVelocity(bool isConstantVelocity) { behavior_.isConstantVelocity = isConstantVelocity; }
+
+	void SetSpeed(float speed) { behavior_.speed = speed; }
+
 	void SetCount(uint32_t count) { count_ = count; }
 
 	void SetFrequency(float frequency);
