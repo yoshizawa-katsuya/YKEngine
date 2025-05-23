@@ -193,7 +193,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
 
-	Particle particle;
+	Particle particle{};
 
 	if (randomFlags.velocity)
 	{
