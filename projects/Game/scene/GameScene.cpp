@@ -70,11 +70,15 @@ void GameScene::Initialize() {
 	emitter_->Initialize(textureHandle2, modelPlatform_->CreatePlane(textureHandle2));
 	emitter_->SetScale({ 0.05f, 1.0f, 1.0f });
 	emitter_->SetIsRandomRotate(true);
-	emitter_->SetRandScaleMax({ 0.0f, 1.0f, 0.0f });
+	emitter_->SetRandScaleMax({ 0.0f, 3.0f, 0.0f });
 	emitter_->SetRandScaleMin({ 0.0f, 0.0f, 0.0f });
 	emitter_->SetIsRandomScale(true);
 	emitter_->SetRandRotateMax({ 0.0f, 0.0f, std::numbers::pi_v<float> });
 	emitter_->SetRandRotateMin({ 0.0f, 0.0f, -std::numbers::pi_v<float> });
+	emitter_->SetIsRandomLifeTime(true);
+	emitter_->SetRandLifeTimeMax(0.2f);
+	emitter_->SetRandLifeTimeMin(0.2f);
+	//emitter_->SetIsScaleToDisappear(true);
 
 	emitter2_ = std::make_unique<ParticleEmitter>("Effect2", 15, 1.5f);
 	emitter2_->Initialize(textureHandle_, modelPlayer_);
