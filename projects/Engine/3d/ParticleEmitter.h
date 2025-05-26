@@ -16,7 +16,7 @@ public:
 	/// <param name = 'frequency'>発生頻度</param>
 	ParticleEmitter(const std::string& name, uint32_t count, float frequency);
 
-	void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard);
+	void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model);
 
 	void Update(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
@@ -60,11 +60,15 @@ public:
 
 	void SetIsRandomLifeTime(bool isRandomLifeTime) { randomFlags_.lifeTime = isRandomLifeTime; }
 
-	void SetIsFaceToVelocityDirection(bool isFaceToVelocityDirection) { behavior_.isFaceToVelocityDirection = isFaceToVelocityDirection; }
+	void SetIsFaceToVelocityDirection(bool isFaceToVelocityDirection) { behavior_->isFaceToVelocityDirection = isFaceToVelocityDirection; }
 
-	void SetIsConstantVelocity(bool isConstantVelocity) { behavior_.isConstantVelocity = isConstantVelocity; }
+	void SetIsConstantVelocity(bool isConstantVelocity) { behavior_->isConstantVelocity = isConstantVelocity; }
 
-	void SetSpeed(float speed) { behavior_.speed = speed; }
+	void SetSpeed(float speed) { behavior_->speed = speed; }
+
+	void SetIsScaleToDisappear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }
+
+	void SetIsUseBillboard(bool isUseBillboard) { behavior_->isUseBillboard = isUseBillboard; }
 
 	void SetCount(uint32_t count) { count_ = count; }
 
@@ -126,7 +130,7 @@ private:
 
 	ParticleRandomizationFlags randomFlags_;
 
-	ParticleBehavior behavior_;
+	std::shared_ptr<ParticleBehavior> behavior_;
 
 	//ランダム化の上限下限を管理
 	EmitterRangeParams rangeParams_;

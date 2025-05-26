@@ -4,6 +4,7 @@
 #include <numbers>
 #include "imgui/imgui.h"
 #include "TransformHelpers.h"
+#include "Lerp.h"
 
 ParticleManager* ParticleManager::GetInstance()
 {
@@ -69,12 +70,21 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 			particleIterator->currentTime += kDeltaTime_;	//経過時間を足す
 
 			if (particleGroupIterator->second.numInstance < particleGroupIterator->second.kNumMaxInstance) {
-				Matrix4x4 scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
+				Matrix4x4 scaleMatrix{};
+				if (particleGroupIterator->second.behavior->isScaleToDisappear) 
+				{
+					//消えるときにScaleを小さくする
+					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, particleIterator->currentTime / particleIterator->lifeTime));
+				}
+				else
+				{
+					scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
+				}
 				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
 				Matrix4x4 rotateMatrix = MakeRotateMatrix(particleIterator->transform.rotation);
 				//Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
 				Matrix4x4 worldMatrix;
-				if (particleGroupIterator->second.useBillboard) 
+				if (particleGroupIterator->second.behavior->isUseBillboard) 
 				{
 					worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
 				}
@@ -146,7 +156,7 @@ void ParticleManager::Draw()
 }
 
 
-void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard)
+void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior)
 {
 	//名前とテクスチャが同じ場合パーティクルを使いまわす
 	if (particleGroups_.contains(name))
@@ -155,13 +165,14 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 		particleGroups_[name].particles.clear();
 		particleGroups_[name].numInstance = 0;
+		particleGroups_[name].behavior = behavior;
 		return;
 	}
 
 	ParticleGroup& particleGroup = particleGroups_[name];
 
 	particleGroup.model = model;
-	particleGroup.useBillboard = useBillboard;
+	particleGroup.behavior = behavior;
 	particleGroup.textureHandle = textureHandle;
 
 	particleGroup.instancingResouce = dxCommon_->CreateBufferResource(sizeof(ParticleForGPU) * particleGroup.kNumMaxInstance);

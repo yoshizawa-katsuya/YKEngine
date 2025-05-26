@@ -23,7 +23,7 @@ public:
 
 	void Draw();
 
-	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard);
+	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
 
 	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor);
 
@@ -51,13 +51,13 @@ private:
 	struct ParticleGroup {
 		std::shared_ptr<BaseModel> model;
 		uint32_t textureHandle;
-		bool useBillboard;
 		std::list<Particle> particles;
 		uint32_t instancingSrvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResouce;
 		const uint32_t kNumMaxInstance = 500;
 		uint32_t numInstance;
 		ParticleForGPU* instancingData;
+		std::shared_ptr<ParticleBehavior> behavior;
 	};
 
 	DirectXCommon* dxCommon_;
