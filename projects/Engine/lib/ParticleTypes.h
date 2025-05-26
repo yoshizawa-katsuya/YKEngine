@@ -41,4 +41,8 @@ struct ParticleBehavior
 	//速さを一定にするかどうか
 	bool isConstantVelocity = false;
 	float speed = 1.0f;
+	//消えるときScaleを小さくするかどうか
+	bool isScaleToDisappear = false;
+	//ビルボードを使用するかどうか
+	bool isUseBillboard = true;
 };
