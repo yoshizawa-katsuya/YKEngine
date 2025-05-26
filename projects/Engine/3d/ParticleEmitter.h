@@ -44,6 +44,10 @@ public:
 
 	void SetRandVelocityMax(const Vector3& velocityMax) { rangeParams_.velocity.max = velocityMax; }
 
+	void SetRandLifeTimeMin(float lifeTimeMin) { rangeParams_.lifeTime.min = lifeTimeMin; }
+
+	void SetRandLifeTimeMax(float lifeTimeMax) { rangeParams_.lifeTime.max = lifeTimeMax; }
+
 	void SetIsRandomColor(bool isRandomColor) { randomFlags_.color = isRandomColor; }
 
 	void SetIsRandomTranslate(bool isRandomTranslate) { randomFlags_.translate = isRandomTranslate; }
@@ -53,6 +57,8 @@ public:
 	void SetIsRandomRotate(bool isRandomRotate) { randomFlags_.rotate = isRandomRotate; }
 
 	void SetIsRandomScale(bool isRandomScale) { randomFlags_.scale = isRandomScale; }
+
+	void SetIsRandomLifeTime(bool isRandomLifeTime) { randomFlags_.lifeTime = isRandomLifeTime; }
 
 	void SetIsFaceToVelocityDirection(bool isFaceToVelocityDirection) { behavior_.isFaceToVelocityDirection = isFaceToVelocityDirection; }
 
