@@ -85,6 +85,9 @@ void GameScene::Initialize() {
 	emitter2_->SetScale({ 0.1f, 0.1f, 1.0f });
 	emitter2_->SetIsConstantVelocity(true);
 	emitter2_->SetSpeed(20.0f);
+	emitter2_->SetIsRandomLifeTime(true);
+	emitter2_->SetRandLifeTimeMax(0.2f);
+	emitter2_->SetRandLifeTimeMin(0.2f);
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
