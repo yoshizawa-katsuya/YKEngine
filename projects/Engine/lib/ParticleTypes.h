@@ -45,4 +45,6 @@ struct ParticleBehavior
 	bool isScaleToDisappear = false;
 	//ビルボードを使用するかどうか
 	bool isUseBillboard = true;
+	//少しずつ速度を下げるかどうか
+	bool isdownVelocity = false;
 };
