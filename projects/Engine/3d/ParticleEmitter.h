@@ -70,6 +70,8 @@ public:
 
 	void SetIsUseBillboard(bool isUseBillboard) { behavior_->isUseBillboard = isUseBillboard; }
 
+	void SetIsDownVelocity(bool isDownVelocity) { behavior_->isdownVelocity = isDownVelocity; }
+
 	void SetCount(uint32_t count) { count_ = count; }
 
 	void SetFrequency(float frequency);

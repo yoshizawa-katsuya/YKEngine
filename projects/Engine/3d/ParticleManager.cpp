@@ -66,9 +66,17 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				}
 			}
 
-			particleIterator->transform.translation += particleIterator->velocity * kDeltaTime_;
 			particleIterator->currentTime += kDeltaTime_;	//経過時間を足す
-
+			if (particleGroupIterator->second.behavior->isdownVelocity)
+			{
+				particleIterator->transform.translation += Lerp(particleIterator->velocity, Vector3{ 0.0f, 0.0f, 0.0f }, particleIterator->currentTime / particleIterator->lifeTime) * kDeltaTime_;
+			}
+			else 
+			{
+				//速度をそのまま適用する
+				particleIterator->transform.translation += particleIterator->velocity * kDeltaTime_;
+			}
+			
 			if (particleGroupIterator->second.numInstance < particleGroupIterator->second.kNumMaxInstance) {
 				Matrix4x4 scaleMatrix{};
 				if (particleGroupIterator->second.behavior->isScaleToDisappear) 
