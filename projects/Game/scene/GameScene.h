@@ -80,7 +80,7 @@ private:
 	WorldTransform worldTransform1_;
 	WorldTransform worldTransform2_;
 	*/
-
+	bool isParticleUpdate_ = true;
 	//パーティクル
 	std::unique_ptr<ParticleEmitter> emitter_;
 	std::unique_ptr<ParticleEmitter> emitter2_;

@@ -115,7 +115,7 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	
+
 
 	//カメラの更新
 	camera_->Update();
@@ -140,82 +140,99 @@ void GameScene::Update() {
 	objects_->WorldTransformUpdate(worldTransform2_);
 	*/
 
-	emitter_->Update();
-	emitter2_->Update({1.0f, 0.0f, 0.0f, 1.0f});
-
-	ParticleManager::GetInstance()->Update(mainCamera_);
-
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
+	/*emitter_->Update();
+	emitter2_->Update({1.0f, 0.0f, 0.0f, 1.0f});*/
+	if (isParticleUpdate_)
+	{
+		ParticleManager::GetInstance()->Update(mainCamera_);
 	}
+	//if (input_->TriggerKey(DIK_SPACE)) {
+	//	//シーン切り替え依頼
+	//	sceneManager_->ChengeScene("TitleScene");
+	//}
 
 #ifdef _DEBUG
 
+	
+	ImGui::Begin("ParticleDebug");
 
-		ImGui::Begin("Window");
-		if (ImGui::TreeNode("camera")) {
-			ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
-			ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
-			//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
+	ImGui::Checkbox("isParticleUpdate", &isParticleUpdate_);
+	if (ImGui::Button("emit")) {
+		//パーティクルの発生
+		emitter_->Emit();
+		emitter2_->Emit({ 1.0f, 0.0f, 0.0f, 1.0f });
+	}
+	if (ImGui::Button("advance1Frame"))
+	{
+		ParticleManager::GetInstance()->Update(mainCamera_);
+	}
 
-			ImGui::TreePop();
-		}
+	ImGui::End();
 
-		if (ImGui::TreeNode("DirectionalLight")) {
-			ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
-			ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
-			ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
 
-			ImGui::TreePop();
-		}
+	ImGui::Begin("Window");
+	if (ImGui::TreeNode("camera")) {
+		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
+		ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
+		//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
 
-		if (ImGui::TreeNode("PointLight")) {
-			ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
-			ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
-			ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
-			ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
-			ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
+		ImGui::TreePop();
+	}
 
-			ImGui::TreePop();
-		}
+	if (ImGui::TreeNode("DirectionalLight")) {
+		ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
+		ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
+		ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
 
-		if (ImGui::TreeNode("SpotLight")) {
-			ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
-			ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
-			ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
-			ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
-			ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
-			ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
-			ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
-			ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
+		ImGui::TreePop();
+	}
 
-			ImGui::TreePop();
-		}
-		//メインカメラの切り替え
-		if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
-			isActiveDebugCamera_ = false;
+	if (ImGui::TreeNode("PointLight")) {
+		ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
+		ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
+		ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
+		ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
+		ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
 
-			mainCamera_ = camera_.get();
-			modelPlatform_->SetCamera(mainCamera_);
+		ImGui::TreePop();
+	}
 
-		}
-		if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
-			isActiveDebugCamera_ = true;
+	if (ImGui::TreeNode("SpotLight")) {
+		ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
+		ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
+		ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
+		ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
+		ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
+		ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
+		ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
+		ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
 
-			mainCamera_ = camera2_.get();
-			modelPlatform_->SetCamera(mainCamera_);
+		ImGui::TreePop();
+	}
+	//メインカメラの切り替え
+	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
+		isActiveDebugCamera_ = false;
 
-		}
+		mainCamera_ = camera_.get();
+		modelPlatform_->SetCamera(mainCamera_);
+
+	}
+	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
+		isActiveDebugCamera_ = true;
+
+		mainCamera_ = camera2_.get();
+		modelPlatform_->SetCamera(mainCamera_);
+
+	}
 		
-		ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
+	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 
-		/*
-		if (ImGui::Button("BGMstop")) {
-			audio_->SoundStopWave(bgm1_);
-		}
-		*/
-		ImGui::End();
+	/*
+	if (ImGui::Button("BGMstop")) {
+		audio_->SoundStopWave(bgm1_);
+	}
+	*/
+	ImGui::End();
 		
 
 #endif // _DEBUG
