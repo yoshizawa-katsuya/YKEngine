@@ -68,7 +68,7 @@ void GameScene::Initialize() {
 	//パーティクルエミッターの生成
 	emitter_ = std::make_unique<ParticleEmitter>("Effect", 5, 1.5f);
 	emitter_->Initialize(textureHandle2, modelPlatform_->CreatePlane(textureHandle2));
-	emitter_->SetScale({ 0.05f, 1.0f, 1.0f });
+	emitter_->SetScale({ 0.2f, 1.0f, 1.0f });
 	emitter_->SetIsRandomRotate(true);
 	emitter_->SetRandScaleMax({ 0.0f, 3.0f, 0.0f });
 	emitter_->SetRandScaleMin({ 0.0f, 0.0f, 0.0f });
@@ -78,7 +78,7 @@ void GameScene::Initialize() {
 	emitter_->SetIsRandomLifeTime(true);
 	emitter_->SetRandLifeTimeMax(0.2f);
 	emitter_->SetRandLifeTimeMin(0.2f);
-	//emitter_->SetIsScaleToDisappear(true);
+	emitter_->SetIsScaleToDisappear(true);
 
 	emitter2_ = std::make_unique<ParticleEmitter>("Effect2", 15, 1.5f);
 	emitter2_->Initialize(textureHandle_, modelPlayer_);
@@ -93,6 +93,7 @@ void GameScene::Initialize() {
 	emitter2_->SetRandLifeTimeMax(0.2f);
 	emitter2_->SetRandLifeTimeMin(0.2f);
 	emitter2_->SetIsScaleToDisappear(true);
+	emitter2_->SetIsDownVelocity(true);
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
