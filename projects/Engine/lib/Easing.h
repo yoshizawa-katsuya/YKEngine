@@ -3,12 +3,24 @@
 enum class EasingType
 {
 	Linear,
-	EaseIn,
-	EaseOut,
+	EaseInSine,
+	EaseOutSine,
+	EaseInQuad,
+	EaseOutQuad,
+	EaseInCubic,
+	EaseOutCubic,
 };
 
 float ApplyEasing(EasingType type, float t);
 
-float EaseIn(float x);
+float EaseInSine(float x);
 
-float EaseOut(float x);
+float EaseOutSine(float x);
+
+float EaseInQuad(float x);
+
+float EaseOutQuad(float x);
+
+float EaseInCubic(float x);
+
+float EaseOutCubic(float x);
