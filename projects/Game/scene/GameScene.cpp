@@ -79,15 +79,15 @@ void GameScene::Initialize() {
 	emitter_->SetRandLifeTimeMax(0.2f);
 	emitter_->SetRandLifeTimeMin(0.2f);
 	emitter_->SetIsScaleToDisappear(true);
-	emitter_->SetEasingTypeForScale(EasingType::EaseInCubic);
+	emitter_->SetEasingTypeForScale(EasingType::EaseInBack);
 
-	emitter2_ = std::make_unique<ParticleEmitter>("Effect2", 15, 1.5f);
+	emitter2_ = std::make_unique<ParticleEmitter>("Effect2", 30, 1.5f);
 	emitter2_->Initialize(textureHandle_, modelPlayer_);
 	emitter2_->SetIsFaceToVelocityDirection(true);
 	emitter2_->SetIsRandomVelocity(true);
 	emitter2_->SetRandVelocityMax({ 1.0f, 1.0f, 1.0f });
 	emitter2_->SetRandVelocityMin({ -1.0f, -1.0f, -1.0f });
-	emitter2_->SetScale({ 0.1f, 0.1f, 1.0f });
+	emitter2_->SetScale({ 0.05f, 0.05f, 1.0f });
 	emitter2_->SetIsConstantVelocity(true);
 	emitter2_->SetSpeed(20.0f);
 	emitter2_->SetIsRandomLifeTime(true);
@@ -161,7 +161,7 @@ void GameScene::Update() {
 	if (ImGui::Button("emit")) {
 		//パーティクルの発生
 		emitter_->Emit();
-		emitter2_->Emit({ 1.0f, 0.0f, 0.0f, 1.0f });
+		emitter2_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
 	}
 	if (ImGui::Button("advance1Frame"))
 	{
