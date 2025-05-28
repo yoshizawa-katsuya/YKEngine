@@ -28,6 +28,12 @@ float ApplyEasing(EasingType type, float t)
 	case EasingType::EaseOutCubic:
 		return EaseOutCubic(t);
 		break;
+	case EasingType::EaseInBack:
+		return EaseInBack(t);
+		break;
+	case EasingType::EaseOutBack:
+		return EaseOutBack(t);
+		break;
 	default:
 		return t;
 		break;
@@ -61,4 +67,18 @@ float EaseInCubic(float x)
 float EaseOutCubic(float x)
 {
 	return 1.0f - std::pow(1.0f - x, 3.0f);
+}
+
+float EaseInBack(float x)
+{
+	float c1 = 1.70158f;
+	float c3 = c1 + 1.0f;
+	return c3 * x * x * x - c1 * x * x;
+}
+
+float EaseOutBack(float x)
+{
+	float c1 = 1.70158f;
+	float c3 = c1 + 1.0f;
+	return 1.0f + c3 * std::pow(x - 1.0f, 3.0f) + c1 * std::pow(x - 1.0f, 2.0f);
 }
