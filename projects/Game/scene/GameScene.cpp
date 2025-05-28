@@ -79,6 +79,7 @@ void GameScene::Initialize() {
 	emitter_->SetRandLifeTimeMax(0.2f);
 	emitter_->SetRandLifeTimeMin(0.2f);
 	emitter_->SetIsScaleToDisappear(true);
+	emitter_->SetEasingTypeForScale(EasingType::EaseIn);
 
 	emitter2_ = std::make_unique<ParticleEmitter>("Effect2", 15, 1.5f);
 	emitter2_->Initialize(textureHandle_, modelPlayer_);
