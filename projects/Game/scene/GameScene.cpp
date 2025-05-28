@@ -87,7 +87,7 @@ void GameScene::Initialize() {
 	emitter2_->SetIsRandomVelocity(true);
 	emitter2_->SetRandVelocityMax({ 1.0f, 1.0f, 1.0f });
 	emitter2_->SetRandVelocityMin({ -1.0f, -1.0f, -1.0f });
-	emitter2_->SetScale({ 0.05f, 0.05f, 1.0f });
+	emitter2_->SetScale({ 0.05f, 0.05f, 1.5f });
 	emitter2_->SetIsConstantVelocity(true);
 	emitter2_->SetSpeed(20.0f);
 	emitter2_->SetIsRandomLifeTime(true);
@@ -160,7 +160,7 @@ void GameScene::Update() {
 	ImGui::Checkbox("isParticleUpdate", &isParticleUpdate_);
 	if (ImGui::Button("emit")) {
 		//パーティクルの発生
-		emitter_->Emit();
+		emitter_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
 		emitter2_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
 	}
 	if (ImGui::Button("advance1Frame"))
