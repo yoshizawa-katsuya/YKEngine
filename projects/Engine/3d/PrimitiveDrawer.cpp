@@ -26,6 +26,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeAddParticle)) = CreateGraphicsPipeline(BlendMode::kBlendModeAddParticle, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormalParticle)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormalParticle, dxCommon);
+	
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kLineMode)) = CreateGraphicsPipeline(BlendMode::kLineMode, dxCommon);
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSphereMode)) = CreateGraphicsPipeline(BlendMode::kSphereMode, dxCommon);
@@ -201,6 +203,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			rootParameters[1].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
 			break;
 		case BlendMode::kBlendModeAddParticle:
+		case BlendMode::kBlendModeNormalParticle:
 		case BlendMode::kBlendModeNormalinstancing:
 			//Particle用、instancing用
 			//ParticleForGPU、TransformationMatrix
@@ -383,6 +386,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case BlendMode::kBlendModeNormal:
 	case BlendMode::kBlendModeNormalSprite:
 	case BlendMode::kBlendModeNormalinstancing:
+	case BlendMode::kBlendModeNormalParticle:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
@@ -482,6 +486,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		break;
 
 	case BlendMode::kBlendModeAddParticle:
+	case BlendMode::kBlendModeNormalParticle:
 
 		//Particle用
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Particle.VS.hlsl",
@@ -572,6 +577,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 	case BlendMode::kBlendModeAddParticle:
+	case BlendMode::kBlendModeNormalParticle:
 		//Depthの機能を有効化する
 		depthStencilDesc.DepthEnable = true;
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
