@@ -64,6 +64,8 @@ public:
 
 	void SetIsConstantVelocity(bool isConstantVelocity) { behavior_->isConstantVelocity = isConstantVelocity; }
 
+	void SetEasingTypeForScale(EasingType easingType) { behavior_->easingTypeForScale = easingType; }
+
 	void SetSpeed(float speed) { behavior_->speed = speed; }
 
 	void SetIsScaleToDisappear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }

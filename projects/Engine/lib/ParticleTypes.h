@@ -1,5 +1,6 @@
 #pragma once
 #include <numbers>
+#include "Easing.h"
 
 struct ParticleRandomizationFlags {
 	bool color = false;
@@ -43,6 +44,7 @@ struct ParticleBehavior
 	float speed = 1.0f;
 	//消えるときScaleを小さくするかどうか
 	bool isScaleToDisappear = false;
+	EasingType easingTypeForScale = EasingType::Linear;
 	//ビルボードを使用するかどうか
 	bool isUseBillboard = true;
 	//少しずつ速度を下げるかどうか

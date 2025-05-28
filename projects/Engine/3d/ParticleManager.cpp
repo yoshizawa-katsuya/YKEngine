@@ -81,8 +81,9 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				Matrix4x4 scaleMatrix{};
 				if (particleGroupIterator->second.behavior->isScaleToDisappear) 
 				{
+					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
 					//消えるときにScaleを小さくする
-					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, particleIterator->currentTime / particleIterator->lifeTime));
+					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, t));
 				}
 				else
 				{
