@@ -42,8 +42,10 @@ struct ParticleBehavior
 	//速さを一定にするかどうか
 	bool isConstantVelocity = false;
 	float speed = 1.0f;
-	//消えるときScaleを小さくするかどうか
+	//少しずつScaleを小さくするかどうか
 	bool isScaleToDisappear = false;
+	//少しずつScaleを大きくするかどうか
+	bool isScaleToAppear = false;
 	EasingType easingTypeForScale = EasingType::Linear;
 	//ビルボードを使用するかどうか
 	bool isUseBillboard = true;
