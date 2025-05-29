@@ -85,6 +85,12 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 					//消えるときにScaleを小さくする
 					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, t));
 				}
+				else if (particleGroupIterator->second.behavior->isScaleToAppear)
+				{
+					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
+					//出現するときにScaleを大きくする
+					scaleMatrix = MakeScaleMatrix(Lerp({ 0.0f, 0.0f, 0.0f }, particleIterator->transform.scale, t));
+				}
 				else
 				{
 					scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);

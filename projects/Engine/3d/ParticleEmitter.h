@@ -70,6 +70,8 @@ public:
 
 	void SetIsScaleToDisappear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }
 
+	void SetIsScaleToAppear(bool isScaleToAppear) { behavior_->isScaleToAppear = isScaleToAppear; }
+
 	void SetIsUseBillboard(bool isUseBillboard) { behavior_->isUseBillboard = isUseBillboard; }
 
 	void SetIsDownVelocity(bool isDownVelocity) { behavior_->isdownVelocity = isDownVelocity; }
