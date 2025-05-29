@@ -102,6 +102,8 @@ void GameScene::Initialize() {
 	emitter3_->SetIsRandomLifeTime(true);
 	emitter3_->SetRandLifeTimeMax(0.2f);
 	emitter3_->SetRandLifeTimeMin(0.2f);
+	emitter3_->SetIsScaleToAppear(true);
+	emitter3_->SetEasingTypeForScale(EasingType::EaseInQuad);
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
