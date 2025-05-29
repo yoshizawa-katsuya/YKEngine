@@ -83,6 +83,7 @@ private:
 	bool isParticleUpdate_ = true;
 	//パーティクル
 	std::unique_ptr<ParticleEmitter> slashEmitter_;
+	std::unique_ptr<ParticleEmitter> slashEmitter2_;
 	std::unique_ptr<ParticleEmitter> explosionEmitter_;
 	std::unique_ptr<ParticleEmitter> ringEmitter_;
 

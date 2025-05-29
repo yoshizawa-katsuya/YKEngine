@@ -67,7 +67,7 @@ void GameScene::Initialize() {
 	*/
 
 	//パーティクルエミッターの生成
-	slashEmitter_ = std::make_unique<ParticleEmitter>("Effect", 5, 1.5f);
+	slashEmitter_ = std::make_unique<ParticleEmitter>("SlashEffect", 5, 1.5f);
 	slashEmitter_->Initialize(textureHandle2, modelPlatform_->CreatePlane(textureHandle2));
 	slashEmitter_->SetScale({ 0.2f, 1.0f, 1.0f });
 	slashEmitter_->SetIsRandomRotate(true);
@@ -84,7 +84,22 @@ void GameScene::Initialize() {
 	//slashEmitter_->SetIsScaleToDisappear(true);
 	//slashEmitter_->SetEasingTypeForScale(EasingType::EaseInBack);
 
-	explosionEmitter_ = std::make_unique<ParticleEmitter>("Effect2", 30, 1.5f);
+	slashEmitter2_ = std::make_unique<ParticleEmitter>("SlashEffect2", 5, 1.5f);
+	slashEmitter2_->Initialize(textureHandle2, modelPlatform_->CreatePlane(textureHandle2));
+	slashEmitter2_->SetScale({ 0.2f, 1.0f, 1.0f });
+	slashEmitter2_->SetIsRandomRotate(true);
+	slashEmitter2_->SetRandScaleMax({ 0.0f, 3.0f, 0.0f });
+	slashEmitter2_->SetRandScaleMin({ 0.0f, 0.0f, 0.0f });
+	slashEmitter2_->SetIsRandomScale(true);
+	slashEmitter2_->SetRandRotateMax({ 0.0f, 0.0f, std::numbers::pi_v<float> });
+	slashEmitter2_->SetRandRotateMin({ 0.0f, 0.0f, -std::numbers::pi_v<float> });
+	slashEmitter2_->SetIsRandomLifeTime(true);
+	slashEmitter2_->SetRandLifeTimeMax(0.2f);
+	slashEmitter2_->SetRandLifeTimeMin(0.2f);
+	slashEmitter2_->SetIsScaleToDisappear(true);
+	slashEmitter2_->SetEasingTypeForScale(EasingType::EaseInBack);
+
+	explosionEmitter_ = std::make_unique<ParticleEmitter>("ExplosionEffect", 30, 1.5f);
 	explosionEmitter_->Initialize(textureHandle_, modelPlayer_);
 	explosionEmitter_->SetIsFaceToVelocityDirection(true);
 	explosionEmitter_->SetIsRandomVelocity(true);
@@ -99,7 +114,7 @@ void GameScene::Initialize() {
 	explosionEmitter_->SetIsScaleToDisappear(true);
 	explosionEmitter_->SetIsDownVelocity(true);
 
-	ringEmitter_ = std::make_unique<ParticleEmitter>("Effect3", 1, 1.5f);
+	ringEmitter_ = std::make_unique<ParticleEmitter>("RingEffect", 1, 1.5f);
 	ringEmitter_->Initialize(textureHandle3, modelPlatform_->CreateRing(textureHandle3));
 	ringEmitter_->SetIsRandomLifeTime(true);
 	ringEmitter_->SetRandLifeTimeMax(0.2f);
@@ -169,15 +184,45 @@ void GameScene::Update() {
 	ImGui::Begin("ParticleDebug");
 
 	ImGui::Checkbox("isParticleUpdate", &isParticleUpdate_);
-	if (ImGui::Button("emit")) {
-		//パーティクルの発生
-		slashEmitter_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
-		explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
-		ringEmitter_->Emit();
-	}
+
 	if (ImGui::Button("advance1Frame"))
 	{
 		ParticleManager::GetInstance()->Update(mainCamera_);
+	}
+	if (ImGui::TreeNode("emitter"))
+	{
+		if (ImGui::Button("Slash1"))
+		{
+			slashEmitter_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
+		}
+		if (ImGui::Button("Slash2"))
+		{
+			slashEmitter2_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
+		}
+		if (ImGui::Button("Explosion")) 
+		{
+			explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
+		}
+		if (ImGui::Button("Ring")) 
+		{
+			ringEmitter_->Emit();
+		}
+		if (ImGui::Button("Group1")) 
+		{
+			//パーティクルの発生
+			slashEmitter_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
+			explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
+			ringEmitter_->Emit();
+		}
+		if (ImGui::Button("Group2"))
+		{
+			//パーティクルの発生
+			slashEmitter2_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
+			explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
+			ringEmitter_->Emit();
+		}
+
+		ImGui::TreePop();
 	}
 
 	ImGui::End();
