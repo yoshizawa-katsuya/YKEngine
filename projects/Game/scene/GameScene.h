@@ -87,6 +87,10 @@ private:
 	std::unique_ptr<ParticleEmitter> explosionEmitter_;
 	std::unique_ptr<ParticleEmitter> ringEmitter_;
 
+	Vector4 slashColor_ = { 1.0f, 0.5f, 0.0f, 1.0f };
+	Vector4 explosionColor_ = { 1.0f, 1.0f, 0.0f, 1.0f };
+	Vector4 ringColor_ = { 1.0f, 0.2f, 0.0f, 1.0f };
+
 	//std::unique_ptr<AccelerationField> field_;
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	

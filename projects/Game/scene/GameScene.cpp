@@ -195,33 +195,33 @@ void GameScene::Update() {
 	{
 		if (ImGui::Button("Slash1"))
 		{
-			slashEmitter_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
+			slashEmitter_->Emit(slashColor_);
 		}
 		if (ImGui::Button("Slash2"))
 		{
-			slashEmitter2_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
+			slashEmitter2_->Emit(slashColor_);
 		}
 		if (ImGui::Button("Explosion")) 
 		{
-			explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
+			explosionEmitter_->Emit(explosionColor_);
 		}
 		if (ImGui::Button("Ring")) 
 		{
-			ringEmitter_->Emit({ 1.0f, 0.2f, 0.0f, 1.0f });
+			ringEmitter_->Emit(ringColor_);
 		}
 		if (ImGui::Button("Group1")) 
 		{
 			//パーティクルの発生
-			slashEmitter_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
-			explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
-			ringEmitter_->Emit({ 1.0f, 0.2f, 0.0f, 1.0f });
+			slashEmitter_->Emit(slashColor_);
+			explosionEmitter_->Emit(explosionColor_);
+			ringEmitter_->Emit(ringColor_);
 		}
 		if (ImGui::Button("Group2"))
 		{
 			//パーティクルの発生
-			slashEmitter2_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
-			explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
-			ringEmitter_->Emit({ 1.0f, 0.2f, 0.0f, 1.0f });
+			slashEmitter2_->Emit(slashColor_);
+			explosionEmitter_->Emit(explosionColor_);
+			ringEmitter_->Emit(ringColor_);
 		}
 
 		ImGui::TreePop();
