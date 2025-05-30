@@ -53,13 +53,15 @@ void GameScene::Initialize() {
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 	uint32_t textureHandle2 = TextureManager::GetInstance()->Load("./resources/circle2.png");
-	uint32_t textureHandle3 = TextureManager::GetInstance()->Load("./resources/gradationLine.png");
+	uint32_t textureHandle3 = TextureManager::GetInstance()->Load("./resources/ring.png");
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
-	
+	std::shared_ptr<BaseModel> ringModel_ = modelPlatform_->CreateRing(textureHandle3);
+	ringModel_->SetUVTransform({ 20.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
+
 	/*
 	//スプライトの生成
 	sprite_ = std::make_unique<Sprite>();
@@ -115,7 +117,7 @@ void GameScene::Initialize() {
 	explosionEmitter_->SetIsDownVelocity(true);
 
 	ringEmitter_ = std::make_unique<ParticleEmitter>("RingEffect", 1, 1.5f);
-	ringEmitter_->Initialize(textureHandle3, modelPlatform_->CreateRing(textureHandle3));
+	ringEmitter_->Initialize(textureHandle3, ringModel_);
 	ringEmitter_->SetIsRandomLifeTime(true);
 	ringEmitter_->SetRandLifeTimeMax(0.2f);
 	ringEmitter_->SetRandLifeTimeMin(0.2f);
@@ -205,21 +207,21 @@ void GameScene::Update() {
 		}
 		if (ImGui::Button("Ring")) 
 		{
-			ringEmitter_->Emit();
+			ringEmitter_->Emit({ 1.0f, 0.2f, 0.0f, 1.0f });
 		}
 		if (ImGui::Button("Group1")) 
 		{
 			//パーティクルの発生
 			slashEmitter_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
 			explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
-			ringEmitter_->Emit();
+			ringEmitter_->Emit({ 1.0f, 0.2f, 0.0f, 1.0f });
 		}
 		if (ImGui::Button("Group2"))
 		{
 			//パーティクルの発生
 			slashEmitter2_->Emit({ 1.0f, 0.5f, 0.0f, 1.0f });
 			explosionEmitter_->Emit({ 1.0f, 1.0f, 0.0f, 1.0f });
-			ringEmitter_->Emit();
+			ringEmitter_->Emit({ 1.0f, 0.2f, 0.0f, 1.0f });
 		}
 
 		ImGui::TreePop();
