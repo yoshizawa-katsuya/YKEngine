@@ -101,7 +101,7 @@ void GameScene::Initialize() {
 	slashEmitter2_->SetIsScaleToDisappear(true);
 	slashEmitter2_->SetEasingTypeForScale(EasingType::EaseInBack);
 
-	explosionEmitter_ = std::make_unique<ParticleEmitter>("ExplosionEffect", 30, 1.5f);
+	explosionEmitter_ = std::make_unique<ParticleEmitter>("ExplosionEffect", 45, 1.5f);
 	explosionEmitter_->Initialize(textureHandle_, modelPlayer_);
 	explosionEmitter_->SetIsFaceToVelocityDirection(true);
 	explosionEmitter_->SetIsRandomVelocity(true);
@@ -118,6 +118,7 @@ void GameScene::Initialize() {
 
 	ringEmitter_ = std::make_unique<ParticleEmitter>("RingEffect", 1, 1.5f);
 	ringEmitter_->Initialize(textureHandle3, ringModel_);
+	ringEmitter_->SetScale({1.7f, 1.7f, 1.0f});
 	ringEmitter_->SetIsRandomLifeTime(true);
 	ringEmitter_->SetRandLifeTimeMax(0.2f);
 	ringEmitter_->SetRandLifeTimeMin(0.2f);
