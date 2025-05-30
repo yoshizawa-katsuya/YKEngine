@@ -6,12 +6,11 @@
 #include "Camera.h"
 #include "Lerp.h"
 #include "GameScene.h"
-#include "CollisionTypeIdDef.h"
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix) {
 
 	BaseCharacter::Initialize(model);
-	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayer));
+	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
 
 	input_ = Input::GetInstance();
 

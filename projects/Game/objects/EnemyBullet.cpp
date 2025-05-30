@@ -2,12 +2,11 @@
 #include "cassert"
 #include "TextureManager.h"
 #include "Vector3.h"
-#include "CollisionTypeIdDef.h"
 
 void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle) {
 
 	BaseCharacter::Initialize(model);
-	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemyBullet));
+	Collider::SetTypeID(CollisionTypeIdDef::kEnemyBullet);
 
 	// テクスチャ読み込み
 	textureHandle_ = textureHandle;
@@ -34,9 +33,9 @@ void EnemyBullet::Update() {
 
 void EnemyBullet::OnCollision(Collider* other)
 {
-	uint32_t typeID = other->GetTypeID();
+	CollisionTypeIdDef typeID = other->GetTypeID();
 
-	if (typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayer) || typeID == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet))
+	if (typeID == CollisionTypeIdDef::kPlayer || typeID == CollisionTypeIdDef::kPlayerBullet)
 	{
 		isDead_ = true;
 	}

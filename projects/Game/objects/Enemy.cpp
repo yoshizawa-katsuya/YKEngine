@@ -5,7 +5,6 @@
 #include "Player.h"
 #include "GameScene.h"
 #include "WinApp.h"
-#include "CollisionTypeIdDef.h"
 
 Enemy::~Enemy() {
 	/*
@@ -18,7 +17,7 @@ Enemy::~Enemy() {
 void Enemy::Initialize(BaseModel* model, const Vector3& position, Matrix4x4* viewPortMatrix) {
 
 	BaseCharacter::Initialize(model);
-	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kEnemy));
+	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
 
 	viewPortMatrix_ = viewPortMatrix;
 
@@ -109,7 +108,7 @@ void Enemy::Fire() {
 
 void Enemy::OnCollision(Collider* other)
 {
-	if (other->GetTypeID() == static_cast<uint32_t>(CollisionTypeIdDef::kPlayerBullet)) 
+	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet) 
 	{
 		isDead_ = true;
 	}
