@@ -115,6 +115,7 @@ void GameScene::Initialize() {
 	explosionEmitter_->SetRandLifeTimeMin(0.2f);
 	explosionEmitter_->SetIsScaleToDisappear(true);
 	explosionEmitter_->SetIsDownVelocity(true);
+	explosionEmitter_->SetIsUseBillboard(false);
 
 	ringEmitter_ = std::make_unique<ParticleEmitter>("RingEffect", 3, 1.5f);
 	ringEmitter_->Initialize(textureHandle3, ringModel_);
