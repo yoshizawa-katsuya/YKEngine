@@ -3,6 +3,8 @@
 #include "Matrix.h"
 #include <numbers>
 #include "imgui/imgui.h"
+#include "TransformHelpers.h"
+#include "Lerp.h"
 
 ParticleManager* ParticleManager::GetInstance()
 {
@@ -64,16 +66,40 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				}
 			}
 
-			particleIterator->transform.translation += particleIterator->velocity * kDeltaTime_;
 			particleIterator->currentTime += kDeltaTime_;	//経過時間を足す
-
+			if (particleGroupIterator->second.behavior->isdownVelocity)
+			{
+				particleIterator->transform.translation += Lerp(particleIterator->velocity, Vector3{ 0.0f, 0.0f, 0.0f }, particleIterator->currentTime / particleIterator->lifeTime) * kDeltaTime_;
+			}
+			else 
+			{
+				//速度をそのまま適用する
+				particleIterator->transform.translation += particleIterator->velocity * kDeltaTime_;
+			}
+			
 			if (particleGroupIterator->second.numInstance < particleGroupIterator->second.kNumMaxInstance) {
-				Matrix4x4 scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
+				Matrix4x4 scaleMatrix{};
+				if (particleGroupIterator->second.behavior->isScaleToDisappear) 
+				{
+					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
+					//消えるときにScaleを小さくする
+					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, t));
+				}
+				else if (particleGroupIterator->second.behavior->isScaleToAppear)
+				{
+					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
+					//出現するときにScaleを大きくする
+					scaleMatrix = MakeScaleMatrix(Lerp({ 0.0f, 0.0f, 0.0f }, particleIterator->transform.scale, t));
+				}
+				else
+				{
+					scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
+				}
 				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
 				Matrix4x4 rotateMatrix = MakeRotateMatrix(particleIterator->transform.rotation);
 				//Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
 				Matrix4x4 worldMatrix;
-				if (particleGroupIterator->second.useBillboard) 
+				if (particleGroupIterator->second.behavior->isUseBillboard) 
 				{
 					worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
 				}
@@ -145,7 +171,7 @@ void ParticleManager::Draw()
 }
 
 
-void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard)
+void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior)
 {
 	//名前とテクスチャが同じ場合パーティクルを使いまわす
 	if (particleGroups_.contains(name))
@@ -154,13 +180,14 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 		particleGroups_[name].particles.clear();
 		particleGroups_[name].numInstance = 0;
+		particleGroups_[name].behavior = behavior;
 		return;
 	}
 
 	ParticleGroup& particleGroup = particleGroups_[name];
 
 	particleGroup.model = model;
-	particleGroup.useBillboard = useBillboard;
+	particleGroup.behavior = behavior;
 	particleGroup.textureHandle = textureHandle;
 
 	particleGroup.instancingResouce = dxCommon_->CreateBufferResource(sizeof(ParticleForGPU) * particleGroup.kNumMaxInstance);
@@ -180,19 +207,37 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 }
 
 void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams)
+	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
 	assert(particleGroups_.contains(name));
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams));
+		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams, behavior));
 	}
 }
 
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams)
+	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
 
-	Particle particle;
+	Particle particle{};
+
+	if (randomFlags.velocity)
+	{
+		std::uniform_real_distribution<float> distributionX(rangeParams.velocity.min.x, rangeParams.velocity.max.x);
+		std::uniform_real_distribution<float> distributionY(rangeParams.velocity.min.y, rangeParams.velocity.max.y);
+		std::uniform_real_distribution<float> distributionZ(rangeParams.velocity.min.z, rangeParams.velocity.max.z);
+
+		particle.velocity = { distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+
+		if (behavior.isConstantVelocity) 
+		{
+			particle.velocity = Normalize(particle.velocity) * behavior.speed;
+		}
+	}
+	else
+	{
+		particle.velocity = { 0.0f, 0.0f, 0.0f };
+	}
 
 	if (randomFlags.scale) 
 	{
@@ -216,6 +261,11 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		Vector3 randomrotate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
 		particle.transform.rotation = transform.rotation + randomrotate;
 	}
+	else if (behavior.isFaceToVelocityDirection)
+	{
+		//進行方向を向く
+		particle.transform.rotation = TransformHelpers::FaceToVelocityDirection(particle.transform.rotation, particle.velocity);
+	}
 	else 
 	{
 		particle.transform.rotation = transform.rotation;
@@ -235,17 +285,6 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		particle.transform.translation = transform.translation;
 	}
 
-	if (randomFlags.velocity)
-	{
-		std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
-
-		particle.velocity = { distribution(randomEngine_), distribution(randomEngine_), distribution(randomEngine_) };
-	}
-	else 
-	{
-		particle.velocity = { 0.0f, 0.0f, 0.0f };
-	}
-
 	if (randomFlags.color)
 	{
 		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
@@ -258,7 +297,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 
 	if (randomFlags.lifeTime)
 	{
-		std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+		std::uniform_real_distribution<float> distTime(rangeParams.lifeTime.min, rangeParams.lifeTime.max);
 		particle.lifeTime = distTime(randomEngine_);
 	}
 	else

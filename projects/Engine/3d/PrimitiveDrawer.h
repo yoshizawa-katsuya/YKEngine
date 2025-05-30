@@ -24,6 +24,7 @@ enum class BlendMode {
 	kBackGroundSprite,
 
 	kBlendModeAddParticle,
+	kBlendModeNormalParticle,
 
 	kLineMode,
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <numbers>
+#include "Easing.h"
 
 struct ParticleRandomizationFlags {
 	bool color = false;
@@ -23,9 +24,31 @@ struct EmitterRangeParams
 		: translate({ Vector3{ 1.0f, 1.0f, 1.0f }, Vector3{ -1.0f, -1.0f, -1.0f } })
 		, scale ({ { 1.0f, 1.0f, 1.0f } , { -1.0f, -1.0f, -1.0f } })
 		, rotate ({ { std::numbers::pi_v<float>, std::numbers::pi_v<float>, std::numbers::pi_v<float> } ,{ -std::numbers::pi_v<float>, -std::numbers::pi_v<float>, -std::numbers::pi_v<float> } })
+		, velocity({ Vector3{ 1.0f, 1.0f, 1.0f }, Vector3{ -1.0f, -1.0f, -1.0f } })
+		, lifeTime({3.0f, 1.0f})
 	{
 	}
 	RandomRange<Vector3> translate;
 	RandomRange<Vector3> scale;
 	RandomRange<Vector3> rotate;
+	RandomRange<Vector3> velocity;
+	RandomRange<float> lifeTime;
+};
+
+struct ParticleBehavior
+{
+	//進行方向を向くかどうか
+	bool isFaceToVelocityDirection = false;
+	//速さを一定にするかどうか
+	bool isConstantVelocity = false;
+	float speed = 1.0f;
+	//少しずつScaleを小さくするかどうか
+	bool isScaleToDisappear = false;
+	//少しずつScaleを大きくするかどうか
+	bool isScaleToAppear = false;
+	EasingType easingTypeForScale = EasingType::Linear;
+	//ビルボードを使用するかどうか
+	bool isUseBillboard = true;
+	//少しずつ速度を下げるかどうか
+	bool isdownVelocity = false;
 };
