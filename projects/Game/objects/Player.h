@@ -18,6 +18,9 @@ public:
 	//旋回
 	//void Rotate();
 
+	//照準
+	void ReticleUpdate(Camera* railCamera);
+
 	//攻撃
 	void Attack();
 
