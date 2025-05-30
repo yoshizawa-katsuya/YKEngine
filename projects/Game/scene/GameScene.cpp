@@ -172,6 +172,38 @@ void GameScene::Update() {
 
 	/*slashEmitter_->Update();
 	explosionEmitter_->Update({1.0f, 0.0f, 0.0f, 1.0f});*/
+
+	if (input_->TriggerKey(DIK_1))
+	{
+		slashEmitter_->Emit(slashColor_);
+	}
+	if (input_->TriggerKey(DIK_2))
+	{
+		slashEmitter2_->Emit(slashColor_);
+	}
+	if (input_->TriggerKey(DIK_3))
+	{
+		explosionEmitter_->Emit(explosionColor_);
+	}
+	if (input_->TriggerKey(DIK_4))
+	{
+		ringEmitter_->Emit(ringColor_);
+	}
+	if (input_->TriggerKey(DIK_5))
+	{
+		//パーティクルの発生
+		slashEmitter_->Emit(slashColor_);
+		explosionEmitter_->Emit(explosionColor_);
+		ringEmitter_->Emit(ringColor_);
+	}
+	if (input_->TriggerKey(DIK_6))
+	{
+		//パーティクルの発生
+		slashEmitter2_->Emit(slashColor_);
+		explosionEmitter_->Emit(explosionColor_);
+		ringEmitter_->Emit(ringColor_);
+	}
+
 	if (isParticleUpdate_)
 	{
 		ParticleManager::GetInstance()->Update(mainCamera_);
