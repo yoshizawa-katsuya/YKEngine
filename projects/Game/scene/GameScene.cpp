@@ -110,65 +110,36 @@ void GameScene::Initialize() {
 	emitter_->SetRandScaleMax({ 0.0f, 1.0f, 0.0f });
 	emitter_->SetRandScaleMin({ 0.0f, -0.6f, 0.0f });
 
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
 }
 
 void GameScene::Update() {
-
-
-	//レールカメラの更新
-	railCamera_->Update();
 
 	if (isActiveDebugCamera_) 
 	{
 		debugCamera_->Update();
 	}
 
-	//スカイドームの更新
-	skydome_->Update();
-
-	//プレイヤーの更新
-	player_->Update(camera_.get());
-
-	// デスフラグの立った弾を削除
-	playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
-		if (bullet->IsDead()) {
-			return true;
-		}
-		return false;
-		});
-	//弾更新
-	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
-		bullet->Update();
+	switch (phase_)
+	{
+	case GameScene::Phase::kStart:
+		UpdateStart();
+		break;
+	case GameScene::Phase::kMain:
+		UpdateMain();
+		break;
+	case GameScene::Phase::kGameClear:
+		UpdateGameClear();
+		break;
+	case GameScene::Phase::kGameOver:
+		UpdateGameOver();
+		break;
+	default:
+		break;
 	}
-
-	UpdateEnemyPopCommands();
-
-	//デスフラグの立った敵を削除
-	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) {
-		if (enemy->IsDead()) {
-			return true;
-		}
-		return false;
-		});
-	// 敵の更新
-	for (std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->Update();
-	}
-
-	// デスフラグの立った弾を削除
-	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
-		if (bullet->IsDead()) {
-			return true;
-		}
-		return false;
-		});
-	// 弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
-		bullet->Update();
-	}
-
-	CheckAllColision();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
@@ -302,6 +273,8 @@ void GameScene::Draw() {
 
 	player_->DrawUI();
 
+	fade_->Draw();
+
 	ParticleManager::GetInstance()->Draw();
 
 }
@@ -385,6 +358,110 @@ void GameScene::AddEnemybullet(const Vector3& worldPosition, const Vector3& velo
 
 }
 
+void GameScene::UpdateStart()
+{
+	fade_->Update();
+	if (fade_->IsFinished()) {
+		fade_->Stop();
+		phase_ = Phase::kMain;
+	}
+}
+
+void GameScene::UpdateMain()
+{
+	//レールカメラの更新
+	railCamera_->Update();
+
+	//スカイドームの更新
+	skydome_->Update();
+
+	//プレイヤーの更新
+	player_->Update(camera_.get());
+
+	// デスフラグの立った弾を削除
+	playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+		if (bullet->IsDead()) {
+			return true;
+		}
+		return false;
+		});
+	//弾更新
+	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
+		bullet->Update();
+	}
+
+	UpdateEnemyPopCommands();
+
+	//デスフラグの立った敵を削除
+	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) {
+		if (enemy->IsDead()) {
+			return true;
+		}
+		return false;
+		});
+	// 敵の更新
+	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+		enemy->Update();
+	}
+
+	// デスフラグの立った弾を削除
+	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
+		if (bullet->IsDead()) {
+			return true;
+		}
+		return false;
+		});
+	// 弾更新
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+		bullet->Update();
+	}
+
+	CheckAllColision();
+
+	CheckGameClear();
+
+	CheckGameOver();
+
+}
+
+void GameScene::UpdateGameClear()
+{
+	fade_->Update();
+	if (fade_->IsFinished()) {
+		//fade_->Stop();
+		//シーン切り替え依頼
+		sceneManager_->ChengeScene("TitleScene");
+	}
+}
+
+void GameScene::UpdateGameOver()
+{
+	fade_->Update();
+	if (fade_->IsFinished()) {
+		//fade_->Stop();
+		//シーン切り替え依頼
+		sceneManager_->ChengeScene("TitleScene");
+	}
+}
+
+void GameScene::CheckGameClear()
+{
+	//敵がいなくなったらゲームクリア
+	if (enemys_.empty() && isEnemyPopEnd_) {
+		phase_ = Phase::kGameClear;
+		fade_->Start(Fade::Status::FadeOut, 0.5f);
+	}
+}
+
+void GameScene::CheckGameOver()
+{
+	//プレイヤーが死んだらゲームオーバー
+	if (player_->IsDead()) {
+		phase_ = Phase::kGameOver;
+		fade_->Start(Fade::Status::FadeOut, 0.5f);
+	}
+}
+
 void GameScene::LoadEnemyPopData() {
 
 	//ファイルを開く
@@ -464,6 +541,13 @@ void GameScene::UpdateEnemyPopCommands() {
 			break;
 		}
 
+		//ENDコマンドの実行
+		else if (word.find("END") == 0) {
+			isEnemyPopEnd_ = true;
+
+			//コマンドループを抜ける
+			break;
+		}
 	}
 
 }

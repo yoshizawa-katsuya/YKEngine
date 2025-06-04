@@ -41,8 +41,6 @@ public:
 
 	const float GetRadius() const { return radius_; }
 
-	bool IsDead() const { return isDead_; }
-
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 private:

@@ -18,8 +18,6 @@ public:
 	// 描画
 	void Draw(Camera* camera);
 
-	bool IsDead() const { return isDead_; }
-
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
