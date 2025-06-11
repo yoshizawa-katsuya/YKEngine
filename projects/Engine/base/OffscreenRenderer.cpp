@@ -2,8 +2,6 @@
 #include "SrvHeapManager.h"
 #include "PrimitiveDrawer.h"
 
-using namespace Microsoft::WRL;
-
 OffscreenRenderer* OffscreenRenderer::GetInstance()
 {
 	static OffscreenRenderer instance;
@@ -84,7 +82,7 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 void OffscreenRenderer::CreateRenderTexture()
 {
 	const Vector4 kRenderTargetClearValue{ 1.0f, 0.0f, 0.0f, 1.0f };	//一旦分かりやすいように赤
-	renderTextureResource_ = CreateRenderTextureResource(WinApp::kClientWidth, WinApp::kClientHeight,
+	CreateRenderTextureResource(WinApp::kClientWidth, WinApp::kClientHeight,
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
 
 	//RTVの設定
@@ -105,7 +103,7 @@ void OffscreenRenderer::CreateRenderTextureSRV(SrvHeapManager* srvHeapManager)
 	srvHeapManager->CreateSRVforRenderTexture(renderTextureSRVIndex_, renderTextureResource_.Get());
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> OffscreenRenderer::CreateRenderTextureResource(int32_t width, int32_t height, DXGI_FORMAT format, const Vector4& clearColor)
+void OffscreenRenderer::CreateRenderTextureResource(int32_t width, int32_t height, DXGI_FORMAT format, const Vector4& clearColor)
 {
 	//生成するResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
@@ -130,16 +128,14 @@ Microsoft::WRL::ComPtr<ID3D12Resource> OffscreenRenderer::CreateRenderTextureRes
 	clearValue.Color[3] = clearColor.w;
 
 	//Resourceの生成
-	ComPtr<ID3D12Resource> resource = nullptr;
 	HRESULT hr = dxCommon_->GetDevice()->CreateCommittedResource(
 		&heapProperties,	//Heapの設定
 		D3D12_HEAP_FLAG_NONE,	//Heapの特殊な設定。特になし。
 		&resourceDesc,	//Resourceの設定
 		D3D12_RESOURCE_STATE_RENDER_TARGET,	//RenderTargetとして使う
 		&clearValue,	//Clear最適値
-		IID_PPV_ARGS(&resource)	//作成するResourceポインタへのポインタ
+		IID_PPV_ARGS(&renderTextureResource_)	//作成するResourceポインタへのポインタ
 	);
 	assert(SUCCEEDED(hr));
 
-	return resource;
 }

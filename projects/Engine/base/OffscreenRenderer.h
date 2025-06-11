@@ -33,7 +33,7 @@ private:
 
 	void CreateRenderTextureSRV(SrvHeapManager* srvHeapManager);
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(int32_t width, int32_t height, DXGI_FORMAT format, const Vector4& clearColor);
+	void CreateRenderTextureResource(int32_t width, int32_t height, DXGI_FORMAT format, const Vector4& clearColor);
 
 	DirectXCommon* dxCommon_ = nullptr;
 	ID3D12GraphicsCommandList* commandList_;
