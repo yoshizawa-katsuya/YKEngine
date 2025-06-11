@@ -187,5 +187,8 @@ private:
 	// 秒単位の経過時間
 	float deltaTime_ = 0.0f;
 	bool deltaTimeReset_ = false;
+
+	// オフスクリーンレンダリングを使用するかどうか
+	bool* useOffscreenRender_;
 };
 

@@ -24,6 +24,10 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 
 void OffscreenRenderer::PreDrawRenderTexture()
 {
+	if (!useOffscreenRender_) {
+		return;	//オフスクリーンレンダリングを使用しない場合は何もしない
+	}
+
 	//描画先のRTVとDSVを設定する
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dxCommon_->GetDSVCPUDescriptorHandle(0);
 	commandList_->OMSetRenderTargets(1, &renderTextureRtvHandle_, false, &dsvHandle);
@@ -42,6 +46,10 @@ void OffscreenRenderer::PreDrawRenderTexture()
 
 void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
+	if (!useOffscreenRender_) {
+		return;	//オフスクリーンレンダリングを使用しない場合は何もしない
+	}
+
 	//TransitionBarrierの設定
 	D3D12_RESOURCE_BARRIER barrier{};
 	//今回のバリアはTransition
@@ -77,6 +85,8 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	barrier2.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	//TransitionBarrierを張る
 	commandList_->ResourceBarrier(1, &barrier2);
+
+	useOffscreenRender_ = false;	//オフスクリーンレンダリングを使用するフラグを下げる
 }
 
 void OffscreenRenderer::CreateRenderTexture()

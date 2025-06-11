@@ -21,6 +21,12 @@ public:
 
 	void PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
 
+	bool* GetUseOffscreenRenderPtr() { return &useOffscreenRender_; }
+	bool GetUseOffscreenRender() { return useOffscreenRender_; }
+
+	//オフスクリーンレンダリングを使用する場合sceneのUpdateでtrueにする
+	void SetUseOffscreenRender(bool use) { useOffscreenRender_ = use; }
+
 private:
 
 	OffscreenRenderer() = default;
@@ -43,5 +49,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource_ = nullptr;
 	uint32_t renderTextureSRVIndex_;
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTextureRtvHandle_;
+
+	// オフスクリーンレンダリングを使用するかどうか
+	bool useOffscreenRender_ = false;
 };
 
