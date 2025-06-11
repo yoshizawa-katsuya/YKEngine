@@ -28,6 +28,9 @@ public:
 	//SRV生成（Structured Buffer用）
 	void CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
 
+	//SRV作成(RenderTexture用)
+	void CreateSRVforRenderTexture(uint32_t srvIndex, ID3D12Resource* pResource);
+
 	ID3D12DescriptorHeap* GetDescriptorHeap() { return descriptorHeap_.Get(); }
 
 	uint32_t GetDescriptorSize() { return descriptorSize_; }

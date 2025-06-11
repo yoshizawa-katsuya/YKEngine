@@ -1,5 +1,6 @@
 #include "MyGame.h"
 #include "SceneFactory.h"
+#include "OffscreenRenderer.h"
 
 void MyGame::Initialize()
 {
@@ -45,7 +46,7 @@ void MyGame::Draw()
 {
 
 	//描画開始
-	dxCommon_->PreDraw();
+	offscreenRenderer_->PreDrawRenderTexture();
 
 	srvHeapManager_->PreDraw();
 
@@ -63,6 +64,11 @@ void MyGame::Draw()
 	//gameScene_->Draw();
 	//titleScene_->Draw();
 	sceneManager_->Draw();
+
+
+	dxCommon_->PreDraw();
+
+	offscreenRenderer_->PostDrawRenderTexture(primitiveDrawer_.get(), srvHeapManager_.get());
 
 #ifdef _DEBUG
 

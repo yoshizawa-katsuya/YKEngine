@@ -234,6 +234,9 @@
     <ClCompile Include="Engine\lib\TransformHelpers.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\OffscreenRenderer.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -276,6 +279,12 @@
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
     <FxCompile Include="resources\shader\InstancingObject3d.VS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\CopyImage.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\CopyImage.VS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shader\Skybox.VS.hlsl">
@@ -448,6 +457,9 @@
     <ClInclude Include="Engine\lib\TransformHelpers.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\base\OffscreenRenderer.h">
+      <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
@@ -469,6 +481,9 @@
       <Filter>リソース ファイル\shader</Filter>
     </None>
     <None Include="Resources\shader\Skybox.hlsli">
+      <Filter>リソース ファイル\shader</Filter>
+    </None>
+    <None Include="Resources\shader\CopyImage.hlsli">
       <Filter>リソース ファイル\shader</Filter>
     </None>
   </ItemGroup>

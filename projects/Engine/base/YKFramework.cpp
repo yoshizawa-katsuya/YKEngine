@@ -1,4 +1,5 @@
 #include "YKFramework.h"
+#include "OffscreenRenderer.h"
 
 void YKFramework::Initialize()
 {
@@ -21,6 +22,9 @@ void YKFramework::Initialize()
 	//SrvHeapManager初期化
 	srvHeapManager_ = std::make_unique<SrvHeapManager>();
 	srvHeapManager_->Initialize(dxCommon_);
+
+	offscreenRenderer_ = OffscreenRenderer::GetInstance();
+	offscreenRenderer_->Initialize(srvHeapManager_.get());
 
 #ifdef _DEBUG
 

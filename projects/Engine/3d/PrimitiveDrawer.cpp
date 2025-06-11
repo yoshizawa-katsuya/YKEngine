@@ -38,6 +38,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSkyboxMode)) = CreateGraphicsPipeline(BlendMode::kSkyboxMode, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kOffScreenRendering)) = CreateGraphicsPipeline(BlendMode::kOffScreenRendering, dxCommon);
+
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(BlendMode blendMode, DirectXCommon* dxCommon) {
@@ -97,6 +99,19 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters = {};
 
 	switch (blendMode) {
+	case BlendMode::kOffScreenRendering:
+
+		rootParameters.resize(1);
+
+		//テクスチャ
+		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[0].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		rootParameters[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+
+
+		break;
+
 	case BlendMode::kLineMode:
 	case BlendMode::kSphereMode:
 
@@ -274,7 +289,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
 		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapｗｐ使う
-		staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う
+		staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う s0
 		staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 
 		break;
@@ -367,8 +382,23 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
-	inputLayoutDesc.pInputElementDescs = inputElementDescs.data();
-	inputLayoutDesc.NumElements = static_cast<UINT>(inputElementDescs.size());
+
+	switch (blendMode) {
+	case BlendMode::kOffScreenRendering:
+
+		inputLayoutDesc.pInputElementDescs = nullptr;
+		inputLayoutDesc.NumElements = 0;
+
+		break;
+
+	default:
+
+		inputLayoutDesc.pInputElementDescs = inputElementDescs.data();
+		inputLayoutDesc.NumElements = static_cast<UINT>(inputElementDescs.size());
+
+		break;
+	}
+	
 
 	//BlendStateの設定
 	D3D12_BLEND_DESC blendDesc{};
@@ -459,6 +489,18 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Object3d.PS.hlsl",
 			L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
+		break;
+
+	case BlendMode::kOffScreenRendering:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/CopyImage.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/CopyImage.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
 		break;
 
 	case BlendMode::kBlendModeNormalinstancing:
@@ -568,6 +610,12 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		//書き込みします
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 		break;
+
+	case BlendMode::kOffScreenRendering:
+		//Depthの機能を無効化する
+		depthStencilDesc.DepthEnable = false;
+		break;
+
 	case BlendMode::kLineMode:
 	case BlendMode::kSphereMode:
 		//Depthの機能を有効化する

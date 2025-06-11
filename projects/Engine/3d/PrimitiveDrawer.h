@@ -34,6 +34,8 @@ enum class BlendMode {
 
 	kBlendModeNormalinstancing,
 
+	kOffScreenRendering,
+
 	kSkyboxMode,
 
 	kCountOfBlendMode,	//利用してはいけない

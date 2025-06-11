@@ -89,6 +89,10 @@ public:
 
 	void ResetDeltaTime() { deltaTimeReset_ = true; }
 
+	D3D12_VIEWPORT* GetViewport() { return &viewport_; }
+
+	D3D12_RECT* GetScissorRect() { return &scissorRect_; }
+
 private:
 
 	//static DirectXCommon* instance_;
@@ -140,7 +144,7 @@ private:
 	//DepthStencilTextureを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(int32_t width, int32_t height);
 
-	
+
 	//DescriptorHandleを取得する関数。CPU
 	static D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
