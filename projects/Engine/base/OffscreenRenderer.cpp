@@ -66,7 +66,7 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	commandList_->ResourceBarrier(1, &barrier);
 
 	//コピー実行
-	primitiveDrawer->SetPipelineSet(commandList_, BlendMode::kOffScreenRendering);
+	primitiveDrawer->SetPipelineSet(commandList_, DrawMode::kOffScreenRendering);
 	srvHeapManager->SetGraphicsRootDescriptorTable(0, renderTextureSRVIndex_);
 
 	commandList_->DrawInstanced(3, 1, 0, 0);

@@ -6,43 +6,43 @@
 
 void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNone)) = CreateGraphicsPipeline(BlendMode::kBlendModeNone, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNone)) = CreateGraphicsPipeline(DrawMode::kBlendModeNone, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormal)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormal, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNormal)) = CreateGraphicsPipeline(DrawMode::kBlendModeNormal, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeAdd)) = CreateGraphicsPipeline(BlendMode::kBlendModeAdd, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeAdd)) = CreateGraphicsPipeline(DrawMode::kBlendModeAdd, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeSubtract)) = CreateGraphicsPipeline(BlendMode::kBlendModeSubtract, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeSubtract)) = CreateGraphicsPipeline(DrawMode::kBlendModeSubtract, dxCommon);
 	
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeMultiply)) = CreateGraphicsPipeline(BlendMode::kBlendModeMultiply, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeMultiply)) = CreateGraphicsPipeline(DrawMode::kBlendModeMultiply, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeScreen)) = CreateGraphicsPipeline(BlendMode::kBlendModeScreen, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeScreen)) = CreateGraphicsPipeline(DrawMode::kBlendModeScreen, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNoneSprite)) = CreateGraphicsPipeline(BlendMode::kBlendModeNoneSprite, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNoneSprite)) = CreateGraphicsPipeline(DrawMode::kBlendModeNoneSprite, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormalSprite)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormalSprite, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNormalSprite)) = CreateGraphicsPipeline(DrawMode::kBlendModeNormalSprite, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBackGroundSprite)) = CreateGraphicsPipeline(BlendMode::kBackGroundSprite, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBackGroundSprite)) = CreateGraphicsPipeline(DrawMode::kBackGroundSprite, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeAddParticle)) = CreateGraphicsPipeline(BlendMode::kBlendModeAddParticle, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeAddParticle)) = CreateGraphicsPipeline(DrawMode::kBlendModeAddParticle, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormalParticle)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormalParticle, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNormalParticle)) = CreateGraphicsPipeline(DrawMode::kBlendModeNormalParticle, dxCommon);
 	
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kLineMode)) = CreateGraphicsPipeline(BlendMode::kLineMode, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kLineMode)) = CreateGraphicsPipeline(DrawMode::kLineMode, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSphereMode)) = CreateGraphicsPipeline(BlendMode::kSphereMode, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kSphereMode)) = CreateGraphicsPipeline(DrawMode::kSphereMode, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSkinModelMode)) = CreateGraphicsPipeline(BlendMode::kSkinModelMode, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kSkinModelMode)) = CreateGraphicsPipeline(DrawMode::kSkinModelMode, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kBlendModeNormalinstancing)) = CreateGraphicsPipeline(BlendMode::kBlendModeNormalinstancing, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNormalinstancing)) = CreateGraphicsPipeline(DrawMode::kBlendModeNormalinstancing, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kSkyboxMode)) = CreateGraphicsPipeline(BlendMode::kSkyboxMode, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kSkyboxMode)) = CreateGraphicsPipeline(DrawMode::kSkyboxMode, dxCommon);
 
-	pipelineSets_.at(static_cast<uint16_t>(BlendMode::kOffScreenRendering)) = CreateGraphicsPipeline(BlendMode::kOffScreenRendering, dxCommon);
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kOffScreenRendering)) = CreateGraphicsPipeline(DrawMode::kOffScreenRendering, dxCommon);
 
 }
 
-std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(BlendMode blendMode, DirectXCommon* dxCommon) {
+std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon) {
 
 	std::unique_ptr<PipelineSet> pipelineSet = std::make_unique<PipelineSet>();
 
@@ -88,7 +88,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
 
 	D3D12_DESCRIPTOR_RANGE descriptorRangeSkinning[1] = {};
-	if (blendMode == BlendMode::kSkinModelMode) {
+	if (blendMode == DrawMode::kSkinModelMode) {
 		descriptorRangeSkinning[0].BaseShaderRegister = 0;
 		descriptorRangeSkinning[0].NumDescriptors = 1;	//数は1つ
 		descriptorRangeSkinning[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
@@ -99,7 +99,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters = {};
 
 	switch (blendMode) {
-	case BlendMode::kOffScreenRendering:
+	case DrawMode::kOffScreenRendering:
 
 		rootParameters.resize(1);
 
@@ -112,8 +112,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kLineMode:
-	case BlendMode::kSphereMode:
+	case DrawMode::kLineMode:
+	case DrawMode::kSphereMode:
 
 		rootParameters.resize(1);
 
@@ -123,7 +123,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kSkyboxMode:
+	case DrawMode::kSkyboxMode:
 
 		rootParameters.resize(3);
 
@@ -145,7 +145,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kSkinModelMode:
+	case DrawMode::kSkinModelMode:
 
 		rootParameters.resize(9);
 
@@ -217,9 +217,9 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
 			rootParameters[1].Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
 			break;
-		case BlendMode::kBlendModeAddParticle:
-		case BlendMode::kBlendModeNormalParticle:
-		case BlendMode::kBlendModeNormalinstancing:
+		case DrawMode::kBlendModeAddParticle:
+		case DrawMode::kBlendModeNormalParticle:
+		case DrawMode::kBlendModeNormalinstancing:
 			//Particle用、instancing用
 			//ParticleForGPU、TransformationMatrix
 			rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
@@ -274,8 +274,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	std::vector<D3D12_STATIC_SAMPLER_DESC> staticSamplers = {};
 
 	switch (blendMode) {
-	case BlendMode::kLineMode:
-	case BlendMode::kSphereMode:
+	case DrawMode::kLineMode:
+	case DrawMode::kSphereMode:
 
 		break;
 
@@ -318,8 +318,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	std::vector<D3D12_INPUT_ELEMENT_DESC> inputElementDescs = {};
 
 	switch (blendMode) {
-	case BlendMode::kLineMode:
-	case BlendMode::kSphereMode:
+	case DrawMode::kLineMode:
+	case DrawMode::kSphereMode:
 
 		inputElementDescs.resize(1);
 
@@ -330,7 +330,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kSkinModelMode:
+	case DrawMode::kSkinModelMode:
 
 		inputElementDescs.resize(5);
 
@@ -384,7 +384,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 
 	switch (blendMode) {
-	case BlendMode::kOffScreenRendering:
+	case DrawMode::kOffScreenRendering:
 
 		inputLayoutDesc.pInputElementDescs = nullptr;
 		inputLayoutDesc.NumElements = 0;
@@ -409,14 +409,14 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 	switch (blendMode) {
-	case BlendMode::kBlendModeNone:
+	case DrawMode::kBlendModeNone:
 	default:
 		break;
 
-	case BlendMode::kBlendModeNormal:
-	case BlendMode::kBlendModeNormalSprite:
-	case BlendMode::kBlendModeNormalinstancing:
-	case BlendMode::kBlendModeNormalParticle:
+	case DrawMode::kBlendModeNormal:
+	case DrawMode::kBlendModeNormalSprite:
+	case DrawMode::kBlendModeNormalinstancing:
+	case DrawMode::kBlendModeNormalParticle:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
@@ -424,29 +424,29 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		
 		break;
 
-	case BlendMode::kBlendModeAdd:
-	case BlendMode::kBlendModeAddParticle:
+	case DrawMode::kBlendModeAdd:
+	case DrawMode::kBlendModeAddParticle:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
 		break;
 
-	case BlendMode::kBlendModeSubtract:
+	case DrawMode::kBlendModeSubtract:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
 		break;
 
-	case BlendMode::kBlendModeMultiply:
+	case DrawMode::kBlendModeMultiply:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ZERO;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_SRC_COLOR;
 		break;
 
-	case BlendMode::kBlendModeScreen:
+	case DrawMode::kBlendModeScreen:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
@@ -457,9 +457,9 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	//ResiterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	switch (blendMode) {
-	case BlendMode::kBlendModeNoneSprite:
-	case BlendMode::kBlendModeNormalSprite:
-	case BlendMode::kBackGroundSprite:
+	case DrawMode::kBlendModeNoneSprite:
+	case DrawMode::kBlendModeNormalSprite:
+	case DrawMode::kBackGroundSprite:
 		//裏面（時計回り）を表示する
 		rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 		break;
@@ -491,7 +491,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		assert(pixelShaderBlob != nullptr);
 		break;
 
-	case BlendMode::kOffScreenRendering:
+	case DrawMode::kOffScreenRendering:
 
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/CopyImage.VS.hlsl",
 			L"vs_6_0");
@@ -503,7 +503,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kBlendModeNormalinstancing:
+	case DrawMode::kBlendModeNormalinstancing:
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/InstancingObject3d.VS.hlsl",
 			L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
@@ -513,9 +513,9 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		assert(pixelShaderBlob != nullptr);
 		break;
 
-	case BlendMode::kBlendModeNoneSprite:
-	case BlendMode::kBlendModeNormalSprite:
-	case BlendMode::kBackGroundSprite:
+	case DrawMode::kBlendModeNoneSprite:
+	case DrawMode::kBlendModeNormalSprite:
+	case DrawMode::kBackGroundSprite:
 
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sprite.VS.hlsl",
 			L"vs_6_0");
@@ -527,8 +527,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kBlendModeAddParticle:
-	case BlendMode::kBlendModeNormalParticle:
+	case DrawMode::kBlendModeAddParticle:
+	case DrawMode::kBlendModeNormalParticle:
 
 		//Particle用
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Particle.VS.hlsl",
@@ -541,7 +541,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kLineMode:
+	case DrawMode::kLineMode:
 
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Line3D.VS.hlsl",
 			L"vs_6_0");
@@ -556,7 +556,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		assert(pixelShaderBlob != nullptr);
 
 		break;
-	case BlendMode::kSphereMode:
+	case DrawMode::kSphereMode:
 
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Sphere3D.VS.hlsl",
 			L"vs_6_0");
@@ -572,7 +572,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kSkinModelMode:
+	case DrawMode::kSkinModelMode:
 
 
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/SkinningObject3d.VS.hlsl",
@@ -585,7 +585,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
-	case BlendMode::kSkyboxMode:
+	case DrawMode::kSkyboxMode:
 
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Skybox.VS.hlsl",
 			L"vs_6_0");
@@ -611,33 +611,33 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 		break;
 
-	case BlendMode::kOffScreenRendering:
+	case DrawMode::kOffScreenRendering:
 		//Depthの機能を無効化する
 		depthStencilDesc.DepthEnable = false;
 		break;
 
-	case BlendMode::kLineMode:
-	case BlendMode::kSphereMode:
+	case DrawMode::kLineMode:
+	case DrawMode::kSphereMode:
 		//Depthの機能を有効化する
 		depthStencilDesc.DepthEnable = false;
 		//書き込みします
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 
 		break;
-	case BlendMode::kBlendModeAddParticle:
-	case BlendMode::kBlendModeNormalParticle:
+	case DrawMode::kBlendModeAddParticle:
+	case DrawMode::kBlendModeNormalParticle:
 		//Depthの機能を有効化する
 		depthStencilDesc.DepthEnable = true;
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		break;
 
-	case BlendMode::kBackGroundSprite:
+	case DrawMode::kBackGroundSprite:
 		depthStencilDesc.DepthEnable = FALSE;  // 深度バッファ無効化
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;  // 深度への書き込み無効
 		depthStencilDesc.StencilEnable = FALSE;
 		break;
 
-	case BlendMode::kSkyboxMode:
+	case DrawMode::kSkyboxMode:
 		depthStencilDesc.DepthEnable = true;	//比較はするのでDepth自体は有効
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;	//全ピクセルがz=1に出力されるので、書き込む必要はない
 
@@ -658,8 +658,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	default:
 
 		break;
-	case BlendMode::kLineMode:
-	case BlendMode::kSphereMode:
+	case DrawMode::kLineMode:
+	case DrawMode::kSphereMode:
 
 		graphicsPipelineStateDesc.GS = { GeometryShaderBlob->GetBufferPointer(),
 		GeometryShaderBlob->GetBufferSize() };
@@ -685,8 +685,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE; 
 		break;
 
-	case BlendMode::kLineMode:
-	case BlendMode::kSphereMode:
+	case DrawMode::kLineMode:
+	case DrawMode::kSphereMode:
 
 		graphicsPipelineStateDesc.PrimitiveTopologyType =
 			D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
@@ -704,7 +704,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	return pipelineSet;
 }
 
-void PrimitiveDrawer::SetPipelineSet(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) {
+void PrimitiveDrawer::SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode) {
 
 	commandList->SetGraphicsRootSignature(pipelineSets_.at(static_cast<uint16_t>(blendMode))->rootSignature.Get());
 	commandList->SetPipelineState(pipelineSets_.at(static_cast<uint16_t>(blendMode))->graphicsPipelineState.Get());	//PSOを設定
