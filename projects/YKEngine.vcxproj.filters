@@ -284,7 +284,19 @@
     <FxCompile Include="Resources\shader\CopyImage.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shader\CopyImage.VS.hlsl">
+    <FxCompile Include="Resources\shader\FullScreen.VS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\GrayScele.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\Vignette.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\BoxFilter.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shader\Skybox.VS.hlsl">
@@ -480,10 +492,10 @@
     <None Include="resources\shader\Sprite.hlsli">
       <Filter>リソース ファイル\shader</Filter>
     </None>
-    <None Include="Resources\shader\Skybox.hlsli">
+    <None Include="Resources\shader\FullScreen.hlsli">
       <Filter>リソース ファイル\shader</Filter>
     </None>
-    <None Include="Resources\shader\CopyImage.hlsli">
+    <None Include="Resources\shader\Skybox.hlsli">
       <Filter>リソース ファイル\shader</Filter>
     </None>
   </ItemGroup>

@@ -493,11 +493,11 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	case DrawMode::kOffScreenRendering:
 
-		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/CopyImage.VS.hlsl",
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/FullScreen.VS.hlsl",
 			L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 
-		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/CopyImage.PS.hlsl",
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/5x5BoxFilter.PS.hlsl",
 			L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 
