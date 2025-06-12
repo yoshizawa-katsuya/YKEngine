@@ -15,6 +15,15 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 	viewport_ = dxCommon_->GetViewport();
 	scissorRect_ = dxCommon_->GetScissorRect();
 
+	renderTextureDrawModes_.resize(renderTextureTypeCount_);
+
+	renderTextureDrawModes_ = {
+		DrawMode::kOffScreenRendering,	//オフスクリーンレンダリング
+		DrawMode::kGrayScaleRendering,	//グレイスケール
+		DrawMode::kVignetteRendering,	//ヴィネッティング
+		DrawMode::kBoxFilterRendering,	//BoxFilterによるぼかし
+	};
+
 	//RecderTexture作成
 	CreateRenderTexture();
 
@@ -66,7 +75,7 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	commandList_->ResourceBarrier(1, &barrier);
 
 	//コピー実行
-	primitiveDrawer->SetPipelineSet(commandList_, DrawMode::kOffScreenRendering);
+	primitiveDrawer->SetPipelineSet(commandList_, renderTextureDrawModes_[static_cast<uint32_t>(renderTextureType_)]);
 	srvHeapManager->SetGraphicsRootDescriptorTable(0, renderTextureSRVIndex_);
 
 	commandList_->DrawInstanced(3, 1, 0, 0);

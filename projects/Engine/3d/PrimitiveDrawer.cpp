@@ -40,6 +40,12 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kOffScreenRendering)) = CreateGraphicsPipeline(DrawMode::kOffScreenRendering, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kGrayScaleRendering)) = CreateGraphicsPipeline(DrawMode::kGrayScaleRendering, dxCommon);
+
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kVignetteRendering)) = CreateGraphicsPipeline(DrawMode::kVignetteRendering, dxCommon);
+
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBoxFilterRendering)) = CreateGraphicsPipeline(DrawMode::kBoxFilterRendering, dxCommon);
+
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon) {
@@ -100,6 +106,9 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	switch (blendMode) {
 	case DrawMode::kOffScreenRendering:
+	case DrawMode::kGrayScaleRendering:
+	case DrawMode::kVignetteRendering:
+	case DrawMode::kBoxFilterRendering:
 
 		rootParameters.resize(1);
 
@@ -383,9 +392,14 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 
+	//InputLayoutの設定
 	switch (blendMode) {
 	case DrawMode::kOffScreenRendering:
+	case DrawMode::kGrayScaleRendering:
+	case DrawMode::kVignetteRendering:
+	case DrawMode::kBoxFilterRendering:
 
+		//InputLayoutは使わない
 		inputLayoutDesc.pInputElementDescs = nullptr;
 		inputLayoutDesc.NumElements = 0;
 
@@ -497,6 +511,39 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/CopyImage.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+	
+	case DrawMode::kGrayScaleRendering:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/FullScreen.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/GrayScale.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+
+	case DrawMode::kVignetteRendering:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/FullScreen.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Vignette.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+
+	case DrawMode::kBoxFilterRendering:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/FullScreen.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
 		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/5x5BoxFilter.PS.hlsl",
 			L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
@@ -612,6 +659,9 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		break;
 
 	case DrawMode::kOffScreenRendering:
+	case DrawMode::kGrayScaleRendering:
+	case DrawMode::kVignetteRendering:
+	case DrawMode::kBoxFilterRendering:
 		//Depthの機能を無効化する
 		depthStencilDesc.DepthEnable = false;
 		break;

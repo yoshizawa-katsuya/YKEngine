@@ -287,7 +287,7 @@
     <FxCompile Include="Resources\shader\FullScreen.VS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shader\GrayScele.PS.hlsl">
+    <FxCompile Include="Resources\shader\GrayScale.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shader\Vignette.PS.hlsl">

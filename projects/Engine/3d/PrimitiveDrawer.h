@@ -34,7 +34,11 @@ enum class DrawMode {
 
 	kBlendModeNormalinstancing,
 
+	//オフスクリーンレンダリング
 	kOffScreenRendering,
+	kGrayScaleRendering,
+	kVignetteRendering,
+	kBoxFilterRendering,
 
 	kSkyboxMode,
 
