@@ -231,3 +231,16 @@ void GameScene::Finalize()
 {
 
 }
+
+void GameScene::CreateLevel()
+{
+	LevelData* levelData;
+
+	//レベルデータからオブジェクトを生成、配置
+	for (ObjectData& objectData : levelData->objects) 
+	{
+		std::unique_ptr<Rigid3dObject>& object = rigidObjects_.emplace_back();
+		object = std::make_unique<Rigid3dObject>();
+		object
+	}
+}

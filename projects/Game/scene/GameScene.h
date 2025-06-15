@@ -35,6 +35,8 @@ public:
 
 private:
 
+	void CreateLevel();
+
 	//デバイス
 	DirectXCommon* dxCommon_;
 
@@ -73,6 +75,8 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	std::list<std::unique_ptr<Rigid3dObject>> rigidObjects_;
 
 	/*
 	std::unique_ptr<InstancingObjects> objects_;
