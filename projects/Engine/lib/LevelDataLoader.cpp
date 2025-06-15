@@ -43,7 +43,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 	for (nlohmann::json& object : deserialized["objects"]) {
 		assert(object.contains("type"));
 
-		if (object["disabled"].contains("disabled"))
+		if (object.contains("disabled"))
 		{
 			//有効無効フラグ
 			bool disabled = object["disabled"].get<bool>();
@@ -63,9 +63,15 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 			//今追加した要素の参照を得る
 			ObjectData& objectData = levelData->objects.back();
 
-			if (object.contains("file_name")) {
+			if (object.contains("file_name")) 
+			{
 				//ファイル名
 				objectData.fileName = object["file_name"];
+			}
+			if (object.contains("file_path"))
+			{
+				//ファイルパス
+				objectData.filePath = object["file_path"];
 			}
 
 			//トランスフォームのパラメータ読み込み

@@ -224,6 +224,7 @@ struct LoopSoundData
 struct ObjectData
 {
 	std::string fileName;
+	std::string filePath;
 	EulerTransform transform;
 };
 

@@ -16,6 +16,7 @@ class OBJECT_PT_file_name(bpy.types.Panel):
         #パネルに項目を追加
         if "file_name" in context.object:
             #既にプロパティがあれば、プロパティを表示
+            self.layout.prop(context.object, '["file_path"]', text="FilePath")
             self.layout.prop(context.object, '["file_name"]', text=self.bl_label)
         else:
             #プロパティがなければ、プロパティ追加ボタンを表示

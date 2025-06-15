@@ -4,6 +4,7 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "LevelDataLoader.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -86,6 +87,8 @@ void GameScene::Initialize() {
 	worldTransform2_.translation_.x = 1.0f;
 	worldTransform2_.UpdateMatrix();
 	*/
+
+	CreateLevel();
 }
 
 void GameScene::Update() {
@@ -210,8 +213,12 @@ void GameScene::Draw() {
 	
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	//player_->Draw(mainCamera_);
 
+	for (std::unique_ptr<Rigid3dObject>& object : rigidObjects_) {
+		object->CameraUpdate(mainCamera_);
+		object->Draw();
+	}
 	
 
 	/*
@@ -235,12 +242,21 @@ void GameScene::Finalize()
 void GameScene::CreateLevel()
 {
 	LevelData* levelData;
+	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
 
 	//レベルデータからオブジェクトを生成、配置
 	for (ObjectData& objectData : levelData->objects) 
 	{
 		std::unique_ptr<Rigid3dObject>& object = rigidObjects_.emplace_back();
 		object = std::make_unique<Rigid3dObject>();
-		object
+		object->Initialize(modelPlatform_->CreateRigidModel(objectData.filePath, objectData.fileName).get());
+		WorldTransform worldTransfrom{};
+		worldTransfrom.Initialize();
+		worldTransfrom.translation_ = objectData.transform.translation;
+		worldTransfrom.rotation_ = objectData.transform.rotation;
+		worldTransfrom.scale_ = objectData.transform.scale;
+		worldTransfrom.UpdateMatrix();
+		object->WorldTransformUpdate(worldTransfrom);
+
 	}
 }

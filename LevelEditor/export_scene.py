@@ -144,6 +144,8 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
             json_object["disabled"] = object["disabled"]
 
         #カスタムプロパティ'file_name'
+        if "file_path" in object:
+            json_object["file_path"] = object["file_path"]
         if "file_name" in object:
             json_object["file_name"] = object["file_name"]
 

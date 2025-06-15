@@ -10,6 +10,7 @@ class MYADDON_OT_add_filename(bpy.types.Operator):
     def execute(self, context):
 
         #['file_name']カスタムプロパティを追加
+        context.object["file_path"] = "./resources/"
         context.object["file_name"] = ""
 
         return {"FINISHED"}
