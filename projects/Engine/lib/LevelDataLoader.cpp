@@ -43,7 +43,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 	for (nlohmann::json& object : deserialized["objects"]) {
 		assert(object.contains("type"));
 
-		if (object["disabled"].contains("disabled"))
+		if (object.contains("disabled"))
 		{
 			//有効無効フラグ
 			bool disabled = object["disabled"].get<bool>();
