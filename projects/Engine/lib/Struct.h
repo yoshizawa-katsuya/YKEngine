@@ -221,18 +221,6 @@ struct LoopSoundData
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
 };
 
-struct ObjectData
-{
-	std::string fileName;
-	std::string filePath;
-	EulerTransform transform;
-};
-
-struct LevelData
-{
-	std::list<ObjectData> objects;
-};
-
 template <typename tValue>
 struct  KeyFrame
 {

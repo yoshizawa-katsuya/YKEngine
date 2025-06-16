@@ -92,7 +92,31 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 
 			//TODO: コライダーのパラメータ読み込み
 		}
+		//自キャラ発生ポイント
+		else if (type.compare("PlayerSpawn") == 0) {
+			//要素追加
+			levelData->playerSpawns.emplace_back(PlayerSpawnData{});
+			//今追加した要素の参照を得る
+			PlayerSpawnData& playerSpawnData = levelData->playerSpawns.back();
 
+			//トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			//平行移動
+			playerSpawnData.transform.translation.x = -static_cast<float>(transform["translation"][0]);
+			playerSpawnData.transform.translation.y = static_cast<float>(transform["translation"][2]);
+			playerSpawnData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
+			//回転角
+			playerSpawnData.transform.rotation.x = -static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
+			playerSpawnData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
+			playerSpawnData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
+			//スケーリング
+			playerSpawnData.transform.scale.x = static_cast<float>(transform["scaling"][0]);
+			playerSpawnData.transform.scale.y = static_cast<float>(transform["scaling"][2]);
+			playerSpawnData.transform.scale.z = static_cast<float>(transform["scaling"][1]);
+
+
+			//TODO: コライダーのパラメータ読み込み
+		}
 
 		//TODO: オブジェクト走査を再帰関数にまとめ、再帰関数で枝を走査する
 		if (object.contains("children")) {
