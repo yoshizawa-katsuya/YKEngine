@@ -71,9 +71,6 @@ void GameScene::Initialize() {
 	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
 	//emitter_->Initialize(textureHandle2, modelPlayer_, true);
 
-	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
 
 	/*
 	objects_ = std::make_unique<InstancingObjects>();
@@ -213,7 +210,7 @@ void GameScene::Draw() {
 	
 
 	//プレイヤーの描画
-	//player_->Draw(mainCamera_);
+	player_->Draw(mainCamera_);
 
 	for (std::unique_ptr<Rigid3dObject>& object : rigidObjects_) {
 		object->CameraUpdate(mainCamera_);
@@ -243,6 +240,22 @@ void GameScene::CreateLevel()
 {
 	LevelData* levelData;
 	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
+
+	//プレイヤーの初期化
+	player_ = std::make_unique<Player>();
+	player_->Initialize(modelPlayer_.get());
+
+	//プレイヤー配置データからプレイヤーを配置
+	if (!levelData->playerSpawns.empty())
+	{
+		const PlayerSpawnData& playerSpawnData = levelData->playerSpawns.front();
+		WorldTransform playerTransform{};
+		playerTransform.Initialize();
+		playerTransform.translation_ = playerSpawnData.transform.translation;
+		playerTransform.rotation_ = playerSpawnData.transform.rotation;
+		playerTransform.scale_ = playerSpawnData.transform.scale;
+		player_->SetWorldTransform(playerTransform);
+	}
 
 	//レベルデータからオブジェクトを生成、配置
 	for (ObjectData& objectData : levelData->objects) 

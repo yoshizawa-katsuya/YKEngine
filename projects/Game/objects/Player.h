@@ -16,6 +16,8 @@ public:
 
 	void Draw(Camera* camera);
 
+	void SetWorldTransform(const WorldTransform& worldTransform) { worldTransform_ = worldTransform; }
+
 private:
 
 	//Transform変数を作る
