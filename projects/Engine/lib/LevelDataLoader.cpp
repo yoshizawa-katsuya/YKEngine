@@ -95,7 +95,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 		//自キャラ発生ポイント
 		else if (type.compare("PlayerSpawn") == 0) {
 			//要素追加
-			levelData->objects.emplace_back(PlayerSpawnData{});
+			levelData->playerSpawns.emplace_back(PlayerSpawnData{});
 			//今追加した要素の参照を得る
 			PlayerSpawnData& playerSpawnData = levelData->playerSpawns.back();
 
