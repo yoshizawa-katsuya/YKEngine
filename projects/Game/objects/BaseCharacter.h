@@ -22,6 +22,8 @@ public:
 	/// <param name="viewProjection">ビュープロジェクション(参照渡し)</param>
 	virtual void Draw(Camera* camera);
 
+	bool IsDead() const { return isDead_; }
+
 protected:
 
 	std::unique_ptr<Rigid3dObject> object_;

@@ -1,5 +1,6 @@
 #include "MyGame.h"
 #include "SceneFactory.h"
+#include "OffscreenRenderer.h"
 
 void MyGame::Initialize()
 {
@@ -11,7 +12,7 @@ void MyGame::Initialize()
 	sceneFactory_ = std::make_unique<SceneFactory>();
 	sceneManager_->SetSceneFactory(sceneFactory_.get());
 	//シーンマネージャに最初のシーンをセット
-	sceneManager_->ChengeScene("TitleScene");
+	sceneManager_->ChengeScene("GameScene");
 
 	
 }
@@ -45,24 +46,26 @@ void MyGame::Draw()
 {
 
 	//描画開始
-	dxCommon_->PreDraw();
-
 	srvHeapManager_->PreDraw();
 
-	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	//primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNone);
-	/*
-	dxCommon->GetCommandList()->SetGraphicsRootSignature(primitiveDrawer->GetRootSignature());
-	dxCommon->GetCommandList()->SetPipelineState(primitiveDrawer->GetGrahicsPipelineState());	//PSOを設定
-	*/
-	//commandList_->IASetIndexBuffer(&indexBufferView);	//IBVを設定
-	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
-	//dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	offscreenRenderer_->PreDrawRenderTexture();
+	
+	//オフスクリーンレンダリングを使用していない場合は、ここで描画コマンドを積む
+	if (!offscreenRenderer_->GetUseOffscreenRender())
+	{
+		dxCommon_->PreDraw();
+	}
 
-	//gameScene_->Draw();
-	//titleScene_->Draw();
 	sceneManager_->Draw();
+
+	//オフスクリーンレンダリングを使用している場合は、ここで描画コマンドを積む
+	if (offscreenRenderer_->GetUseOffscreenRender())
+	{
+		dxCommon_->PreDraw();
+	}
+
+	offscreenRenderer_->PostDrawRenderTexture(primitiveDrawer_.get(), srvHeapManager_.get());
 
 #ifdef _DEBUG
 

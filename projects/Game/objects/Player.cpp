@@ -6,12 +6,11 @@
 #include "Camera.h"
 #include "Lerp.h"
 #include "GameScene.h"
-#include "CollisionTypeIdDef.h"
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix) {
 
 	BaseCharacter::Initialize(model);
-	Collider::SetTypeID(static_cast<uint32_t>(CollisionTypeIdDef::kPlayer));
+	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
 
 	input_ = Input::GetInstance();
 
@@ -31,6 +30,8 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix) {
 	sprite2DReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
 	sprite2DReticle_->SetAnchorPoint({ 0.5f, 0.5f });
 
+	//シーン遷移直後にプレイヤーが画面中央に来るようにするため、ワールド座標を設定
+	BaseCharacter::Update();
 }
 
 void Player::Update(Camera* railCamera) {
@@ -157,7 +158,7 @@ void Player::ReticleUpdate(Camera* railCamera)
 	Vector2 spritePosition = sprite2DReticle_->GetPosition();
 
 	Vector3 move = { 0, 0, 0 };
-	const float kReticleSpeed = 3.0f;
+	const float kReticleSpeed = 6.0f;
 
 	//押した方向で移動ベクトルを変更(左右)
 	if (input_->PushKey(DIK_LEFT)) {

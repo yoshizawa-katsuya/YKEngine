@@ -1,5 +1,6 @@
 #pragma once
 #include "WorldTransform.h"
+#include "CollisionTypeIdDef.h"
 
 /// <summary>
 /// 衝突判定オブジェクト
@@ -27,10 +28,10 @@ public:
 	void SetRadius(float radius);
 
 	//種別IDを取得
-	uint32_t GetTypeID() const { return typeID_; }
+	CollisionTypeIdDef GetTypeID() const { return typeID_; }
 
 	//種別IDを設定
-	void SetTypeID(uint32_t typeID) { typeID_ = typeID; }
+	void SetTypeID(CollisionTypeIdDef typeID) { typeID_ = typeID; }
 
 	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
@@ -43,6 +44,6 @@ protected:
 	float radius_ = 1.0f;
 
 	//種別ID
-	uint32_t typeID_ = 0u;
+	CollisionTypeIdDef typeID_ = CollisionTypeIdDef::kDefault;
 };
 

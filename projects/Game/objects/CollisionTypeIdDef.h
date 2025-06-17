@@ -3,7 +3,7 @@
 #include <cstdint>
 
 //コリジョン種別ID定義
-enum class CollisionTypeIdDef : uint32_t
+enum class CollisionTypeIdDef
 {
 	kDefault,
 	kPlayer,

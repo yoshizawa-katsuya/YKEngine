@@ -33,9 +33,17 @@ private:
 	/// <summary>
 	/// コライダー2つの衝突判定と応答
 	/// </summary>
-	/// <param name="colliderA">コライダーA</param>
+	/// <param name="player">コライダーA</param>
 	/// <param name="colliderB">コライダーB</param>
 	void CheckColliderPair(Collider* colliderA, Collider* colliderB);
+
+	void CheckPlayerCollisions(Collider* player, Collider* colliderB);
+
+	void CheckEnemyCollisions(Collider* enemy, Collider* colliderB);
+
+	void CheckPlayerBulletCollisions(Collider* playerBullet, Collider* colliderB);
+
+	void CheckEnemyBulletCollisions(Collider* enemyBullet, Collider* colliderB);
 
 	//グローバル変数
 	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();

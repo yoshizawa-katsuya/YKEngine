@@ -139,8 +139,8 @@ private:
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
-	//static const uint32_t resourceNum_ = 2048;
-	static const uint32_t resourceNum_ = 1;
+	static const uint32_t resourceNum_ = 2048;
+	//static const uint32_t resourceNum_ = 1;
 
 	//TransformationMatrix用のリソースを作る 線分用
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> LineWVPResources_;

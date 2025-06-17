@@ -24,6 +24,7 @@
 #include "Skydome.h"
 #include "PlayerBullet.h"
 #include "CollisionManager.h"
+#include "Fade.h"
 
 class GameScene : public BaseScene
 {
@@ -50,6 +51,20 @@ public:
 	void AddEnemybullet(const Vector3& worldPosition, const Vector3& velocity);
 
 private:
+
+	void UpdateStart();
+
+	void UpdateMain();
+
+	void UpdateGameClear();
+
+	void UpdateGameOver();
+
+	//クリアしたかどうかを判定する
+	void CheckGameClear();
+
+	//ゲームオーバーかどうかを判定する
+	void CheckGameOver();
 
 	/// <summary>
 	/// 衝突判定と応答
@@ -154,4 +169,33 @@ private:
 	//std::unique_ptr<AccelerationField> field_;
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	
+	//クリアしたかどうか
+	bool isGameClear_ = false;
+
+	//ゲームオーバーかどうか
+	bool isGameOver_ = false;
+
+	//敵の発生が打ち止めかどうか
+	bool isEnemyPopEnd_ = false;
+
+	//シーンのフェーズ
+	enum class Phase {
+		kStart,	//開始部
+		kMain,	//メイン部
+		kGameClear,	//クリア部
+		kGameOver,	//ゲームオーバー部
+	};
+
+	//現在のフェーズ
+	Phase phase_ = Phase::kStart;
+
+	std::unique_ptr<Fade> fade_;
+
+	//スプライン曲線制御点(通過点)More actions
+	std::vector<Vector3> controlPoints_;
+
+	//線分で描画する用の頂点リスト
+	std::vector<Vector3> pointsDrawing_;
+	//線分の数
+	const uint32_t segmentCount_ = 100;
 };
