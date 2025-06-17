@@ -138,7 +138,7 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 void ParticleManager::Draw()
 {
 
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeAddParticle);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeAddParticle);
 
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
