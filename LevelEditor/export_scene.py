@@ -143,6 +143,20 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         #まとめて1個分のjsonオブジェクトに登録
         json_object["transform"] = transform
 
+        #曲線の制御点を出力
+        if object.type == 'CURVE':
+            points = []
+            curve_data = object.data
+            if curve_data.splines[0].type == 'BEZIER':
+                for pt in curve_data.splines[0].bezier_points:
+                    co = object.matrix_world @ pt.co  # ワールド座標に変換（必要に応じて）
+                    points.append([co.x, co.y, co.z])
+            elif curve_data.splines[0].type == 'NURBS' or curve_data.splines[0].type == 'POLY':
+                for pt in curve_data.splines[0].points:
+                    co = object.matrix_world @ pt.co.xyz  # 4D→3Dに変換
+                    points.append([co.x, co.y, co.z])
+            json_object["control_point"] = points
+
         #カスタムプロパティ'無効オプション'
         if "disabled" in object:
             json_object["disabled"] = object["disabled"]
