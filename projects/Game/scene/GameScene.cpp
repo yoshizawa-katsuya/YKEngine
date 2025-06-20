@@ -6,7 +6,7 @@
 #include "Input.h"
 #include <fstream>
 #include "Matrix.h"
-#include "Curve.h"
+#include "LevelDataLoader.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -115,17 +115,7 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
-	controlPoints_ = {
-		{0, 0, 0},
-		{10, 10, 0},
-		{10, 15, 0},
-		{20, 15, 0},
-		{20, 0, 0},
-		{30, 0, 0},
-	};
-
-	pointsDrawing_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
-
+	CreateLevel();
 }
 
 void GameScene::Update() {
@@ -279,12 +269,7 @@ void GameScene::Draw() {
 
 	modelPlatform_->LinePreDraw();
 
-	//線の描画
-	for (size_t i = 0; i < pointsDrawing_.size() - 1; i++) {
-		Matrix4x4 point1 = MakeTranslateMatrix(pointsDrawing_[i]);
-		Matrix4x4 point2 = MakeTranslateMatrix(pointsDrawing_[i + 1]);
-		modelPlatform_->LineDraw(point1, point2, mainCamera_);
-	}
+	railCamera_->Draw(mainCamera_);
 
 	/*objects_->CameraUpdate(mainCamera_);
 	objects_->Draw();*/
@@ -496,6 +481,16 @@ void GameScene::LoadEnemyPopData() {
 	//ファイルを閉じる
 	file.close();
 
+}
+
+void GameScene::CreateLevel()
+{
+	LevelData* levelData;
+	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
+
+	assert(!levelData->splines.empty());
+	railCamera_->CreateSplineCurve(levelData->splines[0].controlPoints);
+	
 }
 
 void GameScene::UpdateEnemyPopCommands() {

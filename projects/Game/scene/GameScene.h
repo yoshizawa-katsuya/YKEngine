@@ -82,6 +82,11 @@ private:
 	void LoadEnemyPopData();
 
 	/// <summary>
+	/// レベルの生成
+	/// </summary>
+	void CreateLevel();
+
+	/// <summary>
 	/// 敵発生コマンドの更新
 	/// </summary>
 	void UpdateEnemyPopCommands();
@@ -191,11 +196,4 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	//スプライン曲線制御点(通過点)More actions
-	std::vector<Vector3> controlPoints_;
-
-	//線分で描画する用の頂点リスト
-	std::vector<Vector3> pointsDrawing_;
-	//線分の数
-	const uint32_t segmentCount_ = 100;
 };

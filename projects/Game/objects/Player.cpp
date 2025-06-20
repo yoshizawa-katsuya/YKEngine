@@ -85,44 +85,10 @@ void Player::Update(Camera* railCamera) {
 	const float kMoveLimitY = 7.6f;
 
 	//範囲を超えない処理
-	worldTransform_.translation_.x = (std::max)(worldTransform_.translation_.x, -kMoveLimitX);
-	worldTransform_.translation_.x = (std::min)(worldTransform_.translation_.x, kMoveLimitX);
-	worldTransform_.translation_.y = (std::max)(worldTransform_.translation_.y, -kMoveLimitY);
-	worldTransform_.translation_.y = (std::min)(worldTransform_.translation_.y, kMoveLimitY);
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
 
 	BaseCharacter::Update();
-
-	////自機のワールド座標から3Dレティクルのワールド座標を計算
-	//{
-	//	//自機から3Dレティクルへの距離
-	//	const float kDistancePlayerTo3DReticle = 50.0f;
-	//	//自機から3Dレティクルへのオフセット(Z+向き)
-	//	Vector3 offset = { 0, 0, 1.0f };
-	//	//自機のワールド行列の回転を反映
-	//	offset = TransformNormal(offset, worldTransform_.worldMatrix_);
-	//	//ベクトルの長さを整える
-	//	offset = Multiply(kDistancePlayerTo3DReticle, Normalize(offset));
-	//	//3Dレティクルの座標を設定
-	//	worldTransform3DReticle_.translation_ = Add(GetWorldPosition(), offset);
-	//	worldTransform3DReticle_.UpdateMatrix();
-
-	//}
-
-	////3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
-	//{
-	//	Vector3 positionReticle = worldTransform3DReticle_.GetWorldPosition();
-
-	//	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	//	Matrix4x4 matViewProjectionViewport = Multiply(railCamera->GetViewProjection(), *viewPortMatrix_);
-
-	//	//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
-	//	positionReticle = Transform(positionReticle, matViewProjectionViewport);
-
-	//	//スプライトのレティクルに座標設定
-	//	positionReticle = Lerp({ sprite2DReticle_->GetPosition().x, sprite2DReticle_->GetPosition().y, 0.0f }, positionReticle, 0.2f);
-	//	sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
-	//	sprite2DReticle_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-	//}
 
 	//照準オブジェクトの更新
 	ReticleUpdate(railCamera);
@@ -178,6 +144,10 @@ void Player::ReticleUpdate(Camera* railCamera)
 
 	spritePosition.x += move.x;
 	spritePosition.y += move.y;
+
+	//範囲を超えない処理
+	spritePosition.x = std::clamp(spritePosition.x, 0.0f, static_cast<float>(WinApp::kClientWidth));
+	spritePosition.y = std::clamp(spritePosition.y, 0.0f, static_cast<float>(WinApp::kClientHeight));
 
 	//スプライトの座標変更を反映
 	sprite2DReticle_->SetPosition(spritePosition);
