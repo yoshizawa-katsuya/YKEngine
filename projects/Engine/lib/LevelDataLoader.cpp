@@ -59,9 +59,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 		//MESH
 		if (type.compare("MESH") == 0) {
 			//要素追加
-			levelData->objects.emplace_back(ObjectData{});
-			//今追加した要素の参照を得る
-			ObjectData& objectData = levelData->objects.back();
+			ObjectData& objectData = levelData->objects.emplace_back();
 
 			if (object.contains("file_name")) 
 			{
@@ -95,9 +93,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 		//自キャラ発生ポイント
 		else if (type.compare("PlayerSpawn") == 0) {
 			//要素追加
-			levelData->playerSpawns.emplace_back(PlayerSpawnData{});
-			//今追加した要素の参照を得る
-			PlayerSpawnData& playerSpawnData = levelData->playerSpawns.back();
+			PlayerSpawnData& playerSpawnData = levelData->playerSpawns.emplace_back();
 
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
@@ -117,6 +113,22 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 
 			//TODO: コライダーのパラメータ読み込み
 		}
+		//曲線
+		else if (type.compare("CURVE") == 0)
+		{
+			//要素追加
+			SplineData& splineData = levelData->splines.emplace_back();
+			
+			for (nlohmann::json& point : object["control_point"])
+			{
+				Vector3 pointData;
+				pointData.x = -static_cast<float>(point[0]);
+				pointData.y = static_cast<float>(point[2]);
+				pointData.z = -static_cast<float>(point[1]);
+				splineData.controlPoints.push_back(pointData);
+			}
+		}
+
 
 		//TODO: オブジェクト走査を再帰関数にまとめ、再帰関数で枝を走査する
 		if (object.contains("children")) {
