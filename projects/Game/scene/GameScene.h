@@ -82,6 +82,11 @@ private:
 	void LoadEnemyPopData();
 
 	/// <summary>
+	/// レベルの生成
+	/// </summary>
+	void CreateLevel();
+
+	/// <summary>
 	/// 敵発生コマンドの更新
 	/// </summary>
 	void UpdateEnemyPopCommands();

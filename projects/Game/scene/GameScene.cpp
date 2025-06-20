@@ -7,6 +7,7 @@
 #include <fstream>
 #include "Matrix.h"
 #include "Curve.h"
+#include "LevelDataLoader.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -115,17 +116,7 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
-	controlPoints_ = {
-		{0, 0, 0},
-		{10, 10, 0},
-		{10, 15, 0},
-		{20, 15, 0},
-		{20, 0, 0},
-		{30, 0, 0},
-	};
-
-	pointsDrawing_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
-
+	CreateLevel();
 }
 
 void GameScene::Update() {
@@ -496,6 +487,22 @@ void GameScene::LoadEnemyPopData() {
 	//ファイルを閉じる
 	file.close();
 
+}
+
+void GameScene::CreateLevel()
+{
+	LevelData* levelData;
+	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
+
+	if (!levelData->splines.empty())
+	{
+		// レベルデータから制御点を取得
+		for (Vector3& controlPoint : levelData->splines.front().controlPoints) {
+			controlPoints_.push_back(controlPoint);
+		}
+		// Catmull-Romスプラインのポイントを生成
+		pointsDrawing_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
+	}
 }
 
 void GameScene::UpdateEnemyPopCommands() {
