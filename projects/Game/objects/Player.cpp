@@ -85,10 +85,8 @@ void Player::Update(Camera* railCamera) {
 	const float kMoveLimitY = 7.6f;
 
 	//範囲を超えない処理
-	worldTransform_.translation_.x = (std::max)(worldTransform_.translation_.x, -kMoveLimitX);
-	worldTransform_.translation_.x = (std::min)(worldTransform_.translation_.x, kMoveLimitX);
-	worldTransform_.translation_.y = (std::max)(worldTransform_.translation_.y, -kMoveLimitY);
-	worldTransform_.translation_.y = (std::min)(worldTransform_.translation_.y, kMoveLimitY);
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
 
 	BaseCharacter::Update();
 
@@ -146,6 +144,10 @@ void Player::ReticleUpdate(Camera* railCamera)
 
 	spritePosition.x += move.x;
 	spritePosition.y += move.y;
+
+	//範囲を超えない処理
+	spritePosition.x = std::clamp(spritePosition.x, 0.0f, static_cast<float>(WinApp::kClientWidth));
+	spritePosition.y = std::clamp(spritePosition.y, 0.0f, static_cast<float>(WinApp::kClientHeight));
 
 	//スプライトの座標変更を反映
 	sprite2DReticle_->SetPosition(spritePosition);
