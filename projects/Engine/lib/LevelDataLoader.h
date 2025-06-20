@@ -17,18 +17,18 @@ struct PlayerSpawnData
 //スプライン曲線の制御点データ
 struct SplineData
 {
-	std::list<Vector3> controlPoints;
+	std::vector<Vector3> controlPoints;
 };
 
 struct LevelData
 {
-	std::list<ObjectData> objects;
+	std::vector<ObjectData> objects;
 
 	//自キャラ配列
-	std::list<PlayerSpawnData> playerSpawns;
+	std::vector<PlayerSpawnData> playerSpawns;
 
 	//スプライン曲線の制御点データ
-	std::list<SplineData> splines;
+	std::vector<SplineData> splines;
 };
 
 LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
