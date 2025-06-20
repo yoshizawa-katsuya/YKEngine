@@ -6,7 +6,6 @@
 #include "Input.h"
 #include <fstream>
 #include "Matrix.h"
-#include "Curve.h"
 #include "LevelDataLoader.h"
 
 GameScene::~GameScene() {
@@ -270,12 +269,7 @@ void GameScene::Draw() {
 
 	modelPlatform_->LinePreDraw();
 
-	//線の描画
-	for (size_t i = 0; i < pointsDrawing_.size() - 1; i++) {
-		Matrix4x4 point1 = MakeTranslateMatrix(pointsDrawing_[i]);
-		Matrix4x4 point2 = MakeTranslateMatrix(pointsDrawing_[i + 1]);
-		modelPlatform_->LineDraw(point1, point2, mainCamera_);
-	}
+	railCamera_->Draw(mainCamera_);
 
 	/*objects_->CameraUpdate(mainCamera_);
 	objects_->Draw();*/
@@ -494,15 +488,9 @@ void GameScene::CreateLevel()
 	LevelData* levelData;
 	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
 
-	if (!levelData->splines.empty())
-	{
-		// レベルデータから制御点を取得
-		for (Vector3& controlPoint : levelData->splines.front().controlPoints) {
-			controlPoints_.push_back(controlPoint);
-		}
-		// Catmull-Romスプラインのポイントを生成
-		pointsDrawing_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
-	}
+	assert(!levelData->splines.empty());
+	railCamera_->CreateSplineCurve(levelData->splines[0].controlPoints);
+	
 }
 
 void GameScene::UpdateEnemyPopCommands() {
