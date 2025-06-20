@@ -117,6 +117,24 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 
 			//TODO: コライダーのパラメータ読み込み
 		}
+		//曲線
+		else if (type.compare("CURVE") == 0)
+		{
+			//要素追加
+			levelData->splines.emplace_back(SplineData{});
+			//今追加した要素の参照を得る
+			SplineData& splineData = levelData->splines.back();
+			
+			for (nlohmann::json& point : object["control_point"])
+			{
+				Vector3 pointData;
+				pointData.x = -static_cast<float>(point[0]);
+				pointData.y = static_cast<float>(point[2]);
+				pointData.z = -static_cast<float>(point[1]);
+				splineData.controlPoints.push_back(pointData);
+			}
+		}
+
 
 		//TODO: オブジェクト走査を再帰関数にまとめ、再帰関数で枝を走査する
 		if (object.contains("children")) {
