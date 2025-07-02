@@ -110,6 +110,12 @@ void Enemy::OnCollision(Collider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet) 
 	{
+		hitPoint_--;
+
+		if (hitPoint_ > 0) {
+			return;
+		}
+		// 体力が0以下になったら死亡
 		isDead_ = true;
 	}
 }
