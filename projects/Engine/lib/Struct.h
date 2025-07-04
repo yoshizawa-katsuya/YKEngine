@@ -89,6 +89,7 @@ struct Material {
 	float padding[3];
 	Matrix4x4 uvTransform;
 	float shininess;
+	float enviromentCoefficient;	//環境光の係数
 };
 
 struct TransformationMatrix {

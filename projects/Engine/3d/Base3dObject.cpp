@@ -126,6 +126,15 @@ void Base3dObject::SetColor(const Vector4& color)
 	materialData_->color = color;
 }
 
+void Base3dObject::SetEnviromentCoefficient(float coefficient)
+{
+	if (!materialData_)
+	{
+		CreateMaterialData();
+	}
+	materialData_->enviromentCoefficient = coefficient;
+}
+
 void Base3dObject::CreateMaterialData()
 {
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
@@ -138,4 +147,5 @@ void Base3dObject::CreateMaterialData()
 	materialData_->enableLighting = true;
 	materialData_->uvTransform = MakeIdentity4x4();
 	materialData_->shininess = 40.0f;
+	materialData_->enviromentCoefficient = 0.0f; // 環境光の係数を0に設定
 }
