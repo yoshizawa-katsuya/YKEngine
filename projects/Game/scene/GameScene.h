@@ -69,6 +69,7 @@ private:
 
 
 	uint32_t textureHandle_;
+	uint32_t textureHandle2_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー

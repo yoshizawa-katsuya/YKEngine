@@ -57,6 +57,7 @@ StructuredBuffer<SpotLight> gSpotLight : register(t3);
 ConstantBuffer<Camera> gCamera : register(b1);
 ConstantBuffer<LightCount> gLightCount : register(b2);
 Texture2D<float32_t4> gTexture : register(t0);
+TextureCube<float32_t4> gEnvironmentTexture : register(t4);
 SamplerState gSampler : register(s0);
 
 struct PixelShaderOutput
@@ -155,6 +156,13 @@ PixelShaderOutput main(VertexShaderOutput input)
         
         //拡散反射+鏡面反射
         output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffusePointLight + specularPointLight + diffuseSpotLight + specularSpotLight;
+        
+        //環境マップの適用
+        float32_t3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
+        float32_t3 reflectedVector = reflect(cameraToPosition, nomalizedNormal);
+        float32_t4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
+        
+        output.color.rgb += environmentColor.rgb;
         
         //アルファは今まで通り
         output.color.a = gMaterial.color.a * textureColor.a;
