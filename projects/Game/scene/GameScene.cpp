@@ -74,12 +74,12 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
-	skyBox_ = std::make_unique<Rigid3dObject>();
+	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
 	skyBoxWorldTransform_.Initialize();
 	skyBoxWorldTransform_.scale_ = { 50.0f, 50.0f, 50.0f };
 	skyBoxWorldTransform_.UpdateMatrix();
-	skyBox_->WorldTransformUpdate(skyBoxWorldTransform_);
+	skyBox_->WorldTransformUpdate(skyBoxWorldTransform_);*/
 
 	/*
 	objects_ = std::make_unique<InstancingObjects>();
@@ -213,17 +213,18 @@ void GameScene::Draw() {
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
-	TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
-	//modelPlatform_->SkinPreDraw();
+	//環境マップを使う場合はコメントアウトを外す
+	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
 	
+	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
-	modelPlatform_->SkyBoxPreDraw();
+	/*modelPlatform_->SkyBoxPreDraw();
 
 	skyBox_->CameraUpdate(mainCamera_);
-	skyBox_->Draw();
+	skyBox_->Draw();*/
 
 	/*
 	modelPlatform_->InstancingPreDraw();
