@@ -89,7 +89,7 @@ struct Material {
 	float shininess;				//光沢度
 	float enviromentCoefficient;	//環境光の係数
 	//変数を新しく追加する場合paddingを忘れないように
-	//float padding;
+	float padding;
 	Matrix4x4 uvTransform;
 };
 
