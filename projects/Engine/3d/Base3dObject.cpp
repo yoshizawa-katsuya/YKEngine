@@ -145,7 +145,7 @@ void Base3dObject::CreateMaterialData()
 	//白を書き込む
 	materialData_->color = {1.0f, 1.0f, 1.0f, 1.0f};
 	materialData_->enableLighting = true;
-	materialData_->uvTransform = MakeIdentity4x4();
 	materialData_->shininess = 40.0f;
 	materialData_->enviromentCoefficient = 0.0f; // 環境光の係数を0に設定
+	materialData_->uvTransform = MakeIdentity4x4();
 }

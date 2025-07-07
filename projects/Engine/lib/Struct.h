@@ -85,11 +85,12 @@ struct OBB {
 
 struct Material {
 	Vector4 color;
-	int32_t enableLighting;
-	float padding[3];
-	Matrix4x4 uvTransform;
-	float shininess;
+	bool enableLighting;
+	float shininess;				//光沢度
 	float enviromentCoefficient;	//環境光の係数
+	//変数を新しく追加する場合paddingを忘れないように
+	//float padding;
+	Matrix4x4 uvTransform;
 };
 
 struct TransformationMatrix {

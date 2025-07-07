@@ -3,10 +3,11 @@
 struct Material
 {
     float32_t4 color;
-    int32_t enableLighting;
-    float32_t4x4 uvTransform;
+    bool enableLighting;
     float32_t shininess;
     float32_t enviromentCoefficient; //環境マップの影響度
+    float32_t4x4 uvTransform;
+    
 };
 
 struct DirectionalLight
@@ -72,7 +73,8 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     float4 transformedUV = mul(float32_t4(input.texcord, 0.0f, 1.0f), gMaterial.uvTransform);
     float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
-    
+    float32_t3 nomalizedNormal = normalize(input.normal);
+
     //textureのα値が0のときにPixelを棄却
     if (textureColor.a <= 0.0)
     {
@@ -89,7 +91,6 @@ PixelShaderOutput main(VertexShaderOutput input)
         float32_t3 halfVector, diffuseDirectionalLight, specularDirectionalLight;
         diffuseDirectionalLight = float32_t3(0.0f, 0.0f, 0.0f);
         specularDirectionalLight = float32_t3(0.0f, 0.0f, 0.0f);
-        float32_t3 nomalizedNormal = normalize(input.normal);
         
         for (int i = 0; i < gLightCount.directional; i++)
         {
@@ -156,14 +157,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         }
         
         //拡散反射+鏡面反射
-        output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffusePointLight + specularPointLight + diffuseSpotLight + specularSpotLight;
-        
-        //環境マップの適用
-        float32_t3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
-        float32_t3 reflectedVector = reflect(cameraToPosition, nomalizedNormal);
-        float32_t4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
-        
-        output.color.rgb += environmentColor.rgb * gMaterial.enviromentCoefficient;
+        output.color.rgb = diffuseDirectionalLight + specularDirectionalLight + diffusePointLight + specularPointLight + diffuseSpotLight + specularSpotLight;       
         
         //アルファは今まで通り
         output.color.a = gMaterial.color.a * textureColor.a;
@@ -172,6 +166,17 @@ PixelShaderOutput main(VertexShaderOutput input)
     {
         output.color = gMaterial.color * textureColor;
     }
+    
+    if (gMaterial.enviromentCoefficient != 0.0f)
+    {
+        //環境マップの適用
+        float32_t3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
+        float32_t3 reflectedVector = reflect(cameraToPosition, nomalizedNormal);
+        float32_t4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
+        
+        output.color.rgb += environmentColor.rgb * gMaterial.enviromentCoefficient;
+    }
+    
     
     //output.colorのα値が0のときPixelを棄却
     if (output.color.a == 0.0)
