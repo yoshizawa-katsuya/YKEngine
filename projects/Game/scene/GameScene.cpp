@@ -240,6 +240,9 @@ void GameScene::Draw() {
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
+	//環境マップを使う場合はコメントアウトを外す
+	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
+	
 	//modelPlatform_->SkinPreDraw();
 	
 	//スカイドームの描画

@@ -86,6 +86,12 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	descriptorRangeSpotLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
 	descriptorRangeSpotLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
 
+	D3D12_DESCRIPTOR_RANGE descriptorRangeEnvironmentTexture[1] = {};
+	descriptorRangeEnvironmentTexture[0].BaseShaderRegister = 4;	//t4
+	descriptorRangeEnvironmentTexture[0].NumDescriptors = 1;	//数は1つ
+	descriptorRangeEnvironmentTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
+	descriptorRangeEnvironmentTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+
 	/*
 	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
 	descriptorRangeForInstancing[0].BaseShaderRegister = 0;	//0から始まる
@@ -156,7 +162,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	case DrawMode::kSkinModelMode:
 
-		rootParameters.resize(9);
+		rootParameters.resize(10);
 
 		//マテリアル
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -202,16 +208,22 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 		rootParameters[7].Descriptor.ShaderRegister = 2;
 
-		//Well
+		//環境マップ
 		rootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		rootParameters[8].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		rootParameters[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+		rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[8].DescriptorTable.pDescriptorRanges = descriptorRangeEnvironmentTexture;	//Tableの中身の配列を指定
+		rootParameters[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeEnvironmentTexture);	//Tableで利用する数
+
+		//Well
+		rootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		rootParameters[9].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		rootParameters[9].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
 
 		break;
 
 	default:
-		rootParameters.resize(8);
+		rootParameters.resize(9);
 
 		//マテリアル
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
@@ -272,6 +284,12 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 		rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 		rootParameters[7].Descriptor.ShaderRegister = 2;
+
+		//環境マップ
+		rootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[8].DescriptorTable.pDescriptorRanges = descriptorRangeEnvironmentTexture;	//Tableの中身の配列を指定
+		rootParameters[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeEnvironmentTexture);	//Tableで利用する数
 
 		break;
 	}

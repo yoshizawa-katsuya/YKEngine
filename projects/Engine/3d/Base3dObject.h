@@ -34,6 +34,8 @@ public:
 
 	void SetColor(const Vector4& color);
 
+	void SetEnviromentCoefficient(float coefficient);
+
 	const BaseModel& GetModel() const { return *model_; }
 	BaseModel& GetModel() { return *model_; }
 
