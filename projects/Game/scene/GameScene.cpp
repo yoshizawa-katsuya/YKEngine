@@ -127,16 +127,16 @@ void GameScene::Update() {
 
 	switch (phase_)
 	{
-	case GameScene::Phase::kStart:
+	case Phase::kStart:
 		UpdateStart();
 		break;
-	case GameScene::Phase::kMain:
+	case Phase::kMain:
 		UpdateMain();
 		break;
-	case GameScene::Phase::kGameClear:
+	case Phase::kGameClear:
 		UpdateGameClear();
 		break;
-	case GameScene::Phase::kGameOver:
+	case Phase::kGameOver:
 		UpdateGameOver();
 		break;
 	default:
