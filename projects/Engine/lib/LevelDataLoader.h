@@ -14,6 +14,12 @@ struct PlayerSpawnData
 	EulerTransform transform;
 };
 
+//敵の生成データ
+struct EnemySpawnData
+{
+	EulerTransform transform;
+};
+
 //スプライン曲線の制御点データ
 struct SplineData
 {
@@ -26,6 +32,9 @@ struct LevelData
 
 	//自キャラ配列
 	std::vector<PlayerSpawnData> playerSpawns;
+
+	//敵配列
+	std::vector<EnemySpawnData> enemySpawns;
 
 	//スプライン曲線の制御点データ
 	std::vector<SplineData> splines;

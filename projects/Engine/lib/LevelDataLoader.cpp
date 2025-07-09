@@ -113,6 +113,28 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 
 			//TODO: コライダーのパラメータ読み込み
 		}
+		//敵発生ポイント
+		else if (type.compare("EnemySpawn") == 0) {
+			//要素追加
+			EnemySpawnData& enemySpawnData = levelData->enemySpawns.emplace_back();
+			//トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			//平行移動
+			enemySpawnData.transform.translation.x = -static_cast<float>(transform["translation"][0]);
+			enemySpawnData.transform.translation.y = static_cast<float>(transform["translation"][2]);
+			enemySpawnData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
+			//回転角
+			enemySpawnData.transform.rotation.x = -static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
+			enemySpawnData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
+			enemySpawnData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
+			//スケーリング
+			enemySpawnData.transform.scale.x = static_cast<float>(transform["scaling"][0]);
+			enemySpawnData.transform.scale.y = static_cast<float>(transform["scaling"][2]);
+			enemySpawnData.transform.scale.z = static_cast<float>(transform["scaling"][1]);
+
+			//TODO: コライダーのパラメータ読み込み
+		}
+
 		//曲線
 		else if (type.compare("CURVE") == 0)
 		{
