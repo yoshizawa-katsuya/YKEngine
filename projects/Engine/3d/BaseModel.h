@@ -83,6 +83,8 @@ public:
 
 	virtual void SetEnableLighting(bool enableLighting);
 
+	virtual void SetEnvironmentCoefficient(float environmentCoefficient);
+
 	Material& GetMaterialDataAddress() { return *materialData_; }
 
 	const Node& GetRootNode() const { return modelData_->rootNode; }

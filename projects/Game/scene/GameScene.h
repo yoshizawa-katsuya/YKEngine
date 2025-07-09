@@ -71,10 +71,13 @@ private:
 
 
 	uint32_t textureHandle_;
+	uint32_t textureHandle2_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	std::list<std::unique_ptr<Rigid3dObject>> enemeis_;
 
 	std::list<std::unique_ptr<Rigid3dObject>> rigidObjects_;
 

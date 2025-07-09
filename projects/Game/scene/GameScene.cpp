@@ -53,7 +53,7 @@ void GameScene::Initialize() {
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
-	uint32_t textureHandle2 = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
+	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
@@ -71,6 +71,13 @@ void GameScene::Initialize() {
 	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
 	//emitter_->Initialize(textureHandle2, modelPlayer_, true);
 
+
+	/*skyBox_ = std::make_unique<Rigid3dObject>();
+	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
+	skyBoxWorldTransform_.Initialize();
+	skyBoxWorldTransform_.scale_ = { 50.0f, 50.0f, 50.0f };
+	skyBoxWorldTransform_.UpdateMatrix();
+	skyBox_->WorldTransformUpdate(skyBoxWorldTransform_);*/
 
 	/*
 	objects_ = std::make_unique<InstancingObjects>();
@@ -206,11 +213,18 @@ void GameScene::Draw() {
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
-	//modelPlatform_->SkinPreDraw();
+	//環境マップを使う場合はコメントアウトを外す
+	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
 	
+	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+	for (std::unique_ptr<Rigid3dObject>& enemy : enemeis_) {
+		enemy->CameraUpdate(mainCamera_);
+		enemy->Draw();
+	}
 
 	for (std::unique_ptr<Rigid3dObject>& object : rigidObjects_) {
 		object->CameraUpdate(mainCamera_);
@@ -255,6 +269,21 @@ void GameScene::CreateLevel()
 		playerTransform.rotation_ = playerSpawnData.transform.rotation;
 		playerTransform.scale_ = playerSpawnData.transform.scale;
 		player_->SetWorldTransform(playerTransform);
+	}
+
+	//敵配置データから敵を生成、配置
+	for (EnemySpawnData& enemySpawnData : levelData->enemySpawns) 
+	{
+		std::unique_ptr<Rigid3dObject>& enemy = enemeis_.emplace_back();
+		enemy = std::make_unique<Rigid3dObject>();
+		enemy->Initialize(modelPlatform_->CreateRigidModel("./resources/Enemy", "Enemy.obj").get());
+		WorldTransform worldTransfrom{};
+		worldTransfrom.Initialize();
+		worldTransfrom.translation_ = enemySpawnData.transform.translation;
+		worldTransfrom.rotation_ = enemySpawnData.transform.rotation;
+		worldTransfrom.scale_ = enemySpawnData.transform.scale;
+		worldTransfrom.UpdateMatrix();
+		enemy->WorldTransformUpdate(worldTransfrom);
 	}
 
 	//レベルデータからオブジェクトを生成、配置

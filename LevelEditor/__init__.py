@@ -25,8 +25,11 @@ from .filename import OBJECT_PT_file_name
 from .my_menu import TOPBAR_MT_my_menu
 from .disabled import MYADDON_OT_add_disabled
 from .disabled import OBJECT_PT_disabled
+from .spawn import SpawnNames
 from .spawn import MYADDON_OT_spawn_import_symbol
 from .spawn import MYADDON_OT_spawn_create_symbol
+from .spawn import MYADDON_OT_spawn_create_player_symbol
+from .spawn import MYADDON_OT_spawn_create_enemy_symbol
 
 #Blenderに登録するクラスリスト
 classes = (
@@ -42,6 +45,8 @@ classes = (
     OBJECT_PT_disabled,
     MYADDON_OT_spawn_import_symbol,
     MYADDON_OT_spawn_create_symbol,
+    MYADDON_OT_spawn_create_player_symbol,
+    MYADDON_OT_spawn_create_enemy_symbol,
 )
 
 #メニュー項目描画

@@ -170,6 +170,12 @@ void BaseModel::SetEnableLighting(bool enableLighting)
 	materialData_->enableLighting = enableLighting;
 }
 
+void BaseModel::SetEnvironmentCoefficient(float environmentCoefficient)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	materialData_->enviromentCoefficient = environmentCoefficient;
+}
+
 void BaseModel::CreateVertexData()
 {
 
@@ -216,9 +222,10 @@ void BaseModel::CreateMaterialData(const Vector4& color)
 	//白を書き込む
 	materialData_->color = color;
 	materialData_->enableLighting = true;
-	materialData_->uvTransform = MakeIdentity4x4();
 	materialData_->shininess = 40.0f;
-
+	materialData_->enviromentCoefficient = 0.0f;	//環境光の係数は0.0fにしておく
+	materialData_->uvTransform = MakeIdentity4x4();
+	
 }
 /*
 void Model::CreateTransformData()

@@ -31,6 +31,9 @@ public:
 	// デスクリプタテーブルをセット
 	void SetGraphicsRootDescriptorTable(uint32_t textureHandle);
 
+	//環境マップをセット
+	void SetEnvironmentMap(uint32_t textureHandle);
+
 	//メタデータを取得
 	const DirectX::TexMetadata& GetMetaData(uint32_t textureHandle);
 

@@ -61,6 +61,12 @@ void TextureManager::SetGraphicsRootDescriptorTable(uint32_t textureHandle) {
 	
 }
 
+void TextureManager::SetEnvironmentMap(uint32_t textureHandle)
+{
+	// シェーダリソースビューをセット
+	srvHeapManager_->SetGraphicsRootDescriptorTable(8, textureHandle);
+}
+
 const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureHandle)
 {
 	
