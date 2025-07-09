@@ -79,7 +79,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 			objectData.transform.translation.y = static_cast<float>(transform["translation"][2]);
 			objectData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
 			//回転角
-			objectData.transform.rotation.x = -static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
+			objectData.transform.rotation.x = static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
 			objectData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
 			objectData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
 			//スケーリング
@@ -102,7 +102,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 			playerSpawnData.transform.translation.y = static_cast<float>(transform["translation"][2]);
 			playerSpawnData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
 			//回転角
-			playerSpawnData.transform.rotation.x = -static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
+			playerSpawnData.transform.rotation.x = static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
 			playerSpawnData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
 			playerSpawnData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
 			//スケーリング
@@ -124,7 +124,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 			enemySpawnData.transform.translation.y = static_cast<float>(transform["translation"][2]);
 			enemySpawnData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
 			//回転角
-			enemySpawnData.transform.rotation.x = -static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
+			enemySpawnData.transform.rotation.x = static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
 			enemySpawnData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
 			enemySpawnData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
 			//スケーリング
