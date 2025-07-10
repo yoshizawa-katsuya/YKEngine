@@ -21,6 +21,7 @@
 #include <dxcapi.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
+class OffscreenRenderer;
 
 //ゲーム全体
 class YKFramework
@@ -61,6 +62,7 @@ protected:
 	std::unique_ptr<PrimitiveDrawer> primitiveDrawer_;
 	SpritePlatform* spritePlatform_ = nullptr;
 	ModelPlatform* modelPlatform_ = nullptr;
+	OffscreenRenderer* offscreenRenderer_ = nullptr;
 
 	SceneManager* sceneManager_ = nullptr;
 

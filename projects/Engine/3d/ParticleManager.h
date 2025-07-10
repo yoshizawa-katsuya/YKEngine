@@ -23,14 +23,14 @@ public:
 
 	void Draw();
 
-	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, bool useBillboard);
+	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
 
 	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor);
 
 	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color);
 
 	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-		const Vector4& color, const EmitterRangeParams& rangeParams);
+		const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
 
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 
@@ -45,19 +45,19 @@ private:
 	ParticleManager& operator=(ParticleManager&) = default;
 
 	Particle MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
-		const Vector4& color, const EmitterRangeParams& rangeParams);
+		const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
 
 
 	struct ParticleGroup {
 		std::shared_ptr<BaseModel> model;
 		uint32_t textureHandle;
-		bool useBillboard;
 		std::list<Particle> particles;
 		uint32_t instancingSrvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource> instancingResouce;
 		const uint32_t kNumMaxInstance = 500;
 		uint32_t numInstance;
 		ParticleForGPU* instancingData;
+		std::shared_ptr<ParticleBehavior> behavior;
 	};
 
 	DirectXCommon* dxCommon_;

@@ -61,6 +61,12 @@ void TextureManager::SetGraphicsRootDescriptorTable(uint32_t textureHandle) {
 	
 }
 
+void TextureManager::SetEnvironmentMap(uint32_t textureHandle)
+{
+	// シェーダリソースビューをセット
+	srvHeapManager_->SetGraphicsRootDescriptorTable(8, textureHandle);
+}
+
 const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureHandle)
 {
 	
@@ -125,7 +131,16 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 		//WICテクスチャのロード
 		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 		assert(SUCCEEDED(hr));
+		if (image.GetMetadata().format == DXGI_FORMAT_R8G8B8A8_UNORM)
+		{
+			image.OverrideFormat(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 
+		}
+		else if (image.GetMetadata().format == DXGI_FORMAT_B8G8R8A8_UNORM)
+		{
+			image.OverrideFormat(DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+
+		}
 		//ミップマップの作成
 		DirectX::ScratchImage mipImages{};
 		hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);

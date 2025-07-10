@@ -15,9 +15,6 @@ void SceneManager::Finalize()
 void SceneManager::Update()
 {
 
-	//実行中シーンを更新する
-	scene_->Update();
-
 	//次シーンの予約があるなら
 	if (nextScene_) {
 		//シーン切り替え
@@ -30,6 +27,9 @@ void SceneManager::Update()
 		//次シーンを初期化する
 		scene_->Initialize();
 	}
+
+	//実行中シーンを更新する
+	scene_->Update();
 
 }
 

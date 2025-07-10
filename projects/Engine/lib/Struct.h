@@ -85,10 +85,12 @@ struct OBB {
 
 struct Material {
 	Vector4 color;
-	int32_t enableLighting;
-	float padding[3];
+	bool enableLighting;
+	float shininess;				//光沢度
+	float enviromentCoefficient;	//環境光の係数
+	//変数を新しく追加する場合paddingを忘れないように
+	float padding;
 	Matrix4x4 uvTransform;
-	float shininess;
 };
 
 struct TransformationMatrix {
@@ -219,17 +221,6 @@ struct LoopSoundData
 	SoundData soundData;
 
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
-};
-
-struct ObjectData
-{
-	std::string fileName;
-	EulerTransform transform;
-};
-
-struct LevelData
-{
-	std::list<ObjectData> objects;
 };
 
 template <typename tValue>

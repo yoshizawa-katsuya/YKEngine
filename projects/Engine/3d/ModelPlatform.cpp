@@ -101,7 +101,7 @@ void ModelPlatform::PreDraw()
 {
 
 	
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNormal);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormal);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
@@ -115,14 +115,14 @@ void ModelPlatform::PreDraw()
 
 void ModelPlatform::SkyBoxPreDraw()
 {
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSkyboxMode);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kSkyboxMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void ModelPlatform::SkinPreDraw()
 {
 
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSkinModelMode);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kSkinModelMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
@@ -137,7 +137,7 @@ void ModelPlatform::SkinPreDraw()
 void ModelPlatform::InstancingPreDraw()
 {
 
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kBlendModeNormalinstancing);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormalinstancing);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//directionalLight_->Draw();
@@ -153,7 +153,7 @@ void ModelPlatform::InstancingPreDraw()
 void ModelPlatform::LinePreDraw()
 {
 
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kLineMode);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kLineMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
@@ -191,7 +191,7 @@ void ModelPlatform::LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& wor
 void ModelPlatform::SpherePreDraw()
 {
 
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), BlendMode::kSphereMode);
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kSphereMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 	
@@ -243,9 +243,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& dir
 	return models_[filename];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitiveSphere";
+	std::string name = "PrimitiveSphere" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
@@ -255,9 +255,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle)
 	return models_[name];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitivePlane";
+	std::string name = "PrimitivePlane" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
@@ -267,9 +267,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle)
 	return models_[name];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitiveRing";
+	std::string name = "PrimitiveRing" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
@@ -279,9 +279,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle)
 	return models_[name];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitiveCylinder";
+	std::string name = "PrimitiveCylinder" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}
@@ -291,9 +291,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle)
 	return models_[name];
 }
 
-std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle)
+std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle, const std::string& modelName)
 {
-	std::string name = "PrimitiveSkyBox";
+	std::string name = "PrimitiveSkyBox" + modelName;
 	if (models_.contains(name)) {
 		return models_[name];
 	}

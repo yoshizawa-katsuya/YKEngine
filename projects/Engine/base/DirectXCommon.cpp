@@ -3,6 +3,7 @@
 #include <format>
 #include <dx12.h>
 #include <thread>
+#include "OffscreenRenderer.h"
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -16,12 +17,6 @@ using namespace Microsoft::WRL;
 
 DirectXCommon* DirectXCommon::GetInstance()
 {
-	/*
-	if (instance_ == nullptr) {
-		instance_ = new DirectXCommon;
-	}
-	return instance_;
-	*/
 	static DirectXCommon instance;
 	return &instance;
 }
@@ -39,6 +34,8 @@ void DirectXCommon::Initialize(WinApp* winApp) {
 	assert(winApp);
 
 	winApp_ = winApp;
+
+	useOffscreenRender_ = OffscreenRenderer::GetInstance()->GetUseOffscreenRenderPtr();
 
 	//FPS固定初期化
 	InitializeFixFPS();
@@ -303,7 +300,7 @@ void DirectXCommon::CreateDescriptorHeaps()
 
 	//ディスクリプタヒープの生成
 	//RTV用のヒープでディスクリプタの数は2。RTVはShader内で触るものではないので、ShadrVisibleはfalse
-	rtvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
+	rtvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 3, false);
 
 	
 	//DSV用のヒープでディスクリプタの数は1。DSVはShader内で触るものではないので、ShaderVisibleはfalse
@@ -448,9 +445,10 @@ void DirectXCommon::PreDraw() {
 	float clearColor[] = { 0.1f, 0.25f, 0.5f, 1.0f };	//青っぽい色。RGBAの順
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
 
-	//指定した深度で画面全体をクリアする
-	commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-
+	if (!(*useOffscreenRender_)) {
+		//指定した深度で画面全体をクリアする
+		commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	}
 	
 	commandList_->RSSetViewports(1, &viewport_);	//Viewportを設定
 
