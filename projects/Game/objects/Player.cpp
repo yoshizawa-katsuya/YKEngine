@@ -2,8 +2,11 @@
 #include "imgui/imgui.h"
 #include "Rigid3dObject.h"
 #include "Skin3dObject.h"
+#include "Input.h"
 
 void Player::Initialize(BaseModel* model, Animation* animation) {
+
+	input = Input::GetInstance();
 
 	object_ = std::make_unique<Skin3dObject>();
 	object_->Initialize(model);
@@ -40,6 +43,9 @@ void Player::Update() {
 
 
 #endif // _DEBUG	
+
+	worldTransform_.translation_.x += input->GetLeftStickX() / 10.0f;
+	worldTransform_.translation_.z += input->GetLeftStickY() / 10.0f;
 
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);

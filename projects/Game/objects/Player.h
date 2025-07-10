@@ -5,6 +5,7 @@
 #include "Animation.h"
 class Camera;
 class MapChipField;
+class Input;
 
 class Player
 {
@@ -24,6 +25,8 @@ private:
 	std::unique_ptr<Base3dObject> object_;
 	Animation* animation_;
 
-	bool useAnimation_ = false;
+	bool useAnimation_ = true;
+
+	Input* input = nullptr;
 };
 
