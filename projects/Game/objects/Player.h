@@ -67,5 +67,7 @@ private:
 
 	//ビューポート行列
 	Matrix4x4* viewPortMatrix_ = nullptr;
+
+	int hitPoint_ = 5; // プレイヤーのヒットポイント
 };
 

@@ -40,15 +40,15 @@ void TitleScene::Update()
 
 	switch (phase_)
 	{
-	case TitleScene::Phase::kStart:
+	case Phase::kStart:
 
 		UpdateStart();
 		break;
-	case TitleScene::Phase::kMain:
+	case Phase::kMain:
 
 		UpdateMain();
 		break;
-	case TitleScene::Phase::kEnd:
+	case Phase::kEnd:
 
 		UpdateEnd();
 		break;

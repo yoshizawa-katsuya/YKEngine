@@ -127,16 +127,16 @@ void GameScene::Update() {
 
 	switch (phase_)
 	{
-	case GameScene::Phase::kStart:
+	case Phase::kStart:
 		UpdateStart();
 		break;
-	case GameScene::Phase::kMain:
+	case Phase::kMain:
 		UpdateMain();
 		break;
-	case GameScene::Phase::kGameClear:
+	case Phase::kGameClear:
 		UpdateGameClear();
 		break;
-	case GameScene::Phase::kGameOver:
+	case Phase::kGameOver:
 		UpdateGameOver();
 		break;
 	default:
@@ -240,6 +240,9 @@ void GameScene::Draw() {
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
+	//環境マップを使う場合はコメントアウトを外す
+	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
+	
 	//modelPlatform_->SkinPreDraw();
 	
 	//スカイドームの描画

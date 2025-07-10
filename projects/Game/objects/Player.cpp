@@ -40,7 +40,7 @@ void Player::Update(Camera* railCamera) {
 #ifdef _DEBUG
 
 	ImGui::Begin("Player");
-	if (ImGui::TreeNode("Model")) {
+	if (ImGui::TreeNode("Object")) {
 		ImGui::ColorEdit4("color", &object_->GetModel().GetMaterialDataAddress().color.x);
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
@@ -48,12 +48,12 @@ void Player::Update(Camera* railCamera) {
 
 		ImGui::TreePop();
 	}
+	ImGui::DragInt("HP", &hitPoint_, 1.0f, 0, 100);
 	ImGui::End();
 
 
 #endif // _DEBUG	
 
-	//Rotate();
 
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
@@ -98,23 +98,6 @@ void Player::Update(Camera* railCamera) {
 
 	
 }
-
-//void Player::Rotate() {
-//
-//
-//
-//	//回転速さ
-//	const float kRotSpeed = 0.02f;
-//
-//	//押した方向で移動ベクトルを変更
-//	if (input_->PushKey(DIK_A)) {
-//		worldTransform_.rotation_.y -= kRotSpeed;
-//	}
-//	else if (input_->PushKey(DIK_D)) {
-//		worldTransform_.rotation_.y += kRotSpeed;
-//	}
-//
-//}
 
 void Player::ReticleUpdate(Camera* railCamera)
 {
@@ -207,6 +190,15 @@ void Player::Attack() {
 
 void Player::OnCollision(Collider* other)
 {
+	if (other->GetTypeID() == CollisionTypeIdDef::kEnemyBullet)
+	{
+		hitPoint_--;
+
+		if (hitPoint_ > 0) {
+			return;
+		}
+		isDead_ = true;
+	}
 }
 
 void Player::DrawUI() {
