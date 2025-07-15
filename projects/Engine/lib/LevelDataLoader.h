@@ -1,5 +1,6 @@
 #pragma once
 #include "Struct.h"
+#include "json.hpp"
 
 struct ObjectData
 {
@@ -42,4 +43,4 @@ struct LevelData
 
 LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
 
-
+EulerTransform TranformLoad(nlohmann::json& transformData);
