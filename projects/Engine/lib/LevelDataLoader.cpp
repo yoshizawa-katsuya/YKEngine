@@ -1,7 +1,6 @@
 #include "LevelDataLoader.h"
 #include "fstream"
 #include "cassert"
-#include "json.hpp"
 #include <numbers>
 
 LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension)
@@ -74,19 +73,8 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
-			//平行移動
-			objectData.transform.translation.x = -static_cast<float>(transform["translation"][0]);
-			objectData.transform.translation.y = static_cast<float>(transform["translation"][2]);
-			objectData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
-			//回転角
-			objectData.transform.rotation.x = static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
-			objectData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
-			objectData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
-			//スケーリング
-			objectData.transform.scale.x = static_cast<float>(transform["scaling"][0]);
-			objectData.transform.scale.y = static_cast<float>(transform["scaling"][2]);
-			objectData.transform.scale.z = static_cast<float>(transform["scaling"][1]);
 
+			objectData.transform = TranformLoad(transform);
 
 			//TODO: コライダーのパラメータ読み込み
 		}
@@ -97,19 +85,8 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
-			//平行移動
-			playerSpawnData.transform.translation.x = -static_cast<float>(transform["translation"][0]);
-			playerSpawnData.transform.translation.y = static_cast<float>(transform["translation"][2]);
-			playerSpawnData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
-			//回転角
-			playerSpawnData.transform.rotation.x = static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
-			playerSpawnData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
-			playerSpawnData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
-			//スケーリング
-			playerSpawnData.transform.scale.x = static_cast<float>(transform["scaling"][0]);
-			playerSpawnData.transform.scale.y = static_cast<float>(transform["scaling"][2]);
-			playerSpawnData.transform.scale.z = static_cast<float>(transform["scaling"][1]);
 
+			playerSpawnData.transform = TranformLoad(transform);
 
 			//TODO: コライダーのパラメータ読み込み
 		}
@@ -119,18 +96,8 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 			EnemySpawnData& enemySpawnData = levelData->enemySpawns.emplace_back();
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
-			//平行移動
-			enemySpawnData.transform.translation.x = -static_cast<float>(transform["translation"][0]);
-			enemySpawnData.transform.translation.y = static_cast<float>(transform["translation"][2]);
-			enemySpawnData.transform.translation.z = -static_cast<float>(transform["translation"][1]);
-			//回転角
-			enemySpawnData.transform.rotation.x = static_cast<float>(transform["rotation"][0]) / 180 * std::numbers::pi_v<float>;
-			enemySpawnData.transform.rotation.y = -static_cast<float>(transform["rotation"][2]) / 180 * std::numbers::pi_v<float>;
-			enemySpawnData.transform.rotation.z = -static_cast<float>(transform["rotation"][1]) / 180 * std::numbers::pi_v<float>;
-			//スケーリング
-			enemySpawnData.transform.scale.x = static_cast<float>(transform["scaling"][0]);
-			enemySpawnData.transform.scale.y = static_cast<float>(transform["scaling"][2]);
-			enemySpawnData.transform.scale.z = static_cast<float>(transform["scaling"][1]);
+
+			enemySpawnData.transform = TranformLoad(transform);
 
 			//TODO: コライダーのパラメータ読み込み
 		}
@@ -161,4 +128,23 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 
 	return levelData;
 
+}
+
+EulerTransform TranformLoad(nlohmann::json& transformData)
+{
+	EulerTransform transform;
+	//平行移動
+	transform.translation.x = -static_cast<float>(transformData["translation"][0]);
+	transform.translation.y = static_cast<float>(transformData["translation"][2]);
+	transform.translation.z = -static_cast<float>(transformData["translation"][1]);
+	//回転角
+	transform.rotation.x = static_cast<float>(transformData["rotation"][0]) / 180 * std::numbers::pi_v<float>;
+	transform.rotation.y = -static_cast<float>(transformData["rotation"][2]) / 180 * std::numbers::pi_v<float>;
+	transform.rotation.z = -static_cast<float>(transformData["rotation"][1]) / 180 * std::numbers::pi_v<float>;
+	//スケーリング
+	transform.scale.x = static_cast<float>(transformData["scaling"][0]);
+	transform.scale.y = static_cast<float>(transformData["scaling"][2]);
+	transform.scale.z = static_cast<float>(transformData["scaling"][1]);
+
+	return transform;
 }
