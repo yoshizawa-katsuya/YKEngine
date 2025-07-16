@@ -107,7 +107,7 @@ void Player::ReticleUpdate(Camera* railCamera)
 	Vector2 spritePosition = sprite2DReticle_->GetPosition();
 
 	Vector3 move = { 0, 0, 0 };
-	const float kReticleSpeed = 6.0f;
+	const float kReticleSpeed = 12.0f;
 
 	//押した方向で移動ベクトルを変更(左右)
 	if (input_->PushKey(DIK_LEFT)) {
