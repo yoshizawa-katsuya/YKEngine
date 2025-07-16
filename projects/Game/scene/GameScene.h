@@ -77,19 +77,9 @@ private:
 	void EnemyPop(const Vector3& position);
 
 	/// <summary>
-	/// 敵発生データの読み込み
-	/// </summary>
-	void LoadEnemyPopData();
-
-	/// <summary>
 	/// レベルの生成
 	/// </summary>
 	void CreateLevel();
-
-	/// <summary>
-	/// 敵発生コマンドの更新
-	/// </summary>
-	void UpdateEnemyPopCommands();
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -128,10 +118,6 @@ private:
 	std::shared_ptr<BaseModel> modelEnemy_;
 	std::shared_ptr<BaseModel> modelBullet_;
 
-	//待機
-	bool isWait_;
-	int32_t waitTimer_;
-
 	//テクスチャハンドル
 	uint32_t textureHandle_;
 	uint32_t textureHandlePlayerBullet_;
@@ -146,9 +132,6 @@ private:
 
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> playerBullets_;
-
-	//敵発生コマンド
-	std::stringstream enemyPopCommands;
 
 	//敵
 	//Enemy* enemy_ = nullptr;
