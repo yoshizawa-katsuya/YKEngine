@@ -7,7 +7,7 @@ class RailCamera {
 public:
 
 	//初期化
-	void Initialize(const Vector3 worldPos, const Vector3 rotate, Camera* camera);
+	void Initialize(const std::vector<Vector3>& controlPoints, Camera* camera);
 
 	//更新
 	void Update();
@@ -15,19 +15,28 @@ public:
 	//描画
 	void Draw(Camera* camera);
 
-	//曲線の作成
-	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
-
 	Camera* GetCamera() { return camera_; }
 
 	WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
 private:
 	
+	//曲線の作成
+	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
+
+	//向きを更新
+	void UpdateRotate();
+
+	//オフセットを更新
+	void UpdateOffset();
+
+	//カメラを更新
+	void UpdateCamera();
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 
-	//ビュープロジェクション
+	// カメラ
 	Camera* camera_;
 
 	// スプライン曲線制御点(通過点)Add commentMore actions
@@ -42,6 +51,8 @@ private:
 	Vector3 target_;
 	Vector3 forward_;
 	Vector3 offset_ = { 0.0f, 1.0f, 0.0f };
+
+	float speed_ = 0.1f;
 
 	uint32_t difference_ = 5;
 	uint32_t moveCount_ = 0;
