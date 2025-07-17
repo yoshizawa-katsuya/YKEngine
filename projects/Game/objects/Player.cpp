@@ -30,8 +30,6 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix) {
 	sprite2DReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
 	sprite2DReticle_->SetAnchorPoint({ 0.5f, 0.5f });
 
-	//シーン遷移直後にプレイヤーが画面中央に来るようにするため、ワールド座標を設定
-	BaseCharacter::Update();
 }
 
 void Player::Update(Camera* railCamera) {
@@ -220,7 +218,8 @@ void Player::SetParent(WorldTransform* parent) {
 
 	//親子関係を結ぶ
 	worldTransform_.parent_ = parent;
-
+	//シーン遷移直後にプレイヤーが画面中央に来るようにするため、ワールド座標を設定
+	BaseCharacter::Update();
 }
 
 Vector3 Player::GetWorldPosition() {
