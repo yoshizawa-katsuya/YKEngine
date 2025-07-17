@@ -45,11 +45,19 @@ void GameScene::Initialize() {
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
 	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
-	// レールカメラの生成
-	railCamera_ = std::make_unique<RailCamera>();
-	// レールカメラの初期化
-	railCamera_->Initialize({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, camera_.get());
+	
+	//モデルの生成
+	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
+	modelSkydome_ = modelPlatform_->CreateRigidModel("./Resources/skydome", "skydome.obj");
+	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
+	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_, "Bullet");
 
+	//プレイヤーの初期化
+	player_ = std::make_unique<Player>();
+	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_);
+
+	//ステージの生成
+	CreateLevel();
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -69,12 +77,6 @@ void GameScene::Initialize() {
 	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/black.png");
 	textureHandleEnemyBullet_ = TextureManager::GetInstance()->Load("./Resources/red.png");
 
-	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
-	modelSkydome_ = modelPlatform_->CreateRigidModel("./Resources/skydome", "skydome.obj");
-	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
-	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_, "Bullet");
-
 	//衝突マネージャの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize();
@@ -84,10 +86,6 @@ void GameScene::Initialize() {
 	//スカイドームの初期化
 	skydome_->Initialize(modelSkydome_.get());
 	
-
-	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_);
 	//自キャラとレールカメラの親子関係を結ぶ
 	player_->SetParent(railCamera_->GetWorldTransform());
 	player_->SetGameScene(this);
@@ -108,7 +106,6 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
-	CreateLevel();
 }
 
 void GameScene::Update() {
@@ -468,7 +465,10 @@ void GameScene::CreateLevel()
 	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
 
 	assert(!levelData->splines.empty());
-	railCamera_->CreateSplineCurve(levelData->splines[0].controlPoints);
+	// レールカメラの生成
+	railCamera_ = std::make_unique<RailCamera>();
+	// レールカメラの初期化
+	railCamera_->Initialize(levelData->splines[0].controlPoints, camera_.get());
 
 	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns) {
 		//敵の発生位置を取得
