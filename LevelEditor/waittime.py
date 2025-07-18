@@ -10,7 +10,7 @@ class MYADDON_OT_add_wait_time(bpy.types.Operator):
     def execute(self, context):
 
         #['wait_time']カスタムプロパティを追加
-        context.object["wait_time"] = 0
+        context.object["wait_time"] = 0.0
 
         return {"FINISHED"}
     
