@@ -66,16 +66,13 @@ private:
 	std::vector<uint32_t> difficulty_;
 	std::vector<std::unique_ptr<Sprite>> difficultySprites_;
 
-	
-
-	
-	bool selectSpr = true;
 
 	bool selectClick1 = true;
 
-	
+	std::vector<uint32_t> loadings_;
+	std::vector<std::unique_ptr<Sprite>> loadingSprites_;
 
-	bool selectClick2 = false;
+	bool loading_ = true;
 
 	// Save selected elements
 	uint32_t selectedTutorial_ = 0; 

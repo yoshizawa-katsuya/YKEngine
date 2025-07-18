@@ -43,5 +43,7 @@ private:
 	uint32_t start2_;
 	std::unique_ptr<Sprite> startSprite2_;
 
+
+
 };
 
