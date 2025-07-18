@@ -146,6 +146,10 @@ private:
 	std::unique_ptr<Sprite> menuUIsp3_;
 	bool isMenu = false;
 
+	bool isDragging_ = false;
+	Vector2 dragStartPos_;
+	Vector2 dragCurrentPos_;
+
 	void CreateObject(std::unique_ptr<Base3dObject>& object, BaseModel* model, const Vector3& position, const Vector3& scale);
 	void AddToInstancing(InstancingObject* instancingObject, const Vector3& position);
 	Vector3 ConvertScreenToWorld(const Vector2& screenPos);

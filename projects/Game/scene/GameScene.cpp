@@ -382,43 +382,7 @@ void GameScene::Update() {
 
 	if (!setsumei) {
 		//stone move
-		Vector2 mousePos = input_->GetMousePosition();
-
-		if (input_->PushMouseLeft()) {
-			Vector3 clickPos = ConvertScreenToWorld(mousePos);
-
-			float distance = static_cast<float>(sqrt(pow(clickPos.x - stonePosition_.x, 2) + pow(clickPos.z - stonePosition_.z, 2)));
-
-			if (distance < 1.0f) {
-				isDragging_ = true;
-				dragStartPos_ = mousePos;
-			}
-		}
-		if (isDragging_ && input_->PushMouseLeft()) {
-			dragCurrentPos_ = input_->GetMousePosition();
-		}
-		if (isDragging_ && !input_->PushMouseLeft() && !input_->TrigerMouseLeft()) {
-			isDragging_ = false;
-			Vector2 dragVector = { dragStartPos_.x - dragCurrentPos_.x  , dragStartPos_.y - dragCurrentPos_.y };
-
-			float length = sqrt(dragVector.x * dragVector.x + dragVector.y * dragVector.y);
-			if (length > 0) {
-				dragVector.x /= length;
-				dragVector.y /= length;
-			}
-
-			float speed = std::min(length * 0.03f, maxSpeed_);
-			velocity_ = { dragVector.x * speed, 0.0f, -dragVector.y * speed };
-
-		}
-
-
-		stonePosition_ += velocity_;
-		velocity_ *= friction_;
-
-		if (fabs(velocity_.x) < 0.01f) velocity_.x = 0.0f;
-		if (fabs(velocity_.z) < 0.01f) velocity_.z = 0.0f;
-
+		Vector2 mousePos = input_->GetMousePosition();		
 
 		if (!isDragging_) {
 			
@@ -484,14 +448,6 @@ void GameScene::Update() {
 			menuSpes_[6]->SetVisible(false);
 		}
 	}
-
-
-		WorldTransform worldTransform;
-		worldTransform.Initialize();
-		worldTransform.translation_ = stonePosition_;
-		worldTransform.UpdateMatrix();
-		stone_->WorldTransformUpdate(worldTransform);
-	
 
 	
 	//player_->Update();
@@ -579,10 +535,6 @@ void GameScene::Update() {
 			ImGui::Text("stonePosition_z: %f", stone_->GetPosition().z);
 			ImGui::Text("dragStartPos＿: %f %f", stone_->GetDragStartPos().x, stone_->GetDragStartPos().y);
 			ImGui::Text("dragCurrentPos＿: %f %f", stone_->GetDragCurrentPos().x, stone_->GetDragCurrentPos().y);
-			ImGui::Text("stonePosition_x: %f", stonePosition_.x);
-			ImGui::Text("stonePosition_y: %f", stonePosition_.y);
-			ImGui::Text("dragStartPos＿: %f %f", dragStartPos_.x, dragStartPos_.y);
-			ImGui::Text("dragCurrentPos＿: %f %f", dragCurrentPos_.x, dragCurrentPos_.y);
 			ImGui::DragFloat2("stoneUIsp_[3]", &stoneUIsp_->GetPosition().x, 0.1f);
 			ImGui::DragFloat2("smenuUIsp2_s", &menuSpes_[1]->GetPosition().x, 1.0f);
 			
