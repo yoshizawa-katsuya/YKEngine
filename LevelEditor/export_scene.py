@@ -91,6 +91,10 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
                     points.append([co.x, co.y, co.z])
             json_object["control_point"] = points
 
+        #カスタムプロパティ'wait_time'
+        if "wait_time" in object:
+            json_object["wait_time"] = object["wait_time"]
+
         #カスタムプロパティ'無効オプション'
         if "disabled" in object:
             json_object["disabled"] = object["disabled"]

@@ -99,6 +99,12 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 
 			enemySpawnData.transform = TranformLoad(transform);
 
+			if (object.contains("wait_time"))
+			{
+				//待機時間
+				enemySpawnData.waitTime = object["wait_time"].get<float>();
+			}
+
 			//TODO: コライダーのパラメータ読み込み
 		}
 
