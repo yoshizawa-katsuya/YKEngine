@@ -46,6 +46,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBoxFilterRendering)) = CreateGraphicsPipeline(DrawMode::kBoxFilterRendering, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kGaussianFilterRendering)) = CreateGraphicsPipeline(DrawMode::kGaussianFilterRendering, dxCommon);
+
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon) {
@@ -115,6 +117,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kGrayScaleRendering:
 	case DrawMode::kVignetteRendering:
 	case DrawMode::kBoxFilterRendering:
+	case DrawMode::kGaussianFilterRendering:
 
 		rootParameters.resize(1);
 
@@ -416,7 +419,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kGrayScaleRendering:
 	case DrawMode::kVignetteRendering:
 	case DrawMode::kBoxFilterRendering:
-
+	case DrawMode::kGaussianFilterRendering:
+		//フルスクリーン用のシェーダーは頂点情報を使わないので、
 		//InputLayoutは使わない
 		inputLayoutDesc.pInputElementDescs = nullptr;
 		inputLayoutDesc.NumElements = 0;
@@ -568,6 +572,17 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
+	case DrawMode::kGaussianFilterRendering:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/FullScreen.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/GaussianFilter.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+
 	case DrawMode::kBlendModeNormalinstancing:
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/InstancingObject3d.VS.hlsl",
 			L"vs_6_0");
@@ -680,6 +695,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kGrayScaleRendering:
 	case DrawMode::kVignetteRendering:
 	case DrawMode::kBoxFilterRendering:
+	case DrawMode::kGaussianFilterRendering:
+
 		//Depthの機能を無効化する
 		depthStencilDesc.DepthEnable = false;
 		break;

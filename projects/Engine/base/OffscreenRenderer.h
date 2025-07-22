@@ -17,6 +17,7 @@ enum class RenderTextureType
 	GrayScale,
 	Vignette,
 	BoxFilter,
+	GaussianFilter,
 };
 
 class OffscreenRenderer
@@ -66,7 +67,7 @@ private:
 
 	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
 
-	const uint32_t renderTextureTypeCount_ = 4; // RenderTextureTypeの数
+	const uint32_t renderTextureTypeCount_ = 5; // RenderTextureTypeの数
 
 	std::vector<DrawMode> renderTextureDrawModes_;
 

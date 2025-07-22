@@ -39,6 +39,7 @@ enum class DrawMode {
 	kGrayScaleRendering,
 	kVignetteRendering,
 	kBoxFilterRendering,
+	kGaussianFilterRendering,
 
 	kSkyboxMode,
 

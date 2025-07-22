@@ -22,6 +22,7 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 		DrawMode::kGrayScaleRendering,	//グレイスケール
 		DrawMode::kVignetteRendering,	//ヴィネッティング
 		DrawMode::kBoxFilterRendering,	//BoxFilterによるぼかし
+		DrawMode::kGaussianFilterRendering,	//ガウスフィルタによるぼかし
 	};
 
 	//RecderTexture作成
