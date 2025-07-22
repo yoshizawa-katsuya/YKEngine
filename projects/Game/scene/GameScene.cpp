@@ -4,6 +4,7 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "OffScreenrenderer.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -93,11 +94,14 @@ void GameScene::Initialize() {
 	worldTransform2_.translation_.x = 1.0f;
 	worldTransform2_.UpdateMatrix();
 	*/
+
+	OffscreenRenderer::GetInstance()->SetRenderTextureType(RenderTextureType::GaussianFilter);
+
 }
 
 void GameScene::Update() {
 
-	
+	OffscreenRenderer::GetInstance()->SetUseOffscreenRender(true);
 
 	//カメラの更新
 	camera_->Update();
