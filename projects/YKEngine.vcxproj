@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\manager\EnemySpawnManager.cpp" />
     <ClCompile Include="Game\objects\BaseBullet.cpp" />
     <ClCompile Include="Engine\lib\GlobalVariables.cpp" />
     <ClCompile Include="Game\objects\CollisionManager.cpp" />
@@ -304,6 +305,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\manager\EnemySpawnManager.h" />
     <ClInclude Include="Game\objects\BaseBullet.h" />
     <ClInclude Include="Engine\lib\GlobalVariables.h" />
     <ClInclude Include="Game\objects\CollisionManager.h" />

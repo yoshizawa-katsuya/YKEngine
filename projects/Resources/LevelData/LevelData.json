@@ -62,7 +62,8 @@
                     1.0,
                     1.0
                 ]
-            }
+            },
+            "wait_time": 2.0
         },
         {
             "type": "EnemySpawn",
@@ -83,7 +84,8 @@
                     1.0,
                     1.0
                 ]
-            }
+            },
+            "wait_time": 4.0
         },
         {
             "type": "EnemySpawn",
@@ -104,7 +106,8 @@
                     1.0,
                     1.0
                 ]
-            }
+            },
+            "wait_time": 6.0
         },
         {
             "type": "EnemySpawn",
@@ -125,7 +128,8 @@
                     1.0,
                     1.0
                 ]
-            }
+            },
+            "wait_time": 8.0
         },
         {
             "type": "EnemySpawn",
@@ -146,7 +150,8 @@
                     1.0,
                     1.0
                 ]
-            }
+            },
+            "wait_time": 10.0
         },
         {
             "type": "CURVE",

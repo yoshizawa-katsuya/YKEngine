@@ -76,6 +76,12 @@
     <Filter Include="ヘッダー ファイル\myGame">
       <UniqueIdentifier>{b57f4e00-fd0e-4231-8414-f893d017e1a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\manager">
+      <UniqueIdentifier>{580be91a-2e3e-4ed3-986c-2bb28fb6e524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\manager">
+      <UniqueIdentifier>{76dcb174-40e6-43a7-8403-673a98fffff4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -269,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="Game\objects\BaseBullet.cpp">
       <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\manager\EnemySpawnManager.cpp">
+      <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -540,6 +549,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\BaseBullet.h">
       <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\manager\EnemySpawnManager.h">
+      <Filter>ヘッダー ファイル\manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

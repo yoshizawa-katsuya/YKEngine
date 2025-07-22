@@ -56,6 +56,10 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_);
 
+	//エネミースポーンマネージャーの生成
+	enemySpawnManager_ = std::make_unique<EnemySpawnManager>();
+	enemySpawnManager_->Initialize(this);
+
 	//ステージの生成
 	CreateLevel();
 
@@ -368,6 +372,12 @@ void GameScene::UpdateStart()
 
 void GameScene::UpdateMain()
 {
+	// フレーム時間の更新
+	currentTime_ += deltaTime_;
+
+	//敵のスポーンマネージャーの更新
+	enemySpawnManager_->Update(currentTime_);
+
 	//レールカメラの更新
 	railCamera_->Update();
 
@@ -443,11 +453,11 @@ void GameScene::UpdateGameOver()
 
 void GameScene::CheckGameClear()
 {
-	//敵がいなくなったらゲームクリア
-	if (enemys_.empty() && isEnemyPopEnd_) {
-		phase_ = Phase::kGameClear;
-		fade_->Start(Fade::Status::FadeOut, 0.5f);
-	}
+	////敵がいなくなったらゲームクリア
+	//if (enemys_.empty() && isEnemyPopEnd_) {
+	//	phase_ = Phase::kGameClear;
+	//	fade_->Start(Fade::Status::FadeOut, 0.5f);
+	//}
 }
 
 void GameScene::CheckGameOver()
@@ -473,8 +483,10 @@ void GameScene::CreateLevel()
 	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns) {
 		//敵の発生位置を取得
 		Vector3 spawnPosition = enemySpawnData.transform.translation;
-		//敵を発生させる
-		EnemyPop(spawnPosition);
+
+		//レベルエディターで敵のwaitTimeを必ず設定するようにする
+		enemySpawnManager_->AddSpawnData(enemySpawnData.waitTime.value(), spawnPosition);
+
 	}
 	
 }

@@ -25,6 +25,7 @@
 #include "PlayerBullet.h"
 #include "CollisionManager.h"
 #include "Fade.h"
+#include "manager/EnemySpawnManager.h"
 
 class GameScene : public BaseScene
 {
@@ -50,6 +51,11 @@ public:
 	/// </summary>
 	void AddEnemybullet(const Vector3& worldPosition, const Vector3& velocity);
 
+	/// <summary>
+	/// 敵発生
+	/// </summary>
+	void EnemyPop(const Vector3& position);
+
 private:
 
 	void UpdateStart();
@@ -70,11 +76,6 @@ private:
 	/// 衝突判定と応答
 	/// </summary>
 	void CheckAllColision();
-
-	/// <summary>
-	/// 敵発生
-	/// </summary>
-	void EnemyPop(const Vector3& position);
 
 	/// <summary>
 	/// レベルの生成
@@ -127,6 +128,8 @@ private:
 	//衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_;
 
+	std::unique_ptr<EnemySpawnManager> enemySpawnManager_;
+
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
@@ -156,15 +159,9 @@ private:
 	std::unique_ptr<ParticleEmitter> emitter_;
 	//std::unique_ptr<AccelerationField> field_;
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
-	
-	//クリアしたかどうか
-	bool isGameClear_ = false;
 
-	//ゲームオーバーかどうか
-	bool isGameOver_ = false;
-
-	//敵の発生が打ち止めかどうか
-	bool isEnemyPopEnd_ = false;
+	float currentTime_ = 0.0f;	//現在の時間
+	float deltaTime_ = 1.0f / 60.0f;	//1フレームの時間(60fps固定)
 
 	//シーンのフェーズ
 	enum class Phase {
