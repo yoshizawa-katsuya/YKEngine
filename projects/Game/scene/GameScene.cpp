@@ -95,9 +95,13 @@ void GameScene::Initialize() {
 	worldTransform2_.UpdateMatrix();
 	*/
 
+	OffscreenRenderer::GetInstance()->SetRenderTextureType(RenderTextureType::RadialBlur);
+
 }
 
 void GameScene::Update() {
+
+	OffscreenRenderer::GetInstance()->SetUseOffscreenRender(true);
 
 	//カメラの更新
 	camera_->Update();
