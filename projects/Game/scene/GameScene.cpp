@@ -95,13 +95,9 @@ void GameScene::Initialize() {
 	worldTransform2_.UpdateMatrix();
 	*/
 
-	OffscreenRenderer::GetInstance()->SetRenderTextureType(RenderTextureType::Outline);
 }
 
 void GameScene::Update() {
-
-	OffscreenRenderer::GetInstance()->SetUseOffscreenRender(true);
-	OffscreenRenderer::GetInstance()->UpdateOutlineMaterialData(mainCamera_->GetProjection());
 
 	//カメラの更新
 	camera_->Update();
