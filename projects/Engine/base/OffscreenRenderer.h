@@ -5,6 +5,7 @@
 #include <cstdint>
 #include "Vector4.h"
 #include <vector>
+#include "Struct.h"
 class SrvHeapManager;
 class PrimitiveDrawer;
 class DirectXCommon;
@@ -18,6 +19,7 @@ enum class RenderTextureType
 	Vignette,
 	BoxFilter,
 	GaussianFilter,
+	Outline,
 };
 
 class OffscreenRenderer
@@ -32,6 +34,8 @@ public:
 	void PreDrawRenderTexture();
 
 	void PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
+
+	void UpdateOutlineMaterialData(const Matrix4x4& projectionMatrix);
 
 	bool* GetUseOffscreenRenderPtr() { return &useOffscreenRender_; }
 	bool GetUseOffscreenRender() { return useOffscreenRender_; }
@@ -56,6 +60,13 @@ private:
 
 	void CreateRenderTextureResource(int32_t width, int32_t height, DXGI_FORMAT format, const Vector4& clearColor);
 
+	void CreateDepthTextureSRV(SrvHeapManager* srvHerpManager);
+
+	struct OutlineMaterial
+	{
+		Matrix4x4 projectionInverseMatrix; // プロジェクション逆行列
+	};
+
 	DirectXCommon* dxCommon_ = nullptr;
 	ID3D12GraphicsCommandList* commandList_;
 	D3D12_VIEWPORT* viewport_;
@@ -65,9 +76,15 @@ private:
 	uint32_t renderTextureSRVIndex_;
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTextureRtvHandle_;
 
+	uint32_t depthTextureSRVIndex_;
+
+	//マテリアル
+	Microsoft::WRL::ComPtr<ID3D12Resource> MaterialResource_ = nullptr;
+	OutlineMaterial* outlinematerialData_ = nullptr;
+
 	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
 
-	const uint32_t renderTextureTypeCount_ = 5; // RenderTextureTypeの数
+	const uint32_t renderTextureTypeCount_ = 6; // RenderTextureTypeの数
 
 	std::vector<DrawMode> renderTextureDrawModes_;
 

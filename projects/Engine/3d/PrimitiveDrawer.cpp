@@ -48,6 +48,7 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kGaussianFilterRendering)) = CreateGraphicsPipeline(DrawMode::kGaussianFilterRendering, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kOutlineRendering)) = CreateGraphicsPipeline(DrawMode::kOutlineRendering, dxCommon);
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon) {
@@ -130,6 +131,37 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
+	case DrawMode::kOutlineRendering:
+	{
+
+		D3D12_DESCRIPTOR_RANGE descriptorRangeDepthTexture[1] = {};
+		descriptorRangeDepthTexture[0].BaseShaderRegister = 1;	//t1
+		descriptorRangeDepthTexture[0].NumDescriptors = 1;	//数は1つ
+		descriptorRangeDepthTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
+		descriptorRangeDepthTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+
+
+		rootParameters.resize(3);
+
+		//テクスチャ
+		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[0].DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		rootParameters[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+
+		//DepthTexture
+		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeDepthTexture;	//Tableの中身の配列を指定
+		rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDepthTexture);	//Tableで利用する数
+
+		//マテリアル
+		rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		rootParameters[2].Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+		break;
+	}
 	case DrawMode::kLineMode:
 	case DrawMode::kSphereMode:
 
@@ -309,6 +341,30 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
+	case DrawMode::kOutlineRendering:
+
+		staticSamplers.resize(2);
+
+		staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;	//バイリニアフィルタ
+		staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//0～1の範囲外をリピート
+		staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
+		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapｗｐ使う
+		staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う s0
+		staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+
+		staticSamplers[1].Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;	//ポイントフィルタ
+		staticSamplers[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//0～1の範囲外をリピート
+		staticSamplers[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSamplers[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSamplers[1].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
+		staticSamplers[1].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapｗｐ使う
+		staticSamplers[1].ShaderRegister = 1;	//レジスタ番号1を使う s1
+		staticSamplers[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+
+		break;
+
 	default:
 
 		staticSamplers.resize(1);
@@ -420,6 +476,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kVignetteRendering:
 	case DrawMode::kBoxFilterRendering:
 	case DrawMode::kGaussianFilterRendering:
+	case DrawMode::kOutlineRendering:
+
 		//フルスクリーン用のシェーダーは頂点情報を使わないので、
 		//InputLayoutは使わない
 		inputLayoutDesc.pInputElementDescs = nullptr;
@@ -583,6 +641,17 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
+	case DrawMode::kOutlineRendering:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/FullScreen.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/Outline.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+
 	case DrawMode::kBlendModeNormalinstancing:
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/InstancingObject3d.VS.hlsl",
 			L"vs_6_0");
@@ -696,6 +765,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kVignetteRendering:
 	case DrawMode::kBoxFilterRendering:
 	case DrawMode::kGaussianFilterRendering:
+	case DrawMode::kOutlineRendering:
 
 		//Depthの機能を無効化する
 		depthStencilDesc.DepthEnable = false;

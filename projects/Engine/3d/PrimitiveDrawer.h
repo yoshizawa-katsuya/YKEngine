@@ -40,6 +40,7 @@ enum class DrawMode {
 	kVignetteRendering,
 	kBoxFilterRendering,
 	kGaussianFilterRendering,
+	kOutlineRendering,
 
 	kSkyboxMode,
 
