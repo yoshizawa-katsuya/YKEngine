@@ -4,7 +4,6 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
-#include "OffScreenRenderer.h"
 
 GameScene::~GameScene() {
 	//Finalize();

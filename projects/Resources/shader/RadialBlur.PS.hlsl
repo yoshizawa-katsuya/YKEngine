@@ -26,7 +26,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         float32_t2 texcoord = input.texcord + direction * kBlurWidth * float32_t(sampleIndex);
         
         //色を加算
-        outputColor += gTexture.Sample(gSampler, texcoord).rgb;
+        outputColor.rgb += gTexture.Sample(gSampler, texcoord).rgb;
     }
     //サンプリングした色を平均化
     outputColor.rgb *= rcp(kNumSmaples);
