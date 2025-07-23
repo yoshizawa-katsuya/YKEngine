@@ -25,6 +25,7 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 		DrawMode::kBoxFilterRendering,	//BoxFilterによるぼかし
 		DrawMode::kGaussianFilterRendering,	//ガウスフィルタによるぼかし
 		DrawMode::kOutlineRendering,	//アウトライン
+		DrawMode::kRadialBlurRendering,	//放射状ぼかし
 	};
 
 	//RecderTexture作成

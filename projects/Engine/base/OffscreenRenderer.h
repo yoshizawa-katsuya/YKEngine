@@ -20,6 +20,7 @@ enum class RenderTextureType
 	BoxFilter,
 	GaussianFilter,
 	Outline,
+	RadialBlur,
 };
 
 class OffscreenRenderer
@@ -84,7 +85,7 @@ private:
 
 	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
 
-	const uint32_t renderTextureTypeCount_ = 6; // RenderTextureTypeの数
+	const uint32_t renderTextureTypeCount_ = 7; // RenderTextureTypeの数
 
 	std::vector<DrawMode> renderTextureDrawModes_;
 
