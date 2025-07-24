@@ -21,6 +21,7 @@ enum class RenderTextureType
 	GaussianFilter,
 	Outline,
 	RadialBlur,
+	Dissolve,
 };
 
 class OffscreenRenderer
@@ -37,6 +38,8 @@ public:
 	void PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
 
 	void UpdateOutlineMaterialData(const Matrix4x4& projectionMatrix);
+
+	void SetMaskTexture(uint32_t texturehandle) { maskTextureHandle_ = texturehandle; }
 
 	bool* GetUseOffscreenRenderPtr() { return &useOffscreenRender_; }
 	bool GetUseOffscreenRender() { return useOffscreenRender_; }
@@ -83,9 +86,12 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> MaterialResource_ = nullptr;
 	OutlineMaterial* outlinematerialData_ = nullptr;
 
+	//マスクテクスチャのハンドル
+	uint32_t maskTextureHandle_;
+
 	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
 
-	const uint32_t renderTextureTypeCount_ = 7; // RenderTextureTypeの数
+	const uint32_t renderTextureTypeCount_ = 8; // RenderTextureTypeの数
 
 	std::vector<DrawMode> renderTextureDrawModes_;
 

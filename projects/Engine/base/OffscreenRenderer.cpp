@@ -26,6 +26,7 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 		DrawMode::kGaussianFilterRendering,	//ガウスフィルタによるぼかし
 		DrawMode::kOutlineRendering,	//アウトライン
 		DrawMode::kRadialBlurRendering,	//放射状ぼかし
+		DrawMode::kDissolveRendering,	//ディゾルブ
 	};
 
 	//RecderTexture作成
@@ -107,6 +108,11 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 		srvHeapManager->SetGraphicsRootDescriptorTable(1, depthTextureSRVIndex_);	//アウトラインレンダリングの場合はDepthTextureのSRVもセットする
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, MaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
 	}
+	else if (renderTextureType_ == RenderTextureType::Dissolve)
+	{
+		srvHeapManager->SetGraphicsRootDescriptorTable(1, maskTextureHandle_);	//ディゾルブレンダリングの場合はマスクテクスチャのSRVもセットする
+	}
+
 
 	commandList_->DrawInstanced(3, 1, 0, 0);
 

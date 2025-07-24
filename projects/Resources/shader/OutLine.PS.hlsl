@@ -49,7 +49,6 @@ PixelShaderOutput main(VertexShaderOutput input)
     float32_t2 uvStepSize = float32_t2(rcp(width), rcp(height));   
     
     float32_t2 difference = float32_t2(0.0f, 0.0f); //縦横それぞれの畳み込みの結果を格納する変数
-    //色を輝度に変換して、畳み込みを行っていく
     for (int32_t x = 0; x < 3; ++x)
     {
         for (int32_t y = 0; y < 3; ++y)
