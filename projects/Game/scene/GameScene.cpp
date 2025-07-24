@@ -210,7 +210,11 @@ void GameScene::Update() {
 	{
 		renderTextureType_ = RenderTextureType::GaussianFilter;
 	}
-	if (ImGui::RadioButton("Outline", renderTextureType_ == RenderTextureType::Outline))
+	if (ImGui::RadioButton("LuminanceBasedOutline", renderTextureType_ == RenderTextureType::LuminanceOutline))
+	{
+		renderTextureType_ = RenderTextureType::LuminanceOutline;
+	}
+	if (ImGui::RadioButton("DepthBasedOutline", renderTextureType_ == RenderTextureType::Outline))
 	{
 		renderTextureType_ = RenderTextureType::Outline;
 	}
