@@ -31,6 +31,7 @@ void Player::Update() {
 
 #endif // _DEBUG	
 
+	worldTransform_.rotation_.y += 0.01f;
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
 

@@ -56,6 +56,7 @@ void GameScene::Initialize() {
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
+	modelPlayer_->SetEnvironmentCoefficient(1.0f);
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
