@@ -31,8 +31,8 @@ void GameScene::Initialize() {
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
-	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+	camera_->SetRotate({ 0.2f, 0.0f, 0.0f });
+	camera_->SetTranslate({ 0.0f, 6.0f, -25.0f });
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -74,29 +74,20 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
-	/*skyBox_ = std::make_unique<Rigid3dObject>();
-	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
-	skyBoxWorldTransform_.Initialize();
-	skyBoxWorldTransform_.scale_ = { 50.0f, 50.0f, 50.0f };
-	skyBoxWorldTransform_.UpdateMatrix();
-	skyBox_->WorldTransformUpdate(skyBoxWorldTransform_);*/
+	terrain_ = std::make_unique<Rigid3dObject>();
+	terrain_->Initialize(modelPlatform_->CreateRigidModel("./Resources/terrain", "terrain.obj").get());
 
-	/*
-	objects_ = std::make_unique<InstancingObjects>();
-	objects_->Initialize(modelPlayer_.get(), 10);
+	uint32_t maskTextureHandle = TextureManager::GetInstance()->Load("./Resources/noise0.png");
 
-	worldTransform1_.Initialize();
-	worldTransform1_.translation_.x = -1.0f;
-	worldTransform1_.UpdateMatrix();
-
-	worldTransform2_.Initialize();
-	worldTransform2_.translation_.x = 1.0f;
-	worldTransform2_.UpdateMatrix();
-	*/
+	OffscreenRenderer::GetInstance()->SetMaskTexture(maskTextureHandle);
 
 }
 
 void GameScene::Update() {
+
+	OffscreenRenderer::GetInstance()->SetRenderTextureType(renderTextureType_);
+	OffscreenRenderer::GetInstance()->SetUseOffscreenRender(true);
+	OffscreenRenderer::GetInstance()->UpdateOutlineMaterialData(mainCamera_->GetProjection());
 
 	//カメラの更新
 	camera_->Update();
@@ -197,6 +188,46 @@ void GameScene::Update() {
 	*/
 	ImGui::End();
 		
+	ImGui::Begin("RenderTextureType");
+
+	if (ImGui::RadioButton("None", renderTextureType_ == RenderTextureType::OffscreenRender))
+	{
+		renderTextureType_ = RenderTextureType::OffscreenRender;
+	}
+	if (ImGui::RadioButton("Grayscale", renderTextureType_ == RenderTextureType::GrayScale))
+	{
+		renderTextureType_ = RenderTextureType::GrayScale;
+	}
+	if (ImGui::RadioButton("Vignette", renderTextureType_ == RenderTextureType::Vignette))
+	{
+		renderTextureType_ = RenderTextureType::Vignette;
+	}
+	if (ImGui::RadioButton("BoxFilter", renderTextureType_ == RenderTextureType::BoxFilter))
+	{
+		renderTextureType_ = RenderTextureType::BoxFilter;
+	}
+	if (ImGui::RadioButton("GaussianFilter", renderTextureType_ == RenderTextureType::GaussianFilter))
+	{
+		renderTextureType_ = RenderTextureType::GaussianFilter;
+	}
+	if (ImGui::RadioButton("Outline", renderTextureType_ == RenderTextureType::Outline))
+	{
+		renderTextureType_ = RenderTextureType::Outline;
+	}
+	if (ImGui::RadioButton("RadialBlur", renderTextureType_ == RenderTextureType::RadialBlur))
+	{
+		renderTextureType_ = RenderTextureType::RadialBlur;
+	}
+	if (ImGui::RadioButton("Dissolve", renderTextureType_ == RenderTextureType::Dissolve))
+	{
+		renderTextureType_ = RenderTextureType::Dissolve;
+	}
+	if (ImGui::RadioButton("Random", renderTextureType_ == RenderTextureType::Random))
+	{
+		renderTextureType_ = RenderTextureType::Random;
+	}
+
+	ImGui::End();
 
 #endif // _DEBUG
 	
@@ -219,6 +250,9 @@ void GameScene::Draw() {
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+	terrain_->CameraUpdate(mainCamera_);
+	terrain_->Draw();
 
 	/*modelPlatform_->SkyBoxPreDraw();
 

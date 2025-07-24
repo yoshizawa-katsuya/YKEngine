@@ -14,7 +14,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     float32_t mask = gMaskTexture.Sample(gSampler, input.texcord);
     //maskの値が0.5(閾値)以下の場合はdiscardして抜く
     //TODO : 閾値をCBufferで設定できるようにする
-    float32_t threshold = 0.5f; // 閾値を定義
+    float32_t threshold = 0.2f; // 閾値を定義
     if (mask <= threshold) 
     {
         discard;

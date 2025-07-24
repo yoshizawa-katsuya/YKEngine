@@ -18,6 +18,7 @@
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
+#include "OffscreenRenderer.h"
 
 class GameScene : public BaseScene
 {
@@ -74,6 +75,10 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	std::unique_ptr<Rigid3dObject> terrain_;
+
+	RenderTextureType renderTextureType_ = RenderTextureType::GrayScale;
 
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;
