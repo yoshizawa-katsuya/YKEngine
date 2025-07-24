@@ -48,6 +48,8 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kGaussianFilterRendering)) = CreateGraphicsPipeline(DrawMode::kGaussianFilterRendering, dxCommon);
 
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kLuminanceOutlineRendering)) = CreateGraphicsPipeline(DrawMode::kLuminanceOutlineRendering, dxCommon);
+
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kOutlineRendering)) = CreateGraphicsPipeline(DrawMode::kOutlineRendering, dxCommon);
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kRadialBlurRendering)) = CreateGraphicsPipeline(DrawMode::kRadialBlurRendering, dxCommon);
@@ -125,6 +127,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kVignetteRendering:
 	case DrawMode::kBoxFilterRendering:
 	case DrawMode::kGaussianFilterRendering:
+	case DrawMode::kLuminanceOutlineRendering:
 	case DrawMode::kRadialBlurRendering:
 
 		rootParameters.resize(1);
@@ -526,6 +529,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kVignetteRendering:
 	case DrawMode::kBoxFilterRendering:
 	case DrawMode::kGaussianFilterRendering:
+	case DrawMode::kLuminanceOutlineRendering:
 	case DrawMode::kOutlineRendering:
 	case DrawMode::kRadialBlurRendering:
 	case DrawMode::kDissolveRendering:
@@ -694,6 +698,17 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 
+	case DrawMode::kLuminanceOutlineRendering:
+
+		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/FullScreen.VS.hlsl",
+			L"vs_6_0");
+		assert(vertexShaderBlob != nullptr);
+		pixelShaderBlob = dxCommon->CompilerShader(L"resources/shader/LuminanceBasedOutline.PS.hlsl",
+			L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+
+		break;
+
 	case DrawMode::kOutlineRendering:
 
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/FullScreen.VS.hlsl",
@@ -851,6 +866,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kVignetteRendering:
 	case DrawMode::kBoxFilterRendering:
 	case DrawMode::kGaussianFilterRendering:
+	case DrawMode::kLuminanceOutlineRendering:
 	case DrawMode::kOutlineRendering:
 	case DrawMode::kRadialBlurRendering:
 	case DrawMode::kDissolveRendering:
