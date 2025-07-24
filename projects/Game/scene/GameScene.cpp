@@ -4,6 +4,7 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "OffscreenRenderer.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -20,11 +21,11 @@ void GameScene::Initialize() {
 	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize();
-	
+
 	//点光源の生成
 	pointLight_ = std::make_unique<PointLight>();
 	pointLight_->Initialize();
-	
+
 	//スポットライトの生成
 	spotLight_ = std::make_unique<SpotLight>();
 	spotLight_->Initialize();
@@ -59,7 +60,7 @@ void GameScene::Initialize() {
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
-	
+
 	/*
 	//スプライトの生成
 	sprite_ = std::make_unique<Sprite>();
@@ -94,9 +95,14 @@ void GameScene::Initialize() {
 	worldTransform2_.UpdateMatrix();
 	*/
 
+	uint32_t maskTextureHandle = TextureManager::GetInstance()->Load("./Resources/noise0.png");
+	OffscreenRenderer::GetInstance()->SetRenderTextureType(RenderTextureType::Dissolve);
+	OffscreenRenderer::GetInstance()->SetMaskTexture(maskTextureHandle);
 }
 
 void GameScene::Update() {
+
+	OffscreenRenderer::GetInstance()->SetUseOffscreenRender(true);
 
 	//カメラの更新
 	camera_->Update();
@@ -187,7 +193,7 @@ void GameScene::Update() {
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
-		
+
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 
 	/*
@@ -196,10 +202,10 @@ void GameScene::Update() {
 	}
 	*/
 	ImGui::End();
-		
+
 
 #endif // _DEBUG
-	
+
 
 }
 
@@ -214,7 +220,7 @@ void GameScene::Draw() {
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
-	
+
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
