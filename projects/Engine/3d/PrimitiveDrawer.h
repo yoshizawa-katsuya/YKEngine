@@ -43,6 +43,7 @@ enum class DrawMode {
 	kOutlineRendering,
 	kRadialBlurRendering,
 	kDissolveRendering,
+	kRandomRendering,
 
 	kSkyboxMode,
 

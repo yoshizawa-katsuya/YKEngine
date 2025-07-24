@@ -27,6 +27,7 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 		DrawMode::kOutlineRendering,	//アウトライン
 		DrawMode::kRadialBlurRendering,	//放射状ぼかし
 		DrawMode::kDissolveRendering,	//ディゾルブ
+		DrawMode::kRandomRendering,		//ランダムノイズ
 	};
 
 	//RecderTexture作成
@@ -37,9 +38,13 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 	//DepthTextureのSRVを作成する
 	CreateDepthTextureSRV(srvHeapManager);
 
-	MaterialResource_ = dxCommon_->CreateBufferResource(sizeof(OutlineMaterial));
-	MaterialResource_->Map(0, nullptr, reinterpret_cast<void**>(&outlinematerialData_));
+	outlineMaterialResource_ = dxCommon_->CreateBufferResource(sizeof(OutlineMaterial));
+	outlineMaterialResource_->Map(0, nullptr, reinterpret_cast<void**>(&outlinematerialData_));
 	outlinematerialData_->projectionInverseMatrix = MakeIdentity4x4();
+
+	randomMaterialResource_ = dxCommon_->CreateBufferResource(sizeof(RandomMaterial));
+	randomMaterialResource_->Map(0, nullptr, reinterpret_cast<void**>(&randomMaterialData_));
+	randomMaterialData_->time = 0.1f;	//初期値を設定
 
 }
 
@@ -106,13 +111,17 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 		commandList_->ResourceBarrier(1, &depthBarrier);
 
 		srvHeapManager->SetGraphicsRootDescriptorTable(1, depthTextureSRVIndex_);	//アウトラインレンダリングの場合はDepthTextureのSRVもセットする
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, MaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, outlineMaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
 	}
 	else if (renderTextureType_ == RenderTextureType::Dissolve)
 	{
 		srvHeapManager->SetGraphicsRootDescriptorTable(1, maskTextureHandle_);	//ディゾルブレンダリングの場合はマスクテクスチャのSRVもセットする
 	}
-
+	else if (renderTextureType_ == RenderTextureType::Random)
+	{
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, randomMaterialResource_->GetGPUVirtualAddress());	//ランダムマテリアルの設定
+		randomMaterialData_->time += 0.01f;	//時間を更新
+	}
 
 	commandList_->DrawInstanced(3, 1, 0, 0);
 

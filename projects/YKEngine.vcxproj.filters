@@ -320,6 +320,9 @@
     <FxCompile Include="Resources\shader\Dissolve.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shader\Random.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">

@@ -22,6 +22,7 @@ enum class RenderTextureType
 	Outline,
 	RadialBlur,
 	Dissolve,
+	Random,
 };
 
 class OffscreenRenderer
@@ -71,6 +72,11 @@ private:
 		Matrix4x4 projectionInverseMatrix; // プロジェクション逆行列
 	};
 
+	struct RandomMaterial
+	{
+		float time;
+	};
+
 	DirectXCommon* dxCommon_ = nullptr;
 	ID3D12GraphicsCommandList* commandList_;
 	D3D12_VIEWPORT* viewport_;
@@ -82,16 +88,20 @@ private:
 
 	uint32_t depthTextureSRVIndex_;
 
-	//マテリアル
-	Microsoft::WRL::ComPtr<ID3D12Resource> MaterialResource_ = nullptr;
+	//アウトラインマテリアル
+	Microsoft::WRL::ComPtr<ID3D12Resource> outlineMaterialResource_ = nullptr;
 	OutlineMaterial* outlinematerialData_ = nullptr;
+
+	//ランダムマテリアル
+	Microsoft::WRL::ComPtr<ID3D12Resource> randomMaterialResource_ = nullptr;
+	RandomMaterial* randomMaterialData_ = nullptr;
 
 	//マスクテクスチャのハンドル
 	uint32_t maskTextureHandle_;
 
 	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
 
-	const uint32_t renderTextureTypeCount_ = 8; // RenderTextureTypeの数
+	const uint32_t renderTextureTypeCount_ = 9; // RenderTextureTypeの数
 
 	std::vector<DrawMode> renderTextureDrawModes_;
 
