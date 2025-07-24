@@ -24,7 +24,8 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 		DrawMode::kVignetteRendering,	//ヴィネッティング
 		DrawMode::kBoxFilterRendering,	//BoxFilterによるぼかし
 		DrawMode::kGaussianFilterRendering,	//ガウスフィルタによるぼかし
-		DrawMode::kOutlineRendering,	//アウトライン
+		DrawMode::kLuminanceOutlineRendering,	//輝度アウトライン
+		DrawMode::kOutlineRendering,	//深度アウトライン
 		DrawMode::kRadialBlurRendering,	//放射状ぼかし
 		DrawMode::kDissolveRendering,	//ディゾルブ
 		DrawMode::kRandomRendering,		//ランダムノイズ
