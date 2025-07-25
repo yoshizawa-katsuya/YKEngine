@@ -50,6 +50,8 @@ void GameScene::Initialize() {
 	
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
+	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
+	modelGround_->SetUVTransform({ {160.0f, 160.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
 	modelSkydome_ = modelPlatform_->CreateRigidModel("./Resources/skydome", "skydome.obj");
 	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_, "Bullet");
@@ -92,6 +94,15 @@ void GameScene::Initialize() {
 	//スカイドームの初期化
 	skydome_->Initialize(modelSkydome_.get());
 	
+	//地面の生成
+	ground_ = std::make_unique<Rigid3dObject>();
+	ground_->Initialize(modelGround_.get());
+	WorldTransform groundTransform;
+	groundTransform.Initialize();
+	groundTransform.scale_ = { 20.0f, 20.0f, 20.0f };
+	groundTransform.UpdateMatrix();
+	ground_->WorldTransformUpdate(groundTransform);
+
 	//自キャラとレールカメラの親子関係を結ぶ
 	player_->SetParent(railCamera_->GetWorldTransform());
 	player_->SetGameScene(this);
@@ -241,6 +252,10 @@ void GameScene::Draw() {
 	
 	//modelPlatform_->SkinPreDraw();
 	
+	//地面の描画
+	ground_->CameraUpdate(mainCamera_);
+	ground_->Draw();
+
 	//スカイドームの描画
 	skydome_->Draw(mainCamera_);
 

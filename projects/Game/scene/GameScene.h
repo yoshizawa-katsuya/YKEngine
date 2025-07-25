@@ -115,6 +115,7 @@ private:
 
 	//3Dモデル
 	std::shared_ptr<BaseModel> modelSkydome_;
+	std::shared_ptr<BaseModel> modelGround_;
 	std::shared_ptr<BaseModel> modelPlayer_;
 	std::shared_ptr<BaseModel> modelEnemy_;
 	std::shared_ptr<BaseModel> modelBullet_;
@@ -145,6 +146,9 @@ private:
 
 	//天球
 	std::unique_ptr<Skydome> skydome_;
+
+	//地面
+	std::unique_ptr<Rigid3dObject> ground_;
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;
