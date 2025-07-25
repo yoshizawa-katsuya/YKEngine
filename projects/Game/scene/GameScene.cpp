@@ -52,7 +52,6 @@ void GameScene::Initialize() {
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
 	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
 	modelGround_->SetUVTransform({ {160.0f, 160.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
-	modelSkydome_ = modelPlatform_->CreateRigidModel("./Resources/skydome", "skydome.obj");
 	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_, "Bullet");
 
@@ -84,16 +83,22 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/black.png");
 	textureHandleEnemyBullet_ = TextureManager::GetInstance()->Load("./Resources/red.png");
+	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
 	//衝突マネージャの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize();
-
-	//スカイドームの生成
-	skydome_ = std::make_unique<Skydome>();
-	//スカイドームの初期化
-	skydome_->Initialize(modelSkydome_.get());
 	
+
+	//スカイボックスの生成
+	skyBox_ = std::make_unique<Rigid3dObject>();
+	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandleSkyBox_).get());
+	WorldTransform skyBoxTransform;
+	skyBoxTransform.Initialize();
+	skyBoxTransform.scale_ = { 100.0f, 100.0f, 100.0f };
+	skyBoxTransform.UpdateMatrix();
+	skyBox_->WorldTransformUpdate(skyBoxTransform);
+
 	//地面の生成
 	ground_ = std::make_unique<Rigid3dObject>();
 	ground_->Initialize(modelGround_.get());
@@ -245,6 +250,12 @@ void GameScene::Draw() {
 
 	//sprite_->Draw();
 
+	//背景の描画
+	modelPlatform_->SkyBoxPreDraw();
+
+	skyBox_->CameraUpdate(mainCamera_);
+	skyBox_->Draw();
+
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
@@ -255,9 +266,6 @@ void GameScene::Draw() {
 	//地面の描画
 	ground_->CameraUpdate(mainCamera_);
 	ground_->Draw();
-
-	//スカイドームの描画
-	skydome_->Draw(mainCamera_);
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
@@ -396,9 +404,6 @@ void GameScene::UpdateMain()
 
 	//レールカメラの更新
 	railCamera_->Update();
-
-	//スカイドームの更新
-	skydome_->Update();
 
 	//プレイヤーの更新
 	player_->Update(camera_.get());

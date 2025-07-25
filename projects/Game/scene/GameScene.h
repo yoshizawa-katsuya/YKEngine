@@ -114,7 +114,7 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	//3Dモデル
-	std::shared_ptr<BaseModel> modelSkydome_;
+	/*std::shared_ptr<BaseModel> modelSkydome_;*/
 	std::shared_ptr<BaseModel> modelGround_;
 	std::shared_ptr<BaseModel> modelPlayer_;
 	std::shared_ptr<BaseModel> modelEnemy_;
@@ -124,6 +124,7 @@ private:
 	uint32_t textureHandle_;
 	uint32_t textureHandlePlayerBullet_;
 	uint32_t textureHandleEnemyBullet_;
+	uint32_t textureHandleSkyBox_;
 	//std::unique_ptr<Sprite> sprite_;
 
 	//衝突マネージャー
@@ -145,7 +146,10 @@ private:
 	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
 
 	//天球
-	std::unique_ptr<Skydome> skydome_;
+	/*std::unique_ptr<Skydome> skydome_;*/
+
+	//スカイボックス
+	std::unique_ptr<Rigid3dObject> skyBox_;
 
 	//地面
 	std::unique_ptr<Rigid3dObject> ground_;
