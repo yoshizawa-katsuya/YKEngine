@@ -107,6 +107,19 @@ void SrvHeapManager::CreateSRVforRenderTexture(uint32_t srvIndex, ID3D12Resource
 	dxCommon_->GetDevice()->CreateShaderResourceView(pResource, &renderTextureSrvDesc, GetCPUDescriptorHandle(srvIndex));
 }
 
+void SrvHeapManager::CreateSRVforDepthTexture(uint32_t srvIndex, ID3D12Resource* pResource)
+{
+	D3D12_SHADER_RESOURCE_VIEW_DESC depthTextureSrvDesc{};
+	// DXGI_FORMAT_D24_UNORM_S8_UINTのDepthを読むときはDXGI_FORMAT_R24_UNORM_X8_TYPELESS
+	depthTextureSrvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS; // 深度テクスチャのフォーマット
+	depthTextureSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	depthTextureSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
+	depthTextureSrvDesc.Texture2D.MipLevels = 1; // ミップレベルは1
+
+	// SRVの生成
+	dxCommon_->GetDevice()->CreateShaderResourceView(pResource, &depthTextureSrvDesc, GetCPUDescriptorHandle(srvIndex));
+}
+
 D3D12_CPU_DESCRIPTOR_HANDLE SrvHeapManager::GetCPUDescriptorHandle(uint32_t index)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();

@@ -347,6 +347,24 @@
     <FxCompile Include="Resources\shader\Skybox.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shader\GaussianFilter.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\Outline.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\RadialBlur.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\Dissolve.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\Random.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\LuminanceBasedOutline.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">

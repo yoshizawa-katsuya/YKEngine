@@ -1,6 +1,7 @@
 #include "OffscreenRenderer.h"
 #include "SrvHeapManager.h"
 #include "PrimitiveDrawer.h"
+#include "Matrix.h"
 
 OffscreenRenderer* OffscreenRenderer::GetInstance()
 {
@@ -22,12 +23,29 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 		DrawMode::kGrayScaleRendering,	//グレイスケール
 		DrawMode::kVignetteRendering,	//ヴィネッティング
 		DrawMode::kBoxFilterRendering,	//BoxFilterによるぼかし
+		DrawMode::kGaussianFilterRendering,	//ガウスフィルタによるぼかし
+		DrawMode::kLuminanceOutlineRendering,	//輝度アウトライン
+		DrawMode::kOutlineRendering,	//深度アウトライン
+		DrawMode::kRadialBlurRendering,	//放射状ぼかし
+		DrawMode::kDissolveRendering,	//ディゾルブ
+		DrawMode::kRandomRendering,		//ランダムノイズ
 	};
 
 	//RecderTexture作成
 	CreateRenderTexture();
 
 	CreateRenderTextureSRV(srvHeapManager);
+
+	//DepthTextureのSRVを作成する
+	CreateDepthTextureSRV(srvHeapManager);
+
+	outlineMaterialResource_ = dxCommon_->CreateBufferResource(sizeof(OutlineMaterial));
+	outlineMaterialResource_->Map(0, nullptr, reinterpret_cast<void**>(&outlinematerialData_));
+	outlinematerialData_->projectionInverseMatrix = MakeIdentity4x4();
+
+	randomMaterialResource_ = dxCommon_->CreateBufferResource(sizeof(RandomMaterial));
+	randomMaterialResource_->Map(0, nullptr, reinterpret_cast<void**>(&randomMaterialData_));
+	randomMaterialData_->time = 0.1f;	//初期値を設定
 
 }
 
@@ -65,7 +83,7 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	//Noneにしておく
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	//バリアを張る対象のリソース。現在のバックバッファに対して使う
+	//バリアを張る対象のリソース
 	barrier.Transition.pResource = renderTextureResource_.Get();
 	//遷移前（現在）のResourceState
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
@@ -77,6 +95,34 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	//コピー実行
 	primitiveDrawer->SetPipelineSet(commandList_, renderTextureDrawModes_[static_cast<uint32_t>(renderTextureType_)]);
 	srvHeapManager->SetGraphicsRootDescriptorTable(0, renderTextureSRVIndex_);
+
+	if (renderTextureType_ == RenderTextureType::Outline) {
+
+		//TransitionBarrierの設定
+		D3D12_RESOURCE_BARRIER depthBarrier{};
+		//今回のバリアはTransition
+		depthBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		//バリアを張る対象のリソース。DepthTextureのSRVをセットする
+		depthBarrier.Transition.pResource = dxCommon_->GetDepthStencilResource();
+		//遷移前（現在）のResourceState
+		depthBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+		//遷移後のResourceState
+		depthBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+		//TransitionBarrierを張る
+		commandList_->ResourceBarrier(1, &depthBarrier);
+
+		srvHeapManager->SetGraphicsRootDescriptorTable(1, depthTextureSRVIndex_);	//アウトラインレンダリングの場合はDepthTextureのSRVもセットする
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, outlineMaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
+	}
+	else if (renderTextureType_ == RenderTextureType::Dissolve)
+	{
+		srvHeapManager->SetGraphicsRootDescriptorTable(1, maskTextureHandle_);	//ディゾルブレンダリングの場合はマスクテクスチャのSRVもセットする
+	}
+	else if (renderTextureType_ == RenderTextureType::Random)
+	{
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, randomMaterialResource_->GetGPUVirtualAddress());	//ランダムマテリアルの設定
+		randomMaterialData_->time += 0.01f;	//時間を更新
+	}
 
 	commandList_->DrawInstanced(3, 1, 0, 0);
 
@@ -95,7 +141,29 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	//TransitionBarrierを張る
 	commandList_->ResourceBarrier(1, &barrier2);
 
+	if (renderTextureType_ == RenderTextureType::Outline) {
+		//TransitionBarrierの設定
+		D3D12_RESOURCE_BARRIER depthBarrier{};
+		//今回のバリアはTransition
+		depthBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		//バリアを張る対象のリソース。DepthTextureのSRVをセットする
+		depthBarrier.Transition.pResource = dxCommon_->GetDepthStencilResource();
+		//遷移前（現在）のResourceState
+		depthBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+		//遷移後のResourceState
+		depthBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+		//TransitionBarrierを張る
+		commandList_->ResourceBarrier(1, &depthBarrier);
+	}
+
 	useOffscreenRender_ = false;	//オフスクリーンレンダリングを使用するフラグを下げる
+}
+
+void OffscreenRenderer::UpdateOutlineMaterialData(const Matrix4x4& projectionMatrix)
+{
+	//アウトラインマテリアルのデータを更新する
+	outlinematerialData_->projectionInverseMatrix = Inverse(projectionMatrix);
+	
 }
 
 void OffscreenRenderer::CreateRenderTexture()
@@ -157,4 +225,11 @@ void OffscreenRenderer::CreateRenderTextureResource(int32_t width, int32_t heigh
 	);
 	assert(SUCCEEDED(hr));
 
+}
+
+void OffscreenRenderer::CreateDepthTextureSRV(SrvHeapManager* srvHerpManager)
+{
+	//DepthStencilのSRVを作成する
+	depthTextureSRVIndex_ = srvHerpManager->Allocate();
+	srvHerpManager->CreateSRVforDepthTexture(depthTextureSRVIndex_, dxCommon_->GetDepthStencilResource());
 }

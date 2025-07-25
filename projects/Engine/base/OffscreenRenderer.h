@@ -5,6 +5,7 @@
 #include <cstdint>
 #include "Vector4.h"
 #include <vector>
+#include "Struct.h"
 class SrvHeapManager;
 class PrimitiveDrawer;
 class DirectXCommon;
@@ -17,6 +18,12 @@ enum class RenderTextureType
 	GrayScale,
 	Vignette,
 	BoxFilter,
+	GaussianFilter,
+	LuminanceOutline,
+	Outline,
+	RadialBlur,
+	Dissolve,
+	Random,
 };
 
 class OffscreenRenderer
@@ -31,6 +38,10 @@ public:
 	void PreDrawRenderTexture();
 
 	void PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
+
+	void UpdateOutlineMaterialData(const Matrix4x4& projectionMatrix);
+
+	void SetMaskTexture(uint32_t texturehandle) { maskTextureHandle_ = texturehandle; }
 
 	bool* GetUseOffscreenRenderPtr() { return &useOffscreenRender_; }
 	bool GetUseOffscreenRender() { return useOffscreenRender_; }
@@ -55,6 +66,18 @@ private:
 
 	void CreateRenderTextureResource(int32_t width, int32_t height, DXGI_FORMAT format, const Vector4& clearColor);
 
+	void CreateDepthTextureSRV(SrvHeapManager* srvHerpManager);
+
+	struct OutlineMaterial
+	{
+		Matrix4x4 projectionInverseMatrix; // プロジェクション逆行列
+	};
+
+	struct RandomMaterial
+	{
+		float time;
+	};
+
 	DirectXCommon* dxCommon_ = nullptr;
 	ID3D12GraphicsCommandList* commandList_;
 	D3D12_VIEWPORT* viewport_;
@@ -64,9 +87,22 @@ private:
 	uint32_t renderTextureSRVIndex_;
 	D3D12_CPU_DESCRIPTOR_HANDLE renderTextureRtvHandle_;
 
+	uint32_t depthTextureSRVIndex_;
+
+	//アウトラインマテリアル
+	Microsoft::WRL::ComPtr<ID3D12Resource> outlineMaterialResource_ = nullptr;
+	OutlineMaterial* outlinematerialData_ = nullptr;
+
+	//ランダムマテリアル
+	Microsoft::WRL::ComPtr<ID3D12Resource> randomMaterialResource_ = nullptr;
+	RandomMaterial* randomMaterialData_ = nullptr;
+
+	//マスクテクスチャのハンドル
+	uint32_t maskTextureHandle_;
+
 	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
 
-	const uint32_t renderTextureTypeCount_ = 4; // RenderTextureTypeの数
+	const uint32_t renderTextureTypeCount_ = 10; // RenderTextureTypeの数
 
 	std::vector<DrawMode> renderTextureDrawModes_;
 
