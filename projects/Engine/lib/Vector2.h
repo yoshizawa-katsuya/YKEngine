@@ -5,11 +5,31 @@ struct Vector2 {
 	float y;
 };
 
+//加算
+Vector2 Add(const Vector2& v1, const Vector2& v2);
+
 //減算
 Vector2 Subtract(const Vector2& v1, const Vector2& v2);
+
+//スカラー倍
+Vector2 Multiply(const Vector2& v, float s);
 
 //長さ
 float Length(const Vector2& v);
 
 //内積
 float Dot(const Vector2& v1, const Vector2& v2);
+
+Vector2 operator+(const Vector2& v1, const Vector2& v2);
+
+Vector2 operator-(const Vector2& v1, const Vector2& v2);
+
+Vector2 operator*(float s, const Vector2& v);
+
+Vector2 operator*(const Vector2& v, float s);
+
+Vector2 operator/(const Vector2& v, float s);
+
+Vector2 operator-(const Vector2& v);
+
+Vector2 operator+(const Vector2& v);
