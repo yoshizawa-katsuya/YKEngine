@@ -7,6 +7,8 @@
 #include <fstream>
 #include "Matrix.h"
 #include "LevelDataLoader.h"
+#include "Collision.h"
+#include "Vector2.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -317,8 +319,7 @@ void GameScene::CheckAllColision() {
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
 		Vector2 ScreenPosB = { enemy->GetScreenPosition(camera_.get()).x, enemy->GetScreenPosition(camera_.get()).y };
 
-		if (ScreenPosB.x >= ScreenPosA.x - SizeA.x && ScreenPosB.x <= ScreenPosA.x + SizeA.x &&
-			ScreenPosB.y >= ScreenPosA.y - SizeA.y && ScreenPosB.y <= ScreenPosA.y + SizeA.y) {
+		if (IsCollision(Square(ScreenPosA - SizeA / 2.0f, ScreenPosA + SizeA / 2.0f), ScreenPosB)) {
 
 			player_->LockOn(ScreenPosB, enemy->GetWorldPosition());
 			break;
