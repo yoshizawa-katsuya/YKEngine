@@ -50,9 +50,9 @@ void GameScene::Initialize() {
 	
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
-	modelPlayer_->SetEnvironmentCoefficient(1.0f);
 	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
 	modelGround_->SetUVTransform({ {160.0f, 160.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
+	modelGround_->SetEnvironmentCoefficient(0.8f);
 	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_, "Bullet");
 
