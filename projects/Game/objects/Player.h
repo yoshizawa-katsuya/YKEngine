@@ -41,9 +41,9 @@ public:
 	Vector3 GetWorldPosition();
 
 	//2Dレティクルの座標を取得
-	Vector2 Get2DReticlePosition() { return sprite2DReticle_->GetPosition(); }
+	Vector2 GetLargeReticlePosition() { return spriteLargeReticle_->GetPosition(); }
 
-	Vector2 Get2DReticleSize() { return sprite2DReticle_->GetSize(); }
+	Vector2 GetLargeReticleSize() { return spriteLargeReticle_->GetSize(); }
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
@@ -59,7 +59,8 @@ private:
 	WorldTransform worldTransform3DReticle_;
 
 	//2Dレティクル用スプライト
-	std::unique_ptr<Sprite> sprite2DReticle_;
+	std::unique_ptr<Sprite> spriteLargeReticle_;
+	std::unique_ptr<Sprite> spriteSmallReticle_;
 
 	bool isLockOn_ = false;
 

@@ -22,13 +22,19 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix) {
 	worldTransform3DReticle_.Initialize();
 
 	//レティクル用テクスチャ取得
-	uint32_t textureReticle = TextureManager::GetInstance()->Load("./Resources/reticle.png");
+	uint32_t textureLargeReticle = TextureManager::GetInstance()->Load("./Resources/largeReticle.png");
+	uint32_t textureSmallReticle = TextureManager::GetInstance()->Load("./Resources/smallReticle.png");
 
 	//スプライト生成
-	sprite2DReticle_ = std::make_unique<Sprite>();
-	sprite2DReticle_->Initialize(textureReticle);
-	sprite2DReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
-	sprite2DReticle_->SetAnchorPoint({ 0.5f, 0.5f });
+	spriteLargeReticle_ = std::make_unique<Sprite>();
+	spriteLargeReticle_->Initialize(textureLargeReticle);
+	spriteLargeReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
+	spriteLargeReticle_->SetAnchorPoint({ 0.5f, 0.5f });
+
+	spriteSmallReticle_ = std::make_unique<Sprite>();
+	spriteSmallReticle_->Initialize(textureSmallReticle);
+	spriteSmallReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
+	spriteSmallReticle_->SetAnchorPoint({ 0.5f, 0.5f });
 
 }
 
@@ -99,10 +105,10 @@ void Player::Update(Camera* railCamera) {
 
 void Player::ReticleUpdate(Camera* railCamera)
 {
-	sprite2DReticle_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	spriteSmallReticle_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 
 	//スプライトの現在座標を取得
-	Vector2 spritePosition = sprite2DReticle_->GetPosition();
+	Vector2 spritePosition = spriteLargeReticle_->GetPosition();
 
 	Vector3 move = { 0, 0, 0 };
 	const float kReticleSpeed = 12.0f;
@@ -131,7 +137,8 @@ void Player::ReticleUpdate(Camera* railCamera)
 	spritePosition.y = std::clamp(spritePosition.y, 0.0f, static_cast<float>(WinApp::kClientHeight));
 
 	//スプライトの座標変更を反映
-	sprite2DReticle_->SetPosition(spritePosition);
+	spriteLargeReticle_->SetPosition(spritePosition);
+	spriteSmallReticle_->SetPosition(spritePosition);
 
 	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
 	Matrix4x4 matViewProjectionViewport = Multiply(railCamera->GetViewProjection(), *viewPortMatrix_);
@@ -201,15 +208,15 @@ void Player::OnCollision(Collider* other)
 
 void Player::DrawUI() {
 
-	sprite2DReticle_->Draw();
-
+	spriteLargeReticle_->Draw();
+	spriteSmallReticle_->Draw();
 }
 
 void Player::LockOn(const Vector2& position, const Vector3& targetPosition) {
 
 	isLockOn_ = true;
-	sprite2DReticle_->SetPosition(position);
-	sprite2DReticle_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
+	spriteSmallReticle_->SetPosition(position);
+	spriteSmallReticle_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
 
 	target_ = targetPosition;
 }

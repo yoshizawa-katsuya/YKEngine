@@ -335,18 +335,25 @@ void GameScene::CheckAllColision() {
 
 #pragma region
 
-	Vector2 ScreenPosA = player_->Get2DReticlePosition();
-	Vector2 SizeA = player_->Get2DReticleSize();
+	Vector2 ScreenPosA = player_->GetLargeReticlePosition();
+	Vector2 SizeA = player_->GetLargeReticleSize();
 
 	player_->SetIsLockOn(false);
+	float closestDistance = (std::numeric_limits<float>::max)();
 
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
 		Vector2 ScreenPosB = { enemy->GetScreenPosition(camera_.get()).x, enemy->GetScreenPosition(camera_.get()).y };
 
 		if (IsCollision(Square(ScreenPosA - SizeA / 2.0f, ScreenPosA + SizeA / 2.0f), ScreenPosB)) {
+			//一番近い敵を探す
+			float distance = Length(ScreenPosA - ScreenPosB);
 
+			if (closestDistance < distance) {
+				continue; // 既に近い敵がいるのでスキップ
+			}
+
+			closestDistance = distance;
 			player_->LockOn(ScreenPosB, enemy->GetWorldPosition());
-			break;
 		}
 
 	}
