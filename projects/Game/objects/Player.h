@@ -4,8 +4,10 @@
 #include "Input.h"
 #include "Sprite.h"
 #include "BaseCharacter.h"
+#include "ReticleController.h"
 class Camera;
 class GameScene;
+class Enemy;
 
 class Player : public BaseCharacter
 {
@@ -30,20 +32,13 @@ public:
 	//UI描画
 	void DrawUI();
 
-	void LockOn(const Vector2& position, const Vector3& targetPosition);
+	void SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* railCamera);
 
 	//親となるワールドトランスフォームをセット
 	void SetParent(WorldTransform* parent);
 
-	void SetIsLockOn(bool isLockOn) { isLockOn_ = isLockOn; }
-
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
-
-	//2Dレティクルの座標を取得
-	Vector2 GetLargeReticlePosition() { return spriteLargeReticle_->GetPosition(); }
-
-	Vector2 GetLargeReticleSize() { return spriteLargeReticle_->GetSize(); }
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
@@ -55,19 +50,7 @@ private:
 	//ゲームシーン
 	GameScene* gameScene_ = nullptr;
 
-	//3Dレティクル用ワールドトランスフォーム
-	WorldTransform worldTransform3DReticle_;
-
-	//2Dレティクル用スプライト
-	std::unique_ptr<Sprite> spriteLargeReticle_;
-	std::unique_ptr<Sprite> spriteSmallReticle_;
-
-	bool isLockOn_ = false;
-
-	Vector3 target_;
-
-	//ビューポート行列
-	Matrix4x4* viewPortMatrix_ = nullptr;
+	std::unique_ptr<ReticleController> reticleController_ = nullptr;
 
 	int hitPoint_ = 5; // プレイヤーのヒットポイント
 };

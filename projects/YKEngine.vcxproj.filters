@@ -279,6 +279,9 @@
     <ClCompile Include="Game\manager\EnemySpawnManager.cpp">
       <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\ReticleController.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -570,6 +573,9 @@
     </ClInclude>
     <ClInclude Include="Game\manager\EnemySpawnManager.h">
       <Filter>ヘッダー ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\ReticleController.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

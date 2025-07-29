@@ -7,7 +7,6 @@
 #include <fstream>
 #include "Matrix.h"
 #include "LevelDataLoader.h"
-#include "Collision.h"
 #include "Vector2.h"
 
 GameScene::~GameScene() {
@@ -333,32 +332,6 @@ void GameScene::CheckAllColision() {
 	collisionManager_->Update();
 	collisionManager_->CheckAllCollisions();
 
-#pragma region
-
-	Vector2 ScreenPosA = player_->GetLargeReticlePosition();
-	Vector2 SizeA = player_->GetLargeReticleSize();
-
-	player_->SetIsLockOn(false);
-	float closestDistance = (std::numeric_limits<float>::max)();
-
-	for (std::unique_ptr<Enemy>& enemy : enemys_) {
-		Vector2 ScreenPosB = { enemy->GetScreenPosition(camera_.get()).x, enemy->GetScreenPosition(camera_.get()).y };
-
-		if (IsCollision(Square(ScreenPosA - SizeA / 2.0f, ScreenPosA + SizeA / 2.0f), ScreenPosB)) {
-			//一番近い敵を探す
-			float distance = Length(ScreenPosA - ScreenPosB);
-
-			if (closestDistance < distance) {
-				continue; // 既に近い敵がいるのでスキップ
-			}
-
-			closestDistance = distance;
-			player_->LockOn(ScreenPosB, enemy->GetWorldPosition());
-		}
-
-	}
-
-#pragma endregion
 }
 
 void GameScene::EnemyPop(const Vector3& position) {
@@ -453,6 +426,8 @@ void GameScene::UpdateMain()
 	}
 
 	CheckAllColision();
+
+	player_->SetLockOnTarget(enemys_, camera_.get());
 
 	CheckGameClear();
 

@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Lerp.h"
 #include "GameScene.h"
+#include "ReticleController.h"
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix) {
 
@@ -14,27 +15,10 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix) {
 
 	input_ = Input::GetInstance();
 
-	viewPortMatrix_ = viewPortMatrix;
-
 	worldTransform_.translation_.z = 20.0f;
 
-	//3Dレティクルのワールドトランスフォーム初期化
-	worldTransform3DReticle_.Initialize();
-
-	//レティクル用テクスチャ取得
-	uint32_t textureLargeReticle = TextureManager::GetInstance()->Load("./Resources/largeReticle.png");
-	uint32_t textureSmallReticle = TextureManager::GetInstance()->Load("./Resources/smallReticle.png");
-
-	//スプライト生成
-	spriteLargeReticle_ = std::make_unique<Sprite>();
-	spriteLargeReticle_->Initialize(textureLargeReticle);
-	spriteLargeReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
-	spriteLargeReticle_->SetAnchorPoint({ 0.5f, 0.5f });
-
-	spriteSmallReticle_ = std::make_unique<Sprite>();
-	spriteSmallReticle_->Initialize(textureSmallReticle);
-	spriteSmallReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
-	spriteSmallReticle_->SetAnchorPoint({ 0.5f, 0.5f });
+	reticleController_ = std::make_unique<ReticleController>();
+	reticleController_->Initialize(viewPortMatrix);
 
 }
 
@@ -105,62 +89,7 @@ void Player::Update(Camera* railCamera) {
 
 void Player::ReticleUpdate(Camera* railCamera)
 {
-	spriteSmallReticle_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-
-	//スプライトの現在座標を取得
-	Vector2 spritePosition = spriteLargeReticle_->GetPosition();
-
-	Vector3 move = { 0, 0, 0 };
-	const float kReticleSpeed = 12.0f;
-
-	//押した方向で移動ベクトルを変更(左右)
-	if (input_->PushKey(DIK_LEFT)) {
-		move.x -= kReticleSpeed;
-	}
-	else if (input_->PushKey(DIK_RIGHT)) {
-		move.x += kReticleSpeed;
-	}
-
-	// 押した方向で移動ベクトルを変更(上下)
-	if (input_->PushKey(DIK_DOWN)) {
-		move.y += kReticleSpeed;
-	}
-	else if (input_->PushKey(DIK_UP)) {
-		move.y -= kReticleSpeed;
-	}
-
-	spritePosition.x += move.x;
-	spritePosition.y += move.y;
-
-	//範囲を超えない処理
-	spritePosition.x = std::clamp(spritePosition.x, 0.0f, static_cast<float>(WinApp::kClientWidth));
-	spritePosition.y = std::clamp(spritePosition.y, 0.0f, static_cast<float>(WinApp::kClientHeight));
-
-	//スプライトの座標変更を反映
-	spriteLargeReticle_->SetPosition(spritePosition);
-	spriteSmallReticle_->SetPosition(spritePosition);
-
-	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
-	Matrix4x4 matViewProjectionViewport = Multiply(railCamera->GetViewProjection(), *viewPortMatrix_);
-
-	//合成行列の逆行列の計算をする
-	Matrix4x4 matInveraseVPV = Inverse(matViewProjectionViewport);
-
-	//スクリーン座標
-	Vector3 posNear = Vector3(spritePosition.x, spritePosition.y, 0);
-	Vector3 posFar = Vector3(spritePosition.x, spritePosition.y, 1);
-
-	//スクリーン座標系からワールド座標系へ
-	posNear = Transform(posNear, matInveraseVPV);
-	posFar = Transform(posFar, matInveraseVPV);
-
-	//マウスレイの方向
-	Vector3 mouseDirection = Subtract(posFar, posNear);
-	mouseDirection = Normalize(mouseDirection);
-	//カメラから照準オブジェクトへの距離
-	const float kDistanceTestObject = 50.0f;
-	worldTransform3DReticle_.translation_ = Add(posNear, Multiply(kDistanceTestObject, mouseDirection));
-	worldTransform3DReticle_.UpdateMatrix();
+	reticleController_->Update(railCamera);
 }
 
 void Player::Attack() {
@@ -172,12 +101,12 @@ void Player::Attack() {
 		Vector3 velocity(0, 0, kBulletSpeed);
 
 		//自機から照準オブジェクトへのベクトル
-		if (isLockOn_) {
-			velocity = Subtract(target_, GetWorldPosition());
+		if (reticleController_->IsLockOn()) {
+			velocity = Subtract(reticleController_->GetTargetPosition(), GetWorldPosition());
 
 		}
 		else {
-			velocity = Subtract(worldTransform3DReticle_.translation_, GetWorldPosition());
+			velocity = Subtract(reticleController_->Get3DReticlePosition(), GetWorldPosition());
 
 		}
 		velocity = Multiply(kBulletSpeed, Normalize(velocity));
@@ -206,19 +135,14 @@ void Player::OnCollision(Collider* other)
 	}
 }
 
-void Player::DrawUI() {
-
-	spriteLargeReticle_->Draw();
-	spriteSmallReticle_->Draw();
+void Player::DrawUI()
+{
+	reticleController_->Draw();
 }
 
-void Player::LockOn(const Vector2& position, const Vector3& targetPosition) {
-
-	isLockOn_ = true;
-	spriteSmallReticle_->SetPosition(position);
-	spriteSmallReticle_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
-
-	target_ = targetPosition;
+void Player::SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* railCamera)
+{
+	reticleController_->SetLockOnTarget(enemies, railCamera);
 }
 
 void Player::SetParent(WorldTransform* parent) {
