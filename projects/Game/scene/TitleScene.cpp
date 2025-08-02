@@ -15,13 +15,12 @@ void TitleScene::Initialize()
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
-	/*
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/Title.png");
+	
+	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/title.png");
 
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(textureHandle_, spritePlatform_);
-	sprite_->SetPosition({ 100.0f, 100.0f });
-	*/
+	spriteTitle_ = std::make_unique<Sprite>();
+	spriteTitle_->Initialize(textureHandle);
+	
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
@@ -63,6 +62,8 @@ void TitleScene::Draw()
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
+
+	spriteTitle_->Draw();
 
 	fade_->Draw();
 }

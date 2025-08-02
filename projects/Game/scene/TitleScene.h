@@ -40,6 +40,8 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 	
+	std::unique_ptr<Sprite> spriteTitle_;	//タイトルのスプライト
+
 	//シーンのフェーズ
 	enum class Phase {
 		kStart,	//開始部
