@@ -451,7 +451,7 @@ void GameScene::UpdateGameOver()
 	if (fade_->IsFinished()) {
 		//fade_->Stop();
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
+		sceneManager_->ChengeScene("GameOverScene");
 	}
 }
 
