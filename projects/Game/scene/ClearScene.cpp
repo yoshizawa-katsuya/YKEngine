@@ -1,23 +1,23 @@
-#include "GameOverScene.h"
+#include "ClearScene.h"
 #include "Input.h"
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "imgui/imgui.h"
 #include "SceneManager.h"
 
-GameOverScene::~GameOverScene()
+ClearScene::~ClearScene()
 {
 }
 
-void GameOverScene::Initialize()
+void ClearScene::Initialize()
 {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
-	//TODO : ゲームオーバー用のテクスチャに差し替える
-	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/gameOver.png");
+	//TODO : ゲームクリア用のテクスチャに差し替える
+	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/clear.png");
 
 	spriteBackGround_ = std::make_unique<Sprite>();
 	spriteBackGround_->Initialize(textureHandle);
@@ -27,12 +27,12 @@ void GameOverScene::Initialize()
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 }
 
-void GameOverScene::Update()
+void ClearScene::Update()
 {
 #ifdef _DEBUG
 
 	ImGui::Begin("Window");
-	ImGui::Text("GameOver");
+	ImGui::Text("Clear");
 	ImGui::End();
 
 #endif // _DEBUG
@@ -56,7 +56,7 @@ void GameOverScene::Update()
 	}
 }
 
-void GameOverScene::Draw()
+void ClearScene::Draw()
 {
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
@@ -66,11 +66,11 @@ void GameOverScene::Draw()
 	fade_->Draw();
 }
 
-void GameOverScene::Finalize()
+void ClearScene::Finalize()
 {
 }
 
-void GameOverScene::UpdateStart()
+void ClearScene::UpdateStart()
 {
 	fade_->Update();
 	if (fade_->IsFinished()) {
@@ -79,7 +79,7 @@ void GameOverScene::UpdateStart()
 	}
 }
 
-void GameOverScene::UpdateMain()
+void ClearScene::UpdateMain()
 {
 	if (input_->TriggerKey(DIK_SPACE)) {
 		phase_ = Phase::kEnd;
@@ -87,7 +87,7 @@ void GameOverScene::UpdateMain()
 	}
 }
 
-void GameOverScene::UpdateEnd()
+void ClearScene::UpdateEnd()
 {
 	fade_->Update();
 	if (fade_->IsFinished()) {

@@ -19,6 +19,8 @@ public:
 
 	WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
+	bool IsEnd() const { return moveCount_ >= pointsDrawing_.size(); }
+
 private:
 	
 	//曲線の作成

@@ -441,7 +441,7 @@ void GameScene::UpdateGameClear()
 	if (fade_->IsFinished()) {
 		//fade_->Stop();
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
+		sceneManager_->ChengeScene("ClearScene");
 	}
 }
 
@@ -457,11 +457,11 @@ void GameScene::UpdateGameOver()
 
 void GameScene::CheckGameClear()
 {
-	////敵がいなくなったらゲームクリア
-	//if (enemys_.empty() && isEnemyPopEnd_) {
-	//	phase_ = Phase::kGameClear;
-	//	fade_->Start(Fade::Status::FadeOut, 0.5f);
-	//}
+	if (railCamera_->IsEnd()) {
+		//ゲームクリア
+		phase_ = Phase::kGameClear;
+		fade_->Start(Fade::Status::FadeOut, 0.5f);
+	}
 }
 
 void GameScene::CheckGameOver()
