@@ -42,31 +42,7 @@ void Player::Update(Camera* railCamera) {
 
 #endif // _DEBUG	
 
-
-	//キャラクターの移動ベクトル
-	Vector3 move = { 0, 0, 0 };
-
-	//キャラクターの移動速さ
-	const float kCharacterSpeed = 0.2f;
-
-	//押した方向で移動ベクトルを変更(左右)
-	if (input_->PushKey(DIK_A)) {
-		move.x -= kCharacterSpeed;
-	}
-	else if (input_->PushKey(DIK_D)) {
-		move.x += kCharacterSpeed;
-	}
-
-	// 押した方向で移動ベクトルを変更(上下)
-	if (input_->PushKey(DIK_S)) {
-		move.y -= kCharacterSpeed;
-	}
-	else if (input_->PushKey(DIK_W)) {
-		move.y += kCharacterSpeed;
-	}
-
-	//座標移動(ベクトルの加算)
-	worldTransform_.translation_ += move;
+	HandleMoveInput();
 
 	//移動限界座標
 	const float kMoveLimitX = 14;
@@ -85,41 +61,6 @@ void Player::Update(Camera* railCamera) {
 	Attack();
 
 	
-}
-
-void Player::ReticleUpdate(Camera* railCamera)
-{
-	reticleController_->Update(railCamera);
-}
-
-void Player::Attack() {
-
-	if (input_->TriggerKey(DIK_SPACE)) {
-
-		//弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
-
-		//自機から照準オブジェクトへのベクトル
-		if (reticleController_->IsLockOn()) {
-			velocity = Subtract(reticleController_->GetTargetPosition(), GetWorldPosition());
-
-		}
-		else {
-			velocity = Subtract(reticleController_->Get3DReticlePosition(), GetWorldPosition());
-
-		}
-		velocity = Multiply(kBulletSpeed, Normalize(velocity));
-		//速度ベクトルを自機の向きに合わせて回転させる
-		//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
-		//弾を生成し、初期化
-		gameScene_->AddPlayerbullet(GetWorldPosition(), velocity);
-
-	}
-
-
-
 }
 
 void Player::OnCollision(Collider* other)
@@ -156,5 +97,70 @@ void Player::SetParent(WorldTransform* parent) {
 Vector3 Player::GetWorldPosition() {
 
 	return worldTransform_.GetWorldPosition();;
+
+}
+
+void Player::HandleMoveInput()
+{
+	//キャラクターの移動ベクトル
+	Vector3 move = { 0, 0, 0 };
+
+	//押した方向で移動ベクトルを変更(左右)
+	if (input_->PushKey(DIK_A)) {
+		move.x = -1.0f;
+	}
+	else if (input_->PushKey(DIK_D)) {
+		move.x = 1.0f;
+	}
+
+	// 押した方向で移動ベクトルを変更(上下)
+	if (input_->PushKey(DIK_S)) {
+		move.y = -1.0f;
+	}
+	else if (input_->PushKey(DIK_W)) {
+		move.y = 1.0f;
+	}
+
+	//キャラクターの移動速さ
+	const float kCharacterSpeed = 0.2f;
+	//移動ベクトルの正規化と速さの適用
+	move = Normalize(move) * kCharacterSpeed;
+
+	//座標移動(ベクトルの加算)
+	worldTransform_.translation_ += move;
+}
+
+void Player::ReticleUpdate(Camera* railCamera)
+{
+	reticleController_->Update(railCamera);
+}
+
+void Player::Attack() {
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+
+		//弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+		//自機から照準オブジェクトへのベクトル
+		if (reticleController_->IsLockOn()) {
+			velocity = Subtract(reticleController_->GetTargetPosition(), GetWorldPosition());
+
+		}
+		else {
+			velocity = Subtract(reticleController_->Get3DReticlePosition(), GetWorldPosition());
+
+		}
+		velocity = Multiply(kBulletSpeed, Normalize(velocity));
+		//速度ベクトルを自機の向きに合わせて回転させる
+		//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+		//弾を生成し、初期化
+		gameScene_->AddPlayerbullet(GetWorldPosition(), velocity);
+
+	}
+
+
 
 }

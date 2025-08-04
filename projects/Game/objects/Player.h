@@ -20,12 +20,6 @@ public:
 	//旋回
 	//void Rotate();
 
-	//照準
-	void ReticleUpdate(Camera* railCamera);
-
-	//攻撃
-	void Attack();
-
 	//衝突時に呼ばれる関数
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
@@ -43,6 +37,15 @@ public:
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 private:
+
+	//移動入力
+	void HandleMoveInput();
+
+	//照準
+	void ReticleUpdate(Camera* railCamera);
+
+	//攻撃
+	void Attack();
 
 	//キーボード入力
 	Input* input_ = nullptr;

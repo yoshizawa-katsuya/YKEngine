@@ -38,27 +38,29 @@ void ReticleController::Update(Camera* railCamera)
 	//スプライトの現在座標を取得
 	Vector2 spritePosition = spriteLargeReticle_->GetPosition();
 
-	Vector3 move = { 0, 0, 0 };
-	const float kReticleSpeed = 12.0f;
+	Vector2 move = { 0, 0 };
 
 	//押した方向で移動ベクトルを変更(左右)
 	if (input_->PushKey(DIK_LEFT)) {
-		move.x -= kReticleSpeed;
+		move.x = -1.0f;
 	}
 	else if (input_->PushKey(DIK_RIGHT)) {
-		move.x += kReticleSpeed;
+		move.x = 1.0f;
 	}
 
 	// 押した方向で移動ベクトルを変更(上下)
 	if (input_->PushKey(DIK_DOWN)) {
-		move.y += kReticleSpeed;
+		move.y = 1.0f;
 	}
 	else if (input_->PushKey(DIK_UP)) {
-		move.y -= kReticleSpeed;
+		move.y = -1.0f;
 	}
 
-	spritePosition.x += move.x;
-	spritePosition.y += move.y;
+	const float kReticleSpeed = 12.0f;
+	//移動ベクトルの正規化と速さの適用
+	move = Normalize(move) * kReticleSpeed;
+
+	spritePosition += move;
 
 	//範囲を超えない処理
 	spritePosition.x = std::clamp(spritePosition.x, 0.0f, static_cast<float>(WinApp::kClientWidth));
