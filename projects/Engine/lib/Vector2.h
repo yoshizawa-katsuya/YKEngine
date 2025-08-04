@@ -14,6 +14,9 @@ Vector2 Subtract(const Vector2& v1, const Vector2& v2);
 //スカラー倍
 Vector2 Multiply(const Vector2& v, float s);
 
+//正規化
+Vector2 Normalize(const Vector2& v);
+
 //長さ
 float Length(const Vector2& v);
 
