@@ -28,6 +28,19 @@ Vector2 Multiply(const Vector2& v, float s)
 	return anser;
 }
 
+Vector2 Normalize(const Vector2& v)
+{
+	Vector2 anser;
+	float length = Length(v);
+	if (length == 0.0f) {
+		return { 0.0f, 0.0f };
+	}
+	anser.x = v.x / length;
+	anser.y = v.y / length;
+
+	return anser;
+}
+
 float Length(const Vector2& v)
 {
 	float anser;
