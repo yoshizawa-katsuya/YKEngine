@@ -96,7 +96,7 @@ void Player::SetParent(WorldTransform* parent) {
 
 Vector3 Player::GetWorldPosition() {
 
-	return worldTransform_.GetWorldPosition();;
+	return worldTransform_.GetWorldPosition();
 
 }
 
