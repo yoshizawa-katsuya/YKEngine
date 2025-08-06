@@ -84,7 +84,7 @@ void TitleScene::UpdateStart()
 
 void TitleScene::UpdateMain()
 {
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		phase_ = Phase::kEnd;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
 	}

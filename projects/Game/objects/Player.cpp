@@ -105,26 +105,35 @@ void Player::HandleMoveInput()
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
-	//押した方向で移動ベクトルを変更(左右)
-	if (input_->PushKey(DIK_A)) {
-		move.x = -1.0f;
-	}
-	else if (input_->PushKey(DIK_D)) {
-		move.x = 1.0f;
-	}
+	move.x = input_->GetLeftStickX();
+	move.y = input_->GetLeftStickY();
 
-	// 押した方向で移動ベクトルを変更(上下)
-	if (input_->PushKey(DIK_S)) {
-		move.y = -1.0f;
-	}
-	else if (input_->PushKey(DIK_W)) {
-		move.y = 1.0f;
+	if (move.x == 0 && move.y == 0) {
+		//左スティックがニュートラルなら、キーボード入力を確認
+		//押した方向で移動ベクトルを変更(左右)
+		if (input_->PushKey(DIK_A)) {
+			move.x = -1.0f;
+		}
+		else if (input_->PushKey(DIK_D)) {
+			move.x = 1.0f;
+		}
+
+		// 押した方向で移動ベクトルを変更(上下)
+		if (input_->PushKey(DIK_S)) {
+			move.y = -1.0f;
+		}
+		else if (input_->PushKey(DIK_W)) {
+			move.y = 1.0f;
+		}
+
+		move = Normalize(move); //移動ベクトルの正規化
+
 	}
 
 	//キャラクターの移動速さ
 	const float kCharacterSpeed = 0.2f;
-	//移動ベクトルの正規化と速さの適用
-	move = Normalize(move) * kCharacterSpeed;
+	//移動ベクトルの速さの適用
+	move *= kCharacterSpeed;
 
 	//座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move;
@@ -137,7 +146,7 @@ void Player::ReticleUpdate(Camera* railCamera)
 
 void Player::Attack() {
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 
 		//弾の速度
 		const float kBulletSpeed = 1.0f;

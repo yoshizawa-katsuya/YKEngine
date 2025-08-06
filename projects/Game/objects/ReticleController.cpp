@@ -40,25 +40,36 @@ void ReticleController::Update(Camera* railCamera)
 
 	Vector2 move = { 0, 0 };
 
-	//押した方向で移動ベクトルを変更(左右)
-	if (input_->PushKey(DIK_LEFT)) {
-		move.x = -1.0f;
-	}
-	else if (input_->PushKey(DIK_RIGHT)) {
-		move.x = 1.0f;
-	}
+	//入力を取得して移動ベクトルを設定
+	move.x = input_->GetRightStickX();
+	move.y = -input_->GetRightStickY();
 
-	// 押した方向で移動ベクトルを変更(上下)
-	if (input_->PushKey(DIK_DOWN)) {
-		move.y = 1.0f;
+	if (move.x == 0 && move.y == 0) {
+		//左スティックがニュートラルなら、キーボード入力を確認
+		//押した方向で移動ベクトルを変更(左右)
+		if (input_->PushKey(DIK_LEFT)) {
+			move.x = -1.0f;
+		}
+		else if (input_->PushKey(DIK_RIGHT)) {
+			move.x = 1.0f;
+		}
+
+		// 押した方向で移動ベクトルを変更(上下)
+		if (input_->PushKey(DIK_DOWN)) {
+			move.y = 1.0f;
+		}
+		else if (input_->PushKey(DIK_UP)) {
+			move.y = -1.0f;
+		}
+
+		move = Normalize(move);
+
 	}
-	else if (input_->PushKey(DIK_UP)) {
-		move.y = -1.0f;
-	}
+	
 
 	const float kReticleSpeed = 12.0f;
-	//移動ベクトルの正規化と速さの適用
-	move = Normalize(move) * kReticleSpeed;
+	//移動ベクトルの速さの適用
+	move *= kReticleSpeed;
 
 	spritePosition += move;
 
