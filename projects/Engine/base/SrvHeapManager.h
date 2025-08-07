@@ -31,6 +31,9 @@ public:
 	//SRV作成(RenderTexture用)
 	void CreateSRVforRenderTexture(uint32_t srvIndex, ID3D12Resource* pResource);
 
+	//SRV作成(DepthTexture用)
+	void CreateSRVforDepthTexture(uint32_t srvIndex, ID3D12Resource* pResource);
+
 	ID3D12DescriptorHeap* GetDescriptorHeap() { return descriptorHeap_.Get(); }
 
 	uint32_t GetDescriptorSize() { return descriptorSize_; }

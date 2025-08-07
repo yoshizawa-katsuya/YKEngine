@@ -89,10 +89,10 @@ public:
 	//ゲームパッドのボタンを押し続けているかをチェック
 	bool HoldButton(uint32_t xinput);
 
-	//左スティックのX方向の入力。0.0f~1.0fの範囲
+	//左スティックのX方向の入力。-1.0f~1.0fの範囲
 	float GetLeftStickX();
 
-	//左スティックのY方向の入力。0.0f~1.0fの範囲
+	//左スティックのY方向の入力。-1.0f~1.0fの範囲
 	float GetLeftStickY();
 
 	//左スティックを下に倒した瞬間をチェック
@@ -101,10 +101,10 @@ public:
 	//左スティックを上に倒した瞬間をチェック
 	bool TrigerLeftStickUp();
 
-	//右スティックのX方向の入力。0.0f~1.0fの範囲
+	//右スティックのX方向の入力。-1.0f~1.0fの範囲
 	float GetRightStickX();
 
-	//右スティックのY方向の入力。0.0f~1.0fの範囲
+	//右スティックのY方向の入力。-1.0f~1.0fの範囲
 	float GetRightStickY();
 
 private:

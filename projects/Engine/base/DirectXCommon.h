@@ -93,6 +93,8 @@ public:
 
 	D3D12_RECT* GetScissorRect() { return &scissorRect_; }
 
+	ID3D12Resource* GetDepthStencilResource() const { return depthStencilResource_.Get(); }
+
 private:
 
 	//static DirectXCommon* instance_;

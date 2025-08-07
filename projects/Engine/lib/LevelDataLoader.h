@@ -1,5 +1,6 @@
 #pragma once
 #include "Struct.h"
+#include "json.hpp"
 
 struct ObjectData
 {
@@ -17,7 +18,8 @@ struct PlayerSpawnData
 //敵の生成データ
 struct EnemySpawnData
 {
-	EulerTransform transform;
+	EulerTransform transform{};
+	std::optional<float> waitTime = std::nullopt; // 待機時間（オプション）
 };
 
 //スプライン曲線の制御点データ
@@ -42,4 +44,4 @@ struct LevelData
 
 LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
 
-
+EulerTransform TranformLoad(nlohmann::json& transformData);

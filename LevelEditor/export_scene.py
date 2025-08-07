@@ -11,73 +11,6 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
     #出力するファイルの拡張子
     filename_ext = ".json"
 
-    def write_and_print(self, file, str):
-        print(str)
-
-        file.write(str)
-        file.write('\n')
-
-    def parse_scene_recursive(self, file, object, level):
-        """シーン解析用再起関数"""
-
-        #深さ分インデントする(タブを挿入)
-        indent = ''
-        for i in range(level):
-            indent += "\t"
-
-        #オブジェクト名書き込み
-        self.write_and_print(file, indent + object.type)
-        #ローカルトランスフォーム行列から平行移動、回転、スケーリングを抽出
-        #型は Vector, Quaternion, Vector
-        trans, rot, scale = object.matrix_local.decompose()
-        #回転を Quaternion から Euler (3軸での回転角)に変換
-        rot = rot.to_euler()
-        #ラジアンから度数法に変換
-        rot.x = math.degrees(rot.x)
-        rot.y = math.degrees(rot.y)
-        rot.z = math.degrees(rot.z)
-
-        #トランスフォーム情報を表示
-        self.write_and_print(file, indent + "T %f %f %f" % (trans.x, trans.y, trans.z) )
-        self.write_and_print(file, indent + "R %f %f %f" % (rot.x, rot.y, rot.z) )
-        self.write_and_print(file, indent + "S %f %f %f" % (scale.x, scale.y, scale.z) )
-        #カスタムプロパティ'file_name'
-        if ("file_name" in object):
-            self.write_and_print(file, indent + "N %s" % object["file_name"])
-        #カスタムプロパティ'collision'
-        if "collider" in object:
-            self.write_and_print(file, indent + "C %s" % object["collider"])
-            self.write_and_print(file, indent + "CC %f %f %f" % (object["collider_center"][0], object["collider_center"][1],object["collider_center"][2]))
-            self.write_and_print(file, indent + "CS %f %f %f" % (object["collider_size"][0], object["collider_size"][1],object["collider_size"][2]))
-            
-        self.write_and_print(file, indent + 'END')
-        self.write_and_print(file, '')
-        #子ノードへ進む(深さが1上がる)
-        for child in object.children:
-            self.parse_scene_recursive(file, child, level + 1)
-
-    def export(self):
-        """ファイルに出力"""
-
-        print("シーン情報出力開始... %r" % self.filepath)
-
-        #ファイルにテキスト形式で書き出し用にオープン
-        #スコープを抜けると自動的にクローズされる
-        with open(self.filepath, "wt") as file:
-
-            #ファイルに文字列を書き込む
-            self.write_and_print(file, "SCENE")
-
-            #シーン内の全オブジェクトについて
-            for object in bpy.context.scene.objects:
-                
-                #親オブジェクトがあるものはスキップ(代わりに親から呼び出すから)
-                if (object.parent):
-                    continue
-
-                #シーン直下のオブジェクトをルートノード(深さ0)とし、再起関数で走査
-                self.parse_scene_recursive(file, object, 0)
-
     def export_json(self):
         """JSON形式でファイルに出力"""
 
@@ -138,6 +71,7 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         #トランスフォーム情報をディクショナリに登録
         transform = dict()
         transform["translation"] = (trans.x, trans.y, trans.z)
+        #複雑な回転には対応不可
         transform["rotation"] = (rot.x, rot.y, rot.z)
         transform["scaling"] = (scale.x, scale.y, scale.z)
         #まとめて1個分のjsonオブジェクトに登録
@@ -156,6 +90,10 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
                     co = object.matrix_world @ pt.co.xyz  # 4D→3Dに変換
                     points.append([co.x, co.y, co.z])
             json_object["control_point"] = points
+
+        #カスタムプロパティ'wait_time'
+        if "wait_time" in object:
+            json_object["wait_time"] = object["wait_time"]
 
         #カスタムプロパティ'無効オプション'
         if "disabled" in object:
