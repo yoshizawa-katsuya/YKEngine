@@ -48,6 +48,10 @@ void BaseModel::CreateSphere(uint32_t textureHandle)
 {
 }
 
+void BaseModel::CreateCube(uint32_t textureHandle)
+{
+}
+
 void BaseModel::CreatePlane(uint32_t textureHandle)
 {
 }
