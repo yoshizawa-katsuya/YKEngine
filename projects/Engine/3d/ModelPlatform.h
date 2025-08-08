@@ -47,6 +47,8 @@ public:
 
 	std::shared_ptr<BaseModel> CreateSphere(uint32_t textureHandle, const std::string& modelName = "");
 
+	std::shared_ptr<BaseModel> CreateCube(uint32_t textureHandle, const std::string& modelName = "");
+
 	std::shared_ptr<BaseModel> CreatePlane(uint32_t textureHandle, const std::string& modelName = "");
 
 	std::shared_ptr<BaseModel> CreateRing(uint32_t textureHandle, const std::string& modelName = "");

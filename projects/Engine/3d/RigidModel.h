@@ -9,6 +9,8 @@ public:
 
 	void CreateSphere(uint32_t textureHandle) override;
 
+	void CreateCube(uint32_t textureHandle) override;
+
 	void CreatePlane(uint32_t textureHandle) override;
 
 	void CreateRing(uint32_t textureHandle) override;

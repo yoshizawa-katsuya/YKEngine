@@ -255,6 +255,18 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle, c
 	return models_[name];
 }
 
+std::shared_ptr<BaseModel> ModelPlatform::CreateCube(uint32_t textureHandle, const std::string& modelName)
+{
+	std::string name = "PrimitiveCube" + modelName;
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+	models_[name] = std::make_shared<RigidModel>();
+	models_[name]->CreateCube(textureHandle);
+
+	return models_[name];
+}
+
 std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitivePlane" + modelName;
