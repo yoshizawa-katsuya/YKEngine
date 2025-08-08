@@ -14,7 +14,7 @@ Enemy::~Enemy() {
 	*/
 }
 
-void Enemy::Initialize(BaseModel* model, const Vector3& position, Matrix4x4* viewPortMatrix) {
+void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix) {
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
@@ -24,12 +24,17 @@ void Enemy::Initialize(BaseModel* model, const Vector3& position, Matrix4x4* vie
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
 
+	//移動方向を初期化
+	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotaion);
+	approachVelocity_ = TransformNormal(approachVelocity_, rotateMatrix);
+
 	ApproachInitialize();
 }
 
 void Enemy::ApproachInitialize() {
 	//発射タイマーを初期化
 	fireTimer = kFireInterval;
+	
 }
 
 void Enemy::Update() {
@@ -76,7 +81,7 @@ void Enemy::ApproachUpdate() {
 	}
 
 	// 移動
-	worldTransform_.translation_ += ApproachVelocity_;
+	worldTransform_.translation_ += approachVelocity_;
 	// 規定の位置に到達したら離脱
 	if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
@@ -85,7 +90,7 @@ void Enemy::ApproachUpdate() {
 
 void Enemy::LeaveUpdate() {
 	// 移動
-	worldTransform_.translation_ += LeaveVelocity_;
+	worldTransform_.translation_ += leaveVelocity_;
 	
 }
 

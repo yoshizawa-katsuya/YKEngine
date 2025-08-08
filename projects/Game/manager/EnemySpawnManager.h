@@ -8,6 +8,7 @@ struct EnemySpawn
 {
     float spawnTime;        // 出現予定時刻（例：5.0秒後）
     Vector3 position;       // 出現位置
+	Vector3 rotation;		// 進行方向の回転角度（例：0, 0, 0）
 };
 
 class EnemySpawnManager
@@ -18,7 +19,7 @@ public:
 
 	void Update(float currentTime); // 更新メソッド
 
-    void AddSpawnData(float spawnTime, const Vector3& position);
+    void AddSpawnData(float spawnTime, const Vector3& position, const Vector3& rotation);
 
 private:
 	

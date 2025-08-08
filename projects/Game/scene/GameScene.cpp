@@ -334,13 +334,13 @@ void GameScene::CheckAllColision() {
 
 }
 
-void GameScene::EnemyPop(const Vector3& position) {
+void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation) {
 
 	// 敵の生成
 	std::unique_ptr<Enemy>& enemy = enemys_.emplace_back();
 	// 敵の初期化
 	enemy = std::make_unique<Enemy>();
-	enemy->Initialize(modelEnemy_.get(), position, &viewPortMatrix_);
+	enemy->Initialize(modelEnemy_.get(), position, rotation, &viewPortMatrix_);
 	enemy->SetPlayer(player_.get());
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetGameScene(this);
@@ -487,9 +487,11 @@ void GameScene::CreateLevel()
 	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns) {
 		//敵の発生位置を取得
 		Vector3 spawnPosition = enemySpawnData.transform.translation;
+		//敵の回転を取得
+		Vector3 spawnRotation = enemySpawnData.transform.rotation;
 
 		//レベルエディターで敵のwaitTimeを必ず設定するようにする
-		enemySpawnManager_->AddSpawnData(enemySpawnData.waitTime.value(), spawnPosition);
+		enemySpawnManager_->AddSpawnData(enemySpawnData.waitTime.value(), spawnPosition, spawnRotation);
 
 	}
 	

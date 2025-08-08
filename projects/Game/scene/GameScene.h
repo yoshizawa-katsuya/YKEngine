@@ -54,7 +54,7 @@ public:
 	/// <summary>
 	/// 敵発生
 	/// </summary>
-	void EnemyPop(const Vector3& position);
+	void EnemyPop(const Vector3& position, const Vector3& rotation);
 
 private:
 

@@ -12,7 +12,7 @@ public:
 	~Enemy();
 
 	// 初期化
-	void Initialize(BaseModel* model, const Vector3& position, Matrix4x4* viewPortMatrix);
+	void Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix);
 
 	void ApproachInitialize();
 
@@ -65,8 +65,8 @@ private:
 	Phase phase_ = Phase::Approach;
 
 	// キャラクターの移動速さ
-	Vector3 ApproachVelocity_ = {0.0f, 0.0f, -0.1f};
-	Vector3 LeaveVelocity_ = {0.1f, -0.1f, 0.0f};
+	Vector3 approachVelocity_ = {0.0f, 0.0f, 0.1f};
+	Vector3 leaveVelocity_ = {0.1f, -0.1f, 0.0f};
 
 	//ビューポート行列
 	Matrix4x4* viewPortMatrix_ = nullptr;

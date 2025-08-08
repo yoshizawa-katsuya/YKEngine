@@ -12,7 +12,7 @@ void EnemySpawnManager::Update(float currentTime)
 	{
 		if (spawnData->spawnTime <= currentTime)
 		{
-			gameScene_->EnemyPop(spawnData->position);
+			gameScene_->EnemyPop(spawnData->position, spawnData->rotation);
 			spawnData = spawnDatas_.erase(spawnData);	//出現した敵のデータを削除
 		}
 		else
@@ -22,10 +22,11 @@ void EnemySpawnManager::Update(float currentTime)
 	}
 }
 
-void EnemySpawnManager::AddSpawnData(float spawnTime, const Vector3& position)
+void EnemySpawnManager::AddSpawnData(float spawnTime, const Vector3& position, const Vector3& rotation)
 {
 	EnemySpawn data;
 	data.spawnTime = spawnTime;
 	data.position = position;
+	data.rotation = rotation;
 	spawnDatas_.push_back(data);
 }
