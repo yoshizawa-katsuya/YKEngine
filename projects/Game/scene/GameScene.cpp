@@ -47,6 +47,12 @@ void GameScene::Initialize() {
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
 	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
 	
+	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
+	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/black.png");
+	textureHandleEnemyBullet_ = TextureManager::GetInstance()->Load("./Resources/red.png");
+	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
+
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
 	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
@@ -78,12 +84,6 @@ void GameScene::Initialize() {
 
 	//モデルを描画する際カメラの設定は必須
 	modelPlatform_->SetCamera(mainCamera_);
-
-	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
-	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
-	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/black.png");
-	textureHandleEnemyBullet_ = TextureManager::GetInstance()->Load("./Resources/red.png");
-	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
 	//衝突マネージャの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -293,8 +293,11 @@ void GameScene::Draw() {
 
 	railCamera_->Draw(mainCamera_);
 
-	/*objects_->CameraUpdate(mainCamera_);
-	objects_->Draw();*/
+	modelPlatform_->InstancingPreDraw();
+
+	//オブジェクトの描画
+	instancingObjects_->CameraUpdate(mainCamera_);
+	instancingObjects_->Draw();
 	
 	//Spriteの前景描画前処理
 	spritePlatform_->PreDraw();
@@ -484,7 +487,8 @@ void GameScene::CreateLevel()
 	// レールカメラの初期化
 	railCamera_->Initialize(levelData->splines[0].controlPoints, camera_.get());
 
-	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns) {
+	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns)
+	{
 		//敵の発生位置を取得
 		Vector3 spawnPosition = enemySpawnData.transform.translation;
 		//敵の回転を取得
@@ -495,4 +499,29 @@ void GameScene::CreateLevel()
 
 	}
 	
+	//オブジェクトの生成
+	instancingObjects_ = std::make_unique<InstancingObjects>();
+
+	bool isCubeLoaded = false;
+
+	for (const ObjectData& objectData : levelData->objects)
+	{
+		if (objectData.fileName == "primitiveCube")
+		{
+			if (!isCubeLoaded)
+			{
+				instancingObjects_->Initialize(modelPlatform_->CreateCube(textureHandle_).get(), 128);
+				isCubeLoaded = true;
+			}
+			WorldTransform transform;
+			transform.Initialize();
+			transform.rotation_ = objectData.transform.rotation;
+			transform.translation_ = objectData.transform.translation;
+			transform.scale_ = objectData.transform.scale;
+			transform.UpdateMatrix();
+			instancingObjects_->WorldTransformUpdate(transform);
+
+		}
+	}
+
 }

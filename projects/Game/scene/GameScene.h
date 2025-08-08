@@ -154,6 +154,9 @@ private:
 	//地面
 	std::unique_ptr<Rigid3dObject> ground_;
 
+	//オブジェクト
+	std::unique_ptr<InstancingObjects> instancingObjects_;
+
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;
 	/*
