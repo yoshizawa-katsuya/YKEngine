@@ -155,7 +155,7 @@ private:
 	std::unique_ptr<Rigid3dObject> ground_;
 
 	//オブジェクト
-	std::unique_ptr<InstancingObjects> instancingObjects_;
+	std::map<std::string, std::unique_ptr<InstancingObjects>> instancingObjects_;
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;

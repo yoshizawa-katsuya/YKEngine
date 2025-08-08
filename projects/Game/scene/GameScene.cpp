@@ -296,8 +296,10 @@ void GameScene::Draw() {
 	modelPlatform_->InstancingPreDraw();
 
 	//オブジェクトの描画
-	instancingObjects_->CameraUpdate(mainCamera_);
-	instancingObjects_->Draw();
+	for (const auto& [name, instancingObject] : instancingObjects_) {
+		instancingObject->CameraUpdate(mainCamera_);
+		instancingObject->Draw();
+	}
 	
 	//Spriteの前景描画前処理
 	spritePlatform_->PreDraw();
@@ -500,28 +502,35 @@ void GameScene::CreateLevel()
 	}
 	
 	//オブジェクトの生成
-	instancingObjects_ = std::make_unique<InstancingObjects>();
-
-	bool isCubeLoaded = false;
+	std::string key;
 
 	for (const ObjectData& objectData : levelData->objects)
 	{
-		if (objectData.fileName == "primitiveCube")
-		{
-			if (!isCubeLoaded)
-			{
-				instancingObjects_->Initialize(modelPlatform_->CreateCube(textureHandle_).get(), 128);
-				isCubeLoaded = true;
-			}
-			WorldTransform transform;
-			transform.Initialize();
-			transform.rotation_ = objectData.transform.rotation;
-			transform.translation_ = objectData.transform.translation;
-			transform.scale_ = objectData.transform.scale;
-			transform.UpdateMatrix();
-			instancingObjects_->WorldTransformUpdate(transform);
+		//ワールド変換の初期化
+		WorldTransform transform;
+		transform.Initialize();
+		transform.rotation_ = objectData.transform.rotation;
+		transform.translation_ = objectData.transform.translation;
+		transform.scale_ = objectData.transform.scale;
+		transform.UpdateMatrix();
 
+		key = objectData.fileName;
+
+		if (!instancingObjects_.contains(key))
+		{
+			instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
+			//インスタンスオブジェクトの初期化
+			if (key == "primitiveCube")
+			{
+				instancingObjects_[key]->Initialize(modelPlatform_->CreateCube(textureHandle_).get(), 128);
+			}
+			else if (key == "primitiveSphere")
+			{
+				instancingObjects_[key]->Initialize(modelPlatform_->CreateSphere(textureHandle_).get(), 128);
+			}
 		}
+		//インスタンスオブジェクトにワールド変換を設定
+		instancingObjects_[key]->WorldTransformUpdate(transform);
 	}
 
 }

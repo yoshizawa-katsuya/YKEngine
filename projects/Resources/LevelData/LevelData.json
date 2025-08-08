@@ -283,6 +283,29 @@
             },
             "file_path": "./resources/",
             "file_name": "primitiveCube"
+        },
+        {
+            "type": "MESH",
+            "name": "球",
+            "transform": {
+                "translation": [
+                    14.806391716003418,
+                    -65.6947250366211,
+                    15.000782012939453
+                ],
+                "rotation": [
+                    0.0,
+                    17.946578979492188,
+                    0.0
+                ],
+                "scaling": [
+                    6.379122257232666,
+                    4.237317085266113,
+                    11.782388687133789
+                ]
+            },
+            "file_path": "./resources/",
+            "file_name": "primitiveSphere"
         }
     ]
 }
