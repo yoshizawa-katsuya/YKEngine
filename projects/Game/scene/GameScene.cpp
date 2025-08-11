@@ -61,10 +61,6 @@ void GameScene::Initialize() {
 	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_, "Bullet");
 
-	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_);
-
 	//エネミースポーンマネージャーの生成
 	enemySpawnManager_ = std::make_unique<EnemySpawnManager>();
 	enemySpawnManager_->Initialize(this);
@@ -107,10 +103,6 @@ void GameScene::Initialize() {
 	groundTransform.scale_ = { 20.0f, 20.0f, 20.0f };
 	groundTransform.UpdateMatrix();
 	ground_->WorldTransformUpdate(groundTransform);
-
-	//自キャラとレールカメラの親子関係を結ぶ
-	player_->SetParent(railCamera_->GetWorldTransform());
-	player_->SetGameScene(this);
 
 	//パーティクル
 	emitter_ = std::make_unique<ParticleEmitter>("HitEffect01", 3, 1.5f);
@@ -291,7 +283,7 @@ void GameScene::Draw() {
 
 	modelPlatform_->LinePreDraw();
 
-	railCamera_->Draw(mainCamera_);
+	player_->DrawRail(mainCamera_);
 
 	modelPlatform_->InstancingPreDraw();
 
@@ -462,7 +454,7 @@ void GameScene::UpdateGameOver()
 
 void GameScene::CheckGameClear()
 {
-	if (railCamera_->IsEnd()) {
+	if (player_->IsEnd()) {
 		//ゲームクリア
 		phase_ = Phase::kGameClear;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
@@ -484,10 +476,16 @@ void GameScene::CreateLevel()
 	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
 
 	assert(!levelData->splines.empty());
+
+	//プレイヤーの初期化
+	player_ = std::make_unique<Player>();
+	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_, levelData->splines[0].controlPoints);
+	player_->SetGameScene(this);
+
 	// レールカメラの生成
 	railCamera_ = std::make_unique<RailCamera>();
 	// レールカメラの初期化
-	railCamera_->Initialize(levelData->splines[0].controlPoints, camera_.get());
+	railCamera_->Initialize(camera_.get(), player_->GetbasePointWorldTransform());
 
 	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns)
 	{
