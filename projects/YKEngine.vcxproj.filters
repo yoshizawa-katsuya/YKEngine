@@ -288,6 +288,9 @@
     <ClCompile Include="Game\scene\ClearScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="RailMover.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -588,6 +591,9 @@
     </ClInclude>
     <ClInclude Include="Game\scene\ClearScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="RailMover.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

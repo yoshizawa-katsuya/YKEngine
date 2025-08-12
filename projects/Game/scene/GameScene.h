@@ -26,6 +26,7 @@
 #include "CollisionManager.h"
 #include "Fade.h"
 #include "manager/EnemySpawnManager.h"
+#include "RailMover.h"
 
 class GameScene : public BaseScene
 {
@@ -156,6 +157,9 @@ private:
 
 	//オブジェクト
 	std::map<std::string, std::unique_ptr<InstancingObjects>> instancingObjects_;
+
+	//レールムーバー
+	std::unique_ptr<RailMover> railMover_;
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;

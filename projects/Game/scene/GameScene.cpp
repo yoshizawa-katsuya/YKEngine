@@ -283,7 +283,7 @@ void GameScene::Draw() {
 
 	modelPlatform_->LinePreDraw();
 
-	player_->DrawRail(mainCamera_);
+	railMover_->DrawRail(mainCamera_);
 
 	modelPlatform_->InstancingPreDraw();
 
@@ -380,6 +380,9 @@ void GameScene::UpdateMain()
 	//敵のスポーンマネージャーの更新
 	enemySpawnManager_->Update(currentTime_);
 
+	//レールムーバーの更新
+	railMover_->Update();
+
 	//レールカメラの更新
 	railCamera_->Update();
 
@@ -454,7 +457,7 @@ void GameScene::UpdateGameOver()
 
 void GameScene::CheckGameClear()
 {
-	if (player_->IsEnd()) {
+	if (railMover_->IsEnd()) {
 		//ゲームクリア
 		phase_ = Phase::kGameClear;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
@@ -477,15 +480,19 @@ void GameScene::CreateLevel()
 
 	assert(!levelData->splines.empty());
 
+	//レールムーバーの生成
+	railMover_ = std::make_unique<RailMover>();
+	railMover_->Initialize(levelData->splines[0].controlPoints);
+
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_, levelData->splines[0].controlPoints);
+	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_, railMover_->GetWorldTransform());
 	player_->SetGameScene(this);
 
 	// レールカメラの生成
 	railCamera_ = std::make_unique<RailCamera>();
 	// レールカメラの初期化
-	railCamera_->Initialize(camera_.get(), player_->GetbasePointWorldTransform());
+	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform());
 
 	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns)
 	{
