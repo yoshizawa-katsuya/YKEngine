@@ -266,7 +266,7 @@ void Player::UpdateOffset()
 	//オフセットを更新する処理
 	basePointWorldTransform_.UpdateMatrix();
 
-	offset_ = { 0.0f, 1.0f, 0.0f };
+	offset_ = { 0.0f, 3.0f, 0.0f };
 	offset_ = TransformNormal(offset_, basePointWorldTransform_.worldMatrix_);
 	basePointWorldTransform_.translation_ += offset_;
 }
