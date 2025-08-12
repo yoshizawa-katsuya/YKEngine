@@ -22,7 +22,7 @@ void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3&
 	viewPortMatrix_ = viewPortMatrix;
 
 	worldTransform_.translation_ = position;
-	worldTransform_.rotation_.y = std::numbers::pi_v<float>;
+	worldTransform_.rotation_ = rotaion;
 
 	//移動方向を初期化
 	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotaion);
@@ -83,9 +83,9 @@ void Enemy::ApproachUpdate() {
 	// 移動
 	worldTransform_.translation_ += approachVelocity_;
 	// 規定の位置に到達したら離脱
-	if (worldTransform_.translation_.z < 0.0f) {
+	/*if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
-	}
+	}*/
 }
 
 void Enemy::LeaveUpdate() {
