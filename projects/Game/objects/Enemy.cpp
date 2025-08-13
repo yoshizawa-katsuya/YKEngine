@@ -131,7 +131,7 @@ Vector3 Enemy::GetWorldPosition() {
 
 }
 
-Vector3 Enemy::GetScreenPosition(Camera* camera) {
+Vector2 Enemy::GetScreenPosition(Camera* camera) {
 	
 	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
 	Matrix4x4 matViewProjectionViewport = Multiply(camera->GetViewProjection(), *viewPortMatrix_);
@@ -139,5 +139,19 @@ Vector3 Enemy::GetScreenPosition(Camera* camera) {
 	// ワールド→スクリーン座標変換(ここで3Dから2Dになる)
 	Vector3 screenPosition = Transform(GetWorldPosition(), matViewProjectionViewport);
 
-	return screenPosition;
+	return { screenPosition.x, screenPosition.y };
+}
+
+bool Enemy::IsVisible(Camera* camera)
+{
+	Vector3 clipPosition = Transform(GetWorldPosition(), camera->GetViewProjection());
+
+	//NDCの範囲内にあるかチェック
+	if (clipPosition.x < -1.1f || clipPosition.x > 1.1f ||
+		clipPosition.y < -1.1f || clipPosition.y > 1.1f ||
+		clipPosition.z < 0.0f || clipPosition.z > 1.0f) {
+		return false; // 範囲外
+	}
+
+	return true; // 範囲内
 }

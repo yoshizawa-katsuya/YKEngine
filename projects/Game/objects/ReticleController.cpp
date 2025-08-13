@@ -122,7 +122,12 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>&
 	Vector3 targetWorldPosition = { 0.0f, 0.0f , 0.0f};
 
 	for (const std::unique_ptr<Enemy>& enemy : enemies) {
-		Vector2 ScreenPosB = { enemy->GetScreenPosition(railCamera).x, enemy->GetScreenPosition(railCamera).y };
+
+		if (!enemy->IsVisible(railCamera)) {
+			continue; // 敵が見えない場合はスキップ
+		}
+
+		Vector2 ScreenPosB = enemy->GetScreenPosition(railCamera);
 
 		if (IsCollision(Square(ScreenPosA - SizeA / 2.0f, ScreenPosA + SizeA / 2.0f), ScreenPosB)) {
 			//一番近い敵を探す
