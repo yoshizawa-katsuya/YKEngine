@@ -144,7 +144,6 @@ void CollisionManager::CheckPlayerBulletCollisions(Collider* playerBullet, Colli
 	switch (typeID)
 	{
 	case CollisionTypeIdDef::kEnemy:
-	case CollisionTypeIdDef::kEnemyBullet:
 		//球と球の交差判定
 		if (IsCollision(Sphere{ playerBullet->GetCenterPosition(), playerBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
 			// プレイヤー弾の衝突時
@@ -164,7 +163,6 @@ void CollisionManager::CheckEnemyBulletCollisions(Collider* enemyBullet, Collide
 	switch (typeID)
 	{
 	case CollisionTypeIdDef::kPlayer:
-	case CollisionTypeIdDef::kPlayerBullet:
 		//球と球の交差判定
 		if (IsCollision(Sphere{ enemyBullet->GetCenterPosition(), enemyBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
 			// 敵弾の衝突時

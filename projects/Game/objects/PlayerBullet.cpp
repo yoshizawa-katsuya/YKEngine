@@ -14,7 +14,7 @@ void PlayerBullet::OnCollision(Collider* other)
 {
 	CollisionTypeIdDef typeID = other->GetTypeID();
 
-	if (typeID == CollisionTypeIdDef::kEnemy || typeID == CollisionTypeIdDef::kEnemyBullet)
+	if (typeID == CollisionTypeIdDef::kEnemy)
 	{
 		isDead_ = true;
 	}
