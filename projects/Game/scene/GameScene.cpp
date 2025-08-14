@@ -422,7 +422,7 @@ void GameScene::UpdateMain()
 		});
 	// 弾更新
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
-		bullet->Update();
+		bullet->Update(camera_.get());
 	}
 
 	CheckAllColision();

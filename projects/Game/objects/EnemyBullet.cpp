@@ -10,6 +10,16 @@ void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Ve
 
 }
 
+void EnemyBullet::Update(Camera* railCamera)
+{
+	BaseBullet::Update();
+
+	if (!IsVisible(railCamera))
+	{
+		isDead_ = true;
+	}
+}
+
 void EnemyBullet::OnCollision(Collider* other)
 {
 	CollisionTypeIdDef typeID = other->GetTypeID();

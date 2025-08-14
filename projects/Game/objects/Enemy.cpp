@@ -141,17 +141,3 @@ Vector2 Enemy::GetScreenPosition(Camera* camera) {
 
 	return { screenPosition.x, screenPosition.y };
 }
-
-bool Enemy::IsVisible(Camera* camera)
-{
-	Vector3 clipPosition = Transform(GetWorldPosition(), camera->GetViewProjection());
-
-	//NDCの範囲内にあるかチェック
-	if (clipPosition.x < -1.1f || clipPosition.x > 1.1f ||
-		clipPosition.y < -1.1f || clipPosition.y > 1.1f ||
-		clipPosition.z < 0.0f || clipPosition.z > 1.0f) {
-		return false; // 範囲外
-	}
-
-	return true; // 範囲内
-}

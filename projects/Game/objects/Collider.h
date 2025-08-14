@@ -1,6 +1,7 @@
 #pragma once
 #include "WorldTransform.h"
 #include "CollisionTypeIdDef.h"
+class Camera;
 
 /// <summary>
 /// 衝突判定オブジェクト
@@ -18,6 +19,9 @@ public:
 
 	//衝突時に呼ばれる関数
 	virtual void OnCollision([[maybe_unused]] Collider* other) {}
+
+	//画面に表示されているかどうかを取得
+	virtual bool IsVisible(Camera* camera);
 
 	//中心座標を取得
 	virtual Vector3 GetCenterPosition();

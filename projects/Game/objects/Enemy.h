@@ -36,9 +36,6 @@ public:
 	//スクリーン座標を取得
 	Vector2 GetScreenPosition(Camera* camera);
 
-	//画面に表示されているかどうかを取得
-	bool IsVisible(Camera* camera);
-
 	// 弾リストを取得
 	//const std::list<EnemyBullet*>& GetBullets() const { return enemyBullets_; }
 
