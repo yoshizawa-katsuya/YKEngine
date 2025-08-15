@@ -1,6 +1,10 @@
 #include "SrvHeapManager.h"
 #include <cassert>
 
+SrvHeapManager::~SrvHeapManager()
+{
+}
+
 void SrvHeapManager::Initialize(DirectXCommon* dxCommon)
 {
 
@@ -32,21 +36,36 @@ void SrvHeapManager::SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uin
 uint32_t SrvHeapManager::Allocate()
 {
 	std::unique_lock<std::mutex> lock(mutex_);
-	assert(useIndex < kMaxSrvDescriptors_);
+	assert(useIndex_ < kMaxSrvDescriptors_);
 	
+	uint32_t index;
+
+	if (!freeList_.empty())
+	{
+		//空いている番号がある場合は、そこを使う
+		index = freeList_.front();
+		freeList_.pop();
+		return index;
+	}
+
 	//returnする番号を記録しておく
-	uint32_t index = useIndex;
+	index = useIndex_;
 	//次回のために番号を1進める
-	useIndex++;
+	useIndex_++;
 	
 	//上で記録した値をreturn
 	return index;
 
 }
 
+void SrvHeapManager::Free(uint32_t srvIndex)
+{
+	freeList_.push(srvIndex);
+}
+
 bool SrvHeapManager::Check()
 {
-	if (useIndex < kMaxSrvDescriptors_) {
+	if (useIndex_ < kMaxSrvDescriptors_) {
 		return true;
 	}
 	return false;

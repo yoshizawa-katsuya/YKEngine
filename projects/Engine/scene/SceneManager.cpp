@@ -1,12 +1,6 @@
 #include "SceneManager.h"
 #include <cassert>
 
-SceneManager* SceneManager::GetInstance()
-{
-	static SceneManager instance;
-	return &instance;
-}
-
 void SceneManager::Finalize()
 {
 

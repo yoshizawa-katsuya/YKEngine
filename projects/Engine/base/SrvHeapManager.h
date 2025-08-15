@@ -1,11 +1,14 @@
 #pragma once
 #include "DirectXCommon.h"
 #include <mutex>
+#include <queue>
 
 //SRV管理
 class SrvHeapManager
 {
 public:
+
+	~SrvHeapManager();
 
 	//初期化
 	void Initialize(DirectXCommon* dxCommon);
@@ -18,6 +21,9 @@ public:
 
 	//確保関数
 	uint32_t Allocate();
+
+	//解放関数
+	void Free(uint32_t srvIndex);
 
 	//確保可能チェック
 	bool Check();
@@ -62,8 +68,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
 
 	//次に使用するSRVインデックス
-	uint32_t useIndex = 0;
+	uint32_t useIndex_ = 0;
 
+	//SRVの空きリスト
+	std::queue<uint32_t> freeList_;
 
 	std::mutex mutex_;
 };

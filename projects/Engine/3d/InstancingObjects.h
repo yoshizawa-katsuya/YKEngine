@@ -7,6 +7,8 @@ public:
 
 	InstancingObjects();
 	
+	~InstancingObjects();
+
 	//RigidModelのみに対応
 	void Initialize(BaseModel* model, uint32_t maxInstances);
 

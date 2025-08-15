@@ -8,9 +8,6 @@ class SceneManager
 {
 public:
 
-	//シングルトンインスタンスの取得
-	static SceneManager* GetInstance();
-
 	//終了
 	void Finalize();
 
@@ -30,11 +27,6 @@ public:
 	void ChengeScene(const std::string& sceneName);
 
 private:
-
-	SceneManager() = default;
-	~SceneManager() = default;
-	SceneManager(SceneManager&) = delete;
-	SceneManager& operator=(SceneManager&) = delete;
 
 	//今のシーン(実行中シーン)
 	std::unique_ptr<BaseScene> scene_;
