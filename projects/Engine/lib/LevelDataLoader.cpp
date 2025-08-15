@@ -105,6 +105,11 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 				enemySpawnData.waitTime = object["wait_time"].get<float>();
 			}
 
+			if (object.contains("wave_num"))
+			{
+				//ウェーブ数
+				enemySpawnData.waveNum = object["wave_num"].get<uint32_t>();
+			}
 			//TODO: コライダーのパラメータ読み込み
 		}
 

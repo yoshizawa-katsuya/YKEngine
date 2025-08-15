@@ -56,6 +56,8 @@ public:
 
 	virtual void CreateSphere(uint32_t textureHandle);
 
+	virtual void CreateCube(uint32_t textureHandle);
+
 	virtual void CreatePlane(uint32_t textureHandle);
 
 	virtual void CreateRing(uint32_t textureHandle);

@@ -95,6 +95,10 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         if "wait_time" in object:
             json_object["wait_time"] = object["wait_time"]
 
+        #カスタムプロパティ'wave_num'
+        if "wave_num" in object:
+            json_object["wave_num"] = object["wave_num"]
+
         #カスタムプロパティ'無効オプション'
         if "disabled" in object:
             json_object["disabled"] = object["disabled"]
