@@ -14,7 +14,7 @@ class MYADDON_OT_add_wait_time(bpy.types.Operator):
 
         return {"FINISHED"}
     
-    #パネル ファイル名
+#パネル 待機時間
 class OBJECT_PT_wait_time(bpy.types.Panel):
     """オブジェクトのファイルネームパネル"""
     bl_name = "OBJECT_PT_wait_time"

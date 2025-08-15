@@ -20,6 +20,7 @@ struct EnemySpawnData
 {
 	EulerTransform transform{};
 	std::optional<float> waitTime = std::nullopt; // 待機時間（オプション）
+	std::optional<uint32_t> waveNum = std::nullopt; // ウェーブ番号（オプション）
 };
 
 //スプライン曲線の制御点データ
