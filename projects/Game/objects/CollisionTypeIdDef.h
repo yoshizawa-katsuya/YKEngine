@@ -12,4 +12,5 @@ enum class CollisionTypeIdDef
 	kEnemyBullet,
 	kRailMover,
 	kWaveEvent,
+	kSpeedEvent,
 };

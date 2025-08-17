@@ -5,6 +5,7 @@
 #include "ModelPlatform.h"
 #include "WaveEvent.h"
 #include "manager/EnemySpawnManager.h"
+#include "SpeedEvent.h"
 
 void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager)
 {
@@ -93,13 +94,22 @@ void RailMover::OnCollision(Collider* other)
 	// WaveEventとの衝突時の処理
 	if (WaveEvent* waveEvent = dynamic_cast<WaveEvent*>(other))
 	{
-		if (nextWaveNumber_ != waveEvent->GetWaveNumber())
+		if (nextEnemyWaveNumber_ != waveEvent->GetWaveNumber())
 		{
 			return;
 		}
-		enemySpawnManager_->WaveStart(nextWaveNumber_);
-		nextWaveNumber_++;
+		enemySpawnManager_->WaveStart(nextEnemyWaveNumber_);
+		nextEnemyWaveNumber_++;
 		
+	}
+	else if (SpeedEvent* speedEvent = dynamic_cast<SpeedEvent*>(other))
+	{
+		if (nextSpeedWaveNumber_ != speedEvent->GetWaveNumber())
+		{
+			return;
+		}
+		speed_ = speedEvent->GetSpeed();
+		nextSpeedWaveNumber_++;
 	}
 }
 

@@ -17,7 +17,7 @@ void WaveEvent::OnCollision(Collider* other)
 {
 	if (RailMover* railMover = dynamic_cast<RailMover*>(other))
 	{
-		if (railMover->GetNextWaveNumber() > waveNumber_)
+		if (railMover->GetNextEnemyWaveNumber() > waveNumber_)
 		{
 			isDead_ = true;
 		}

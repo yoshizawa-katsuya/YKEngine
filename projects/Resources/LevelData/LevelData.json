@@ -473,6 +473,31 @@
             "wave_num": 5,
             "file_path": "./resources/",
             "file_name": "waveEvent"
+        },
+        {
+            "type": "MESH",
+            "name": "球.006",
+            "transform": {
+                "translation": [
+                    -73.1684799194336,
+                    60.34193801879883,
+                    21.453340530395508
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "speed": 0.20000000298023224,
+            "wave_num": 1,
+            "file_path": "./resources/",
+            "file_name": "speedEvent"
         }
     ]
 }

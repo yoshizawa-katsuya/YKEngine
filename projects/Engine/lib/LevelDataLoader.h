@@ -8,6 +8,7 @@ struct ObjectData
 	std::string filePath;
 	EulerTransform transform;
 	std::optional<uint32_t> waveNum = std::nullopt; // ウェーブ番号（オプション）
+	std::optional<float> speed = std::nullopt; // スピード（オプション）
 };
 
 //自キャラの生成データ

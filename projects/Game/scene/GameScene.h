@@ -28,6 +28,7 @@
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
 #include "WaveEvent.h"
+#include "SpeedEvent.h"
 
 class GameScene : public BaseScene
 {
@@ -164,6 +165,9 @@ private:
 
 	//ウェーブイベント
 	std::list<std::unique_ptr<WaveEvent>> waveEvents_;
+
+	//スピードイベント
+	std::list<std::unique_ptr<SpeedEvent>> speedEvents_;
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;

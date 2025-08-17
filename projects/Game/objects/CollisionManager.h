@@ -49,6 +49,8 @@ private:
 
 	void CheckWaveEventCollisions(Collider* waveEvent, Collider* colliderB);
 
+	void CheckSpeedEventCollisions(Collider* speedEvent, Collider* colliderB);
+
 	//グローバル変数
 	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();
 

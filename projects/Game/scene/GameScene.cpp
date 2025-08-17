@@ -281,10 +281,6 @@ void GameScene::Draw() {
 	//衝突マネージャの描画
 	collisionManager_->Draw(mainCamera_);
 
-	modelPlatform_->LinePreDraw();
-
-	railMover_->DrawRail(mainCamera_);
-
 	modelPlatform_->InstancingPreDraw();
 
 	//オブジェクトの描画
@@ -293,6 +289,10 @@ void GameScene::Draw() {
 		instancingObject->Draw();
 	}
 	
+	modelPlatform_->LinePreDraw();
+
+	railMover_->DrawRail(mainCamera_);
+
 	//Spriteの前景描画前処理
 	spritePlatform_->PreDraw();
 
@@ -328,6 +328,9 @@ void GameScene::CheckAllColision() {
 	}
 	for (std::unique_ptr<WaveEvent>& waveEvent : waveEvents_) {
 		collisionManager_->AddCollider(waveEvent.get());
+	}
+	for (std::unique_ptr<SpeedEvent>& speedEvent : speedEvents_) {
+		collisionManager_->AddCollider(speedEvent.get());
 	}
 
 	collisionManager_->Update();
@@ -385,6 +388,14 @@ void GameScene::UpdateMain()
 	//デスフラグの立ったウェーブイベントを削除
 	waveEvents_.remove_if([](std::unique_ptr<WaveEvent>& waveEvent) {
 		if (waveEvent->IsDead()) {
+			return true;
+		}
+		return false;
+		});
+
+	//デスフラグの立ったスピードイベントを削除
+	speedEvents_.remove_if([](std::unique_ptr<SpeedEvent>& speedEvent) {
+		if (speedEvent->IsDead()) {
 			return true;
 		}
 		return false;
@@ -531,6 +542,15 @@ void GameScene::CreateLevel()
 			waveEvent = std::make_unique<WaveEvent>();
 			waveEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
 
+			continue;
+		}
+		else if (key == "speedEvent")
+		{
+			//スピードイベントの生成
+			std::unique_ptr<SpeedEvent>& speedEvent = speedEvents_.emplace_back();
+			speedEvent = std::make_unique<SpeedEvent>();
+			speedEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
+			
 			continue;
 		}
 

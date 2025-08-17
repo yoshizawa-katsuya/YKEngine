@@ -21,7 +21,9 @@ public:
 
 	bool IsEnd() const { return moveCount_ >= pointsDrawing_.size(); }
 
-	uint32_t GetNextWaveNumber() const { return nextWaveNumber_; }
+	uint32_t GetNextEnemyWaveNumber() const { return nextEnemyWaveNumber_; }
+
+	uint32_t GetNextSpeedWaveNumber() const { return nextSpeedWaveNumber_; }
 
 private:
 
@@ -52,8 +54,10 @@ private:
 	uint32_t difference_ = 5;
 	uint32_t moveCount_ = 0;
 
-	uint32_t nextWaveNumber_ = 1;
+	uint32_t nextEnemyWaveNumber_ = 1;
 	EnemySpawnManager* enemySpawnManager_ = nullptr;
+
+	uint32_t nextSpeedWaveNumber_ = 1;
 
 };
 

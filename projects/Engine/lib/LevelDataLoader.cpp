@@ -75,6 +75,11 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 				//ウェーブ数
 				objectData.waveNum = object["wave_num"].get<uint32_t>();
 			}
+			if (object.contains("speed"))
+			{
+				//移動速度
+				objectData.speed = object["speed"].get<float>();
+			}
 
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
