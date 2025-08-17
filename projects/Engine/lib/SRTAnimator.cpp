@@ -6,6 +6,7 @@ void SRTAnimator::SetAnimation(const Vector3& startVector, const Vector3& endVec
 	startVector_ = startVector;
 	endVector_ = endVector;
 	duration_ = duration;
+	elapsedTime_ = 0.0f;
 }
 
 Vector3 SRTAnimator::Update()
