@@ -179,6 +179,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\RailMover.cpp" />
     <ClCompile Include="Game\objects\WaveEvent.cpp" />
     <ClCompile Include="Game\objects\SpeedEvent.cpp" />
+    <ClCompile Include="RotateEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -421,6 +422,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\RailMover.h" />
     <ClInclude Include="Game\objects\WaveEvent.h" />
     <ClInclude Include="Game\objects\SpeedEvent.h" />
+    <ClInclude Include="RotateEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

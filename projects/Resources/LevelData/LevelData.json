@@ -479,9 +479,9 @@
             "name": "球.006",
             "transform": {
                 "translation": [
-                    -73.1684799194336,
-                    60.34193801879883,
-                    21.453340530395508
+                    -73.23125457763672,
+                    57.893592834472656,
+                    22.09498405456543
                 ],
                 "rotation": [
                     0.0,
@@ -498,6 +498,30 @@
             "wave_num": 1,
             "file_path": "./resources/",
             "file_name": "speedEvent"
+        },
+        {
+            "type": "MESH",
+            "name": "rotateEvent",
+            "transform": {
+                "translation": [
+                    -73.15436553955078,
+                    63.958927154541016,
+                    21.828121185302734
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "wave_num": 1,
+            "file_path": "./resources/",
+            "file_name": "rotateEvent"
         }
     ]
 }

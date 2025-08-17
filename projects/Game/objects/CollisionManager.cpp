@@ -101,6 +101,9 @@ void CollisionManager::CheckColliderPair(Collider* colliderA, Collider* collider
 	case CollisionTypeIdDef::kSpeedEvent:
 		CheckSpeedEventCollisions(colliderA, colliderB);
 		break;
+	case CollisionTypeIdDef::kRotateEvent:
+		CheckRotateEventCollisions(colliderA, colliderB);
+		break;
 	default:
 		break;
 	}
@@ -193,6 +196,7 @@ void CollisionManager::CheakRailMoverCollisions(Collider* railMover, Collider* c
 	{
 	case CollisionTypeIdDef::kWaveEvent:
 	case CollisionTypeIdDef::kSpeedEvent:
+	case CollisionTypeIdDef::kRotateEvent:
 		//球と球の交差判定
 		if (IsCollision(Sphere{ railMover->GetCenterPosition(), railMover->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
 			// 敵弾の衝突時
@@ -237,6 +241,25 @@ void CollisionManager::CheckSpeedEventCollisions(Collider* speedEvent, Collider*
 			// イベントの衝突時
 			speedEvent->OnCollision(colliderB);
 			colliderB->OnCollision(speedEvent);
+		}
+		return;
+	default:
+		return;
+	}
+}
+
+void CollisionManager::CheckRotateEventCollisions(Collider* rotateEvent, Collider* colliderB)
+{
+	CollisionTypeIdDef typeID = colliderB->GetTypeID();
+
+	switch (typeID)
+	{
+	case CollisionTypeIdDef::kRailMover:
+		//球と球の交差判定
+		if (IsCollision(Sphere{ rotateEvent->GetCenterPosition(), rotateEvent->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+			// イベントの衝突時
+			rotateEvent->OnCollision(colliderB);
+			colliderB->OnCollision(rotateEvent);
 		}
 		return;
 	default:

@@ -6,6 +6,7 @@
 #include "WaveEvent.h"
 #include "manager/EnemySpawnManager.h"
 #include "SpeedEvent.h"
+#include "RotateEvent.h"
 
 void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager)
 {
@@ -28,6 +29,8 @@ void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawn
 	UpdateOffset();
 
 	worldTransform_.UpdateMatrix();
+
+	srtAnimator_ = std::make_unique<SRTAnimator>();
 }
 
 void RailMover::Update()
@@ -111,6 +114,16 @@ void RailMover::OnCollision(Collider* other)
 		speed_ = speedEvent->GetSpeed();
 		nextSpeedWaveNumber_++;
 	}
+	else if (RotateEvent* rotateEvent = dynamic_cast<RotateEvent*>(other))
+	{
+		if (nextRotateWaveNumber_ != rotateEvent->GetWaveNumber())
+		{
+			return;
+		}
+		srtAnimator_->SetAnimation(worldTransform_.rotation_, rotateEvent->GetRotate(), 0.5f);
+		isInRotateEvent_ = true;
+		nextRotateWaveNumber_++;
+	}
 }
 
 void RailMover::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
@@ -126,7 +139,14 @@ void RailMover::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
 void RailMover::UpdateRotate()
 {
 	//カメラの向きを更新する処理
-	if (pointsDrawing_.size() > moveCount_ + difference_) {
+	if (isInRotateEvent_) 
+	{
+		// 回転イベント中は回転アニメーションを適用
+		worldTransform_.rotation_ = srtAnimator_->Update();
+		return;
+	}
+	else if (pointsDrawing_.size() > moveCount_ + difference_)
+	{
 		target_ = pointsDrawing_[moveCount_ + difference_];
 		forward_ = Subtract(target_, worldTransform_.translation_);
 

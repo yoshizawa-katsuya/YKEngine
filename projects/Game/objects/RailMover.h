@@ -1,5 +1,6 @@
 #pragma once
 #include "Collider.h"
+#include "SRTAnimator.h"
 class Camera;
 class EnemySpawnManager;
 
@@ -24,6 +25,8 @@ public:
 	uint32_t GetNextEnemyWaveNumber() const { return nextEnemyWaveNumber_; }
 
 	uint32_t GetNextSpeedWaveNumber() const { return nextSpeedWaveNumber_; }
+
+	uint32_t GetNextRotateWaveNumber() const { return nextRotateWaveNumber_; }
 
 private:
 
@@ -59,5 +62,8 @@ private:
 
 	uint32_t nextSpeedWaveNumber_ = 1;
 
+	uint32_t nextRotateWaveNumber_ = 1;
+	//回転イベント中
+	bool isInRotateEvent_ = false;
+	std::unique_ptr<SRTAnimator> srtAnimator_;
 };
-

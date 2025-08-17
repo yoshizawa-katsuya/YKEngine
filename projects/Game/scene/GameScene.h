@@ -29,6 +29,7 @@
 #include "RailMover.h"
 #include "WaveEvent.h"
 #include "SpeedEvent.h"
+#include "RotateEvent.h"
 
 class GameScene : public BaseScene
 {
@@ -168,6 +169,9 @@ private:
 
 	//スピードイベント
 	std::list<std::unique_ptr<SpeedEvent>> speedEvents_;
+
+	//回転イベント
+	std::list<std::unique_ptr<RotateEvent>> rotateEvents_;
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;
