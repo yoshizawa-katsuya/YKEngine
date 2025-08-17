@@ -92,6 +92,12 @@ void CollisionManager::CheckColliderPair(Collider* colliderA, Collider* collider
 	case CollisionTypeIdDef::kEnemyBullet:
 		CheckEnemyBulletCollisions(colliderA, colliderB);
 		break;
+	case CollisionTypeIdDef::kRailMover:
+		CheakRailMoverCollisions(colliderA, colliderB);
+		break;
+	case CollisionTypeIdDef::kWaveEvent:
+		CheckWaveEventCollisions(colliderA, colliderB);
+		break;
 	default:
 		break;
 	}
@@ -171,6 +177,45 @@ void CollisionManager::CheckEnemyBulletCollisions(Collider* enemyBullet, Collide
 		}
 		return;
 
+	default:
+		return;
+	}
+}
+
+void CollisionManager::CheakRailMoverCollisions(Collider* railMover, Collider* colliderB)
+{
+	CollisionTypeIdDef typeID = colliderB->GetTypeID();
+
+	switch (typeID)
+	{
+	case CollisionTypeIdDef::kWaveEvent:
+		//球と球の交差判定
+		if (IsCollision(Sphere{ railMover->GetCenterPosition(), railMover->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+			// 敵弾の衝突時
+			railMover->OnCollision(colliderB);
+			colliderB->OnCollision(railMover);
+		}
+		return;
+
+	default:
+		return;
+	}
+}
+
+void CollisionManager::CheckWaveEventCollisions(Collider* waveEvent, Collider* colliderB)
+{
+	CollisionTypeIdDef typeID = colliderB->GetTypeID();
+
+	switch (typeID)
+	{
+	case CollisionTypeIdDef::kRailMover:
+		//球と球の交差判定
+		if (IsCollision(Sphere{ waveEvent->GetCenterPosition(), waveEvent->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+			// 波イベントの衝突時
+			waveEvent->OnCollision(colliderB);
+			colliderB->OnCollision(waveEvent);
+		}
+		return;
 	default:
 		return;
 	}

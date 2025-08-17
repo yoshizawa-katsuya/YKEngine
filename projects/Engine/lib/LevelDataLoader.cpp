@@ -70,6 +70,11 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 				//ファイルパス
 				objectData.filePath = object["file_path"];
 			}
+			if (object.contains("wave_num"))
+			{
+				//ウェーブ数
+				objectData.waveNum = object["wave_num"].get<uint32_t>();
+			}
 
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];

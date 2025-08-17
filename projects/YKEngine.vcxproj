@@ -176,7 +176,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\lib\TransformHelpers.cpp" />
     <ClCompile Include="Engine\base\OffscreenRenderer.cpp" />
     <ClCompile Include="Game\objects\ReticleController.cpp" />
-    <ClCompile Include="RailMover.cpp" />
+    <ClCompile Include="Game\objects\RailMover.cpp" />
+    <ClCompile Include="Game\objects\WaveEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -416,7 +417,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\TransformHelpers.h" />
     <ClInclude Include="Engine\base\OffscreenRenderer.h" />
     <ClInclude Include="Game\objects\ReticleController.h" />
-    <ClInclude Include="RailMover.h" />
+    <ClInclude Include="Game\objects\RailMover.h" />
+    <ClInclude Include="Game\objects\WaveEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

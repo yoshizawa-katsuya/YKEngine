@@ -45,6 +45,10 @@ private:
 
 	void CheckEnemyBulletCollisions(Collider* enemyBullet, Collider* colliderB);
 
+	void CheakRailMoverCollisions(Collider* railMover, Collider* colliderB);
+
+	void CheckWaveEventCollisions(Collider* waveEvent, Collider* colliderB);
+
 	//グローバル変数
 	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();
 

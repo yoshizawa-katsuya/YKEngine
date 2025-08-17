@@ -1,21 +1,27 @@
 #pragma once
 #include "Collider.h"
 class Camera;
+class EnemySpawnManager;
 
 class RailMover : public Collider
 {
 public:
 
-	void Initialize(const std::vector<Vector3>& controlPoints);
+	void Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager);
 
 	void Update();
 
 	//レール描画
 	void DrawRail(Camera* camera);
 
+	//衝突時に呼ばれる関数
+	void OnCollision([[maybe_unused]] Collider* other) override;
+
 	WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
 	bool IsEnd() const { return moveCount_ >= pointsDrawing_.size(); }
+
+	uint32_t GetNextWaveNumber() const { return nextWaveNumber_; }
 
 private:
 
@@ -45,6 +51,9 @@ private:
 
 	uint32_t difference_ = 5;
 	uint32_t moveCount_ = 0;
+
+	uint32_t nextWaveNumber_ = 1;
+	EnemySpawnManager* enemySpawnManager_ = nullptr;
 
 };
 

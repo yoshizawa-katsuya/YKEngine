@@ -288,7 +288,10 @@
     <ClCompile Include="Game\scene\ClearScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="RailMover.cpp">
+    <ClCompile Include="Game\objects\RailMover.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\WaveEvent.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -592,7 +595,10 @@
     <ClInclude Include="Game\scene\ClearScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="RailMover.h">
+    <ClInclude Include="Game\objects\RailMover.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\WaveEvent.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>

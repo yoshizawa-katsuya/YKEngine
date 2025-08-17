@@ -315,6 +315,7 @@ void GameScene::CheckAllColision() {
 	collisionManager_->Reset();
 
 	//コライダーをリストに登録
+	collisionManager_->AddCollider(railMover_.get());
 	collisionManager_->AddCollider(player_.get());
 	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
 		collisionManager_->AddCollider(bullet.get());
@@ -324,6 +325,9 @@ void GameScene::CheckAllColision() {
 	}
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 		collisionManager_->AddCollider(bullet.get());
+	}
+	for (std::unique_ptr<WaveEvent>& waveEvent : waveEvents_) {
+		collisionManager_->AddCollider(waveEvent.get());
 	}
 
 	collisionManager_->Update();
@@ -374,11 +378,17 @@ void GameScene::UpdateStart()
 
 void GameScene::UpdateMain()
 {
-	// フレーム時間の更新
-	currentTime_ += deltaTime_;
 
 	//敵のスポーンマネージャーの更新
-	enemySpawnManager_->Update(currentTime_);
+	enemySpawnManager_->Update();
+
+	//デスフラグの立ったウェーブイベントを削除
+	waveEvents_.remove_if([](std::unique_ptr<WaveEvent>& waveEvent) {
+		if (waveEvent->IsDead()) {
+			return true;
+		}
+		return false;
+		});
 
 	//レールムーバーの更新
 	railMover_->Update();
@@ -482,7 +492,7 @@ void GameScene::CreateLevel()
 
 	//レールムーバーの生成
 	railMover_ = std::make_unique<RailMover>();
-	railMover_->Initialize(levelData->splines[0].controlPoints);
+	railMover_->Initialize(levelData->splines[0].controlPoints, enemySpawnManager_.get());
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -501,8 +511,8 @@ void GameScene::CreateLevel()
 		//敵の回転を取得
 		Vector3 spawnRotation = enemySpawnData.transform.rotation;
 
-		//レベルエディターで敵のwaitTimeを必ず設定するようにする
-		enemySpawnManager_->AddSpawnData(enemySpawnData.waitTime.value(), spawnPosition, spawnRotation);
+		//レベルエディターで敵のwaveNumを必ず設定するようにする
+		enemySpawnManager_->AddSpawnData(enemySpawnData.waveNum.value(), spawnPosition, spawnRotation);
 
 	}
 	
@@ -511,15 +521,18 @@ void GameScene::CreateLevel()
 
 	for (const ObjectData& objectData : levelData->objects)
 	{
-		//ワールド変換の初期化
-		WorldTransform transform;
-		transform.Initialize();
-		transform.rotation_ = objectData.transform.rotation;
-		transform.translation_ = objectData.transform.translation;
-		transform.scale_ = objectData.transform.scale;
-		transform.UpdateMatrix();
 
 		key = objectData.fileName;
+
+		if (key == "waveEvent")
+		{
+			//波イベントの生成
+			std::unique_ptr<WaveEvent>& waveEvent = waveEvents_.emplace_back();
+			waveEvent = std::make_unique<WaveEvent>();
+			waveEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
+
+			continue;
+		}
 
 		if (!instancingObjects_.contains(key))
 		{
@@ -534,6 +547,13 @@ void GameScene::CreateLevel()
 				instancingObjects_[key]->Initialize(modelPlatform_->CreateSphere(textureHandle_).get(), 128);
 			}
 		}
+		//ワールド変換の初期化
+		WorldTransform transform;
+		transform.Initialize();
+		transform.rotation_ = objectData.transform.rotation;
+		transform.translation_ = objectData.transform.translation;
+		transform.scale_ = objectData.transform.scale;
+		transform.UpdateMatrix();
 		//インスタンスオブジェクトにワールド変換を設定
 		instancingObjects_[key]->WorldTransformUpdate(transform);
 	}

@@ -7,6 +7,7 @@ struct ObjectData
 	std::string fileName;
 	std::string filePath;
 	EulerTransform transform;
+	std::optional<uint32_t> waveNum = std::nullopt; // ウェーブ番号（オプション）
 };
 
 //自キャラの生成データ

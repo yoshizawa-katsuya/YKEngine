@@ -63,7 +63,8 @@
                     1.0
                 ]
             },
-            "wait_time": 2.0
+            "wait_time": 2.0,
+            "wave_num": 1
         },
         {
             "type": "EnemySpawn",
@@ -85,7 +86,8 @@
                     1.0
                 ]
             },
-            "wait_time": 10.0
+            "wait_time": 10.0,
+            "wave_num": 2
         },
         {
             "type": "EnemySpawn",
@@ -107,7 +109,8 @@
                     1.0
                 ]
             },
-            "wait_time": 30.0
+            "wait_time": 30.0,
+            "wave_num": 3
         },
         {
             "type": "EnemySpawn",
@@ -129,7 +132,8 @@
                     1.0
                 ]
             },
-            "wait_time": 55.0
+            "wait_time": 55.0,
+            "wave_num": 5
         },
         {
             "type": "EnemySpawn",
@@ -151,7 +155,8 @@
                     0.9999999403953552
                 ]
             },
-            "wait_time": 38.0
+            "wait_time": 38.0,
+            "wave_num": 4
         },
         {
             "type": "CURVE",
@@ -348,6 +353,126 @@
                 ]
             },
             "disabled": true
+        },
+        {
+            "type": "MESH",
+            "name": "球.001",
+            "transform": {
+                "translation": [
+                    -73.01937103271484,
+                    66.93601989746094,
+                    21.453340530395508
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "wave_num": 1,
+            "file_path": "./resources/",
+            "file_name": "waveEvent"
+        },
+        {
+            "type": "MESH",
+            "name": "球.002",
+            "transform": {
+                "translation": [
+                    -73.73043823242188,
+                    11.236927032470703,
+                    21.93679428100586
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "wave_num": 2,
+            "file_path": "./resources/",
+            "file_name": "waveEvent"
+        },
+        {
+            "type": "MESH",
+            "name": "球.003",
+            "transform": {
+                "translation": [
+                    -47.995880126953125,
+                    -68.4620590209961,
+                    41.063419342041016
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "wave_num": 3,
+            "file_path": "./resources/",
+            "file_name": "waveEvent"
+        },
+        {
+            "type": "MESH",
+            "name": "球.004",
+            "transform": {
+                "translation": [
+                    -3.7684197425842285,
+                    -68.36206817626953,
+                    41.063419342041016
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "wave_num": 4,
+            "file_path": "./resources/",
+            "file_name": "waveEvent"
+        },
+        {
+            "type": "MESH",
+            "name": "球.005",
+            "transform": {
+                "translation": [
+                    54.76268005371094,
+                    -49.10712432861328,
+                    15.094496726989746
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "wave_num": 5,
+            "file_path": "./resources/",
+            "file_name": "waveEvent"
         }
     ]
 }

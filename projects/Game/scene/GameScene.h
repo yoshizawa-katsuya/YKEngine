@@ -27,6 +27,7 @@
 #include "Fade.h"
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
+#include "WaveEvent.h"
 
 class GameScene : public BaseScene
 {
@@ -161,6 +162,9 @@ private:
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;
 
+	//ウェーブイベント
+	std::list<std::unique_ptr<WaveEvent>> waveEvents_;
+
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;
 	/*
@@ -174,9 +178,6 @@ private:
 	std::unique_ptr<ParticleEmitter> emitter_;
 	//std::unique_ptr<AccelerationField> field_;
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
-
-	float currentTime_ = 0.0f;	//現在の時間
-	float deltaTime_ = 1.0f / 60.0f;	//1フレームの時間(60fps固定)
 
 	//シーンのフェーズ
 	enum class Phase {

@@ -3,10 +3,15 @@
 #include "TransformHelpers.h"
 #include "Matrix.h"
 #include "ModelPlatform.h"
+#include "WaveEvent.h"
+#include "manager/EnemySpawnManager.h"
 
-void RailMover::Initialize(const std::vector<Vector3>& controlPoints)
+void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager)
 {
 	Collider::Initialize();
+	typeID_ = CollisionTypeIdDef::kRailMover;
+
+	enemySpawnManager_ = enemySpawnManager;
 
 	CreateSplineCurve(controlPoints);
 	// 初期位置をスプラインの最初のポイントに設定
@@ -80,6 +85,21 @@ void RailMover::DrawRail(Camera* camera)
 		Matrix4x4 point1 = MakeTranslateMatrix(pointsDrawing_[i]);
 		Matrix4x4 point2 = MakeTranslateMatrix(pointsDrawing_[i + 1]);
 		ModelPlatform::GetInstance()->LineDraw(point1, point2, camera);
+	}
+}
+
+void RailMover::OnCollision(Collider* other)
+{
+	// WaveEventとの衝突時の処理
+	if (WaveEvent* waveEvent = dynamic_cast<WaveEvent*>(other))
+	{
+		if (nextWaveNumber_ != waveEvent->GetWaveNumber())
+		{
+			return;
+		}
+		enemySpawnManager_->WaveStart(nextWaveNumber_);
+		nextWaveNumber_++;
+		
 	}
 }
 
