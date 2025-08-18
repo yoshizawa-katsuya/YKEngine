@@ -95,14 +95,9 @@ void CollisionManager::CheckColliderPair(Collider* colliderA, Collider* collider
 	case CollisionTypeIdDef::kRailMover:
 		CheakRailMoverCollisions(colliderA, colliderB);
 		break;
-	case CollisionTypeIdDef::kWaveEvent:
-		CheckWaveEventCollisions(colliderA, colliderB);
+	case CollisionTypeIdDef::kEvent:
+		CheckEventCollisions(colliderA, colliderB);
 		break;
-	case CollisionTypeIdDef::kSpeedEvent:
-		CheckSpeedEventCollisions(colliderA, colliderB);
-		break;
-	case CollisionTypeIdDef::kRotateEvent:
-		CheckRotateEventCollisions(colliderA, colliderB);
 		break;
 	default:
 		break;
@@ -194,9 +189,7 @@ void CollisionManager::CheakRailMoverCollisions(Collider* railMover, Collider* c
 
 	switch (typeID)
 	{
-	case CollisionTypeIdDef::kWaveEvent:
-	case CollisionTypeIdDef::kSpeedEvent:
-	case CollisionTypeIdDef::kRotateEvent:
+	case CollisionTypeIdDef::kEvent:
 		//球と球の交差判定
 		if (IsCollision(Sphere{ railMover->GetCenterPosition(), railMover->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
 			// 敵弾の衝突時
@@ -210,7 +203,7 @@ void CollisionManager::CheakRailMoverCollisions(Collider* railMover, Collider* c
 	}
 }
 
-void CollisionManager::CheckWaveEventCollisions(Collider* waveEvent, Collider* colliderB)
+void CollisionManager::CheckEventCollisions(Collider* event, Collider* colliderB)
 {
 	CollisionTypeIdDef typeID = colliderB->GetTypeID();
 
@@ -218,48 +211,10 @@ void CollisionManager::CheckWaveEventCollisions(Collider* waveEvent, Collider* c
 	{
 	case CollisionTypeIdDef::kRailMover:
 		//球と球の交差判定
-		if (IsCollision(Sphere{ waveEvent->GetCenterPosition(), waveEvent->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+		if (IsCollision(Sphere{ event->GetCenterPosition(), event->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
 			// 波イベントの衝突時
-			waveEvent->OnCollision(colliderB);
-			colliderB->OnCollision(waveEvent);
-		}
-		return;
-	default:
-		return;
-	}
-}
-
-void CollisionManager::CheckSpeedEventCollisions(Collider* speedEvent, Collider* colliderB)
-{
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kRailMover:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ speedEvent->GetCenterPosition(), speedEvent->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
-			// イベントの衝突時
-			speedEvent->OnCollision(colliderB);
-			colliderB->OnCollision(speedEvent);
-		}
-		return;
-	default:
-		return;
-	}
-}
-
-void CollisionManager::CheckRotateEventCollisions(Collider* rotateEvent, Collider* colliderB)
-{
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kRailMover:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ rotateEvent->GetCenterPosition(), rotateEvent->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
-			// イベントの衝突時
-			rotateEvent->OnCollision(colliderB);
-			colliderB->OnCollision(rotateEvent);
+			event->OnCollision(colliderB);
+			colliderB->OnCollision(event);
 		}
 		return;
 	default:

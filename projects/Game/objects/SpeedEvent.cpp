@@ -3,14 +3,8 @@
 
 void SpeedEvent::Initialize(uint32_t waveNumber, const Vector3& position, float radius, float speed)
 {
-	Collider::Initialize();
-	SetRadius(radius);
-	worldTransform_.translation_ = position;
-	worldTransform_.UpdateMatrix();
+	BaseEvent::Initialize(waveNumber, position, radius);
 
-	typeID_ = CollisionTypeIdDef::kSpeedEvent;
-
-	waveNumber_ = waveNumber;
 	speed_ = speed;
 }
 

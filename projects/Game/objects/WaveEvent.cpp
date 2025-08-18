@@ -3,14 +3,7 @@
 
 void WaveEvent::Initialize(uint32_t waveNumber, const Vector3& position, float radius)
 {
-	Collider::Initialize();
-	SetRadius(radius);
-	worldTransform_.translation_ = position;
-	worldTransform_.UpdateMatrix();
-
-	typeID_ = CollisionTypeIdDef::kWaveEvent;
-
-	waveNumber_ = waveNumber;
+	BaseEvent::Initialize(waveNumber ,position, radius);
 }
 
 void WaveEvent::OnCollision(Collider* other)

@@ -1,7 +1,7 @@
 #pragma once
-#include "Collider.h"
+#include "BaseEvent.h"
 
-class SpeedEvent : public Collider
+class SpeedEvent : public BaseEvent
 {
 public:
 
@@ -10,17 +10,10 @@ public:
 	//衝突時に呼ばれる関数
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
-	bool IsDead() { return isDead_; }
-
-	uint32_t GetWaveNumber() const { return waveNumber_; }
-
 	float GetSpeed() const { return speed_; }
 
 private:
 
-	uint32_t waveNumber_ = 0;
 	float speed_ = 0.0f;
-
-	bool isDead_ = false;
 };
 

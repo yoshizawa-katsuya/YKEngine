@@ -1,7 +1,7 @@
 #pragma once
-#include "Collider.h"
+#include "BaseEvent.h"
 
-class RotateEvent : public Collider
+class RotateEvent : public BaseEvent
 {
 public:
 
@@ -10,15 +10,8 @@ public:
 	//衝突時に呼ばれる関数
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
-	bool IsDead() { return isDead_; }
-
-	uint32_t GetWaveNumber() const { return waveNumber_; }
-
 	const Vector3& GetRotate() const { return worldTransform_.rotation_; }
 
 private:
 
-	uint32_t waveNumber_ = 0;
-
-	bool isDead_ = false;
 };

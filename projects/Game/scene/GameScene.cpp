@@ -8,6 +8,9 @@
 #include "Matrix.h"
 #include "LevelDataLoader.h"
 #include "Vector2.h"
+#include "WaveEvent.h"
+#include "SpeedEvent.h"
+#include "RotateEvent.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -326,15 +329,10 @@ void GameScene::CheckAllColision() {
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 		collisionManager_->AddCollider(bullet.get());
 	}
-	for (std::unique_ptr<WaveEvent>& waveEvent : waveEvents_) {
-		collisionManager_->AddCollider(waveEvent.get());
+	for (std::unique_ptr<BaseEvent>& event : events_) {
+		collisionManager_->AddCollider(event.get());
 	}
-	for (std::unique_ptr<SpeedEvent>& speedEvent : speedEvents_) {
-		collisionManager_->AddCollider(speedEvent.get());
-	}
-	for (std::unique_ptr<RotateEvent>& rotateEvent : rotateEvents_) {
-		collisionManager_->AddCollider(rotateEvent.get());
-	}
+	
 
 	collisionManager_->Update();
 	collisionManager_->CheckAllCollisions();
@@ -388,25 +386,9 @@ void GameScene::UpdateMain()
 	//敵のスポーンマネージャーの更新
 	enemySpawnManager_->Update();
 
-	//デスフラグの立ったウェーブイベントを削除
-	waveEvents_.remove_if([](std::unique_ptr<WaveEvent>& waveEvent) {
-		if (waveEvent->IsDead()) {
-			return true;
-		}
-		return false;
-		});
-
-	//デスフラグの立ったスピードイベントを削除
-	speedEvents_.remove_if([](std::unique_ptr<SpeedEvent>& speedEvent) {
-		if (speedEvent->IsDead()) {
-			return true;
-		}
-		return false;
-		});
-
-	//デスフラグの立った回転イベントを削除
-	rotateEvents_.remove_if([](std::unique_ptr<RotateEvent>& rotateEvent) {
-		if (rotateEvent->IsDead()) {
+	//デスフラグの立ったイベントを削除
+	events_.remove_if([](std::unique_ptr<BaseEvent>& event) {
+		if (event->IsDead()) {
 			return true;
 		}
 		return false;
@@ -549,7 +531,7 @@ void GameScene::CreateLevel()
 		if (key == "waveEvent")
 		{
 			//波イベントの生成
-			std::unique_ptr<WaveEvent>& waveEvent = waveEvents_.emplace_back();
+			std::unique_ptr<BaseEvent>& waveEvent = events_.emplace_back();
 			waveEvent = std::make_unique<WaveEvent>();
 			waveEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
 
@@ -558,18 +540,20 @@ void GameScene::CreateLevel()
 		else if (key == "speedEvent")
 		{
 			//スピードイベントの生成
-			std::unique_ptr<SpeedEvent>& speedEvent = speedEvents_.emplace_back();
-			speedEvent = std::make_unique<SpeedEvent>();
-			speedEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
+			std::unique_ptr<BaseEvent>& speedEvent = events_.emplace_back();
+			SpeedEvent* speedEventPtr = new SpeedEvent();
+			speedEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
+			speedEvent = std::make_unique<SpeedEvent>(*speedEventPtr);
 			
 			continue;
 		}
 		else if (key == "rotateEvent")
 		{
 			//回転イベントの生成
-			std::unique_ptr<RotateEvent>& rotateEvent = rotateEvents_.emplace_back();
-			rotateEvent = std::make_unique<RotateEvent>();
-			rotateEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
+			std::unique_ptr<BaseEvent>& rotateEvent = events_.emplace_back();
+			RotateEvent* rotateEventPtr = new RotateEvent();
+			rotateEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
+			rotateEvent = std::make_unique<RotateEvent>(*rotateEventPtr);
 			
 			continue;
 		}

@@ -47,11 +47,7 @@ private:
 
 	void CheakRailMoverCollisions(Collider* railMover, Collider* colliderB);
 
-	void CheckWaveEventCollisions(Collider* waveEvent, Collider* colliderB);
-
-	void CheckSpeedEventCollisions(Collider* speedEvent, Collider* colliderB);
-
-	void CheckRotateEventCollisions(Collider* rotateEvent, Collider* colliderB);
+	void CheckEventCollisions(Collider* event, Collider* colliderB);
 
 	//グローバル変数
 	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();

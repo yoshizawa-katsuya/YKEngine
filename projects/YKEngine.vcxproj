@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\BaseEvent.cpp" />
     <ClCompile Include="Game\scene\ClearScene.cpp" />
     <ClCompile Include="Game\scene\GameOverScene.cpp" />
     <ClCompile Include="Game\manager\EnemySpawnManager.cpp" />
@@ -348,6 +349,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\BaseEvent.h" />
     <ClInclude Include="Game\scene\ClearScene.h" />
     <ClInclude Include="Game\scene\GameOverScene.h" />
     <ClInclude Include="Game\manager\EnemySpawnManager.h" />

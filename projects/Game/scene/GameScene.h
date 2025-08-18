@@ -27,9 +27,7 @@
 #include "Fade.h"
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
-#include "WaveEvent.h"
-#include "SpeedEvent.h"
-#include "RotateEvent.h"
+#include "BaseEvent.h"
 
 class GameScene : public BaseScene
 {
@@ -164,14 +162,8 @@ private:
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;
 
-	//ウェーブイベント
-	std::list<std::unique_ptr<WaveEvent>> waveEvents_;
-
-	//スピードイベント
-	std::list<std::unique_ptr<SpeedEvent>> speedEvents_;
-
-	//回転イベント
-	std::list<std::unique_ptr<RotateEvent>> rotateEvents_;
+	//イベント
+	std::list<std::unique_ptr<BaseEvent>> events_;
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;
