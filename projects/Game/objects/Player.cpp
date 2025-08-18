@@ -7,7 +7,7 @@
 #include "GameScene.h"
 #include "ReticleController.h"
 
-void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent) {
+void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle) {
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
@@ -21,6 +21,8 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransf
 
 	reticleController_ = std::make_unique<ReticleController>();
 	reticleController_->Initialize(viewPortMatrix);
+
+	HUDInitialize(heartTextureHandle, heartEmptyTexturehandle);
 
 }
 
@@ -81,6 +83,19 @@ void Player::OnCollision(Collider* other)
 void Player::DrawUI()
 {
 	reticleController_->Draw();
+
+	//HPの表示
+	for (int i = 0; i < maxHitPoint_; i++)
+	{
+		if (i < hitPoint_)
+		{
+			heratSprites_[i]->Draw();
+		}
+		else
+		{
+			heratEmptySprites_[i]->Draw();
+		}
+	}
 }
 
 void Player::SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* railCamera)
@@ -92,6 +107,25 @@ Vector3 Player::GetWorldPosition() {
 
 	return worldTransform_.GetWorldPosition();
 
+}
+
+void Player::HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
+{
+	heratSprites_.resize(maxHitPoint_);
+	heratEmptySprites_.resize(maxHitPoint_);
+
+	for (int i = 0; i < maxHitPoint_; i++)
+	{
+		heratSprites_[i] = std::make_unique<Sprite>();
+		heratSprites_[i]->Initialize(heartTextureHandle);
+		heratSprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 50.0f)); //位置を設定
+		heratSprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
+
+		heratEmptySprites_[i] = std::make_unique<Sprite>();
+		heratEmptySprites_[i]->Initialize(heartEmptyTexturehandle);
+		heratEmptySprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 50.0f)); //位置を設定
+		heratEmptySprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
+	}
 }
 
 void Player::HandleMoveInput()

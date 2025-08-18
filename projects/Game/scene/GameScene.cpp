@@ -499,9 +499,12 @@ void GameScene::CreateLevel()
 	railMover_ = std::make_unique<RailMover>();
 	railMover_->Initialize(levelData->splines[0].controlPoints, enemySpawnManager_.get());
 
+	uint32_t heratTextureHandle = TextureManager::GetInstance()->Load("./Resources/heart.png");
+	uint32_t heratFrameTextureHandle = TextureManager::GetInstance()->Load("./Resources/heartFrame.png");
+
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_, railMover_->GetWorldTransform());
+	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_, railMover_->GetWorldTransform(), heratTextureHandle, heratFrameTextureHandle);
 	player_->SetGameScene(this);
 
 	// レールカメラの生成

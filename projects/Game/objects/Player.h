@@ -13,7 +13,7 @@ class Player : public BaseCharacter
 {
 public:
 
-	void Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent);
+	void Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
 
 	void Update(Camera* railCamera);
 
@@ -35,6 +35,9 @@ public:
 
 private:
 
+	//HUD初期化
+	void HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
+
 	//移動入力
 	void HandleMoveInput();
 
@@ -52,7 +55,10 @@ private:
 
 	std::unique_ptr<ReticleController> reticleController_ = nullptr;
 
-	int hitPoint_ = 5; // プレイヤーのヒットポイント
+	const int maxHitPoint_ = 5; // 最大ヒットポイント
+	int hitPoint_ = maxHitPoint_; // プレイヤーのヒットポイント
 
+	std::vector<std::unique_ptr<Sprite>> heratSprites_; // ヒットポイントのスプライト
+	std::vector<std::unique_ptr<Sprite>> heratEmptySprites_; // ヒットポイントがないときのスプライト
 };
 
