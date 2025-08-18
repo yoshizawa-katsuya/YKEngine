@@ -7,6 +7,7 @@
 #include "manager/EnemySpawnManager.h"
 #include "SpeedEvent.h"
 #include "RotateEvent.h"
+#include "RotateResetEvent.h"
 
 void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager)
 {
@@ -124,6 +125,16 @@ void RailMover::OnCollision(Collider* other)
 		isInRotateEvent_ = true;
 		nextRotateWaveNumber_++;
 	}
+	else if (RotateResetEvent* rotateResetEvent = dynamic_cast<RotateResetEvent*>(other))
+	{
+		if (nextRotateResetWaveNumber_ != rotateResetEvent->GetWaveNumber())
+		{
+			return;
+		}
+		isInRotateEvent_ = false;
+		nextRotateResetWaveNumber_++;
+	}
+	
 }
 
 void RailMover::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
@@ -150,7 +161,8 @@ void RailMover::UpdateRotate()
 		target_ = pointsDrawing_[moveCount_ + difference_];
 		forward_ = Subtract(target_, worldTransform_.translation_);
 
-		worldTransform_.rotation_ = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
+		Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
+		worldTransform_.rotation_ = Lerp(worldTransform_.rotation_, targetRotation, 0.1f);
 
 	}
 }

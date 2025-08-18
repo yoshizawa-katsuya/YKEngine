@@ -28,6 +28,8 @@ public:
 
 	uint32_t GetNextRotateWaveNumber() const { return nextRotateWaveNumber_; }
 
+	uint32_t GetNextRotateResetWaveNumber() const { return nextRotateResetWaveNumber_; }
+
 private:
 
 	//曲線の作成
@@ -66,4 +68,6 @@ private:
 	//回転イベント中
 	bool isInRotateEvent_ = false;
 	std::unique_ptr<SRTAnimator> srtAnimator_;
+
+	uint32_t nextRotateResetWaveNumber_ = 1;
 };

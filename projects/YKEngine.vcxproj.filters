@@ -297,10 +297,13 @@
     <ClCompile Include="Game\objects\SpeedEvent.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="RotateEvent.cpp">
+    <ClCompile Include="Game\objects\RotateEvent.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\BaseEvent.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\RotateResetEvent.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -613,10 +616,13 @@
     <ClInclude Include="Game\objects\SpeedEvent.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="RotateEvent.h">
+    <ClInclude Include="Game\objects\RotateEvent.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\BaseEvent.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\RotateResetEvent.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>

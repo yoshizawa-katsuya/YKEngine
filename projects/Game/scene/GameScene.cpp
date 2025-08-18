@@ -11,6 +11,7 @@
 #include "WaveEvent.h"
 #include "SpeedEvent.h"
 #include "RotateEvent.h"
+#include "RotateResetEvent.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -554,6 +555,15 @@ void GameScene::CreateLevel()
 			RotateEvent* rotateEventPtr = new RotateEvent();
 			rotateEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
 			rotateEvent = std::make_unique<RotateEvent>(*rotateEventPtr);
+			
+			continue;
+		}
+		else if (key == "rotateResetEvent")
+		{
+			//回転リセットイベントの生成
+			std::unique_ptr<BaseEvent>& rotateResetEvent = events_.emplace_back();
+			rotateResetEvent = std::make_unique<RotateResetEvent>();
+			rotateResetEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
 			
 			continue;
 		}

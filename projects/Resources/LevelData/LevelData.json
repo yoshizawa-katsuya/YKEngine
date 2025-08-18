@@ -522,6 +522,30 @@
             "wave_num": 1,
             "file_path": "./resources/",
             "file_name": "rotateEvent"
+        },
+        {
+            "type": "MESH",
+            "name": "球.007",
+            "transform": {
+                "translation": [
+                    -72.60094451904297,
+                    4.594902038574219,
+                    23.10986328125
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "wave_num": 1,
+            "file_path": "./resources/",
+            "file_name": "rotateResetEvent"
         }
     ]
 }
