@@ -6,6 +6,7 @@
 #include "GameScene.h"
 #include "WinApp.h"
 #include "TransformHelpers.h"
+#include "Lerp.h"
 
 Enemy::~Enemy() {
 	/*
@@ -70,9 +71,9 @@ void Enemy::ApproachUpdate() {
 
 	//回転
 	Vector3 toPosition = player_->GetWorldPosition();
-	Vector3 fromPosition = GetWorldPosition();
-	direction_ = Subtract(toPosition, fromPosition);
-	worldTransform_.rotation_ = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
+	direction_ = Subtract(toPosition, GetWorldPosition());
+	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
+	worldTransform_.rotation_ = Lerp(worldTransform_.rotation_, targetRotation, 0.1f);
 
 	// 規定の位置に到達したら離脱
 	/*if (worldTransform_.translation_.z < 0.0f) {

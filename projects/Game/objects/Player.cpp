@@ -6,6 +6,7 @@
 #include "Lerp.h"
 #include "GameScene.h"
 #include "ReticleController.h"
+#include "TransformHelpers.h"
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle) {
 
@@ -56,6 +57,21 @@ void Player::Update(Camera* railCamera) {
 	//範囲を超えない処理
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
 	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
+
+	//回転
+	Vector3 toPosition;
+	if (reticleController_->IsLockOn())
+	{
+		toPosition = reticleController_->GetTargetPosition();
+	}
+	else
+	{
+		toPosition = reticleController_->Get3DReticlePosition();
+	}
+	direction_ = Subtract(toPosition, GetWorldPosition());
+	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
+	targetRotation -= worldTransform_.parent_->rotation_;
+	worldTransform_.rotation_ = Lerp(worldTransform_.rotation_, targetRotation, 0.1f);
 
 	BaseCharacter::Update();
 
@@ -178,21 +194,9 @@ void Player::Attack() {
 
 		//弾の速度
 		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
 
-		//自機から照準オブジェクトへのベクトル
-		if (reticleController_->IsLockOn()) {
-			velocity = Subtract(reticleController_->GetTargetPosition(), GetWorldPosition());
-
-		}
-		else {
-			velocity = Subtract(reticleController_->Get3DReticlePosition(), GetWorldPosition());
-
-		}
-		velocity = Multiply(kBulletSpeed, Normalize(velocity));
-		//速度ベクトルを自機の向きに合わせて回転させる
-		//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-
+		Vector3 velocity = Multiply(kBulletSpeed, Normalize(direction_));
+		
 		//弾を生成し、初期化
 		gameScene_->AddPlayerbullet(GetWorldPosition(), velocity);
 

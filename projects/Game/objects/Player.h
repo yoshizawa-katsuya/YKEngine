@@ -55,6 +55,8 @@ private:
 
 	std::unique_ptr<ReticleController> reticleController_ = nullptr;
 
+	Vector3 direction_{};	//方向
+
 	const int maxHitPoint_ = 5; // 最大ヒットポイント
 	int hitPoint_ = maxHitPoint_; // プレイヤーのヒットポイント
 
