@@ -73,4 +73,6 @@ private:
 
 	int hitPoint_ = 3; // ヒットポイント
 
+	Vector3 direction_; // 方向
+
 };

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "GameScene.h"
 #include "WinApp.h"
+#include "TransformHelpers.h"
 
 Enemy::~Enemy() {
 	/*
@@ -39,16 +40,6 @@ void Enemy::ApproachInitialize() {
 
 void Enemy::Update() {
 
-	// デスフラグの立った弾を削除
-	/*
-	enemyBullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-	*/
 	switch (phase_) {
 	case Phase::Approach:
 	default:
@@ -59,12 +50,6 @@ void Enemy::Update() {
 		break;
 	}
 
-	// 弾更新
-	/*
-	for (EnemyBullet* bullet : enemyBullets_) {
-		bullet->Update();
-	}
-	*/
 	BaseCharacter::Update();
 }
 
@@ -82,6 +67,13 @@ void Enemy::ApproachUpdate() {
 
 	// 移動
 	worldTransform_.translation_ += approachVelocity_;
+
+	//回転
+	Vector3 toPosition = player_->GetWorldPosition();
+	Vector3 fromPosition = GetWorldPosition();
+	direction_ = Subtract(toPosition, fromPosition);
+	worldTransform_.rotation_ = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
+
 	// 規定の位置に到達したら離脱
 	/*if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
@@ -99,10 +91,7 @@ void Enemy::Fire() {
 	//弾の速さ
 	const float kBulletSpeed = 0.5f;
 
-	Vector3 toPosition = player_->GetWorldPosition();
-	Vector3 fromPosition = GetWorldPosition();
-	Vector3 velocity = Subtract(toPosition, fromPosition);
-	velocity = Normalize(velocity);
+	Vector3 velocity = Normalize(direction_);
 	velocity = Multiply(kBulletSpeed, velocity);
 
 	// 弾を生成し、初期化
