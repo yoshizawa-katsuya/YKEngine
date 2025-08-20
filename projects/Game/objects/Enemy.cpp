@@ -73,7 +73,7 @@ void Enemy::ApproachUpdate() {
 	Vector3 toPosition = player_->GetWorldPosition();
 	direction_ = Subtract(toPosition, GetWorldPosition());
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
-	worldTransform_.rotation_ = Lerp(worldTransform_.rotation_, targetRotation, 0.1f);
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 
 	// 規定の位置に到達したら離脱
 	/*if (worldTransform_.translation_.z < 0.0f) {

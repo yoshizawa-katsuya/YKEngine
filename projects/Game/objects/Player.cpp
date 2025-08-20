@@ -71,7 +71,7 @@ void Player::Update(Camera* railCamera) {
 	direction_ = Subtract(toPosition, GetWorldPosition());
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
 	targetRotation -= worldTransform_.parent_->rotation_;
-	worldTransform_.rotation_ = Lerp(worldTransform_.rotation_, targetRotation, 0.1f);
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 
 	BaseCharacter::Update();
 
