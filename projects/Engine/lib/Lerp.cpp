@@ -1,6 +1,7 @@
 #include "Lerp.h"
 #include <numbers>
 #include <cmath>
+#include "TransformHelpers.h"
 
 float Lerp(const float& p0, const float& p1, float t) {
 	return (1 - t) * p0 + t * p1;
@@ -27,6 +28,21 @@ Vector3 Lerp(const Vector3& p0, const Vector3& p1, float t)
 	anser.z = (1 - t) * p0.z + t * p1.z;
 
 	return anser;
+}
+
+float LerpAngle(float a0, float a1, float t)
+{
+	float diff = TransformHelpers::NormalizeAngle(a1 - a0);	//最短差分を求める
+	return a0 + diff * t;
+}
+
+Vector3 LerpAngle(const Vector3& a0, const Vector3& a1, float t)
+{
+	return Vector3(
+		LerpAngle(a0.x, a1.x, t),
+		LerpAngle(a0.y, a1.y, t),
+		LerpAngle(a0.z, a1.z, t)
+	);
 }
 
 Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t)
