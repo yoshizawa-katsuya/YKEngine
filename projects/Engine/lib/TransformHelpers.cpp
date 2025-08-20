@@ -20,3 +20,29 @@ Vector3 TransformHelpers::FaceToVelocityDirection(const Vector3& rotate, const V
 
 	return newRotate;
 }
+
+float TransformHelpers::NormalizeAngle(float angle)
+{
+	//2π
+	float twoPi = 2.0f * std::numbers::pi_v<float>;
+	angle = std::fmod(angle, twoPi);
+	if (angle > std::numbers::pi_v<float>)
+	{
+		angle -= twoPi;
+	}
+	else if (angle < -std::numbers::pi_v<float>)
+	{
+		angle += twoPi;
+	}
+	return angle;
+}
+
+Vector3 TransformHelpers::NormalizeAngle(const Vector3& angle)
+{
+	return
+	{
+		NormalizeAngle(angle.x),
+		NormalizeAngle(angle.y),
+		NormalizeAngle(angle.z)
+	};
+}
