@@ -41,6 +41,8 @@ public:
 
 protected:
 
+	Vector4 ClipPosition(Camera* camera);
+
 	//Transform変数を作る
 	WorldTransform worldTransform_;
 

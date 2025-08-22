@@ -14,7 +14,19 @@ void Collider::Update()
 
 bool Collider::IsVisible(Camera* camera)
 {
-	Vector3 clipPosition = Transform(worldTransform_.GetWorldPosition(), camera->GetViewProjection());
+	Vector4 clipPosition = ClipPosition(camera);
+
+	// カメラ後ろ判定は w で
+	if (clipPosition.w < 0.0f) 
+	{
+		return false; // カメラの後ろにある
+	}
+
+	// NDC変換
+	assert(clipPosition.w != 0.0f);
+	clipPosition.x /= clipPosition.w;
+	clipPosition.y /= clipPosition.w;
+	clipPosition.z /= clipPosition.w;
 
 	//NDCの範囲内にあるかチェック
 	if (clipPosition.x < -1.1f || clipPosition.x > 1.1f ||
@@ -24,6 +36,20 @@ bool Collider::IsVisible(Camera* camera)
 	}
 
 	return true; // 範囲内
+}
+
+Vector4 Collider::ClipPosition(Camera* camera)
+{
+	Vector3 vector = worldTransform_.GetWorldPosition();
+	Matrix4x4 matrix = camera->GetViewProjection();
+	Vector4 clipPosition;
+
+	clipPosition.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
+	clipPosition.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
+	clipPosition.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
+	clipPosition.w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + 1.0f * matrix.m[3][3];
+
+	return clipPosition;
 }
 
 Vector3 Collider::GetCenterPosition()
