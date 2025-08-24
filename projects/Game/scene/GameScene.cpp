@@ -285,7 +285,7 @@ void GameScene::Draw() {
 	//衝突マネージャの描画
 	collisionManager_->Draw(mainCamera_);
 
-	modelPlatform_->InstancingPreDraw();
+	enemySpawnManager_->Draw(mainCamera_);
 
 	//オブジェクトの描画
 	for (const auto& [name, instancingObject] : instancingObjects_) {
