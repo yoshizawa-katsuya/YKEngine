@@ -43,12 +43,13 @@ void EnemySpawnManager::Draw(Camera* camera)
 	objects_->Draw();
 }
 
-void EnemySpawnManager::AddSpawnData(uint32_t waveNumber, const Vector3& position, const Vector3& rotation)
+void EnemySpawnManager::AddSpawnData(uint32_t waveNumber, const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints)
 {
 	EnemySpawn data;
 	data.waveNumber = waveNumber;
 	data.position = position;
 	data.rotation = rotation;
+	data.controlPoints = controlPoints;
 	spawnDatas_.push_back(data);
 }
 
@@ -95,7 +96,7 @@ void EnemySpawnManager::UpdateWaveStart()
 	// イージングで変化させる
 	Vector3 scale = Lerp(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), EaseInCubic(time));
 
-	for (uint32_t i = 0; i <= spawnCount_; i++)
+	for (uint32_t i = 0; i < spawnCount_; i++)
 	{
 		WorldTransform& worldTransform = worldTransforms_[i];
 		// スケールをイージングで変化させる
@@ -143,7 +144,7 @@ void EnemySpawnManager::UpdateWaveEnd()
 	// イージングで変化させる
 	Vector3 scale = Lerp(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), EaseInCubic(time));
 
-	for (uint32_t i = 0; i <= spawnCount_; i++)
+	for (uint32_t i = 0; i < spawnCount_; i++)
 	{
 		WorldTransform& worldTransform = worldTransforms_[i];
 		// スケールをイージングで変化させる
@@ -163,7 +164,7 @@ void EnemySpawnManager::SpawnEnemies()
 	{
 		if (spawnData->waveNumber <= waveNumber_)
 		{
-			gameScene_->EnemyPop(spawnData->position, spawnData->rotation);
+			gameScene_->EnemyPop(spawnData->position, spawnData->rotation, spawnData->controlPoints);
 			spawnData = spawnDatas_.erase(spawnData);	//出現した敵のデータを削除
 		}
 		else

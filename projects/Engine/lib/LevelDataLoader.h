@@ -11,6 +11,12 @@ struct ObjectData
 	std::optional<float> speed = std::nullopt; // スピード（オプション）
 };
 
+//スプライン曲線の制御点データ
+struct SplineData
+{
+	std::vector<Vector3> controlPoints;
+};
+
 //自キャラの生成データ
 struct PlayerSpawnData
 {
@@ -23,12 +29,7 @@ struct EnemySpawnData
 	EulerTransform transform{};
 	std::optional<float> waitTime = std::nullopt; // 待機時間（オプション）
 	std::optional<uint32_t> waveNum = std::nullopt; // ウェーブ番号（オプション）
-};
-
-//スプライン曲線の制御点データ
-struct SplineData
-{
-	std::vector<Vector3> controlPoints;
+	std::optional<SplineData> spline = std::nullopt; // スプライン曲線（オプション）
 };
 
 struct LevelData

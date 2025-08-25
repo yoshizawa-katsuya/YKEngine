@@ -56,7 +56,7 @@ public:
 	/// <summary>
 	/// 敵発生
 	/// </summary>
-	void EnemyPop(const Vector3& position, const Vector3& rotation);
+	void EnemyPop(const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints);
 
 private:
 

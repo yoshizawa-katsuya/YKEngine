@@ -340,13 +340,13 @@ void GameScene::CheckAllColision() {
 
 }
 
-void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation) {
+void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints) {
 
 	// 敵の生成
 	std::unique_ptr<Enemy>& enemy = enemys_.emplace_back();
 	// 敵の初期化
 	enemy = std::make_unique<Enemy>();
-	enemy->Initialize(modelEnemy_.get(), position, rotation, &viewPortMatrix_);
+	enemy->Initialize(modelEnemy_.get(), position, rotation, &viewPortMatrix_, controlPoints);
 	enemy->SetPlayer(player_.get());
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetGameScene(this);
@@ -519,8 +519,14 @@ void GameScene::CreateLevel()
 		//敵の回転を取得
 		Vector3 spawnRotation = enemySpawnData.transform.rotation;
 
+		std::vector<Vector3> controlPoints;
+		if (enemySpawnData.spline.has_value())
+		{
+			controlPoints = enemySpawnData.spline->controlPoints;
+		}
+
 		//レベルエディターで敵のwaveNumを必ず設定するようにする
-		enemySpawnManager_->AddSpawnData(enemySpawnData.waveNum.value(), spawnPosition, spawnRotation);
+		enemySpawnManager_->AddSpawnData(enemySpawnData.waveNum.value(), spawnPosition, spawnRotation, controlPoints);
 
 	}
 	

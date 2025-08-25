@@ -40,7 +40,7 @@ void RailMover::Update()
 		//残りの移動距離計算用の変数
 		float remainingMoveDistance = speed_;
 
-		// カメラの位置を更新する処理
+		// 位置を更新する処理
 		while (remainingMoveDistance > 0.0f && pointsDrawing_.size() > moveCount_)
 		{
 			Vector3 moveDirection = pointsDrawing_[moveCount_] - eye_;

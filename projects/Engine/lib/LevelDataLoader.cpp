@@ -120,6 +120,28 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 				//ウェーブ数
 				enemySpawnData.waveNum = object["wave_num"].get<uint32_t>();
 			}
+
+			if (object.contains("children")) 
+			{
+				for (nlohmann::json& child : object["children"]) 
+				{
+					std::string type = child["type"].get<std::string>();
+					if (type.compare("CURVE") == 0)
+					{
+						enemySpawnData.spline.emplace();
+						for (nlohmann::json& point : child["control_point"])
+						{
+							Vector3 pointData;
+							pointData.x = -static_cast<float>(point[0]);
+							pointData.y = static_cast<float>(point[2]);
+							pointData.z = -static_cast<float>(point[1]);
+							enemySpawnData.spline->controlPoints.push_back(pointData);
+						}
+						//曲線要素が見つかったら抜ける
+						break;
+					}
+				}
+			}
 			//TODO: コライダーのパラメータ読み込み
 		}
 

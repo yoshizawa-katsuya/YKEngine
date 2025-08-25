@@ -12,7 +12,7 @@ public:
 	~Enemy();
 
 	// 初期化
-	void Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix);
+	void Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, const std::vector<Vector3>& controlPoints);
 
 	void ApproachInitialize();
 
@@ -45,6 +45,12 @@ public:
 
 private:
 	
+	//曲線の作成
+	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
+
+	//レールに沿って移動
+	void MoveAlongRail();
+
 	//自キャラ
 	Player* player_ = nullptr;
 	//ゲームシーン
@@ -75,4 +81,15 @@ private:
 
 	Vector3 direction_; // 方向
 
+	// スプライン曲線制御点(通過点)Add commentMore actions
+	std::vector<Vector3> controlPoints_;
+	// スプライン曲線上の点
+	std::vector<Vector3> corvePoints_;
+	// 線分の数
+	const uint32_t segmentCount_ = 63;
+	uint32_t moveCount_ = 0;
+
+	float speed_ = 0.1f;
+
+	bool hasRail_ = false; // レールがあるかどうか
 };

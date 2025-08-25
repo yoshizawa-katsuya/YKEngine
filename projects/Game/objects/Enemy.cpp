@@ -7,6 +7,7 @@
 #include "WinApp.h"
 #include "TransformHelpers.h"
 #include "Lerp.h"
+#include "Curve.h"
 
 Enemy::~Enemy() {
 	/*
@@ -16,19 +17,27 @@ Enemy::~Enemy() {
 	*/
 }
 
-void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix) {
+void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, const std::vector<Vector3>& controlPoints) {
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
 
+	if (!controlPoints.empty())
+	{
+		hasRail_ = true;
+		CreateSplineCurve(controlPoints);
+		worldTransform_.translation_ = controlPoints_[0];
+	}
+	else
+	{
+		worldTransform_.translation_ = position;
+		//移動方向を初期化
+		Matrix4x4 rotateMatrix = MakeRotateMatrix(rotaion);
+		approachVelocity_ = TransformNormal(approachVelocity_, rotateMatrix);
+	}
 	viewPortMatrix_ = viewPortMatrix;
 
-	worldTransform_.translation_ = position;
 	worldTransform_.rotation_ = rotaion;
-
-	//移動方向を初期化
-	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotaion);
-	approachVelocity_ = TransformNormal(approachVelocity_, rotateMatrix);
 
 	ApproachInitialize();
 }
@@ -67,7 +76,15 @@ void Enemy::ApproachUpdate() {
 	}
 
 	// 移動
-	worldTransform_.translation_ += approachVelocity_;
+	if (hasRail_)
+	{
+		MoveAlongRail();
+	}
+	else
+	{
+		worldTransform_.translation_ += approachVelocity_;
+	}
+	
 
 	//回転
 	Vector3 toPosition = player_->GetWorldPosition();
@@ -130,4 +147,61 @@ Vector2 Enemy::GetScreenPosition(Camera* camera) {
 	Vector3 screenPosition = Transform(GetWorldPosition(), matViewProjectionViewport);
 
 	return { screenPosition.x, screenPosition.y };
+}
+
+void Enemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
+{
+	// レベルデータから制御点を取得
+	for (Vector3 controlPoint : controlPoints) {
+		controlPoints_.push_back(controlPoint);
+	}
+	// Catmull-Romスプラインのポイントを生成
+	corvePoints_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
+}
+
+void Enemy::MoveAlongRail()
+{
+	if (corvePoints_.size() > moveCount_) {
+		//残りの移動距離計算用の変数
+		float remainingMoveDistance = speed_;
+
+		Vector3 moveDirection{};
+
+		// 位置を更新する処理
+		while (remainingMoveDistance > 0.0f && corvePoints_.size() > moveCount_)
+		{
+			moveDirection = corvePoints_[moveCount_] - worldTransform_.translation_;
+			float distance = Length(moveDirection);
+
+			// ほぼゼロ距離の場合はスキップ
+			if (distance < 0.001f) {
+				moveCount_++;
+				continue;
+			}
+
+			if (distance < remainingMoveDistance)
+			{
+				// 次のポイントに移動する距離が残りの距離よりも短い場合、次のポイントに移動
+				worldTransform_.translation_ = corvePoints_[moveCount_];
+				remainingMoveDistance -= distance;
+				moveCount_++;
+
+			}
+			else
+			{
+				// 残りの距離が次のポイントまでの距離よりも長い場合、次のポイントに向かって移動
+				Vector3 normalizeDirection = Normalize(moveDirection);
+				// 残りの距離を考慮してカメラの位置を更新
+				worldTransform_.translation_ += normalizeDirection * remainingMoveDistance;
+				remainingMoveDistance = 0.0f;
+			}
+		}
+
+		// レールの終点に到達した場合
+		if (corvePoints_.size() <= moveCount_)
+		{
+			approachVelocity_ = speed_ * Normalize(moveDirection);
+			hasRail_ = false;
+		}
+	}
 }
