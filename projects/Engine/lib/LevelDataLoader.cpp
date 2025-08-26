@@ -151,7 +151,7 @@ EulerTransform TranformLoad(nlohmann::json& transformData)
 	//回転角
 	transform.rotation.x = static_cast<float>(transformData["rotation"][0]) / 180 * std::numbers::pi_v<float>;
 	transform.rotation.y = -static_cast<float>(transformData["rotation"][2]) / 180 * std::numbers::pi_v<float>;
-	transform.rotation.z = -static_cast<float>(transformData["rotation"][1]) / 180 * std::numbers::pi_v<float>;
+	transform.rotation.z = static_cast<float>(transformData["rotation"][1]) / 180 * std::numbers::pi_v<float>;
 	//スケーリング
 	transform.scale.x = static_cast<float>(transformData["scaling"][0]);
 	transform.scale.y = static_cast<float>(transformData["scaling"][2]);
