@@ -60,7 +60,9 @@ void GameScene::Initialize() {
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
+	Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(4, 14);
+	player_->Initialize(modelPlayer_.get(), PlayerPosition);
+	player_->SetMapChipField(mapChipField_.get());
 
 }
 
@@ -78,20 +80,6 @@ void GameScene::Update() {
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
-	//modelPlatform_->PointLightUpdate(pointLight_->GetPointLightData());
-	//modelPlatform_->SpotLightUpdate(spotLight_->GetSpotLightData());
-
-	/*
-	objects_->PreUpdate();
-	worldTransform1_.translation_.x += 0.01f;
-	worldTransform1_.UpdateMatrix();
-	objects_->WorldTransformUpdate(worldTransform1_);
-	objects_->WorldTransformUpdate(worldTransform2_);
-	*/
-
-	//emitter_->Update();
-
-	//ParticleManager::GetInstance()->Update(mainCamera_);
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
