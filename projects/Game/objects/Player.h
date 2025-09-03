@@ -4,7 +4,6 @@
 #include "SRTAnimator.h"
 #include "Animation.h"
 class Camera;
-class MapChipField;
 
 class Player
 {

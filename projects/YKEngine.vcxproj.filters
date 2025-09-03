@@ -240,6 +240,9 @@
     <ClCompile Include="Engine\lib\Curve.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\MapChipField.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -495,6 +498,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\Curve.h">
       <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\MapChipField.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

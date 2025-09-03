@@ -18,6 +18,7 @@
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
+#include "MapChipField.h"
 
 class GameScene : public BaseScene
 {
@@ -34,6 +35,8 @@ public:
 	void Finalize() override;
 
 private:
+
+	void CreateLevel();
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -66,7 +69,7 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	std::shared_ptr<BaseModel> modelPlayer_;
-
+	std::shared_ptr<BaseModel> modelBlock_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;
@@ -75,19 +78,9 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
-	//std::unique_ptr<Rigid3dObject> skyBox_;
-	//WorldTransform skyBoxWorldTransform_;
+	std::unique_ptr<InstancingObjects> blocks_;
 
-	/*
-	std::unique_ptr<InstancingObjects> objects_;
-
-	WorldTransform worldTransform1_;
-	WorldTransform worldTransform2_;
-	*/
-
-	//パーティクル
-	//std::unique_ptr<ParticleEmitter> emitter_;
-	//std::unique_ptr<AccelerationField> field_;
-	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
+	//マップチップフィールド
+	std::unique_ptr<MapChipField> mapChipField_;
 	
 };
