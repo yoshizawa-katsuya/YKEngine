@@ -1,27 +1,22 @@
 #pragma once
-#include "Rigid3dObject.h"
-#include "WorldTransform.h"
-#include "SRTAnimator.h"
-#include "Animation.h"
+#include "Input.h"
 class Camera;
 class MapChipField;
 
-class Player
+#include "BaseCharacter.h"
+
+class Player : public BaseCharacter
 {
 public:
 
-	void Initialize(BaseModel* model);
+	void Initialize(BaseModel* model) override;
 
-	void Update();
+	void Update() override;
 
-	void Draw(Camera* camera);
+	void Draw(Camera* camera) override;
 
 private:
 
-	//Transform変数を作る
-	WorldTransform worldTransform_;
-
-	std::unique_ptr<Rigid3dObject> object_;
 
 };
 

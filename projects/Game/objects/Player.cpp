@@ -4,15 +4,11 @@
 
 void Player::Initialize(BaseModel* model) {
 
-	object_ = std::make_unique<Rigid3dObject>();
-	object_->Initialize(model);
-
-	worldTransform_.Initialize();
+	BaseCharacter::Initialize(model);
 
 }
 
 void Player::Update() {
-
 
 #ifdef _DEBUG
 
@@ -30,14 +26,12 @@ void Player::Update() {
 
 #endif // _DEBUG	
 
-	worldTransform_.UpdateMatrix();
-	object_->WorldTransformUpdate(worldTransform_);
+	BaseCharacter::Update();
 
 }
 
 void Player::Draw(Camera* camera) {
 
-	object_->CameraUpdate(camera);
-	object_->Draw();
+	BaseCharacter::Draw(camera);
 
 }
