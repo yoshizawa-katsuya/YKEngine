@@ -46,19 +46,19 @@ public:
 
 	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
 
-	uint32_t GetNumBlockVirtical();
+	uint32_t GetNumCellVirtical();
 
-	uint32_t GetNumBlockHorizontal();
+	uint32_t GetNumCellHorizontal();
 
 private:
 	
 	// 1ブロックのサイズ
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
+	const float kCellWidth_ = 2.0f;
+	const float kCellHeight_ = 2.0f;
 
 	// ブロックの個数
-	const uint32_t kNumBlockVirtical = 20;
-	const uint32_t kNumBlockHorizontal = 100;
+	uint32_t kNumCellVirtical_ = 0;
+	uint32_t kNumCellHorizontal_ = 0;
 
 	MapChipData mapChipData_;
 

@@ -211,13 +211,13 @@ void GameScene::CreateLevel()
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
 	blocks_ = std::make_unique<InstancingObjects>();
-	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumBlockVirtical() * mapChipField_->GetNumBlockHorizontal());
+	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
 	blocks_->PreUpdate();
 
 	WorldTransform worldTransform = {};
 
-	for (uint32_t y = 0; y < mapChipField_->GetNumBlockVirtical(); y++) {
-		for (uint32_t x = 0; x < mapChipField_->GetNumBlockHorizontal(); x++) {
+	for (uint32_t y = 0; y < mapChipField_->GetNumCellVirtical(); y++) {
+		for (uint32_t x = 0; x < mapChipField_->GetNumCellHorizontal(); x++) {
 			if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kBlock) 
 			{
 				worldTransform.Initialize();

@@ -17,9 +17,9 @@ std::map<std::string, MapChipType> mapChipTable = {
 void MapChipField::ResetMapChipDate() {
 
     mapChipData_.data.clear();
-	mapChipData_.data.resize(kNumBlockVirtical);
+	mapChipData_.data.resize(kNumCellVirtical_);
 	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {
-		mapChipDataLine.resize(kNumBlockHorizontal);
+		mapChipDataLine.resize(kNumCellHorizontal_);
 	}
 
 }
@@ -42,33 +42,38 @@ void MapChipField::LoadMapChipCsv(const std::string& filePath) {
 
 	std::string line;
 
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	while (getline(mapChipCsv, line)) {
 		
-		getline(mapChipCsv, line);
-
 		//1行分の文字列をストリームに変換して解析しやすくする
 		std::istringstream line_stream(line);
+		std::string word;
 
-		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-			
-			std::string word;
-			getline(line_stream, word, ',');
+		std::vector<MapChipType> mapChipDataLine;
 
-			if (mapChipTable.contains(word)) {
-				mapChipData_.data[i][j] = mapChipTable[word];
+		while (getline(line_stream, word, ',')) {
+
+			if (mapChipTable.contains(word)) 
+			{
+				mapChipDataLine.push_back(mapChipTable[word]);
 			}
 
 		}
 
+		if (kNumCellVirtical_ == 0)
+		{
+			kNumCellHorizontal_ = static_cast<uint32_t>(mapChipDataLine.size());
+		}
+		mapChipData_.data.push_back(mapChipDataLine);
+		kNumCellVirtical_++;
 	}
 
 }
 
 MapChipType MapChipField::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {
-	if (xIndex < 0 || kNumBlockHorizontal - 1 < xIndex) {
+	if (xIndex < 0 || kNumCellHorizontal_ - 1 < xIndex) {
 		return MapChipType::kBlank;
 	}
-	if (yIndex < 0 || kNumBlockVirtical - 1 < yIndex) {
+	if (yIndex < 0 || kNumCellVirtical_ - 1 < yIndex) {
 		return MapChipType::kBlank;
 	}
 
@@ -76,7 +81,7 @@ MapChipType MapChipField::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex
 }
 
 Vector3 MapChipField::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex) {
-	return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVirtical - 1 - yIndex), 0);
+	return Vector3(kCellWidth_ * xIndex, kCellHeight_ * (kNumCellVirtical_ - 1 - yIndex), 0);
 }
 
 MapChipField::Rect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t yIndex) {
@@ -85,10 +90,10 @@ MapChipField::Rect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t yIndex
 	Vector3 center = GetMapChipPositionByIndex(xIndex, yIndex);
 
 	Rect rect;
-	rect.left = center.x - kBlockWidth / 2.0f;
-	rect.right = center.x + kBlockWidth / 2.0f;
-	rect.bottom = center.y - kBlockHeight / 2.0f;
-	rect.top = center.y + kBlockHeight / 2.0f;
+	rect.left = center.x - kCellWidth_ / 2.0f;
+	rect.right = center.x + kCellWidth_ / 2.0f;
+	rect.bottom = center.y - kCellHeight_ / 2.0f;
+	rect.top = center.y + kCellHeight_ / 2.0f;
 
 	return rect;
 
@@ -97,14 +102,14 @@ MapChipField::Rect MapChipField::GetRectByIndex(uint32_t xIndex, uint32_t yIndex
 MapChipField::IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3& position) {
 
 	IndexSet indexSet = {};
-	indexSet.xIndex = uint32_t((position.x + kBlockWidth / 2) / kBlockWidth);
-	//indexSet.yIndex = uint32_t(kNumBlockVirtical - 1 - (position.y + kBlockHeight / 2) / kBlockHeight);
-	//indexSet.yIndex = uint32_t(kNumBlockVirtical - (position.y + kBlockHeight / 2) / kBlockHeight);
-	indexSet.yIndex = uint32_t((position.y + kBlockHeight / 2) / kBlockHeight);
-	indexSet.yIndex = kNumBlockVirtical - 1 - indexSet.yIndex;
+	indexSet.xIndex = uint32_t((position.x + kCellWidth_ / 2) / kCellWidth_);
+	//indexSet.yIndex = uint32_t(kNumCellVirtical_ - 1 - (position.y + kCellHeight_ / 2) / kCellHeight_);
+	//indexSet.yIndex = uint32_t(kNumCellVirtical_ - (position.y + kCellHeight_ / 2) / kCellHeight_);
+	indexSet.yIndex = uint32_t((position.y + kCellHeight_ / 2) / kCellHeight_);
+	indexSet.yIndex = kNumCellVirtical_ - 1 - indexSet.yIndex;
 	return indexSet;
 }
 
-uint32_t MapChipField::GetNumBlockVirtical() { return kNumBlockVirtical; }
+uint32_t MapChipField::GetNumCellVirtical() { return kNumCellVirtical_; }
 
-uint32_t MapChipField::GetNumBlockHorizontal() { return kNumBlockHorizontal; }
+uint32_t MapChipField::GetNumCellHorizontal() { return kNumCellHorizontal_; }
