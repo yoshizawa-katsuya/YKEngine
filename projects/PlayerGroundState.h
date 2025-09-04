@@ -3,7 +3,7 @@
 
 class BaseCharacter;
 
-class PlayerWalkState : public IPlayerState
+class PlayerGroundState : public IPlayerState
 {
 public: // 公開メンバ関数
 
@@ -12,5 +12,5 @@ public: // 公開メンバ関数
 	void Update() override;
 
 	void Exit() override;
-
 };
+

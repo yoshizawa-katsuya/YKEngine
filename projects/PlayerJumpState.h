@@ -1,7 +1,6 @@
 #pragma once
 #include "IPlayerState.h"
-
-class BaseCharacter;
+#include "BaseCharacter.h"
 
 class PlayerJumpState : public IPlayerState
 {
@@ -13,4 +12,7 @@ public: // 公開メンバ関数
 
 	void Exit() override;
 
+private:
+
+	Vector3 velocity_;
 };

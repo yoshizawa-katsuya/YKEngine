@@ -4,7 +4,7 @@
 void PlayerJumpState::Enter(BaseCharacter* character)
 {
 	// characterをPlayerにキャストしてplayerに代入
-	player = static_cast<Player*>(character);
+	player = dynamic_cast<Player*>(character);
 
 	// playerがnullptrだったら抜ける
 	if (!player)
@@ -13,11 +13,21 @@ void PlayerJumpState::Enter(BaseCharacter* character)
 	}
 
 	// 
-	Vector3 velocity = player->GetVelocity();
+	velocity_ = player->GetVelocity();
+
+	BaseCharacter::PhysicsParam physicsParam_ = player->GetPhysicsParam();
+
+	velocity_.y += physicsParam_.kJumpAcceleration;
 }
 
 void PlayerJumpState::Update()
 {
+	BaseCharacter::PhysicsParam physicsParam_ = player->GetPhysicsParam();
+
+	// 落下速度
+	velocity_.y += -physicsParam_.kGravityAcceleration;
+	// 落下速度制限	
+	velocity_.y = (std::max)(velocity_.y, -physicsParam_.kLimitFallSpeed);
 }
 
 void PlayerJumpState::Exit()
