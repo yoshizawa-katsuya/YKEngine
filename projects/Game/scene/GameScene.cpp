@@ -45,54 +45,24 @@ void GameScene::Initialize() {
 	mainCamera_ = camera_.get();
 
 	//モデルを描画する際カメラの設定は必須
-	//modelPlatform_->SetDirectionalLight(directionalLight_.get());
-	//modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
-	//modelPlatform_->SetSpotLight(spotLight_.get());
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
+	uint32_t textureHandleBlock_ = TextureManager::GetInstance()->Load("./resources/block.png");
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
-	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
-	//modelPlayer_->SetEnableLighting(false);
-	//modelPlayer_ = std::make_unique<RigidModel>();
-	
-	/*
-	//スプライトの生成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(textureHandle_, spritePlatform_);
-	*/
+	modelBlock_ = modelPlatform_->CreateCube(textureHandleBlock_, "block");
 
-	//パーティクルエミッターの生成
-	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
-	//emitter_->Initialize(textureHandle2, modelPlayer_, true);
+	CreateLevel();
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
-
-	/*skyBox_ = std::make_unique<Rigid3dObject>();
-	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
-	skyBoxWorldTransform_.Initialize();
-	skyBoxWorldTransform_.scale_ = { 50.0f, 50.0f, 50.0f };
-	skyBoxWorldTransform_.UpdateMatrix();
-	skyBox_->WorldTransformUpdate(skyBoxWorldTransform_);*/
-
-	/*
-	objects_ = std::make_unique<InstancingObjects>();
-	objects_->Initialize(modelPlayer_.get(), 10);
-
-	worldTransform1_.Initialize();
-	worldTransform1_.translation_.x = -1.0f;
-	worldTransform1_.UpdateMatrix();
-
-	worldTransform2_.Initialize();
-	worldTransform2_.translation_.x = 1.0f;
-	worldTransform2_.UpdateMatrix();
-	*/
+	Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(4, 14);
+	player_->Initialize(modelPlayer_.get(), PlayerPosition);
+	player_->SetMapChipField(mapChipField_.get());
 
 }
 
@@ -110,20 +80,6 @@ void GameScene::Update() {
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
-	//modelPlatform_->PointLightUpdate(pointLight_->GetPointLightData());
-	//modelPlatform_->SpotLightUpdate(spotLight_->GetSpotLightData());
-
-	/*
-	objects_->PreUpdate();
-	worldTransform1_.translation_.x += 0.01f;
-	worldTransform1_.UpdateMatrix();
-	objects_->WorldTransformUpdate(worldTransform1_);
-	objects_->WorldTransformUpdate(worldTransform2_);
-	*/
-
-	//emitter_->Update();
-
-	//ParticleManager::GetInstance()->Update(mainCamera_);
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
@@ -208,37 +164,55 @@ void GameScene::Draw() {
 	//Spriteの背景描画前処理
 	//spritePlatform_->PreBackGroundDraw();
 
-	//sprite_->Draw();
-
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
-	
-	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
-	/*modelPlatform_->SkyBoxPreDraw();
+	modelPlatform_->SkyBoxPreDraw();
 
-	skyBox_->CameraUpdate(mainCamera_);
-	skyBox_->Draw();*/
+	//modelPlatform_->SkinPreDraw();
 
-	/*
 	modelPlatform_->InstancingPreDraw();
 
-	objects_->CameraUpdate(mainCamera_);
-	objects_->Draw();
-	*/
+	blocks_->CameraUpdate(mainCamera_);
+	blocks_->Draw();
+
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
-	//ParticleManager::GetInstance()->Draw();
 
 }
 
 void GameScene::Finalize()
 {
 
+}
+
+void GameScene::CreateLevel()
+{
+	// マップチップフィールドの生成
+	mapChipField_ = std::make_unique<MapChipField>();
+	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
+
+	blocks_ = std::make_unique<InstancingObjects>();
+	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
+	blocks_->PreUpdate();
+
+	WorldTransform worldTransform = {};
+
+	for (uint32_t y = 0; y < mapChipField_->GetNumCellVirtical(); y++) {
+		for (uint32_t x = 0; x < mapChipField_->GetNumCellHorizontal(); x++) {
+			if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kBlock) 
+			{
+				worldTransform.Initialize();
+				worldTransform.translation_ = mapChipField_->GetMapChipPositionByIndex(x, y);
+				worldTransform.UpdateMatrix();
+				blocks_->WorldTransformUpdate(worldTransform);
+			}
+		}
+	}
 }
