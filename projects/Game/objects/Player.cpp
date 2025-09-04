@@ -107,29 +107,29 @@ void Player::Move()
 		}
 	}
 
-	//if (onGround_) 
-	//{
-	//	if (Input::GetInstance()->PushKey(DIK_UP)) {
-	//		// ジャンプ加速
-	//		velocity_.y += kJumpAcceleration_;
-	//		onGround_ = false;
-	//	}
-	//}
-
-	if (dynamic_cast<PlayerGroundState*>(state_.get()) && input_->PushKey(DIK_SPACE))
+	if (dynamic_cast<PlayerGroundState*>(state_.get()) && input_->PushKey(DIK_UP))
 	{
+		velocity_.y += physicsParam_.kJumpAcceleration;
+
 		state_->Exit();
 
 		ChangeState(std::make_unique<PlayerJumpState>());
 
 		state_->Enter(this);
 	}
-
-	if (dynamic_cast<PlayerJumpState*>(state_.get()) && onGround_)
+	else if (dynamic_cast<PlayerJumpState*>(state_.get()) && onGround_)
 	{
 		state_->Exit();
 
 		ChangeState(std::make_unique<PlayerGroundState>());
+
+		state_->Enter(this);
+	}
+	else if (dynamic_cast<PlayerGroundState*>(state_.get()) && !onGround_)
+	{
+		state_->Exit();
+
+		ChangeState(std::make_unique<PlayerJumpState>());
 
 		state_->Enter(this);
 	}

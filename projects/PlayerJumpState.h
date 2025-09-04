@@ -11,8 +11,4 @@ public: // 公開メンバ関数
 	void Update() override;
 
 	void Exit() override;
-
-private:
-
-	Vector3 velocity_;
 };

@@ -13,4 +13,3 @@ public: // 公開メンバ関数
 
 	void Exit() override;
 };
-

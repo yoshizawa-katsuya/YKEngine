@@ -11,23 +11,18 @@ void PlayerJumpState::Enter(BaseCharacter* character)
 	{
 		return;
 	}
-
-	// 
-	velocity_ = player->GetVelocity();
-
-	BaseCharacter::PhysicsParam physicsParam_ = player->GetPhysicsParam();
-
-	velocity_.y += physicsParam_.kJumpAcceleration;
 }
 
 void PlayerJumpState::Update()
 {
+	Vector3& velocity = player->GetVelocity();
+
 	BaseCharacter::PhysicsParam physicsParam_ = player->GetPhysicsParam();
 
 	// 落下速度
-	velocity_.y += -physicsParam_.kGravityAcceleration;
+	velocity.y += -physicsParam_.kGravityAcceleration;
 	// 落下速度制限	
-	velocity_.y = (std::max)(velocity_.y, -physicsParam_.kLimitFallSpeed);
+	velocity.y = (std::max)(velocity.y, -physicsParam_.kLimitFallSpeed);
 }
 
 void PlayerJumpState::Exit()

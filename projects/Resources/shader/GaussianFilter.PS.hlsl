@@ -46,15 +46,15 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     output.color.rgb = float32_t3(0.0f, 0.0f, 0.0f);
     output.color.a = 1.0f;
-    for (int32_t x = 0; x < 3; ++x) //3x3ループ
+    for (int32_t j = 0; j < 3; ++j) //3x3ループ
     {
-        for (int32_t y = 0; y < 3; ++y)
+        for (int32_t k = 0; k < 3; ++k)
         {
             //現在のtexcordを算出
-            float32_t2 texcord = input.texcord + kIndex3x3[x][y] * uvStepSize;
+            float32_t2 texcord = input.texcord + kIndex3x3[j][k] * uvStepSize;
             //色に1/9掛けて足す
             float32_t3 fetchColor = gTexture.Sample(gSampler, texcord).rgb;
-            output.color.rgb += fetchColor * kernel3x3[x][y];
+            output.color.rgb += fetchColor * kernel3x3[j][k];
         }
     }
     

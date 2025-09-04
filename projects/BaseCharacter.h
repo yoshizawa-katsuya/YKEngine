@@ -54,6 +54,8 @@ public: // 公開メンバ関数
 
 	Vector3& GetVelocity() { return velocity_; }
 
+	void SetVelocity(const Vector3& velocity) { velocity_ = velocity; }
+
 	//AABBを取得
 	AABB GetAABB();
 
