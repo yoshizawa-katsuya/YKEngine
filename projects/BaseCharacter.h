@@ -17,11 +17,16 @@ public: // 公開メンバ関数
 
 	virtual void Draw(Camera* camera);
 
+	Vector3 GetVelocity() { return velocity_; }
+
+	WorldTransform GetWorldTransform() { return worldTransform_; }
 protected:
 
 	//Transform変数を作る
 	WorldTransform worldTransform_;
 
 	std::unique_ptr<Rigid3dObject> object_;
+
+	Vector3 velocity_ = { 0,0,0 };
 };
 

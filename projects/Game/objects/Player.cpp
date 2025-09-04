@@ -6,6 +6,8 @@ void Player::Initialize(BaseModel* model) {
 
 	BaseCharacter::Initialize(model);
 
+	// 最初の状態をIdleにする
+	ChangeState(std::make_unique<PlayerIdleState>());
 }
 
 void Player::Update() {
@@ -25,7 +27,11 @@ void Player::Update() {
 
 
 #endif // _DEBUG	
+	
+	// ステートの更新
+	StateUpdate();
 
+	// 基底クラスの更新
 	BaseCharacter::Update();
 
 }
@@ -35,3 +41,48 @@ void Player::Draw(Camera* camera) {
 	BaseCharacter::Draw(camera);
 
 }
+
+void Player::ChangeState(std::unique_ptr<IPlayerState> state)
+{
+	if (!state)
+	{
+		return;
+	}
+
+	// もしstate_がnullptrじゃなかったら
+	if (state_)
+	{
+		// state_のExitを呼ぶ
+		state_->Exit();
+	}
+
+	// state_に引数のstateをムーブする
+	state_ = std::move(state);
+
+	// state_のEnterを呼ぶ
+	state_->Enter(this);
+}
+
+
+void Player::HandleInput()
+{
+	Input* input = Input::GetInstance();
+
+	if (input->PushKey(DIK_SPACE) && !dynamic_cast<PlayerJumpState*>(state_.get()))
+	{
+		state_->Exit();
+
+		state_ = std::move(std::make_unique<PlayerJumpState>());
+
+		state_->Enter(this);
+	}
+}
+
+void Player::StateUpdate()
+{
+	if (state_)
+	{
+		state_->Update();
+	}
+}
+

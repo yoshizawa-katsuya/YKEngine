@@ -16,5 +16,6 @@ void BaseCharacter::Update()
 
 void BaseCharacter::Draw(Camera* camera)
 {
-
+	object_->CameraUpdate(camera);
+	object_->Draw();
 }
