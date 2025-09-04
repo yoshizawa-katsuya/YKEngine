@@ -19,6 +19,7 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 #include "MapChipField.h"
+#include "CameraController.h"
 
 class GameScene : public BaseScene
 {
@@ -79,6 +80,9 @@ private:
 	std::unique_ptr<Player> player_;
 
 	std::unique_ptr<InstancingObjects> blocks_;
+
+	//カメラコントローラー
+	std::unique_ptr<CameraController> cameraController_;
 
 	//マップチップフィールド
 	std::unique_ptr<MapChipField> mapChipField_;

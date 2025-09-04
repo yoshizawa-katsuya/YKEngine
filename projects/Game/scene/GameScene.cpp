@@ -64,12 +64,12 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_.get(), PlayerPosition);
 	player_->SetMapChipField(mapChipField_.get());
 
+	//カメラコントローラーの生成
+	cameraController_ = std::make_unique<CameraController>();
+	cameraController_->Initialize(camera_.get(), player_.get(), mapChipField_.get());
 }
 
 void GameScene::Update() {
-
-	//カメラの更新
-	camera_->Update();
 
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
@@ -77,6 +77,8 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	cameraController_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());

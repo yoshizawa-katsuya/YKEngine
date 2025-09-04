@@ -97,7 +97,7 @@ private:
 	//旋回開始時の角度
 	float turnFirstRotationY_ = 0.0f;
 	//旋回タイマー
-	float turnTimer_ = 0.0f;
+	float turnTimer_ = 1.0f;
 	//旋回時間<秒>
 	const float kTimeTurn_ = 0.03f;
 
