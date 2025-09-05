@@ -25,6 +25,12 @@ void Player::Update() {
 	//移動入力
 	Move();
 
+	// ステートの更新
+	StateUpdate();
+
+	// 基底クラスの更新
+	BaseCharacter::Update();
+
 #ifdef _DEBUG
 
 	ImGui::Begin("Player");
@@ -40,12 +46,6 @@ void Player::Update() {
 
 
 #endif // _DEBUG	
-	
-	// ステートの更新
-	StateUpdate();
-
-	// 基底クラスの更新
-	BaseCharacter::Update();
 
 }
 

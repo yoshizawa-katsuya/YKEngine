@@ -60,12 +60,6 @@ private:
 
 	Input* input_;
 
-
-	//ワールド変換データ
-	WorldTransform worldTransform_;
-	//オブジェクト
-	std::unique_ptr<Rigid3dObject> object_;
-
 	std::unique_ptr<IPlayerState> state_ = nullptr;
 
 };
