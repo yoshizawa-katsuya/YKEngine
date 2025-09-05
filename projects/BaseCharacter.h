@@ -117,7 +117,7 @@ protected:
 
 	const float kMoveSpeed_ = 0.1f;
 
-	PhysicsParam physicsParam_ = { 0.03f, 1.0f, 0.5f};
+	PhysicsParam physicsParam_ = { 0.03f, 1.0f, 0.55f};
 
 	//キャラクターの当たり判定サイズ
 	const float kWidth_ = 1.0f;

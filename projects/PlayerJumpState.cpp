@@ -3,14 +3,13 @@
 
 void PlayerJumpState::Enter(BaseCharacter* character)
 {
+	if (!character)
+	{
+		assert(0 && "characterがnullptrです");
+	}
+
 	// characterをPlayerにキャストしてplayerに代入
 	player = dynamic_cast<Player*>(character);
-
-	// playerがnullptrだったら抜ける
-	if (!player)
-	{
-		return;
-	}
 }
 
 void PlayerJumpState::Update()
