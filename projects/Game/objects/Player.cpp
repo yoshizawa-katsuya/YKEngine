@@ -16,9 +16,6 @@ void Player::Initialize(BaseModel* model, const Vector3& position)
 
 	BaseCharacter::Initialize(model, position);
 
-	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
-	worldTransform_.UpdateMatrix();
-
 	// 最初の状態をIdleにする
 	ChangeState(std::make_unique<PlayerGroundState>());
 }

@@ -51,8 +51,6 @@ private: // 非公開メンバ関数
 
 	void StateUpdate();
 
-	
-
 	//移動入力
 	void Move();
 	

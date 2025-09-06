@@ -20,6 +20,7 @@
 #include "RigidModel.h"
 #include "MapChipField.h"
 #include "CameraController.h"
+#include "Fade.h"
 
 class GameScene : public BaseScene
 {
@@ -38,6 +39,14 @@ public:
 private:
 
 	void CreateLevel();
+
+	void UpdateStart();
+
+	void UpdateMain();
+
+	void UpdateGameClear();
+
+	void UpdateGameOver();
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -87,4 +96,16 @@ private:
 	//マップチップフィールド
 	std::unique_ptr<MapChipField> mapChipField_;
 	
+	//シーンのフェーズ
+	enum class Phase {
+		kStart,	//開始部
+		kMain,	//メイン部
+		kGameClear,	//クリア部
+		kGameOver,	//ゲームオーバー部
+	};
+
+	//現在のフェーズ
+	Phase phase_ = Phase::kStart;
+
+	std::unique_ptr<Fade> fade_;
 };

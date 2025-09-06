@@ -1,41 +1,37 @@
-#include "TitleScene.h"
+#include "GameOverScene.h"
 #include "imgui/imgui.h"
 #include "SceneManager.h"
 
-TitleScene::~TitleScene()
+GameOverScene::~GameOverScene()
 {
-	//Finalize();
 }
 
-void TitleScene::Initialize()
+void GameOverScene::Initialize()
 {
-
 	dxCommon_ = DirectXCommon::GetInstance();
 	audio_ = Audio::GetInstance();
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
-	
+
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
-
 }
 
-void TitleScene::Update()
+void GameOverScene::Update()
 {
-
 #ifdef _DEBUG
-	
+
 	ImGui::Begin("Window");
-	ImGui::Text("Title");
-	if (ImGui::Button("Go to GameScene"))
+	ImGui::Text("GameOver");
+	if (ImGui::Button("Go to TitleScene"))
 	{
 		phase_ = Phase::kEnd;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
 	}
 	ImGui::End();
-	
+
 #endif // _DEBUG
 
 	switch (phase_)
@@ -58,31 +54,29 @@ void TitleScene::Update()
 
 }
 
-void TitleScene::Draw()
+void GameOverScene::Draw()
 {
-
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
 	fade_->Draw();
 }
 
-void TitleScene::Finalize()
+void GameOverScene::Finalize()
 {
-
 }
 
-void TitleScene::UpdateStart()
+void GameOverScene::UpdateStart()
 {
 	fade_->Update();
-	if (fade_->IsFinished()) 
+	if (fade_->IsFinished())
 	{
 		fade_->Stop();
 		phase_ = Phase::kMain;
 	}
 }
 
-void TitleScene::UpdateMain()
+void GameOverScene::UpdateMain()
 {
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A))
 	{
@@ -91,12 +85,12 @@ void TitleScene::UpdateMain()
 	}
 }
 
-void TitleScene::UpdateEnd()
+void GameOverScene::UpdateEnd()
 {
 	fade_->Update();
 	if (fade_->IsFinished()) {
 		//fade_->Stop();
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("GameScene");
+		sceneManager_->ChengeScene("TitleScene");
 	}
 }

@@ -35,6 +35,9 @@ public:
 
 private:
 	
+	//移動範囲制限
+	void ClampPosition();
+
 	Camera* camera_ = nullptr;
 
 	EulerTransform transform_;

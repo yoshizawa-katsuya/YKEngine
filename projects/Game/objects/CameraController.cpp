@@ -48,10 +48,8 @@ void CameraController::Update() {
 	transform_.translation.x = std::clamp(transform_.translation.x, targetWorldTransform.translation_.x + margin_.left, targetWorldTransform.translation_.x + margin_.right);
 	transform_.translation.y = std::clamp(transform_.translation.y, targetWorldTransform.translation_.y + margin_.bottom, targetWorldTransform.translation_.y + margin_.top);
 	
-	//移動範囲制限
-	transform_.translation.x = std::clamp(transform_.translation.x, movableArea_.left, movableArea_.right);
-	transform_.translation.y = std::clamp(transform_.translation.y, movableArea_.bottom, movableArea_.top);
-	
+	ClampPosition();
+
 	//行列を更新する
 	camera_->SetTranslate(transform_.translation);
 	camera_->Update();
@@ -66,6 +64,16 @@ void CameraController::Reset() {
 	//追従対象とオフセットからカメラの座標を計算
 	transform_.translation = targetWorldTransform.translation_;
 	transform_.translation.z += targetOffset_.z;
+	
+	ClampPosition();
+
 	camera_->SetTranslate(transform_.translation);
 	camera_->Update();
+}
+
+void CameraController::ClampPosition()
+{
+	//移動範囲制限
+	transform_.translation.x = std::clamp(transform_.translation.x, movableArea_.left, movableArea_.right);
+	transform_.translation.y = std::clamp(transform_.translation.y, movableArea_.bottom, movableArea_.top);
 }

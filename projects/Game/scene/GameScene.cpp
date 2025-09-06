@@ -67,6 +67,10 @@ void GameScene::Initialize() {
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
 	cameraController_->Initialize(camera_.get(), player_.get(), mapChipField_.get());
+
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 0.5f);
 }
 
 void GameScene::Update() {
@@ -75,18 +79,26 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 
-	//プレイヤーの更新
-	player_->Update();
-
-	cameraController_->Update();
+	switch (phase_)
+	{
+	case Phase::kStart:
+		UpdateStart();
+		break;
+	case Phase::kMain:
+		UpdateMain();
+		break;
+	case Phase::kGameClear:
+		UpdateGameClear();
+		break;
+	case Phase::kGameOver:
+		UpdateGameOver();
+		break;
+	default:
+		break;
+	}
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
-
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
-	}
 
 #ifdef _DEBUG
 
@@ -145,7 +157,16 @@ void GameScene::Update() {
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
-		
+	if (ImGui::Button("Go to GameClearScene"))
+	{
+		phase_ = Phase::kGameClear;
+		fade_->Start(Fade::Status::FadeOut, 0.5f);
+	}
+	if (ImGui::Button("Go to GameOverScene"))
+	{
+		phase_ = Phase::kGameOver;
+		fade_->Start(Fade::Status::FadeOut, 0.5f);
+	}
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 
 	/*
@@ -184,8 +205,9 @@ void GameScene::Draw() {
 	blocks_->Draw();
 
 	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
+	spritePlatform_->PreDraw();
 
+	fade_->Draw();
 
 }
 
@@ -216,5 +238,43 @@ void GameScene::CreateLevel()
 				blocks_->WorldTransformUpdate(worldTransform);
 			}
 		}
+	}
+}
+
+void GameScene::UpdateStart()
+{
+	fade_->Update();
+	if (fade_->IsFinished())
+	{
+		fade_->Stop();
+		phase_ = Phase::kMain;
+	}
+}
+
+void GameScene::UpdateMain()
+{
+	//プレイヤーの更新
+	player_->Update();
+
+	cameraController_->Update();
+}
+
+void GameScene::UpdateGameClear()
+{
+	fade_->Update();
+	if (fade_->IsFinished()) {
+		//fade_->Stop();
+		//シーン切り替え依頼
+		sceneManager_->ChengeScene("GameClearScene");
+	}
+}
+
+void GameScene::UpdateGameOver()
+{
+	fade_->Update();
+	if (fade_->IsFinished()) {
+		//fade_->Stop();
+		//シーン切り替え依頼
+		sceneManager_->ChengeScene("GameOverScene");
 	}
 }

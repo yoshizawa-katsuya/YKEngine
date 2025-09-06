@@ -9,11 +9,11 @@
 #include "Sprite.h"
 #include "Fade.h"
 
-class TitleScene : public BaseScene
+class GameClearScene : public BaseScene
 {
 public:
 
-	~TitleScene() override;
+	~GameClearScene() override;
 
 	void Initialize() override;
 
@@ -52,4 +52,3 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 };
-

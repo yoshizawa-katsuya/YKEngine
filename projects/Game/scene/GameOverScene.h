@@ -9,11 +9,11 @@
 #include "Sprite.h"
 #include "Fade.h"
 
-class TitleScene : public BaseScene
+class GameOverScene : public BaseScene
 {
 public:
 
-	~TitleScene() override;
+	~GameOverScene() override;
 
 	void Initialize() override;
 

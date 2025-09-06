@@ -16,6 +16,7 @@ void BaseCharacter::Initialize(BaseModel* model, const Vector3& position) {
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 	worldTransform_.UpdateMatrix();
+	object_->WorldTransformUpdate(worldTransform_);
 }
 
 void BaseCharacter::Update() {
