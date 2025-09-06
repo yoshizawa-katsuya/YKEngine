@@ -55,6 +55,7 @@ void GameScene::Initialize() {
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
 	modelBlock_ = modelPlatform_->CreateCube(textureHandleBlock_, "block");
+	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
 
 	CreateLevel();
 
@@ -63,6 +64,7 @@ void GameScene::Initialize() {
 	Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(4, 14);
 	player_->Initialize(modelPlayer_.get(), PlayerPosition);
 	player_->SetMapChipField(mapChipField_.get());
+	player_->SetElectricModel(modelElectric_.get());
 
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
@@ -78,10 +80,13 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
+	CheckElectricRangeCollision(player_.get(),blocks_.get());
+
 	cameraController_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
+
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
@@ -194,6 +199,12 @@ void GameScene::Finalize()
 
 }
 
+bool GameScene::IsIntersect(const AABB& a, const AABB& b) {
+	return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
+		(a.min.y <= b.max.y && a.max.y >= b.min.y) &&
+		(a.min.z <= b.max.z && a.max.z >= b.min.z);
+}
+
 void GameScene::CreateLevel()
 {
 	// マップチップフィールドの生成
@@ -215,6 +226,18 @@ void GameScene::CreateLevel()
 				worldTransform.UpdateMatrix();
 				blocks_->WorldTransformUpdate(worldTransform);
 			}
+		}
+	}
+}
+//電気範囲とブロックの衝突判定
+void GameScene::CheckElectricRangeCollision(Player* player, InstancingObjects* blocks) {
+	AABB electricAABB = player->GetElectricRange()->GetAABB();
+
+	auto blockAABBs = blocks->GetAABBs( 2.0f);
+
+	for (const auto& blockAABB : blockAABBs) {
+		if (IsIntersect(electricAABB, blockAABB)) {
+			OutputDebugStringA("ElectricRange hit block!\n");
 		}
 	}
 }

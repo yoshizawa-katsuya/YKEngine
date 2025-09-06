@@ -19,7 +19,8 @@ public:
 	void CameraUpdate(Camera* camera);
 
 	void Draw();
-
+public:  
+	std::vector<AABB> GetAABBs(float blockSize);
 private:
 
 	DirectXCommon* dxCommon_;

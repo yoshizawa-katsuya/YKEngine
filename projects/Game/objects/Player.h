@@ -6,6 +6,7 @@ class Input;
 
 #include "BaseCharacter.h"
 #include "IPlayerState.h"
+#include "ElectricRange.h"
 
 class Player : public BaseCharacter
 {
@@ -51,16 +52,19 @@ private: // 非公開メンバ関数
 
 	void StateUpdate();
 
-	
-
 	//移動入力
 	void Move();
 	
+public:
+	ElectricRange* GetElectricRange() const { return electricRange_.get(); }
+	void SetElectricModel(BaseModel* electricModel);
 private:
 
 	Input* input_;
 
 	std::unique_ptr<IPlayerState> state_ = nullptr;
 
+	//電気範囲
+	std::unique_ptr<ElectricRange>electricRange_;
 };
 

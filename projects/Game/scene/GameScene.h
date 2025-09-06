@@ -36,9 +36,9 @@ public:
 	void Finalize() override;
 
 private:
-
+	bool IsIntersect(const AABB& a, const AABB& b);
 	void CreateLevel();
-
+	void CheckElectricRangeCollision(Player* player, InstancingObjects* blocks);
 	//デバイス
 	DirectXCommon* dxCommon_;
 
@@ -71,6 +71,7 @@ private:
 
 	std::shared_ptr<BaseModel> modelPlayer_;
 	std::shared_ptr<BaseModel> modelBlock_;
+	std::shared_ptr<BaseModel>modelElectric_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;
