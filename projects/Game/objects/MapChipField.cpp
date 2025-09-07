@@ -113,3 +113,8 @@ MapChipField::IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3&
 uint32_t MapChipField::GetNumCellVirtical() { return kNumCellVirtical_; }
 
 uint32_t MapChipField::GetNumCellHorizontal() { return kNumCellHorizontal_; }
+
+void MapChipField::SetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType)
+{
+	mapChipData_.data[yIndex][xIndex] = mapChipType;
+}

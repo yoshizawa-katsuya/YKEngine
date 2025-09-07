@@ -7,6 +7,13 @@
 enum class MapChipType {
 	kBlank, // 空白
 	kBlock, // ブロック
+	// 仮
+
+	kPlayerSpawn, // プレイヤースポーン
+	kDoorTrigger, // ドアトリガー
+	kDoor,       // ドア
+
+	kTransparentBlock, // 透明ブロック
 };
 
 struct MapChipData {
@@ -49,6 +56,9 @@ public:
 	uint32_t GetNumCellVirtical();
 
 	uint32_t GetNumCellHorizontal();
+
+	// ドア用
+	void SetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType);
 
 private:
 	

@@ -22,6 +22,8 @@
 #include "CameraController.h"
 #include "Fade.h"
 
+#include "Door.h"
+
 class GameScene : public BaseScene
 {
 public:
@@ -90,6 +92,8 @@ private:
 
 	std::unique_ptr<InstancingObjects> blocks_;
 
+	std::unique_ptr<InstancingObjects> doors_;;
+
 	//カメラコントローラー
 	std::unique_ptr<CameraController> cameraController_;
 
@@ -108,4 +112,7 @@ private:
 	Phase phase_ = Phase::kStart;
 
 	std::unique_ptr<Fade> fade_;
+
+	// ドアギミック
+	std::unique_ptr<Door> doorGimmick_;
 };

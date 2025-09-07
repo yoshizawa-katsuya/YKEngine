@@ -71,6 +71,9 @@ void GameScene::Initialize() {
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
+
+	doorGimmick_ = std::make_unique<Door>();
+	doorGimmick_->Initialize();
 }
 
 void GameScene::Update() {
@@ -204,6 +207,10 @@ void GameScene::Draw() {
 	blocks_->CameraUpdate(mainCamera_);
 	blocks_->Draw();
 
+	//door
+	doors_->CameraUpdate(mainCamera_);
+	doors_->Draw();
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
@@ -226,6 +233,10 @@ void GameScene::CreateLevel()
 	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
 	blocks_->PreUpdate();
 
+	doors_ = std::make_unique<InstancingObjects>();
+	doors_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
+	doors_->PreUpdate();
+
 	WorldTransform worldTransform = {};
 
 	for (uint32_t y = 0; y < mapChipField_->GetNumCellVirtical(); y++) {
@@ -236,6 +247,13 @@ void GameScene::CreateLevel()
 				worldTransform.translation_ = mapChipField_->GetMapChipPositionByIndex(x, y);
 				worldTransform.UpdateMatrix();
 				blocks_->WorldTransformUpdate(worldTransform);
+			}
+			else if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kDoor)
+			{
+				worldTransform.Initialize();
+				worldTransform.translation_ = mapChipField_->GetMapChipPositionByIndex(x, y);
+				worldTransform.UpdateMatrix();
+				doors_->WorldTransformUpdate(worldTransform);
 			}
 		}
 	}
