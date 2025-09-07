@@ -121,17 +121,15 @@ void BaseCharacter::MapCollisionUp(CollisionMapInfo& info) {
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+	CheckHitMapChipType(mapChipType);
+	
 	//右上点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+	CheckHitMapChipType(mapChipType);
 
-	if (hit) {
+	if (hitBlock_ || hitSpine_)
+	{
 		//めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 		//めり込み先ブロックの範囲矩形
@@ -140,6 +138,8 @@ void BaseCharacter::MapCollisionUp(CollisionMapInfo& info) {
 		//天井に当たったことを記録する
 		info.isCeilingCollision = true;
 	}
+	//ヒット情報リセット
+	HitReset();
 }
 
 void BaseCharacter::MapCollisionBottom(CollisionMapInfo& info) {
@@ -163,18 +163,16 @@ void BaseCharacter::MapCollisionBottom(CollisionMapInfo& info) {
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+	CheckHitMapChipType(mapChipType);
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+	CheckHitMapChipType(mapChipType);
 
 	//ブロックにヒット?
-	if (hit) {
+	if (hitBlock_ || hitSpine_)
+	{
 		// めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 		// めり込み先ブロックの範囲矩形
@@ -183,6 +181,8 @@ void BaseCharacter::MapCollisionBottom(CollisionMapInfo& info) {
 		// 地面に当たったことを記録する
 		info.landing = true;
 	}
+	//ヒット情報リセット
+	HitReset();
 }
 
 void BaseCharacter::MapCollisionRight(CollisionMapInfo& info)
@@ -207,26 +207,26 @@ void BaseCharacter::MapCollisionRight(CollisionMapInfo& info)
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+	CheckHitMapChipType(mapChipType);
+
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+	CheckHitMapChipType(mapChipType);
 
 	// ブロックにヒット?
-	if (hit) {
+	if (hitBlock_ || hitSpine_)
+	{
 		// めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 		// めり込み先ブロックの範囲矩形
 		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.x = (std::max)(0.0f, (rect.left - worldTransform_.translation_.x) - (kWidth_ / 2 + kBlank_));
-		// 地面に当たったことを記録する
+		// 壁に当たったことを記録する
 		info.isWallCollision = true;
 	}
+	//ヒット情報リセット
+	HitReset();
 }
 
 void BaseCharacter::MapCollisionLeft(CollisionMapInfo& info) {
@@ -250,26 +250,26 @@ void BaseCharacter::MapCollisionLeft(CollisionMapInfo& info) {
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+	CheckHitMapChipType(mapChipType);
+
 	// 左下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock) {
-		hit = true;
-	}
+	CheckHitMapChipType(mapChipType);
 
 	// ブロックにヒット?
-	if (hit) {
+	if (hitBlock_ || hitSpine_)
+	{
 		// めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 		// めり込み先ブロックの範囲矩形
 		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.x = (std::min)(0.0f, (rect.right - worldTransform_.translation_.x) + (kWidth_ / 2 + kBlank_));
-		// 地面に当たったことを記録する
+		// 壁に当たったことを記録する
 		info.isWallCollision = true;
 	}
+	//ヒット情報リセット
+	HitReset();
 }
 
 void BaseCharacter::MoveAppli(const CollisionMapInfo& info) {
@@ -308,22 +308,20 @@ void BaseCharacter::GroundCollision(const CollisionMapInfo& info) {
 			MapChipField::IndexSet indexSet;
 			indexSet = mapChipField_->GetMapChipIndexSetByPosition({ positionsNew[kLeftBottom].x, positionsNew[kLeftBottom].y - kBlank_ * 2, positionsNew[kLeftBottom].z });
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-			if (mapChipType == MapChipType::kBlock) {
-				hit = true;
-			}
+			CheckHitMapChipType(mapChipType);
+
 			// 右下点の判定
 			indexSet = mapChipField_->GetMapChipIndexSetByPosition({ positionsNew[kRightBottom].x, positionsNew[kRightBottom].y - kBlank_ * 2, positionsNew[kRightBottom].z });
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-			if (mapChipType == MapChipType::kBlock) {
-				hit = true;
-			}
+			CheckHitMapChipType(mapChipType);
 
 			// ブロックにヒット?
-			if (!hit) {
+			if (!hitBlock_ && !hitSpine_) {
 				//空中状態に切り替える
 				onGround_ = false;
 			}
-
+			//ヒット情報リセット
+			HitReset();
 		}
 	}
 	else {
@@ -353,4 +351,27 @@ Vector3 BaseCharacter::CornerPosition(const Vector3& center, Corner corner)
 	return { center.x + offsetTable[static_cast<uint32_t>(corner)].x,
 			center.y + offsetTable[static_cast<uint32_t>(corner)].y,
 			center.z + offsetTable[static_cast<uint32_t>(corner)].z };
+}
+
+void BaseCharacter::CheckHitMapChipType(MapChipType mapChipType)
+{
+	switch (mapChipType)
+	{
+	case MapChipType::kBlock:
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kSpine:
+		hitSpine_ = true;
+		break;
+
+	default:
+		break;
+	}
+}
+
+void BaseCharacter::HitReset()
+{
+	hitBlock_ = false;
+	hitSpine_ = false;
 }

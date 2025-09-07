@@ -544,6 +544,9 @@
     <ClInclude Include="Game\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
+    <ClInclude Include="Game\objects\MapChipType.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

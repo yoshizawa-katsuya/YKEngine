@@ -55,6 +55,7 @@ void GameScene::Initialize() {
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
 	modelBlock_ = modelPlatform_->CreateCube(textureHandleBlock_, "block");
+	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
 
 	CreateLevel();
 
@@ -204,6 +205,9 @@ void GameScene::Draw() {
 	blocks_->CameraUpdate(mainCamera_);
 	blocks_->Draw();
 
+	spines_->CameraUpdate(mainCamera_);
+	spines_->Draw();
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
@@ -222,20 +226,41 @@ void GameScene::CreateLevel()
 	mapChipField_ = std::make_unique<MapChipField>();
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
+	//マップの生成
 	blocks_ = std::make_unique<InstancingObjects>();
-	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
+	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumBlocks());
 	blocks_->PreUpdate();
 
+	spines_ = std::make_unique<InstancingObjects>();
+	spines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
+	spines_->PreUpdate();
+
 	WorldTransform worldTransform = {};
+	MapChipField* mapChipField = mapChipField_.get();
+
+	std::function<void(uint32_t, uint32_t)> setWorldTransform = [&worldTransform, mapChipField](uint32_t x, uint32_t y) {
+		worldTransform.Initialize();
+		worldTransform.translation_ = mapChipField->GetMapChipPositionByIndex(x, y);
+		worldTransform.UpdateMatrix();
+		};
 
 	for (uint32_t y = 0; y < mapChipField_->GetNumCellVirtical(); y++) {
 		for (uint32_t x = 0; x < mapChipField_->GetNumCellHorizontal(); x++) {
-			if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kBlock) 
+			MapChipType mapChipType = mapChipField_->GetMapChipTypeByIndex(x, y);
+			switch (mapChipType)
 			{
-				worldTransform.Initialize();
-				worldTransform.translation_ = mapChipField_->GetMapChipPositionByIndex(x, y);
-				worldTransform.UpdateMatrix();
+			case MapChipType::kBlock:
+				setWorldTransform(x, y);
 				blocks_->WorldTransformUpdate(worldTransform);
+				break;
+
+			case MapChipType::kSpine:
+				setWorldTransform(x, y);
+				spines_->WorldTransformUpdate(worldTransform);
+				break;
+
+			default:
+				break;
 			}
 		}
 	}

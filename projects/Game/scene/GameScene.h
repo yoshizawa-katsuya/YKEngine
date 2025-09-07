@@ -80,6 +80,7 @@ private:
 
 	std::shared_ptr<BaseModel> modelPlayer_;
 	std::shared_ptr<BaseModel> modelBlock_;
+	std::shared_ptr<BaseModel> modelSpine_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;
@@ -88,7 +89,10 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	//ブロック
 	std::unique_ptr<InstancingObjects> blocks_;
+	//トゲ
+	std::unique_ptr<InstancingObjects> spines_;
 
 	//カメラコントローラー
 	std::unique_ptr<CameraController> cameraController_;

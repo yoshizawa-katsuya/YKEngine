@@ -3,6 +3,7 @@
 #include "WorldTransform.h"
 #include "SRTAnimator.h"
 #include "Animation.h"
+#include "MapChipType.h"
 
 class Camera;
 class MapChipField;
@@ -91,6 +92,11 @@ private:
 
 protected:
 
+	//どのマップチップに接触しているか
+	void CheckHitMapChipType(MapChipType mapChipType);
+
+	void HitReset();
+
 	//Transform変数を作る
 	WorldTransform worldTransform_;
 
@@ -131,5 +137,8 @@ protected:
 
 	//デスフラグ
 	bool isDead_ = false;
+
+	bool hitBlock_ = false;
+	bool hitSpine_ = false;
 };
 

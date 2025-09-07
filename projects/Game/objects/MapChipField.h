@@ -3,11 +3,7 @@
 #include <string>
 #include <vector>
 #include <Vector3.h>
-
-enum class MapChipType {
-	kBlank, // 空白
-	kBlock, // ブロック
-};
+#include "MapChipType.h"
 
 struct MapChipData {
 	std::vector<std::vector<MapChipType>> data;
@@ -50,8 +46,15 @@ public:
 
 	uint32_t GetNumCellHorizontal();
 
+	uint32_t GetNumBlocks() { return numBlocks_; };
+
+	uint32_t GetNumSpines() { return numSpines_; };
+
 private:
 	
+	//マップチップタイプごとの個数を数える
+	void CountMapChipTypeNum(MapChipType mapChipType);
+
 	// 1ブロックのサイズ
 	const float kCellWidth_ = 2.0f;
 	const float kCellHeight_ = 2.0f;
@@ -62,5 +65,7 @@ private:
 
 	MapChipData mapChipData_;
 
+	uint32_t numBlocks_ = 0;
+	uint32_t numSpines_ = 0;
 };
 

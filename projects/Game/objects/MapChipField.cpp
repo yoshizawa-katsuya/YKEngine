@@ -9,6 +9,7 @@ namespace {
 std::map<std::string, MapChipType> mapChipTable = {
     {"0", MapChipType::kBlank},
     {"1", MapChipType::kBlock},
+	{"12", MapChipType::kSpine},
 };
 
 }
@@ -55,6 +56,7 @@ void MapChipField::LoadMapChipCsv(const std::string& filePath) {
 			if (mapChipTable.contains(word)) 
 			{
 				mapChipDataLine.push_back(mapChipTable[word]);
+				CountMapChipTypeNum(mapChipTable[word]);
 			}
 
 		}
@@ -113,3 +115,18 @@ MapChipField::IndexSet MapChipField::GetMapChipIndexSetByPosition(const Vector3&
 uint32_t MapChipField::GetNumCellVirtical() { return kNumCellVirtical_; }
 
 uint32_t MapChipField::GetNumCellHorizontal() { return kNumCellHorizontal_; }
+
+void MapChipField::CountMapChipTypeNum(MapChipType mapChipType)
+{
+	switch (mapChipType)
+	{
+	case MapChipType::kBlock:
+		++numBlocks_;
+		break;
+	case MapChipType::kSpine:
+		++numSpines_;
+		break;
+	default:
+		break;
+	}
+}
