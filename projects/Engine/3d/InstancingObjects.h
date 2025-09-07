@@ -20,7 +20,7 @@ public:
 
 	void Draw();
 public:  
-	std::vector<AABB> GetAABBs(float blockSize);
+	
 private:
 
 	DirectXCommon* dxCommon_;

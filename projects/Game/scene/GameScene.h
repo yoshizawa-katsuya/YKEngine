@@ -36,9 +36,7 @@ public:
 	void Finalize() override;
 
 private:
-	bool IsIntersect(const AABB& a, const AABB& b);
 	void CreateLevel();
-	void CheckElectricRangeCollision(Player* player, InstancingObjects* blocks);
 	//デバイス
 	DirectXCommon* dxCommon_;
 

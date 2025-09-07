@@ -68,24 +68,4 @@ void InstancingObjects::Draw()
 	model_->InstancingDraw(numInstance_);
 
 }
-std::vector<AABB> InstancingObjects::GetAABBs(float blockSize) {
-	std::vector<AABB> result;
-	result.reserve(numInstance_);
 
-	float half = blockSize / 2.0f;
-
-	for (uint32_t i = 0; i < numInstance_; i++) {
-		Vector3 center = {
-			instancingData_[i].World.m[3][0] + half,
-			instancingData_[i].World.m[3][1] + half,
-			instancingData_[i].World.m[3][2] + half
-		};
-
-		AABB aabb;
-		aabb.min = { center.x - half, center.y - half, center.z - half };
-		aabb.max = { center.x + half, center.y + half, center.z + half };
-
-		result.push_back(aabb);
-	}
-	return result;
-}

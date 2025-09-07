@@ -46,14 +46,6 @@ void ElectricRange::DebugImGui()
         ImGui::TreePop();
     }
 }
-AABB ElectricRange::GetAABB() {
-    Vector3 pos = electricPosition; 
-    Vector3 scale = worldTransform_.scale_;
-    float halfX = kWidth_ * scale.x / 2.0f;
-    float halfY = kHeight_ * scale.y / 2.0f;
-    float halfZ = kWidth_ * scale.z / 2.0f;
-    return { {pos.x - halfX, pos.y - halfY, pos.z - halfZ}, {pos.x + halfX, pos.y + halfY, pos.z + halfZ} };
-}
 void ElectricRange::SetColor(const Vector4& color)
 {
     color_ = color;

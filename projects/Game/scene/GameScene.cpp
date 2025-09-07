@@ -80,8 +80,6 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
-	CheckElectricRangeCollision(player_.get(),blocks_.get());
-
 	cameraController_->Update();
 
 	modelPlatform_->LightPreUpdate();
@@ -199,12 +197,6 @@ void GameScene::Finalize()
 
 }
 
-bool GameScene::IsIntersect(const AABB& a, const AABB& b) {
-	return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
-		(a.min.y <= b.max.y && a.max.y >= b.min.y) &&
-		(a.min.z <= b.max.z && a.max.z >= b.min.z);
-}
-
 void GameScene::CreateLevel()
 {
 	// マップチップフィールドの生成
@@ -229,15 +221,4 @@ void GameScene::CreateLevel()
 		}
 	}
 }
-//電気範囲とブロックの衝突判定
-void GameScene::CheckElectricRangeCollision(Player* player, InstancingObjects* blocks) {
-	AABB electricAABB = player->GetElectricRange()->GetAABB();
 
-	auto blockAABBs = blocks->GetAABBs( 2.0f);
-
-	for (const auto& blockAABB : blockAABBs) {
-		if (IsIntersect(electricAABB, blockAABB)) {
-			OutputDebugStringA("ElectricRange hit block!\n");
-		}
-	}
-}
