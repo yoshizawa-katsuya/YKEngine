@@ -21,10 +21,13 @@ private:
 private:
     Vector4 color_ = { 1.0f, 0.902f, 0.0f, 0.45f };
     Vector3 scale_ = { 0.7f, 0.7f, 0.7f };
+    Vector3 electricPosition; 
+    Vector3 offset = { 0, 0, 0 };
     const float minScale_ = 0.2f;
     const float maxScale_ = 1.8f;
     const float step_ = 0.2f;
-
+    const float rangeWidth_ = 2.0f;
+    const float rangeHeight_ = 2.0f;
     const Vector3* targetPosition_ = nullptr; 
 };
 

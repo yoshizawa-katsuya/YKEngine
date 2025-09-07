@@ -35,10 +35,10 @@ void Player::Update() {
 	// ステートの更新
 	StateUpdate();
 
-	electricRange_->Update();
-
 	// 基底クラスの更新
 	BaseCharacter::Update();
+
+	electricRange_->Update();
 
 #ifdef _DEBUG
 

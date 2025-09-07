@@ -5,16 +5,16 @@
 void ElectricRange::Initialize(BaseModel* model, const Vector3& position)
 {
     BaseCharacter::Initialize(model, position);
-    scale_ = { 0.7f, 0.7f, 0.7f };
+    scale_ = { 0.7f,0.7f,0.7f };
 }
 
 void ElectricRange::Update()
 {
     //プレイヤーの位置に追従
-    worldTransform_.translation_ = *targetPosition_;
-    worldTransform_.scale_ = scale_;
+    electricPosition = *targetPosition_ + offset;
+    worldTransform_.translation_ = electricPosition;
 
-    //拡大縮小操作
+    //拡大縮小
     if (Input::GetInstance()->PushKey(DIK_E)) {
         scale_ += Vector3{ step_, step_, step_ } *(1.0f / 60.0f);
     }
@@ -22,9 +22,14 @@ void ElectricRange::Update()
         scale_ -= Vector3{ step_, step_, step_ } *(1.0f / 60.0f);
     }
     ClampScale();
+
+    worldTransform_.scale_ = scale_;
+
+    //行列更新
     worldTransform_.UpdateMatrix();
     object_->WorldTransformUpdate(worldTransform_);
 }
+
 
 void ElectricRange::Draw(Camera* camera)
 {
@@ -42,18 +47,12 @@ void ElectricRange::DebugImGui()
     }
 }
 AABB ElectricRange::GetAABB() {
-    AABB aabb;
-    Vector3 pos = GetWorldPosition();
+    Vector3 pos = electricPosition; 
     Vector3 scale = worldTransform_.scale_;
-
-    float halfX = (kWidth_ * scale.x) / 2.0f;
-    float halfY = (kWidth_ * scale.y) / 2.0f;
-    float halfZ = (kWidth_ * scale.z) / 2.0f;
-
-    aabb.min = { pos.x - halfX, pos.y - halfY, pos.z - halfZ };
-    aabb.max = { pos.x + halfX, pos.y + halfY, pos.z + halfZ };
-
-    return aabb;
+    float halfX = kWidth_ * scale.x / 2.0f;
+    float halfY = kHeight_ * scale.y / 2.0f;
+    float halfZ = kWidth_ * scale.z / 2.0f;
+    return { {pos.x - halfX, pos.y - halfY, pos.z - halfZ}, {pos.x + halfX, pos.y + halfY, pos.z + halfZ} };
 }
 void ElectricRange::SetColor(const Vector4& color)
 {
