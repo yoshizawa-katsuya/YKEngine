@@ -134,6 +134,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
     <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
     <ClCompile Include="Engine\3d\InstancingObjects.cpp" />
+    <ClCompile Include="Game\objects\Goal.cpp" />
     <ClCompile Include="IPlayerState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
@@ -400,6 +401,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\SRTAnimator.h" />
     <ClInclude Include="Engine\lib\TransformHelpers.h" />
     <ClInclude Include="Engine\base\OffscreenRenderer.h" />
+    <ClInclude Include="Game\objects\Goal.h" />
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="PlayerGroundState.h" />
     <ClInclude Include="PlayerJumpState.h" />

@@ -128,7 +128,7 @@ void BaseCharacter::MapCollisionUp(CollisionMapInfo& info) {
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	CheckHitMapChipType(mapChipType);
 
-	if (hitBlock_ || hitSpine_)
+	if (IsHitObstacle())
 	{
 		//めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
@@ -171,7 +171,7 @@ void BaseCharacter::MapCollisionBottom(CollisionMapInfo& info) {
 	CheckHitMapChipType(mapChipType);
 
 	//ブロックにヒット?
-	if (hitBlock_ || hitSpine_)
+	if (IsHitObstacle())
 	{
 		// めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
@@ -215,7 +215,7 @@ void BaseCharacter::MapCollisionRight(CollisionMapInfo& info)
 	CheckHitMapChipType(mapChipType);
 
 	// ブロックにヒット?
-	if (hitBlock_ || hitSpine_)
+	if (IsHitObstacle())
 	{
 		// めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
@@ -258,7 +258,7 @@ void BaseCharacter::MapCollisionLeft(CollisionMapInfo& info) {
 	CheckHitMapChipType(mapChipType);
 
 	// ブロックにヒット?
-	if (hitBlock_ || hitSpine_)
+	if (IsHitObstacle())
 	{
 		// めり込みを排除する方向に移動量を設定する
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
@@ -316,7 +316,7 @@ void BaseCharacter::GroundCollision(const CollisionMapInfo& info) {
 			CheckHitMapChipType(mapChipType);
 
 			// ブロックにヒット?
-			if (!hitBlock_ && !hitSpine_) {
+			if (!IsHitObstacle()) {
 				//空中状態に切り替える
 				onGround_ = false;
 			}
@@ -368,6 +368,11 @@ void BaseCharacter::CheckHitMapChipType(MapChipType mapChipType)
 	default:
 		break;
 	}
+}
+
+bool BaseCharacter::IsHitObstacle()
+{
+	return hitBlock_ || hitSpine_;
 }
 
 void BaseCharacter::HitReset()

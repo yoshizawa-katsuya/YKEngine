@@ -93,7 +93,10 @@ private:
 protected:
 
 	//どのマップチップに接触しているか
-	void CheckHitMapChipType(MapChipType mapChipType);
+	virtual void CheckHitMapChipType(MapChipType mapChipType);
+
+	//めり込んではいけないオブジェクトに接触しているか
+	bool IsHitObstacle();
 
 	void HitReset();
 

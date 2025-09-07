@@ -21,6 +21,7 @@
 #include "MapChipField.h"
 #include "CameraController.h"
 #include "Fade.h"
+#include "Goal.h"
 
 class GameScene : public BaseScene
 {
@@ -81,6 +82,7 @@ private:
 	std::shared_ptr<BaseModel> modelPlayer_;
 	std::shared_ptr<BaseModel> modelBlock_;
 	std::shared_ptr<BaseModel> modelSpine_;
+	std::shared_ptr<BaseModel> modelGoal_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;
@@ -93,6 +95,8 @@ private:
 	std::unique_ptr<InstancingObjects> blocks_;
 	//トゲ
 	std::unique_ptr<InstancingObjects> spines_;
+	//ゴール
+	std::unique_ptr<Goal> goal_;
 
 	//カメラコントローラー
 	std::unique_ptr<CameraController> cameraController_;

@@ -264,6 +264,9 @@
     <ClCompile Include="Game\scene\GameOverScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\Goal.cpp">
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -545,6 +548,9 @@
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\MapChipType.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\Goal.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>

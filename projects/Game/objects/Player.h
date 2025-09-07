@@ -47,9 +47,14 @@ public:
 
 	void ChangeState(std::unique_ptr<IPlayerState> state);
 
+	bool HitGoal() { return hitGoal_; }
+
 private: // 非公開メンバ関数
 
 	void StateUpdate();
+
+	//どのマップチップに接触しているか
+	void CheckHitMapChipType(MapChipType mapChipType) override;
 
 	//移動入力
 	void Move();
@@ -60,5 +65,6 @@ private:
 
 	std::unique_ptr<IPlayerState> state_ = nullptr;
 
+	bool hitGoal_ = false;
 };
 

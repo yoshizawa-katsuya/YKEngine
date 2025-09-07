@@ -50,12 +50,14 @@ void GameScene::Initialize() {
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
-	uint32_t textureHandleBlock_ = TextureManager::GetInstance()->Load("./resources/block.png");
+	uint32_t textureHandleBlock = TextureManager::GetInstance()->Load("./resources/block.png");
+	uint32_t textureHandleGoal = TextureManager::GetInstance()->Load("./resources/goal.png");
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
-	modelBlock_ = modelPlatform_->CreateCube(textureHandleBlock_, "block");
+	modelBlock_ = modelPlatform_->CreateCube(textureHandleBlock, "block");
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
+	modelGoal_ = modelPlatform_->CreateRing(textureHandleGoal, "goal");
 
 	CreateLevel();
 
@@ -196,7 +198,10 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
-	modelPlatform_->SkyBoxPreDraw();
+	goal_->Draw(mainCamera_);
+
+	//スカイボックスの描画前処理
+	//modelPlatform_->SkyBoxPreDraw();
 
 	//modelPlatform_->SkinPreDraw();
 
@@ -235,6 +240,9 @@ void GameScene::CreateLevel()
 	spines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
 	spines_->PreUpdate();
 
+	goal_ = std::make_unique<Goal>();
+	goal_->Initialize(modelGoal_.get());
+
 	WorldTransform worldTransform = {};
 	MapChipField* mapChipField = mapChipField_.get();
 
@@ -259,6 +267,10 @@ void GameScene::CreateLevel()
 				spines_->WorldTransformUpdate(worldTransform);
 				break;
 
+			case MapChipType::kGoal:
+				goal_->SetPosition(mapChipField->GetMapChipPositionByIndex(x, y));
+
+				break;
 			default:
 				break;
 			}
@@ -282,6 +294,15 @@ void GameScene::UpdateMain()
 	player_->Update();
 
 	cameraController_->Update();
+
+	goal_->Update();
+
+	if (player_->HitGoal())
+	{
+		phase_ = Phase::kGameClear;
+		fade_->Start(Fade::Status::FadeOut, 0.5f);
+	}
+
 }
 
 void GameScene::UpdateGameClear()
