@@ -37,6 +37,7 @@ public:
 
 private:
 	void CreateLevel();
+	void CheckElectricCollision();
 	//デバイス
 	DirectXCommon* dxCommon_;
 

@@ -80,6 +80,8 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
+	CheckElectricCollision();
+
 	cameraController_->Update();
 
 	modelPlatform_->LightPreUpdate();
@@ -221,4 +223,25 @@ void GameScene::CreateLevel()
 		}
 	}
 }
+void GameScene::CheckElectricCollision() {
+	if (!player_ || !blocks_) return;
 
+	auto electricRange = player_->GetElectricRange();
+	if (!electricRange) return;
+
+	Vector3 electricPos = electricRange->GetPosition();      // 電気の中心
+	float electricRadius = electricRange->GetScale().x * 0.5f; // 電気の半径（スケールを半分で簡易化）
+
+	for (uint32_t i = 0; i < blocks_->GetNumInstance(); ++i) {
+		Vector3 blockPos = blocks_->GetInstancePosition(i);
+		float blockRadius = 1.0f; // ブロック1マスの半径
+
+		Vector3 diff = electricPos - blockPos;
+		float dist = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+
+		if (dist <= electricRadius + blockRadius) {
+			std::string msg = "Electric hit block " + std::to_string(i) + "\n";
+			OutputDebugStringA(msg.c_str()); printf("Electric hit block %u\n", i);
+		}
+	}
+}

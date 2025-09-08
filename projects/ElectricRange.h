@@ -13,6 +13,8 @@ public:
     //Imgui
     void DebugImGui();
 public:
+    Vector3 GetPosition() const { return electricPosition; }
+    Vector3 GetScale() const { return scale_; }
     void SetColor(const Vector4& color);
     void SetFollowTarget(const Vector3* targetPos);
 private:
