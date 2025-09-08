@@ -29,7 +29,7 @@ void TitleScene::Update()
 	
 	ImGui::Begin("Window");
 	ImGui::Text("Title");
-	if (ImGui::Button("Go to GameScene"))
+	if (ImGui::Button("Go to StageSelect"))
 	{
 		phase_ = Phase::kEnd;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
@@ -97,6 +97,6 @@ void TitleScene::UpdateEnd()
 	if (fade_->IsFinished()) {
 		//fade_->Stop();
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("GameScene");
+		sceneManager_->ChengeScene("StageSelectScene");
 	}
 }
