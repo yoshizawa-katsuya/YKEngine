@@ -229,12 +229,12 @@ void GameScene::CheckElectricCollision() {
 	auto electricRange = player_->GetElectricRange();
 	if (!electricRange) return;
 
-	Vector3 electricPos = electricRange->GetPosition();      // 電気の中心
-	float electricRadius = electricRange->GetScale().x * 0.5f; // 電気の半径（スケールを半分で簡易化）
+	Vector3 electricPos = electricRange->GetPosition();      //電気の中心
+	float electricRadius = electricRange->GetScale().x * 0.5f; //電気の半径
 
 	for (uint32_t i = 0; i < blocks_->GetNumInstance(); ++i) {
 		Vector3 blockPos = blocks_->GetInstancePosition(i);
-		float blockRadius = 1.0f; // ブロック1マスの半径
+		float blockRadius = 1.1999999999999f; //ブロック1マスの半径
 
 		Vector3 diff = electricPos - blockPos;
 		float dist = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
