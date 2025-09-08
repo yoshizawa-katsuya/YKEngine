@@ -16,6 +16,9 @@ void Player::Initialize(BaseModel* model, const Vector3& position)
 
 	BaseCharacter::Initialize(model, position);
 
+	kWidth_ = 0.719f;
+	kHeight_ = 1.79f;
+
 	// 最初の状態をIdleにする
 	ChangeState(std::make_unique<PlayerGroundState>());
 }

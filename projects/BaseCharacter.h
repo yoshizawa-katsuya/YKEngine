@@ -135,8 +135,8 @@ protected:
 	PhysicsParam physicsParam_ = { 0.03f, 1.0f, 0.55f};
 
 	//キャラクターの当たり判定サイズ
-	const float kWidth_ = 1.0f;
-	const float kHeight_ = 1.0f;
+	float kWidth_ = 1.0f;
+	float kHeight_ = 1.0f;
 
 	//余白
 	const float kBlank_ = 0.01f;
