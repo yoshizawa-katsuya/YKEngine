@@ -50,12 +50,11 @@ void GameScene::Initialize() {
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
-	uint32_t textureHandleBlock = TextureManager::GetInstance()->Load("./resources/block.png");
 	uint32_t textureHandleGoal = TextureManager::GetInstance()->Load("./resources/goal.png");
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
-	modelBlock_ = modelPlatform_->CreateCube(textureHandleBlock, "block");
+	modelBlock_ = modelPlatform_->CreateRigidModel("./resources/block", "block.obj");
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
 	modelGoal_ = modelPlatform_->CreateRing(textureHandleGoal, "goal");
 	modelGoal_->SetEnableLighting(false);
