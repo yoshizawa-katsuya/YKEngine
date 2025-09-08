@@ -58,6 +58,7 @@ void GameScene::Initialize() {
 	modelBlock_ = modelPlatform_->CreateCube(textureHandleBlock, "block");
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
 	modelGoal_ = modelPlatform_->CreateRing(textureHandleGoal, "goal");
+	modelGoal_->SetEnableLighting(false);
 
 	CreateLevel();
 
