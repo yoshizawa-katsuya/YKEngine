@@ -113,7 +113,7 @@ void Player::Move()
 	velocity_.x = 0.0f;	// 水平速度リセット
 	// 移動入力
 	// 左右移動操作
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+	if (Input::GetInstance()->PushKey(DIK_D)) {
 
 		velocity_.x += kMoveSpeed_;
 		if (lrDirection_ != LRDirection::kRight) {
@@ -122,7 +122,7 @@ void Player::Move()
 			turnTimer_ = 0.0f;
 		}
 	}
-	else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+	else if (Input::GetInstance()->PushKey(DIK_A)) {
 		velocity_.x -= kMoveSpeed_;
 		if (lrDirection_ != LRDirection::kLeft) {
 			lrDirection_ = LRDirection::kLeft;
@@ -131,7 +131,7 @@ void Player::Move()
 		}
 	}
 
-	if (dynamic_cast<PlayerGroundState*>(state_.get()) && input_->PushKey(DIK_UP))
+	if (dynamic_cast<PlayerGroundState*>(state_.get()) && input_->TriggerKey(DIK_W))
 	{
 		velocity_.y += physicsParam_.kJumpAcceleration;
 
