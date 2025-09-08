@@ -11,14 +11,6 @@ class Player : public BaseCharacter
 {
 private:
 
-	// マップとの当たり判定情報
-	struct CollisionMapInfo {
-		bool isCeilingCollision = false;
-		bool landing = false;
-		bool isWallCollision = false;
-		Vector3 move;
-	};
-
 	enum Corner {
 		kRightBottom,	//右下
 		kLeftBottom,	//左下
@@ -59,6 +51,8 @@ private: // 非公開メンバ関数
 	//移動入力
 	void Move();
 	
+	void SpineCollision(const CollisionMapInfo& info) override;
+
 private:
 
 	Input* input_;

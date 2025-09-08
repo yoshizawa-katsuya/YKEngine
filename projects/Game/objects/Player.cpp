@@ -155,3 +155,12 @@ void Player::Move()
 		state_->Enter(this);
 	}
 }
+
+void Player::SpineCollision(const CollisionMapInfo& info)
+{
+	if (!info.isSpineCollision)
+	{
+		return;
+	}
+	isDead_ = true;
+}

@@ -303,6 +303,11 @@ void GameScene::UpdateMain()
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
 	}
 
+	if (player_->GetIsDead())
+	{
+		phase_ = Phase::kGameOver;
+		fade_->Start(Fade::Status::FadeOut, 0.5f);
+	}
 }
 
 void GameScene::UpdateGameClear()

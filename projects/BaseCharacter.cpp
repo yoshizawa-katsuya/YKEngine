@@ -41,6 +41,9 @@ void BaseCharacter::Update() {
 	//壁衝突
 	WallCollision(collisionMapInfo);
 
+	//トゲ衝突
+	SpineCollision(collisionMapInfo);
+
 	// 旋回制御
 	if (turnTimer_ < 1.0f) {
 		turnTimer_ += 1.0f / 60.0f;
@@ -137,6 +140,10 @@ void BaseCharacter::MapCollisionUp(CollisionMapInfo& info) {
 		info.move.y = (std::max)(0.0f, (rect.bottom - worldTransform_.translation_.y) - (kHeight_ / 2 + kBlank_));
 		//天井に当たったことを記録する
 		info.isCeilingCollision = true;
+		if (hitSpine_ && !hitBlock_)
+		{
+			info.isSpineCollision = true;
+		}
 	}
 	//ヒット情報リセット
 	HitReset();
@@ -180,6 +187,10 @@ void BaseCharacter::MapCollisionBottom(CollisionMapInfo& info) {
 		info.move.y = (std::min)(0.0f, (rect.top - worldTransform_.translation_.y) + (kHeight_ / 2 + kBlank_));
 		// 地面に当たったことを記録する
 		info.landing = true;
+		if (hitSpine_ && !hitBlock_)
+		{
+			info.isSpineCollision = true;
+		}
 	}
 	//ヒット情報リセット
 	HitReset();
@@ -224,6 +235,10 @@ void BaseCharacter::MapCollisionRight(CollisionMapInfo& info)
 		info.move.x = (std::max)(0.0f, (rect.left - worldTransform_.translation_.x) - (kWidth_ / 2 + kBlank_));
 		// 壁に当たったことを記録する
 		info.isWallCollision = true;
+		if (hitSpine_ && !hitBlock_)
+		{
+			info.isSpineCollision = true;
+		}
 	}
 	//ヒット情報リセット
 	HitReset();
@@ -267,6 +282,10 @@ void BaseCharacter::MapCollisionLeft(CollisionMapInfo& info) {
 		info.move.x = (std::min)(0.0f, (rect.right - worldTransform_.translation_.x) + (kWidth_ / 2 + kBlank_));
 		// 壁に当たったことを記録する
 		info.isWallCollision = true;
+		if (hitSpine_ && !hitBlock_)
+		{
+			info.isSpineCollision = true;
+		}
 	}
 	//ヒット情報リセット
 	HitReset();
@@ -283,7 +302,7 @@ void BaseCharacter::CeilingCollision(const CollisionMapInfo& info) {
 	}
 }
 
-void BaseCharacter::GroundCollision(const CollisionMapInfo& info) {
+void BaseCharacter::GroundCollision(CollisionMapInfo& info) {
 	//自キャラが設置状態?
 	if (onGround_) {
 
@@ -315,6 +334,10 @@ void BaseCharacter::GroundCollision(const CollisionMapInfo& info) {
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 			CheckHitMapChipType(mapChipType);
 
+			if (hitSpine_ && !hitBlock_)
+			{
+				info.isSpineCollision = true;
+			}
 			// ブロックにヒット?
 			if (!IsHitObstacle()) {
 				//空中状態に切り替える
@@ -336,6 +359,10 @@ void BaseCharacter::GroundCollision(const CollisionMapInfo& info) {
 }
 
 void BaseCharacter::WallCollision(const CollisionMapInfo& info) {
+}
+
+void BaseCharacter::SpineCollision(const CollisionMapInfo& info)
+{
 }
 
 Vector3 BaseCharacter::CornerPosition(const Vector3& center, Corner corner)

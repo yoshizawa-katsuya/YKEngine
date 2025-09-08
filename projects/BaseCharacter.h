@@ -18,15 +18,18 @@ public:
 		const float kJumpAcceleration;
 	};
 
-private: 
+protected:
 
 	// マップとの当たり判定情報
 	struct CollisionMapInfo {
 		bool isCeilingCollision = false;
 		bool landing = false;
 		bool isWallCollision = false;
+		bool isSpineCollision = false;
 		Vector3 move;
 	};
+
+private: 
 
 	enum Corner {
 		kRightBottom,	//右下
@@ -83,10 +86,13 @@ private:
 	void CeilingCollision(const CollisionMapInfo& info);
 
 	//地面に接触している場合の処理
-	void GroundCollision(const CollisionMapInfo& info);
+	void GroundCollision(CollisionMapInfo& info);
 
 	//壁に接触している場合の処理
 	void WallCollision(const CollisionMapInfo& info);
+
+	//とげに接触している場合の処理
+	virtual void SpineCollision(const CollisionMapInfo& info);
 
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 
