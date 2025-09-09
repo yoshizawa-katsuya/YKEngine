@@ -121,11 +121,11 @@ void GameScene::Update() {
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
 	
-	//リセット
-	if (input_->TriggerKey(DIK_R))
-	{
-		Initialize();
-	}
+	////リセット
+	//if (input_->TriggerKey(DIK_R))
+	//{
+	//	Initialize();
+	//}
 
 #ifdef _DEBUG
 

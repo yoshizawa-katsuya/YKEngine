@@ -187,7 +187,8 @@ void PauseMenu::UpdateMenu() {
 
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		if (menuState == 1) {//リトライ
-			nextScene_ = "GameScene";
+			fadeStart_ = true;
+			nextScene_ = "RetryScene";
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		} else if (menuState == 2) {//操作説明画面
 			isControlScreen_ = true;
