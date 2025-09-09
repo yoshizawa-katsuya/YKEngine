@@ -120,12 +120,6 @@ void GameScene::Update() {
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
 
-
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
-	}
-
 #ifdef _DEBUG
 
 
