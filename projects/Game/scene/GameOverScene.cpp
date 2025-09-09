@@ -17,6 +17,19 @@ void GameOverScene::Initialize()
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
+
+	for (int i = 0; i < 8; i++) {
+		std::string path = "Resources/scene/gameover0" + std::to_string(i + 1) + ".png";
+		gameOvers[i] = std::make_unique<Sprite>();
+		gameOvers[i]->Initialize(TextureManager::GetInstance()->Load(path));
+		gameOvers[i]->SetPosition({ 0.0f, 0.0f });
+	}
+
+	menuState = 0;
+	frameCount = 0;
+	blinkIndex = 0;
+
+
 }
 
 void GameOverScene::Update()
@@ -33,6 +46,25 @@ void GameOverScene::Update()
 	ImGui::End();
 
 #endif // _DEBUG
+
+	if (input_->TriggerKey(DIK_W)) {
+		menuState--;
+		if (menuState <= 0) {
+			menuState = 0;
+		}
+	} else if (input_->TriggerKey(DIK_S)) {
+		menuState++;
+		if (menuState >= 3) {
+			menuState = 3;
+		}
+	}
+
+	frameCount++;
+	if (frameCount > 30) {
+		blinkIndex = 1 - blinkIndex;
+		frameCount = 0;
+	}
+
 
 	switch (phase_)
 	{
@@ -59,6 +91,16 @@ void GameOverScene::Draw()
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
+	if (menuState == 0) {
+		gameOvers[blinkIndex]->Draw();
+	} else if (menuState == 1) {
+		gameOvers[2 + blinkIndex]->Draw();
+	} else if (menuState == 2) {
+		gameOvers[4 + blinkIndex]->Draw();
+	} else if (menuState == 3) {
+		gameOvers[6 + blinkIndex]->Draw();
+	}
+
 	fade_->Draw();
 }
 
@@ -78,10 +120,15 @@ void GameOverScene::UpdateStart()
 
 void GameOverScene::UpdateMain()
 {
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A))
-	{
-		phase_ = Phase::kEnd;
-		fade_->Start(Fade::Status::FadeOut, 0.5f);
+	if (menuState == 2) {
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+			phase_ = Phase::kEnd;
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		}
+	} else if (menuState == 3) {
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+			PostQuitMessage(0);
+		}
 	}
 }
 
