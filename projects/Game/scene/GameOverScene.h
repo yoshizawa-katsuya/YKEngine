@@ -51,5 +51,12 @@ private:
 	Phase phase_ = Phase::kStart;
 
 	std::unique_ptr<Fade> fade_;
+
+	std::array<std::unique_ptr<Sprite>, 8> gameOvers;
+
+	int menuState = 0;
+	int frameCount = 0;
+	int blinkIndex = 0;
+
 };
 
