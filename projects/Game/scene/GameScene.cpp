@@ -60,6 +60,7 @@ void GameScene::Initialize() {
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
 	modelGoal_ = modelPlatform_->CreateRing(textureHandleGoal, "goal");
 	modelGoal_->SetEnableLighting(false);
+	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
 
 	CreateLevel();
 
@@ -70,6 +71,9 @@ void GameScene::Initialize() {
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
+
+	doorGimmick_ = std::make_unique<Door>();
+	doorGimmick_->Initialize(mapChipField_.get());
 }
 
 void GameScene::Update() {
@@ -96,8 +100,18 @@ void GameScene::Update() {
 		break;
 	}
 
+	CheckElectricCollision(MapChipType::kDoorTrigger);
+
+	cameraController_->Update();
+
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
+
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+		//シーン切り替え依頼
+		sceneManager_->ChengeScene("TitleScene");
+	}
 
 #ifdef _DEBUG
 
@@ -209,6 +223,15 @@ void GameScene::Draw() {
 	spines_->CameraUpdate(mainCamera_);
 	spines_->Draw();
 
+	//door
+	if (doorGimmick_->GetState() == Door::State::kClosed) {
+		doors_->CameraUpdate(mainCamera_);
+		doors_->Draw();
+	}
+
+	doorTriggers_->CameraUpdate(mainCamera_);
+	doorTriggers_->Draw();
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
@@ -230,11 +253,20 @@ void GameScene::CreateLevel()
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->SetMapChipField(mapChipField_.get());
+	player_->SetElectricModel(modelElectric_.get());
 
 	//マップの生成
 	blocks_ = std::make_unique<InstancingObjects>();
 	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumBlocks());
 	blocks_->PreUpdate();
+
+	doors_ = std::make_unique<InstancingObjects>();
+	doors_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
+	doors_->PreUpdate();
+
+	doorTriggers_ = std::make_unique<InstancingObjects>();
+	doorTriggers_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
+	doorTriggers_->PreUpdate();
 
 	spines_ = std::make_unique<InstancingObjects>();
 	spines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
@@ -275,6 +307,22 @@ void GameScene::CreateLevel()
 				goal_->SetPosition(mapChipField_->GetMapChipPositionByIndex(x, y));
 				break;
 
+				break;
+
+			case MapChipType::kDoorTrigger:
+
+				setWorldTransform(x, y);
+				doorTriggers_->WorldTransformUpdate(worldTransform);
+
+				break;
+
+			case MapChipType::kDoor:
+
+				setWorldTransform(x, y);
+				doors_->WorldTransformUpdate(worldTransform);
+
+				break;
+
 			default:
 				break;
 			}
@@ -298,6 +346,11 @@ void GameScene::UpdateMain()
 	player_->Update();
 
 	cameraController_->Update();
+
+	if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
+
+		doorGimmick_->ChangeState(Door::State::kOpened);
+	}
 
 	goal_->Update();
 
@@ -332,4 +385,48 @@ void GameScene::UpdateGameOver()
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GameOverScene");
 	}
+}
+bool GameScene::CheckElectricCollision(MapChipType type) {
+	if (!player_) return false;
+
+	auto electricRange = player_->GetElectricRange();
+	if (!electricRange) return false;
+
+	Vector3 electricPos = electricRange->GetPosition();      //電気の中心
+	float electricRadius = electricRange->GetScale().x; //電気の半径
+
+	switch (type)
+	{
+	case MapChipType::kDoorTrigger:
+
+		for (uint32_t i = 0; i < doorTriggers_->GetNumInstance(); ++i) {
+			Vector3 blockPos = doorTriggers_->GetInstancePosition(i);
+
+			float half = 2.0f / 2.0f;
+
+			// AABB の最小・最大
+			Vector3 min = { blockPos.x - half, blockPos.y - half, 0.0f };
+			Vector3 max = { blockPos.x + half, blockPos.y + half, 0.0f };
+
+			// 円の中心に一番近い点をAABBの範囲にクランプ
+			Vector3 closest = {
+				std::clamp(electricPos.x, min.x, max.x),
+				std::clamp(electricPos.y, min.y, max.y),
+				0.0f
+			};
+
+			// 最近接点と円の中心の距離を比較
+			Vector3 diff = electricPos - closest;
+			float distSq = diff.x * diff.x + diff.y * diff.y;
+
+			if (distSq <= (electricRadius * electricRadius)) {
+
+				return true;
+			}
+		}
+
+		break;
+	}
+
+	return false;
 }

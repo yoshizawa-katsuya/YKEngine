@@ -6,6 +6,7 @@ class Input;
 
 #include "BaseCharacter.h"
 #include "IPlayerState.h"
+#include "ElectricRange.h"
 
 class Player : public BaseCharacter
 {
@@ -53,6 +54,9 @@ private: // 非公開メンバ関数
 	
 	void SpineCollision(const CollisionMapInfo& info) override;
 
+public:
+	ElectricRange* GetElectricRange() const { return electricRange_.get(); }
+	void SetElectricModel(BaseModel* electricModel);
 private:
 
 	Input* input_;
@@ -60,5 +64,7 @@ private:
 	std::unique_ptr<IPlayerState> state_ = nullptr;
 
 	bool hitGoal_ = false;
+	//電気範囲
+	std::unique_ptr<ElectricRange>electricRange_;
 };
 
