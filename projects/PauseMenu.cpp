@@ -15,6 +15,7 @@ void PauseMenu::Initialize() {
 
 	texturePaths = {
 			"Resources/pause/background.png",//背景
+			"Resources/pause/retry.png",//リトライ
 			"Resources/pause/control.png",//操作方法へ
 			"Resources/pause/backselect.png",//セレクトへ
 			"Resources/pause/backtitle.png",//タイトルへ
@@ -23,9 +24,10 @@ void PauseMenu::Initialize() {
 
 	positions = {
 		Vector2{650.0f,355.0f},//背景
-		Vector2{650.0f,85.0f},//操作方法
-		Vector2{650.0f,280.0f},//セレクトへ
-		Vector2{650.0f,502.0f},//タイトル
+		Vector2{650.0f,70.0f},//リトライ
+		Vector2{650.0f,220.0f},//操作方法
+		Vector2{650.0f,400.0f},//セレクトへ
+		Vector2{650.0f,580.0f},//タイトル
 		Vector2{650.0f,350.0f},//操作方法画面
 	};
 
@@ -36,11 +38,12 @@ void PauseMenu::Initialize() {
 		sprites_[i]->SetPosition(positions[i]);
 		sizes[i] = sprites_[i]->GetTextureSize();
 	}
-	sizes[0] = Vector2{ 500.0f, 700.0f };
-	sizes[1] = Vector2{ 490.0f, 204.0f };
-	sizes[2] = Vector2{ 490.0f, 204.0f };
-	sizes[3] = Vector2{ 490.0f, 204.0f };
-	sizes[4] = Vector2{ 950.0f,630.0f };
+	sizes[0] = Vector2{ 500.0f, 700.0f };//背景
+	sizes[1] = Vector2{ 490.0f, 204.0f };//リトライ
+	sizes[2] = Vector2{ 490.0f, 204.0f };//操作方法
+	sizes[3] = Vector2{ 490.0f, 204.0f };//セレクトへ
+	sizes[4] = Vector2{ 490.0f,204.0f };//タイトルへ
+	sizes[5] = Vector2{ 950.0f,630.0f };//操作方法画面
 
 	for (size_t i = 0; i < sprites_.size(); i++) {
 		sprites_[i]->SetSize(sizes[i]);
@@ -53,7 +56,7 @@ void PauseMenu::Initialize() {
 }
 void PauseMenu::Update() {
 	//Tキーで出し入れ
-	if (Input::GetInstance()->TriggerKey(DIK_T)) {
+	if (!isControlScreen_&&Input::GetInstance()->TriggerKey(DIK_T)) {
 		isPaused_ = !isPaused_;
 	}
 
@@ -68,7 +71,7 @@ void PauseMenu::Update() {
 				if (menuState < 1) menuState = 1;
 			} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
 				menuState++;
-				if (menuState > 3) menuState = 3;
+				if (menuState > 4) menuState = 4;
 			}
 		}
 
@@ -97,8 +100,8 @@ void PauseMenu::Update() {
 	}
 
 	float controlScale = static_cast<float>(easeInOutCirc(controlEaseTimer_));
-	sprites_[4]->SetPosition(positions[4]);
-	sprites_[4]->SetSize({ sizes[4].x * controlScale, sizes[4].y * controlScale });
+	sprites_[5]->SetPosition(positions[5]);
+	sprites_[5]->SetSize({ sizes[5].x * controlScale, sizes[5].y * controlScale });
 
 	//操作方法画面から戻る
 	if (isControlScreen_ && Input::GetInstance()->TriggerKey(DIK_F)) {
@@ -110,7 +113,7 @@ void PauseMenu::Update() {
 		cursorTimer_ += cursorSpeed_ * 1.0f / 60.0f;
 		float animScale = 1.0f + std::sin(cursorTimer_) * cursorAmplitude_;
 
-		for (size_t i = 1; i <= 3; i++) {
+		for (size_t i = 1; i <= 4; i++) {
 			if (i == menuState) {
 				sprites_[i]->SetSize({ sizes[i].x * easedValue * animScale,
 									   sizes[i].y * easedValue * animScale });
@@ -144,7 +147,7 @@ void PauseMenu::Draw() {
 			}
 		} else {
 			//操作方法画面
-			sprites_[4]->Draw();
+			sprites_[5]->Draw();
 		}
 	}
 	//フェード描画
@@ -171,13 +174,16 @@ void PauseMenu::UpdateMenu() {
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		if (menuState == 1) {//操作説明
+		if (menuState == 1) {//リトライ
+			nextScene_ = "GameScene";
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		} else if (menuState == 2) {//操作説明画面
 			isControlScreen_ = true;
-		} else if (menuState == 2) { //セレクト
+		} else if (menuState == 3) { //セレクト
 			fadeStart_ = true;
 			nextScene_ = "StageSelectScene";
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
-		} else if (menuState == 3) { //タイトル
+		} else if (menuState == 4) { //タイトル
 			fadeStart_ = true;
 			nextScene_ = "TitleScene";
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
