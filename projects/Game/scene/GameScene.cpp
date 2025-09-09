@@ -22,11 +22,11 @@ void GameScene::Initialize() {
 	//平行光源の生成
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize();
-	
+
 	//点光源の生成
 	pointLight_ = std::make_unique<PointLight>();
 	pointLight_->Initialize();
-	
+
 	//スポットライトの生成
 	spotLight_ = std::make_unique<SpotLight>();
 	spotLight_->Initialize();
@@ -80,6 +80,10 @@ void GameScene::Initialize() {
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
+
+	//ポーズメニュー
+	pause_ = std::make_unique<PauseMenu>();
+	pause_->Initialize();
 
 	doorGimmick_ = std::make_unique<Door>();
 	doorGimmick_->Initialize(mapChipField_.get());
@@ -197,10 +201,10 @@ void GameScene::Update() {
 	}
 	*/
 	ImGui::End();
-		
+
 
 #endif // _DEBUG
-	
+
 
 }
 
@@ -251,7 +255,8 @@ void GameScene::Draw() {
 	spritePlatform_->PreDraw();
 
 	fade_->Draw();
-
+	//ポーズメニュー
+	pause_->Draw();
 }
 
 void GameScene::Finalize()
@@ -357,10 +362,12 @@ void GameScene::UpdateStart()
 
 void GameScene::UpdateMain()
 {
-	//プレイヤーの更新
-	player_->Update();
+	//ポーズ中は停止
+	if (!pause_->IsPaused()) {
+		//プレイヤーの更新
+		player_->Update();
 
-	cameraController_->Update();
+		cameraController_->Update();
 
 	if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
 
@@ -369,17 +376,20 @@ void GameScene::UpdateMain()
 
 	goal_->Update();
 
-	if (player_->HitGoal())
-	{
-		phase_ = Phase::kGameClear;
-		fade_->Start(Fade::Status::FadeOut, 0.5f);
-	}
+		if (player_->HitGoal())
+		{
+			phase_ = Phase::kGameClear;
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		}
 
-	if (player_->GetIsDead())
-	{
-		phase_ = Phase::kGameOver;
-		fade_->Start(Fade::Status::FadeOut, 0.5f);
+		if (player_->GetIsDead())
+		{
+			phase_ = Phase::kGameOver;
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		}
 	}
+	//ポーズメニュー
+	pause_->Update();
 }
 
 void GameScene::UpdateGameClear()

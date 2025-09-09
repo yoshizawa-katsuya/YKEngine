@@ -22,6 +22,7 @@
 #include "CameraController.h"
 #include "Fade.h"
 #include "Goal.h"
+#include "PauseMenu.h"
 
 #include "Door.h"
 
@@ -130,6 +131,8 @@ private:
 	Phase phase_ = Phase::kStart;
 
 	std::unique_ptr<Fade> fade_;
+	//ポーズメニュ-
+	std::unique_ptr<PauseMenu>pause_;
 
 	// ドアギミック
 	std::unique_ptr<Door> doorGimmick_;

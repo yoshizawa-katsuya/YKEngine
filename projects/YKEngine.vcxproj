@@ -171,6 +171,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\lib\SRTAnimator.cpp" />
     <ClCompile Include="Engine\lib\TransformHelpers.cpp" />
     <ClCompile Include="Engine\base\OffscreenRenderer.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PlayerGroundState.cpp" />
     <ClCompile Include="PlayerJumpState.cpp" />
     <ClCompile Include="Game\scene\StageSelectScene.cpp" />
@@ -408,6 +409,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\OffscreenRenderer.h" />
     <ClInclude Include="Game\objects\Goal.h" />
     <ClInclude Include="IPlayerState.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PlayerGroundState.h" />
     <ClInclude Include="PlayerJumpState.h" />
     <ClInclude Include="Game\scene\StageSelectScene.h" />
