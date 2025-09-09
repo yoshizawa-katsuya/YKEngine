@@ -51,7 +51,7 @@ void GameScene::Initialize() {
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
-	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
+	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./resources/skyBox.dds");
 	uint32_t textureHandleGoal = TextureManager::GetInstance()->Load("./resources/goal.png");
 
 	//モデルの生成
@@ -61,6 +61,15 @@ void GameScene::Initialize() {
 	modelGoal_ = modelPlatform_->CreateRing(textureHandleGoal, "goal");
 	modelGoal_->SetEnableLighting(false);
 	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
+
+	//スカイボックスの生成
+	skyBox_ = std::make_unique<Rigid3dObject>();
+	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandleSkyBox_).get());
+	WorldTransform skyBoxTransform;
+	skyBoxTransform.Initialize();
+	skyBoxTransform.scale_ = { 100.0f, 100.0f, 100.0f };
+	skyBoxTransform.UpdateMatrix();
+	skyBox_->WorldTransformUpdate(skyBoxTransform);
 
 	CreateLevel();
 
@@ -201,10 +210,13 @@ void GameScene::Draw() {
 	//spritePlatform_->PreBackGroundDraw();
 
 	//環境マップを使う場合はコメントアウトを外す
-	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
+	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandleSkyBox_);
 
 	//スカイボックスの描画前処理
-	//modelPlatform_->SkyBoxPreDraw();
+	modelPlatform_->SkyBoxPreDraw();
+
+	skyBox_->CameraUpdate(mainCamera_);
+	skyBox_->Draw();
 
 	//modelPlatform_->SkinPreDraw();
 

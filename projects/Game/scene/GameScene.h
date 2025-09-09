@@ -92,8 +92,11 @@ private:
 	std::shared_ptr<BaseModel>modelElectric_;
 
 	uint32_t textureHandle_;
-	uint32_t textureHandle2_;
+	uint32_t textureHandleSkyBox_;
 	//std::unique_ptr<Sprite> sprite_;
+
+	//スカイボックス
+	std::unique_ptr<Rigid3dObject> skyBox_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
