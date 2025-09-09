@@ -23,6 +23,13 @@ void Player::Initialize(BaseModel* model, const Vector3& position)
 	ChangeState(std::make_unique<PlayerGroundState>());
 }
 
+void Player::SetElectricModel(BaseModel* electricModel) {
+	electricRange_ = std::make_unique<ElectricRange>();
+	electricRange_->Initialize(electricModel, worldTransform_.translation_);
+	electricRange_->SetColor({ 1.0f, 0.902f, 0.0f, 0.45f });
+	electricRange_->SetFollowTarget(&worldTransform_.translation_); 
+}
+
 void Player::Update() {
 
 	//移動入力
@@ -33,6 +40,8 @@ void Player::Update() {
 
 	// 基底クラスの更新
 	BaseCharacter::Update();
+
+	electricRange_->Update();
 
 #ifdef _DEBUG
 
@@ -46,7 +55,7 @@ void Player::Update() {
 		ImGui::TreePop();
 	}
 	ImGui::End();
-
+	electricRange_->DebugImGui();
 
 #endif // _DEBUG	
 
@@ -55,6 +64,8 @@ void Player::Update() {
 void Player::Draw(Camera* camera) {
 
 	BaseCharacter::Draw(camera);
+	//電気範囲
+    electricRange_->Draw(camera);
 
 }
 

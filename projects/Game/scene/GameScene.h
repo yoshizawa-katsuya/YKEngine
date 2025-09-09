@@ -23,6 +23,8 @@
 #include "Fade.h"
 #include "Goal.h"
 
+#include "Door.h"
+
 class GameScene : public BaseScene
 {
 public:
@@ -41,7 +43,6 @@ public:
 	static uint32_t stageNum_;
 
 private:
-
 	void CreateLevel();
 
 	void UpdateStart();
@@ -51,6 +52,8 @@ private:
 	void UpdateGameClear();
 
 	void UpdateGameOver();
+
+	bool CheckElectricCollision(MapChipType type);
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -86,6 +89,7 @@ private:
 	std::shared_ptr<BaseModel> modelBlock_;
 	std::shared_ptr<BaseModel> modelSpine_;
 	std::shared_ptr<BaseModel> modelGoal_;
+	std::shared_ptr<BaseModel>modelElectric_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;
@@ -100,6 +104,10 @@ private:
 	std::unique_ptr<InstancingObjects> spines_;
 	//ゴール
 	std::unique_ptr<Goal> goal_;
+
+	std::unique_ptr<InstancingObjects> doors_;
+
+	std::unique_ptr<InstancingObjects> doorTriggers_;
 
 	//カメラコントローラー
 	std::unique_ptr<CameraController> cameraController_;
@@ -119,4 +127,7 @@ private:
 	Phase phase_ = Phase::kStart;
 
 	std::unique_ptr<Fade> fade_;
+
+	// ドアギミック
+	std::unique_ptr<Door> doorGimmick_;
 };

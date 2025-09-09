@@ -5,6 +5,18 @@
 #include <Vector3.h>
 #include "MapChipType.h"
 
+enum class MapChipType {
+	kBlank, // 空白
+	kBlock, // ブロック
+	// 仮
+
+	kPlayerSpawn, // プレイヤースポーン
+	kDoorTrigger, // ドアトリガー
+	kDoor,       // ドア
+
+	kTransparentBlock, // 透明ブロック
+};
+
 struct MapChipData {
 	std::vector<std::vector<MapChipType>> data;
 };
@@ -16,6 +28,8 @@ struct MapChipData {
 class MapChipField {	
 
 public:
+
+
 	
 	struct IndexSet {
 		uint32_t xIndex;
@@ -49,6 +63,11 @@ public:
 	uint32_t GetNumBlocks() { return numBlocks_; };
 
 	uint32_t GetNumSpines() { return numSpines_; };
+
+	// ドア用
+	void SetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType);
+
+	Vector2 GetCellSize() { return { kCellWidth_, kCellHeight_ }; }
 
 private:
 	
