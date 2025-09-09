@@ -49,7 +49,8 @@ private:
 
 	void UpdateGameOver();
 
-	void CheckElectricCollision();
+	bool CheckElectricCollision(MapChipType type);
+
 	//デバイス
 	DirectXCommon* dxCommon_;
 
@@ -93,7 +94,9 @@ private:
 
 	std::unique_ptr<InstancingObjects> blocks_;
 
-	std::unique_ptr<InstancingObjects> doors_;;
+	std::unique_ptr<InstancingObjects> doors_;
+
+	std::unique_ptr<InstancingObjects> doorTriggers_;
 
 	//カメラコントローラー
 	std::unique_ptr<CameraController> cameraController_;

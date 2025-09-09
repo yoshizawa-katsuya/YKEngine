@@ -27,6 +27,8 @@ struct MapChipData {
 class MapChipField {	
 
 public:
+
+
 	
 	struct IndexSet {
 		uint32_t xIndex;
@@ -59,6 +61,8 @@ public:
 
 	// ドア用
 	void SetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType);
+
+	Vector2 GetCellSize() { return { kCellWidth_, kCellHeight_ }; }
 
 private:
 	
