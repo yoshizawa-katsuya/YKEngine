@@ -63,12 +63,6 @@ void GameScene::Initialize() {
 
 	CreateLevel();
 
-	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(4, 14);
-	player_->Initialize(modelPlayer_.get(), PlayerPosition);
-	player_->SetMapChipField(mapChipField_.get());
-
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
 	cameraController_->Initialize(camera_.get(), player_.get(), mapChipField_.get());
@@ -233,6 +227,10 @@ void GameScene::CreateLevel()
 	mapChipField_ = std::make_unique<MapChipField>();
 	mapChipField_->LoadMapChipCsv("Resources/stageData/stage" + std::to_string(stageNum_) + ".csv");
 
+	//プレイヤーの初期化
+	player_ = std::make_unique<Player>();
+	player_->SetMapChipField(mapChipField_.get());
+
 	//マップの生成
 	blocks_ = std::make_unique<InstancingObjects>();
 	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumBlocks());
@@ -264,15 +262,19 @@ void GameScene::CreateLevel()
 				blocks_->WorldTransformUpdate(worldTransform);
 				break;
 
+			case MapChipType::kPlayerSpawn:
+				player_->Initialize(modelPlayer_.get(), mapChipField_->GetMapChipPositionByIndex(x, y));
+				break;
+
 			case MapChipType::kSpine:
 				setWorldTransform(x, y);
 				spines_->WorldTransformUpdate(worldTransform);
 				break;
 
 			case MapChipType::kGoal:
-				goal_->SetPosition(mapChipField->GetMapChipPositionByIndex(x, y));
-
+				goal_->SetPosition(mapChipField_->GetMapChipPositionByIndex(x, y));
 				break;
+
 			default:
 				break;
 			}
