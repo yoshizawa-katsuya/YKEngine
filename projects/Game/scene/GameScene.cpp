@@ -74,6 +74,9 @@ void GameScene::Initialize() {
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
+	//ポーズメニュー
+	pause_ = std::make_unique<PauseMenu>();
+	pause_->Initialize();
 }
 
 void GameScene::Update() {
@@ -217,6 +220,8 @@ void GameScene::Draw() {
 	spritePlatform_->PreDraw();
 
 	fade_->Draw();
+	//ポーズメニュー
+	pause_->Draw();
 
 }
 
@@ -308,6 +313,9 @@ void GameScene::UpdateMain()
 		phase_ = Phase::kGameOver;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
 	}
+
+	//ポーズメニュー
+	pause_->Update();
 }
 
 void GameScene::UpdateGameClear()

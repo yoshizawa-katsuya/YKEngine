@@ -22,6 +22,7 @@
 #include "CameraController.h"
 #include "Fade.h"
 #include "Goal.h"
+#include "PauseMenu.h"
 
 class GameScene : public BaseScene
 {
@@ -116,4 +117,6 @@ private:
 	Phase phase_ = Phase::kStart;
 
 	std::unique_ptr<Fade> fade_;
+	//ポーズメニュ-
+	std::unique_ptr<PauseMenu>pause_;
 };
