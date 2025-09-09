@@ -159,7 +159,7 @@ void PauseMenu::Draw() {
 		}
 	}
     //メニューUI描画
-	if (!fadeStart_) {
+	if (!fadeStart_&&!isControlScreen_) {
 		sprites_[6]->Draw();
 	}
 	//フェード描画
