@@ -24,6 +24,7 @@
 #include "Goal.h"
 
 #include "Door.h"
+#include "SpineGimmick.h"
 
 class GameScene : public BaseScene
 {
@@ -98,12 +99,17 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	// マップチップブロック
+
 	//ブロック
 	std::unique_ptr<InstancingObjects> blocks_;
-	//トラップ用トゲ
+
+	//設置型トゲ
 	std::unique_ptr<InstancingObjects> trapSpines_;
 
-	// 
+	std::unique_ptr<InstancingObjects> spineTriggers_;
+
+	// 消えたり現れたりするトラップ
 	std::unique_ptr<InstancingObjects> gimmickSpines_;
 	//ゴール
 	std::unique_ptr<Goal> goal_;
@@ -133,4 +139,5 @@ private:
 
 	// ドアギミック
 	std::unique_ptr<Door> doorGimmick_;
+	std::unique_ptr<SpineGimmick> spineGimmick_;
 };

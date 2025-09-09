@@ -419,6 +419,10 @@ void BaseCharacter::CheckHitMapChipType(MapChipType mapChipType)
 		hitSpine_ = true;
 		break;
 
+	case MapChipType::kActiveSpine:
+		hitSpine_ = true;
+		break;
+
 	default:
 		break;
 	}

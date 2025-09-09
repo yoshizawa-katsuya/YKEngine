@@ -63,14 +63,7 @@ void GameScene::Initialize() {
 	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
 
 	CreateLevel();
-
-	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(4, 14);
-	player_->Initialize(modelPlayer_.get(), PlayerPosition);
-	player_->SetMapChipField(mapChipField_.get());
-	player_->SetElectricModel(modelElectric_.get());
-
+	
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
 	cameraController_->Initialize(camera_.get(), player_.get(), mapChipField_.get());
@@ -81,6 +74,9 @@ void GameScene::Initialize() {
 
 	doorGimmick_ = std::make_unique<Door>();
 	doorGimmick_->Initialize(mapChipField_.get());
+
+	spineGimmick_ = std::make_unique<SpineGimmick>();
+	spineGimmick_->Initialize(mapChipField_.get());
 }
 
 void GameScene::Update() {
@@ -236,6 +232,11 @@ void GameScene::Draw() {
 		doors_->Draw();
 	}
 
+	if (spineGimmick_->GetState() == SpineGimmick::State::kActive) {
+		gimmickSpines_->CameraUpdate(mainCamera_);
+		gimmickSpines_->Draw();
+	}
+
 	doorTriggers_->CameraUpdate(mainCamera_);
 	doorTriggers_->Draw();
 
@@ -273,6 +274,10 @@ void GameScene::CreateLevel()
 	trapSpines_ = std::make_unique<InstancingObjects>();
 	trapSpines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
 	trapSpines_->PreUpdate();
+
+	spineTriggers_ = std::make_unique<InstancingObjects>();
+	spineTriggers_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
+	spineTriggers_->PreUpdate();
 
 	gimmickSpines_ = std::make_unique<InstancingObjects>();
 	gimmickSpines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
@@ -331,6 +336,24 @@ void GameScene::CreateLevel()
 
 				break;
 
+			case MapChipType::kSpineTrigger:
+
+				setWorldTransform(x, y);
+				spineTriggers_->WorldTransformUpdate(worldTransform);
+
+				break;
+
+			case MapChipType::kPlayerSpawn:
+
+				//プレイヤーの初期化
+				player_ = std::make_unique<Player>();
+				Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(x, y);
+				player_->Initialize(modelPlayer_.get(), PlayerPosition);
+				player_->SetMapChipField(mapChipField_.get());
+				player_->SetElectricModel(modelElectric_.get());
+
+				break;
+
 			default:
 				break;
 			}
@@ -358,6 +381,11 @@ void GameScene::UpdateMain()
 	if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
 
 		doorGimmick_->ChangeState(Door::State::kOpened);
+	}
+
+	if (CheckElectricCollision(MapChipType::kSpineTrigger))
+	{
+		spineGimmick_->ChangeState(SpineGimmick::State::kInactive);
 	}
 
 	goal_->Update();
@@ -409,6 +437,36 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 
 		for (uint32_t i = 0; i < doorTriggers_->GetNumInstance(); ++i) {
 			Vector3 blockPos = doorTriggers_->GetInstancePosition(i);
+
+			float half = 2.0f / 2.0f;
+
+			// AABB の最小・最大
+			Vector3 min = { blockPos.x - half, blockPos.y - half, 0.0f };
+			Vector3 max = { blockPos.x + half, blockPos.y + half, 0.0f };
+
+			// 円の中心に一番近い点をAABBの範囲にクランプ
+			Vector3 closest = {
+				std::clamp(electricPos.x, min.x, max.x),
+				std::clamp(electricPos.y, min.y, max.y),
+				0.0f
+			};
+
+			// 最近接点と円の中心の距離を比較
+			Vector3 diff = electricPos - closest;
+			float distSq = diff.x * diff.x + diff.y * diff.y;
+
+			if (distSq <= (electricRadius * electricRadius)) {
+
+				return true;
+			}
+		}
+
+		break;
+
+	case MapChipType::kSpineTrigger:
+
+		for (uint32_t i = 0; i < spineTriggers_->GetNumInstance(); ++i) {
+			Vector3 blockPos = spineTriggers_->GetInstancePosition(i);
 
 			float half = 2.0f / 2.0f;
 
