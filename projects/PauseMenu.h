@@ -22,17 +22,20 @@ private:
 private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
-	std::array<std::unique_ptr<Sprite>, 4>sprites_;
-	std::array<std::string, 4>texturePaths;
-	std::array<Vector2, 4>positions;
-	std::array<Vector2,4>sizes;
+	std::array<std::unique_ptr<Sprite>, 5>sprites_;
+	std::array<std::string, 5>texturePaths;
+	std::array<Vector2, 5>positions;
+	std::array<Vector2,5>sizes;
 	std::unique_ptr<Fade>fade_;
 	std::string nextScene_;
 	bool isPaused_ = false;//ポーズ中か
 	bool fadeStart_ = false;//フェード開始フラグ
+	bool isControlScreen_ = false;//操作方法画面表示しているか
+	bool controlClosing_ = false;
 	int menuState = 1;
 	float easeTimer_ = 0.0f;
 	float cursorTimer_ = 0.0f;//選択中演出タイマー
+	float controlEaseTimer_ = 0.0f;//操作方法画面イージング
 	float cursorSpeed_ = 3.0f;//演出速度
 	float cursorAmplitude_ = 0.1f;//拡大幅
 	const float easeSpeed = 0.04f;//遷移速度

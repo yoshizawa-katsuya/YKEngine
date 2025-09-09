@@ -15,9 +15,10 @@ void PauseMenu::Initialize() {
 
 	texturePaths = {
 			"Resources/pause/background.png",//背景
-			"Resources/pause/control.png",//操作方法
+			"Resources/pause/control.png",//操作方法へ
 			"Resources/pause/backselect.png",//セレクトへ
 			"Resources/pause/backtitle.png",//タイトルへ
+			"Resources/pause/controltile.png",//操作方法画面
 	};
 
 	positions = {
@@ -25,6 +26,7 @@ void PauseMenu::Initialize() {
 		Vector2{650.0f,85.0f},//操作方法
 		Vector2{650.0f,280.0f},//セレクトへ
 		Vector2{650.0f,502.0f},//タイトル
+		Vector2{650.0f,350.0f},//操作方法画面
 	};
 
 	for (size_t i = 0; i < sprites_.size(); i++) {
@@ -38,6 +40,7 @@ void PauseMenu::Initialize() {
 	sizes[1] = Vector2{ 490.0f, 204.0f };
 	sizes[2] = Vector2{ 490.0f, 204.0f };
 	sizes[3] = Vector2{ 490.0f, 204.0f };
+	sizes[4] = Vector2{ 950.0f,630.0f };
 
 	for (size_t i = 0; i < sprites_.size(); i++) {
 		sprites_[i]->SetSize(sizes[i]);
@@ -59,7 +62,7 @@ void PauseMenu::Update() {
 		easeTimer_ += easeSpeed;
 		if (easeTimer_ > 1.0f)easeTimer_ = 1.0f;
 		//メニュー内移動
-		if (!fadeStart_) { 
+		if (!fadeStart_) {
 			if (Input::GetInstance()->TriggerKey(DIK_W)) {
 				menuState--;
 				if (menuState < 1) menuState = 1;
@@ -84,6 +87,24 @@ void PauseMenu::Update() {
 		sprites_[i]->SetSize({ sizes[i].x * easedValue, sizes[i].y * easedValue });
 	}
 
+	//操作方法画面イージング
+	if (isControlScreen_) {
+		controlEaseTimer_ += easeSpeed;
+		if (controlEaseTimer_ > 1.0f) controlEaseTimer_ = 1.0f;
+	} else {
+		controlEaseTimer_ -= easeSpeed;
+		if (controlEaseTimer_ < 0.0f) controlEaseTimer_ = 0.0f;
+	}
+
+	float controlScale = static_cast<float>(easeInOutCirc(controlEaseTimer_));
+	sprites_[4]->SetPosition(positions[4]);
+	sprites_[4]->SetSize({ sizes[4].x * controlScale, sizes[4].y * controlScale });
+
+	//操作方法画面から戻る
+	if (isControlScreen_ && Input::GetInstance()->TriggerKey(DIK_F)) {
+		isControlScreen_ = false;
+	}
+
 	//メニュー内選択演出
 	if (isPaused_) {
 		cursorTimer_ += cursorSpeed_ * 1.0f / 60.0f;
@@ -104,8 +125,8 @@ void PauseMenu::Update() {
 		for (size_t i = 0; i < sprites_.size(); i++) {
 			ImGui::PushID(static_cast<int>(i));
 			ImGui::Text("Sprite %zu", i);
-			ImGui::DragFloat2("Pos", &positions[i].x, 1.0f); 
-			ImGui::DragFloat2("Size", &sizes[i].x, 1.0f); 
+			ImGui::DragFloat2("Pos", &positions[i].x, 1.0f);
+			ImGui::DragFloat2("Size", &sizes[i].x, 1.0f);
 			ImGui::Separator();
 			ImGui::PopID();
 		}
@@ -117,15 +138,30 @@ void PauseMenu::Update() {
 }
 void PauseMenu::Draw() {
 	if (easeTimer_ > 0.0f) {
-		for (size_t i = 0; i < sprites_.size(); i++) {
-			sprites_[i]->Draw();
+		if (!isControlScreen_) {
+			for (size_t i = 0; i < sprites_.size() - 1; i++) {
+				sprites_[i]->Draw();
+			}
+		} else {
+			//操作方法画面
+			sprites_[4]->Draw();
 		}
 	}
 	//フェード描画
 	fade_->Draw();
-	
+
 }
 void PauseMenu::UpdateMenu() {
+
+	//操作方法画面
+	if (isControlScreen_) {
+		if (Input::GetInstance()->TriggerKey(DIK_F)) {
+			isControlScreen_ = false;
+		}
+		return;
+	}
+
+	//フェード
 	if (fadeStart_) {
 		if (fade_->IsFinished()) {
 			fadeStart_ = false;
@@ -135,7 +171,9 @@ void PauseMenu::UpdateMenu() {
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		if (menuState == 2) { //セレクト
+		if (menuState == 1) {//操作説明
+			isControlScreen_ = true;
+		} else if (menuState == 2) { //セレクト
 			fadeStart_ = true;
 			nextScene_ = "StageSelectScene";
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
