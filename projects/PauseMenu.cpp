@@ -1,4 +1,5 @@
 #include "PauseMenu.h"
+#include "SceneManager.h"
 #include "Input.h"
 #include "imgui/imgui.h"
 
@@ -41,6 +42,11 @@ void PauseMenu::Initialize() {
 	for (size_t i = 0; i < sprites_.size(); i++) {
 		sprites_[i]->SetSize(sizes[i]);
 	}
+
+	fade_ = std::make_unique<Fade>();
+	fade_->Initialize();
+
+	menuState = 1;
 }
 void PauseMenu::Update() {
 	//Tキーで出し入れ
@@ -49,8 +55,21 @@ void PauseMenu::Update() {
 	}
 
 	if (isPaused_) {
+		//イージングタイマー
 		easeTimer_ += easeSpeed;
 		if (easeTimer_ > 1.0f)easeTimer_ = 1.0f;
+		//メニュー内移動
+		if (!fadeStart_) { 
+			if (Input::GetInstance()->TriggerKey(DIK_W)) {
+				menuState--;
+				if (menuState < 1) menuState = 1;
+			} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
+				menuState++;
+				if (menuState > 3) menuState = 3;
+			}
+		}
+
+		UpdateMenu();
 	} else {
 		easeTimer_ -= easeSpeed;
 		if (easeTimer_ < 0.0f)easeTimer_ = 0.0f;
@@ -64,6 +83,22 @@ void PauseMenu::Update() {
 		sprites_[i]->SetPosition(positions[i]);
 		sprites_[i]->SetSize({ sizes[i].x * easedValue, sizes[i].y * easedValue });
 	}
+
+	//メニュー内選択演出
+	if (isPaused_) {
+		cursorTimer_ += cursorSpeed_ * 1.0f / 60.0f;
+		float animScale = 1.0f + std::sin(cursorTimer_) * cursorAmplitude_;
+
+		for (size_t i = 1; i <= 3; i++) {
+			if (i == menuState) {
+				sprites_[i]->SetSize({ sizes[i].x * easedValue * animScale,
+									   sizes[i].y * easedValue * animScale });
+			} else {
+				sprites_[i]->SetSize({ sizes[i].x * easedValue, sizes[i].y * easedValue });
+			}
+		}
+	}
+
 #ifdef _DEBUG
 	if (ImGui::Begin("PauseMenu Debug")) {
 		for (size_t i = 0; i < sprites_.size(); i++) {
@@ -77,6 +112,8 @@ void PauseMenu::Update() {
 	}
 	ImGui::End();
 #endif
+
+	fade_->Update();
 }
 void PauseMenu::Draw() {
 	if (easeTimer_ > 0.0f) {
@@ -84,4 +121,32 @@ void PauseMenu::Draw() {
 			sprites_[i]->Draw();
 		}
 	}
+	//フェード描画
+	fade_->Draw();
+	
+}
+void PauseMenu::UpdateMenu() {
+	if (fadeStart_) {
+		if (fade_->IsFinished()) {
+			fadeStart_ = false;
+			SceneManager::GetInstance()->ChengeScene(nextScene_);
+		}
+		return;
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		if (menuState == 2) { //セレクト
+			fadeStart_ = true;
+			nextScene_ = "StageSelectScene";
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		} else if (menuState == 3) { //タイトル
+			fadeStart_ = true;
+			nextScene_ = "TitleScene";
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		}
+	}
+}
+//ポーズ中かを取得
+bool PauseMenu::IsPaused() {
+	return isPaused_ || easeTimer_ > 0.0f;
 }

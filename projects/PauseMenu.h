@@ -3,6 +3,7 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Sprite.h"
+#include "Fade.h"
 #include <array>
 #include <memory>
 #include <cmath>
@@ -13,6 +14,9 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void UpdateMenu();
+public:
+	bool IsPaused();//ポーズ中かを取得
 private:
 	double easeInOutCirc(double x);
 private:
@@ -22,8 +26,15 @@ private:
 	std::array<std::string, 4>texturePaths;
 	std::array<Vector2, 4>positions;
 	std::array<Vector2,4>sizes;
+	std::unique_ptr<Fade>fade_;
+	std::string nextScene_;
 	bool isPaused_ = false;//ポーズ中か
+	bool fadeStart_ = false;//フェード開始フラグ
+	int menuState = 1;
 	float easeTimer_ = 0.0f;
+	float cursorTimer_ = 0.0f;//選択中演出タイマー
+	float cursorSpeed_ = 3.0f;//演出速度
+	float cursorAmplitude_ = 0.1f;//拡大幅
 	const float easeSpeed = 0.04f;//遷移速度
 
 };
