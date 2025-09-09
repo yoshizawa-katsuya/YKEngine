@@ -52,9 +52,9 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	std::array<std::unique_ptr<Sprite>, 8> gameClears;
+	std::array<std::unique_ptr<Sprite>, 8> gameClears_;
 
-	int menuState = 0;
-	int frameCount = 0;
-	int blinkIndex = 0;
+	int menuState_ = 0;
+	int frameCount_ = 0;
+	int blinkIndex_ = 0;
 };
