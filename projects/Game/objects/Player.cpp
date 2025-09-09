@@ -106,8 +106,12 @@ void Player::CheckHitMapChipType(MapChipType mapChipType)
 		hitBlock_ = true;
 		break;
 
-	case MapChipType::kSpine:
+	case MapChipType::kSpineTrap:
 		hitSpine_ = true;
+		break;
+
+	case MapChipType::kClosedDoor:
+		hitBlock_ = true;
 		break;
 
 	case MapChipType::kGoal:

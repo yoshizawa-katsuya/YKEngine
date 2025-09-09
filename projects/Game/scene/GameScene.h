@@ -100,8 +100,11 @@ private:
 
 	//ブロック
 	std::unique_ptr<InstancingObjects> blocks_;
-	//トゲ
-	std::unique_ptr<InstancingObjects> spines_;
+	//トラップ用トゲ
+	std::unique_ptr<InstancingObjects> trapSpines_;
+
+	// 
+	std::unique_ptr<InstancingObjects> gimmickSpines_;
 	//ゴール
 	std::unique_ptr<Goal> goal_;
 

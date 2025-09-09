@@ -227,8 +227,8 @@ void GameScene::Draw() {
 	blocks_->CameraUpdate(mainCamera_);
 	blocks_->Draw();
 
-	spines_->CameraUpdate(mainCamera_);
-	spines_->Draw();
+	trapSpines_->CameraUpdate(mainCamera_);
+	trapSpines_->Draw();
 
 	//door
 	if (doorGimmick_->GetState() == Door::State::kClosed) {
@@ -270,9 +270,13 @@ void GameScene::CreateLevel()
 	doorTriggers_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
 	doorTriggers_->PreUpdate();
 
-	spines_ = std::make_unique<InstancingObjects>();
-	spines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
-	spines_->PreUpdate();
+	trapSpines_ = std::make_unique<InstancingObjects>();
+	trapSpines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
+	trapSpines_->PreUpdate();
+
+	gimmickSpines_ = std::make_unique<InstancingObjects>();
+	gimmickSpines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
+	gimmickSpines_->PreUpdate();
 
 	goal_ = std::make_unique<Goal>();
 	goal_->Initialize(modelGoal_.get());
@@ -296,9 +300,9 @@ void GameScene::CreateLevel()
 				blocks_->WorldTransformUpdate(worldTransform);
 				break;
 
-			case MapChipType::kSpine:
+			case MapChipType::kSpineTrap:
 				setWorldTransform(x, y);
-				spines_->WorldTransformUpdate(worldTransform);
+				trapSpines_->WorldTransformUpdate(worldTransform);
 				break;
 
 			case MapChipType::kGoal:
@@ -313,10 +317,17 @@ void GameScene::CreateLevel()
 
 				break;
 
-			case MapChipType::kDoor:
+			case MapChipType::kClosedDoor:
 
 				setWorldTransform(x, y);
 				doors_->WorldTransformUpdate(worldTransform);
+
+				break;
+
+			case MapChipType::kActiveSpine:
+					
+			    setWorldTransform(x, y);
+			    gimmickSpines_->WorldTransformUpdate(worldTransform);
 
 				break;
 
