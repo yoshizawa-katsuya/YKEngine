@@ -13,6 +13,7 @@ std::map<std::string, MapChipType> mapChipTable = {
 	{"4", MapChipType::kDoor},
 	{"12", MapChipType::kSpine},
 	{"18", MapChipType::kGoal},
+	{"99", MapChipType::kTransparentBlock},
 };
 
 }
@@ -133,7 +134,6 @@ void MapChipField::CountMapChipTypeNum(MapChipType mapChipType)
 		break;
 	}
 }
-uint32_t MapChipField::GetNumCellHorizontal() { return kNumCellHorizontal_; }
 
 void MapChipField::SetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType)
 {

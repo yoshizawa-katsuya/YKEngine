@@ -129,13 +129,6 @@ void BaseCharacter::MapCollisionUp(CollisionMapInfo& info) {
 	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kDoor) {
 		hit = true;
 	}
-	//右上点の判定
-	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
-	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	CheckHitMapChipType(mapChipType);
-	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kDoor) {
-		hit = true;
-	}
 
 	if (IsHitObstacle())
 	{
@@ -364,17 +357,22 @@ void BaseCharacter::GroundCollision(CollisionMapInfo& info) {
 			if (hitSpine_ && !hitBlock_)
 			{
 				info.isSpineCollision = true;
-			if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kDoor) {
-				hit = true;
+				/*if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kDoor) {
+					hit = true;
+				}*/
+				
 			}
+			
 			// ブロックにヒット?
 			if (!IsHitObstacle()) {
 				//空中状態に切り替える
 				onGround_ = false;
 			}
-			//ヒット情報リセット
-			HitReset();
 		}
+
+		//ヒット情報リセット
+		HitReset();
+
 	}
 	else {
 

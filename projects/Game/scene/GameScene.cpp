@@ -305,22 +305,23 @@ void GameScene::CreateLevel()
 				goal_->SetPosition(mapChipField->GetMapChipPositionByIndex(x, y));
 
 				break;
+
+			case MapChipType::kDoorTrigger:
+
+				setWorldTransform(x, y);
+				doorTriggers_->WorldTransformUpdate(worldTransform);
+
+				break;
+
+			case MapChipType::kDoor:
+
+				setWorldTransform(x, y);
+				doors_->WorldTransformUpdate(worldTransform);
+
+				break;
+
 			default:
 				break;
-			}
-			else if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kDoor)
-			{
-				worldTransform.Initialize();
-				worldTransform.translation_ = mapChipField_->GetMapChipPositionByIndex(x, y);
-				worldTransform.UpdateMatrix();
-				doors_->WorldTransformUpdate(worldTransform);
-			}
-			else if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kDoorTrigger) {
-
-				worldTransform.Initialize();
-				worldTransform.translation_ = mapChipField_->GetMapChipPositionByIndex(x, y);
-				worldTransform.UpdateMatrix();
-				doorTriggers_->WorldTransformUpdate(worldTransform);
 			}
 		}
 	}

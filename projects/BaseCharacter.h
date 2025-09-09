@@ -128,7 +128,7 @@ protected:
 	Vector3 velocity_ = {};
 
 	//設置状態フラグ
-	bool onGround_ = true;
+	bool onGround_ = false;
 
 	const float kMoveSpeed_ = 0.1f;
 
