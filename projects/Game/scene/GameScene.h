@@ -39,7 +39,6 @@ public:
 	void Finalize() override;
 
 private:
-
 	void CreateLevel();
 
 	void UpdateStart();
@@ -50,6 +49,7 @@ private:
 
 	void UpdateGameOver();
 
+	void CheckElectricCollision();
 	//デバイス
 	DirectXCommon* dxCommon_;
 
@@ -82,6 +82,7 @@ private:
 
 	std::shared_ptr<BaseModel> modelPlayer_;
 	std::shared_ptr<BaseModel> modelBlock_;
+	std::shared_ptr<BaseModel>modelElectric_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;

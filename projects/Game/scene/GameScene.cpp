@@ -55,6 +55,7 @@ void GameScene::Initialize() {
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
 	modelBlock_ = modelPlatform_->CreateCube(textureHandleBlock_, "block");
+	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
 
 	CreateLevel();
 
@@ -63,6 +64,7 @@ void GameScene::Initialize() {
 	Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(4, 14);
 	player_->Initialize(modelPlayer_.get(), PlayerPosition);
 	player_->SetMapChipField(mapChipField_.get());
+	player_->SetElectricModel(modelElectric_.get());
 
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
@@ -100,8 +102,18 @@ void GameScene::Update() {
 		break;
 	}
 
+	CheckElectricCollision();
+
+	cameraController_->Update();
+
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
+
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+		//シーン切り替え依頼
+		sceneManager_->ChengeScene("TitleScene");
+	}
 
 #ifdef _DEBUG
 
@@ -294,5 +306,27 @@ void GameScene::UpdateGameOver()
 		//fade_->Stop();
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GameOverScene");
+	}
+}
+void GameScene::CheckElectricCollision() {
+	if (!player_ || !blocks_) return;
+
+	auto electricRange = player_->GetElectricRange();
+	if (!electricRange) return;
+
+	Vector3 electricPos = electricRange->GetPosition();      //電気の中心
+	float electricRadius = electricRange->GetScale().x * 0.5f; //電気の半径
+
+	for (uint32_t i = 0; i < blocks_->GetNumInstance(); ++i) {
+		Vector3 blockPos = blocks_->GetInstancePosition(i);
+		float blockRadius = 1.1999999999999f; //ブロック1マスの半径
+
+		Vector3 diff = electricPos - blockPos;
+		float dist = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+
+		if (dist <= electricRadius + blockRadius) {
+			std::string msg = "Electric hit block " + std::to_string(i) + "\n";
+			OutputDebugStringA(msg.c_str()); printf("Electric hit block %u\n", i);
+		}
 	}
 }

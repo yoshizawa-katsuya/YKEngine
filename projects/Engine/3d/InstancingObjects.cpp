@@ -36,7 +36,6 @@ void InstancingObjects::WorldTransformUpdate(const WorldTransform& worldTransfor
 {
 	instancingData_[numInstance_].World = worldTransform.worldMatrix_;
 	numInstance_++;
-
 	return;
 }
 
@@ -69,3 +68,4 @@ void InstancingObjects::Draw()
 	model_->InstancingDraw(numInstance_);
 
 }
+
