@@ -2,6 +2,8 @@
 #include "imgui/imgui.h"
 #include "SceneManager.h"
 
+uint32_t StageSelectScene::selectStage_ = 1;
+
 StageSelectScene::~StageSelectScene()
 {
 	//Finalize();
@@ -29,12 +31,18 @@ void StageSelectScene::Update()
 
 	ImGui::Begin("Window");
 	ImGui::Text("StageSelect");
+	ImGui::InputInt("SelectStage", (int*)&selectStage_, 1);
 	if (ImGui::Button("Go to GameScene"))
 	{
 		phase_ = Phase::kEnd;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
 	}
 	ImGui::End();
+
+	if (selectStage_ > kMaxStage)
+	{ 
+		selectStage_ = kMaxStage;
+	}
 
 #endif // _DEBUG
 
@@ -97,6 +105,6 @@ void StageSelectScene::UpdateEnd()
 	if (fade_->IsFinished()) {
 		//fade_->Stop();
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("GameScene");
+		sceneManager_->ChengeScene("GameScene" + std::to_string(selectStage_));
 	}
 }

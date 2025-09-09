@@ -37,6 +37,9 @@ public:
 
 	void Finalize() override;
 
+	//ステージ番号
+	static uint32_t stageNum_;
+
 private:
 
 	void CreateLevel();

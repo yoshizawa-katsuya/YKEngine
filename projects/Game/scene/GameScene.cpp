@@ -5,6 +5,8 @@
 #include "SceneManager.h"
 #include "Input.h"
 
+uint32_t GameScene::stageNum_ = 1;
+
 GameScene::~GameScene() {
 	//Finalize();
 }
@@ -229,7 +231,7 @@ void GameScene::CreateLevel()
 {
 	// マップチップフィールドの生成
 	mapChipField_ = std::make_unique<MapChipField>();
-	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
+	mapChipField_->LoadMapChipCsv("Resources/stageData/stage" + std::to_string(stageNum_) + ".csv");
 
 	//マップの生成
 	blocks_ = std::make_unique<InstancingObjects>();
