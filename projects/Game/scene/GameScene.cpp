@@ -222,7 +222,6 @@ void GameScene::Draw() {
 	fade_->Draw();
 	//ポーズメニュー
 	pause_->Draw();
-
 }
 
 void GameScene::Finalize()

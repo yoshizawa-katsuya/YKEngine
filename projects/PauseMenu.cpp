@@ -20,6 +20,7 @@ void PauseMenu::Initialize() {
 			"Resources/pause/backselect.png",//セレクトへ
 			"Resources/pause/backtitle.png",//タイトルへ
 			"Resources/pause/controltile.png",//操作方法画面
+			"Resources/pause/menuUi.png",//メニューUI
 	};
 
 	positions = {
@@ -29,6 +30,7 @@ void PauseMenu::Initialize() {
 		Vector2{650.0f,400.0f},//セレクトへ
 		Vector2{650.0f,580.0f},//タイトル
 		Vector2{650.0f,350.0f},//操作方法画面
+		Vector2{1090.0f,50.0f},//メニューUI
 	};
 
 	for (size_t i = 0; i < sprites_.size(); i++) {
@@ -44,6 +46,7 @@ void PauseMenu::Initialize() {
 	sizes[3] = Vector2{ 490.0f, 204.0f };//セレクトへ
 	sizes[4] = Vector2{ 490.0f,204.0f };//タイトルへ
 	sizes[5] = Vector2{ 950.0f,630.0f };//操作方法画面
+	sizes[6] = Vector2{ 330.0f,100.0f };//メニューUI
 
 	for (size_t i = 0; i < sprites_.size(); i++) {
 		sprites_[i]->SetSize(sizes[i]);
@@ -84,10 +87,15 @@ void PauseMenu::Update() {
 	float easedValue = static_cast<float>(easeInOutCirc(easeTimer_));
 
 	for (size_t i = 0; i < sprites_.size(); i++) {
-		float scale = (i == 0) ? easedValue : easedValue;
-		Vector2 baseSize = sprites_[i]->GetTextureSize();
-		sprites_[i]->SetPosition(positions[i]);
-		sprites_[i]->SetSize({ sizes[i].x * easedValue, sizes[i].y * easedValue });
+		if (i == 6) {
+			//UIはイージングしない
+			sprites_[6]->SetPosition(positions[6]);
+			sprites_[6]->SetSize(sizes[6]);
+		} else {
+			float scale = easedValue;
+			sprites_[i]->SetPosition(positions[i]);
+			sprites_[i]->SetSize({ sizes[i].x * easedValue, sizes[i].y * easedValue });
+		}
 	}
 
 	//操作方法画面イージング
@@ -149,6 +157,10 @@ void PauseMenu::Draw() {
 			//操作方法画面
 			sprites_[5]->Draw();
 		}
+	}
+    //メニューUI描画
+	if (!fadeStart_) {
+		sprites_[6]->Draw();
 	}
 	//フェード描画
 	fade_->Draw();

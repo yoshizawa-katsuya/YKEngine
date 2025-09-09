@@ -22,10 +22,10 @@ private:
 private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
-	std::array<std::unique_ptr<Sprite>, 6>sprites_;
-	std::array<std::string, 6>texturePaths;
-	std::array<Vector2, 6>positions;
-	std::array<Vector2,6>sizes;
+	std::array<std::unique_ptr<Sprite>, 7>sprites_;
+	std::array<std::string, 7>texturePaths;
+	std::array<Vector2, 7>positions;
+	std::array<Vector2,7>sizes;
 	std::unique_ptr<Fade>fade_;
 	std::string nextScene_;
 	bool isPaused_ = false;//ポーズ中か

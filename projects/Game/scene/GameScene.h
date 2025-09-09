@@ -119,4 +119,6 @@ private:
 	std::unique_ptr<Fade> fade_;
 	//ポーズメニュ-
 	std::unique_ptr<PauseMenu>pause_;
+	//メニューUI
+	std::unique_ptr<Sprite>menuUi_;
 };
