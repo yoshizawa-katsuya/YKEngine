@@ -24,6 +24,8 @@
 #include "Goal.h"
 #include "PauseMenu.h"
 
+#include "Door.h"
+
 class GameScene : public BaseScene
 {
 public:
@@ -38,8 +40,10 @@ public:
 
 	void Finalize() override;
 
-private:
+	//ステージ番号
+	static uint32_t stageNum_;
 
+private:
 	void CreateLevel();
 
 	void UpdateStart();
@@ -49,6 +53,8 @@ private:
 	void UpdateGameClear();
 
 	void UpdateGameOver();
+
+	bool CheckElectricCollision(MapChipType type);
 
 	//デバイス
 	DirectXCommon* dxCommon_;
@@ -84,10 +90,14 @@ private:
 	std::shared_ptr<BaseModel> modelBlock_;
 	std::shared_ptr<BaseModel> modelSpine_;
 	std::shared_ptr<BaseModel> modelGoal_;
+	std::shared_ptr<BaseModel>modelElectric_;
 
 	uint32_t textureHandle_;
-	uint32_t textureHandle2_;
+	uint32_t textureHandleSkyBox_;
 	//std::unique_ptr<Sprite> sprite_;
+
+	//スカイボックス
+	std::unique_ptr<Rigid3dObject> skyBox_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
@@ -98,6 +108,10 @@ private:
 	std::unique_ptr<InstancingObjects> spines_;
 	//ゴール
 	std::unique_ptr<Goal> goal_;
+
+	std::unique_ptr<InstancingObjects> doors_;
+
+	std::unique_ptr<InstancingObjects> doorTriggers_;
 
 	//カメラコントローラー
 	std::unique_ptr<CameraController> cameraController_;
@@ -119,6 +133,7 @@ private:
 	std::unique_ptr<Fade> fade_;
 	//ポーズメニュ-
 	std::unique_ptr<PauseMenu>pause_;
-	//メニューUI
-	std::unique_ptr<Sprite>menuUi_;
+
+	// ドアギミック
+	std::unique_ptr<Door> doorGimmick_;
 };

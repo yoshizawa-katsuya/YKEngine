@@ -51,5 +51,9 @@ private:
 	Phase phase_ = Phase::kStart;
 
 	std::unique_ptr<Fade> fade_;
+
+	const uint32_t kMaxStage = 2;
+	static uint32_t selectStage_; //選択中のステージ
+
 };
 

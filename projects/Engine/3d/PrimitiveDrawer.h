@@ -47,6 +47,8 @@ enum class DrawMode {
 	kRandomRendering,
 
 	kSkyboxMode,
+	//裏面描画
+	kCullBackMode,
 
 	kCountOfBlendMode,	//利用してはいけない
 };

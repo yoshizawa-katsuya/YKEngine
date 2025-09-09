@@ -19,7 +19,12 @@ public:
 	void CameraUpdate(Camera* camera);
 
 	void Draw();
-
+public:  
+	uint32_t GetNumInstance() const { return numInstance_; }
+	Vector3 GetInstancePosition(uint32_t index){
+		const auto& world = instancingData_[index].World; 
+		return { world.m[3][0], world.m[3][1], world.m[3][2] };
+	}
 private:
 
 	DirectXCommon* dxCommon_;

@@ -16,6 +16,8 @@ struct MapChipData {
 class MapChipField {	
 
 public:
+
+
 	
 	struct IndexSet {
 		uint32_t xIndex;
@@ -49,6 +51,9 @@ public:
 	uint32_t GetNumBlocks() { return numBlocks_; };
 
 	uint32_t GetNumSpines() { return numSpines_; };
+
+	// ドア用
+	void SetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex, MapChipType mapChipType);
 
 private:
 	

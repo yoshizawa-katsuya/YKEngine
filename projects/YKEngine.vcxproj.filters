@@ -267,10 +267,16 @@
     <ClCompile Include="Game\objects\Goal.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\scene\StageSelectScene.cpp">
+        <ClCompile Include="Game\scene\StageSelectScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ElectricRange.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -556,13 +562,19 @@
     <ClInclude Include="Game\objects\MapChipType.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\Goal.h">
+     <ClInclude Include="Game\objects\Goal.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\scene\StageSelectScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
     <ClInclude Include="PauseMenu.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ElectricRange.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
