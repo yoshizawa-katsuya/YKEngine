@@ -59,7 +59,6 @@ void GameScene::Initialize() {
 	modelBlock_ = modelPlatform_->CreateRigidModel("./resources/block", "block.obj");
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
 	modelGoal_ = modelPlatform_->CreateCylinder(textureHandleGoal, "goal");
-	modelGoal_->SetEnableLighting(false);
 	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
 
 	//スカイボックスの生成
@@ -76,6 +75,8 @@ void GameScene::Initialize() {
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
 	cameraController_->Initialize(camera_.get(), player_.get(), mapChipField_.get());
+
+	phase_ = Phase::kStart;
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
@@ -115,11 +116,11 @@ void GameScene::Update() {
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
-
-
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
+	
+	//リセット
+	if (input_->TriggerKey(DIK_R))
+	{
+		Initialize();
 	}
 
 #ifdef _DEBUG

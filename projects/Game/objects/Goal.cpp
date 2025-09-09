@@ -15,6 +15,7 @@ void Goal::Initialize(BaseModel* model)
 	object_->WorldTransformUpdate(worldTransform_);
 	object_->SetColor({ 0.2f, 0.2f, 1.0f, 1.0f });
 	object_->SetEnableLighting(false);
+	object_->SetUVTransform(uvTransform_);
 }
 
 void Goal::Update()
@@ -39,4 +40,6 @@ void Goal::SetPosition(const Vector3& position)
 {
 	worldTransform_.translation_ = position;
 	worldTransform_.translation_.y -= 1.2f;
+	worldTransform_.UpdateMatrix();
+	object_->WorldTransformUpdate(worldTransform_);
 }
