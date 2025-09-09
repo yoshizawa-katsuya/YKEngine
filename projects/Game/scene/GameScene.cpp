@@ -200,15 +200,8 @@ void GameScene::Draw() {
 	//Spriteの背景描画前処理
 	//spritePlatform_->PreBackGroundDraw();
 
-	//Modelの描画前処理
-	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
-
-	//プレイヤーの描画
-	player_->Draw(mainCamera_);
-
-	goal_->Draw(mainCamera_);
 
 	//スカイボックスの描画前処理
 	//modelPlatform_->SkyBoxPreDraw();
@@ -231,6 +224,14 @@ void GameScene::Draw() {
 
 	doorTriggers_->CameraUpdate(mainCamera_);
 	doorTriggers_->Draw();
+
+	//Modelの描画前処理
+	modelPlatform_->PreDraw();
+
+	goal_->Draw(mainCamera_);
+
+	//プレイヤーの描画
+	player_->Draw(mainCamera_);
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
