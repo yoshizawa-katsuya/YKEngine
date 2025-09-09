@@ -16,12 +16,14 @@ public:
 	//描画
 	void Draw(Camera* camera);
 
-	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; }
+	void SetPosition(const Vector3& position);
 
 private:
 
 	//Transform変数を作る
 	WorldTransform worldTransform_;
+
+	EulerTransform uvTransform_{};
 
 	std::unique_ptr<Rigid3dObject> object_;
 };

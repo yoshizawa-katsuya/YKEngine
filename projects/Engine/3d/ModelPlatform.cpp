@@ -221,6 +221,12 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 	sphereIndex_++;
 }
 
+void ModelPlatform::SetPipelineState(DrawMode drawMode)
+{
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), drawMode);
+
+}
+
 std::shared_ptr<BaseModel> ModelPlatform::CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
 {
 	if (models_.contains(filename)) {

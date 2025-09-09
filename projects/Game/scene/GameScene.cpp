@@ -58,7 +58,7 @@ void GameScene::Initialize() {
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
 	modelBlock_ = modelPlatform_->CreateRigidModel("./resources/block", "block.obj");
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
-	modelGoal_ = modelPlatform_->CreateRing(textureHandleGoal, "goal");
+	modelGoal_ = modelPlatform_->CreateCylinder(textureHandleGoal, "goal");
 	modelGoal_->SetEnableLighting(false);
 	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
 
@@ -239,9 +239,11 @@ void GameScene::Draw() {
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
+	modelPlatform_->SetPipelineState(DrawMode::kCullBackMode);
 
 	goal_->Draw(mainCamera_);
 
+	modelPlatform_->SetPipelineState(DrawMode::kBlendModeNormal);
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 

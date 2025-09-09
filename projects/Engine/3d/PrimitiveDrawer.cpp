@@ -57,6 +57,9 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kDissolveRendering)) = CreateGraphicsPipeline(DrawMode::kDissolveRendering, dxCommon);
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kRandomRendering)) = CreateGraphicsPipeline(DrawMode::kRandomRendering, dxCommon);
+
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kCullBackMode)) = CreateGraphicsPipeline(DrawMode::kCullBackMode, dxCommon);
+
 }
 
 std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon) {
@@ -568,6 +571,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kBlendModeNormalSprite:
 	case DrawMode::kBlendModeNormalinstancing:
 	case DrawMode::kBlendModeNormalParticle:
+	case DrawMode::kCullBackMode:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
@@ -611,6 +615,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kBlendModeNoneSprite:
 	case DrawMode::kBlendModeNormalSprite:
 	case DrawMode::kBackGroundSprite:
+	case DrawMode::kCullBackMode:
 		//裏面（時計回り）を表示する
 		rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 		break;

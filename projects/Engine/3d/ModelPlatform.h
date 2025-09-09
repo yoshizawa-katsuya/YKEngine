@@ -41,6 +41,8 @@ public:
 
 	void SphereDraw(const Matrix4x4& worldMatrix, Camera* camera);
 
+	void SetPipelineState(DrawMode drawMode);
+
 	std::shared_ptr<BaseModel> CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
 	std::shared_ptr<BaseModel> CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
