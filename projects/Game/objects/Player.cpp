@@ -123,6 +123,16 @@ void Player::CheckHitMapChipType(MapChipType mapChipType)
 		hitGoal_ = true;
 		break;
 
+	case MapChipType::kActiveAppear:
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kInactiveDisappear:
+
+		hitBlock_ = true;
+
+		break;
+
 	default:
 		break;
 	}

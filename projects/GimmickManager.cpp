@@ -35,7 +35,7 @@ void GimmickManager::Initialize(MapChipField* mapChipField)
 	spineTriggers_->PreUpdate();
 
 	gimmickSpines_ = std::make_unique<InstancingObjects>();
-	gimmickSpines_->Initialize(modelSpine_.get(), mapChipField->GetNumSpines());
+	gimmickSpines_->Initialize(modelSpine_.get(), mapChipField->GetNumCellVirtical() * mapChipField->GetNumCellHorizontal());
 	gimmickSpines_->PreUpdate();
 
 	disappearBlocks_ = std::make_unique<InstancingObjects>();
@@ -110,7 +110,7 @@ void GimmickManager::Initialize(MapChipField* mapChipField)
 
 				break;
 
-			case MapChipType::kActiveAppear:
+			case MapChipType::kInactiveAppear:
 
 				setWorldTransform(x, y);
 				appearBlocks_->WorldTransformUpdate(worldTransform);
@@ -190,11 +190,12 @@ InstancingObjects* GimmickManager::GetTriggers(GimmickType type)
 
 	case GimmickType::kAppear:
 
-		return disappearTriggers_.get();
+		return appearTriggers_.get();
 
 		break;
 
 	default:
+
 		return nullptr;
 		break;
 	}

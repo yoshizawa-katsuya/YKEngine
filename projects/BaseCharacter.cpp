@@ -171,13 +171,13 @@ void BaseCharacter::MapCollisionBottom(CollisionMapInfo& info) {
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	CheckHitMapChipType(mapChipType);
 
-	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor) {
+	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear) {
 		hit = true;
 	}
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor) {
+	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear) {
 		hit = true;
 	}
 	CheckHitMapChipType(mapChipType);
@@ -225,14 +225,14 @@ void BaseCharacter::MapCollisionRight(CollisionMapInfo& info)
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	CheckHitMapChipType(mapChipType);
 
-	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor) {
+	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear) {
 		hit = true;
 	}
 	// 右下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	CheckHitMapChipType(mapChipType);
-	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor) {
+	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear) {
 		hit = true;
 	}
 
@@ -276,7 +276,7 @@ void BaseCharacter::MapCollisionLeft(CollisionMapInfo& info) {
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor) {
+	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear) {
 		hit = true;
 	}
 	CheckHitMapChipType(mapChipType);
@@ -284,7 +284,7 @@ void BaseCharacter::MapCollisionLeft(CollisionMapInfo& info) {
 	// 左下点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor) {
+	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear) {
 		hit = true;
 	}
 	CheckHitMapChipType(mapChipType);
@@ -346,13 +346,17 @@ void BaseCharacter::GroundCollision(CollisionMapInfo& info) {
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 			CheckHitMapChipType(mapChipType);
 
-			if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor) {
+			if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear) {
 				hit = true;
 			}
 			// 右下点の判定
 			indexSet = mapChipField_->GetMapChipIndexSetByPosition({ positionsNew[kRightBottom].x, positionsNew[kRightBottom].y - kBlank_ * 2, positionsNew[kRightBottom].z });
 			mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 			CheckHitMapChipType(mapChipType);
+
+			if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear) {
+				hit = true;
+			}
 
 			if (hitSpine_ && !hitBlock_)
 			{
@@ -423,6 +427,15 @@ void BaseCharacter::CheckHitMapChipType(MapChipType mapChipType)
 		hitSpine_ = true;
 		break;
 
+	case MapChipType::kActiveAppear:
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kInactiveDisappear:
+
+		hitBlock_ = true;
+
+		break;
 	default:
 		break;
 	}

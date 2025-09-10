@@ -36,6 +36,10 @@ public:
 		disappearGimmick_->ChangeState(state);
 	}
 
+	void AppearGimmickChangeState(AppearGimmick::State state) {
+		appearGimmick_->ChangeState(state);
+	}
+
 	InstancingObjects* GetTriggers(GimmickType type);
 
 private:

@@ -72,16 +72,6 @@ void GameScene::Initialize() {
 
 	CreateLevel();
 
-	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(4, 14);
-	player_->Initialize(modelPlayer_.get(), PlayerPosition);
-	player_->SetMapChipField(mapChipField_.get());
-	player_->SetElectricModel(modelElectric_.get());
-
-	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(4, 14);
 	//ポーズメニュー
 	pause_ = std::make_unique<PauseMenu>();
 	pause_->Initialize();
@@ -100,8 +90,6 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
-	doorGimmick_ = std::make_unique<Door>();
-	doorGimmick_->Initialize(mapChipField_.get());
 }
 
 void GameScene::Update() {
@@ -232,8 +220,10 @@ void GameScene::Draw() {
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandleSkyBox_);
 
 	//スカイボックスの描画前処理
-	doorTriggers_->CameraUpdate(mainCamera_);
-	doorTriggers_->Draw();
+	modelPlatform_->SkyBoxPreDraw();
+
+	skyBox_->CameraUpdate(mainCamera_);
+	skyBox_->Draw();
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
@@ -245,7 +235,7 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
-	skyBox_->Draw();
+	
 
 	//modelPlatform_->SkinPreDraw();
 
@@ -258,9 +248,6 @@ void GameScene::Draw() {
 	trapSpines_->Draw();
 
 	gimmickManager_->Draw(mainCamera_);
-
-	doorTriggers_->CameraUpdate(mainCamera_);
-	doorTriggers_->Draw();
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
@@ -293,6 +280,7 @@ void GameScene::CreateLevel()
 	blocks_->PreUpdate();
 
 	trapSpines_ = std::make_unique<InstancingObjects>();
+
 	trapSpines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
 	trapSpines_->PreUpdate();
 
@@ -301,10 +289,7 @@ void GameScene::CreateLevel()
 
 	WorldTransform worldTransform = {};
 	MapChipField* mapChipField = mapChipField_.get();
-			case MapChipType::kPlayerSpawn:
-				player_->Initialize(modelPlayer_.get(), mapChipField_->GetMapChipPositionByIndex(x, y));
-				break;
-			case MapChipType::kSpineTrap:
+			
 	std::function<void(uint32_t, uint32_t)> setWorldTransform = [&worldTransform, mapChipField](uint32_t x, uint32_t y) {
 		worldTransform.Initialize();
 		worldTransform.translation_ = mapChipField->GetMapChipPositionByIndex(x, y);
@@ -321,7 +306,7 @@ void GameScene::CreateLevel()
 				blocks_->WorldTransformUpdate(worldTransform);
 				break;
 
-			case MapChipType::kSpine:
+			case MapChipType::kSpineTrap:
 				setWorldTransform(x, y);
 				trapSpines_->WorldTransformUpdate(worldTransform);
 				break;
@@ -379,6 +364,17 @@ void GameScene::UpdateMain()
 		gimmickManager_->SpineGimmickChangeState(SpineGimmick::State::kInactive);
 	}
 
+	if (CheckElectricCollision(MapChipType::kDisappearTrigger))
+	{
+		gimmickManager_->DisappearGimmickChangeState(DisappearGimmick::State::kActive);
+	}
+
+	if (CheckElectricCollision(MapChipType::kAppearTrigger))
+	{
+		gimmickManager_->AppearGimmickChangeState(AppearGimmick::State::kActive);
+	}
+	
+
 	goal_->Update();
 
 		if (player_->HitGoal())
@@ -433,65 +429,56 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 
 		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDoor);
 
-		for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
-			Vector3 blockPos = triggers_->GetInstancePosition(i);
-
-			float half = 2.0f / 2.0f;
-
-			// AABB の最小・最大
-			Vector3 min = { blockPos.x - half, blockPos.y - half, 0.0f };
-			Vector3 max = { blockPos.x + half, blockPos.y + half, 0.0f };
-
-			// 円の中心に一番近い点をAABBの範囲にクランプ
-			Vector3 closest = {
-				std::clamp(electricPos.x, min.x, max.x),
-				std::clamp(electricPos.y, min.y, max.y),
-				0.0f
-			};
-
-			// 最近接点と円の中心の距離を比較
-			Vector3 diff = electricPos - closest;
-			float distSq = diff.x * diff.x + diff.y * diff.y;
-
-			if (distSq <= (electricRadius * electricRadius)) {
-
-				return true;
-			}
-		}
-
 		break;
 
 	case MapChipType::kSpineTrigger:
 
 		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kSpine);
 
-		for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
-			Vector3 blockPos = triggers_->GetInstancePosition(i);
+		break;
 
-			float half = 2.0f / 2.0f;
+	case MapChipType::kDisappearTrigger:
 
-			// AABB の最小・最大
-			Vector3 min = { blockPos.x - half, blockPos.y - half, 0.0f };
-			Vector3 max = { blockPos.x + half, blockPos.y + half, 0.0f };
-
-			// 円の中心に一番近い点をAABBの範囲にクランプ
-			Vector3 closest = {
-				std::clamp(electricPos.x, min.x, max.x),
-				std::clamp(electricPos.y, min.y, max.y),
-				0.0f
-			};
-
-			// 最近接点と円の中心の距離を比較
-			Vector3 diff = electricPos - closest;
-			float distSq = diff.x * diff.x + diff.y * diff.y;
-
-			if (distSq <= (electricRadius * electricRadius)) {
-
-				return true;
-			}
-		}
+		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDisappear);
 
 		break;
+
+	case MapChipType::kAppearTrigger:
+
+		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kAppear);
+
+		break;
+
+	default:
+
+		return false;
+
+	}
+
+	for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
+		Vector3 blockPos = triggers_->GetInstancePosition(i);
+
+		float half = 2.0f / 2.0f;
+
+		// AABB の最小・最大
+		Vector3 min = { blockPos.x - half, blockPos.y - half, 0.0f };
+		Vector3 max = { blockPos.x + half, blockPos.y + half, 0.0f };
+
+		// 円の中心に一番近い点をAABBの範囲にクランプ
+		Vector3 closest = {
+			std::clamp(electricPos.x, min.x, max.x),
+			std::clamp(electricPos.y, min.y, max.y),
+			0.0f
+		};
+
+		// 最近接点と円の中心の距離を比較
+		Vector3 diff = electricPos - closest;
+		float distSq = diff.x * diff.x + diff.y * diff.y;
+
+		if (distSq <= (electricRadius * electricRadius)) {
+
+			return true;
+		}
 	}
 
 	return false;
