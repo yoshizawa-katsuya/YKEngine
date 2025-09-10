@@ -16,7 +16,7 @@ void GimmickManager::Initialize(MapChipField* mapChipField)
 
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
 
-	modelTrigger_ = modelPlatform->CreateRigidModel("./resources/block", "block.obj");
+	modelTrigger_ = modelPlatform->CreateRigidModel("./resources/GimmickR", "GimmickR.obj");
 
 	modelBlock_ = modelPlatform->CreateRigidModel("./resources/block", "block.obj");
 
@@ -27,11 +27,11 @@ void GimmickManager::Initialize(MapChipField* mapChipField)
 	doors_->PreUpdate();
 
 	doorTriggers_ = std::make_unique<InstancingObjects>();
-	doorTriggers_->Initialize(modelBlock_.get(), mapChipField->GetNumCellVirtical() * mapChipField->GetNumCellHorizontal()); // トリガー用のモデルに変更
+	doorTriggers_->Initialize(modelTrigger_.get(), mapChipField->GetNumCellVirtical() * mapChipField->GetNumCellHorizontal()); // トリガー用のモデルに変更
 	doorTriggers_->PreUpdate();
 
 	spineTriggers_ = std::make_unique<InstancingObjects>();
-	spineTriggers_->Initialize(modelBlock_.get(), mapChipField->GetNumCellVirtical() * mapChipField->GetNumCellHorizontal()); // トリガー用のモデルに変更
+	spineTriggers_->Initialize(modelTrigger_.get(), mapChipField->GetNumCellVirtical() * mapChipField->GetNumCellHorizontal()); // トリガー用のモデルに変更
 	spineTriggers_->PreUpdate();
 
 	gimmickSpines_ = std::make_unique<InstancingObjects>();
@@ -51,7 +51,7 @@ void GimmickManager::Initialize(MapChipField* mapChipField)
 	appearBlocks_->PreUpdate();
 
 	appearTriggers_ = std::make_unique<InstancingObjects>();
-	appearTriggers_->Initialize(modelBlock_.get(), mapChipField->GetNumCellVirtical() * mapChipField->GetNumCellHorizontal()); // トリガー用のモデルに変更
+	appearTriggers_->Initialize(modelTrigger_.get(), mapChipField->GetNumCellVirtical() * mapChipField->GetNumCellHorizontal()); // トリガー用のモデルに変更
 	appearTriggers_->PreUpdate();
 
 	WorldTransform worldTransform = {};
