@@ -1,16 +1,13 @@
 #include "StageSelectScene.h"
 #include "imgui/imgui.h"
 #include "SceneManager.h"
+#include "GameScene.h"
 
-uint32_t StageSelectScene::selectStage_ = 1;
-
-StageSelectScene::~StageSelectScene()
-{
+StageSelectScene::~StageSelectScene() {
 	//Finalize();
 }
 
-void StageSelectScene::Initialize()
-{
+void StageSelectScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -22,32 +19,78 @@ void StageSelectScene::Initialize()
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
+	control = std::make_unique<Sprite>();
+	control->Initialize(TextureManager::GetInstance()->Load("Resources/scene/controltile.png"));
+	control->SetPosition({ 140.0f,10.0f });
+
+
+	for (int i = 0; i < 24; i++) {
+		char fileName[64];
+		sprintf_s(fileName, "Resources/scene/select%02d.png", i + 1); // 01~09, 10~22
+		selects[i] = std::make_unique<Sprite>();
+		selects[i]->Initialize(TextureManager::GetInstance()->Load(fileName));
+		selects[i]->SetPosition({ 0.0f, 0.0f });
+	}
+	menuState = { 0, 0 };
+	frameCount = 0;
+	blinkIndex = 0;
+
 }
 
-void StageSelectScene::Update()
-{
+void StageSelectScene::Update() {
 
 #ifdef _DEBUG
 
 	ImGui::Begin("Window");
 	ImGui::Text("StageSelect");
-	ImGui::InputInt("SelectStage", (int*)&selectStage_, 1);
-	if (ImGui::Button("Go to GameScene"))
-	{
+	if (ImGui::Button("Go to GameScene")) {
 		phase_ = Phase::kEnd;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
 	}
 	ImGui::End();
 
-	if (selectStage_ > kMaxStage)
-	{ 
-		selectStage_ = kMaxStage;
-	}
-
 #endif // _DEBUG
 
-	switch (phase_)
-	{
+
+	if (input_->TriggerKey(DIK_W)) {
+		menuState.x--;
+		if (menuState.x <= 0) {
+			menuState.x = 0;
+		}
+	} else if (input_->TriggerKey(DIK_S)) {
+		menuState.x++;
+		if (menuState.x >= 3) {
+			menuState.x = 3;
+		}
+	}
+
+	if (input_->TriggerKey(DIK_A)) {
+		menuState.y--;
+		if (menuState.y <= 0) {
+			menuState.y = 0;
+		}
+	} else if (input_->TriggerKey(DIK_D)) {
+		menuState.y++;
+		if (menuState.y >= 4) {
+			menuState.y = 4;
+		}
+	}
+
+
+
+	frameCount++;
+	if (frameCount > 30) {
+		blinkIndex = 1 - blinkIndex;
+		frameCount = 0;
+	}
+
+
+
+
+
+
+
+	switch (phase_) {
 	case Phase::kStart:
 
 		UpdateStart();
@@ -66,45 +109,91 @@ void StageSelectScene::Update()
 
 }
 
-void StageSelectScene::Draw()
-{
+void StageSelectScene::Draw() {
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
+	if (menuState.x == 0) {
+		selects[blinkIndex]->Draw();
+	} else if (menuState.x == 1 && menuState.y == 0) {
+		selects[2 + blinkIndex]->Draw();
+	} else if (menuState.x == 1 && menuState.y == 1) {
+		selects[4 + blinkIndex]->Draw();
+	} else if (menuState.x == 1 && menuState.y == 2) {
+		selects[6 + blinkIndex]->Draw();
+	} else if (menuState.x == 1 && menuState.y == 3) {
+		selects[8 + blinkIndex]->Draw();
+	} else if (menuState.x == 1 && menuState.y == 4) {
+		selects[10 + blinkIndex]->Draw();
+	} else if (menuState.x == 2 && menuState.y == 0) {
+		selects[12 + blinkIndex]->Draw();
+	} else if (menuState.x == 2 && menuState.y == 1) {
+		selects[14 + blinkIndex]->Draw();
+	} else if (menuState.x == 2 && menuState.y == 2) {
+		selects[16 + blinkIndex]->Draw();
+	} else if (menuState.x == 2 && menuState.y == 3) {
+		selects[18 + blinkIndex]->Draw();
+	} else if (menuState.x == 2 && menuState.y == 4) {
+		selects[20 + blinkIndex]->Draw();
+	} else if (menuState.x == 3) {
+		selects[22 + blinkIndex]->Draw();
+	}
+	if (showControl_) {
+		control->Draw();
+	}
+
+
 	fade_->Draw();
 }
 
-void StageSelectScene::Finalize()
-{
+void StageSelectScene::Finalize() {
 
 }
 
-void StageSelectScene::UpdateStart()
-{
+void StageSelectScene::UpdateStart() {
 	fade_->Update();
-	if (fade_->IsFinished())
-	{
+	if (fade_->IsFinished()) {
 		fade_->Stop();
 		phase_ = Phase::kMain;
 	}
 }
 
-void StageSelectScene::UpdateMain()
-{
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A))
-	{
-		phase_ = Phase::kEnd;
-		fade_->Start(Fade::Status::FadeOut, 0.5f);
+void StageSelectScene::UpdateMain() {
+
+	if (menuState.x == 0) {
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+			showControl_ = !showControl_;
+		}
+	}
+	if ((menuState.x == 1 || menuState.x == 2) &&
+		(menuState.y >= 0 && menuState.y <= 4)) {
+
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+			// stageNum 
+			uint32_t stageNum = static_cast<uint32_t>((menuState.x - 1) * 5 + (menuState.y + 1));
+
+			GameScene::stageNum_ = stageNum;   // stage1 ~ stage10
+			nextSceneName_ = "GameScene" + std::to_string(stageNum);
+			phase_ = Phase::kEnd;
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		}
+	}
+
+	if (menuState.x == 3) {
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+			nextSceneName_ = "TitleScene";
+			phase_ = Phase::kEnd;
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		}
 	}
 }
 
-void StageSelectScene::UpdateEnd()
-{
+void StageSelectScene::UpdateEnd() {
 	fade_->Update();
 	if (fade_->IsFinished()) {
-		//fade_->Stop();
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("GameScene" + std::to_string(selectStage_));
+		if (!nextSceneName_.empty()) {
+			sceneManager_->ChengeScene(nextSceneName_);
+		}
 	}
 }

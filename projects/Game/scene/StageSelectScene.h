@@ -9,8 +9,7 @@
 #include "Sprite.h"
 #include "Fade.h"
 
-class StageSelectScene : public BaseScene
-{
+class StageSelectScene : public BaseScene {
 public:
 
 	~StageSelectScene() override;
@@ -52,8 +51,14 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	const uint32_t kMaxStage = 2;
-	static uint32_t selectStage_; //選択中のステージ
+	std::array<std::unique_ptr<Sprite>, 24> selects;
 
+	std::unique_ptr<Sprite> control;
+
+	Vector2 menuState = { 0, 0 };
+	int frameCount = 0;
+	int blinkIndex = 0;
+	bool showControl_ = false;
+	std::string nextSceneName_;
 };
 
