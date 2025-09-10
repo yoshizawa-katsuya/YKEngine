@@ -98,6 +98,9 @@
     <ClCompile Include="PlayerJumpState.cpp" />
     <ClCompile Include="Game\scene\StageSelectScene.cpp" />
     <ClCompile Include="SpineGimmick.cpp" />
+    <ClCompile Include="DisappearGimmick.cpp" />
+    <ClCompile Include="GimmickManager.cpp" />
+    <ClCompile Include="AppearGimmick.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseCharacter.h" />
@@ -170,6 +173,9 @@
     <ClInclude Include="PlayerJumpState.h" />
     <ClInclude Include="Game\scene\StageSelectScene.h" />
     <ClInclude Include="SpineGimmick.h" />
+    <ClInclude Include="DisappearGimmick.h" />
+    <ClInclude Include="GimmickManager.h" />
+    <ClInclude Include="AppearGimmick.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shader\FullScreen.hlsli" />

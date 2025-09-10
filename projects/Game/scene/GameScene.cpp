@@ -72,11 +72,8 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
 
-	doorGimmick_ = std::make_unique<Door>();
-	doorGimmick_->Initialize(mapChipField_.get());
-
-	spineGimmick_ = std::make_unique<SpineGimmick>();
-	spineGimmick_->Initialize(mapChipField_.get());
+	gimmickManager_ = std::make_unique<GimmickManager>();
+	gimmickManager_->Initialize(mapChipField_.get());
 }
 
 void GameScene::Update() {
@@ -226,19 +223,7 @@ void GameScene::Draw() {
 	trapSpines_->CameraUpdate(mainCamera_);
 	trapSpines_->Draw();
 
-	//door
-	if (doorGimmick_->GetState() == Door::State::kClosed) {
-		doors_->CameraUpdate(mainCamera_);
-		doors_->Draw();
-	}
-
-	if (spineGimmick_->GetState() == SpineGimmick::State::kActive) {
-		gimmickSpines_->CameraUpdate(mainCamera_);
-		gimmickSpines_->Draw();
-	}
-
-	doorTriggers_->CameraUpdate(mainCamera_);
-	doorTriggers_->Draw();
+	gimmickManager_->Draw(mainCamera_);
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
@@ -263,25 +248,9 @@ void GameScene::CreateLevel()
 	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumBlocks());
 	blocks_->PreUpdate();
 
-	doors_ = std::make_unique<InstancingObjects>();
-	doors_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
-	doors_->PreUpdate();
-
-	doorTriggers_ = std::make_unique<InstancingObjects>();
-	doorTriggers_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
-	doorTriggers_->PreUpdate();
-
 	trapSpines_ = std::make_unique<InstancingObjects>();
 	trapSpines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
 	trapSpines_->PreUpdate();
-
-	spineTriggers_ = std::make_unique<InstancingObjects>();
-	spineTriggers_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
-	spineTriggers_->PreUpdate();
-
-	gimmickSpines_ = std::make_unique<InstancingObjects>();
-	gimmickSpines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
-	gimmickSpines_->PreUpdate();
 
 	goal_ = std::make_unique<Goal>();
 	goal_->Initialize(modelGoal_.get());
@@ -312,34 +281,6 @@ void GameScene::CreateLevel()
 
 			case MapChipType::kGoal:
 				goal_->SetPosition(mapChipField->GetMapChipPositionByIndex(x, y));
-
-				break;
-
-			case MapChipType::kDoorTrigger:
-
-				setWorldTransform(x, y);
-				doorTriggers_->WorldTransformUpdate(worldTransform);
-
-				break;
-
-			case MapChipType::kClosedDoor:
-
-				setWorldTransform(x, y);
-				doors_->WorldTransformUpdate(worldTransform);
-
-				break;
-
-			case MapChipType::kActiveSpine:
-					
-			    setWorldTransform(x, y);
-			    gimmickSpines_->WorldTransformUpdate(worldTransform);
-
-				break;
-
-			case MapChipType::kSpineTrigger:
-
-				setWorldTransform(x, y);
-				spineTriggers_->WorldTransformUpdate(worldTransform);
 
 				break;
 
@@ -380,12 +321,12 @@ void GameScene::UpdateMain()
 
 	if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
 
-		doorGimmick_->ChangeState(Door::State::kOpened);
+		gimmickManager_->DoorGimmickChangeState(Door::State::kOpened);
 	}
 
 	if (CheckElectricCollision(MapChipType::kSpineTrigger))
 	{
-		spineGimmick_->ChangeState(SpineGimmick::State::kInactive);
+		gimmickManager_->SpineGimmickChangeState(SpineGimmick::State::kInactive);
 	}
 
 	goal_->Update();
@@ -431,12 +372,16 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 	Vector3 electricPos = electricRange->GetPosition();      //電気の中心
 	float electricRadius = electricRange->GetScale().x; //電気の半径
 
+	InstancingObjects* triggers_;
+
 	switch (type)
 	{
 	case MapChipType::kDoorTrigger:
 
-		for (uint32_t i = 0; i < doorTriggers_->GetNumInstance(); ++i) {
-			Vector3 blockPos = doorTriggers_->GetInstancePosition(i);
+		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDoor);
+
+		for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
+			Vector3 blockPos = triggers_->GetInstancePosition(i);
 
 			float half = 2.0f / 2.0f;
 
@@ -465,8 +410,10 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 
 	case MapChipType::kSpineTrigger:
 
-		for (uint32_t i = 0; i < spineTriggers_->GetNumInstance(); ++i) {
-			Vector3 blockPos = spineTriggers_->GetInstancePosition(i);
+		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kSpine);
+
+		for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
+			Vector3 blockPos = triggers_->GetInstancePosition(i);
 
 			float half = 2.0f / 2.0f;
 

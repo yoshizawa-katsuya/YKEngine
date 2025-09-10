@@ -23,8 +23,7 @@
 #include "Fade.h"
 #include "Goal.h"
 
-#include "Door.h"
-#include "SpineGimmick.h"
+#include "GimmickManager.h"
 
 class GameScene : public BaseScene
 {
@@ -107,16 +106,11 @@ private:
 	//設置型トゲ
 	std::unique_ptr<InstancingObjects> trapSpines_;
 
-	std::unique_ptr<InstancingObjects> spineTriggers_;
-
-	// 消えたり現れたりするトラップ
-	std::unique_ptr<InstancingObjects> gimmickSpines_;
+	
 	//ゴール
 	std::unique_ptr<Goal> goal_;
 
-	std::unique_ptr<InstancingObjects> doors_;
-
-	std::unique_ptr<InstancingObjects> doorTriggers_;
+	
 
 	//カメラコントローラー
 	std::unique_ptr<CameraController> cameraController_;
@@ -137,7 +131,5 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	// ドアギミック
-	std::unique_ptr<Door> doorGimmick_;
-	std::unique_ptr<SpineGimmick> spineGimmick_;
+	std::unique_ptr<GimmickManager> gimmickManager_;
 };
