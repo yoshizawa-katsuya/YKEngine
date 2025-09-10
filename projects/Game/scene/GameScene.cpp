@@ -80,7 +80,7 @@ void GameScene::Initialize() {
 
 	gimmickManager_ = std::make_unique<GimmickManager>();
 	gimmickManager_->Initialize(mapChipField_.get());
-	player_->SetElectricModel(modelElectric_.get());
+	//player_->SetElectricModel(modelElectric_.get());
 
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
@@ -334,7 +334,7 @@ void GameScene::CreateLevel()
 				Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(x, y);
 				player_->Initialize(modelPlayer_.get(), PlayerPosition);
 				player_->SetMapChipField(mapChipField_.get());
-				player_->SetElectricModel(modelElectric_.get());
+				//player_->SetElectricModel(modelElectric_.get());
 				player_->SetJumpSE(&jumpSE_);
 
 				break;

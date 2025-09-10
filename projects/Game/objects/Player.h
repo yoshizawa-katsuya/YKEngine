@@ -59,7 +59,7 @@ private: // 非公開メンバ関数
 
 public:
 	ElectricRange* GetElectricRange() const { return electricRange_.get(); }
-	void SetElectricModel(BaseModel* electricModel);
+	//void SetElectricModel(BaseModel* electricModel);
 private:
 
 	Input* input_;
