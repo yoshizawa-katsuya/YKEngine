@@ -24,7 +24,7 @@
 #include "Goal.h"
 #include "PauseMenu.h"
 
-#include "Door.h"
+#include "GimmickManager.h"
 
 class GameScene : public BaseScene
 {
@@ -102,16 +102,19 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	// マップチップブロック
+
 	//ブロック
 	std::unique_ptr<InstancingObjects> blocks_;
-	//トゲ
-	std::unique_ptr<InstancingObjects> spines_;
+
+	//設置型トゲ
+	std::unique_ptr<InstancingObjects> trapSpines_;
+
+	
 	//ゴール
 	std::unique_ptr<Goal> goal_;
 
-	std::unique_ptr<InstancingObjects> doors_;
-
-	std::unique_ptr<InstancingObjects> doorTriggers_;
+	
 
 	//カメラコントローラー
 	std::unique_ptr<CameraController> cameraController_;
@@ -134,8 +137,7 @@ private:
 	//ポーズメニュ-
 	std::unique_ptr<PauseMenu>pause_;
 
-	// ドアギミック
-	std::unique_ptr<Door> doorGimmick_;
     //メニューUI描画フラグ
 	bool isDrawPauseUI;
+	std::unique_ptr<GimmickManager> gimmickManager_;
 };

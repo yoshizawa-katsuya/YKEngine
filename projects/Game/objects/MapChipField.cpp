@@ -7,14 +7,23 @@
 namespace {
 
 std::map<std::string, MapChipType> mapChipTable = {
-    {"0", MapChipType::kBlank},
-    {"1", MapChipType::kBlock},
+	{"0", MapChipType::kBlank},
+	{"1", MapChipType::kBlock},
 	{"2", MapChipType::kPlayerSpawn},
 	{"3", MapChipType::kDoorTrigger},
-	{"4", MapChipType::kDoor},
-	{"12", MapChipType::kSpine},
-	{"18", MapChipType::kGoal},
-	{"99", MapChipType::kTransparentBlock},
+	{"4", MapChipType::kClosedDoor},
+	{"5", MapChipType::kDisappearTrigger},
+	{"6", MapChipType::kActiveDisappear},
+	{"7", MapChipType::kAppearTrigger},
+	{"8", MapChipType::kActiveAppear},
+	{"9", MapChipType::kSpineTrigger},
+	{"10", MapChipType::kActiveSpine},
+	{"11", MapChipType::kSpineTrap},
+	{"12", MapChipType::kGoal},
+	{"13", MapChipType::kOpenedDoor},
+	{"14", MapChipType::kInactiveDisappear},
+	{"15", MapChipType::kInactiveAppear},
+	{"16", MapChipType::kInactiveSpine},
 };
 
 }
@@ -128,7 +137,7 @@ void MapChipField::CountMapChipTypeNum(MapChipType mapChipType)
 	case MapChipType::kBlock:
 		++numBlocks_;
 		break;
-	case MapChipType::kSpine:
+	case MapChipType::kSpineTrap:
 		++numSpines_;
 		break;
 	default:

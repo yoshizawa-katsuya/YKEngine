@@ -1,15 +1,15 @@
-#include "Door.h"
+#include "DisappearGimmick.h"
 
-void Door::Initialize(MapChipField* mapChipField)
+void DisappearGimmick::Initialize(MapChipField* mapChipField)
 {
-	state_ = State::kClosed;
+	state_ = State::kInactive;
 
 	mapChipField_ = mapChipField;
 }
 
-void Door::ChangeState(State state)
+void DisappearGimmick::ChangeState(State state)
 {
-	if (state == State::kOpened)
+	if (state == State::kInactive)
 	{
 		uint32_t numCellHorizontal = mapChipField_->GetNumCellHorizontal();
 
@@ -17,23 +17,23 @@ void Door::ChangeState(State state)
 
 		for (uint32_t y = 0; y < numCellVirtical; y++) {
 			for (uint32_t x = 0; x < numCellHorizontal; x++) {
-				if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kClosedDoor) {
+				if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kActiveDisappear) {
 
-					mapChipField_->SetMapChipTypeByIndex(x, y, MapChipType::kOpenedDoor);
+					mapChipField_->SetMapChipTypeByIndex(x, y, MapChipType::kInactiveDisappear);
 
 				}
 			}
 		}
 	}
-	else if (state == State::kClosed)
+	else if (state == State::kActive)
 	{
 		uint32_t numCellHorizontal = mapChipField_->GetNumCellHorizontal();
 		uint32_t numCellVirtical = mapChipField_->GetNumCellVirtical();
 		for (uint32_t y = 0; y < numCellVirtical; y++) {
 			for (uint32_t x = 0; x < numCellHorizontal; x++) {
-				if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kOpenedDoor) {
+				if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kInactiveDisappear) {
 
-					mapChipField_->SetMapChipTypeByIndex(x, y, MapChipType::kClosedDoor);
+					mapChipField_->SetMapChipTypeByIndex(x, y, MapChipType::kActiveDisappear);
 				}
 			}
 		}
