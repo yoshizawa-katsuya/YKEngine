@@ -213,7 +213,7 @@ void StageSelectScene::UpdateMain() {
 	}
 
 	if (menuState.x == 0) {
-		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerKey(DIK_F) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 			audio_->SoundPlayWave(ketteiSE_);
 
 			showControl_ = !showControl_;
