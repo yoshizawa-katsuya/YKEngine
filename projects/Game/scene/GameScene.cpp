@@ -59,6 +59,7 @@ void GameScene::Initialize() {
 	modelBlock_ = modelPlatform_->CreateRigidModel("./resources/block", "block.obj");
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
 	modelGoal_ = modelPlatform_->CreateCylinder(textureHandleGoal, "goal");
+	modelDischarge_ = modelPlatform_->CreateRing(textureHandleGoal, "goal");
 	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denki.obj");
 
 	//スカイボックスの生成
@@ -262,6 +263,11 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
+	if (dischargeVisible_) {
+		discharge_->Draw(mainCamera_);
+		modelPlatform_->SetPipelineState(DrawMode::kBlendModeNormal);   // 원복
+	}
+
 	fade_->Draw();
 	//ポーズメニュー
 	isDrawPauseUI = !(phase_ == Phase::kGameClear || phase_ == Phase::kGameOver);
@@ -356,8 +362,7 @@ void GameScene::UpdateStart()
 	}
 }
 
-void GameScene::UpdateMain()
-{
+void GameScene::UpdateMain() {
 	isKandenSEPlay_ = false;
 
 	//ポーズ中は停止
@@ -367,41 +372,53 @@ void GameScene::UpdateMain()
 
 		cameraController_->Update();
 
-	if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
+		if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
+			gimmickManager_->ToggleDoor();
+		} else if (CheckElectricCollision(MapChipType::kSpineTrigger)) {
+			gimmickManager_->ToggleSpine();
+		} else if (CheckElectricCollision(MapChipType::kDisappearTrigger)) {
+			gimmickManager_->ToggleDisappear();
+		} else if (CheckElectricCollision(MapChipType::kAppearTrigger)) {
+			gimmickManager_->ToggleAppear();
+		}
 
-		gimmickManager_->DoorGimmickChangeState(Door::State::kOpened);
-	}
+		if (!isKandenSEPlay_) {
+			audio_->SoundStopWave(kandenSE_);
+		}
 
-	if (CheckElectricCollision(MapChipType::kSpineTrigger))
-	{
-		gimmickManager_->SpineGimmickChangeState(SpineGimmick::State::kInactive);
-	}
+		goal_->Update();
 
-	if (CheckElectricCollision(MapChipType::kDisappearTrigger))
-	{
-		gimmickManager_->DisappearGimmickChangeState(DisappearGimmick::State::kActive);
-	}
 
-	if (CheckElectricCollision(MapChipType::kAppearTrigger))
-	{
-		gimmickManager_->AppearGimmickChangeState(AppearGimmick::State::kActive);
-	}
-	
-	if (!isKandenSEPlay_)
-	{
-		audio_->SoundStopWave(kandenSE_);
-	}
 
-	goal_->Update();
+		if (!dischargeVisible_) {
+			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+				dischargeVisible_ = true;
+				dischargeFrame_ = 0;
+				dischargeArmed_ = true;
+			}
+		}
 
-		if (player_->HitGoal())
-		{
+
+		if (dischargeVisible_) {
+			if (auto er = player_->GetElectricRange()) {
+				Vector3 pos = er->GetPosition();
+				pos.z += 0.01f;
+				discharge_->SetPosition(pos);
+			}
+			discharge_->Update();
+
+			if (++dischargeFrame_ >= kDischargeLife) {
+				dischargeVisible_ = false;
+				dischargeArmed_ = false;
+			}
+		}
+
+		if (player_->HitGoal()) {
 			phase_ = Phase::kGameClear;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		}
 
-		if (player_->GetIsDead())
-		{
+		if (player_->GetIsDead()) {
 			phase_ = Phase::kGameOver;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		}
@@ -430,82 +447,46 @@ void GameScene::UpdateGameOver()
 	}
 }
 bool GameScene::CheckElectricCollision(MapChipType type) {
-	if (!player_) return false;
+	if (!player_ || !discharge_ || !dischargeVisible_ || !dischargeArmed_) return false;
 
-	auto electricRange = player_->GetElectricRange();
-	if (!electricRange) return false;
+	Vector3 center = player_->GetElectricRange()
+		? player_->GetElectricRange()->GetPosition()
+		: Vector3{ 0,0,0 };
 
-	Vector3 electricPos = electricRange->GetPosition();      //電気の中心
-	float electricRadius = electricRange->GetScale().x; //電気の半径
 
-	InstancingObjects* triggers_;
+	float radius = discharge_->GetRadius();
 
-	switch (type)
-	{
-	case MapChipType::kDoorTrigger:
-
-		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDoor);
-
-		break;
-
-	case MapChipType::kSpineTrigger:
-
-		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kSpine);
-
-		break;
-
-	case MapChipType::kDisappearTrigger:
-
-		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDisappear);
-
-		break;
-
-	case MapChipType::kAppearTrigger:
-
-		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kAppear);
-
-		break;
-
-	default:
-
-		return false;
-
+	InstancingObjects* triggers_ = nullptr;
+	switch (type) {
+	case MapChipType::kDoorTrigger:      triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDoor);      break;
+	case MapChipType::kSpineTrigger:     triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kSpine);     break;
+	case MapChipType::kDisappearTrigger: triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDisappear); break;
+	case MapChipType::kAppearTrigger:    triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kAppear);    break;
+	default: return false;
 	}
+	if (!triggers_) return false;
 
+	const float half = 1.0f;
 	for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
-		Vector3 blockPos = triggers_->GetInstancePosition(i);
+		Vector3 p = triggers_->GetInstancePosition(i);
+		Vector3 mn = { p.x - half, p.y - half, 0.0f };
+		Vector3 mx = { p.x + half, p.y + half, 0.0f };
 
-		float half = 2.0f / 2.0f;
+		Vector3 closest = { std::clamp(center.x, mn.x, mx.x),
+							std::clamp(center.y, mn.y, mx.y),
+							0.0f };
 
-		// AABB の最小・最大
-		Vector3 min = { blockPos.x - half, blockPos.y - half, 0.0f };
-		Vector3 max = { blockPos.x + half, blockPos.y + half, 0.0f };
+		Vector3 d = center - closest;
+		float distSq = d.x * d.x + d.y * d.y;
 
-		// 円の中心に一番近い点をAABBの範囲にクランプ
-		Vector3 closest = {
-			std::clamp(electricPos.x, min.x, max.x),
-			std::clamp(electricPos.y, min.y, max.y),
-			0.0f
-		};
+		if (distSq <= radius * radius) {
 
-		// 最近接点と円の中心の距離を比較
-		Vector3 diff = electricPos - closest;
-		float distSq = diff.x * diff.x + diff.y * diff.y;
-
-		if (distSq <= (electricRadius * electricRadius)) {
-			XAUDIO2_VOICE_STATE state;
-			kandenSE_.pSourceVoice->GetState(&state);
-			isKandenSEPlay_ = true;
-			// 再生中でなければ再生
-			if(state.BuffersQueued == 0) {
-				audio_->SoundPlayWave(kandenSE_);
-			}
+			dischargeArmed_ = false;
 
 			return true;
 		}
-
-		
 	}
-
 	return false;
 }
+
+

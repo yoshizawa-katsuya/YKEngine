@@ -9,8 +9,7 @@
 #include "Sprite.h"
 #include "Fade.h"
 
-class GameOverScene : public BaseScene
-{
+class GameOverScene : public BaseScene {
 public:
 
 	~GameOverScene() override;
@@ -52,11 +51,13 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	std::array<std::unique_ptr<Sprite>, 8> gameOvers_;
+	std::array<std::unique_ptr<Sprite>, 8> gameOvers;
 
 	int menuState_ = 0;
-	int frameCount_ = 0;
-	int blinkIndex_ = 0;
+	int frameCount = 0;
+	int blinkIndex = 0;
+
+	std::string nextSceneName_;
 
 	LoopSoundData menuSE_;
 	LoopSoundData ketteiSE_;

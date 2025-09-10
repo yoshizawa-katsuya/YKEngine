@@ -29,7 +29,6 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 	else if (sceneName == "StageSelectScene") {
 		newScene = new StageSelectScene();
 	}
-	
 
 	return newScene;
 }

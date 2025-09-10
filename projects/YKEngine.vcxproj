@@ -108,11 +108,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game\objects\AppearGimmick.cpp" />
-    <ClCompile Include="Game\objects\BaseCharacter.cpp" />
-    <ClCompile Include="Game\objects\DisappearGimmick.cpp" />
-    <ClCompile Include="Game\objects\Door.cpp" />
-    <ClCompile Include="Game\objects\ElectricRange.cpp" />
+    <ClCompile Include="AppearGimmick.cpp" />
+    <ClCompile Include="BaseCharacter.cpp" />
+    <ClCompile Include="DisappearGimmick.cpp" />
+    <ClCompile Include="Discharge.cpp" />
+    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="ElectricRange.cpp" />
     <ClCompile Include="Engine\3d\Base3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
     <ClCompile Include="Engine\lib\Collision.cpp" />
@@ -347,11 +348,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game\objects\AppearGimmick.h" />
-    <ClInclude Include="Game\objects\BaseCharacter.h" />
-    <ClInclude Include="Game\objects\DisappearGimmick.h" />
-    <ClInclude Include="Game\objects\Door.h" />
-    <ClInclude Include="Game\objects\ElectricRange.h" />
+    <ClInclude Include="AppearGimmick.h" />
+    <ClInclude Include="BaseCharacter.h" />
+    <ClInclude Include="DisappearGimmick.h" />
+    <ClInclude Include="Discharge.h" />
+    <ClInclude Include="Door.h" />
+    <ClInclude Include="ElectricRange.h" />
     <ClInclude Include="Engine\3d\Base3dObject.h" />
     <ClInclude Include="Engine\3d\Animation.h" />
     <ClInclude Include="Engine\lib\Collision.h" />
