@@ -12,7 +12,7 @@ void MyGame::Initialize()
 	sceneFactory_ = std::make_unique<SceneFactory>();
 	sceneManager_->SetSceneFactory(sceneFactory_.get());
 	//シーンマネージャに最初のシーンをセット
-	sceneManager_->ChengeScene("GameScene1");
+	sceneManager_->ChengeScene("TitleScene");
 
 	/*bgm_ = Audio::GetInstance()->LoopSoundLoadWave("Resources/sound/bgm.mp3");
 	Audio::GetInstance()->SoundLoopPlayWave(bgm_, 0.25f);*/
