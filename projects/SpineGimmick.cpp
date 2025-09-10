@@ -1,15 +1,15 @@
-#include "Door.h"
+#include "SpineGimmick.h"
 
-void Door::Initialize(MapChipField* mapChipField)
+void SpineGimmick::Initialize(MapChipField* mapChipField)
 {
-	state_ = State::kClosed;
+	state_ = State::kActive;
 
 	mapChipField_ = mapChipField;
 }
 
-void Door::ChangeState(State state)
+void SpineGimmick::ChangeState(State state)
 {
-	if (state == State::kOpened)
+	if (state == State::kInactive)
 	{
 		uint32_t numCellHorizontal = mapChipField_->GetNumCellHorizontal();
 
@@ -17,23 +17,23 @@ void Door::ChangeState(State state)
 
 		for (uint32_t y = 0; y < numCellVirtical; y++) {
 			for (uint32_t x = 0; x < numCellHorizontal; x++) {
-				if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kClosedDoor) {
+				if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kActiveSpine) {
 
-					mapChipField_->SetMapChipTypeByIndex(x, y, MapChipType::kOpenedDoor);
+					mapChipField_->SetMapChipTypeByIndex(x, y, MapChipType::kInactiveSpine);
 
 				}
 			}
 		}
 	}
-	else if (state == State::kClosed)
+	else if (state == State::kActive)
 	{
 		uint32_t numCellHorizontal = mapChipField_->GetNumCellHorizontal();
 		uint32_t numCellVirtical = mapChipField_->GetNumCellVirtical();
 		for (uint32_t y = 0; y < numCellVirtical; y++) {
 			for (uint32_t x = 0; x < numCellHorizontal; x++) {
-				if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kOpenedDoor) {
+				if (mapChipField_->GetMapChipTypeByIndex(x, y) == MapChipType::kInactiveSpine) {
 
-					mapChipField_->SetMapChipTypeByIndex(x, y, MapChipType::kClosedDoor);
+					mapChipField_->SetMapChipTypeByIndex(x, y, MapChipType::kActiveSpine);
 				}
 			}
 		}

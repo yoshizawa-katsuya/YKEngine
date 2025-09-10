@@ -130,7 +130,7 @@ protected:
 	//設置状態フラグ
 	bool onGround_ = false;
 
-	const float kMoveSpeed_ = 0.1f;
+	const float kMoveSpeed_ = 0.13f;
 
 	PhysicsParam physicsParam_ = { 0.03f, 1.0f, 0.55f};
 

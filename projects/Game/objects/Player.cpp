@@ -103,16 +103,63 @@ void Player::CheckHitMapChipType(MapChipType mapChipType)
 	switch (mapChipType)
 	{
 	case MapChipType::kBlock:
+
 		hitBlock_ = true;
 		break;
 
-	case MapChipType::kSpine:
+	case MapChipType::kDoorTrigger:
+
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kClosedDoor:
+
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kDisappearTrigger:
+
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kInactiveDisappear:
+
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kAppearTrigger:
+
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kActiveAppear:
+
+		hitBlock_ = true;
+		break;
+
+	case MapChipType::kSpineTrap:
+
 		hitSpine_ = true;
 		break;
+
+	case MapChipType::kSpineTrigger:
+
+		hitSpine_ = true;
+		break;
+
+	case MapChipType::kActiveSpine:
+
+		hitSpine_ = true;
+		break;
+	
 
 	case MapChipType::kGoal:
 		hitGoal_ = true;
 		break;
+
+	
+
+	
 
 	default:
 		break;

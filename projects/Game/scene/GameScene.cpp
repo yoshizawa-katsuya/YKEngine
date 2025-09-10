@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 	modelBlock_ = modelPlatform_->CreateRigidModel("./resources/block", "block.obj");
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
 	modelGoal_ = modelPlatform_->CreateCylinder(textureHandleGoal, "goal");
-	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
+	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denki.obj");
 
 	//スカイボックスの生成
 	skyBox_ = std::make_unique<Rigid3dObject>();
@@ -77,6 +77,11 @@ void GameScene::Initialize() {
 
 	CreateLevel();
 
+
+	gimmickManager_ = std::make_unique<GimmickManager>();
+	gimmickManager_->Initialize(mapChipField_.get());
+	player_->SetElectricModel(modelElectric_.get());
+
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
 	cameraController_->Initialize(camera_.get(), player_.get(), mapChipField_.get());
@@ -92,9 +97,6 @@ void GameScene::Initialize() {
 	pause_->Initialize();
 	pause_->SetMenuSE(&menuSE_);
 	pause_->SetKetteiSE(&ketteiSE_);
-
-	doorGimmick_ = std::make_unique<Door>();
-	doorGimmick_->Initialize(mapChipField_.get());
 
 	bgm_ = audio_->LoopSoundLoadWave("Resources/sound/bgm.mp3");
 	audio_->SoundLoopPlayWave(bgm_, 0.25f);
@@ -235,25 +237,6 @@ void GameScene::Draw() {
 	skyBox_->CameraUpdate(mainCamera_);
 	skyBox_->Draw();
 
-	//modelPlatform_->SkinPreDraw();
-
-	modelPlatform_->InstancingPreDraw();
-
-	blocks_->CameraUpdate(mainCamera_);
-	blocks_->Draw();
-
-	spines_->CameraUpdate(mainCamera_);
-	spines_->Draw();
-
-	//door
-	if (doorGimmick_->GetState() == Door::State::kClosed) {
-		doors_->CameraUpdate(mainCamera_);
-		doors_->Draw();
-	}
-
-	doorTriggers_->CameraUpdate(mainCamera_);
-	doorTriggers_->Draw();
-
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	modelPlatform_->SetPipelineState(DrawMode::kCullBackMode);
@@ -264,12 +247,27 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	
+
+	//modelPlatform_->SkinPreDraw();
+
+	modelPlatform_->InstancingPreDraw();
+
+	blocks_->CameraUpdate(mainCamera_);
+	blocks_->Draw();
+
+	trapSpines_->CameraUpdate(mainCamera_);
+	trapSpines_->Draw();
+
+	gimmickManager_->Draw(mainCamera_);
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
 	fade_->Draw();
 	//ポーズメニュー
-	pause_->Draw();
+	isDrawPauseUI = !(phase_ == Phase::kGameClear || phase_ == Phase::kGameOver);
+	pause_->Draw(isDrawPauseUI);
 }
 
 void GameScene::Finalize()
@@ -288,35 +286,22 @@ void GameScene::CreateLevel()
 	mapChipField_ = std::make_unique<MapChipField>();
 	mapChipField_->LoadMapChipCsv("Resources/stageData/stage" + std::to_string(stageNum_) + ".csv");
 
-	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	player_->SetMapChipField(mapChipField_.get());
-	player_->SetElectricModel(modelElectric_.get());
-	player_->SetJumpSE(&jumpSE_);
-
 	//マップの生成
 	blocks_ = std::make_unique<InstancingObjects>();
 	blocks_->Initialize(modelBlock_.get(), mapChipField_->GetNumBlocks());
 	blocks_->PreUpdate();
 
-	doors_ = std::make_unique<InstancingObjects>();
-	doors_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
-	doors_->PreUpdate();
+	trapSpines_ = std::make_unique<InstancingObjects>();
 
-	doorTriggers_ = std::make_unique<InstancingObjects>();
-	doorTriggers_->Initialize(modelBlock_.get(), mapChipField_->GetNumCellVirtical() * mapChipField_->GetNumCellHorizontal());
-	doorTriggers_->PreUpdate();
-
-	spines_ = std::make_unique<InstancingObjects>();
-	spines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
-	spines_->PreUpdate();
+	trapSpines_->Initialize(modelSpine_.get(), mapChipField_->GetNumSpines());
+	trapSpines_->PreUpdate();
 
 	goal_ = std::make_unique<Goal>();
 	goal_->Initialize(modelGoal_.get());
 
 	WorldTransform worldTransform = {};
 	MapChipField* mapChipField = mapChipField_.get();
-
+			
 	std::function<void(uint32_t, uint32_t)> setWorldTransform = [&worldTransform, mapChipField](uint32_t x, uint32_t y) {
 		worldTransform.Initialize();
 		worldTransform.translation_ = mapChipField->GetMapChipPositionByIndex(x, y);
@@ -333,13 +318,9 @@ void GameScene::CreateLevel()
 				blocks_->WorldTransformUpdate(worldTransform);
 				break;
 
-			case MapChipType::kPlayerSpawn:
-				player_->Initialize(modelPlayer_.get(), mapChipField_->GetMapChipPositionByIndex(x, y));
-				break;
-
-			case MapChipType::kSpine:
+			case MapChipType::kSpineTrap:
 				setWorldTransform(x, y);
-				spines_->WorldTransformUpdate(worldTransform);
+				trapSpines_->WorldTransformUpdate(worldTransform);
 				break;
 
 			case MapChipType::kGoal:
@@ -348,17 +329,15 @@ void GameScene::CreateLevel()
 
 				break;
 
-			case MapChipType::kDoorTrigger:
+			case MapChipType::kPlayerSpawn:
 
-				setWorldTransform(x, y);
-				doorTriggers_->WorldTransformUpdate(worldTransform);
-
-				break;
-
-			case MapChipType::kDoor:
-
-				setWorldTransform(x, y);
-				doors_->WorldTransformUpdate(worldTransform);
+				//プレイヤーの初期化
+				player_ = std::make_unique<Player>();
+				Vector3 PlayerPosition = mapChipField_->GetMapChipPositionByIndex(x, y);
+				player_->Initialize(modelPlayer_.get(), PlayerPosition);
+				player_->SetMapChipField(mapChipField_.get());
+				player_->SetElectricModel(modelElectric_.get());
+				player_->SetJumpSE(&jumpSE_);
 
 				break;
 
@@ -381,6 +360,8 @@ void GameScene::UpdateStart()
 
 void GameScene::UpdateMain()
 {
+	isKandenSEPlay_ = false;
+
 	//ポーズ中は停止
 	if (!pause_->IsPaused()) {
 		//プレイヤーの更新
@@ -390,7 +371,27 @@ void GameScene::UpdateMain()
 
 	if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
 
-		doorGimmick_->ChangeState(Door::State::kOpened);
+		gimmickManager_->DoorGimmickChangeState(Door::State::kOpened);
+	}
+
+	if (CheckElectricCollision(MapChipType::kSpineTrigger))
+	{
+		gimmickManager_->SpineGimmickChangeState(SpineGimmick::State::kInactive);
+	}
+
+	if (CheckElectricCollision(MapChipType::kDisappearTrigger))
+	{
+		gimmickManager_->DisappearGimmickChangeState(DisappearGimmick::State::kActive);
+	}
+
+	if (CheckElectricCollision(MapChipType::kAppearTrigger))
+	{
+		gimmickManager_->AppearGimmickChangeState(AppearGimmick::State::kActive);
+	}
+	
+	if (!isKandenSEPlay_)
+	{
+		audio_->SoundStopWave(kandenSE_);
 	}
 
 	goal_->Update();
@@ -439,46 +440,73 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 	Vector3 electricPos = electricRange->GetPosition();      //電気の中心
 	float electricRadius = electricRange->GetScale().x; //電気の半径
 
+	InstancingObjects* triggers_;
+
 	switch (type)
 	{
 	case MapChipType::kDoorTrigger:
 
-		for (uint32_t i = 0; i < doorTriggers_->GetNumInstance(); ++i) {
-			Vector3 blockPos = doorTriggers_->GetInstancePosition(i);
-
-			float half = 2.0f / 2.0f;
-
-			// AABB の最小・最大
-			Vector3 min = { blockPos.x - half, blockPos.y - half, 0.0f };
-			Vector3 max = { blockPos.x + half, blockPos.y + half, 0.0f };
-
-			// 円の中心に一番近い点をAABBの範囲にクランプ
-			Vector3 closest = {
-				std::clamp(electricPos.x, min.x, max.x),
-				std::clamp(electricPos.y, min.y, max.y),
-				0.0f
-			};
-
-			// 最近接点と円の中心の距離を比較
-			Vector3 diff = electricPos - closest;
-			float distSq = diff.x * diff.x + diff.y * diff.y;
-
-			if (distSq <= (electricRadius * electricRadius)) {
-				XAUDIO2_VOICE_STATE state;
-				kandenSE_.pSourceVoice->GetState(&state);
-				// 再生中でなければ再生
-				if(state.BuffersQueued == 0) {
-					audio_->SoundPlayWave(kandenSE_);
-				}
-
-				return true;
-			}
-
-			audio_->SoundStopWave(kandenSE_);
-
-		}
+		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDoor);
 
 		break;
+
+	case MapChipType::kSpineTrigger:
+
+		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kSpine);
+
+		break;
+
+	case MapChipType::kDisappearTrigger:
+
+		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDisappear);
+
+		break;
+
+	case MapChipType::kAppearTrigger:
+
+		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kAppear);
+
+		break;
+
+	default:
+
+		return false;
+
+	}
+
+	for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
+		Vector3 blockPos = triggers_->GetInstancePosition(i);
+
+		float half = 2.0f / 2.0f;
+
+		// AABB の最小・最大
+		Vector3 min = { blockPos.x - half, blockPos.y - half, 0.0f };
+		Vector3 max = { blockPos.x + half, blockPos.y + half, 0.0f };
+
+		// 円の中心に一番近い点をAABBの範囲にクランプ
+		Vector3 closest = {
+			std::clamp(electricPos.x, min.x, max.x),
+			std::clamp(electricPos.y, min.y, max.y),
+			0.0f
+		};
+
+		// 最近接点と円の中心の距離を比較
+		Vector3 diff = electricPos - closest;
+		float distSq = diff.x * diff.x + diff.y * diff.y;
+
+		if (distSq <= (electricRadius * electricRadius)) {
+			XAUDIO2_VOICE_STATE state;
+			kandenSE_.pSourceVoice->GetState(&state);
+			isKandenSEPlay_ = true;
+			// 再生中でなければ再生
+			if(state.BuffersQueued == 0) {
+				audio_->SoundPlayWave(kandenSE_);
+			}
+
+			return true;
+		}
+
+		
 	}
 
 	return false;

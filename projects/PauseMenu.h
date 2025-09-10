@@ -13,7 +13,7 @@ class PauseMenu
 public:
 	void Initialize();
 	void Update();
-	void Draw();
+	void Draw(bool canDrawUI);
 	void UpdateMenu();
 public:
 	bool IsPaused();//ポーズ中かを取得

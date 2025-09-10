@@ -108,7 +108,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AppearGimmick.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
+    <ClCompile Include="DisappearGimmick.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="ElectricRange.cpp" />
     <ClCompile Include="Engine\3d\Base3dObject.cpp" />
@@ -137,6 +139,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
     <ClCompile Include="Engine\3d\InstancingObjects.cpp" />
     <ClCompile Include="Game\objects\Goal.cpp" />
+    <ClCompile Include="GimmickManager.cpp" />
     <ClCompile Include="IPlayerState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
@@ -175,6 +178,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="PlayerGroundState.cpp" />
     <ClCompile Include="PlayerJumpState.cpp" />
     <ClCompile Include="Game\scene\StageSelectScene.cpp" />
+    <ClCompile Include="SpineGimmick.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -343,7 +347,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppearGimmick.h" />
     <ClInclude Include="BaseCharacter.h" />
+    <ClInclude Include="DisappearGimmick.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="ElectricRange.h" />
     <ClInclude Include="Engine\3d\Base3dObject.h" />
@@ -408,11 +414,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\TransformHelpers.h" />
     <ClInclude Include="Engine\base\OffscreenRenderer.h" />
     <ClInclude Include="Game\objects\Goal.h" />
+    <ClInclude Include="GimmickManager.h" />
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PlayerGroundState.h" />
     <ClInclude Include="PlayerJumpState.h" />
     <ClInclude Include="Game\scene\StageSelectScene.h" />
+    <ClInclude Include="SpineGimmick.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

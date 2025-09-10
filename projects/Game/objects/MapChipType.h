@@ -1,12 +1,21 @@
 #pragma once
 
 enum class MapChipType {
-	kBlank, // 空白
-	kBlock, // ブロック
-	kPlayerSpawn, // プレイヤースポーン 
-	kDoorTrigger, // ドアトリガー
-	kDoor,       // ドア
-	kTransparentBlock, // 透明ブロック
-	kSpine, // トゲ
-	kGoal,  // ゴール
+	kBlank,
+	kBlock,
+    kPlayerSpawn,
+	kDoorTrigger,
+	kClosedDoor,
+	kDisappearTrigger,
+	kActiveDisappear,
+	kAppearTrigger,
+	kActiveAppear,
+	kSpineTrigger,
+	kActiveSpine,
+	kSpineTrap,
+	kGoal,
+	kOpenedDoor,
+	kInactiveDisappear,
+	kInactiveAppear,
+	kInactiveSpine,
 };
