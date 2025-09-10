@@ -37,6 +37,8 @@ public:
 
 private:
 
+	SoundData SoundLoadMp3(const std::string& fileName);
+
 	Audio() = default;
 	~Audio() = default;
 	Audio(Audio&) = delete;
