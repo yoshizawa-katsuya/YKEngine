@@ -255,21 +255,6 @@
     <ClCompile Include="Game\scene\StageSelectScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\AppearGimmick.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\BaseCharacter.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\DisappearGimmick.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\Door.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\ElectricRange.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\objects\GimmickManager.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
@@ -290,6 +275,24 @@
     </ClCompile>
     <ClCompile Include="Game\objects\SpineGimmick.cpp">
       <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Discharge.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\AppearGimmick.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\BaseCharacter.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\DisappearGimmick.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\Door.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\ElectricRange.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -568,21 +571,6 @@
     <ClInclude Include="Game\scene\StageSelectScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\AppearGimmick.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\BaseCharacter.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\DisappearGimmick.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\Door.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\ElectricRange.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\GimmickManager.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
@@ -600,6 +588,24 @@
     </ClInclude>
     <ClInclude Include="Game\objects\SpineGimmick.h">
       <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Discharge.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\AppearGimmick.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\BaseCharacter.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\DisappearGimmick.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\Door.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\ElectricRange.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -40,6 +40,29 @@ public:
 		appearGimmick_->ChangeState(state);
 	}
 
+	Door::State              GetDoorState()      const { return doorGimmick_->GetState(); }
+	SpineGimmick::State      GetSpineState()     const { return spineGimmick_->GetState(); }
+	DisappearGimmick::State  GetDisappearState() const { return disappearGimmick_->GetState(); }
+	AppearGimmick::State     GetAppearState()    const { return appearGimmick_->GetState(); }
+
+	// 토글
+	void ToggleDoor() {
+		auto cur = doorGimmick_->GetState();
+		doorGimmick_->ChangeState(cur == Door::State::kClosed ? Door::State::kOpened : Door::State::kClosed);
+	}
+	void ToggleSpine() {
+		auto cur = spineGimmick_->GetState();
+		spineGimmick_->ChangeState(cur == SpineGimmick::State::kActive ? SpineGimmick::State::kInactive : SpineGimmick::State::kActive);
+	}
+	void ToggleDisappear() {
+		auto cur = disappearGimmick_->GetState();
+		disappearGimmick_->ChangeState(cur == DisappearGimmick::State::kInactive ? DisappearGimmick::State::kActive : DisappearGimmick::State::kInactive);
+	}
+	void ToggleAppear() {
+		auto cur = appearGimmick_->GetState();
+		appearGimmick_->ChangeState(cur == AppearGimmick::State::kInactive ? AppearGimmick::State::kActive : AppearGimmick::State::kInactive);
+	}
+
 	InstancingObjects* GetTriggers(GimmickType type);
 
 private:

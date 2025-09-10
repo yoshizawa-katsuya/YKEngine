@@ -25,6 +25,7 @@
 #include "PauseMenu.h"
 
 #include "GimmickManager.h"
+#include "Discharge.h"
 
 class GameScene : public BaseScene
 {
@@ -68,8 +69,6 @@ private:
 	LoopSoundData ketteiSE_;
 	LoopSoundData kandenSE_;
 
-	bool isKandenSEPlay_ = false;
-
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 
@@ -96,6 +95,7 @@ private:
 	std::shared_ptr<BaseModel> modelBlock_;
 	std::shared_ptr<BaseModel> modelSpine_;
 	std::shared_ptr<BaseModel> modelGoal_;
+	std::shared_ptr<BaseModel> modelDischarge_;
 	std::shared_ptr<BaseModel>modelElectric_;
 
 	uint32_t textureHandle_;
@@ -146,4 +146,12 @@ private:
     //メニューUI描画フラグ
 	bool isDrawPauseUI;
 	std::unique_ptr<GimmickManager> gimmickManager_;
+
+	//Discharge
+	std::unique_ptr<Discharge> discharge_;
+	bool dischargeVisible_ = false;
+	int  dischargeFrame_ = 0;
+	static constexpr int kDischargeLife = 45;
+	bool dischargeArmed_ = false;
+
 };

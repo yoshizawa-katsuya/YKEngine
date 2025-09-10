@@ -108,11 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game\objects\AppearGimmick.cpp" />
-    <ClCompile Include="Game\objects\BaseCharacter.cpp" />
-    <ClCompile Include="Game\objects\DisappearGimmick.cpp" />
-    <ClCompile Include="Game\objects\Door.cpp" />
-    <ClCompile Include="Game\objects\ElectricRange.cpp" />
+    <ClCompile Include="Discharge.cpp" />
     <ClCompile Include="Engine\3d\Base3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
     <ClCompile Include="Engine\lib\Collision.cpp" />
@@ -129,6 +125,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\DirectionalLight.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\lib\dx12.cpp" />
+    <ClCompile Include="Game\objects\AppearGimmick.cpp" />
+    <ClCompile Include="Game\objects\BaseCharacter.cpp" />
+    <ClCompile Include="Game\objects\DisappearGimmick.cpp" />
+    <ClCompile Include="Game\objects\Door.cpp" />
+    <ClCompile Include="Game\objects\ElectricRange.cpp" />
     <ClCompile Include="Game\scene\GameOverScene.cpp" />
     <ClCompile Include="Game\scene\GameClearScene.cpp" />
     <ClCompile Include="Game\objects\CameraController.cpp" />
@@ -347,11 +348,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game\objects\AppearGimmick.h" />
-    <ClInclude Include="Game\objects\BaseCharacter.h" />
-    <ClInclude Include="Game\objects\DisappearGimmick.h" />
-    <ClInclude Include="Game\objects\Door.h" />
-    <ClInclude Include="Game\objects\ElectricRange.h" />
+    <ClInclude Include="Discharge.h" />
     <ClInclude Include="Engine\3d\Base3dObject.h" />
     <ClInclude Include="Engine\3d\Animation.h" />
     <ClInclude Include="Engine\lib\Collision.h" />
@@ -377,6 +374,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3d\PrimitiveDrawer.h" />
+    <ClInclude Include="Game\objects\AppearGimmick.h" />
+    <ClInclude Include="Game\objects\BaseCharacter.h" />
+    <ClInclude Include="Game\objects\DisappearGimmick.h" />
+    <ClInclude Include="Game\objects\Door.h" />
+    <ClInclude Include="Game\objects\ElectricRange.h" />
     <ClInclude Include="Game\objects\MapChipType.h" />
     <ClInclude Include="Game\scene\GameOverScene.h" />
     <ClInclude Include="Game\scene\GameClearScene.h" />
