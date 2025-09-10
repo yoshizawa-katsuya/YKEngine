@@ -102,7 +102,10 @@ void GameScene::Initialize() {
 	bgm_ = audio_->LoopSoundLoadWave("Resources/sound/bgm.mp3");
 	audio_->SoundLoopPlayWave(bgm_, 0.25f);
 
-	
+	discharge_ = std::make_unique<Discharge>();
+	discharge_->Initialize(modelDischarge_.get());
+	dischargeVisible_ = false;
+	dischargeFrame_ = 0;
 }
 
 void GameScene::Update() {
@@ -392,18 +395,19 @@ void GameScene::UpdateMain() {
 
 		if (!dischargeVisible_) {
 			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+
 				dischargeVisible_ = true;
 				dischargeFrame_ = 0;
 				dischargeArmed_ = true;
 			}
 		}
 
+		discharge_->SetPosition(player_->GetWorldPosition());
 
 		if (dischargeVisible_) {
 			if (auto er = player_->GetElectricRange()) {
 				Vector3 pos = er->GetPosition();
 				pos.z += 0.01f;
-				discharge_->SetPosition(pos);
 			}
 			discharge_->Update();
 
