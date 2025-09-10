@@ -136,4 +136,6 @@ private:
 
 	// ドアギミック
 	std::unique_ptr<Door> doorGimmick_;
+    //メニューUI描画フラグ
+	bool isDrawPauseUI;
 };
