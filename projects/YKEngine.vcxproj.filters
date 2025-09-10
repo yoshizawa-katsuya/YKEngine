@@ -31,207 +31,6 @@
     <FxCompile Include="Resources\shader\Vignette.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\DirectXCommon.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\WinApp.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Matrix.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Vector3.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\BaseModel.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\PrimitiveDrawer.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\TextureManager.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\2d\Sprite.cpp">
-      <Filter>ソース ファイル\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\scene\GameScene.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\Player.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\input\Input.cpp">
-      <Filter>ソース ファイル\input</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\dx12.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\2d\SpritePlatform.cpp">
-      <Filter>ソース ファイル\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\ModelPlatform.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\DirectionalLight.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Camera.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\SrvHeapManager.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\ImGuiManager.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\ParticleManager.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\ParticleEmitter.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\audio\Audio.cpp">
-      <Filter>ソース ファイル\audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\DebugCamera.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\myGame\MyGame.cpp">
-      <Filter>ソース ファイル\myGame</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\YKFramework.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\scene\TitleScene.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\scene\BaseScene.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\scene\SceneManager.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\scene\SceneFactory.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\LevelDataLoader.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Animation.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Lerp.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Quaternion.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Slerp.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Easing.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\WorldTransform.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\RigidModel.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\SkinModel.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Base3dObject.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Rigid3dObject.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Skin3dObject.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\PointLight.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\SpotLight.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\ThreadPool.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\InstancingObjects.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Collision.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Vector2.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Vector4.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\SRTAnimator.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Fade.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\TransformHelpers.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\OffscreenRenderer.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\lib\Curve.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseCharacter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="IPlayerState.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerJumpState.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\MapChipField.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\CameraController.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerGroundState.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\scene\GameClearScene.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\scene\GameOverScene.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\Goal.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-        <ClCompile Include="Game\scene\StageSelectScene.cpp">
-      <Filter>ソース ファイル\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseMenu.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Door.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ElectricRange.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="ElectricRange.cpp" />
@@ -302,6 +101,74 @@
     <ClCompile Include="DisappearGimmick.cpp" />
     <ClCompile Include="GimmickManager.cpp" />
     <ClCompile Include="AppearGimmick.cpp" />
+    <ClCompile Include="BaseCharacter.cpp" />
+    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="ElectricRange.cpp" />
+    <ClCompile Include="Engine\3d\Base3dObject.cpp" />
+    <ClCompile Include="Engine\3d\Animation.cpp" />
+    <ClCompile Include="Engine\lib\Collision.cpp" />
+    <ClCompile Include="Engine\lib\Curve.cpp" />
+    <ClCompile Include="Engine\lib\Easing.cpp" />
+    <ClCompile Include="Engine\lib\Fade.cpp" />
+    <ClCompile Include="Engine\lib\Lerp.cpp" />
+    <ClCompile Include="Engine\lib\Slerp.cpp" />
+    <ClCompile Include="Engine\scene\BaseScene.cpp" />
+    <ClCompile Include="Engine\3d\DebugCamera.cpp" />
+    <ClCompile Include="Engine\audio\Audio.cpp" />
+    <ClCompile Include="Engine\3d\Camera.cpp" />
+    <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp" />
+    <ClCompile Include="Engine\3d\DirectionalLight.cpp" />
+    <ClCompile Include="Engine\base\DirectXCommon.cpp" />
+    <ClCompile Include="Engine\lib\dx12.cpp" />
+    <ClCompile Include="Game\scene\GameOverScene.cpp" />
+    <ClCompile Include="Game\scene\GameClearScene.cpp" />
+    <ClCompile Include="Game\objects\CameraController.cpp" />
+    <ClCompile Include="Game\objects\MapChipField.cpp" />
+    <ClCompile Include="Game\scene\GameScene.cpp" />
+    <ClCompile Include="Engine\input\Input.cpp" />
+    <ClCompile Include="Engine\base\ImGuiManager.cpp" />
+    <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
+    <ClCompile Include="Engine\3d\InstancingObjects.cpp" />
+    <ClCompile Include="Game\objects\Goal.cpp" />
+    <ClCompile Include="IPlayerState.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Engine\lib\Matrix.cpp" />
+    <ClCompile Include="Engine\lib\Vector3.cpp" />
+    <ClCompile Include="Engine\3d\BaseModel.cpp" />
+    <ClCompile Include="Engine\2d\Sprite.cpp" />
+    <ClCompile Include="Engine\base\TextureManager.cpp" />
+    <ClCompile Include="Engine\base\WinApp.cpp" />
+    <ClCompile Include="Engine\3d\PrimitiveDrawer.cpp" />
+    <ClCompile Include="Game\objects\Player.cpp" />
+    <ClCompile Include="Engine\3d\ModelPlatform.cpp" />
+    <ClCompile Include="Engine\2d\SpritePlatform.cpp" />
+    <ClCompile Include="Engine\3d\ParticleEmitter.cpp" />
+    <ClCompile Include="Engine\3d\ParticleManager.cpp" />
+    <ClCompile Include="Engine\base\SrvHeapManager.cpp" />
+    <ClCompile Include="Game\myGame\MyGame.cpp" />
+    <ClCompile Include="Engine\base\YKFramework.cpp" />
+    <ClCompile Include="Game\scene\TitleScene.cpp" />
+    <ClCompile Include="Engine\scene\SceneManager.cpp" />
+    <ClCompile Include="Game\scene\SceneFactory.cpp" />
+    <ClCompile Include="Engine\lib\Quaternion.cpp" />
+    <ClCompile Include="Engine\3d\WorldTransform.cpp" />
+    <ClCompile Include="Engine\3d\RigidModel.cpp" />
+    <ClCompile Include="Engine\3d\SkinModel.cpp" />
+    <ClCompile Include="Engine\3d\Rigid3dObject.cpp" />
+    <ClCompile Include="Engine\3d\Skin3dObject.cpp" />
+    <ClCompile Include="Engine\3d\PointLight.cpp" />
+    <ClCompile Include="Engine\3d\SpotLight.cpp" />
+    <ClCompile Include="Engine\lib\ThreadPool.cpp" />
+    <ClCompile Include="Engine\lib\Vector2.cpp" />
+    <ClCompile Include="Engine\lib\Vector4.cpp" />
+    <ClCompile Include="Engine\lib\SRTAnimator.cpp" />
+    <ClCompile Include="Engine\lib\TransformHelpers.cpp" />
+    <ClCompile Include="Engine\base\OffscreenRenderer.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
+    <ClCompile Include="PlayerGroundState.cpp" />
+    <ClCompile Include="PlayerJumpState.cpp" />
+    <ClCompile Include="Game\scene\StageSelectScene.cpp" />
+    <ClCompile Include="Discharge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseCharacter.h" />
@@ -377,6 +244,8 @@
     <ClInclude Include="DisappearGimmick.h" />
     <ClInclude Include="GimmickManager.h" />
     <ClInclude Include="AppearGimmick.h" />
+    <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="Discharge.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">
@@ -574,14 +443,11 @@
     <ClInclude Include="Game\objects\MapChipType.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-     <ClInclude Include="Game\objects\Goal.h">
+    <ClInclude Include="Game\objects\Goal.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\scene\StageSelectScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseMenu.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Door.h">
       <Filter>ヘッダー ファイル</Filter>
