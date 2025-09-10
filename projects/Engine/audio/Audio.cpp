@@ -1,6 +1,14 @@
 #include "Audio.h"
 #include <fstream>
 #include <cassert>
+#include <mfapi.h>
+#include <mfobjects.h>
+#include <mfidl.h>
+#include <mfreadwrite.h>
+
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "mfreadwrite.lib")
+#pragma comment(lib, "mfuuid.lib")
 
 Audio* Audio::GetInstance()
 {
@@ -10,7 +18,7 @@ Audio* Audio::GetInstance()
 
 void Audio::Finalize()
 {
-	
+	MFShutdown();
 }
 
 void Audio::Initialize()
@@ -21,11 +29,18 @@ void Audio::Initialize()
 	//マスターボイスを生成
 	result = xAudio2_->CreateMasteringVoice(&masterVoice_);
 
+	//MFの初期化
+	MFStartup(MF_VERSION);
 }
 
 SoundData Audio::SoundLoadWave(const std::string& fileName)
 {
 	
+	if (fileName.ends_with(".mp3")) {
+		//MP3ファイルの読み込み
+		return SoundLoadMp3(fileName);
+	}
+
 	//ファイル入力ストリームのインスタンス
 	std::ifstream file;
 	//.wavファイルをバイナリモードで開く
@@ -186,4 +201,70 @@ void Audio::SoundUnload(LoopSoundData* loopSoundData)
 
 	SoundUnload(&loopSoundData->soundData);
 
+}
+
+SoundData Audio::SoundLoadMp3(const std::string& fileName)
+{
+	//MP3ファイルの読み込み
+	//MFソースリーダーの生成
+	IMFSourceReader* pReader = nullptr;
+	MFCreateSourceReaderFromURL(std::wstring(fileName.begin(), fileName.end()).c_str(), nullptr, &pReader);
+
+	IMFMediaType* pAudioType = nullptr;
+	MFCreateMediaType(&pAudioType);
+	pAudioType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+	pAudioType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+
+	pReader->SetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, nullptr, pAudioType);
+	pAudioType->Release();
+
+	IMFMediaType* pPartialType = nullptr;
+	pReader->GetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, &pPartialType);
+
+	WAVEFORMATEX* pWaveFormat = nullptr;
+	UINT32 cbFormat = 0;
+	MFCreateWaveFormatExFromMFMediaType(pPartialType, &pWaveFormat, &cbFormat);
+	pPartialType->Release();
+
+	SoundData soundData = {};
+
+	while (true) {
+		DWORD dwFlags = 0;
+		IMFSample* pSample = nullptr;
+		IMFMediaBuffer* pBuffer = nullptr;
+
+		HRESULT hr = pReader->ReadSample(
+			MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+			0, nullptr, &dwFlags, nullptr, &pSample
+		);
+
+		if (FAILED(hr) || (dwFlags & MF_SOURCE_READERF_ENDOFSTREAM)) {
+			break; // 読み終わり
+		}
+
+		if (pSample) {
+			pSample->ConvertToContiguousBuffer(&pBuffer);
+
+			BYTE* pAudioData = nullptr;
+			DWORD cbBuffer = 0;
+			pBuffer->Lock(&pAudioData, nullptr, &cbBuffer);
+
+			soundData.pcmData.insert(soundData.pcmData.end(), pAudioData, pAudioData + cbBuffer);
+
+			pBuffer->Unlock();
+			pBuffer->Release();
+			pSample->Release();
+		}
+	}
+
+	pReader->Release();
+
+	//returnするための音声データ
+	
+
+	soundData.wfex = *pWaveFormat;
+	soundData.pBuffer = soundData.pcmData.data();
+	soundData.bufferSize = (UINT32)soundData.pcmData.size();
+
+	return soundData;
 }

@@ -213,6 +213,8 @@ struct SoundData
 	BYTE* pBuffer;
 	//バッファのサイズ
 	unsigned int bufferSize;
+
+	std::vector<BYTE> pcmData;
 };
 
 //音声データ
