@@ -1,6 +1,7 @@
 #include "GameOverScene.h"
 #include "imgui/imgui.h"
 #include "SceneManager.h"
+#include "GameScene.h"
 
 GameOverScene::~GameOverScene() {
 }
@@ -111,7 +112,13 @@ void GameOverScene::UpdateStart() {
 
 void GameOverScene::UpdateMain() {
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
-		if (menuState == 1) {
+		if(menuState == 0) { // Retry (同じステージをやり直す)
+			const uint32_t stageNum = GameScene::stageNum_;
+			nextSceneName_ = "GameScene" + std::to_string(stageNum); 
+			phase_ = Phase::kEnd;
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		
+		}else if (menuState == 1) {
 			nextSceneName_ = "StageSelectScene";
 			phase_ = Phase::kEnd;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
