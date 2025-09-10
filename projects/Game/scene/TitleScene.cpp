@@ -4,7 +4,7 @@
 
 TitleScene::~TitleScene()
 {
-	//Finalize();
+	Finalize();
 }
 
 void TitleScene::Initialize()
@@ -31,6 +31,9 @@ void TitleScene::Initialize()
 	menuState = 0;
 	frameCount = 0;
 	blinkIndex = 0;
+
+	menuSE_ = audio_->LoopSoundLoadWave("Resources/sound/menuidou.mp3");
+	ketteiSE_ = audio_->LoopSoundLoadWave("Resources/sound/sentaku.mp3");
 }
 
 void TitleScene::Update()
@@ -50,8 +53,12 @@ void TitleScene::Update()
 #endif // _DEBUG
 
 	if (input_->TriggerKey(DIK_W)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState = 0;
 	} else if (input_->TriggerKey(DIK_S)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState = 1;
 	}
 
@@ -99,6 +106,8 @@ void TitleScene::Draw()
 void TitleScene::Finalize()
 {
 
+	audio_->SoundStopWave(menuSE_);
+	audio_->SoundStopWave(ketteiSE_);
 }
 
 void TitleScene::UpdateStart()
@@ -115,6 +124,8 @@ void TitleScene::UpdateMain()
 {
 	if (menuState == 0) {
 		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+			audio_->SoundPlayWave(ketteiSE_);
+
 			phase_ = Phase::kEnd;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		}

@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "imgui/imgui.h"
+#include "Audio.h"
 
 double PauseMenu::easeInOutCirc(double x) {
 	return (x < 0.5)
@@ -60,6 +61,7 @@ void PauseMenu::Initialize() {
 void PauseMenu::Update() {
 	//Tキーで出し入れ
 	if (!isControlScreen_&&Input::GetInstance()->TriggerKey(DIK_T)) {
+		Audio::GetInstance()->SoundPlayWave(*ketteiSE_);
 		isPaused_ = !isPaused_;
 	}
 
@@ -70,9 +72,13 @@ void PauseMenu::Update() {
 		//メニュー内移動
 		if (!fadeStart_) {
 			if (Input::GetInstance()->TriggerKey(DIK_W)) {
+				Audio::GetInstance()->SoundPlayWave(*menuSE_);
+
 				menuState--;
 				if (menuState < 1) menuState = 1;
 			} else if (Input::GetInstance()->TriggerKey(DIK_S)) {
+				Audio::GetInstance()->SoundPlayWave(*menuSE_);
+
 				menuState++;
 				if (menuState > 4) menuState = 4;
 			}
@@ -171,6 +177,8 @@ void PauseMenu::UpdateMenu() {
 	//操作方法画面
 	if (isControlScreen_) {
 		if (Input::GetInstance()->TriggerKey(DIK_F)) {
+			Audio::GetInstance()->SoundPlayWave(*ketteiSE_);
+
 			isControlScreen_ = false;
 		}
 		return;
@@ -186,6 +194,8 @@ void PauseMenu::UpdateMenu() {
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		Audio::GetInstance()->SoundPlayWave(*ketteiSE_);
+
 		if (menuState == 1) {//リトライ
 			fadeStart_ = true;
 			nextScene_ = "RetryScene";

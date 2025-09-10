@@ -4,6 +4,7 @@
 
 GameOverScene::~GameOverScene()
 {
+	Finalize();
 }
 
 void GameOverScene::Initialize()
@@ -30,6 +31,8 @@ void GameOverScene::Initialize()
 	blinkIndex_ = 0;
 
 
+	menuSE_ = audio_->LoopSoundLoadWave("Resources/sound/menuidou.mp3");
+	ketteiSE_ = audio_->LoopSoundLoadWave("Resources/sound/sentaku.mp3");
 }
 
 void GameOverScene::Update()
@@ -93,17 +96,23 @@ void GameOverScene::Draw()
 
 void GameOverScene::Finalize()
 {
+	audio_->SoundStopWave(menuSE_);
+	audio_->SoundStopWave(ketteiSE_);
 }
 
 void GameOverScene::UpdateStart()
 {
 	if (input_->TriggerKey(DIK_W)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState_--;
 		if (menuState_ <= 0) {
 			menuState_ = 0;
 		}
 	}
 	else if (input_->TriggerKey(DIK_S)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState_++;
 		if (menuState_ >= 3) {
 			menuState_ = 3;
@@ -121,12 +130,16 @@ void GameOverScene::UpdateStart()
 void GameOverScene::UpdateMain()
 {
 	if (input_->TriggerKey(DIK_W)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState_--;
 		if (menuState_ <= 0) {
 			menuState_ = 0;
 		}
 	}
 	else if (input_->TriggerKey(DIK_S)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState_++;
 		if (menuState_ >= 3) {
 			menuState_ = 3;
@@ -135,6 +148,8 @@ void GameOverScene::UpdateMain()
 
 	if (menuState_ <= 2) {
 		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+			audio_->SoundPlayWave(ketteiSE_);
+
 			phase_ = Phase::kEnd;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		}

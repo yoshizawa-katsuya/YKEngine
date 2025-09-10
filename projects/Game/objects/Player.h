@@ -1,5 +1,6 @@
 #pragma once
 #include "Input.h"
+#include "Audio.h"
 class Camera;
 class MapChipField;
 class Input;
@@ -40,6 +41,8 @@ public:
 
 	void ChangeState(std::unique_ptr<IPlayerState> state);
 
+	void SetJumpSE(LoopSoundData* jumpSE) { jumpSE_ = jumpSE; }
+
 	bool HitGoal() { return hitGoal_; }
 
 private: // 非公開メンバ関数
@@ -65,6 +68,8 @@ private:
 
 	bool hitGoal_ = false;
 	//電気範囲
-	std::unique_ptr<ElectricRange>electricRange_;
+	std::unique_ptr<ElectricRange> electricRange_;
+
+	LoopSoundData* jumpSE_ = nullptr;
 };
 

@@ -151,6 +151,8 @@ void Player::Move()
 		ChangeState(std::make_unique<PlayerJumpState>());
 
 		state_->Enter(this);
+
+		Audio::GetInstance()->SoundPlayWave(*jumpSE_);
 	}
 	else if (dynamic_cast<PlayerJumpState*>(state_.get()) && onGround_)
 	{

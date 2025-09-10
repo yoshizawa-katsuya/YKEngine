@@ -150,6 +150,27 @@ void Audio::SoundPlayWave(const SoundData& soundData, float volume)
 
 }
 
+void Audio::SoundPlayWave(const LoopSoundData& loopSoundData, float volume)
+{
+	HRESULT result;
+
+	SoundStopWave(loopSoundData);
+
+	//再生する波形データの設定
+	XAUDIO2_BUFFER buf{};
+	buf.pAudioData = loopSoundData.soundData.pBuffer;
+	buf.AudioBytes = loopSoundData.soundData.bufferSize;
+	buf.Flags = XAUDIO2_END_OF_STREAM;
+
+	//ループ再生の設定
+	buf.LoopCount = XAUDIO2_NO_LOOP_REGION;
+
+	//波形データの再生
+	result = loopSoundData.pSourceVoice->SubmitSourceBuffer(&buf);
+	result = loopSoundData.pSourceVoice->SetVolume(volume);
+	result = loopSoundData.pSourceVoice->Start();
+}
+
 void Audio::SoundLoopPlayWave(const LoopSoundData& loopSoundData, float volume)
 {
 

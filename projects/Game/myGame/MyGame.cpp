@@ -14,6 +14,8 @@ void MyGame::Initialize()
 	//シーンマネージャに最初のシーンをセット
 	sceneManager_->ChengeScene("GameScene1");
 
+	/*bgm_ = Audio::GetInstance()->LoopSoundLoadWave("Resources/sound/bgm.mp3");
+	Audio::GetInstance()->SoundLoopPlayWave(bgm_, 0.25f);*/
 	
 }
 
@@ -24,6 +26,7 @@ void MyGame::Finalize()
 	//delete gameScene_;
 	//gameScene_ = nullptr;
 
+	/*Audio::GetInstance()->SoundStopWave(bgm_);*/
 
 	YKFramework::Finalize();
 

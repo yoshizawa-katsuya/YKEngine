@@ -25,6 +25,8 @@ public:
 	//音声再生。1.0f = 100%の音量
 	void SoundPlayWave(const SoundData& soundData, float volume = 1.0f);
 
+	void SoundPlayWave(const LoopSoundData& loopSoundData, float volume = 1.0f);
+
 	//ループ再生。1.0f = 100%の音量
 	void SoundLoopPlayWave(const LoopSoundData& loopSoundData, float volume = 1.0f);
 

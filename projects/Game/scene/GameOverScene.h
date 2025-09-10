@@ -58,5 +58,7 @@ private:
 	int frameCount_ = 0;
 	int blinkIndex_ = 0;
 
+	LoopSoundData menuSE_;
+	LoopSoundData ketteiSE_;
 };
 

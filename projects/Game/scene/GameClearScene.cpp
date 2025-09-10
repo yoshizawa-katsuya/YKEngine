@@ -4,6 +4,7 @@
 
 GameClearScene::~GameClearScene()
 {
+	Finalize();
 }
 
 void GameClearScene::Initialize()
@@ -28,6 +29,12 @@ void GameClearScene::Initialize()
 	menuState_ = 0;
 	frameCount_ = 0;
 	blinkIndex_ = 0;
+
+	menuSE_ = audio_->LoopSoundLoadWave("Resources/sound/menuidou.mp3");
+	ketteiSE_ = audio_->LoopSoundLoadWave("Resources/sound/sentaku.mp3");
+
+	jingle_ = audio_->LoopSoundLoadWave("Resources/sound/clear2.mp3");
+	audio_->SoundPlayWave(jingle_);
 }
 
 void GameClearScene::Update()
@@ -91,17 +98,24 @@ void GameClearScene::Draw()
 
 void GameClearScene::Finalize()
 {
+	audio_->SoundStopWave(jingle_);
+	audio_->SoundStopWave(menuSE_);
+	audio_->SoundStopWave(ketteiSE_);
 }
 
 void GameClearScene::UpdateStart()
 {
 	if (input_->TriggerKey(DIK_W)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState_--;
 		if (menuState_ <= 0) {
 			menuState_ = 0;
 		}
 	}
 	else if (input_->TriggerKey(DIK_S)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState_++;
 		if (menuState_ >= 3) {
 			menuState_ = 3;
@@ -119,12 +133,16 @@ void GameClearScene::UpdateStart()
 void GameClearScene::UpdateMain()
 {
 	if (input_->TriggerKey(DIK_W)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState_--;
 		if (menuState_ <= 0) {
 			menuState_ = 0;
 		}
 	}
 	else if (input_->TriggerKey(DIK_S)) {
+		audio_->SoundPlayWave(menuSE_);
+
 		menuState_++;
 		if (menuState_ >= 3) {
 			menuState_ = 3;
@@ -133,6 +151,8 @@ void GameClearScene::UpdateMain()
 
 	if (menuState_ <= 2) {
 		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+			audio_->SoundPlayWave(ketteiSE_);
+
 			phase_ = Phase::kEnd;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		}

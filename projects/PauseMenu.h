@@ -17,6 +17,11 @@ public:
 	void UpdateMenu();
 public:
 	bool IsPaused();//ポーズ中かを取得
+
+	void SetMenuSE(LoopSoundData* menuSE) { menuSE_ = menuSE; };//メニューSEセット
+
+	void SetKetteiSE(LoopSoundData* ketteiSE) { ketteiSE_ = ketteiSE; };//決定SEセット
+
 private:
 	double easeInOutCirc(double x);
 private:
@@ -40,5 +45,7 @@ private:
 	float cursorAmplitude_ = 0.1f;//拡大幅
 	const float easeSpeed = 0.04f;//遷移速度
 
+	LoopSoundData* menuSE_ = nullptr;
+	LoopSoundData* ketteiSE_ = nullptr;
 };
 

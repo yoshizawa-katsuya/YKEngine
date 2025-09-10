@@ -8,7 +8,7 @@
 uint32_t GameScene::stageNum_ = 1;
 
 GameScene::~GameScene() {
-	//Finalize();
+	Finalize();
 }
 
 void GameScene::Initialize() {
@@ -70,6 +70,11 @@ void GameScene::Initialize() {
 	skyBoxTransform.UpdateMatrix();
 	skyBox_->WorldTransformUpdate(skyBoxTransform);
 
+	jumpSE_ = audio_->LoopSoundLoadWave("Resources/sound/jump2.mp3");
+	menuSE_ = audio_->LoopSoundLoadWave("Resources/sound/menuidou.mp3");
+	ketteiSE_ = audio_->LoopSoundLoadWave("Resources/sound/sentaku.mp3");
+	kandenSE_ = audio_->LoopSoundLoadWave("Resources/sound/kanden.mp3");
+
 	CreateLevel();
 
 	//カメラコントローラーの生成
@@ -85,9 +90,16 @@ void GameScene::Initialize() {
 	//ポーズメニュー
 	pause_ = std::make_unique<PauseMenu>();
 	pause_->Initialize();
+	pause_->SetMenuSE(&menuSE_);
+	pause_->SetKetteiSE(&ketteiSE_);
 
 	doorGimmick_ = std::make_unique<Door>();
 	doorGimmick_->Initialize(mapChipField_.get());
+
+	bgm_ = audio_->LoopSoundLoadWave("Resources/sound/bgm.mp3");
+	audio_->SoundLoopPlayWave(bgm_, 0.25f);
+
+	
 }
 
 void GameScene::Update() {
@@ -262,6 +274,11 @@ void GameScene::Draw() {
 
 void GameScene::Finalize()
 {
+	audio_->SoundStopWave(bgm_);
+	audio_->SoundStopWave(jumpSE_);
+	audio_->SoundStopWave(menuSE_);
+	audio_->SoundStopWave(ketteiSE_);
+	audio_->SoundStopWave(kandenSE_);
 
 }
 
@@ -275,6 +292,7 @@ void GameScene::CreateLevel()
 	player_ = std::make_unique<Player>();
 	player_->SetMapChipField(mapChipField_.get());
 	player_->SetElectricModel(modelElectric_.get());
+	player_->SetJumpSE(&jumpSE_);
 
 	//マップの生成
 	blocks_ = std::make_unique<InstancingObjects>();
@@ -446,9 +464,18 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 			float distSq = diff.x * diff.x + diff.y * diff.y;
 
 			if (distSq <= (electricRadius * electricRadius)) {
+				XAUDIO2_VOICE_STATE state;
+				kandenSE_.pSourceVoice->GetState(&state);
+				// 再生中でなければ再生
+				if(state.BuffersQueued == 0) {
+					audio_->SoundPlayWave(kandenSE_);
+				}
 
 				return true;
 			}
+
+			audio_->SoundStopWave(kandenSE_);
+
 		}
 
 		break;
