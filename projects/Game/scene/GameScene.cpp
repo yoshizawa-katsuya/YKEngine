@@ -237,18 +237,6 @@ void GameScene::Draw() {
 	skyBox_->CameraUpdate(mainCamera_);
 	skyBox_->Draw();
 
-	//Modelの描画前処理
-	modelPlatform_->PreDraw();
-	modelPlatform_->SetPipelineState(DrawMode::kCullBackMode);
-
-	goal_->Draw(mainCamera_);
-
-	modelPlatform_->SetPipelineState(DrawMode::kBlendModeNormal);
-	//プレイヤーの描画
-	player_->Draw(mainCamera_);
-
-	
-
 	//modelPlatform_->SkinPreDraw();
 
 	modelPlatform_->InstancingPreDraw();
@@ -260,6 +248,16 @@ void GameScene::Draw() {
 	trapSpines_->Draw();
 
 	gimmickManager_->Draw(mainCamera_);
+
+	//Modelの描画前処理
+	modelPlatform_->PreDraw();
+	modelPlatform_->SetPipelineState(DrawMode::kCullBackMode);
+
+	goal_->Draw(mainCamera_);
+
+	modelPlatform_->SetPipelineState(DrawMode::kBlendModeNormal);
+	//プレイヤーの描画
+	player_->Draw(mainCamera_);
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
