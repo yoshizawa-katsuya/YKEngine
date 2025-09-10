@@ -147,7 +147,7 @@ void PauseMenu::Update() {
 
 	fade_->Update();
 }
-void PauseMenu::Draw() {
+void PauseMenu::Draw(bool canDrawUI) {
 	if (easeTimer_ > 0.0f) {
 		if (!isControlScreen_) {
 			for (size_t i = 0; i < sprites_.size() - 1; i++) {
@@ -159,7 +159,7 @@ void PauseMenu::Draw() {
 		}
 	}
     //メニューUI描画
-	if (!fadeStart_&&!isControlScreen_) {
+	if (canDrawUI && !fadeStart_ && !isControlScreen_) {
 		sprites_[6]->Draw();
 	}
 	//フェード描画

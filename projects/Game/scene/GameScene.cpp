@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 	modelBlock_ = modelPlatform_->CreateRigidModel("./resources/block", "block.obj");
 	modelSpine_ = modelPlatform_->CreateRigidModel("./resources/spine", "spine.obj");
 	modelGoal_ = modelPlatform_->CreateCylinder(textureHandleGoal, "goal");
-	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denkih.obj");
+	modelElectric_ = modelPlatform_->CreateRigidModel("./resources/Denki", "denki.obj");
 
 	//スカイボックスの生成
 	skyBox_ = std::make_unique<Rigid3dObject>();
@@ -257,7 +257,8 @@ void GameScene::Draw() {
 
 	fade_->Draw();
 	//ポーズメニュー
-	pause_->Draw();
+	isDrawPauseUI = !(phase_ == Phase::kGameClear || phase_ == Phase::kGameOver);
+	pause_->Draw(isDrawPauseUI);
 }
 
 void GameScene::Finalize()
