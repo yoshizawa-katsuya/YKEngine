@@ -148,4 +148,6 @@ private:
 	bool dischargeVisible_ = false;
 	int  dischargeFrame_ = 0;
 	static constexpr int kDischargeLife = 45;
+	bool dischargeArmed_ = false;
+
 };

@@ -9,8 +9,7 @@
 #include "Sprite.h"
 #include "Fade.h"
 
-class GameClearScene : public BaseScene
-{
+class GameClearScene : public BaseScene {
 public:
 
 	~GameClearScene() override;
@@ -52,9 +51,12 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	std::array<std::unique_ptr<Sprite>, 8> gameClears_;
+	std::array<std::unique_ptr<Sprite>, 8> gameClears;
 
-	int menuState_ = 0;
-	int frameCount_ = 0;
-	int blinkIndex_ = 0;
+	int menuState = 0;
+	int frameCount = 0;
+	int blinkIndex = 0;
+
+	std::string nextSceneName_;
+
 };

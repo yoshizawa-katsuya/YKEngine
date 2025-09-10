@@ -365,23 +365,13 @@ void GameScene::UpdateMain()
 		cameraController_->Update();
 
 	if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
-
-		gimmickManager_->DoorGimmickChangeState(Door::State::kOpened);
-	}
-
-	if (CheckElectricCollision(MapChipType::kSpineTrigger))
-	{
-		gimmickManager_->SpineGimmickChangeState(SpineGimmick::State::kInactive);
-	}
-
-	if (CheckElectricCollision(MapChipType::kDisappearTrigger))
-	{
-		gimmickManager_->DisappearGimmickChangeState(DisappearGimmick::State::kActive);
-	}
-
-	if (CheckElectricCollision(MapChipType::kAppearTrigger))
-	{
-		gimmickManager_->AppearGimmickChangeState(AppearGimmick::State::kActive);
+		gimmickManager_->ToggleDoor();
+	} else if (CheckElectricCollision(MapChipType::kSpineTrigger)) {
+		gimmickManager_->ToggleSpine();
+	} else if (CheckElectricCollision(MapChipType::kDisappearTrigger)) {
+		gimmickManager_->ToggleDisappear();
+	} else if (CheckElectricCollision(MapChipType::kAppearTrigger)) {
+		gimmickManager_->ToggleAppear();
 	}
 	
 
@@ -393,20 +383,22 @@ void GameScene::UpdateMain()
 		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 			dischargeVisible_ = true;
 			dischargeFrame_ = 0;
+			dischargeArmed_ = true;   
 		}
 	}
 
+	
 	if (dischargeVisible_) {
 		if (auto er = player_->GetElectricRange()) {
 			Vector3 pos = er->GetPosition();
 			pos.z += 0.01f;
 			discharge_->SetPosition(pos);
 		}
-
 		discharge_->Update();
 
 		if (++dischargeFrame_ >= kDischargeLife) {
-			dischargeVisible_ = false;   
+			dischargeVisible_ = false;        
+			dischargeArmed_ = false;
 		}
 	}
 
@@ -446,7 +438,7 @@ void GameScene::UpdateGameOver()
 	}
 }
 bool GameScene::CheckElectricCollision(MapChipType type) {
-	if (!player_ || !discharge_ || !dischargeVisible_) return false;
+	if (!player_ || !discharge_ || !dischargeVisible_ || !dischargeArmed_) return false;
 
 	Vector3 center = player_->GetElectricRange()
 		? player_->GetElectricRange()->GetPosition()
@@ -455,60 +447,37 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 	
 	float radius = discharge_->GetRadius();
 
-	InstancingObjects* triggers_;
-
-	switch (type)
-	{
-	case MapChipType::kDoorTrigger:
-
-		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDoor);
-
-		break;
-
-	case MapChipType::kSpineTrigger:
-
-		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kSpine);
-
-		break;
-
-	case MapChipType::kDisappearTrigger:
-
-		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDisappear);
-
-		break;
-
-	case MapChipType::kAppearTrigger:
-
-		triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kAppear);
-
-		break;
-
-	default:
-
-		return false;
-
+	InstancingObjects* triggers_ = nullptr;
+	switch (type) {
+	case MapChipType::kDoorTrigger:      triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDoor);      break;
+	case MapChipType::kSpineTrigger:     triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kSpine);     break;
+	case MapChipType::kDisappearTrigger: triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kDisappear); break;
+	case MapChipType::kAppearTrigger:    triggers_ = gimmickManager_->GetTriggers(GimmickManager::GimmickType::kAppear);    break;
+	default: return false;
 	}
+	if (!triggers_) return false;
 
-	const float half = 2.0f / 2.0f;
-
+	const float half = 1.0f; 
 	for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
 		Vector3 p = triggers_->GetInstancePosition(i);
-
 		Vector3 mn = { p.x - half, p.y - half, 0.0f };
 		Vector3 mx = { p.x + half, p.y + half, 0.0f };
 
-		Vector3 closest = {
-			std::clamp(center.x, mn.x, mx.x),
-			std::clamp(center.y, mn.y, mx.y),
-			0.0f
-		};
+		Vector3 closest = { std::clamp(center.x, mn.x, mx.x),
+							std::clamp(center.y, mn.y, mx.y),
+							0.0f };
 
 		Vector3 d = center - closest;
 		float distSq = d.x * d.x + d.y * d.y;
 
 		if (distSq <= radius * radius) {
+			
+			dischargeArmed_ = false; 
+			
 			return true;
 		}
 	}
 	return false;
 }
+
+
