@@ -51,11 +51,13 @@ void GameClearScene::Update() {
 #endif // _DEBUG
 
 	if (input_->TriggerKey(DIK_W)) {
+		audio_->SoundPlayWave(menuSE_);
 		menuState--;
 		if (menuState <= 0) {
 			menuState = 0;
 		}
 	} else if (input_->TriggerKey(DIK_S)) {
+		audio_->SoundPlayWave(menuSE_);
 		menuState++;
 		if (menuState >= 3) {
 			menuState = 3;
@@ -113,22 +115,6 @@ void GameClearScene::Finalize()
 
 void GameClearScene::UpdateStart()
 {
-	if (input_->TriggerKey(DIK_W)) {
-		audio_->SoundPlayWave(menuSE_);
-
-		menuState_--;
-		if (menuState_ <= 0) {
-			menuState_ = 0;
-		}
-	}
-	else if (input_->TriggerKey(DIK_S)) {
-		audio_->SoundPlayWave(menuSE_);
-
-		menuState_++;
-		if (menuState_ >= 3) {
-			menuState_ = 3;
-		}
-	}
 
 	fade_->Update();
 	if (fade_->IsFinished()) {
@@ -139,27 +125,19 @@ void GameClearScene::UpdateStart()
 
 void GameClearScene::UpdateMain()
 {
-	if (input_->TriggerKey(DIK_W)) {
-		audio_->SoundPlayWave(menuSE_);
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+		if (menuState == 0) { // Retry (同じステージをやり直す)
+			const uint32_t stageNum = GameScene::stageNum_;
+			nextSceneName_ = "GameScene" + std::to_string(stageNum);
+			phase_ = Phase::kEnd;
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
 
-		menuState_--;
-		if (menuState_ <= 0) {
-			menuState_ = 0;
-		}
-	}
-	else if (input_->TriggerKey(DIK_S)) {
-		audio_->SoundPlayWave(menuSE_);
-
-		menuState_++;
-		if (menuState_ >= 3) {
-			menuState_ = 3;
-		}
-	}
-
-	if (menuState_ <= 2) {
-		if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
-			audio_->SoundPlayWave(ketteiSE_);
-
+		} else if (menuState == 1) {
+			nextSceneName_ = "StageSelectScene";
+			phase_ = Phase::kEnd;
+			fade_->Start(Fade::Status::FadeOut, 0.5f);
+		} else if (menuState == 2) {
+			nextSceneName_ = "TitleScene";
 			phase_ = Phase::kEnd;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		} else if (menuState == 3) {

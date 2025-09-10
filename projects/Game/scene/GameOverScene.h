@@ -53,9 +53,11 @@ private:
 
 	std::array<std::unique_ptr<Sprite>, 8> gameOvers;
 
-	int menuState = 0;
+	int menuState_ = 0;
 	int frameCount = 0;
 	int blinkIndex = 0;
+
+	std::string nextSceneName_;
 
 	LoopSoundData menuSE_;
 	LoopSoundData ketteiSE_;

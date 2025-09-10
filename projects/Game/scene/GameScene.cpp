@@ -362,8 +362,7 @@ void GameScene::UpdateStart()
 	}
 }
 
-void GameScene::UpdateMain()
-{
+void GameScene::UpdateMain() {
 	isKandenSEPlay_ = false;
 
 	//ポーズ中は停止
@@ -373,45 +372,53 @@ void GameScene::UpdateMain()
 
 		cameraController_->Update();
 
-	if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
-		gimmickManager_->ToggleDoor();
-	} else if (CheckElectricCollision(MapChipType::kSpineTrigger)) {
-		gimmickManager_->ToggleSpine();
-	} else if (CheckElectricCollision(MapChipType::kDisappearTrigger)) {
-		gimmickManager_->ToggleDisappear();
-	} else if (CheckElectricCollision(MapChipType::kAppearTrigger)) {
-		gimmickManager_->ToggleAppear();
-	}
-	
-
-	goal_->Update();
-
-	if (CheckElectricCollision(MapChipType::kAppearTrigger))
-	{
-		gimmickManager_->AppearGimmickChangeState(AppearGimmick::State::kActive);
-	}
-	
-	if (!isKandenSEPlay_)
-	{
-		audio_->SoundStopWave(kandenSE_);
-	}
-
-	goal_->Update();
-
-		if (++dischargeFrame_ >= kDischargeLife) {
-			dischargeVisible_ = false;        
-			dischargeArmed_ = false;
+		if (CheckElectricCollision(MapChipType::kDoorTrigger)) {
+			gimmickManager_->ToggleDoor();
+		} else if (CheckElectricCollision(MapChipType::kSpineTrigger)) {
+			gimmickManager_->ToggleSpine();
+		} else if (CheckElectricCollision(MapChipType::kDisappearTrigger)) {
+			gimmickManager_->ToggleDisappear();
+		} else if (CheckElectricCollision(MapChipType::kAppearTrigger)) {
+			gimmickManager_->ToggleAppear();
 		}
-	}
 
-		if (player_->HitGoal())
-		{
+		if (!isKandenSEPlay_) {
+			audio_->SoundStopWave(kandenSE_);
+		}
+
+		goal_->Update();
+
+
+
+		if (!dischargeVisible_) {
+			if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+				dischargeVisible_ = true;
+				dischargeFrame_ = 0;
+				dischargeArmed_ = true;
+			}
+		}
+
+
+		if (dischargeVisible_) {
+			if (auto er = player_->GetElectricRange()) {
+				Vector3 pos = er->GetPosition();
+				pos.z += 0.01f;
+				discharge_->SetPosition(pos);
+			}
+			discharge_->Update();
+
+			if (++dischargeFrame_ >= kDischargeLife) {
+				dischargeVisible_ = false;
+				dischargeArmed_ = false;
+			}
+		}
+
+		if (player_->HitGoal()) {
 			phase_ = Phase::kGameClear;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		}
 
-		if (player_->GetIsDead())
-		{
+		if (player_->GetIsDead()) {
 			phase_ = Phase::kGameOver;
 			fade_->Start(Fade::Status::FadeOut, 0.5f);
 		}
@@ -446,7 +453,7 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 		? player_->GetElectricRange()->GetPosition()
 		: Vector3{ 0,0,0 };
 
-	
+
 	float radius = discharge_->GetRadius();
 
 	InstancingObjects* triggers_ = nullptr;
@@ -459,7 +466,7 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 	}
 	if (!triggers_) return false;
 
-	const float half = 1.0f; 
+	const float half = 1.0f;
 	for (uint32_t i = 0; i < triggers_->GetNumInstance(); ++i) {
 		Vector3 p = triggers_->GetInstancePosition(i);
 		Vector3 mn = { p.x - half, p.y - half, 0.0f };
@@ -472,23 +479,12 @@ bool GameScene::CheckElectricCollision(MapChipType type) {
 		Vector3 d = center - closest;
 		float distSq = d.x * d.x + d.y * d.y;
 
-		// 最近接点と円の中心の距離を比較
-		Vector3 diff = electricPos - closest;
-		float distSq = diff.x * diff.x + diff.y * diff.y;
+		if (distSq <= radius * radius) {
 
-		if (distSq <= (electricRadius * electricRadius)) {
-			XAUDIO2_VOICE_STATE state;
-			kandenSE_.pSourceVoice->GetState(&state);
-			isKandenSEPlay_ = true;
-			// 再生中でなければ再生
-			if(state.BuffersQueued == 0) {
-				audio_->SoundPlayWave(kandenSE_);
-			}
+			dischargeArmed_ = false;
 
 			return true;
 		}
-
-		
 	}
 	return false;
 }
