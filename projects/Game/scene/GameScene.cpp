@@ -81,7 +81,7 @@ void GameScene::Initialize() {
 
 	gimmickManager_ = std::make_unique<GimmickManager>();
 	gimmickManager_->Initialize(mapChipField_.get());
-	//player_->SetElectricModel(modelElectric_.get());
+	player_->SetElectricModel(modelElectric_.get());
 
 	//カメラコントローラーの生成
 	cameraController_ = std::make_unique<CameraController>();
