@@ -130,8 +130,6 @@ void GameScene::Update() {
 		break;
 	}
 
-	CheckElectricCollision(MapChipType::kDoorTrigger);
-
 	cameraController_->Update();
 
 	modelPlatform_->LightPreUpdate();

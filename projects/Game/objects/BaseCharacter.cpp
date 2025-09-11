@@ -119,9 +119,17 @@ void BaseCharacter::MapCollisionUp(CollisionMapInfo& info) {
 
 	MapChipType mapChipType;
 	//真上の当たり判定を行う
-	bool hit = false;
-	//左上点の判定
 	MapChipField::IndexSet indexSet;
+	//右上点の判定
+	bool hit = false;
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	CheckHitMapChipType(mapChipType);
+
+	if (mapChipType == MapChipType::kBlock || mapChipType == MapChipType::kClosedDoor || mapChipType == MapChipType::kInactiveDisappear || mapChipType == MapChipType::kActiveAppear || mapChipType == MapChipType::kDoorTrigger || mapChipType == MapChipType::kSpineTrigger || mapChipType == MapChipType::kDisappearTrigger || mapChipType == MapChipType::kAppearTrigger) {
+		hit = true;
+	}
+	//左上点の判定
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
 	CheckHitMapChipType(mapChipType);
