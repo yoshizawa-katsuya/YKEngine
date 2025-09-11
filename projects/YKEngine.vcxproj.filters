@@ -276,23 +276,23 @@
     <ClCompile Include="Game\objects\SpineGimmick.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Discharge.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\objects\AppearGimmick.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\BaseCharacter.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\DisappearGimmick.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\Discharge.cpp">
+      <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\Door.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\ElectricRange.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -589,23 +589,23 @@
     <ClInclude Include="Game\objects\SpineGimmick.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Discharge.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\AppearGimmick.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\BaseCharacter.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\DisappearGimmick.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\Discharge.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\Door.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\ElectricRange.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
