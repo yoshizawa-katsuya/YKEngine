@@ -134,7 +134,7 @@ void GameScene::Update() {
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
-	
+
 	////リセット
 	//if (input_->TriggerKey(DIK_R))
 	//{
@@ -304,7 +304,7 @@ void GameScene::CreateLevel()
 
 	WorldTransform worldTransform = {};
 	MapChipField* mapChipField = mapChipField_.get();
-			
+
 	std::function<void(uint32_t, uint32_t)> setWorldTransform = [&worldTransform, mapChipField](uint32_t x, uint32_t y) {
 		worldTransform.Initialize();
 		worldTransform.translation_ = mapChipField->GetMapChipPositionByIndex(x, y);
