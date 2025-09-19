@@ -68,6 +68,8 @@ void YKFramework::Finalize()
 {
 	dxCommon_->Finalize();
 
+	audio_->Finalize();
+
 	threadPool_->Finalize();
 }
 
