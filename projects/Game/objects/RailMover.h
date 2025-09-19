@@ -38,9 +38,6 @@ private:
 	//向きを更新
 	void UpdateRotate();
 
-	//オフセットを更新
-	void UpdateOffset();
-
 	// スプライン曲線制御点(通過点)Add commentMore actions
 	std::vector<Vector3> controlPoints_;
 
@@ -49,10 +46,8 @@ private:
 	// 線分の数
 	const uint32_t segmentCount_ = 100;
 
-	Vector3 eye_;
 	Vector3 target_;
 	Vector3 forward_;
-	Vector3 offset_ = { 0.0f, 1.0f, 0.0f };
 
 	float speed_ = 0.1f;
 
@@ -69,5 +64,8 @@ private:
 	bool isInRotateEvent_ = false;
 	std::unique_ptr<SRTAnimator> srtAnimator_;
 
+	//回転リセットイベント用
 	uint32_t nextRotateResetWaveNumber_ = 1;
+
+	bool isDrawRail_ = false;
 };

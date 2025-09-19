@@ -8,6 +8,7 @@
 #include "SpeedEvent.h"
 #include "RotateEvent.h"
 #include "RotateResetEvent.h"
+#include "imgui/imgui.h"
 
 void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager)
 {
@@ -18,16 +19,10 @@ void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawn
 
 	CreateSplineCurve(controlPoints);
 	// 初期位置をスプラインの最初のポイントに設定
-	eye_ = pointsDrawing_[0]; // 初期位置をスプラインの最初のポイントに設定
-
-
-	//ワールドトランスフォームの初期設定
-	worldTransform_.translation_ = eye_;
+	worldTransform_.translation_ = pointsDrawing_[0]; // 初期位置をスプラインの最初のポイントに設定
 
 	//向きを更新する処理
 	UpdateRotate();
-
-	UpdateOffset();
 
 	worldTransform_.UpdateMatrix();
 
@@ -36,6 +31,14 @@ void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawn
 
 void RailMover::Update()
 {
+#ifdef _DEBUG
+
+	ImGui::Begin("RailMover");
+	ImGui::Checkbox("DrawRail", &isDrawRail_);
+	ImGui::End();
+
+#endif // _DEBUG
+
 	if (pointsDrawing_.size() > moveCount_) {
 		//残りの移動距離計算用の変数
 		float remainingMoveDistance = speed_;
@@ -43,7 +46,7 @@ void RailMover::Update()
 		// 位置を更新する処理
 		while (remainingMoveDistance > 0.0f && pointsDrawing_.size() > moveCount_)
 		{
-			Vector3 moveDirection = pointsDrawing_[moveCount_] - eye_;
+			Vector3 moveDirection = pointsDrawing_[moveCount_] - worldTransform_.translation_;
 			float distance = Length(moveDirection);
 
 			// ほぼゼロ距離の場合はスキップ
@@ -55,7 +58,7 @@ void RailMover::Update()
 			if (distance < remainingMoveDistance)
 			{
 				// 次のポイントに移動する距離が残りの距離よりも短い場合、次のポイントに移動
-				eye_ = pointsDrawing_[moveCount_];
+				worldTransform_.translation_ = pointsDrawing_[moveCount_];
 				remainingMoveDistance -= distance;
 				moveCount_++;
 
@@ -65,17 +68,14 @@ void RailMover::Update()
 				// 残りの距離が次のポイントまでの距離よりも長い場合、次のポイントに向かって移動
 				Vector3 normalizeDirection = Normalize(moveDirection);
 				// 残りの距離を考慮してカメラの位置を更新
-				eye_ += normalizeDirection * remainingMoveDistance;
+				worldTransform_.translation_ += normalizeDirection * remainingMoveDistance;
 				remainingMoveDistance = 0.0f;
 			}
 		}
 
-		worldTransform_.translation_ = eye_;
 
 		//向きを更新する処理
 		UpdateRotate();
-
-		UpdateOffset();
 
 	}
 
@@ -85,12 +85,16 @@ void RailMover::Update()
 
 void RailMover::DrawRail(Camera* camera)
 {
-	//線の描画
-	for (size_t i = 0; i < pointsDrawing_.size() - 1; i++) {
-		Matrix4x4 point1 = MakeTranslateMatrix(pointsDrawing_[i]);
-		Matrix4x4 point2 = MakeTranslateMatrix(pointsDrawing_[i + 1]);
-		ModelPlatform::GetInstance()->LineDraw(point1, point2, camera);
+	if (isDrawRail_) 
+	{
+		//線の描画
+		for (size_t i = 0; i < pointsDrawing_.size() - 1; i++) {
+			Matrix4x4 point1 = MakeTranslateMatrix(pointsDrawing_[i]);
+			Matrix4x4 point2 = MakeTranslateMatrix(pointsDrawing_[i + 1]);
+			ModelPlatform::GetInstance()->LineDraw(point1, point2, camera);
+		}
 	}
+	
 }
 
 void RailMover::OnCollision(Collider* other)
@@ -165,14 +169,4 @@ void RailMover::UpdateRotate()
 		worldTransform_.rotation_ = Lerp(worldTransform_.rotation_, targetRotation, 0.1f);
 
 	}
-}
-
-void RailMover::UpdateOffset()
-{
-	//オフセットを更新する処理
-	worldTransform_.UpdateMatrix();
-
-	offset_ = { 0.0f, 3.0f, 0.0f };
-	offset_ = TransformNormal(offset_, worldTransform_.worldMatrix_);
-	worldTransform_.translation_ += offset_;
 }
