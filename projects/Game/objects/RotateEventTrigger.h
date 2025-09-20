@@ -1,7 +1,7 @@
 #pragma once
-#include "BaseEvent.h"
+#include "BaseEventTrigger.h"
 
-class RotateEvent : public BaseEvent
+class RotateEventTrigger : public BaseEventTrigger
 {
 public:
 

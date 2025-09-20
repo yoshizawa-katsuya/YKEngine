@@ -291,19 +291,19 @@
     <ClCompile Include="Game\objects\RailMover.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\WaveEvent.cpp">
+    <ClCompile Include="Game\objects\EnemySpawnEventTrigger.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\SpeedEvent.cpp">
+    <ClCompile Include="Game\objects\SpeedEventTrigger.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\RotateEvent.cpp">
+    <ClCompile Include="Game\objects\RotateEventTrigger.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\BaseEvent.cpp">
+    <ClCompile Include="Game\objects\BaseEventTrigger.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\RotateResetEvent.cpp">
+    <ClCompile Include="Game\objects\RotateResetEventTrigger.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -610,19 +610,19 @@
     <ClInclude Include="Game\objects\RailMover.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\WaveEvent.h">
+    <ClInclude Include="Game\objects\EnemySpawnEventTrigger.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\SpeedEvent.h">
+    <ClInclude Include="Game\objects\SpeedEventTrigger.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\RotateEvent.h">
+    <ClInclude Include="Game\objects\RotateEventTrigger.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\BaseEvent.h">
+    <ClInclude Include="Game\objects\BaseEventTrigger.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\RotateResetEvent.h">
+    <ClInclude Include="Game\objects\RotateResetEventTrigger.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>

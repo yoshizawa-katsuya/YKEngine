@@ -27,7 +27,7 @@
 #include "Fade.h"
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
-#include "BaseEvent.h"
+#include "BaseEventTrigger.h"
 
 class GameScene : public BaseScene
 {
@@ -163,7 +163,7 @@ private:
 	std::unique_ptr<RailMover> railMover_;
 
 	//イベント
-	std::list<std::unique_ptr<BaseEvent>> events_;
+	std::list<std::unique_ptr<BaseEventTrigger>> events_;
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;

@@ -108,7 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game\objects\BaseEvent.cpp" />
+    <ClCompile Include="Game\objects\BaseEventTrigger.cpp" />
     <ClCompile Include="Game\scene\ClearScene.cpp" />
     <ClCompile Include="Game\scene\GameOverScene.cpp" />
     <ClCompile Include="Game\manager\EnemySpawnManager.cpp" />
@@ -178,10 +178,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\OffscreenRenderer.cpp" />
     <ClCompile Include="Game\objects\ReticleController.cpp" />
     <ClCompile Include="Game\objects\RailMover.cpp" />
-    <ClCompile Include="Game\objects\WaveEvent.cpp" />
-    <ClCompile Include="Game\objects\SpeedEvent.cpp" />
-    <ClCompile Include="Game\objects\RotateEvent.cpp" />
-    <ClCompile Include="Game\objects\RotateResetEvent.cpp" />
+    <ClCompile Include="Game\objects\EnemySpawnEventTrigger.cpp" />
+    <ClCompile Include="Game\objects\SpeedEventTrigger.cpp" />
+    <ClCompile Include="Game\objects\RotateEventTrigger.cpp" />
+    <ClCompile Include="Game\objects\RotateResetEventTrigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -350,7 +350,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game\objects\BaseEvent.h" />
+    <ClInclude Include="Game\objects\BaseEventTrigger.h" />
     <ClInclude Include="Game\scene\ClearScene.h" />
     <ClInclude Include="Game\scene\GameOverScene.h" />
     <ClInclude Include="Game\manager\EnemySpawnManager.h" />
@@ -423,10 +423,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\OffscreenRenderer.h" />
     <ClInclude Include="Game\objects\ReticleController.h" />
     <ClInclude Include="Game\objects\RailMover.h" />
-    <ClInclude Include="Game\objects\WaveEvent.h" />
-    <ClInclude Include="Game\objects\SpeedEvent.h" />
-    <ClInclude Include="Game\objects\RotateEvent.h" />
-    <ClInclude Include="Game\objects\RotateResetEvent.h" />
+    <ClInclude Include="Game\objects\EnemySpawnEventTrigger.h" />
+    <ClInclude Include="Game\objects\SpeedEventTrigger.h" />
+    <ClInclude Include="Game\objects\RotateEventTrigger.h" />
+    <ClInclude Include="Game\objects\RotateResetEventTrigger.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

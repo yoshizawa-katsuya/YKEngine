@@ -1,7 +1,7 @@
 #pragma once
-#include "BaseEvent.h"
+#include "BaseEventTrigger.h"
 
-class WaveEvent : public BaseEvent
+class EnemySpawnEventTrigger : public BaseEventTrigger
 {
 public:
 

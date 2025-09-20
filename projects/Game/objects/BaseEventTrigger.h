@@ -1,7 +1,7 @@
 #pragma once
 #include "Collider.h"
 
-class BaseEvent : public Collider
+class BaseEventTrigger : public Collider
 {
 public:
 

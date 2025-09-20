@@ -3,11 +3,11 @@
 #include "TransformHelpers.h"
 #include "Matrix.h"
 #include "ModelPlatform.h"
-#include "WaveEvent.h"
+#include "EnemySpawnEventTrigger.h"
 #include "manager/EnemySpawnManager.h"
-#include "SpeedEvent.h"
-#include "RotateEvent.h"
-#include "RotateResetEvent.h"
+#include "SpeedEventTrigger.h"
+#include "RotateEventTrigger.h"
+#include "RotateResetEventTrigger.h"
 #include "imgui/imgui.h"
 
 void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager)
@@ -100,43 +100,43 @@ void RailMover::DrawRail(Camera* camera)
 void RailMover::OnCollision(Collider* other)
 {
 	// WaveEventとの衝突時の処理
-	if (WaveEvent* waveEvent = dynamic_cast<WaveEvent*>(other))
+	if (EnemySpawnEventTrigger* waveEvent = dynamic_cast<EnemySpawnEventTrigger*>(other))
 	{
-		if (nextEnemyWaveNumber_ != waveEvent->GetWaveNumber())
+		if (nextEnemySpawnEventNumber_ != waveEvent->GetWaveNumber())
 		{
 			return;
 		}
-		enemySpawnManager_->WaveStart(nextEnemyWaveNumber_);
-		nextEnemyWaveNumber_++;
+		enemySpawnManager_->WaveStart(nextEnemySpawnEventNumber_);
+		nextEnemySpawnEventNumber_++;
 		
 	}
-	else if (SpeedEvent* speedEvent = dynamic_cast<SpeedEvent*>(other))
+	else if (SpeedEventTrigger* speedEvent = dynamic_cast<SpeedEventTrigger*>(other))
 	{
-		if (nextSpeedWaveNumber_ != speedEvent->GetWaveNumber())
+		if (nextSpeedEventNumber_ != speedEvent->GetWaveNumber())
 		{
 			return;
 		}
 		speed_ = speedEvent->GetSpeed();
-		nextSpeedWaveNumber_++;
+		nextSpeedEventNumber_++;
 	}
-	else if (RotateEvent* rotateEvent = dynamic_cast<RotateEvent*>(other))
+	else if (RotateEventTrigger* rotateEvent = dynamic_cast<RotateEventTrigger*>(other))
 	{
-		if (nextRotateWaveNumber_ != rotateEvent->GetWaveNumber())
+		if (nextRotateEventNumber_ != rotateEvent->GetWaveNumber())
 		{
 			return;
 		}
 		srtAnimator_->SetAnimation(worldTransform_.rotation_, rotateEvent->GetRotate(), 0.5f);
 		isInRotateEvent_ = true;
-		nextRotateWaveNumber_++;
+		nextRotateEventNumber_++;
 	}
-	else if (RotateResetEvent* rotateResetEvent = dynamic_cast<RotateResetEvent*>(other))
+	else if (RotateResetEventTrigger* rotateResetEvent = dynamic_cast<RotateResetEventTrigger*>(other))
 	{
-		if (nextRotateResetWaveNumber_ != rotateResetEvent->GetWaveNumber())
+		if (nextRotateResetEventNumber_ != rotateResetEvent->GetWaveNumber())
 		{
 			return;
 		}
 		isInRotateEvent_ = false;
-		nextRotateResetWaveNumber_++;
+		nextRotateResetEventNumber_++;
 	}
 	
 }

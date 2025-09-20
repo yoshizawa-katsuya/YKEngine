@@ -1,7 +1,7 @@
-#include "RotateResetEvent.h"
+#include "RotateResetEventTrigger.h"
 #include "RailMover.h"
 
-void RotateResetEvent::OnCollision(Collider* other)
+void RotateResetEventTrigger::OnCollision(Collider* other)
 {
 	if (RailMover* railMover = dynamic_cast<RailMover*>(other))
 	{
