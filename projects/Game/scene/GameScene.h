@@ -19,14 +19,14 @@
 #include "RigidModel.h"
 #include "RailCamera.h"
 #include "Enemy.h"
-#include "EnemyBullet.h"
+#include "bullet/EnemyBullet.h"
 #include "Skydome.h"
-#include "PlayerBullet.h"
-#include "CollisionManager.h"
+#include "bullet/PlayerBullet.h"
+#include "manager/CollisionManager.h"
 #include "Fade.h"
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
-#include "BaseEventTrigger.h"
+#include "eventTrigger/BaseEventTrigger.h"
 
 class GameScene : public BaseScene
 {

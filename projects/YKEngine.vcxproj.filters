@@ -82,6 +82,18 @@
     <Filter Include="ヘッダー ファイル\manager">
       <UniqueIdentifier>{76dcb174-40e6-43a7-8403-673a98fffff4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\objects\bullet">
+      <UniqueIdentifier>{cd59d97f-9aea-4425-b3ad-cb1a8d8d0164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\objects\eventTrigger">
+      <UniqueIdentifier>{71e8d74f-fb59-40e9-b738-c7c97be08269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\objects\bullet">
+      <UniqueIdentifier>{f1cd4bae-1e41-4dee-95c6-46488eb8b7ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\objects\eventTrigger">
+      <UniqueIdentifier>{ff41f0ea-4034-4283-b919-fa6afdd836d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -240,12 +252,6 @@
     <ClCompile Include="Game\objects\Enemy.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\EnemyBullet.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\PlayerBullet.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -253,9 +259,6 @@
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\BaseCharacter.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\CollisionManager.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
     <ClCompile Include="Engine\lib\GlobalVariables.cpp">
@@ -273,9 +276,6 @@
     <ClCompile Include="Engine\lib\Curve.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\BaseBullet.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\manager\EnemySpawnManager.cpp">
       <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
@@ -291,23 +291,35 @@
     <ClCompile Include="Game\objects\RailMover.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\EnemySpawnEventTrigger.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\SpeedEventTrigger.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\RotateEventTrigger.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\BaseEventTrigger.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\RotateResetEventTrigger.cpp">
-      <Filter>ソース ファイル\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\manager\EffectManager.cpp">
       <Filter>ソース ファイル\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\manager\CollisionManager.cpp">
+      <Filter>ソース ファイル\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\bullet\EnemyBullet.cpp">
+      <Filter>ソース ファイル\objects\bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\bullet\BaseBullet.cpp">
+      <Filter>ソース ファイル\objects\bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\bullet\PlayerBullet.cpp">
+      <Filter>ソース ファイル\objects\bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\eventTrigger\EnemySpawnEventTrigger.cpp">
+      <Filter>ソース ファイル\objects\eventTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\eventTrigger\RotateEventTrigger.cpp">
+      <Filter>ソース ファイル\objects\eventTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\eventTrigger\RotateResetEventTrigger.cpp">
+      <Filter>ソース ファイル\objects\eventTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\eventTrigger\SpeedEventTrigger.cpp">
+      <Filter>ソース ファイル\objects\eventTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\eventTrigger\BaseEventTrigger.cpp">
+      <Filter>ソース ファイル\objects\eventTrigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -556,12 +568,6 @@
     <ClInclude Include="Game\objects\Enemy.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\EnemyBullet.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\RailCamera.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
@@ -572,9 +578,6 @@
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\BaseCharacter.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\CollisionManager.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Engine\lib\GlobalVariables.h">
@@ -595,9 +598,6 @@
     <ClInclude Include="Engine\lib\Curve.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\BaseBullet.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\manager\EnemySpawnManager.h">
       <Filter>ヘッダー ファイル\manager</Filter>
     </ClInclude>
@@ -613,23 +613,35 @@
     <ClInclude Include="Game\objects\RailMover.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\EnemySpawnEventTrigger.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\SpeedEventTrigger.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\RotateEventTrigger.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\BaseEventTrigger.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\RotateResetEventTrigger.h">
-      <Filter>ヘッダー ファイル\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\manager\EffectManager.h">
       <Filter>ヘッダー ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\manager\CollisionManager.h">
+      <Filter>ヘッダー ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\BaseBullet.h">
+      <Filter>ヘッダー ファイル\objects\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\objects\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\objects\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\eventTrigger\EnemySpawnEventTrigger.h">
+      <Filter>ヘッダー ファイル\objects\eventTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\eventTrigger\BaseEventTrigger.h">
+      <Filter>ヘッダー ファイル\objects\eventTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\eventTrigger\RotateEventTrigger.h">
+      <Filter>ヘッダー ファイル\objects\eventTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\eventTrigger\RotateResetEventTrigger.h">
+      <Filter>ヘッダー ファイル\objects\eventTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\eventTrigger\SpeedEventTrigger.h">
+      <Filter>ヘッダー ファイル\objects\eventTrigger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

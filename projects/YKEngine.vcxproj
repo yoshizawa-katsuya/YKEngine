@@ -109,13 +109,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game\manager\EffectManager.cpp" />
-    <ClCompile Include="Game\objects\BaseEventTrigger.cpp" />
+    <ClCompile Include="Game\objects\eventTrigger\BaseEventTrigger.cpp" />
     <ClCompile Include="Game\scene\ClearScene.cpp" />
     <ClCompile Include="Game\scene\GameOverScene.cpp" />
     <ClCompile Include="Game\manager\EnemySpawnManager.cpp" />
-    <ClCompile Include="Game\objects\BaseBullet.cpp" />
+    <ClCompile Include="Game\objects\bullet\BaseBullet.cpp" />
     <ClCompile Include="Engine\lib\GlobalVariables.cpp" />
-    <ClCompile Include="Game\objects\CollisionManager.cpp" />
+    <ClCompile Include="Game\manager\CollisionManager.cpp" />
     <ClCompile Include="Game\objects\BaseCharacter.cpp" />
     <ClCompile Include="Game\objects\Collider.cpp" />
     <ClCompile Include="Engine\3d\Base3dObject.cpp" />
@@ -135,8 +135,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\lib\dx12.cpp" />
     <ClCompile Include="Game\objects\Enemy.cpp" />
-    <ClCompile Include="Game\objects\EnemyBullet.cpp" />
-    <ClCompile Include="Game\objects\PlayerBullet.cpp" />
+    <ClCompile Include="Game\objects\bullet\EnemyBullet.cpp" />
+    <ClCompile Include="Game\objects\bullet\PlayerBullet.cpp" />
     <ClCompile Include="Game\objects\RailCamera.cpp" />
     <ClCompile Include="Game\objects\Skydome.cpp" />
     <ClCompile Include="Game\scene\GameScene.cpp" />
@@ -179,10 +179,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\OffscreenRenderer.cpp" />
     <ClCompile Include="Game\objects\ReticleController.cpp" />
     <ClCompile Include="Game\objects\RailMover.cpp" />
-    <ClCompile Include="Game\objects\EnemySpawnEventTrigger.cpp" />
-    <ClCompile Include="Game\objects\SpeedEventTrigger.cpp" />
-    <ClCompile Include="Game\objects\RotateEventTrigger.cpp" />
-    <ClCompile Include="Game\objects\RotateResetEventTrigger.cpp" />
+    <ClCompile Include="Game\objects\eventTrigger\EnemySpawnEventTrigger.cpp" />
+    <ClCompile Include="Game\objects\eventTrigger\SpeedEventTrigger.cpp" />
+    <ClCompile Include="Game\objects\eventTrigger\RotateEventTrigger.cpp" />
+    <ClCompile Include="Game\objects\eventTrigger\RotateResetEventTrigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -352,13 +352,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\manager\EffectManager.h" />
-    <ClInclude Include="Game\objects\BaseEventTrigger.h" />
+    <ClInclude Include="Game\objects\eventTrigger\BaseEventTrigger.h" />
     <ClInclude Include="Game\scene\ClearScene.h" />
     <ClInclude Include="Game\scene\GameOverScene.h" />
     <ClInclude Include="Game\manager\EnemySpawnManager.h" />
-    <ClInclude Include="Game\objects\BaseBullet.h" />
+    <ClInclude Include="Game\objects\bullet\BaseBullet.h" />
     <ClInclude Include="Engine\lib\GlobalVariables.h" />
-    <ClInclude Include="Game\objects\CollisionManager.h" />
+    <ClInclude Include="Game\manager\CollisionManager.h" />
     <ClInclude Include="Game\objects\BaseCharacter.h" />
     <ClInclude Include="Game\objects\Collider.h" />
     <ClInclude Include="Engine\3d\Base3dObject.h" />
@@ -388,8 +388,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\PrimitiveDrawer.h" />
     <ClInclude Include="Game\objects\CollisionTypeIdDef.h" />
     <ClInclude Include="Game\objects\Enemy.h" />
-    <ClInclude Include="Game\objects\EnemyBullet.h" />
-    <ClInclude Include="Game\objects\PlayerBullet.h" />
+    <ClInclude Include="Game\objects\bullet\EnemyBullet.h" />
+    <ClInclude Include="Game\objects\bullet\PlayerBullet.h" />
     <ClInclude Include="Game\objects\RailCamera.h" />
     <ClInclude Include="Game\objects\Skydome.h" />
     <ClInclude Include="Game\scene\GameScene.h" />
@@ -425,10 +425,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\OffscreenRenderer.h" />
     <ClInclude Include="Game\objects\ReticleController.h" />
     <ClInclude Include="Game\objects\RailMover.h" />
-    <ClInclude Include="Game\objects\EnemySpawnEventTrigger.h" />
-    <ClInclude Include="Game\objects\SpeedEventTrigger.h" />
-    <ClInclude Include="Game\objects\RotateEventTrigger.h" />
-    <ClInclude Include="Game\objects\RotateResetEventTrigger.h" />
+    <ClInclude Include="Game\objects\eventTrigger\EnemySpawnEventTrigger.h" />
+    <ClInclude Include="Game\objects\eventTrigger\SpeedEventTrigger.h" />
+    <ClInclude Include="Game\objects\eventTrigger\RotateEventTrigger.h" />
+    <ClInclude Include="Game\objects\eventTrigger\RotateResetEventTrigger.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

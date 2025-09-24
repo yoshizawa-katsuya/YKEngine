@@ -8,10 +8,10 @@
 #include "Matrix.h"
 #include "LevelDataLoader.h"
 #include "Vector2.h"
-#include "EnemySpawnEventTrigger.h"
-#include "SpeedEventTrigger.h"
-#include "RotateEventTrigger.h"
-#include "RotateResetEventTrigger.h"
+#include "eventTrigger/EnemySpawnEventTrigger.h"
+#include "eventTrigger/SpeedEventTrigger.h"
+#include "eventTrigger/RotateEventTrigger.h"
+#include "eventTrigger/RotateResetEventTrigger.h"
 
 GameScene::~GameScene() {
 	//Finalize();

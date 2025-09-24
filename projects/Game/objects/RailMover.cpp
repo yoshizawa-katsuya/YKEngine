@@ -3,11 +3,11 @@
 #include "TransformHelpers.h"
 #include "Matrix.h"
 #include "ModelPlatform.h"
-#include "EnemySpawnEventTrigger.h"
+#include "eventTrigger/EnemySpawnEventTrigger.h"
 #include "manager/EnemySpawnManager.h"
-#include "SpeedEventTrigger.h"
-#include "RotateEventTrigger.h"
-#include "RotateResetEventTrigger.h"
+#include "eventTrigger/SpeedEventTrigger.h"
+#include "eventTrigger/RotateEventTrigger.h"
+#include "eventTrigger/RotateResetEventTrigger.h"
 #include "imgui/imgui.h"
 
 void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager)
