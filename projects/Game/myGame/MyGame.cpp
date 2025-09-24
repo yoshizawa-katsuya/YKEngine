@@ -1,12 +1,15 @@
 #include "MyGame.h"
 #include "SceneFactory.h"
 #include "OffscreenRenderer.h"
+#include "manager/EffectManager.h"
 
 void MyGame::Initialize()
 {
 
 	//基底クラスの初期化処理
 	YKFramework::Initialize();
+
+	EffectManager::GetInstance()->Initialize();
 
 	//シーンファクトリを生成し、マネージャにセット
 	sceneFactory_ = std::make_unique<SceneFactory>();

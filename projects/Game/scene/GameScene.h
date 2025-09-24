@@ -15,7 +15,6 @@
 #include "Player.h"
 #include "Camera.h"
 #include "DebugCamera.h"
-#include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 #include "RailCamera.h"
@@ -174,8 +173,6 @@ private:
 	WorldTransform worldTransform2_;
 	*/
 
-	//パーティクル
-	std::unique_ptr<ParticleEmitter> emitter_;
 	//std::unique_ptr<AccelerationField> field_;
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 

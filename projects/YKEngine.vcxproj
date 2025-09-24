@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\manager\EffectManager.cpp" />
     <ClCompile Include="Game\objects\BaseEventTrigger.cpp" />
     <ClCompile Include="Game\scene\ClearScene.cpp" />
     <ClCompile Include="Game\scene\GameOverScene.cpp" />
@@ -350,6 +351,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\manager\EffectManager.h" />
     <ClInclude Include="Game\objects\BaseEventTrigger.h" />
     <ClInclude Include="Game\scene\ClearScene.h" />
     <ClInclude Include="Game\scene\GameOverScene.h" />

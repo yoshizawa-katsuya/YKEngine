@@ -178,6 +178,7 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 	{
 		assert(particleGroups_[name].textureHandle == textureHandle);
 
+		//既にある場合はパーティクルをリセットする
 		particleGroups_[name].particles.clear();
 		particleGroups_[name].numInstance = 0;
 		particleGroups_[name].behavior = behavior;

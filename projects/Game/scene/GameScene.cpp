@@ -108,18 +108,6 @@ void GameScene::Initialize() {
 	groundTransform.UpdateMatrix();
 	ground_->WorldTransformUpdate(groundTransform);
 
-	//パーティクル
-	emitter_ = std::make_unique<ParticleEmitter>("HitEffect01", 3, 1.5f);
-	uint32_t textureHandle3 = TextureManager::GetInstance()->Load("./Resources/circle2.png");
-	emitter_->Initialize(textureHandle3, modelPlatform_->CreatePlane(textureHandle3));
-	emitter_->SetScale({ 0.1f, 2.0f, 2.0f });
-	emitter_->SetIsRandomScele(true);
-	emitter_->SetIsRandomRotate(true);
-	emitter_->SetRandRotateMax({ 0.0f, 0.0f, std::numbers::pi_v<float> });
-	emitter_->SetRandRotateMin({ 0.0f, 0.0f, -std::numbers::pi_v<float> });
-	emitter_->SetRandScaleMax({ 0.0f, 1.0f, 0.0f });
-	emitter_->SetRandScaleMin({ 0.0f, -0.6f, 0.0f });
-
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 0.5f);
