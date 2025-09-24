@@ -334,7 +334,7 @@ void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const
 	std::unique_ptr<Enemy>& enemy = enemys_.emplace_back();
 	// 敵の初期化
 	enemy = std::make_unique<Enemy>();
-	enemy->Initialize(modelEnemy_.get(), position, rotation, &viewPortMatrix_, controlPoints);
+	enemy->Initialize(modelEnemy_.get(), position, rotation, &viewPortMatrix_, camera_.get(), controlPoints);
 	enemy->SetPlayer(player_.get());
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetGameScene(this);

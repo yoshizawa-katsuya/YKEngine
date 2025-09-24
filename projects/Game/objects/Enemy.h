@@ -2,6 +2,7 @@
 #include "BaseCharacter.h"
 class Player;
 class GameScene;
+class Camera;
 
 //敵
 class Enemy : public BaseCharacter
@@ -12,18 +13,11 @@ public:
 	~Enemy();
 
 	// 初期化
-	void Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, const std::vector<Vector3>& controlPoints);
+	void Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, Camera* railCamera, const std::vector<Vector3>& controlPoints);
 
-	void ApproachInitialize();
-
+	
 	// 更新
 	void Update() override;
-
-	void ApproachUpdate();
-	void LeaveUpdate();
-
-	//弾発射
-	void Fire();
 
 	//衝突時に呼ばれる関数
 	void OnCollision([[maybe_unused]] Collider* other) override;
@@ -45,8 +39,23 @@ public:
 
 private:
 	
+	void MainInitialize();
+
+	void UpdateApproach();
+	void UpdateMain();
+	void UpdateLeave();
+
+	//弾発射
+	void Fire();
+
 	//曲線の作成
 	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
+
+	//移動
+	void Move();
+
+	//回転
+	void Rotate();
 
 	//レールに沿って移動
 	void MoveAlongRail();
@@ -65,14 +74,14 @@ private:
 
 	enum class Phase {
 		Approach, // 接近する
-		Leave,    // 離脱する
+		Main,	// メイン
+		Leave,	// 離脱する
 	};
 	//フェーズ
 	Phase phase_ = Phase::Approach;
 
 	// キャラクターの移動速さ
-	Vector3 approachVelocity_ = {0.0f, 0.0f, 0.1f};
-	Vector3 leaveVelocity_ = {0.1f, -0.1f, 0.0f};
+	Vector3 velocity_ = {0.0f, 0.0f, 0.1f};
 
 	//ビューポート行列
 	Matrix4x4* viewPortMatrix_ = nullptr;
@@ -80,6 +89,10 @@ private:
 	int hitPoint_ = 3; // ヒットポイント
 
 	Vector3 direction_; // 方向
+
+	float leaveTimer_ = 0.0f; // 離脱タイマー
+
+	Camera* railCamera_ = nullptr; // レールカメラ
 
 	// スプライン曲線制御点(通過点)Add commentMore actions
 	std::vector<Vector3> controlPoints_;

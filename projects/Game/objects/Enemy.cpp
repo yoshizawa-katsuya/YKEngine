@@ -17,10 +17,12 @@ Enemy::~Enemy() {
 	*/
 }
 
-void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, const std::vector<Vector3>& controlPoints) {
+void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, Camera* railCamera, const std::vector<Vector3>& controlPoints) {
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
+
+	railCamera_ = railCamera;
 
 	if (!controlPoints.empty())
 	{
@@ -33,89 +35,32 @@ void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3&
 		worldTransform_.translation_ = position;
 		//移動方向を初期化
 		Matrix4x4 rotateMatrix = MakeRotateMatrix(rotaion);
-		approachVelocity_ = TransformNormal(approachVelocity_, rotateMatrix);
+		velocity_ = TransformNormal(velocity_, rotateMatrix);
 	}
 	viewPortMatrix_ = viewPortMatrix;
 
 	worldTransform_.rotation_ = rotaion;
 
-	ApproachInitialize();
+	MainInitialize();
 }
 
-void Enemy::ApproachInitialize() {
-	//発射タイマーを初期化
-	fireTimer = kFireInterval;
-	
-}
+
 
 void Enemy::Update() {
 
 	switch (phase_) {
 	case Phase::Approach:
-	default:
-		ApproachUpdate();
+		UpdateApproach();
+		break;
+	case Phase::Main:
+		UpdateMain();
 		break;
 	case Phase::Leave:
-		LeaveUpdate();
+		UpdateLeave();
 		break;
 	}
 
 	BaseCharacter::Update();
-}
-
-void Enemy::ApproachUpdate() {
-
-	//発射タイマーカウントダウン
-	fireTimer--;
-	//指定時間に達した
-	if (fireTimer == 0) {
-		//弾を発射
-		Fire();
-		//発射タイマーを初期化
-		fireTimer = kFireInterval;
-	}
-
-	// 移動
-	if (hasRail_)
-	{
-		MoveAlongRail();
-	}
-	else
-	{
-		worldTransform_.translation_ += approachVelocity_;
-	}
-	
-
-	//回転
-	Vector3 toPosition = player_->GetWorldPosition();
-	direction_ = Subtract(toPosition, GetWorldPosition());
-	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
-	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
-
-	// 規定の位置に到達したら離脱
-	/*if (worldTransform_.translation_.z < 0.0f) {
-		phase_ = Phase::Leave;
-	}*/
-}
-
-void Enemy::LeaveUpdate() {
-	// 移動
-	worldTransform_.translation_ += leaveVelocity_;
-	
-}
-
-void Enemy::Fire() {
-
-	//弾の速さ
-	const float kBulletSpeed = 0.5f;
-
-	Vector3 velocity = Normalize(direction_);
-	velocity = Multiply(kBulletSpeed, velocity);
-
-	// 弾を生成し、初期化
-	gameScene_->AddEnemybullet(GetWorldPosition(), velocity);
-	//enemyBullets_.push_back(newBullet);
-
 }
 
 void Enemy::OnCollision(Collider* other)
@@ -149,6 +94,93 @@ Vector2 Enemy::GetScreenPosition(Camera* camera) {
 	return { screenPosition.x, screenPosition.y };
 }
 
+void Enemy::MainInitialize() {
+	//発射タイマーを初期化
+	fireTimer = kFireInterval;
+
+}
+
+void Enemy::UpdateApproach() {
+
+	// 移動
+	Move();
+
+	//レールカメラに映っていたらメインフェーズへ
+	if (IsVisible(railCamera_))
+	{
+		phase_ = Phase::Main;
+		MainInitialize();
+	}
+
+	//回転
+	Rotate();
+
+}
+
+void Enemy::UpdateMain() {
+
+	//発射タイマーカウントダウン
+	fireTimer--;
+	//指定時間に達した
+	if (fireTimer == 0) {
+		//弾を発射
+		Fire();
+		//発射タイマーを初期化
+		fireTimer = kFireInterval;
+	}
+
+	// 移動
+	Move();
+
+	//回転
+	Rotate();
+
+	//レールカメラに映っていなかったら離脱フェーズへ
+	if (!hasRail_ && !IsVisible(railCamera_))
+	{
+		phase_ = Phase::Leave;
+	}
+
+}
+
+void Enemy::UpdateLeave()
+{
+	//離脱タイマーをカウント
+	leaveTimer_ += 1.0f / 60.0f;
+	float leaveTime = 1.0f; // 離脱までの時間（秒）
+	if (leaveTimer_ > leaveTime) 
+	{
+		isDead_ = true;
+	}
+
+	if (IsVisible(railCamera_))
+	{
+		phase_ = Phase::Main;
+		leaveTimer_ = 0.0f;
+		MainInitialize();
+	}
+
+	// 移動
+	Move();
+
+	//回転
+	Rotate();
+}
+
+void Enemy::Fire() {
+
+	//弾の速さ
+	const float kBulletSpeed = 0.5f;
+
+	Vector3 velocity = Normalize(direction_);
+	velocity = Multiply(kBulletSpeed, velocity);
+
+	// 弾を生成し、初期化
+	gameScene_->AddEnemybullet(GetWorldPosition(), velocity);
+	//enemyBullets_.push_back(newBullet);
+
+}
+
 void Enemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
 {
 	// レベルデータから制御点を取得
@@ -157,6 +189,26 @@ void Enemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
 	}
 	// Catmull-Romスプラインのポイントを生成
 	corvePoints_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
+}
+
+void Enemy::Move()
+{
+	if (hasRail_)
+	{
+		MoveAlongRail();
+	}
+	else
+	{
+		worldTransform_.translation_ += velocity_;
+	}
+}
+
+void Enemy::Rotate()
+{
+	Vector3 toPosition = player_->GetWorldPosition();
+	direction_ = Subtract(toPosition, GetWorldPosition());
+	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 }
 
 void Enemy::MoveAlongRail()
@@ -200,7 +252,7 @@ void Enemy::MoveAlongRail()
 		// レールの終点に到達した場合
 		if (corvePoints_.size() <= moveCount_)
 		{
-			approachVelocity_ = speed_ * Normalize(moveDirection);
+			velocity_ = speed_ * Normalize(moveDirection);
 			hasRail_ = false;
 		}
 	}
