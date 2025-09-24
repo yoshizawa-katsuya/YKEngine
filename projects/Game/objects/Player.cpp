@@ -193,7 +193,7 @@ void Player::Attack() {
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 
 		//弾の速度
-		const float kBulletSpeed = 1.0f;
+		const float kBulletSpeed = 2.0f;
 
 		Vector3 velocity = Multiply(kBulletSpeed, Normalize(direction_));
 		

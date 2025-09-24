@@ -11,6 +11,8 @@ void BaseBullet::Initialize(BaseModel* model, const Vector3& position, const Vec
 	worldTransform_.translation_ = position;
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+
+	SetRadius(0.5f);
 }
 
 void BaseBullet::Update()
@@ -21,7 +23,7 @@ void BaseBullet::Update()
 	}
 
 	//座標を移動させる
-	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+	worldTransform_.translation_ += velocity_;
 
 	BaseCharacter::Update();
 }
