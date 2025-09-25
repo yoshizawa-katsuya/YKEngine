@@ -19,7 +19,6 @@
 #include "RigidModel.h"
 #include "RailCamera.h"
 #include "Enemy.h"
-#include "bullet/EnemyBullet.h"
 #include "Skydome.h"
 #include "manager/CollisionManager.h"
 #include "Fade.h"
@@ -27,6 +26,7 @@
 #include "RailMover.h"
 #include "eventTrigger/BaseEventTrigger.h"
 #include "manager/PlayerBulletManager.h"
+#include "manager/EnemyBulletManager.h"
 
 class GameScene : public BaseScene
 {
@@ -41,11 +41,6 @@ public:
 	void Draw() override;
 
 	void Finalize() override;
-
-	/// <summary>
-	/// 敵弾を追加する
-	/// </summary>
-	void AddEnemybullet(const Vector3& worldPosition, const Vector3& velocity);
 
 	/// <summary>
 	/// 敵発生
@@ -114,11 +109,9 @@ private:
 	std::shared_ptr<BaseModel> modelGround_;
 	std::shared_ptr<BaseModel> modelPlayer_;
 	std::shared_ptr<BaseModel> modelEnemy_;
-	std::shared_ptr<BaseModel> modelBullet_;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_;
-	uint32_t textureHandleEnemyBullet_;
 	uint32_t textureHandleSkyBox_;
 	//std::unique_ptr<Sprite> sprite_;
 
@@ -138,7 +131,7 @@ private:
 	std::list<std::unique_ptr<Enemy>> enemys_;
 
 	// 敵の弾
-	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+	std::unique_ptr<EnemyBulletManager> enemyBulletManager_;
 
 	//天球
 	/*std::unique_ptr<Skydome> skydome_;*/

@@ -324,6 +324,9 @@
     <ClCompile Include="Game\manager\PlayerBulletManager.cpp">
       <Filter>ソース ファイル\manager</Filter>
     </ClCompile>
+    <ClCompile Include="Game\manager\EnemyBulletManager.cpp">
+      <Filter>ソース ファイル\manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -647,6 +650,9 @@
       <Filter>ヘッダー ファイル\objects\eventTrigger</Filter>
     </ClInclude>
     <ClInclude Include="Game\manager\PlayerBulletManager.h">
+      <Filter>ヘッダー ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\manager\EnemyBulletManager.h">
       <Filter>ヘッダー ファイル\manager</Filter>
     </ClInclude>
   </ItemGroup>

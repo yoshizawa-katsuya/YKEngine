@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseCharacter.h"
 class Player;
-class GameScene;
+class EnemyBulletManager;
 class Camera;
 
 //敵
@@ -35,7 +35,7 @@ public:
 
 	const float GetRadius() const { return radius_; }
 
-	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+	void SetEnemyBulletManager(EnemyBulletManager* enemyBulletManager) { enemyBulletManager_ = enemyBulletManager; }
 
 private:
 	
@@ -62,8 +62,8 @@ private:
 
 	//自キャラ
 	Player* player_ = nullptr;
-	//ゲームシーン
-	GameScene* gameScene_ = nullptr;
+	//敵の弾マネージャー
+	EnemyBulletManager* enemyBulletManager_ = nullptr;
 
 	// 弾
 	//std::list<EnemyBullet*> enemyBullets_;

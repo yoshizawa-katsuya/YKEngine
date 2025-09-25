@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\manager\EnemyBulletManager.cpp" />
     <ClCompile Include="Game\manager\EffectManager.cpp" />
     <ClCompile Include="Game\objects\eventTrigger\BaseEventTrigger.cpp" />
     <ClCompile Include="Game\scene\ClearScene.cpp" />
@@ -352,6 +353,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\manager\EnemyBulletManager.h" />
     <ClInclude Include="Game\manager\EffectManager.h" />
     <ClInclude Include="Game\objects\eventTrigger\BaseEventTrigger.h" />
     <ClInclude Include="Game\scene\ClearScene.h" />

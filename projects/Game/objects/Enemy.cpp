@@ -176,7 +176,7 @@ void Enemy::Fire() {
 	velocity = Multiply(kBulletSpeed, velocity);
 
 	// 弾を生成し、初期化
-	gameScene_->AddEnemybullet(GetWorldPosition(), velocity);
+	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity);
 	//enemyBullets_.push_back(newBullet);
 
 }
