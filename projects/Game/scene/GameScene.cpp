@@ -53,7 +53,6 @@ void GameScene::Initialize() {
 	
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
-	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/black.png");
 	textureHandleEnemyBullet_ = TextureManager::GetInstance()->Load("./Resources/red.png");
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
@@ -64,6 +63,10 @@ void GameScene::Initialize() {
 	modelGround_->SetEnvironmentCoefficient(0.8f);
 	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 	modelBullet_ = modelPlatform_->CreateSphere(textureHandle_, "Bullet");
+
+	//自機の弾マネージャーの生成
+	playerBulletManager_ = std::make_unique<PlayerBulletManager>();
+	playerBulletManager_->Initialize();
 
 	//エネミースポーンマネージャーの生成
 	enemySpawnManager_ = std::make_unique<EnemySpawnManager>();
@@ -254,10 +257,8 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
-	//弾描画
-	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
-		bullet->Draw(mainCamera_);
-	}
+	//自機の弾の描画
+	playerBulletManager_->Draw(mainCamera_);
 
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
 		enemy->Draw(mainCamera_);
@@ -309,9 +310,7 @@ void GameScene::CheckAllColision() {
 	//コライダーをリストに登録
 	collisionManager_->AddCollider(railMover_.get());
 	collisionManager_->AddCollider(player_.get());
-	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
-		collisionManager_->AddCollider(bullet.get());
-	}
+	playerBulletManager_->AddColliders(collisionManager_.get());
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
 		collisionManager_->AddCollider(enemy.get());
 	}
@@ -339,15 +338,6 @@ void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetGameScene(this);
 
-}
-
-void GameScene::AddPlayerbullet(const Vector3& worldPosition, const Vector3& velocity)
-{
-	//リストに登録する
-	//弾を生成し、初期化
-	std::unique_ptr<PlayerBullet>& bullet = playerBullets_.emplace_back();
-	bullet = std::make_unique<PlayerBullet>();
-	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandlePlayerBullet_);
 }
 
 void GameScene::AddEnemybullet(const Vector3& worldPosition, const Vector3& velocity) {
@@ -392,17 +382,8 @@ void GameScene::UpdateMain()
 	//プレイヤーの更新
 	player_->Update(camera_.get());
 
-	// デスフラグの立った弾を削除
-	playerBullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
-		if (bullet->IsDead()) {
-			return true;
-		}
-		return false;
-		});
-	//弾更新
-	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
-		bullet->Update();
-	}
+	//自機の弾の更新
+	playerBulletManager_->Update();
 
 	//デスフラグの立った敵を削除
 	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) {
@@ -493,7 +474,7 @@ void GameScene::CreateLevel()
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_, railMover_->GetWorldTransform(), heratTextureHandle, heratFrameTextureHandle);
-	player_->SetGameScene(this);
+	player_->SetPlayerBulletManager(playerBulletManager_.get());
 
 	// レールカメラの生成
 	railCamera_ = std::make_unique<RailCamera>();

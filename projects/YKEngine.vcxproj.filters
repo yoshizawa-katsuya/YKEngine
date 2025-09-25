@@ -321,6 +321,9 @@
     <ClCompile Include="Game\objects\eventTrigger\BaseEventTrigger.cpp">
       <Filter>ソース ファイル\objects\eventTrigger</Filter>
     </ClCompile>
+    <ClCompile Include="Game\manager\PlayerBulletManager.cpp">
+      <Filter>ソース ファイル\manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -642,6 +645,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\eventTrigger\SpeedEventTrigger.h">
       <Filter>ヘッダー ファイル\objects\eventTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\manager\PlayerBulletManager.h">
+      <Filter>ヘッダー ファイル\manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

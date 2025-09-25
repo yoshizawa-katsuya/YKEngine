@@ -4,7 +4,7 @@
 #include "WinApp.h"
 #include "Camera.h"
 #include "Lerp.h"
-#include "GameScene.h"
+#include "manager/PlayerBulletManager.h"
 #include "ReticleController.h"
 #include "TransformHelpers.h"
 
@@ -198,7 +198,7 @@ void Player::Attack() {
 		Vector3 velocity = Multiply(kBulletSpeed, Normalize(direction_));
 		
 		//弾を生成し、初期化
-		gameScene_->AddPlayerbullet(GetWorldPosition(), velocity);
+		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity);
 
 	}
 

@@ -183,6 +183,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\eventTrigger\SpeedEventTrigger.cpp" />
     <ClCompile Include="Game\objects\eventTrigger\RotateEventTrigger.cpp" />
     <ClCompile Include="Game\objects\eventTrigger\RotateResetEventTrigger.cpp" />
+    <ClCompile Include="Game\manager\PlayerBulletManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -429,6 +430,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\eventTrigger\SpeedEventTrigger.h" />
     <ClInclude Include="Game\objects\eventTrigger\RotateEventTrigger.h" />
     <ClInclude Include="Game\objects\eventTrigger\RotateResetEventTrigger.h" />
+    <ClInclude Include="Game\manager\PlayerBulletManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

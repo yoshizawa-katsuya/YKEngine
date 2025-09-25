@@ -21,12 +21,12 @@
 #include "Enemy.h"
 #include "bullet/EnemyBullet.h"
 #include "Skydome.h"
-#include "bullet/PlayerBullet.h"
 #include "manager/CollisionManager.h"
 #include "Fade.h"
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
 #include "eventTrigger/BaseEventTrigger.h"
+#include "manager/PlayerBulletManager.h"
 
 class GameScene : public BaseScene
 {
@@ -41,11 +41,6 @@ public:
 	void Draw() override;
 
 	void Finalize() override;
-
-	/// <summary>
-	/// プレイヤーの弾を追加する
-	/// </summary>
-	void AddPlayerbullet(const Vector3& worldPosition, const Vector3& velocity);
 
 	/// <summary>
 	/// 敵弾を追加する
@@ -123,7 +118,6 @@ private:
 
 	//テクスチャハンドル
 	uint32_t textureHandle_;
-	uint32_t textureHandlePlayerBullet_;
 	uint32_t textureHandleEnemyBullet_;
 	uint32_t textureHandleSkyBox_;
 	//std::unique_ptr<Sprite> sprite_;
@@ -136,8 +130,8 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
-	//弾
-	std::list<std::unique_ptr<PlayerBullet>> playerBullets_;
+	//プレイヤーの弾
+	std::unique_ptr<PlayerBulletManager> playerBulletManager_;
 
 	//敵
 	//Enemy* enemy_ = nullptr;

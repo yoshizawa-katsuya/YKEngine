@@ -6,8 +6,8 @@
 #include "BaseCharacter.h"
 #include "ReticleController.h"
 class Camera;
-class GameScene;
 class Enemy;
+class PlayerBulletManager;
 
 class Player : public BaseCharacter
 {
@@ -31,7 +31,7 @@ public:
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
-	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+	void SetPlayerBulletManager(PlayerBulletManager* playerBulletManager) { playerBulletManager_ = playerBulletManager; }
 
 private:
 
@@ -50,8 +50,8 @@ private:
 	//キーボード入力
 	Input* input_ = nullptr;
 
-	//ゲームシーン
-	GameScene* gameScene_ = nullptr;
+	//自機の弾のマネージャー
+	PlayerBulletManager* playerBulletManager_ = nullptr;
 
 	std::unique_ptr<ReticleController> reticleController_ = nullptr;
 
