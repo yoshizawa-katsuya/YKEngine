@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include "InstancingObjects.h"
-class GameScene; // 前方宣言
+class EnemyManager;
 
 // 敵の出現データを保持する構造体
 struct EnemySpawn
@@ -18,7 +18,7 @@ class EnemySpawnManager
 {
 public:
 
-	void Initialize(GameScene* scene); // 初期化メソッド
+	void Initialize(); // 初期化メソッド
 
 	void Update(); // 更新メソッド
 
@@ -27,6 +27,8 @@ public:
     void AddSpawnData(uint32_t waveNumber, const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints);
 
 	void WaveStart(uint32_t waveNum); // ウェーブ開始メソッド
+
+	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; } // 敵管理クラスのポインタを設定する
 
 private:
 	
@@ -51,7 +53,7 @@ private:
 	//現在のフェーズ
 	Phase phase_ = Phase::kWait;
 
-	GameScene* gameScene_; // ゲームシーンへのポインタ
+	EnemyManager* enemyManager_ = nullptr; // 敵管理クラスのポインタ
 
 	std::vector<EnemySpawn> spawnDatas_; // 敵の出現データリスト
 

@@ -1,0 +1,56 @@
+#include "EnemyManager.h"
+#include "ModelPlatform.h"
+#include "ShotEnemy01.h"
+#include "CollisionManager.h"
+
+void EnemyManager::Initialize(Player* player, Camera* railCamera, Matrix4x4* viewPortMatrix, EnemyBulletManager* enemyBulletManager)
+{
+	player_ = player;
+	railCamera_ = railCamera;
+	viewPortMatrix_ = viewPortMatrix;
+	enemyBulletManager_ = enemyBulletManager;
+
+	modelEnemy_ = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
+
+}
+
+void EnemyManager::Update()
+{
+	//デスフラグの立った敵を削除
+	enemys_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
+		if (enemy->IsDead()) {
+			return true;
+		}
+		return false;
+		});
+	// 敵の更新
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
+		enemy->Update();
+	}
+}
+
+void EnemyManager::Draw(Camera* camera)
+{
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
+		enemy->Draw(camera);
+	}
+}
+
+void EnemyManager::PopEnemy(const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints)
+{
+	// 敵の生成
+	std::unique_ptr<BaseEnemy>& enemy = enemys_.emplace_back();
+	// 敵の初期化
+	enemy = std::make_unique<ShotEnemy01>();
+	enemy->Initialize(modelEnemy_.get(), position, rotation, viewPortMatrix_, railCamera_, controlPoints);
+	enemy->SetPlayer(player_);
+	// 敵キャラにゲームシーンを渡す
+	enemy->SetEnemyBulletManager(enemyBulletManager_);
+}
+
+void EnemyManager::RegisterToCollisionManager(CollisionManager* collisionManager)
+{
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
+		collisionManager->AddCollider(enemy.get());
+	}
+}

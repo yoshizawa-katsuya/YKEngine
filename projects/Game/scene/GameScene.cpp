@@ -57,7 +57,6 @@ void GameScene::Initialize() {
 	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
 	modelGround_->SetUVTransform({ {160.0f, 160.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
 	modelGround_->SetEnvironmentCoefficient(0.8f);
-	modelEnemy_ = modelPlatform_->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 
 	//自機の弾マネージャーの生成
 	playerBulletManager_ = std::make_unique<PlayerBulletManager>();
@@ -69,10 +68,15 @@ void GameScene::Initialize() {
 
 	//エネミースポーンマネージャーの生成
 	enemySpawnManager_ = std::make_unique<EnemySpawnManager>();
-	enemySpawnManager_->Initialize(this);
+	enemySpawnManager_->Initialize();
 
 	//ステージの生成
 	CreateLevel();
+
+	//敵マネージャーの生成
+	enemyManager_ = std::make_unique<EnemyManager>();
+	enemyManager_->Initialize(player_.get(), camera_.get(), &viewPortMatrix_, enemyBulletManager_.get());
+	enemySpawnManager_->SetEnemyManager(enemyManager_.get());
 
 	//デバッグカメラの生成
 	camera2_ = std::make_unique<Camera>();
@@ -259,9 +263,8 @@ void GameScene::Draw() {
 	//自機の弾の描画
 	playerBulletManager_->Draw(mainCamera_);
 
-	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
-		enemy->Draw(mainCamera_);
-	}
+	// 敵の描画
+	enemyManager_->Draw(mainCamera_);
 
 	// 弾描画
 	enemyBulletManager_->Draw(mainCamera_);
@@ -308,28 +311,13 @@ void GameScene::CheckAllColision() {
 	collisionManager_->AddCollider(railMover_.get());
 	collisionManager_->AddCollider(player_.get());
 	playerBulletManager_->RegisterToCollisionManager(collisionManager_.get());
-	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
-		collisionManager_->AddCollider(enemy.get());
-	}
+	enemyManager_->RegisterToCollisionManager(collisionManager_.get());
 	enemyBulletManager_->RegisterToCollisionManager(collisionManager_.get());
 	eventTriggerManager_->RegisterToCollisionManager(collisionManager_.get());
 	
 
 	collisionManager_->Update();
 	collisionManager_->CheckAllCollisions();
-
-}
-
-void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints) {
-
-	// 敵の生成
-	std::unique_ptr<BaseEnemy>& enemy = enemys_.emplace_back();
-	// 敵の初期化
-	enemy = std::make_unique<ShotEnemy01>();
-	enemy->Initialize(modelEnemy_.get(), position, rotation, &viewPortMatrix_, camera_.get(), controlPoints);
-	enemy->SetPlayer(player_.get());
-	// 敵キャラにゲームシーンを渡す
-	enemy->SetEnemyBulletManager(enemyBulletManager_.get());
 
 }
 
@@ -363,24 +351,15 @@ void GameScene::UpdateMain()
 	//自機の弾の更新
 	playerBulletManager_->Update();
 
-	//デスフラグの立った敵を削除
-	enemys_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
-		if (enemy->IsDead()) {
-			return true;
-		}
-		return false;
-		});
-	// 敵の更新
-	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
-		enemy->Update();
-	}
+	//敵の更新
+	enemyManager_->Update();
 
 	//敵の弾の更新
 	enemyBulletManager_->Update(camera_.get());
 
 	CheckAllColision();
 
-	player_->SetLockOnTarget(enemys_, camera_.get());
+	player_->SetLockOnTarget(enemyManager_->GetEnemies(), camera_.get());
 
 	CheckGameClear();
 

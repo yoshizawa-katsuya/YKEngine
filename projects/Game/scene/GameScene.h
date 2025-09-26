@@ -18,7 +18,7 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 #include "RailCamera.h"
-#include "BaseEnemy.h"
+#include "manager/EnemyManager.h"
 #include "Skydome.h"
 #include "manager/CollisionManager.h"
 #include "Fade.h"
@@ -41,11 +41,6 @@ public:
 	void Draw() override;
 
 	void Finalize() override;
-
-	/// <summary>
-	/// 敵発生
-	/// </summary>
-	void EnemyPop(const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints);
 
 private:
 
@@ -108,7 +103,6 @@ private:
 	/*std::shared_ptr<BaseModel> modelSkydome_;*/
 	std::shared_ptr<BaseModel> modelGround_;
 	std::shared_ptr<BaseModel> modelPlayer_;
-	std::shared_ptr<BaseModel> modelEnemy_;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_;
@@ -127,8 +121,7 @@ private:
 	std::unique_ptr<PlayerBulletManager> playerBulletManager_;
 
 	//敵
-	//BaseEnemy* enemy_ = nullptr;
-	std::list<std::unique_ptr<BaseEnemy>> enemys_;
+	std::unique_ptr<EnemyManager> enemyManager_;
 
 	// 敵の弾
 	std::unique_ptr<EnemyBulletManager> enemyBulletManager_;

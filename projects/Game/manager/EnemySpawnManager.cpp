@@ -3,15 +3,13 @@
 #include "Easing.h"
 #include "Lerp.h"
 
-void EnemySpawnManager::Initialize(GameScene* scene)
+void EnemySpawnManager::Initialize()
 {
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");
 	std::shared_ptr<BaseModel> model = ModelPlatform::GetInstance()->CreateSphere(textureHandle, "EnemySpawn");
 
 	objects_ = std::make_unique<InstancingObjects>();
 	objects_->Initialize(model.get(), 127);
-
-	gameScene_ = scene;
 
 	worldTransforms_.resize(30);
 }
@@ -164,7 +162,7 @@ void EnemySpawnManager::SpawnEnemies()
 	{
 		if (spawnData->waveNumber <= waveNumber_)
 		{
-			gameScene_->EnemyPop(spawnData->position, spawnData->rotation, spawnData->controlPoints);
+			enemyManager_->PopEnemy(spawnData->position, spawnData->rotation, spawnData->controlPoints);
 			spawnData = spawnDatas_.erase(spawnData);	//出現した敵のデータを削除
 		}
 		else
