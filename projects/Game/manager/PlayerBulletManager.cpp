@@ -44,7 +44,7 @@ void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Ve
 	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandlePlayerBullet_);
 }
 
-void PlayerBulletManager::AddColliders(CollisionManager* collisionManager)
+void PlayerBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)
 {
 	for (std::unique_ptr<PlayerBullet>& bullet : playerBullets_) {
 		collisionManager->AddCollider(bullet.get());

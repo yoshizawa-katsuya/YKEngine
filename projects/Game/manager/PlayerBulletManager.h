@@ -15,7 +15,7 @@ public:
 
 	void AddPlayerBullet(const Vector3& worldPosition, const Vector3& velocity);
 
-	void AddColliders(CollisionManager* collisionManager);
+	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
 private:
 

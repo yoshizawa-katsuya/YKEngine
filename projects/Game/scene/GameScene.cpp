@@ -8,10 +8,7 @@
 #include "Matrix.h"
 #include "LevelDataLoader.h"
 #include "Vector2.h"
-#include "eventTrigger/EnemySpawnEventTrigger.h"
-#include "eventTrigger/SpeedEventTrigger.h"
-#include "eventTrigger/RotateEventTrigger.h"
-#include "eventTrigger/RotateResetEventTrigger.h"
+
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -310,14 +307,12 @@ void GameScene::CheckAllColision() {
 	//コライダーをリストに登録
 	collisionManager_->AddCollider(railMover_.get());
 	collisionManager_->AddCollider(player_.get());
-	playerBulletManager_->AddColliders(collisionManager_.get());
+	playerBulletManager_->RegisterToCollisionManager(collisionManager_.get());
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
 		collisionManager_->AddCollider(enemy.get());
 	}
-	enemyBulletManager_->AddColliders(collisionManager_.get());
-	for (std::unique_ptr<BaseEventTrigger>& event : events_) {
-		collisionManager_->AddCollider(event.get());
-	}
+	enemyBulletManager_->RegisterToCollisionManager(collisionManager_.get());
+	eventTriggerManager_->RegisterToCollisionManager(collisionManager_.get());
 	
 
 	collisionManager_->Update();
@@ -353,13 +348,8 @@ void GameScene::UpdateMain()
 	//敵のスポーンマネージャーの更新
 	enemySpawnManager_->Update();
 
-	//デスフラグの立ったイベントを削除
-	events_.remove_if([](std::unique_ptr<BaseEventTrigger>& event) {
-		if (event->IsDead()) {
-			return true;
-		}
-		return false;
-		});
+	//イベントトリガーの更新
+	eventTriggerManager_->Update();
 
 	//レールムーバーの更新
 	railMover_->Update();
@@ -478,6 +468,9 @@ void GameScene::CreateLevel()
 
 	}
 	
+	//イベントトリガーマネージャーの生成
+	eventTriggerManager_ = std::make_unique<EventTriggerManager>();
+
 	//オブジェクトの生成
 	std::string key;
 
@@ -486,44 +479,52 @@ void GameScene::CreateLevel()
 
 		key = objectData.fileName;
 
-		if (key == "waveEvent")
+		if (key.find("Event") != std::string::npos)
 		{
-			//波イベントの生成
-			std::unique_ptr<BaseEventTrigger>& waveEvent = events_.emplace_back();
-			waveEvent = std::make_unique<EnemySpawnEventTrigger>();
-			waveEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
+			//イベントトリガーの生成
+			eventTriggerManager_->AddEvent(key, objectData);
 
 			continue;
 		}
-		else if (key == "speedEvent")
-		{
-			//スピードイベントの生成
-			std::unique_ptr<BaseEventTrigger>& speedEvent = events_.emplace_back();
-			SpeedEventTrigger* speedEventPtr = new SpeedEventTrigger();
-			speedEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
-			speedEvent = std::make_unique<SpeedEventTrigger>(*speedEventPtr);
-			
-			continue;
-		}
-		else if (key == "rotateEvent")
-		{
-			//回転イベントの生成
-			std::unique_ptr<BaseEventTrigger>& rotateEvent = events_.emplace_back();
-			RotateEventTrigger* rotateEventPtr = new RotateEventTrigger();
-			rotateEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
-			rotateEvent = std::make_unique<RotateEventTrigger>(*rotateEventPtr);
-			
-			continue;
-		}
-		else if (key == "rotateResetEvent")
-		{
-			//回転リセットイベントの生成
-			std::unique_ptr<BaseEventTrigger>& rotateResetEvent = events_.emplace_back();
-			rotateResetEvent = std::make_unique<RotateResetEventTrigger>();
-			rotateResetEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
-			
-			continue;
-		}
+
+		//if (key == "waveEvent")
+		//{
+		//	//波イベントの生成
+		//	std::unique_ptr<BaseEventTrigger>& waveEvent = events_.emplace_back();
+		//	waveEvent = std::make_unique<EnemySpawnEventTrigger>();
+		//	waveEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
+
+		//	continue;
+		//}
+		//else if (key == "speedEvent")
+		//{
+		//	//スピードイベントの生成
+		//	std::unique_ptr<BaseEventTrigger>& speedEvent = events_.emplace_back();
+		//	SpeedEventTrigger* speedEventPtr = new SpeedEventTrigger();
+		//	speedEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
+		//	speedEvent = std::make_unique<SpeedEventTrigger>(*speedEventPtr);
+		//	
+		//	continue;
+		//}
+		//else if (key == "rotateEvent")
+		//{
+		//	//回転イベントの生成
+		//	std::unique_ptr<BaseEventTrigger>& rotateEvent = events_.emplace_back();
+		//	RotateEventTrigger* rotateEventPtr = new RotateEventTrigger();
+		//	rotateEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
+		//	rotateEvent = std::make_unique<RotateEventTrigger>(*rotateEventPtr);
+		//	
+		//	continue;
+		//}
+		//else if (key == "rotateResetEvent")
+		//{
+		//	//回転リセットイベントの生成
+		//	std::unique_ptr<BaseEventTrigger>& rotateResetEvent = events_.emplace_back();
+		//	rotateResetEvent = std::make_unique<RotateResetEventTrigger>();
+		//	rotateResetEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
+		//	
+		//	continue;
+		//}
 
 		if (!instancingObjects_.contains(key))
 		{

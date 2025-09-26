@@ -24,7 +24,7 @@
 #include "Fade.h"
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
-#include "eventTrigger/BaseEventTrigger.h"
+#include "manager/EventTriggerManager.h"
 #include "manager/PlayerBulletManager.h"
 #include "manager/EnemyBulletManager.h"
 
@@ -148,8 +148,8 @@ private:
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;
 
-	//イベント
-	std::list<std::unique_ptr<BaseEventTrigger>> events_;
+	//イベントトリガーマネージャー
+	std::unique_ptr<EventTriggerManager> eventTriggerManager_;
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;

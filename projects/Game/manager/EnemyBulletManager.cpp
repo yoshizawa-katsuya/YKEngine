@@ -42,7 +42,7 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandleEnemyBullet_);
 }
 
-void EnemyBulletManager::AddColliders(CollisionManager* collisionManager)
+void EnemyBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)
 {
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 		collisionManager->AddCollider(bullet.get());
