@@ -249,7 +249,7 @@
     <ClCompile Include="Game\objects\RailCamera.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\Enemy.cpp">
+    <ClCompile Include="Game\objects\BaseEnemy.cpp">
       <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -329,6 +329,9 @@
     </ClCompile>
     <ClCompile Include="Game\manager\EventTriggerManager.cpp">
       <Filter>ソース ファイル\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\ShotEnemy01.cpp">
+      <Filter>ソース ファイル\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -574,7 +577,7 @@
     <ClInclude Include="Engine\lib\ParticleTypes.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\Enemy.h">
+    <ClInclude Include="Game\objects\BaseEnemy.h">
       <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\RailCamera.h">
@@ -660,6 +663,9 @@
     </ClInclude>
     <ClInclude Include="Game\manager\EventTriggerManager.h">
       <Filter>ヘッダー ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\ShotEnemy01.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

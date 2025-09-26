@@ -18,7 +18,7 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 #include "RailCamera.h"
-#include "Enemy.h"
+#include "BaseEnemy.h"
 #include "Skydome.h"
 #include "manager/CollisionManager.h"
 #include "Fade.h"
@@ -127,8 +127,8 @@ private:
 	std::unique_ptr<PlayerBulletManager> playerBulletManager_;
 
 	//敵
-	//Enemy* enemy_ = nullptr;
-	std::list<std::unique_ptr<Enemy>> enemys_;
+	//BaseEnemy* enemy_ = nullptr;
+	std::list<std::unique_ptr<BaseEnemy>> enemys_;
 
 	// 敵の弾
 	std::unique_ptr<EnemyBulletManager> enemyBulletManager_;

@@ -136,7 +136,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\DirectionalLight.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\lib\dx12.cpp" />
-    <ClCompile Include="Game\objects\Enemy.cpp" />
+    <ClCompile Include="Game\objects\BaseEnemy.cpp" />
     <ClCompile Include="Game\objects\bullet\EnemyBullet.cpp" />
     <ClCompile Include="Game\objects\bullet\PlayerBullet.cpp" />
     <ClCompile Include="Game\objects\RailCamera.cpp" />
@@ -186,6 +186,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\eventTrigger\RotateEventTrigger.cpp" />
     <ClCompile Include="Game\objects\eventTrigger\RotateResetEventTrigger.cpp" />
     <ClCompile Include="Game\manager\PlayerBulletManager.cpp" />
+    <ClCompile Include="Game\objects\ShotEnemy01.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -392,7 +393,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3d\PrimitiveDrawer.h" />
     <ClInclude Include="Game\objects\CollisionTypeIdDef.h" />
-    <ClInclude Include="Game\objects\Enemy.h" />
+    <ClInclude Include="Game\objects\BaseEnemy.h" />
     <ClInclude Include="Game\objects\bullet\EnemyBullet.h" />
     <ClInclude Include="Game\objects\bullet\PlayerBullet.h" />
     <ClInclude Include="Game\objects\RailCamera.h" />
@@ -435,6 +436,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\eventTrigger\RotateEventTrigger.h" />
     <ClInclude Include="Game\objects\eventTrigger\RotateResetEventTrigger.h" />
     <ClInclude Include="Game\manager\PlayerBulletManager.h" />
+    <ClInclude Include="Game\objects\ShotEnemy01.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

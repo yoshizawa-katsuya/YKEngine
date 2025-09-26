@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "Camera.h"
 #include "Matrix.h"
-#include "Enemy.h"
+#include "BaseEnemy.h"
 #include "Collision.h"
 
 void ReticleController::Initialize(Matrix4x4* viewPortMatrix)
@@ -110,7 +110,7 @@ void ReticleController::Draw()
 	spriteSmallReticle_->Draw();
 }
 
-void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* railCamera)
+void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera)
 {
 	Vector2 ScreenPosA = spriteLargeReticle_->GetPosition();
 	Vector2 SizeA = spriteLargeReticle_->GetSize();
@@ -121,7 +121,7 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>&
 	Vector2 targetScreenPosition = { 0.0f, 0.0f };
 	Vector3 targetWorldPosition = { 0.0f, 0.0f , 0.0f};
 
-	for (const std::unique_ptr<Enemy>& enemy : enemies) {
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemies) {
 
 		if (!enemy->IsVisible(railCamera)) {
 			continue; // 敵が見えない場合はスキップ

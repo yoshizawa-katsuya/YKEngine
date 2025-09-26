@@ -5,22 +5,21 @@ class EnemyBulletManager;
 class Camera;
 
 //敵
-class Enemy : public BaseCharacter
+class BaseEnemy : public BaseCharacter
 {
 public:
 
 	//デストラクタ
-	~Enemy();
+	virtual ~BaseEnemy();
 
 	// 初期化
 	void Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, Camera* railCamera, const std::vector<Vector3>& controlPoints);
 
-	
 	// 更新
-	void Update() override;
+	virtual void Update() override;
 
 	//衝突時に呼ばれる関数
-	void OnCollision([[maybe_unused]] Collider* other) override;
+	virtual void OnCollision([[maybe_unused]] Collider* other) override;
 
 	void SetPlayer(Player* player) { player_ = player; }
 
@@ -37,7 +36,7 @@ public:
 
 	void SetEnemyBulletManager(EnemyBulletManager* enemyBulletManager) { enemyBulletManager_ = enemyBulletManager; }
 
-private:
+protected:
 	
 	void MainInitialize();
 

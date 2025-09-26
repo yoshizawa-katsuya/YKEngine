@@ -114,7 +114,7 @@ void Player::DrawUI()
 	}
 }
 
-void Player::SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* railCamera)
+void Player::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera)
 {
 	reticleController_->SetLockOnTarget(enemies, railCamera);
 }

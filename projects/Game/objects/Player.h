@@ -6,7 +6,7 @@
 #include "BaseCharacter.h"
 #include "ReticleController.h"
 class Camera;
-class Enemy;
+class BaseEnemy;
 class PlayerBulletManager;
 
 class Player : public BaseCharacter
@@ -26,7 +26,7 @@ public:
 	//UI描画
 	void DrawUI();
 
-	void SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* railCamera);
+	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera);
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();

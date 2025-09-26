@@ -1,4 +1,4 @@
-#include "Enemy.h"
+#include "BaseEnemy.h"
 #include "cassert"
 #include "Vector3.h"
 #include "Matrix.h"
@@ -9,7 +9,7 @@
 #include "Lerp.h"
 #include "Curve.h"
 
-Enemy::~Enemy() {
+BaseEnemy::~BaseEnemy() {
 	/*
 	for (EnemyBullet* bullet : enemyBullets_) {
 		delete bullet;
@@ -17,7 +17,7 @@ Enemy::~Enemy() {
 	*/
 }
 
-void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, Camera* railCamera, const std::vector<Vector3>& controlPoints) {
+void BaseEnemy::Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, Camera* railCamera, const std::vector<Vector3>& controlPoints) {
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
@@ -44,9 +44,7 @@ void Enemy::Initialize(BaseModel* model, const Vector3& position, const Vector3&
 	MainInitialize();
 }
 
-
-
-void Enemy::Update() {
+void BaseEnemy::Update() {
 
 	switch (phase_) {
 	case Phase::Approach:
@@ -63,7 +61,7 @@ void Enemy::Update() {
 	BaseCharacter::Update();
 }
 
-void Enemy::OnCollision(Collider* other)
+void BaseEnemy::OnCollision(Collider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet) 
 	{
@@ -77,13 +75,13 @@ void Enemy::OnCollision(Collider* other)
 	}
 }
 
-Vector3 Enemy::GetWorldPosition() {
+Vector3 BaseEnemy::GetWorldPosition() {
 
 	return worldTransform_.GetWorldPosition();
 
 }
 
-Vector2 Enemy::GetScreenPosition(Camera* camera) {
+Vector2 BaseEnemy::GetScreenPosition(Camera* camera) {
 	
 	// ビュー行列とプロジェクション行列、ビューポート行列を合成する
 	Matrix4x4 matViewProjectionViewport = Multiply(camera->GetViewProjection(), *viewPortMatrix_);
@@ -94,13 +92,13 @@ Vector2 Enemy::GetScreenPosition(Camera* camera) {
 	return { screenPosition.x, screenPosition.y };
 }
 
-void Enemy::MainInitialize() {
+void BaseEnemy::MainInitialize() {
 	//発射タイマーを初期化
 	fireTimer = kFireInterval;
 
 }
 
-void Enemy::UpdateApproach() {
+void BaseEnemy::UpdateApproach() {
 
 	// 移動
 	Move();
@@ -117,7 +115,7 @@ void Enemy::UpdateApproach() {
 
 }
 
-void Enemy::UpdateMain() {
+void BaseEnemy::UpdateMain() {
 
 	//発射タイマーカウントダウン
 	fireTimer--;
@@ -143,7 +141,7 @@ void Enemy::UpdateMain() {
 
 }
 
-void Enemy::UpdateLeave()
+void BaseEnemy::UpdateLeave()
 {
 	//離脱タイマーをカウント
 	leaveTimer_ += 1.0f / 60.0f;
@@ -167,7 +165,7 @@ void Enemy::UpdateLeave()
 	Rotate();
 }
 
-void Enemy::Fire() {
+void BaseEnemy::Fire() {
 
 	//弾の速さ
 	const float kBulletSpeed = 0.5f;
@@ -181,7 +179,7 @@ void Enemy::Fire() {
 
 }
 
-void Enemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
+void BaseEnemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
 {
 	// レベルデータから制御点を取得
 	for (Vector3 controlPoint : controlPoints) {
@@ -191,7 +189,7 @@ void Enemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
 	corvePoints_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
 }
 
-void Enemy::Move()
+void BaseEnemy::Move()
 {
 	if (hasRail_)
 	{
@@ -203,7 +201,7 @@ void Enemy::Move()
 	}
 }
 
-void Enemy::Rotate()
+void BaseEnemy::Rotate()
 {
 	Vector3 toPosition = player_->GetWorldPosition();
 	direction_ = Subtract(toPosition, GetWorldPosition());
@@ -211,7 +209,7 @@ void Enemy::Rotate()
 	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 }
 
-void Enemy::MoveAlongRail()
+void BaseEnemy::MoveAlongRail()
 {
 	if (corvePoints_.size() > moveCount_) {
 		//残りの移動距離計算用の変数

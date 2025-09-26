@@ -4,7 +4,7 @@
 #include "Sprite.h"
 class Input;
 class Camera;
-class Enemy;
+class BaseEnemy;
 
 class ReticleController
 {
@@ -16,7 +16,7 @@ public:
 
 	void Draw();
 
-	void SetLockOnTarget(const std::list<std::unique_ptr<Enemy>>& enemies, Camera* railCamera);
+	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera);
 
 	bool IsLockOn() const { return isLockOn_; }
 

@@ -8,7 +8,7 @@
 #include "Matrix.h"
 #include "LevelDataLoader.h"
 #include "Vector2.h"
-
+#include "ShotEnemy01.h"
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -259,7 +259,7 @@ void GameScene::Draw() {
 	//自機の弾の描画
 	playerBulletManager_->Draw(mainCamera_);
 
-	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
 		enemy->Draw(mainCamera_);
 	}
 
@@ -308,7 +308,7 @@ void GameScene::CheckAllColision() {
 	collisionManager_->AddCollider(railMover_.get());
 	collisionManager_->AddCollider(player_.get());
 	playerBulletManager_->RegisterToCollisionManager(collisionManager_.get());
-	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
 		collisionManager_->AddCollider(enemy.get());
 	}
 	enemyBulletManager_->RegisterToCollisionManager(collisionManager_.get());
@@ -323,9 +323,9 @@ void GameScene::CheckAllColision() {
 void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints) {
 
 	// 敵の生成
-	std::unique_ptr<Enemy>& enemy = enemys_.emplace_back();
+	std::unique_ptr<BaseEnemy>& enemy = enemys_.emplace_back();
 	// 敵の初期化
-	enemy = std::make_unique<Enemy>();
+	enemy = std::make_unique<ShotEnemy01>();
 	enemy->Initialize(modelEnemy_.get(), position, rotation, &viewPortMatrix_, camera_.get(), controlPoints);
 	enemy->SetPlayer(player_.get());
 	// 敵キャラにゲームシーンを渡す
@@ -364,14 +364,14 @@ void GameScene::UpdateMain()
 	playerBulletManager_->Update();
 
 	//デスフラグの立った敵を削除
-	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) {
+	enemys_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
 		if (enemy->IsDead()) {
 			return true;
 		}
 		return false;
 		});
 	// 敵の更新
-	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
 		enemy->Update();
 	}
 
@@ -486,45 +486,6 @@ void GameScene::CreateLevel()
 
 			continue;
 		}
-
-		//if (key == "waveEvent")
-		//{
-		//	//波イベントの生成
-		//	std::unique_ptr<BaseEventTrigger>& waveEvent = events_.emplace_back();
-		//	waveEvent = std::make_unique<EnemySpawnEventTrigger>();
-		//	waveEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
-
-		//	continue;
-		//}
-		//else if (key == "speedEvent")
-		//{
-		//	//スピードイベントの生成
-		//	std::unique_ptr<BaseEventTrigger>& speedEvent = events_.emplace_back();
-		//	SpeedEventTrigger* speedEventPtr = new SpeedEventTrigger();
-		//	speedEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
-		//	speedEvent = std::make_unique<SpeedEventTrigger>(*speedEventPtr);
-		//	
-		//	continue;
-		//}
-		//else if (key == "rotateEvent")
-		//{
-		//	//回転イベントの生成
-		//	std::unique_ptr<BaseEventTrigger>& rotateEvent = events_.emplace_back();
-		//	RotateEventTrigger* rotateEventPtr = new RotateEventTrigger();
-		//	rotateEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
-		//	rotateEvent = std::make_unique<RotateEventTrigger>(*rotateEventPtr);
-		//	
-		//	continue;
-		//}
-		//else if (key == "rotateResetEvent")
-		//{
-		//	//回転リセットイベントの生成
-		//	std::unique_ptr<BaseEventTrigger>& rotateResetEvent = events_.emplace_back();
-		//	rotateResetEvent = std::make_unique<RotateResetEventTrigger>();
-		//	rotateResetEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
-		//	
-		//	continue;
-		//}
 
 		if (!instancingObjects_.contains(key))
 		{
