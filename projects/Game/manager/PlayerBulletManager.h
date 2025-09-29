@@ -1,5 +1,6 @@
 #pragma once
-#include "bullet/PlayerBullet.h"
+#include "bullet/BasePlayerBullet.h"
+#include "bullet/PlayerBulletType.h"
 class Camera;
 class CollisionManager;
 
@@ -17,7 +18,7 @@ public:
 	void Draw(Camera* camera);
 
 	//弾の追加
-	void AddPlayerBullet(const Vector3& worldPosition, const Vector3& velocity);
+	void AddPlayerBullet(const Vector3& worldPosition, const Vector3& velocity, PlayerBulletType bulletType);
 
 	//コライダー登録
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
@@ -31,6 +32,6 @@ private:
 	uint32_t textureHandlePlayerBullet_;
 
 	//弾
-	std::list<std::unique_ptr<PlayerBullet>> playerBullets_;
+	std::list<std::unique_ptr<BasePlayerBullet>> playerBullets_;
 };
 

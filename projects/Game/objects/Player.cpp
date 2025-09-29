@@ -7,6 +7,7 @@
 #include "manager/PlayerBulletManager.h"
 #include "ReticleController.h"
 #include "TransformHelpers.h"
+#include "bullet/PlayerBulletType.h"
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle) {
 
@@ -77,6 +78,9 @@ void Player::Update(Camera* railCamera) {
 
 	//照準オブジェクトの更新
 	ReticleUpdate(railCamera);
+
+	//チャージ処理
+	Charge();
 
 	//キャラクター攻撃処理
 	Attack();
@@ -198,8 +202,45 @@ void Player::Attack() {
 		Vector3 velocity = Multiply(kBulletSpeed, Normalize(direction_));
 		
 		//弾を生成し、初期化
-		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity);
+		if (isChargeMax_)
+		{
+			//チャージ最大なら強力な弾を撃つ
+			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::Charge);
+
+			//チャージをリセット
+			ChargeReset();
+			return;
+		}
+
+		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::Normal);
+		//チャージをリセット
+		ChargeReset();
 
 	}
 
+}
+
+void Player::Charge()
+{
+	//チャージが最大なら処理しない
+	if (isChargeMax_)
+	{
+		return;
+	}
+
+	//チャージ
+	chargeTime_ += 1.0f / 60.0f;
+	if (chargeTime_ >= maxChargeTime_) 
+	{
+		chargeTime_ = maxChargeTime_;
+		isChargeMax_ = true;
+		reticleController_->ChargeMax();
+	}
+}
+
+void Player::ChargeReset()
+{
+	isChargeMax_ = false;
+	chargeTime_ = 0.0f;
+	reticleController_->ChargeReset();
 }

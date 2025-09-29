@@ -65,7 +65,11 @@ void BaseEnemy::OnCollision(Collider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet) 
 	{
-		hitPoint_--;
+		// 弾と衝突したら体力を減らす
+		BaseBullet* bullet = dynamic_cast<BaseBullet*>(other);
+		assert(bullet);
+
+		hitPoint_ -= bullet->GetAttackPower();
 
 		if (hitPoint_ > 0) {
 			return;

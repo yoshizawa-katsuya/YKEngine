@@ -152,6 +152,16 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnem
 	}
 }
 
+void ReticleController::ChargeMax()
+{
+	spriteLargeReticle_->SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
+}
+
+void ReticleController::ChargeReset()
+{
+	spriteLargeReticle_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+}
+
 void ReticleController::LockOn(const Vector2& position, const Vector3& targetPosition)
 {
 	spriteSmallReticle_->SetPosition(position);

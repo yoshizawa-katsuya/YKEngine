@@ -47,6 +47,12 @@ private:
 	//攻撃
 	void Attack();
 
+	//チャージ
+	void Charge();
+
+	//チャージリセット
+	void ChargeReset();
+
 	//キーボード入力
 	Input* input_ = nullptr;
 
@@ -62,5 +68,9 @@ private:
 
 	std::vector<std::unique_ptr<Sprite>> heratSprites_; // ヒットポイントのスプライト
 	std::vector<std::unique_ptr<Sprite>> heratEmptySprites_; // ヒットポイントがないときのスプライト
+
+	float chargeTime_ = 0.0f; // チャージ時間
+	const float maxChargeTime_ = 1.0f; // 最大チャージ時間
+	bool isChargeMax_ = false; // チャージが最大かどうか
 };
 

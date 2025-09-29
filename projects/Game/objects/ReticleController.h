@@ -18,6 +18,12 @@ public:
 
 	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera);
 
+	//チャージマックス時の処理
+	void ChargeMax();
+
+	//チャージリセット時の処理
+	void ChargeReset();
+
 	bool IsLockOn() const { return isLockOn_; }
 
 	const Vector3& GetTargetPosition() const { return target_; }

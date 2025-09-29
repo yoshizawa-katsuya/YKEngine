@@ -303,7 +303,7 @@
     <ClCompile Include="Game\objects\bullet\BaseBullet.cpp">
       <Filter>ソース ファイル\objects\bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\bullet\PlayerBullet.cpp">
+    <ClCompile Include="Game\objects\bullet\BasePlayerBullet.cpp">
       <Filter>ソース ファイル\objects\bullet</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\eventTrigger\EnemySpawnEventTrigger.cpp">
@@ -335,6 +335,12 @@
     </ClCompile>
     <ClCompile Include="Game\manager\EnemyManager.cpp">
       <Filter>ソース ファイル\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\bullet\PlayerBullet01.cpp">
+      <Filter>ソース ファイル\objects\bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\bullet\ChargePlayerBullet01.cpp">
+      <Filter>ソース ファイル\objects\bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -637,7 +643,7 @@
     <ClInclude Include="Game\objects\bullet\BaseBullet.h">
       <Filter>ヘッダー ファイル\objects\bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\bullet\PlayerBullet.h">
+    <ClInclude Include="Game\objects\bullet\BasePlayerBullet.h">
       <Filter>ヘッダー ファイル\objects\bullet</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\bullet\EnemyBullet.h">
@@ -672,6 +678,15 @@
     </ClInclude>
     <ClInclude Include="Game\manager\EnemyManager.h">
       <Filter>ヘッダー ファイル\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\PlayerBullet01.h">
+      <Filter>ヘッダー ファイル\objects\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\ChargePlayerBullet01.h">
+      <Filter>ヘッダー ファイル\objects\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\PlayerBulletType.h">
+      <Filter>ヘッダー ファイル\objects\bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

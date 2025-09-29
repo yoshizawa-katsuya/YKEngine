@@ -17,6 +17,8 @@ public:
 	// 描画
 	virtual void Draw(Camera* camera);
 
+	virtual int32_t GetAttackPower() { return attackPower_; }
+
 private:
 
 	// テクスチャハンドル
@@ -30,6 +32,11 @@ private:
 
 	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
+
+protected:
+
+	//攻撃力
+	int32_t attackPower_ = 1;
 
 };
 
