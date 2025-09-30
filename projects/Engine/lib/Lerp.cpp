@@ -30,6 +30,18 @@ Vector3 Lerp(const Vector3& p0, const Vector3& p1, float t)
 	return anser;
 }
 
+Vector4 Lerp(const Vector4& p0, const Vector4& p1, float t)
+{
+	Vector4 anser;
+
+	anser.x = (1 - t) * p0.x + t * p1.x;
+	anser.y = (1 - t) * p0.y + t * p1.y;
+	anser.z = (1 - t) * p0.z + t * p1.z;
+	anser.w = (1 - t) * p0.w + t * p1.w;
+
+	return anser;
+}
+
 float LerpAngle(float a0, float a1, float t)
 {
 	float diff = TransformHelpers::NormalizeAngle(a1 - a0);	//最短差分を求める
