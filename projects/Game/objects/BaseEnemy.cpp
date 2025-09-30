@@ -40,8 +40,6 @@ void BaseEnemy::Initialize(BaseModel* model, const Vector3& position, const Vect
 	viewPortMatrix_ = viewPortMatrix;
 
 	worldTransform_.rotation_ = rotaion;
-
-	MainInitialize();
 }
 
 void BaseEnemy::Update() {

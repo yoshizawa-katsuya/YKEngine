@@ -180,7 +180,16 @@ void RailMover::UpdateRotate()
 		return;
 	}
 	//通常の向き更新処理
-	target_ = pointsDrawing_[(moveCount_ + difference_) % pointsDrawing_.size()];
+	if (isLoop_) 
+	{
+		// ループしている場合、配列の範囲を超えたら最初に戻る
+		target_ = pointsDrawing_[(moveCount_ + difference_) % pointsDrawing_.size()];
+	}
+	else if (moveCount_ + difference_ < pointsDrawing_.size()) 
+	{
+		// 通常のポイント取得
+		target_ = pointsDrawing_[moveCount_ + difference_];
+	}
 	forward_ = Subtract(target_, worldTransform_.translation_);
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
 	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
