@@ -164,3 +164,31 @@ std::vector<Vector3> GenerateCatmullRomSplinePoints(std::vector<Vector3>& contro
 
 	return splinePoints;
 }
+
+std::vector<Vector3> GenerateCatmullRomSplinePointsLoop(std::vector<Vector3>& controlPoints, uint32_t numPoints)
+{
+	std::vector<Vector3> splinePoints;
+
+	size_t n = controlPoints.size();
+	if (n < 3) {
+		return splinePoints;
+	}
+
+	// 各制御点区間をループさせる
+	for (size_t i = 0; i < n; ++i) {
+		Vector3 p0 = controlPoints[(i + n - 1) % n];
+		Vector3 p1 = controlPoints[i % n];
+		Vector3 p2 = controlPoints[(i + 1) % n];
+		Vector3 p3 = controlPoints[(i + 2) % n];
+
+		for (uint32_t j = 0; j < numPoints; ++j) {
+			float t = static_cast<float>(j) / static_cast<float>(numPoints);
+			splinePoints.push_back(CatmullRom(p0, p1, p2, p3, t));
+		}
+	}
+
+	// 最後に始点と一致する点を追加して完全なループにする
+	splinePoints.push_back(splinePoints.front());
+
+	return splinePoints;
+}
