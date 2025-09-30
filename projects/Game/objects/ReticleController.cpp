@@ -5,6 +5,7 @@
 #include "Matrix.h"
 #include "BaseEnemy.h"
 #include "Collision.h"
+#include "Lerp.h"
 
 void ReticleController::Initialize(Matrix4x4* viewPortMatrix)
 {
@@ -20,11 +21,13 @@ void ReticleController::Initialize(Matrix4x4* viewPortMatrix)
 	spriteLargeReticle_->Initialize(textureLargeReticle);
 	spriteLargeReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
 	spriteLargeReticle_->SetAnchorPoint({ 0.5f, 0.5f });
+	spriteLargeReticle_->SetColor(defaultColor_);
 
 	spriteSmallReticle_ = std::make_unique<Sprite>();
 	spriteSmallReticle_->Initialize(textureSmallReticle);
 	spriteSmallReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
 	spriteSmallReticle_->SetAnchorPoint({ 0.5f, 0.5f });
+	spriteSmallReticle_->SetColor(defaultColor_);
 
 	viewPortMatrix_ = viewPortMatrix;
 
@@ -33,7 +36,9 @@ void ReticleController::Initialize(Matrix4x4* viewPortMatrix)
 
 void ReticleController::Update(Camera* railCamera)
 {
-	spriteSmallReticle_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	spriteSmallReticle_->SetColor(defaultColor_);
+
+	ChargeUpdate();
 
 	//スプライトの現在座標を取得
 	Vector2 spritePosition = spriteLargeReticle_->GetPosition();
@@ -154,12 +159,30 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnem
 
 void ReticleController::ChargeMax()
 {
-	spriteLargeReticle_->SetColor({ 0.0f, 1.0f, 0.0f, 1.0f });
+	isChargeMax_ = true;
 }
 
 void ReticleController::ChargeReset()
 {
-	spriteLargeReticle_->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+	spriteLargeReticle_->SetColor(defaultColor_);
+	chargeMaxTimer_ = 0.0f;
+	isChargeMax_ = false;
+}
+
+void ReticleController::ChargeUpdate()
+{
+	if (!isChargeMax_) 
+	{
+		return;
+	}
+	chargeMaxTimer_ += 1.0f / 60.0f;
+	if (chargeMaxTimer_ > chargeMaxChangeTime_) 
+	{
+		chargeMaxTimer_ = chargeMaxChangeTime_;
+	}
+
+	Vector4 color = Lerp(defaultColor_, chargeMaxColor_, chargeMaxTimer_ / chargeMaxChangeTime_);
+	spriteLargeReticle_->SetColor(color);
 }
 
 void ReticleController::LockOn(const Vector2& position, const Vector3& targetPosition)

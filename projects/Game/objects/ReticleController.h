@@ -32,6 +32,8 @@ public:
 
 private:
 
+	void ChargeUpdate();
+
 	void LockOn(const Vector2& position, const Vector3& targetPosition);
 
 	//3Dレティクル用ワールドトランスフォーム
@@ -50,5 +52,11 @@ private:
 
 	Input* input_ = nullptr;
 
+	Vector4 defaultColor_ = { 1.0f, 1.0f, 0.1f, 1.0f };
+	Vector4 chargeMaxColor_ = { 0.0f, 0.0f, 1.0f, 1.0f };
+	bool isChargeMax_ = false;
+	float chargeMaxTimer_ = 0.0f;
+	//チャージマックス時に色に変化し終わるまでの時間
+	const float chargeMaxChangeTime_ = 0.1f;
 };
 
