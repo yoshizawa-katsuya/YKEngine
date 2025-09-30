@@ -8,6 +8,9 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 #include "Fade.h"
+#include "DebugCamera.h"
+#include "Camera.h"
+#include "Rigid3dObject.h"
 
 class TitleScene : public BaseScene
 {
@@ -40,7 +43,30 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 	
-	std::unique_ptr<Sprite> spriteTitle_;	//タイトルのスプライト
+	//平行光源
+	std::unique_ptr<DirectionalLight> directionalLight_;
+
+	//カメラ
+	Camera* mainCamera_ = nullptr;
+
+	std::unique_ptr<Camera> camera_;
+	std::unique_ptr<Camera> camera2_;
+
+	std::unique_ptr<DebugCamera> debugCamera_;
+
+	bool isActiveDebugCamera_ = false;
+	/*std::unique_ptr<Sprite> spriteTitle_;	*///タイトルのスプライト
+
+	std::shared_ptr<BaseModel> modelGround_;
+
+	//テクスチャハンドル
+	uint32_t textureHandleSkyBox_;
+
+	//スカイボックス
+	std::unique_ptr<Rigid3dObject> skyBox_;
+
+	//地面
+	std::unique_ptr<Rigid3dObject> ground_;
 
 	//シーンのフェーズ
 	enum class Phase {
