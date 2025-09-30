@@ -10,19 +10,20 @@
 #include "eventTrigger/RotateResetEventTrigger.h"
 #include "imgui/imgui.h"
 
-void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager)
+void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager, bool isLoop)
 {
 	Collider::Initialize();
 	typeID_ = CollisionTypeIdDef::kRailMover;
 
 	enemySpawnManager_ = enemySpawnManager;
+	isLoop_ = isLoop;
 
 	CreateSplineCurve(controlPoints);
 	// 初期位置をスプラインの最初のポイントに設定
 	worldTransform_.translation_ = pointsDrawing_[0]; // 初期位置をスプラインの最初のポイントに設定
 
-	//向きを更新する処理
-	UpdateRotate();
+	//向きを初期化する処理
+	InitializeRotate();
 
 	worldTransform_.UpdateMatrix();
 
@@ -80,6 +81,12 @@ void RailMover::Update()
 	}
 
 	worldTransform_.UpdateMatrix();
+
+	//ループ処理
+	if (isLoop_ && moveCount_ >= pointsDrawing_.size()) 
+	{
+		moveCount_ = 0;
+	}
 
 }
 
@@ -148,7 +155,19 @@ void RailMover::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
 		controlPoints_.push_back(controlPoint);
 	}
 	// Catmull-Romスプラインのポイントを生成
+	if (isLoop_) 
+	{
+		pointsDrawing_ = GenerateCatmullRomSplinePointsLoop(controlPoints_, segmentCount_);
+		return;
+	}
 	pointsDrawing_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
+}
+
+void RailMover::InitializeRotate()
+{
+	target_ = pointsDrawing_[(moveCount_ + difference_) % pointsDrawing_.size()];
+	forward_ = Subtract(target_, worldTransform_.translation_);
+	worldTransform_.rotation_ = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
 }
 
 void RailMover::UpdateRotate()
@@ -160,13 +179,9 @@ void RailMover::UpdateRotate()
 		worldTransform_.rotation_ = srtAnimator_->Update();
 		return;
 	}
-	else if (pointsDrawing_.size() > moveCount_ + difference_)
-	{
-		target_ = pointsDrawing_[moveCount_ + difference_];
-		forward_ = Subtract(target_, worldTransform_.translation_);
-
-		Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
-		worldTransform_.rotation_ = Lerp(worldTransform_.rotation_, targetRotation, 0.1f);
-
-	}
+	//通常の向き更新処理
+	target_ = pointsDrawing_[(moveCount_ + difference_) % pointsDrawing_.size()];
+	forward_ = Subtract(target_, worldTransform_.translation_);
+	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 }

@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "imgui/imgui.h"
 #include "SceneManager.h"
+#include "LevelDataLoader.h"
 
 TitleScene::~TitleScene()
 {
@@ -41,11 +42,13 @@ void TitleScene::Initialize()
 	//モデルを描画する際カメラの設定は必須
 	modelPlatform_->SetCamera(mainCamera_);
 
-	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/title.png");
+	//テクスチャの読み込み
+	uint32_t textureHandleTitle = TextureManager::GetInstance()->Load("./Resources/title.png");
+	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
-	/*spriteTitle_ = std::make_unique<Sprite>();
-	spriteTitle_->Initialize(textureHandle);*/
+	spriteTitle_ = std::make_unique<Sprite>();
+	spriteTitle_->Initialize(textureHandleTitle);
 	
 	//モデルの生成
 	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
@@ -69,6 +72,8 @@ void TitleScene::Initialize()
 	groundTransform.scale_ = { 20.0f, 20.0f, 20.0f };
 	groundTransform.UpdateMatrix();
 	ground_->WorldTransformUpdate(groundTransform);
+
+	CreateLevel();
 
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
@@ -144,10 +149,21 @@ void TitleScene::Draw()
 	ground_->CameraUpdate(mainCamera_);
 	ground_->Draw();
 
+	modelPlatform_->InstancingPreDraw();
+
+	//オブジェクトの描画
+	for (const auto& [name, instancingObject] : instancingObjects_) {
+		instancingObject->CameraUpdate(mainCamera_);
+		instancingObject->Draw();
+	}
+
+	modelPlatform_->LinePreDraw();
+
+	railMover_->DrawRail(mainCamera_);
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
-	/*spriteTitle_->Draw();*/
+	spriteTitle_->Draw();
 
 	fade_->Draw();
 }
@@ -168,6 +184,13 @@ void TitleScene::UpdateStart()
 
 void TitleScene::UpdateMain()
 {
+
+	//レールムーバーの更新
+	railMover_->Update();
+
+	//レールカメラの更新
+	railCamera_->Update();
+
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		phase_ = Phase::kEnd;
 		fade_->Start(Fade::Status::FadeOut, 0.5f);
@@ -181,5 +204,54 @@ void TitleScene::UpdateEnd()
 		//fade_->Stop();
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GameScene");
+	}
+}
+
+void TitleScene::CreateLevel()
+{
+	LevelData* levelData;
+	levelData = LevelDataLoad("./resources/LevelData/", "TitleScene", ".json");
+
+	assert(!levelData->splines.empty());
+
+	//レールムーバーの生成
+	railMover_ = std::make_unique<RailMover>();
+	railMover_->Initialize(levelData->splines[0].controlPoints, nullptr, true);
+
+	// レールカメラの生成
+	railCamera_ = std::make_unique<RailCamera>();
+	// レールカメラの初期化
+	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform());
+
+	//オブジェクトの生成
+	std::string key;
+
+	for (const ObjectData& objectData : levelData->objects)
+	{
+
+		key = objectData.fileName;
+
+		if (!instancingObjects_.contains(key))
+		{
+			instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
+			//インスタンスオブジェクトの初期化
+			if (key == "primitiveCube")
+			{
+				instancingObjects_[key]->Initialize(modelPlatform_->CreateCube(textureHandle_).get(), 128);
+			}
+			else if (key == "primitiveSphere")
+			{
+				instancingObjects_[key]->Initialize(modelPlatform_->CreateSphere(textureHandle_).get(), 128);
+			}
+		}
+		//ワールド変換の初期化
+		WorldTransform transform;
+		transform.Initialize();
+		transform.rotation_ = objectData.transform.rotation;
+		transform.translation_ = objectData.transform.translation;
+		transform.scale_ = objectData.transform.scale;
+		transform.UpdateMatrix();
+		//インスタンスオブジェクトにワールド変換を設定
+		instancingObjects_[key]->WorldTransformUpdate(transform);
 	}
 }

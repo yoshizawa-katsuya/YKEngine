@@ -8,7 +8,7 @@ class RailMover : public Collider
 {
 public:
 
-	void Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager);
+	void Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager, bool isLoop);
 
 	void Update();
 
@@ -34,6 +34,9 @@ private:
 
 	//曲線の作成
 	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
+
+	//向きの初期化
+	void InitializeRotate();
 
 	//向きを更新
 	void UpdateRotate();
@@ -68,4 +71,5 @@ private:
 	uint32_t nextRotateResetEventNumber_ = 1;
 
 	bool isDrawRail_ = false;
+	bool isLoop_ = false;
 };

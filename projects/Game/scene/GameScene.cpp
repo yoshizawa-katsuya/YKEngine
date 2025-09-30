@@ -414,7 +414,7 @@ void GameScene::CreateLevel()
 
 	//レールムーバーの生成
 	railMover_ = std::make_unique<RailMover>();
-	railMover_->Initialize(levelData->splines[0].controlPoints, enemySpawnManager_.get());
+	railMover_->Initialize(levelData->splines[0].controlPoints, enemySpawnManager_.get(), false);
 
 	uint32_t heratTextureHandle = TextureManager::GetInstance()->Load("./Resources/heart.png");
 	uint32_t heratFrameTextureHandle = TextureManager::GetInstance()->Load("./Resources/heartFrame.png");

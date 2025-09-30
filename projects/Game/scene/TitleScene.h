@@ -11,6 +11,9 @@
 #include "DebugCamera.h"
 #include "Camera.h"
 #include "Rigid3dObject.h"
+#include "RailMover.h"
+#include "RailCamera.h"
+#include "InstancingObjects.h"
 
 class TitleScene : public BaseScene
 {
@@ -34,6 +37,8 @@ private:
 
 	void UpdateEnd();
 
+	void CreateLevel();
+
 	//デバイス
 	DirectXCommon* dxCommon_;
 
@@ -55,11 +60,12 @@ private:
 	std::unique_ptr<DebugCamera> debugCamera_;
 
 	bool isActiveDebugCamera_ = false;
-	/*std::unique_ptr<Sprite> spriteTitle_;	*///タイトルのスプライト
+	std::unique_ptr<Sprite> spriteTitle_;//タイトルのスプライト
 
 	std::shared_ptr<BaseModel> modelGround_;
 
 	//テクスチャハンドル
+	uint32_t textureHandle_;
 	uint32_t textureHandleSkyBox_;
 
 	//スカイボックス
@@ -67,6 +73,15 @@ private:
 
 	//地面
 	std::unique_ptr<Rigid3dObject> ground_;
+
+	//レールムーバー
+	std::unique_ptr<RailMover> railMover_;
+
+	//レールカメラ
+	std::unique_ptr<RailCamera> railCamera_;
+
+	//オブジェクト
+	std::map<std::string, std::unique_ptr<InstancingObjects>> instancingObjects_;
 
 	//シーンのフェーズ
 	enum class Phase {
