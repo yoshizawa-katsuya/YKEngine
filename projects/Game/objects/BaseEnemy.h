@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseCharacter.h"
+#include "EnemySpawn.h"
 class Player;
 class EnemyBulletManager;
 class Camera;
@@ -13,7 +14,7 @@ public:
 	virtual ~BaseEnemy();
 
 	// 初期化
-	void Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, Camera* railCamera, const std::vector<Vector3>& controlPoints);
+	void Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera);
 
 	// 更新
 	virtual void Update() override;
@@ -80,7 +81,7 @@ protected:
 	Phase phase_ = Phase::Approach;
 
 	// キャラクターの移動速さ
-	Vector3 velocity_ = {0.0f, 0.0f, 0.1f};
+	Vector3 velocity_ = {0.0f, 0.0f, 1.0f};
 
 	//ビューポート行列
 	Matrix4x4* viewPortMatrix_ = nullptr;

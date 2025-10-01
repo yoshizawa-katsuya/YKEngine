@@ -688,6 +688,9 @@
     <ClInclude Include="Game\objects\bullet\PlayerBulletType.h">
       <Filter>ヘッダー ファイル\objects\bullet</Filter>
     </ClInclude>
+    <ClInclude Include="Game\objects\EnemySpawn.h">
+      <Filter>ヘッダー ファイル\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

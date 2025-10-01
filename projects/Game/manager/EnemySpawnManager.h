@@ -1,18 +1,8 @@
 #pragma once
-#include "Vector3.h"
-#include <vector>
 #include <memory>
 #include "InstancingObjects.h"
+#include "EnemySpawn.h"
 class EnemyManager;
-
-// 敵の出現データを保持する構造体
-struct EnemySpawn
-{
-	uint32_t waveNumber;        // ウェーブ番号
-    Vector3 position;       // 出現位置
-	Vector3 rotation;		// 進行方向の回転角度（例：0, 0, 0）
-	std::vector<Vector3> controlPoints;	// スプライン曲線制御点(通過点)
-};
 
 class EnemySpawnManager
 {
@@ -24,7 +14,7 @@ public:
 
 	void Draw(Camera* camera); // 描画メソッド
 
-    void AddSpawnData(uint32_t waveNumber, const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints);
+    void AddSpawnData(const EnemySpawn& spawnData);
 
 	void WaveStart(uint32_t waveNum); // ウェーブ開始メソッド
 

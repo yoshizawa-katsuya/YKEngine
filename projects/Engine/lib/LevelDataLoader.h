@@ -29,6 +29,7 @@ struct EnemySpawnData
 	EulerTransform transform{};
 	std::optional<float> waitTime = std::nullopt; // 待機時間（オプション）
 	std::optional<uint32_t> waveNum = std::nullopt; // ウェーブ番号（オプション）
+	std::optional<float> speed = std::nullopt; // スピード（オプション）
 	std::optional<SplineData> spline = std::nullopt; // スプライン曲線（オプション）
 };
 

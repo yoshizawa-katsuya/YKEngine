@@ -121,6 +121,12 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 				enemySpawnData.waveNum = object["wave_num"].get<uint32_t>();
 			}
 
+			if (object.contains("speed"))
+			{
+				//移動速度
+				enemySpawnData.speed = object["speed"].get<float>();
+			}
+
 			if (object.contains("children")) 
 			{
 				for (nlohmann::json& child : object["children"]) 

@@ -17,29 +17,37 @@ BaseEnemy::~BaseEnemy() {
 	*/
 }
 
-void BaseEnemy::Initialize(BaseModel* model, const Vector3& position, const Vector3& rotaion, Matrix4x4* viewPortMatrix, Camera* railCamera, const std::vector<Vector3>& controlPoints) {
+void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera) {
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
 
 	railCamera_ = railCamera;
 
-	if (!controlPoints.empty())
+	//速さをレベルデータから取得
+	if (spawnData.speed.has_value())
+	{
+		speed_ = spawnData.speed.value();
+	}
+
+	if (!spawnData.controlPoints.empty())
 	{
 		hasRail_ = true;
-		CreateSplineCurve(controlPoints);
+		CreateSplineCurve(spawnData.controlPoints);
 		worldTransform_.translation_ = controlPoints_[0];
 	}
 	else
 	{
-		worldTransform_.translation_ = position;
+		worldTransform_.translation_ = spawnData.position;
 		//移動方向を初期化
-		Matrix4x4 rotateMatrix = MakeRotateMatrix(rotaion);
+		Matrix4x4 rotateMatrix = MakeRotateMatrix(spawnData.rotation);
+		velocity_ *= speed_;
 		velocity_ = TransformNormal(velocity_, rotateMatrix);
 	}
+
 	viewPortMatrix_ = viewPortMatrix;
 
-	worldTransform_.rotation_ = rotaion;
+	worldTransform_.rotation_ = spawnData.rotation;
 }
 
 void BaseEnemy::Update() {

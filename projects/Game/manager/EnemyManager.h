@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseEnemy.h"
+#include "EnemySpawn.h"
 class Camera;
 class Player;
 class EnemyBulletManager;
@@ -19,7 +20,7 @@ public:
 	void Draw(Camera* camera);
 
 	//敵の生成
-	void PopEnemy(const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints);
+	void PopEnemy(const EnemySpawn& spawnData);
 
 	//コライダー登録
 	void RegisterToCollisionManager(CollisionManager* collisionManager);

@@ -431,19 +431,24 @@ void GameScene::CreateLevel()
 
 	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns)
 	{
-		//敵の発生位置を取得
-		Vector3 spawnPosition = enemySpawnData.transform.translation;
-		//敵の回転を取得
-		Vector3 spawnRotation = enemySpawnData.transform.rotation;
+		EnemySpawn enemySpawn;
 
-		std::vector<Vector3> controlPoints;
+		enemySpawn.waveNumber = enemySpawnData.waveNum.value();
+
+		//敵の発生位置を取得
+		enemySpawn.position = enemySpawnData.transform.translation;
+		//敵の回転を取得
+		enemySpawn.rotation = enemySpawnData.transform.rotation;
+
+		//スプラインの制御点を取得
 		if (enemySpawnData.spline.has_value())
 		{
-			controlPoints = enemySpawnData.spline->controlPoints;
+			enemySpawn.controlPoints = enemySpawnData.spline->controlPoints;
 		}
-
+		enemySpawn.speed = enemySpawnData.speed;
+		
 		//レベルエディターで敵のwaveNumを必ず設定するようにする
-		enemySpawnManager_->AddSpawnData(enemySpawnData.waveNum.value(), spawnPosition, spawnRotation, controlPoints);
+		enemySpawnManager_->AddSpawnData(enemySpawn);
 
 	}
 	

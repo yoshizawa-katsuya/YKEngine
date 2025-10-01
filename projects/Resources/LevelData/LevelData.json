@@ -63,6 +63,7 @@
                     1.0
                 ]
             },
+            "speed": 0.0,
             "wait_time": 2.0,
             "wave_num": 1
         },
@@ -356,7 +357,7 @@
         },
         {
             "type": "MESH",
-            "name": "球.001",
+            "name": "EnemySpawnEvent",
             "transform": {
                 "translation": [
                     -73.01937103271484,
@@ -380,7 +381,7 @@
         },
         {
             "type": "MESH",
-            "name": "球.002",
+            "name": "EnemySpawnEvent.001",
             "transform": {
                 "translation": [
                     -73.73043823242188,
@@ -404,7 +405,7 @@
         },
         {
             "type": "MESH",
-            "name": "球.003",
+            "name": "EnemySpawnEvent.002",
             "transform": {
                 "translation": [
                     -47.995880126953125,
@@ -428,7 +429,7 @@
         },
         {
             "type": "MESH",
-            "name": "球.004",
+            "name": "EnemySpawnEvent.003",
             "transform": {
                 "translation": [
                     -5.126176834106445,
@@ -452,7 +453,7 @@
         },
         {
             "type": "MESH",
-            "name": "球.005",
+            "name": "EnemySpawnEvent.004",
             "transform": {
                 "translation": [
                     54.76268005371094,
@@ -476,7 +477,7 @@
         },
         {
             "type": "MESH",
-            "name": "球.006",
+            "name": "SpeedEvent",
             "transform": {
                 "translation": [
                     -73.23125457763672,
@@ -501,7 +502,7 @@
         },
         {
             "type": "MESH",
-            "name": "rotateEvent",
+            "name": "RotateEvent",
             "transform": {
                 "translation": [
                     -73.15436553955078,
@@ -525,7 +526,7 @@
         },
         {
             "type": "MESH",
-            "name": "球.007",
+            "name": "RotateResetEvent",
             "transform": {
                 "translation": [
                     -72.60094451904297,
@@ -614,6 +615,29 @@
                     ]
                 }
             ]
+        },
+        {
+            "type": "EnemySpawn",
+            "name": "EnemySpawn.006",
+            "transform": {
+                "translation": [
+                    -79.82014465332031,
+                    20.02010726928711,
+                    19.49846649169922
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "wait_time": 2.0,
+            "wave_num": 1
         }
     ]
 }

@@ -190,6 +190,10 @@ void RailMover::UpdateRotate()
 		// 通常のポイント取得
 		target_ = pointsDrawing_[moveCount_ + difference_];
 	}
+	else
+	{
+		return; // 配列の範囲を超えた場合は処理を終了
+	}
 	forward_ = Subtract(target_, worldTransform_.translation_);
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
 	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);

@@ -358,6 +358,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\EnemySpawn.h" />
     <ClInclude Include="Game\objects\bullet\ChargePlayerBullet01.h" />
     <ClInclude Include="Game\manager\EnemyManager.h" />
     <ClInclude Include="Game\manager\EventTriggerManager.h" />

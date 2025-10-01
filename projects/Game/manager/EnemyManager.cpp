@@ -36,13 +36,13 @@ void EnemyManager::Draw(Camera* camera)
 	}
 }
 
-void EnemyManager::PopEnemy(const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints)
+void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 {
 	// 敵の生成
 	std::unique_ptr<BaseEnemy>& enemy = enemys_.emplace_back();
 	// 敵の初期化
 	enemy = std::make_unique<ShotEnemy01>();
-	enemy->Initialize(modelEnemy_.get(), position, rotation, viewPortMatrix_, railCamera_, controlPoints);
+	enemy->Initialize(modelEnemy_.get(), spawnData, viewPortMatrix_, railCamera_);
 	enemy->SetPlayer(player_);
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetEnemyBulletManager(enemyBulletManager_);

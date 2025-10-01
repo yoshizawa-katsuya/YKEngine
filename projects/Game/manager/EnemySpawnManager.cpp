@@ -41,17 +41,12 @@ void EnemySpawnManager::Draw(Camera* camera)
 	objects_->Draw();
 }
 
-void EnemySpawnManager::AddSpawnData(uint32_t waveNumber, const Vector3& position, const Vector3& rotation, const std::vector<Vector3>& controlPoints)
+void EnemySpawnManager::AddSpawnData(const EnemySpawn& spawnData)
 {
-	EnemySpawn data;
-	data.waveNumber = waveNumber;
-	data.position = position;
-	data.rotation = rotation;
-	data.controlPoints = controlPoints;
-	spawnDatas_.push_back(data);
+	spawnDatas_.push_back(spawnData);
 }
 
-// TODO : Phase::kWait以外だと想定外の動作をするのを修正する
+// TODO : Phase::kWait以外だと想定外の動作をするのを修正する。敵の出現演出用のクラスを実装する。
 void EnemySpawnManager::WaveStart(uint32_t waveNum)
 {
 	phase_ = Phase::kWaveStart;
@@ -162,7 +157,7 @@ void EnemySpawnManager::SpawnEnemies()
 	{
 		if (spawnData->waveNumber <= waveNumber_)
 		{
-			enemyManager_->PopEnemy(spawnData->position, spawnData->rotation, spawnData->controlPoints);
+			enemyManager_->PopEnemy(*spawnData);
 			spawnData = spawnDatas_.erase(spawnData);	//出現した敵のデータを削除
 		}
 		else
