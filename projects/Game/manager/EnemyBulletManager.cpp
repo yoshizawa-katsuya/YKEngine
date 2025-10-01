@@ -33,13 +33,13 @@ void EnemyBulletManager::Draw(Camera* camera)
 	}
 }
 
-void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity)
+void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity, Player* target, float speed)
 {
 	//リストに登録する
 	//弾を生成し、初期化
 	std::unique_ptr<EnemyBullet>& bullet = enemyBullets_.emplace_back();
 	bullet = std::make_unique<EnemyBullet>();
-	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandleEnemyBullet_);
+	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandleEnemyBullet_, target, speed);
 }
 
 void EnemyBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)

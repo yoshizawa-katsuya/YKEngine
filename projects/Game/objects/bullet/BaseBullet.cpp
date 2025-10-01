@@ -22,8 +22,8 @@ void BaseBullet::Update()
 		isDead_ = true;
 	}
 
-	//座標を移動させる
-	worldTransform_.translation_ += velocity_;
+	//移動処理
+	Move();
 
 	BaseCharacter::Update();
 }
@@ -32,4 +32,10 @@ void BaseBullet::Draw(Camera* camera)
 {
 	object_->CameraUpdate(camera);
 	object_->Draw(textureHandle_);
+}
+
+void BaseBullet::Move()
+{
+	//座標を移動させる
+	worldTransform_.translation_ += velocity_;
 }

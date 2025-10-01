@@ -21,11 +21,12 @@ public:
 
 private:
 
+	virtual void Move();
+
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
-	//速度
-	Vector3 velocity_;
+	
 
 	//寿命
 	static const int32_t kLifeTime = 60 * 5;
@@ -34,6 +35,8 @@ private:
 	int32_t deathTimer_ = kLifeTime;
 
 protected:
+	//速度
+	Vector3 velocity_;
 
 	//攻撃力
 	int32_t attackPower_ = 1;

@@ -13,7 +13,7 @@ public:
 
 	void Draw(Camera* camera);
 
-	void AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity);
+	void AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity, Player* target, float speed);
 
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
 

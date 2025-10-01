@@ -184,8 +184,7 @@ void BaseEnemy::Fire() {
 	velocity = Multiply(kBulletSpeed, velocity);
 
 	// 弾を生成し、初期化
-	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity);
-	//enemyBullets_.push_back(newBullet);
+	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, kBulletSpeed);
 
 }
 
@@ -214,7 +213,7 @@ void BaseEnemy::Move()
 void BaseEnemy::Rotate()
 {
 	Vector3 toPosition = player_->GetWorldPosition();
-	direction_ = Subtract(toPosition, GetWorldPosition());
+	direction_ = toPosition - GetWorldPosition();
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
 	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 }
