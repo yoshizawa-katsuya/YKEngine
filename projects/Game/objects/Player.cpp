@@ -8,6 +8,7 @@
 #include "ReticleController.h"
 #include "TransformHelpers.h"
 #include "bullet/PlayerBulletType.h"
+#include "Matrix.h"
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle) {
 
@@ -60,19 +61,7 @@ void Player::Update(Camera* railCamera) {
 	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
 
 	//回転
-	Vector3 toPosition;
-	if (reticleController_->IsLockOn())
-	{
-		toPosition = reticleController_->GetTargetPosition();
-	}
-	else
-	{
-		toPosition = reticleController_->Get3DReticlePosition();
-	}
-	direction_ = Subtract(toPosition, GetWorldPosition());
-	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
-	targetRotation -= worldTransform_.parent_->rotation_;
-	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
+	Rotate();
 
 	BaseCharacter::Update();
 
@@ -185,6 +174,31 @@ void Player::HandleMoveInput()
 
 	//座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move;
+}
+
+void Player::Rotate()
+{
+	Vector3 toPosition;
+	if (reticleController_->IsLockOn())
+	{
+		toPosition = reticleController_->GetTargetPosition();
+	}
+	else
+	{
+		toPosition = reticleController_->Get3DReticlePosition();
+	}
+	direction_ = Subtract(toPosition, GetWorldPosition());
+	
+	//親の回転を考慮した方向ベクトルの計算
+	Matrix4x4 parentMat = MakeRotateMatrix(worldTransform_.parent_->rotation_);
+	Matrix4x4 invParentMat = Inverse(parentMat);
+
+	//親の回転を打ち消す
+	Vector3 localDirection = TransformNormal(direction_, invParentMat);
+	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
+	/*Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
+	targetRotation -= worldTransform_.parent_->rotation_;*/
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 }
 
 void Player::ReticleUpdate(Camera* railCamera)

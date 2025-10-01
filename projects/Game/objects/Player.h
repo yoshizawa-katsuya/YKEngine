@@ -41,6 +41,9 @@ private:
 	//移動入力
 	void HandleMoveInput();
 
+	//回転
+	void Rotate();
+
 	//照準
 	void ReticleUpdate(Camera* railCamera);
 
