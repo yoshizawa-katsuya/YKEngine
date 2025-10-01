@@ -10,7 +10,7 @@ void RailCamera::Initialize(Camera* camera, WorldTransform* parent) {
 
 	//ワールドトランスフォームの初期設定
 	worldTransform_.Initialize();
-	worldTransform_.translation_.z = -20.0f; // Z軸方向に-20.0fの位置にカメラを配置
+	worldTransform_.translation_.z = -13.0f; // Z軸方向に-13.0fの位置にカメラを配置
 	worldTransform_.parent_ = parent; // 親ワールドトランスフォームを設定
 
 	camera_ = camera;

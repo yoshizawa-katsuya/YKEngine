@@ -52,8 +52,8 @@ void Player::Update(Camera* railCamera) {
 	HandleMoveInput();
 
 	//移動限界座標
-	const float kMoveLimitX = 14;
-	const float kMoveLimitY = 7.6f;
+	const float kMoveLimitX = 8.9f;
+	const float kMoveLimitY = 4.8f;
 
 	//範囲を超えない処理
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
