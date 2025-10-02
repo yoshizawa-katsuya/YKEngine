@@ -94,12 +94,6 @@
     <Filter Include="ヘッダー ファイル\application\scene">
       <UniqueIdentifier>{134ac728-9100-4706-ba82-1c2652abb654}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\manager">
-      <UniqueIdentifier>{580be91a-2e3e-4ed3-986c-2bb28fb6e524}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\manager">
-      <UniqueIdentifier>{76dcb174-40e6-43a7-8403-673a98fffff4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\application\objects\bullet">
       <UniqueIdentifier>{2393db67-4f5d-4277-bf0b-1afc99ed313c}</UniqueIdentifier>
     </Filter>
@@ -111,6 +105,12 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\application\objects\eventTriger">
       <UniqueIdentifier>{f4936340-9de5-4250-96c1-083caeb4adef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\manager">
+      <UniqueIdentifier>{580be91a-2e3e-4ed3-986c-2bb28fb6e524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\manager">
+      <UniqueIdentifier>{76dcb174-40e6-43a7-8403-673a98fffff4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -277,25 +277,25 @@
       <Filter>ソース ファイル\engine\scene</Filter>
     </ClCompile>
     <ClCompile Include="Game\manager\EnemySpawnManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
+      <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\manager\EffectManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
+      <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\manager\CollisionManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
+      <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\manager\PlayerBulletManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
+      <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\manager\EnemyBulletManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
+      <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\manager\EventTriggerManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
+      <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\manager\EnemyManager.cpp">
-      <Filter>ソース ファイル\manager</Filter>
+      <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\BaseCharacter.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
@@ -617,25 +617,25 @@
       <Filter>ヘッダー ファイル\engine\scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\manager\EnemySpawnManager.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\manager\EffectManager.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\manager\CollisionManager.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\manager\PlayerBulletManager.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\manager\EnemyBulletManager.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\manager\EventTriggerManager.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\manager\EnemyManager.h">
-      <Filter>ヘッダー ファイル\manager</Filter>
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\BaseCharacter.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
