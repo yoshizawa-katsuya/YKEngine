@@ -433,6 +433,20 @@ void GameScene::CreateLevel()
 	{
 		EnemySpawn enemySpawn;
 
+		//敵の種類を取得
+		if (enemySpawnData.type == "EnemySpawn")
+		{
+			enemySpawn.type = EnemyType::Shot01;
+		}
+		else if (enemySpawnData.type == "TackleEnemySpawn")
+		{
+			enemySpawn.type = EnemyType::Tackle01;
+		}
+		else
+		{
+			assert(0 && "不明な敵の種類です");
+		}
+		//敵のウェーブナンバーを取得
 		enemySpawn.waveNumber = enemySpawnData.waveNum.value();
 
 		//敵の発生位置を取得

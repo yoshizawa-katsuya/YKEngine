@@ -4,9 +4,16 @@
 #include <vector>
 #include <optional>
 
+enum class EnemyType
+{
+	Shot01,
+	Tackle01,
+};
+
 // 敵の出現データを保持する構造体
 struct EnemySpawn
 {
+	EnemyType type;     // 敵の種類
 	uint32_t waveNumber;        // ウェーブ番号
 	Vector3 position;       // 出現位置
 	Vector3 rotation;		// 進行方向の回転角度（例：0, 0, 0）

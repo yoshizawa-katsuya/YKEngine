@@ -20,7 +20,7 @@ BaseEnemy::~BaseEnemy() {
 void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera) {
 
 	BaseCharacter::Initialize(model);
-	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
+	SetColliderID();
 
 	railCamera_ = railCamera;
 
@@ -100,6 +100,11 @@ Vector2 BaseEnemy::GetScreenPosition(Camera* camera) {
 	Vector3 screenPosition = Transform(GetWorldPosition(), matViewProjectionViewport);
 
 	return { screenPosition.x, screenPosition.y };
+}
+
+void BaseEnemy::SetColliderID()
+{
+	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
 }
 
 void BaseEnemy::MainInitialize() {

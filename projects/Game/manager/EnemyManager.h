@@ -30,7 +30,7 @@ public:
 private:
 
 	//敵のモデル
-	std::shared_ptr<BaseModel> modelEnemy_;
+	std::map<EnemyType, std::shared_ptr<BaseModel>> modelEnemyMap_;
 
 	//敵のリスト
 	std::list<std::unique_ptr<BaseEnemy>> enemys_;

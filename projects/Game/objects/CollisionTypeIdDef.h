@@ -8,6 +8,7 @@ enum class CollisionTypeIdDef
 	kDefault,
 	kPlayer,
 	kEnemy,
+	kTackleEnemy,
 	kPlayerBullet,
 	kEnemyBullet,
 	kRailMover,

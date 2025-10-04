@@ -617,13 +617,13 @@
             ]
         },
         {
-            "type": "EnemySpawn",
-            "name": "EnemySpawn.006",
+            "type": "TackleEnemySpawn",
+            "name": "TackleEnemySpawn",
             "transform": {
                 "translation": [
-                    -79.82014465332031,
-                    20.02010726928711,
-                    19.49846649169922
+                    -73.60885620117188,
+                    9.249715805053711,
+                    21.11362648010254
                 ],
                 "rotation": [
                     0.0,
@@ -636,7 +636,6 @@
                     1.0
                 ]
             },
-            "wait_time": 2.0,
             "wave_num": 1
         }
     ]

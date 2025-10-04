@@ -118,6 +118,10 @@ void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 
 void BaseModel::InstancingDraw(uint32_t numInstance)
 {
+	if (numInstance == 0)
+	{
+		return; // インスタンス数が0の場合は描画しない
+	}
 	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera_);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
@@ -136,6 +140,10 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 
 void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
 {
+	if (numInstance == 0)
+	{
+		return; // インスタンス数が0の場合は描画しない
+	}
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);

@@ -39,11 +39,13 @@ public:
 
 protected:
 	
+	virtual void SetColliderID();
+
 	void MainInitialize();
 
-	void UpdateApproach();
-	void UpdateMain();
-	void UpdateLeave();
+	virtual void UpdateApproach();
+	virtual void UpdateMain();
+	virtual void UpdateLeave();
 
 	//弾発射
 	void Fire();
@@ -52,7 +54,7 @@ protected:
 	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
 
 	//移動
-	void Move();
+	virtual void Move();
 
 	//回転
 	void Rotate();

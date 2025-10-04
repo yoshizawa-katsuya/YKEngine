@@ -78,7 +78,9 @@ void Player::Update(Camera* railCamera) {
 
 void Player::OnCollision(Collider* other)
 {
-	if (other->GetTypeID() == CollisionTypeIdDef::kEnemyBullet)
+	CollisionTypeIdDef typeId = other->GetTypeID();
+
+	if (typeId == CollisionTypeIdDef::kEnemyBullet || typeId == CollisionTypeIdDef::kTackleEnemy)
 	{
 		hitPoint_--;
 

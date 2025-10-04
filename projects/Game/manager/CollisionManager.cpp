@@ -86,6 +86,9 @@ void CollisionManager::CheckColliderPair(Collider* colliderA, Collider* collider
 	case CollisionTypeIdDef::kEnemy:
 		CheckEnemyCollisions(colliderA, colliderB);
 		break;
+	case CollisionTypeIdDef::kTackleEnemy:
+		CheckTackleEnemyCollisions(colliderA, colliderB);
+		break;
 	case CollisionTypeIdDef::kPlayerBullet:
 		CheckPlayerBulletCollisions(colliderA, colliderB);
 		break;
@@ -111,6 +114,7 @@ void CollisionManager::CheckPlayerCollisions(Collider* player, Collider* collide
 	switch (typeID)
 	{
 	case CollisionTypeIdDef::kEnemyBullet:
+	case CollisionTypeIdDef::kTackleEnemy:
 		//球と球の交差判定
 		if (IsCollision(Sphere{ player->GetCenterPosition(), player->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
 			// プレイヤーの衝突時
@@ -144,6 +148,26 @@ void CollisionManager::CheckEnemyCollisions(Collider* enemy, Collider* colliderB
 
 }
 
+void CollisionManager::CheckTackleEnemyCollisions(Collider* tackleEnemy, Collider* colliderB)
+{
+	CollisionTypeIdDef typeID = colliderB->GetTypeID();
+
+	switch (typeID)
+	{
+	case CollisionTypeIdDef::kPlayerBullet:
+	case CollisionTypeIdDef::kPlayer:
+		//球と球の交差判定
+		if (IsCollision(Sphere{ tackleEnemy->GetCenterPosition(), tackleEnemy->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+			// 敵の衝突時
+			tackleEnemy->OnCollision(colliderB);
+			colliderB->OnCollision(tackleEnemy);
+		}
+		return;
+	default:
+		return;
+	}
+}
+
 void CollisionManager::CheckPlayerBulletCollisions(Collider* playerBullet, Collider* colliderB)
 {
 	CollisionTypeIdDef typeID = colliderB->GetTypeID();
@@ -151,6 +175,7 @@ void CollisionManager::CheckPlayerBulletCollisions(Collider* playerBullet, Colli
 	switch (typeID)
 	{
 	case CollisionTypeIdDef::kEnemy:
+	case CollisionTypeIdDef::kTackleEnemy:
 		//球と球の交差判定
 		if (IsCollision(Sphere{ playerBullet->GetCenterPosition(), playerBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
 			// プレイヤー弾の衝突時

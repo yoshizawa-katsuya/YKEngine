@@ -15,7 +15,7 @@ void BasePlayerBullet::OnCollision(Collider* other)
 {
 	CollisionTypeIdDef typeID = other->GetTypeID();
 
-	if (typeID == CollisionTypeIdDef::kEnemy)
+	if (typeID == CollisionTypeIdDef::kEnemy || typeID == CollisionTypeIdDef::kTackleEnemy)
 	{
 		isDead_ = true;
 

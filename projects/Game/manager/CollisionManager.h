@@ -41,6 +41,8 @@ private:
 
 	void CheckEnemyCollisions(Collider* enemy, Collider* colliderB);
 
+	void CheckTackleEnemyCollisions(Collider* tackleEnemy, Collider* colliderB);
+
 	void CheckPlayerBulletCollisions(Collider* playerBullet, Collider* colliderB);
 
 	void CheckEnemyBulletCollisions(Collider* enemyBullet, Collider* colliderB);

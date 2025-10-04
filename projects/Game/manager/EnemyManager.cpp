@@ -1,6 +1,7 @@
 #include "EnemyManager.h"
 #include "ModelPlatform.h"
 #include "ShotEnemy01.h"
+#include "TackleEnemy01.h"
 #include "CollisionManager.h"
 
 void EnemyManager::Initialize(Player* player, Camera* railCamera, Matrix4x4* viewPortMatrix, EnemyBulletManager* enemyBulletManager)
@@ -10,7 +11,8 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, Matrix4x4* vie
 	viewPortMatrix_ = viewPortMatrix;
 	enemyBulletManager_ = enemyBulletManager;
 
-	modelEnemy_ = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
+	modelEnemyMap_[EnemyType::Shot01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
+	modelEnemyMap_[EnemyType::Tackle01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
 
 }
 
@@ -41,8 +43,22 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 	// 敵の生成
 	std::unique_ptr<BaseEnemy>& enemy = enemys_.emplace_back();
 	// 敵の初期化
-	enemy = std::make_unique<ShotEnemy01>();
-	enemy->Initialize(modelEnemy_.get(), spawnData, viewPortMatrix_, railCamera_);
+	switch (spawnData.type)
+	{
+	case EnemyType::Shot01:
+		enemy = std::make_unique<ShotEnemy01>();
+
+		break;
+
+	case EnemyType::Tackle01:
+		enemy = std::make_unique<TackleEnemy01>();
+
+		break;
+
+	default:
+		break;
+	}
+	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), spawnData, viewPortMatrix_, railCamera_);
 	enemy->SetPlayer(player_);
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetEnemyBulletManager(enemyBulletManager_);
