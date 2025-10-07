@@ -48,7 +48,6 @@ void GameScene::Initialize() {
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
 	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
 	
-	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
@@ -153,13 +152,6 @@ void GameScene::Update() {
 	
 	ParticleManager::GetInstance()->Update(mainCamera_);
 
-	/*
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
-	}
-	*/
-
 #ifdef _DEBUG
 
 
@@ -167,7 +159,6 @@ void GameScene::Update() {
 	if (ImGui::TreeNode("camera")) {
 		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
 		ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
-		//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
 
 		ImGui::TreePop();
 	}
@@ -220,11 +211,6 @@ void GameScene::Update() {
 		
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 
-	/*
-	if (ImGui::Button("BGMstop")) {
-		audio_->SoundStopWave(bgm1_);
-	}
-	*/
 	ImGui::End();
 		
 
