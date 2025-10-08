@@ -44,11 +44,11 @@ public:
 	Vector2& GetTextureSize() { return textureSize_; }
 	const Vector2& GetTextureSize() const { return textureSize_; }
 
-	EulerTransform GetTransform() { return transform_; }
-	EulerTransform GetUVTransform() { return uvTransform_; }
+	EulerTransform& GetTransform() { return transform_; }
+	const EulerTransform& GetTransform() const { return transform_; }
 
-	EulerTransform& GetTransformAddress() { return transform_; }
-	EulerTransform& GetUVTransformAddress() { return uvTransform_; }
+	EulerTransform& GetUVTransform() { return uvTransform_; }
+	const EulerTransform& GetUVTransform() const { return uvTransform_; }
 
 	void SetSize(const Vector2& size) { size_ = size; }
 
@@ -70,9 +70,13 @@ public:
 
 	void SetTexture(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 
+	void SetUVTransform(const EulerTransform& uvTransform) { uvTransform_ = uvTransform; }
+
+	void SetUVTranslate(const Vector3& translate) { uvTransform_.translation = translate; }
+
 	uint32_t GetTeture() { return textureHandle_; }
 
-private:
+protected:
 
 	//頂点データ作成
 	void CreateVertexData();

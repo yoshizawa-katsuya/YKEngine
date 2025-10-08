@@ -258,6 +258,9 @@
     <ClCompile Include="Engine\scene\SceneManager.cpp">
       <Filter>ソース ファイル\engine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\2d\AnimatedSprite.cpp">
+      <Filter>ソース ファイル\engine\2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -513,6 +516,9 @@
     </ClInclude>
     <ClInclude Include="Engine\scene\SceneManager.h">
       <Filter>ヘッダー ファイル\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\2d\AnimatedSprite.h">
+      <Filter>ヘッダー ファイル\engine\2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
