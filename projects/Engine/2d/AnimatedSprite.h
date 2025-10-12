@@ -21,6 +21,8 @@ public:
 
 	void SetIsReverse(bool isReverse) { isReverse_ = isReverse; }
 
+	bool GetIsEnd() { return isEnd_; }
+
 private:
 
 	//初期化の共通処理
