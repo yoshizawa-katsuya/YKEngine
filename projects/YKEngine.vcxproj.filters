@@ -276,6 +276,9 @@
     <ClCompile Include="Engine\scene\SceneManager.cpp">
       <Filter>ソース ファイル\engine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\2d\AnimatedSprite.cpp">
+      <Filter>ソース ファイル\engine\2d</Filter>
+    </ClCompile>
     <ClCompile Include="Game\manager\EnemySpawnManager.cpp">
       <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
@@ -360,7 +363,7 @@
     <ClCompile Include="Engine\lib\GlobalVariables.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
-    <ClCompile Include="TackleEnemy01.cpp">
+    <ClCompile Include="Game\objects\TackleEnemy01.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\EnemySpawnObject.cpp">
@@ -622,6 +625,9 @@
     <ClInclude Include="Engine\scene\SceneManager.h">
       <Filter>ヘッダー ファイル\engine\scene</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\2d\AnimatedSprite.h">
+      <Filter>ヘッダー ファイル\engine\2d</Filter>
+    </ClInclude>
     <ClInclude Include="Game\manager\EnemySpawnManager.h">
       <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
@@ -715,7 +721,7 @@
     <ClInclude Include="Engine\lib\GlobalVariables.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
-    <ClInclude Include="TackleEnemy01.h">
+    <ClInclude Include="Game\objects\TackleEnemy01.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\EnemySpawnObject.h">

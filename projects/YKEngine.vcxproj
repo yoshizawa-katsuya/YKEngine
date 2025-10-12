@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
     <ClCompile Include="Game\objects\EnemySpawnObject.cpp" />
     <ClCompile Include="Game\objects\bullet\ChargePlayerBullet01.cpp" />
     <ClCompile Include="Game\manager\EnemyManager.cpp" />
@@ -191,7 +192,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\manager\PlayerBulletManager.cpp" />
     <ClCompile Include="Game\objects\ShotEnemy01.cpp" />
     <ClCompile Include="Game\objects\bullet\PlayerBullet01.cpp" />
-    <ClCompile Include="TackleEnemy01.cpp" />
+    <ClCompile Include="Game\objects\TackleEnemy01.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -360,6 +361,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\2d\AnimatedSprite.h" />
     <ClInclude Include="Game\objects\EnemySpawnObject.h" />
     <ClInclude Include="Game\objects\EnemySpawn.h" />
     <ClInclude Include="Game\objects\bullet\ChargePlayerBullet01.h" />
@@ -448,7 +450,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\ShotEnemy01.h" />
     <ClInclude Include="Game\objects\bullet\PlayerBullet01.h" />
     <ClInclude Include="Game\objects\bullet\PlayerBulletType.h" />
-    <ClInclude Include="TackleEnemy01.h" />
+    <ClInclude Include="Game\objects\TackleEnemy01.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

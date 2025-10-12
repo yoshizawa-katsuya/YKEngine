@@ -36,9 +36,7 @@ public:
 
 private:
 
-	
-
-	Sprite* sprite_ = nullptr;
+	std::unique_ptr<Sprite> sprite_; //フェード用スプライト
 
 	//現在のフェードの状態
 	Status status_ = Status::None;
