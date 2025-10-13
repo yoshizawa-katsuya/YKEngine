@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseScene.h"
-#include "Fade.h"
+#include "AnimatedSprite.h"
 class Input;
 class ModelPlatform;
 
@@ -36,6 +36,8 @@ private:
 
 	std::unique_ptr<Sprite> spriteBackGround_;
 
+	std::unique_ptr<AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
+
 	//シーンのフェーズ
 	enum class Phase {
 		kStart,	//開始部
@@ -45,8 +47,6 @@ private:
 
 	//現在のフェーズ
 	Phase phase_ = Phase::kStart;
-
-	std::unique_ptr<Fade> fade_;
 
 };
 

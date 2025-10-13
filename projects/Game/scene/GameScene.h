@@ -11,7 +11,7 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
-#include "Sprite.h"
+#include "AnimatedSprite.h"
 #include "Player.h"
 #include "Camera.h"
 #include "DebugCamera.h"
@@ -21,7 +21,6 @@
 #include "manager/EnemyManager.h"
 #include "Skydome.h"
 #include "manager/CollisionManager.h"
-#include "Fade.h"
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
 #include "manager/EventTriggerManager.h"
@@ -51,6 +50,8 @@ private:
 	void UpdateGameClear();
 
 	void UpdateGameOver();
+
+	void UpdateTitleReturn();
 
 	//クリアしたかどうかを判定する
 	void CheckGameClear();
@@ -100,14 +101,15 @@ private:
 	std::unique_ptr<SpotLight> spotLight_;
 
 	//3Dモデル
-	/*std::shared_ptr<BaseModel> modelSkydome_;*/
 	std::shared_ptr<BaseModel> modelGround_;
 	std::shared_ptr<BaseModel> modelPlayer_;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_;
 	uint32_t textureHandleSkyBox_;
-	//std::unique_ptr<Sprite> sprite_;
+
+	//スプライト
+	std::unique_ptr<AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
 
 	//衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_;
@@ -126,9 +128,6 @@ private:
 	// 敵の弾
 	std::unique_ptr<EnemyBulletManager> enemyBulletManager_;
 
-	//天球
-	/*std::unique_ptr<Skydome> skydome_;*/
-
 	//スカイボックス
 	std::unique_ptr<Rigid3dObject> skyBox_;
 
@@ -146,15 +145,6 @@ private:
 
 	//レールカメラ
 	std::unique_ptr<RailCamera> railCamera_;
-	/*
-	std::unique_ptr<InstancingObjects> objects_;
-
-	WorldTransform worldTransform1_;
-	WorldTransform worldTransform2_;
-	*/
-
-	//std::unique_ptr<AccelerationField> field_;
-	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	//シーンのフェーズ
 	enum class Phase {
@@ -162,11 +152,10 @@ private:
 		kMain,	//メイン部
 		kGameClear,	//クリア部
 		kGameOver,	//ゲームオーバー部
+		kTitleReturn, //タイトルへ戻る
 	};
 
 	//現在のフェーズ
 	Phase phase_ = Phase::kStart;
-
-	std::unique_ptr<Fade> fade_;
 
 };

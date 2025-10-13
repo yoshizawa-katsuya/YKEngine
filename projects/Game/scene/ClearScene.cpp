@@ -16,15 +16,17 @@ void ClearScene::Initialize()
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
-	//TODO : ゲームクリア用のテクスチャに差し替える
+	//texture読み込み
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/clear.png");
+	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
 
 	spriteBackGround_ = std::make_unique<Sprite>();
 	spriteBackGround_->Initialize(textureHandle);
 
-	fade_ = std::make_unique<Fade>();
-	fade_->Initialize();
-	fade_->Start(Fade::Status::FadeIn, 0.5f);
+	spriteSceneChange_ = std::make_unique<AnimatedSprite>();
+	spriteSceneChange_->Initialize(textureHandleSceneChange, 20, 3);
+	spriteSceneChange_->SetSize({ WinApp::kClientWidth , WinApp::kClientHeight });
+	spriteSceneChange_->SetIsLoop(false);
 }
 
 void ClearScene::Update()
@@ -63,7 +65,10 @@ void ClearScene::Draw()
 
 	spriteBackGround_->Draw();
 
-	fade_->Draw();
+	if (phase_ != Phase::kMain)
+	{
+		spriteSceneChange_->Draw();
+	}
 }
 
 void ClearScene::Finalize()
@@ -72,9 +77,9 @@ void ClearScene::Finalize()
 
 void ClearScene::UpdateStart()
 {
-	fade_->Update();
-	if (fade_->IsFinished()) {
-		fade_->Stop();
+	spriteSceneChange_->Update();
+	if (spriteSceneChange_->GetIsEnd())
+	{
 		phase_ = Phase::kMain;
 	}
 }
@@ -83,15 +88,15 @@ void ClearScene::UpdateMain()
 {
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		phase_ = Phase::kEnd;
-		fade_->Start(Fade::Status::FadeOut, 0.5f);
+		spriteSceneChange_->ResetReverseAnimation();
 	}
 }
 
 void ClearScene::UpdateEnd()
 {
-	fade_->Update();
-	if (fade_->IsFinished()) {
-		//fade_->Stop();
+	spriteSceneChange_->Update();
+	if (spriteSceneChange_->GetIsEnd())
+	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("TitleScene");
 	}

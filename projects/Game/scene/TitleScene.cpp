@@ -44,12 +44,18 @@ void TitleScene::Initialize()
 
 	//テクスチャの読み込み
 	uint32_t textureHandleTitle = TextureManager::GetInstance()->Load("./Resources/title.png");
+	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
 	spriteTitle_ = std::make_unique<Sprite>();
 	spriteTitle_->Initialize(textureHandleTitle);
 	
+	spriteSceneChange_ = std::make_unique<AnimatedSprite>();
+	spriteSceneChange_->Initialize(textureHandleSceneChange, 20, 3);
+	spriteSceneChange_->SetSize({ WinApp::kClientWidth , WinApp::kClientHeight });
+	spriteSceneChange_->SetIsLoop(false);
+
 	//モデルの生成
 	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
 	modelGround_->SetUVTransform({ {160.0f, 160.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
@@ -75,9 +81,6 @@ void TitleScene::Initialize()
 
 	CreateLevel();
 
-	fade_ = std::make_unique<Fade>();
-	fade_->Initialize();
-	fade_->Start(Fade::Status::FadeIn, 0.5f);
 }
 
 void TitleScene::Update()
@@ -165,7 +168,11 @@ void TitleScene::Draw()
 
 	spriteTitle_->Draw();
 
-	fade_->Draw();
+	if (phase_ != Phase::kMain)
+	{
+		spriteSceneChange_->Draw();
+	}
+
 }
 
 void TitleScene::Finalize()
@@ -175,9 +182,9 @@ void TitleScene::Finalize()
 
 void TitleScene::UpdateStart()
 {
-	fade_->Update();
-	if (fade_->IsFinished()) {
-		fade_->Stop();
+	spriteSceneChange_->Update();
+	if (spriteSceneChange_->GetIsEnd())
+	{
 		phase_ = Phase::kMain;
 	}
 }
@@ -193,15 +200,15 @@ void TitleScene::UpdateMain()
 
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		phase_ = Phase::kEnd;
-		fade_->Start(Fade::Status::FadeOut, 0.5f);
+		spriteSceneChange_->ResetReverseAnimation();
 	}
 }
 
 void TitleScene::UpdateEnd()
 {
-	fade_->Update();
-	if (fade_->IsFinished()) {
-		//fade_->Stop();
+	spriteSceneChange_->Update();
+	if (spriteSceneChange_->GetIsEnd()) 
+	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GameScene");
 	}

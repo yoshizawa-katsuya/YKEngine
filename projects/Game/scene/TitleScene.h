@@ -6,8 +6,7 @@
 #include "TextureManager.h"
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
-#include "Sprite.h"
-#include "Fade.h"
+#include "AnimatedSprite.h"
 #include "DebugCamera.h"
 #include "Camera.h"
 #include "Rigid3dObject.h"
@@ -62,6 +61,8 @@ private:
 	bool isActiveDebugCamera_ = false;
 	std::unique_ptr<Sprite> spriteTitle_;//タイトルのスプライト
 
+	std::unique_ptr<AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
+
 	std::shared_ptr<BaseModel> modelGround_;
 
 	//テクスチャハンドル
@@ -92,8 +93,6 @@ private:
 
 	//現在のフェーズ
 	Phase phase_ = Phase::kStart;
-
-	std::unique_ptr<Fade> fade_;
 
 };
 
