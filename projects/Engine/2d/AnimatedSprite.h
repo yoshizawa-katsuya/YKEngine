@@ -15,6 +15,12 @@ public:
 	//アニメーションを逆再生する際の初期化
 	void InitializeReverseAnimation(uint32_t textureHandle, uint32_t horizontalDivisionNum, uint32_t verticalDivisionNum);
 
+	//アニメーションをリセットする
+	void Reset();
+
+	//アニメーションをリセットして逆再生する
+	void ResetReverseAnimation();
+
 	void SetUpdateFrame(uint32_t updateFrame) { updateFrame_ = updateFrame; }
 
 	void SetIsLoop(bool isLoop) { isLoop_ = isLoop; }
