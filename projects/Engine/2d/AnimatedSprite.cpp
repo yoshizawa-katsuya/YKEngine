@@ -49,6 +49,28 @@ void AnimatedSprite::InitializeReverseAnimation(uint32_t textureHandle, uint32_t
 	isReverse_ = true;
 }
 
+void AnimatedSprite::Reset()
+{
+	horizontalIndex_ = 0;
+	verticalIndex_ = 0;
+	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
+	uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
+
+	isReverse_ = false;
+	isEnd_ = false;
+}
+
+void AnimatedSprite::ResetReverseAnimation()
+{
+	horizontalIndex_ = horizontalDivisionNum_ - 1;
+	verticalIndex_ = verticalDivisionNum_ - 1;
+	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
+	uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
+
+	isReverse_ = true;
+	isEnd_ = false;
+}
+
 void AnimatedSprite::CommonInitialize(uint32_t textureHandle, int32_t horizontalDivisionNum, int32_t verticalDivisionNum)
 {
 	Sprite::Initialize(textureHandle);
