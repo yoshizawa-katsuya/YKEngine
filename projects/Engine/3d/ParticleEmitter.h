@@ -68,7 +68,7 @@ public:
 
 	void SetSpeed(float speed) { behavior_->speed = speed; }
 
-	void SetIsScaleToDisappear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }
+	void SetIsScaleToDisAppear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }
 
 	void SetIsScaleToAppear(bool isScaleToAppear) { behavior_->isScaleToAppear = isScaleToAppear; }
 
