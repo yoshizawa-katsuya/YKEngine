@@ -115,6 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\lib\Curve.cpp" />
     <ClCompile Include="Engine\lib\Easing.cpp" />
     <ClCompile Include="Engine\lib\Fade.cpp" />
+    <ClCompile Include="Engine\lib\GlobalVariables.cpp" />
     <ClCompile Include="Engine\lib\Lerp.cpp" />
     <ClCompile Include="Engine\lib\Slerp.cpp" />
     <ClCompile Include="Engine\scene\BaseScene.cpp" />
@@ -338,6 +339,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\Curve.h" />
     <ClInclude Include="Engine\lib\Easing.h" />
     <ClInclude Include="Engine\lib\Fade.h" />
+    <ClInclude Include="Engine\lib\GlobalVariables.h" />
     <ClInclude Include="Engine\lib\Lerp.h" />
     <ClInclude Include="Engine\lib\Slerp.h" />
     <ClInclude Include="Engine\scene\AbstractSceneFactory.h" />

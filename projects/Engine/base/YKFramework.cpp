@@ -56,6 +56,9 @@ void YKFramework::Initialize()
 	modelPlatform_ = ModelPlatform::GetInstance();
 	modelPlatform_->Initialize(dxCommon_, primitiveDrawer_.get(), srvHeapManager_.get());
 
+	globalVariables_ = GlobalVariables::GetInstance();
+	globalVariables_->LoadFiles();
+
 	//シーンマネージャの生成
 	sceneManager_ = SceneManager::GetInstance();
 
@@ -89,6 +92,8 @@ void YKFramework::Update()
 
 	//入力の更新
 	input_->Update();
+
+	globalVariables_->Update();
 
 	sceneManager_->Update();
 

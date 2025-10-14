@@ -261,6 +261,9 @@
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp">
       <Filter>ソース ファイル\engine\2d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\lib\GlobalVariables.cpp">
+      <Filter>ソース ファイル\engine\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -519,6 +522,9 @@
     </ClInclude>
     <ClInclude Include="Engine\2d\AnimatedSprite.h">
       <Filter>ヘッダー ファイル\engine\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\GlobalVariables.h">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
