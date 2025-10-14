@@ -18,8 +18,11 @@ void CollisionManager::Initialize()
 
 void CollisionManager::Update()
 {
+#ifdef _DEBUG
+
 	isDrawCollider_ = globalVariables_->GetBoolValue(groupName_, "isDrawCollider");
 
+#endif //DEBUG
 }
 
 void CollisionManager::Draw(Camera* camera)
