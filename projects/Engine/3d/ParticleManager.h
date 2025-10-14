@@ -25,12 +25,8 @@ public:
 
 	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
 
-	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor);
-
-	//void Emit(const std::string name, const EulerTransform& transform, uint32_t count, bool isRandomColor, const Vector4& color);
-
 	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-		const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
+		const Vector4& color, const EmitterRangeParams& rangeParams);
 
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 

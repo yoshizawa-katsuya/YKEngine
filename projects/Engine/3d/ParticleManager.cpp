@@ -208,11 +208,12 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 }
 
 void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
+	const Vector4& color, const EmitterRangeParams& rangeParams)
 {
 	assert(particleGroups_.contains(name));
+	ParticleGroup& particleGroup = particleGroups_[name];
 	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams, behavior));
+		particleGroup.particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams, *particleGroup.behavior.get()));
 	}
 }
 
