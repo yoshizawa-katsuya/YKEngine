@@ -1,0 +1,77 @@
+{
+    "HitEffect01": {
+        "bahaviorEasingTypeForScale": 0,
+        "bahaviorIsSceleToDisappear": false,
+        "behaviorIsConstantVelocity": false,
+        "behaviorIsDownVelocity": false,
+        "behaviorIsFaceToVelocityDirection": false,
+        "behaviorIsScaleToAppear": false,
+        "behaviorIsUseBillboard": true,
+        "behaviorSpeed": 1.0,
+        "count": 3,
+        "frequency": 1.5,
+        "randomFlagsColor": false,
+        "randomFlagsLifeTime": false,
+        "randomFlagsRotation": true,
+        "randomFlagsScale": true,
+        "randomFlagsTranslation": false,
+        "randomFlagsVelocity": false,
+        "rangeParamsLifeTimeMax": 3.0,
+        "rangeParamsLifeTimeMin": 1.0,
+        "rangeParamsRotateMax": [
+            0.0,
+            0.0,
+            3.1415927410125732
+        ],
+        "rangeParamsRotateMin": [
+            0.0,
+            0.0,
+            -3.1415927410125732
+        ],
+        "rangeParamsScaleMax": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "rangeParamsScaleMin": [
+            0.0,
+            -0.6000000238418579,
+            0.0
+        ],
+        "rangeParamsTranslateMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsTranslateMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsVelocityMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsVelocityMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            0.10000000149011612,
+            2.0,
+            2.0
+        ],
+        "translation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}
