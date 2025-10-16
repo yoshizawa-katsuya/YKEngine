@@ -1,6 +1,9 @@
 #pragma once
 #include "Vector3.h"
 
+/// <summary>
+/// Transformに関する便利関数群
+/// </summary>
 namespace TransformHelpers
 {
 	//移動方向に向く

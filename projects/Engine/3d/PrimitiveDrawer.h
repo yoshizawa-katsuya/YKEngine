@@ -10,7 +10,10 @@
 #include <memory>
 class DirectXCommon;
 
-//描画モード
+/// <summary>
+/// 描画モード。
+/// ブレンドモードや、オフスクリーンレンダリングの種類を指定する。
+/// </summary>
 enum class DrawMode {
 	kBlendModeNone, //ブレンドなし
 	kBlendModeNormal, //NormalBlend
@@ -51,11 +54,20 @@ enum class DrawMode {
 	kCountOfBlendMode,	//利用してはいけない
 };
 
+//TODO:クラス名を変更する
+/// <summary>
+/// プリミティブ描画クラス。
+/// パイプラインステートを管理する。
+/// </summary>
 class PrimitiveDrawer
 {
 public:
 
-	//パイプラインセット
+	/// <summary>
+	/// パイプラインセット
+	/// </summary>
+	/// <param name="rootSignature">ルートシグネチャ</param>
+	/// <param name="graphicsPipelineState">グラフィックスパイプラインステート</param>
 	struct PipelineSet
 	{
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;

@@ -27,6 +27,10 @@
 #include "manager/PlayerBulletManager.h"
 #include "manager/EnemyBulletManager.h"
 
+/// <summary>
+/// ゲームシーン。
+/// ゲームのメイン処理を行う。
+/// </summary>
 class GameScene : public BaseScene
 {
 public:

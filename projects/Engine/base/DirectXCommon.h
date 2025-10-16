@@ -12,6 +12,11 @@
 #include "WinApp.h"
 #include "DirectXTex/DirectXTex.h"
 
+/// <summary>
+/// DirectX共通機能。
+/// DirectX初期化、コマンドリスト、スワップチェイン、描画前後処理など。
+/// 他のクラスでDirectXの機能を使用する場合は、ここからデバイスやコマンドリストを取得して使用する。
+/// </summary>
 class DirectXCommon
 {
 public:

@@ -2,7 +2,8 @@
 #include "Sprite.h"
 
 /// <summary>
-/// フェード
+/// フェードクラス。
+/// 画面のフェードイン・フェードアウトを管理する。
 /// </summary>
 class Fade {
 public:

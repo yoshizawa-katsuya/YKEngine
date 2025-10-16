@@ -7,6 +7,11 @@
 #include "TextureManager.h"
 class SpritePlatform;
 
+/// <summary>
+/// 2D画像を表示するためのクラス。
+/// テクスチャを貼り付けた四角形を表示する。
+/// 四角形の大きさ、位置、回転、色、テクスチャの切り出し範囲などを設定できる。
+/// </summary>
 class Sprite
 {
 public:

@@ -2,6 +2,10 @@
 #include "SrvHeapManager.h"
 #include "DirectXCommon.h"
 
+/// <summary>
+/// ImGui管理クラス。
+/// ImGuiの初期化、描画を行う。
+/// </summary>
 class ImGuiManager
 {
 public:

@@ -5,6 +5,12 @@
 
 #pragma comment(lib,"xaudio2.lib")
 
+/// <summary>
+/// オーディオ。
+/// XAudio2を使用。
+/// 音声読み込み、再生、終了、解放を行う。
+/// Waveファイル、mp3ファイルに対応。
+/// </summary>
 class Audio
 {
 public:

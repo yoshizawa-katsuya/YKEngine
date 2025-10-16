@@ -2,6 +2,12 @@
 #include <Windows.h>
 #include <cstdint>
 
+/// <summary>
+/// Windowsアプリケーションクラス。
+/// シングルトンで実装。
+/// ウィンドウの生成とメッセージ処理を行う。
+/// ゲームウィンドウのクライアント領域は1280x720に固定。
+/// </summary>
 class WinApp
 {
 public:

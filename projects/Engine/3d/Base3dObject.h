@@ -1,6 +1,11 @@
 #pragma once
 #include "BaseModel.h"
 
+/// <summary>
+/// 3Dオブジェクトの基底クラス。
+/// 3Dオブジェクトはモデルを持ち、ワールド変換行列を持つ。
+/// モデルは複数の3Dオブジェクトで共有できる。
+/// </summary>
 class Base3dObject
 {
 public:

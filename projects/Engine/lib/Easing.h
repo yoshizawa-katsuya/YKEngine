@@ -1,5 +1,9 @@
 #pragma once
 
+/// <summary>
+/// イージングの種類
+/// https://easings.net/ja
+/// </summary>
 enum class EasingType
 {
 	Linear,

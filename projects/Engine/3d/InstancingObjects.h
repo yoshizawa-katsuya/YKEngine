@@ -1,6 +1,11 @@
 #pragma once
 #include "BaseModel.h"
 
+/// <summary>
+/// 3Dモデルのインスタンシング描画を行うクラス。
+/// 複数の同じモデルを描画する際に使用する。
+/// マップチップや草など、同じモデルを大量に描画する際に有効。
+/// </summary>
 class InstancingObjects
 {
 public:

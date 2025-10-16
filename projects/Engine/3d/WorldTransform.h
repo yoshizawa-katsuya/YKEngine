@@ -1,6 +1,10 @@
 #pragma once
 #include "Struct.h"
 
+/// <summary>
+/// ワールド変換データ。
+/// 親子関係を持つことができる。
+/// </summary>
 class WorldTransform
 {
 public:

@@ -8,6 +8,13 @@
 #include "DirectXTex/DirectXTex.h"
 #include "SrvHeapManager.h"
 
+/// <summary>
+/// テクスチャ管理クラス。
+/// シングルトン。
+/// 複数のスレッドから同時にLoad関数が呼ばれる可能性があるため、
+/// ミューテックスで排他制御を行う。
+/// テクスチャはuint32_tのハンドルで管理する。
+/// </summary>
 class TextureManager
 {
 public:
@@ -61,7 +68,12 @@ private:
 	/// <summary>
 	/// テクスチャ
 	/// </summary>
-	struct Texture {
+	/// <param name="metadata">メタデータ</param>
+	/// <param name="resource">テクスチャリソース</param>
+	/// <param name="cpuDescHandleSRV">シェーダリソースビューのハンドル(CPU)</param>
+	/// <param name="gpuDescHandleSRV">シェーダリソースビューのハンドル(GPU)</param>
+	struct Texture 
+	{
 		DirectX::TexMetadata metadata;
 		// テクスチャリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;

@@ -2,11 +2,22 @@
 #include "DirectXCommon.h"
 #include <Struct.h>
 
+/// <summary>
+/// 平行光源。
+/// 使用する場合、modelPtalformへデータをセットすること。
+/// </summary>
 class DirectionalLight
 {
 public:
 
-	struct DirectionalLightData {
+	/// <summary>
+	/// 平行光源データ構造体
+	/// </summary>
+	///	<param name="color">ライトの色</param>
+	/// <param name="direction">ライトの向き</param>
+	/// <param name="intensity">輝度</param>
+	struct DirectionalLightData 
+	{
 		Vector4 color;	//ライトの色
 		Vector3 direction;	//ライトの向き
 		float intensity;	//輝度
@@ -46,4 +57,3 @@ private:
 	DirectionalLightData* data_;
 
 };
-

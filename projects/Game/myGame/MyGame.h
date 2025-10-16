@@ -2,7 +2,11 @@
 #include "YKFramework.h"
 class EffectManager;
 
-//ゲーム全体
+/// <summary>
+/// ゲームのメインクラス。
+/// YKFrameworkを継承して作成する。
+/// YKFrameworkの機能を使用してゲームを作成する。
+/// </summary>
 class MyGame : public YKFramework
 {
 public:

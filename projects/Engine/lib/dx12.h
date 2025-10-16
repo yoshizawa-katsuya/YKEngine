@@ -6,13 +6,17 @@
 
 
 
-//ログ
+/// <summary>
+/// ログ出力ユーティリティ
+/// </summary>
 namespace Logger
 {
 	void Log(const std::string& message);
 }
 
-//文字コードユーティリティ
+/// <summary>
+/// 文字列変換ユーティリティ
+/// </summary>
 namespace StringUtility 
 {
 	//wstringに変換

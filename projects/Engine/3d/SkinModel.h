@@ -1,6 +1,13 @@
 #pragma once
 #include "BaseModel.h"
 
+/// <summary>
+/// スキンメッシュを持つモデル。
+/// スキンクラスターを持つ。
+/// アニメーションに対応している。
+/// アニメーションはスキンクラスターを通じてボーンの変形をメッシュに反映させる。
+/// スキンクラスターはSetSkinClusterで設定する。
+/// </summary>
 class SkinModel : public BaseModel
 {
 public:

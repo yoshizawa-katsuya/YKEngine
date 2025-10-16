@@ -7,7 +7,11 @@
 #include "Vector4.h"
 #include "Color.h"
 
-//グローバル変数
+/// <summary>
+/// グローバル変数管理クラス。
+/// グループごとに変数を管理し、ファイルに保存・読み込みが可能。
+/// ファイル形式はJSON。
+/// </summary>
 class GlobalVariables {
 public:
 	static GlobalVariables* GetInstance();

@@ -10,7 +10,11 @@
 
 using namespace Microsoft::WRL;
 
-//入力
+/// <summary>
+/// 入力クラス。
+/// キーボード、マウス、ゲームパッドの入力を管理する。
+/// 押した瞬間、押している、離した瞬間、押しっぱなしをチェックできる。
+/// </summary>
 class Input
 {
 public:

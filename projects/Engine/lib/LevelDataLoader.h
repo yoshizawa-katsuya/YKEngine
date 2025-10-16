@@ -2,6 +2,12 @@
 #include "Struct.h"
 #include "json.hpp"
 
+/// <summary>
+/// オブジェクトの生成データ。
+/// </summary>
+/// <param name="fileName">モデルファイル名</param>
+/// <param name="filePath">モデルファイルパス</param>
+/// <param name="transform">位置、回転、スケール</param>
 struct ObjectData
 {
 	std::string fileName;
@@ -11,19 +17,32 @@ struct ObjectData
 	std::optional<float> speed = std::nullopt; // スピード（オプション）
 };
 
-//スプライン曲線の制御点データ
+/// <summary>
+/// スプライン曲線の制御点データ。
+/// </summary>
+/// <param name="controlPoints">制御点配列</param>
 struct SplineData
 {
 	std::vector<Vector3> controlPoints;
 };
 
-//自キャラの生成データ
+/// <summary>
+/// 自キャラの生成データ。
+/// </summary>
+/// <param name="transform">位置、回転、スケール</param>
 struct PlayerSpawnData
 {
 	EulerTransform transform;
 };
 
-//敵の生成データ
+/// <summary>
+/// 敵の生成データ。
+/// </summary>
+/// <param name="transform">位置、回転、スケール</param>
+/// <param name="waitTime">待機時間（オプション）</param>
+/// <param name="waveNum">ウェーブ番号（オプション）</param>
+/// <param name="speed">スピード（オプション）</param>
+/// <param name="spline">スプライン曲線（オプション）</param>
 struct EnemySpawnData
 {
 	EulerTransform transform{};
@@ -34,6 +53,13 @@ struct EnemySpawnData
 	std::optional<SplineData> spline = std::nullopt; // スプライン曲線（オプション）
 };
 
+/// <summary>
+/// レベルデータ。
+/// </summary>
+/// <param name="objects">オブジェクト配列</param>
+/// <param name="playerSpawns">自キャラ配列</param>
+/// <param name="enemySpawns">敵配列</param>
+/// <param name="splines">スプライン曲線配列</param>
 struct LevelData
 {
 	std::vector<ObjectData> objects;
@@ -44,7 +70,7 @@ struct LevelData
 	//敵配列
 	std::vector<EnemySpawnData> enemySpawns;
 
-	//スプライン曲線の制御点データ
+	//スプライン曲線
 	std::vector<SplineData> splines;
 };
 

@@ -11,21 +11,42 @@ class ModelPlatform;
 class Camera;
 class Animation;
 
+/// <summary>
+/// スキンモデルの頂点ウェイト情報。
+/// </summary>
+/// <param name="weight">ウェイト値</param>
+/// <param name="vertexIndex">頂点インデックス</param>
 struct VertexWeightData {
 	float weight;
 	uint32_t vertexIndex;
 };
 
+/// <summary>
+/// スキンモデルのジョイントウェイト情報。
+/// </summary>
+/// <param name="inverseBindPoseMatrix">逆バインドポーズ行列</param>
+/// <param name="vertexWeights">頂点ウェイト情報の配列</param>
 struct JointWeightData {
 	Matrix4x4 inverseBindPoseMatrix;
 	std::vector<VertexWeightData> vertexWeights;
 };
 
+/// <summary>
+/// マテリアル情報。
+/// </summary>
+/// <param name="textureFilePath">テクスチャファイルのパス</param>
 struct MaterialData
 {
 	std::string textureFilePath;
 };
 
+/// <summary>
+/// ノード情報。
+/// </summary>
+/// <param name="transform">ノードの変換情報</param>
+/// <param name="localMatrix">ノードのローカル変換行列</param>
+/// <param name="name">ノードの名前</param>
+/// <param name="children">子ノードの配列</param>
 struct Node {
 	QuaternionTransform transform;
 	Matrix4x4 localMatrix;
@@ -33,6 +54,14 @@ struct Node {
 	std::vector<Node> children;
 };
 
+/// <summary>
+/// モデルデータ。
+/// </summary>
+/// <param name="skinClusterData">スキンクラスター情報のマップ</param>
+/// <param name="vertices">頂点データの配列</param>
+/// <param name="indeces">インデックスデータの配列</param>
+/// <param name="material">マテリアル情報</param>
+/// <param name="rootNode">ルートノード情報</param>
 struct ModelData {
 	std::map<std::string, JointWeightData> skinClusterData;
 	std::vector<VertexData> vertices;
@@ -41,6 +70,13 @@ struct ModelData {
 	Node rootNode;
 };
 
+/// <summary>
+/// 3Dモデルの基底クラス。
+/// ModelPlatformクラスを介して使用する。
+/// 3dObjectクラスからも使用される。
+/// モデルデータの読み込み、頂点・インデックス・マテリアルデータの作成、描画を行う。
+/// 描画は3DObjectクラスから呼び出される。
+/// </summary>
 class BaseModel
 {
 public:

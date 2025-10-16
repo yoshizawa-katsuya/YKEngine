@@ -2,10 +2,25 @@
 #include "DirectXCommon.h"
 #include <Struct.h>
 
+/// <summary>
+/// スポットライト。
+/// 使用する場合、modelPtalformへデータをセットすること。
+/// </summary>
 class SpotLight
 {
 public:
 
+	/// <summary>
+	/// スポットライトのデータ構造体
+	/// </summary>
+	/// <param name="color">ライトの色</param>
+	/// <param name="position">ライトの位置</param>
+	/// <param name="intensity">輝度</param>
+	/// <param name="direction">ライトの向き</param>
+	/// <param name="distance">ライトの届く最大距離</param>
+	/// <param name="decay">減衰率</param>
+	/// <param name="cosAngle">スポットライトの余弦</param>
+	/// <param name="cosFalloffStart">falloff開始の角度</param>
 	struct SpotLightData {
 		Vector4 color;	//ライトの色
 		Vector3 position;	//ライトの位置

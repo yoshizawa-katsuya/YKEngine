@@ -9,6 +9,9 @@ class Camera;
 class BaseEnemy;
 class PlayerBulletManager;
 
+/// <summary>
+/// プレイヤークラス
+/// </summary>
 class Player : public BaseCharacter
 {
 public:

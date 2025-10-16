@@ -4,6 +4,11 @@
 #include "Struct.h"
 class BaseModel;
 
+/// <summary>
+/// 3Dモデルのアニメーションを管理するクラス。
+/// アニメーションデータを読み込み、アニメーションの再生を行う。
+/// アニメーションはNode単位で管理する。
+/// </summary>
 class Animation
 {
 public:

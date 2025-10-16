@@ -14,6 +14,9 @@
 #include "RailCamera.h"
 #include "InstancingObjects.h"
 
+/// <summary>
+/// タイトル画面のクラス。
+/// </summary>
 class TitleScene : public BaseScene
 {
 public:
