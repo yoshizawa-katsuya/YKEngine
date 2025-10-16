@@ -6,6 +6,7 @@
 #include <random>
 #include "ParticleTypes.h"
 #include "BaseModel.h"
+#include "Color.h"
 
 class ParticleManager
 {
@@ -26,7 +27,7 @@ public:
 	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
 
 	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-		const Vector4& color, const EmitterRangeParams& rangeParams);
+		const Color& color, const EmitterRangeParams& rangeParams);
 
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 
@@ -41,7 +42,7 @@ private:
 	ParticleManager& operator=(ParticleManager&) = default;
 
 	Particle MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
-		const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
+		const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
 
 
 	struct ParticleGroup {

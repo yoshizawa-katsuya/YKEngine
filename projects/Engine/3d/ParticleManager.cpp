@@ -114,7 +114,7 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color = particleIterator->color;
 
 				float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
-				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color.w = alpha;
+				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color.a = alpha;
 
 				++particleGroupIterator->second.numInstance;
 			}
@@ -198,7 +198,7 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 	for (uint32_t index = 0; index < particleGroup.kNumMaxInstance; ++index) {
 		particleGroup.instancingData[index].WVP = MakeIdentity4x4();
 		particleGroup.instancingData[index].World = MakeIdentity4x4();
-		particleGroup.instancingData[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		particleGroup.instancingData[index].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	particleGroup.instancingSrvIndex = srvHeapManager_->Allocate();
@@ -208,7 +208,7 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 }
 
 void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams)
+	const Color& color, const EmitterRangeParams& rangeParams)
 {
 	assert(particleGroups_.contains(name));
 	ParticleGroup& particleGroup = particleGroups_[name];
@@ -218,7 +218,7 @@ void ParticleManager::Emit(const std::string name, const EulerTransform& transfo
 }
 
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
+	const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
 
 	Particle particle{};

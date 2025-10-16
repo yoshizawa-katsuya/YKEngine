@@ -45,19 +45,31 @@ void GlobalVariables::Update() {
 			//int32_t型の値を保持していれば
 			if (std::holds_alternative<int32_t>(item)) {
 				int32_t* ptr = std::get_if<int32_t>(&item);
-				ImGui::SliderInt(itemName.c_str(), ptr, 0, 100);
+				ImGui::DragInt(itemName.c_str(), ptr, 0.01f);
 			}
 
 			//float型の値を保持していれば
 			else if (std::holds_alternative<float>(item)) {
 				float* ptr = std::get_if<float>(&item);
-				ImGui::SliderFloat(itemName.c_str(), ptr, -10.0f, 10.0f);
+				ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
 			}
 
 			//Vector3型の値を保持していれば
 			else if (std::holds_alternative<Vector3>(item)) {
 				Vector3* ptr = std::get_if<Vector3>(&item);
-				ImGui::SliderFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), -10.0f, 10.0f);
+				ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+			}
+
+			// Vector4型の値を保持していれば
+			else if (std::holds_alternative<Vector4>(item)) {
+				Vector4* ptr = std::get_if<Vector4>(&item);
+				ImGui::DragFloat4(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+			}
+
+			// ColorEdit4で編集できるようにする
+			else if (std::holds_alternative<Color>(item)) {
+				Color* ptr = std::get_if<Color>(&item);
+				ImGui::ColorEdit4(itemName.c_str(), reinterpret_cast<float*>(ptr));
 			}
 
 			// bool型の値を保持していれば
@@ -126,6 +138,28 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group[key] = newItem;
 }
 
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector4& value)
+{
+	// グループの参照を取得
+	Group& group = datas_[groupName];
+	// 新しい項目のデータを設定
+	Item newItem{};
+	newItem = value;
+	// 設定した項目をstd::mapに追加
+	group[key] = newItem;
+}
+
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Color& value)
+{
+	// グループの参照を取得
+	Group& group = datas_[groupName];
+	// 新しい項目のデータを設定
+	Item newItem{};
+	newItem = value;
+	// 設定した項目をstd::mapに追加
+	group[key] = newItem;
+}
+
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, bool value) {
 
 	// グループの参照を取得
@@ -155,6 +189,20 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value) {
 
+	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
+		SetValue(groupName, key, value);
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector4& value)
+{
+	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
+		SetValue(groupName, key, value);
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Color& value)
+{
 	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
 		SetValue(groupName, key, value);
 	}
@@ -377,6 +425,30 @@ Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std
 	assert(group.find(key) != group.end());
 
 	return std::get<Vector3>(group.at(key));
+}
+
+Vector4 GlobalVariables::GetVector4Value(const std::string& groupName, const std::string& key) const
+{
+	assert(datas_.find(groupName) != datas_.end());
+
+	// グループの参照を取得
+	const Group& group = datas_.at(groupName);
+
+	assert(group.find(key) != group.end());
+
+	return std::get<Vector4>(group.at(key));
+}
+
+Color GlobalVariables::GetColorValue(const std::string& groupName, const std::string& key) const
+{
+	assert(datas_.find(groupName) != datas_.end());
+
+	// グループの参照を取得
+	const Group& group = datas_.at(groupName);
+
+	assert(group.find(key) != group.end());
+
+	return std::get<Color>(group.at(key));
 }
 
 bool GlobalVariables::GetBoolValue(const std::string& groupName, const std::string& key) const {
