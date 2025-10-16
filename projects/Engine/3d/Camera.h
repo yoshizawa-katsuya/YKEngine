@@ -3,7 +3,11 @@
 #include "WinApp.h"
 #include "DirectXCommon.h"
 
-//カメラ
+/// <summary>
+/// カメラクラス。
+/// 3D空間上の視点を表す。
+/// 視点の位置、向き、投影方法を管理する。
+/// </summary>
 class Camera
 {
 public:

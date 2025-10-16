@@ -19,6 +19,10 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 
+/// <summary>
+/// ゲームシーン。
+/// ゲームのメイン処理を行う。
+/// </summary>
 class GameScene : public BaseScene
 {
 public:

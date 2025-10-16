@@ -1,7 +1,11 @@
 #pragma once
 #include "Sprite.h"
 
-//アニメーション付きスプライト
+/// <summary>
+/// アニメーションスプライトを扱うクラス。
+/// スプライトシートを使用してアニメーションを実装する。
+/// Spriteクラスを継承している。
+/// </summary>
 class AnimatedSprite : public Sprite
 {
 public:

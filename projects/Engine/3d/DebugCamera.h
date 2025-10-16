@@ -3,7 +3,10 @@
 class Camera;
 class Input;
 
-
+/// <summary>
+/// デバッグ用カメラ。
+/// マウスで操作可能。
+/// </summary>
 class DebugCamera
 {
 public:
@@ -14,15 +17,9 @@ public:
 	//更新
 	void Update();
 
-	void ViewMatrixUpdate();
-
-	void AddRotateX(float rotateX);
-
-	void AddRotateY(float rotateY);
-
-	void AddRotateZ(float rotateZ);
-
 private:
+
+	void ViewMatrixUpdate();
 
 	Camera* camera_;
 	Input* input_;

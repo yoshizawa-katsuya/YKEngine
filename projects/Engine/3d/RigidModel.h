@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseModel.h"
 
+/// <summary>
+/// リジッドモデル。
+/// メッシュの形状は変化しない。
+/// </summary>
 class RigidModel : public BaseModel
 {
 public:

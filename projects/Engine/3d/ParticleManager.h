@@ -8,6 +8,13 @@
 #include "BaseModel.h"
 #include "Color.h"
 
+/// <summary>
+/// パーティクル管理クラス。
+/// シングルトン。
+/// パーティクルの生成、更新、描画を行う。
+/// パーティクルはグループごとに管理される。
+/// パーティクルの生成はエミッターから行う。
+/// </summary>
 class ParticleManager
 {
 public:
@@ -44,7 +51,18 @@ private:
 	Particle MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
 		const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
 
-
+	/// <summary>
+	/// パーティクルグループ
+	/// </summary>
+	/// <param name="model">パーティクルのモデル</param>
+	/// <param name="textureHandle">パーティクルのテクスチャハンドル</param>
+	/// <param name="particles">パーティクルのリスト</param>
+	/// <param name="instancingSrvIndex">インスタンシング用SRVヒープのインデックス</param>
+	/// <param name="instancingResouce">インスタンシング用リソース</param>
+	/// <param name="kNumMaxInstance">インスタンスの最大数</param>
+	/// <param name="numInstance">現在のインスタンス数</param>
+	/// <param name="instancingData">インスタンシング用データ</param>
+	/// <param name="behavior">パーティクルの挙動</param>
 	struct ParticleGroup {
 		std::shared_ptr<BaseModel> model;
 		uint32_t textureHandle;

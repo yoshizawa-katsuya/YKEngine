@@ -3,8 +3,10 @@
 #include "BaseScene.h"
 #include <string>
 
-///<summary>
-///シーン工場(概念)
+/// <summary>
+/// シーン工場(概念)
+/// シーンを生成するインターフェースを提供する。
+/// 継承して使用する。
 /// </summary>
 class AbstractSceneFactory
 {

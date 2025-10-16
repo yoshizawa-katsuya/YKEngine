@@ -8,6 +8,9 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 
+/// <summary>
+/// タイトル画面のクラス。
+/// </summary>
 class TitleScene : public BaseScene
 {
 public:

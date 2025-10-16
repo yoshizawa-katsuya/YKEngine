@@ -2,7 +2,11 @@
 #include "DirectXCommon.h"
 #include <mutex>
 
-//SRV管理
+/// <summary>
+/// SRVヒープ管理クラス。
+/// SRVヒープの生成、SRVの生成、SRVヒープの管理を行う。
+/// SRVヒープは1つのみ生成し、SRVは最大512個まで生成可能。
+/// </summary>
 class SrvHeapManager
 {
 public:

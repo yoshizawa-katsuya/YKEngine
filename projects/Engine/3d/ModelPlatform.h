@@ -9,6 +9,11 @@
 #include "BaseModel.h"
 class Camera;
 
+/// <summary>
+/// モデルの基盤クラス。
+/// モデルの生成、管理、描画前処理などを行う。
+/// シングルトン。
+/// </summary>
 class ModelPlatform
 {
 public:

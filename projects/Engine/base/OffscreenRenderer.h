@@ -11,6 +11,12 @@ class PrimitiveDrawer;
 class DirectXCommon;
 enum class DrawMode;
 
+/// <summary>
+/// オフスクリーンレンダラー。
+/// オフスクリーンレンダリングを行い、様々なエフェクトを適用する。
+/// レンダーテクスチャの種類をRenderTextureTypeで指定する。
+/// オフスクリーンレンダリングを使用する場合、sceneのUpdateでSetUseOffscreenRender(true)を呼び出す。
+/// </summary>
 enum class RenderTextureType
 {
 	// オフスクリーンレンダリング用のテクスチャ

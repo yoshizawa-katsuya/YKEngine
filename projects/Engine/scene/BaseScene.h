@@ -3,7 +3,9 @@
 //前方宣言
 class SceneManager;
 
-//シーン基底クラス
+/// <summary>
+/// シーンの基底クラス
+/// </summary>
 class BaseScene
 {
 public:

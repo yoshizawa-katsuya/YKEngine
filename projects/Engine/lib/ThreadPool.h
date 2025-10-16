@@ -5,6 +5,12 @@
 #include <condition_variable>
 #include <atomic>
 
+/// <summary>
+/// 複数のスレッドでタスクを並列に実行するためのクラス。
+/// タスクの追加、完了待機が可能。
+/// タスクの実行中に新しいタスクを追加可能。
+/// タスクの完了を待つ機能も提供。
+/// </summary>
 class ThreadPool {
 public:
     

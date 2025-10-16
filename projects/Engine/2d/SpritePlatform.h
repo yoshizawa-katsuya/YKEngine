@@ -2,6 +2,11 @@
 #include "DirectXCommon.h"
 #include "PrimitiveDrawer.h"
 
+/// <summary>
+/// 2Dスプライト描画の基盤となるクラス。
+/// スプライト描画の前後に必要な設定を行う。
+/// シングルトンパターンで実装。
+/// </summary>
 class SpritePlatform
 {
 public:

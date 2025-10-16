@@ -24,7 +24,13 @@
 #include <math.h>
 class OffscreenRenderer;
 
-//ゲーム全体
+/// <summary>
+/// フレームワーククラス。
+/// ゲームの大枠を管理する。
+/// ゲームごとに継承して使用する。
+/// ゲームループはRun()で実行される。
+/// ゲームループ内でInitialize()、Update()、Draw()が呼ばれる。
+/// </summary>
 class YKFramework
 {
 public:

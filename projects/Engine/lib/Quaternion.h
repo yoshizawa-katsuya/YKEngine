@@ -1,5 +1,9 @@
 #pragma once
 
+/// <summary>
+/// クォータニオン
+/// x, y, zはベクトル成分、wはスカラー成分
+/// </summary>
 struct  Quaternion
 {
 	float x;

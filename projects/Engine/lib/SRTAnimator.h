@@ -2,7 +2,11 @@
 #include "Vector3.h"
 #include "DirectXCommon.h"
 
-//拡縮、回転、移動によるシンプルなアニメーション
+/// <summary>
+/// SRTアニメーション。
+/// SRTとはScale, Rotate, Translateの略。
+/// SRTでの単純なアニメーションを行う。
+/// </summary>
 class SRTAnimator
 {
 public:

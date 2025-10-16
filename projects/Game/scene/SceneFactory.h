@@ -2,6 +2,9 @@
 
 #include "AbstractSceneFactory.h"
 
+/// <summary>
+/// シーンの生成を担当するクラス。
+/// </summary>
 class SceneFactory : public AbstractSceneFactory
 {
 public:

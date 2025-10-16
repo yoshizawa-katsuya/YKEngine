@@ -1,6 +1,13 @@
 #pragma once
 #include "Base3dObject.h"
 
+/// <summary>
+/// スキンモデルを扱うクラス。
+/// Base3dObjectを継承している。
+/// スキンメッシュを持つモデルを描画するために使用される。
+/// スキニングアニメーションをサポートしており、ボーンとジョイントの管理も行う。
+/// ボーンとジョイントのデバッグ描画機能も備えている。
+/// </summary>
 class Skin3dObject : public Base3dObject
 {
 public:

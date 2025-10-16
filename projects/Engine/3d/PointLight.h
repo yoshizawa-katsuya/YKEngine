@@ -2,11 +2,24 @@
 #include "DirectXCommon.h"
 #include <Struct.h>
 
+/// <summary>
+/// 点光源。
+/// 使用する場合、modelPtalformへデータをセットすること。
+/// </summary>
 class PointLight
 {
 public:
 
-	struct PointLightData {
+	/// <summary>
+	/// 点光源のデータ構造体
+	/// </summary>
+	/// <param name="color">ライトの色</param>
+	/// <param name="position">ライトの位置</param>
+	/// <param name="intensity">輝度</param>
+	/// <param name="radius">ライトの届く最大距離</param>
+	/// <param name="decay">減衰率</param>
+	struct PointLightData 
+	{
 		Vector4 color;	//ライトの色
 		Vector3 position;	//ライトの位置
 		float intensity;	//輝度

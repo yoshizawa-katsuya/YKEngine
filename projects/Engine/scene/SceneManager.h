@@ -3,7 +3,11 @@
 #include "AbstractSceneFactory.h"
 #include <memory>
 
-//シーン管理
+/// <summary>
+/// シーンの管理クラス。
+/// シーンの更新、描画、切り替えを行う。
+/// シーンの生成はシーンファクトリーに任せる。
+/// </summary>
 class SceneManager
 {
 public:
