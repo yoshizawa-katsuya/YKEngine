@@ -24,6 +24,15 @@ void EffectManager::Initialize()
 	emitter_->SetRandScaleMin({ 0.0f, -0.6f, 0.0f });
 }
 
+void EffectManager::Update()
+{
+#ifdef _DEBUG
+
+	emitter_->ApplyGlobalVariables();
+
+#endif // _DEBUG
+}
+
 void EffectManager::SpawnHitEffect(const Vector3& position)
 {
 	emitter_->SetTranslation(position); // パーティクルの位置を設定

@@ -9,7 +9,8 @@ void MyGame::Initialize()
 	//基底クラスの初期化処理
 	YKFramework::Initialize();
 
-	EffectManager::GetInstance()->Initialize();
+	effectManager_ = EffectManager::GetInstance();
+	effectManager_->Initialize();
 
 	//シーンファクトリを生成し、マネージャにセット
 	sceneFactory_ = std::make_unique<SceneFactory>();
@@ -24,22 +25,15 @@ void MyGame::Finalize()
 {
 
 	//解放処理
-	//delete gameScene_;
-	//gameScene_ = nullptr;
-
-
 	YKFramework::Finalize();
 
 }
 
 void MyGame::Update()
 {
+	effectManager_->Update();
 
 	YKFramework::Update();
-
-	//ゲームの処理
-	//gameScene_->Update();
-
 
 	YKFramework::EndFrame();
 

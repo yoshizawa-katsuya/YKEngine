@@ -1,5 +1,6 @@
 #pragma once
 #include "YKFramework.h"
+class EffectManager;
 
 //ゲーム全体
 class MyGame : public YKFramework
@@ -21,6 +22,7 @@ public:
 	
 private:
 	
-	
+	EffectManager* effectManager_ = nullptr;
+
 };
 

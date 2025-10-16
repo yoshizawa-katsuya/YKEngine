@@ -13,6 +13,9 @@ public:
 	//初期化
 	void Initialize();
 
+	//更新
+	void Update();
+
 	//ヒットエフェクトの生成
 	void SpawnHitEffect(const Vector3& position);
 
