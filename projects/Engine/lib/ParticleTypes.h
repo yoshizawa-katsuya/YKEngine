@@ -35,6 +35,7 @@ struct EmitterRangeParams
 	RandomRange<float> lifeTime;
 };
 
+//パーティクルの挙動設定
 struct ParticleBehavior
 {
 	//進行方向を向くかどうか

@@ -3,6 +3,8 @@
 #include "ParticleTypes.h"
 #include <memory>
 #include "BaseModel.h"
+#include "GlobalVariables.h"
+#include "Color.h"
 
 class ParticleEmitter
 {
@@ -16,11 +18,17 @@ public:
 	/// <param name = 'frequency'>発生頻度</param>
 	ParticleEmitter(const std::string& name, uint32_t count, float frequency);
 
+	//初期化
 	void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model);
 
-	void Update(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
+	//更新
+	void Update();
 
-	void Emit(const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+	//発生させる
+	void Emit();
+
+	//グローバル変数の内容を反映させる
+	void ApplyGlobalVariables();
 
 	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
 
@@ -127,12 +135,18 @@ public:
 
 private:
 
+	//グローバル変数の初期化
+	void InitializeGlobalVariables();
+
+	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();	
+
 	std::string name_;
 	EulerTransform transform_; //!< エミッタのTransform
 	uint32_t count_;	//!< 発生数
 	float frequency_; //!<　発生頻度
 	float frequencyTime_; //!<頻度用時刻
 	const float kDeltaTime_ = 1.0f / 60.0f;
+	Color color_ = { 1.0f, 1.0f, 1.0f, 1.0f }; //!< 色
 
 	ParticleRandomizationFlags randomFlags_;
 
