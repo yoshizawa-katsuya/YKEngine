@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseCharacter.h"
 
+/// <summary>
+/// 弾の基底クラス。
+/// 継承して使用する。
+/// </summary>
 class BaseBullet : public BaseCharacter
 {
 public:

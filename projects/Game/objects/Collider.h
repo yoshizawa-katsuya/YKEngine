@@ -4,7 +4,11 @@
 class Camera;
 
 /// <summary>
-/// 衝突判定オブジェクト
+/// 衝突判定オブジェクト。
+/// 継承して使用する。
+/// 衝突判定は球同士の当たり判定で行う。
+/// 衝突時にはOnCollision関数が呼ばれる。
+/// 衝突判定を行うオブジェクトはColliderManagerに登録すること。
 /// </summary>
 class Collider
 {

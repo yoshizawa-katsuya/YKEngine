@@ -4,6 +4,10 @@
 class Camera;
 class EnemySpawnManager;
 
+/// <summary>
+/// レールに沿って移動するオブジェクト。
+/// プレイヤーとレールカメラのWorldTransformの親に設定して使用する。 
+/// </summary>
 class RailMover : public Collider
 {
 public:

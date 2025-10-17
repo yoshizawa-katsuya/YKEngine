@@ -3,6 +3,12 @@
 #include "ParticleEmitter.h"
 class ModelPlatform;
 
+/// <summary>
+/// エフェクト管理クラス。
+/// エフェクトの生成を行う。
+/// パーティクルを使用。
+/// エフェクトの生成はこのクラスを通して行う。
+/// </summary>
 class EffectManager
 {
 public:

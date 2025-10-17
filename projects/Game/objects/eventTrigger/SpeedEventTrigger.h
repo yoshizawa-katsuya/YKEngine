@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseEventTrigger.h"
 
+/// <summary>
+/// 速度イベントトリガー。
+/// RailMoverの速度を変更するイベントトリガー。
+/// </summary>
 class SpeedEventTrigger : public BaseEventTrigger
 {
 public:

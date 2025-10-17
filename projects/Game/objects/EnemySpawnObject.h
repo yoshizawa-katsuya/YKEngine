@@ -4,6 +4,11 @@
 #include "EnemySpawn.h"
 class EnemyManager;
 
+/// <summary>
+/// 敵出現オブジェクト。
+/// 出現時のエフェクトも管理する。
+/// 敵の出現そのものはEnemyManagerに任せる。
+/// </summary>
 class EnemySpawnObject
 {
 public:

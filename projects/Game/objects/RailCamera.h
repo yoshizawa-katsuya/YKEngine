@@ -2,7 +2,11 @@
 #include "WorldTransform.h"
 #include "Camera.h"
 
-//レールカメラ
+/// <summary>
+/// レールカメラ。
+/// RailMoverを追従するカメラ。
+/// カメラの位置はRailMoverに依存する。
+/// </summary>
 class RailCamera {
 public:
 

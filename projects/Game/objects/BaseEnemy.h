@@ -5,7 +5,10 @@ class Player;
 class EnemyBulletManager;
 class Camera;
 
-//敵
+/// <summary>
+/// 敵の基底クラス。
+/// 継承して使用する。
+/// </summary>
 class BaseEnemy : public BaseCharacter
 {
 public:

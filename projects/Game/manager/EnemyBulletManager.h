@@ -3,6 +3,10 @@
 class Camera;
 class CollisionManager;
 
+/// <summary>
+/// 敵の弾を管理するクラス。
+/// 弾の生成、更新、描画を行う。
+/// </summary>
 class EnemyBulletManager
 {
 public:

@@ -10,7 +10,10 @@ class BaseEnemy;
 class PlayerBulletManager;
 
 /// <summary>
-/// プレイヤークラス
+/// プレイヤークラス。
+/// プレイヤーの移動、攻撃、チャージ、UI描画などを行う。
+/// BaseCharacterを継承。
+/// 位置はRailMoverを親に持つWorldTransformで管理。
 /// </summary>
 class Player : public BaseCharacter
 {

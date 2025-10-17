@@ -5,6 +5,10 @@
 #include "EnemySpawnObject.h"
 class EnemyManager;
 
+/// <summary>
+/// 敵の出現を管理するクラス。
+/// 敵の生成そのものは、EnemySpawnObjectクラスで行う。
+/// </summary>
 class EnemySpawnManager
 {
 public:

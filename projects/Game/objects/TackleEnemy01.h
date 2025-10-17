@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseEnemy.h"
 
+/// <summary>
+/// プレイヤーに向かって突進する敵キャラ。
+/// 突進中はプレイヤーを追尾する。
+/// </summary>
 class TackleEnemy01 : public BaseEnemy
 {
 public:

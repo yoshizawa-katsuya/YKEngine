@@ -4,6 +4,10 @@
 class Input;
 class ModelPlatform;
 
+/// <summary>
+/// ゲームオーバー画面を管理するクラス。
+/// ゲームオーバー画面の初期化、更新、描画、終了処理を行う。
+/// </summary>
 class GameOverScene : public BaseScene
 {
 public:

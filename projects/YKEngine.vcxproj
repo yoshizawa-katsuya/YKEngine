@@ -144,7 +144,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\bullet\EnemyBullet.cpp" />
     <ClCompile Include="Game\objects\bullet\BasePlayerBullet.cpp" />
     <ClCompile Include="Game\objects\RailCamera.cpp" />
-    <ClCompile Include="Game\objects\Skydome.cpp" />
     <ClCompile Include="Game\scene\GameScene.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
@@ -409,7 +408,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\bullet\EnemyBullet.h" />
     <ClInclude Include="Game\objects\bullet\BasePlayerBullet.h" />
     <ClInclude Include="Game\objects\RailCamera.h" />
-    <ClInclude Include="Game\objects\Skydome.h" />
     <ClInclude Include="Game\scene\GameScene.h" />
     <ClInclude Include="Game\objects\Player.h" />
     <ClInclude Include="Engine\input\Input.h" />

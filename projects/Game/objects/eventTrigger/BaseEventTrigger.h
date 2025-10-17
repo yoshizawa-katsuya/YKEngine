@@ -1,6 +1,10 @@
 #pragma once
 #include "Collider.h"
 
+/// <summary>
+/// イベントトリガーの基底クラス。
+/// RailMoverが通過したときにイベントを発生させる。
+/// </summary>
 class BaseEventTrigger : public Collider
 {
 public:

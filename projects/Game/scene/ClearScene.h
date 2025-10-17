@@ -4,6 +4,10 @@
 class Input;
 class ModelPlatform;
 
+/// <summary>
+/// クリア画面を管理するクラス。
+/// シーンの開始、更新、描画、終了を行う。
+/// </summary>
 class ClearScene : public BaseScene
 {
 public:

@@ -6,6 +6,12 @@ class Input;
 class Camera;
 class BaseEnemy;
 
+/// <summary>
+/// プレイヤーのレティクルを管理するクラス。
+/// 2Dと3Dのレティクルを持ち、ロックオン機能を備えている。
+/// 2Dレティクルは画面上に表示され、3Dレティクルはゲーム空間内でターゲットを示す。
+/// ロックオン時にはターゲットに追従し、チャージマックス時には色が変化する。
+/// </summary>
 class ReticleController
 {
 public:

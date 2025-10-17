@@ -5,6 +5,10 @@
 #include "LevelDataLoader.h"
 class CollisionManager;
 
+/// <summary>
+/// イベントトリガーを管理するクラス。
+/// イベントトリガーの更新やコリジョンマネージャーへの登録を行う。
+/// </summary>
 class EventTriggerManager
 {
 public:

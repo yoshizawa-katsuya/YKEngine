@@ -19,7 +19,6 @@
 #include "RigidModel.h"
 #include "RailCamera.h"
 #include "manager/EnemyManager.h"
-#include "Skydome.h"
 #include "manager/CollisionManager.h"
 #include "manager/EnemySpawnManager.h"
 #include "RailMover.h"
@@ -29,7 +28,7 @@
 
 /// <summary>
 /// ゲームシーン。
-/// ゲームのメイン処理を行う。
+/// ゲームのメイン処理を行う。 
 /// </summary>
 class GameScene : public BaseScene
 {

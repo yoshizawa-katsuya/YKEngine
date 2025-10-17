@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseEventTrigger.h"
 
+/// <summary>
+/// 回転イベントトリガー。
+/// RailMoverが触れたとき、回転させる。
+/// </summary>
 class RotateEventTrigger : public BaseEventTrigger
 {
 public:

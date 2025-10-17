@@ -2,6 +2,10 @@
 #include "BaseBullet.h"
 class Player;
 
+/// <summary>
+/// 敵弾クラス。
+/// プレイヤーに当たるとダメージを与える。
+/// </summary>
 class EnemyBullet : public BaseBullet
 {
 public:

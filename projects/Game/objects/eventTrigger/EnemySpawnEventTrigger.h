@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseEventTrigger.h"
 
+/// <summary>
+/// 敵出現イベントトリガー。
+/// RailMoverが一定範囲に入ると敵が出現する。
+/// </summary>
 class EnemySpawnEventTrigger : public BaseEventTrigger
 {
 public:

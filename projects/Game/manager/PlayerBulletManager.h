@@ -4,6 +4,11 @@
 class Camera;
 class CollisionManager;
 
+/// <summary>
+/// プレイヤーの弾を管理するクラス。
+/// プレイヤーの弾の生成、更新、描画を行う。
+/// また、弾のコライダー登録も行う。
+/// </summary>
 class PlayerBulletManager
 {
 public:

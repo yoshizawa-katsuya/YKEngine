@@ -2,6 +2,11 @@
 #include "Collider.h"
 #include "Rigid3dObject.h"
 
+/// <summary>
+/// キャラクターの基底クラス。
+/// 継承して使用する。
+/// キャラクターはコライダーを持つためColliderクラスを継承する。
+/// </summary>
 class BaseCharacter : public Collider
 {
 public:

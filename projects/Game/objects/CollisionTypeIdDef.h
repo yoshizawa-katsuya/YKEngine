@@ -2,7 +2,9 @@
 
 #include <cstdint>
 
-//コリジョン種別ID定義
+/// <summary>
+/// コライダーの種類ID。
+/// </summary>
 enum class CollisionTypeIdDef
 {
 	kDefault,

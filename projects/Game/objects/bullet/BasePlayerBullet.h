@@ -1,7 +1,10 @@
 #pragma once
 #include "BaseBullet.h"
 
-//自キャラの弾
+/// <summary>
+/// プレイヤー弾の基底クラス。
+/// プレイヤー弾の種類ごとにクラスを作成し、BasePlayerBulletを継承して実装する。
+/// </summary>
 class BasePlayerBullet : public BaseBullet
 {
 public:

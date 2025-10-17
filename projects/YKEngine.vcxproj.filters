@@ -321,9 +321,6 @@
     <ClCompile Include="Game\objects\ShotEnemy01.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\Skydome.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\objects\bullet\BaseBullet.cpp">
       <Filter>ソース ファイル\application\objects\bullet</Filter>
     </ClCompile>
@@ -676,9 +673,6 @@
     <ClInclude Include="Game\objects\ShotEnemy01.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\Skydome.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\bullet\BaseBullet.h">
       <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
     </ClInclude>
@@ -726,6 +720,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\EnemySpawnObject.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\Color.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

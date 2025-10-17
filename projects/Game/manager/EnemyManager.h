@@ -6,6 +6,11 @@ class Player;
 class EnemyBulletManager;
 class CollisionManager;
 
+/// <summary>
+/// 敵を管理するクラス。
+/// 敵の生成、更新、描画、コリジョンマネージャーへの登録を行う。
+/// 
+/// </summary>
 class EnemyManager
 {
 public:
