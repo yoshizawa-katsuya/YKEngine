@@ -12,22 +12,46 @@ class GameOverScene : public BaseScene
 {
 public:
 
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	~GameOverScene() override;
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize() override;
 
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update() override;
 
+	/// <summary>
+	/// 描画。
+	/// </summary>
 	void Draw() override;
 
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize() override;
 
 private:
 
+	/// <summary>
+	/// 開始部の更新。
+	/// </summary>
 	void UpdateStart();
 
+	/// <summary>
+	/// メイン部の更新。
+	/// </summary>
 	void UpdateMain();
 
+	/// <summary>
+	/// 終了部の更新。
+	/// </summary>
 	void UpdateEnd();
 
 	//デバイス

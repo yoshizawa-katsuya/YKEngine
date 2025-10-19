@@ -61,29 +61,48 @@ public:
 
 private:
 
+	/// <summary>
+	/// 開始部の更新。
+	/// </summary>
 	void UpdateStart();
 
+	/// <summary>
+	/// メイン部の更新。
+	/// </summary>
 	void UpdateMain();
 
+	/// <summary>
+	/// クリア部の更新。
+	/// </summary>
 	void UpdateGameClear();
 
+	/// <summary>
+	/// ゲームオーバー部の更新。
+	/// </summary>
 	void UpdateGameOver();
 
+	/// <summary>
+	/// タイトルへ戻る部の更新。
+	/// </summary>
 	void UpdateTitleReturn();
 
-	//クリアしたかどうかを判定する
+	/// <summary>
+	/// ゲームクリアかどうかを判定する。
+	/// </summary>
 	void CheckGameClear();
 
-	//ゲームオーバーかどうかを判定する
+	/// <summary>
+	/// ゲームオーバーかどうかを判定する。
+	/// </summary>
 	void CheckGameOver();
 
 	/// <summary>
-	/// 衝突判定と応答
+	/// 全ての衝突判定を行う。
 	/// </summary>
 	void CheckAllColision();
 
 	/// <summary>
-	/// レベルの生成
+	/// レベルを作成する。
 	/// </summary>
 	void CreateLevel();
 

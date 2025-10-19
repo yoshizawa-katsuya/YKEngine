@@ -12,14 +12,29 @@ class RailMover : public Collider
 {
 public:
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="controlPoints">スプライン曲線の制御点のリスト</param>
+	/// <param name="enemySpawnManager">敵出現管理クラス</param>
+	/// <param name="isLoop">ループするかどうか</param>
 	void Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager, bool isLoop);
 
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	//レール描画
+	/// <summary>
+	/// レールの描画。
+	/// </summary>
+	/// <param name="camera">描画に使用するカメラ</param>
 	void DrawRail(Camera* camera);
 
-	//衝突時に呼ばれる関数
+	/// <summary>
+	/// 衝突時の処理。
+	/// </summary>
+	/// <param name="other">衝突した相手のコライダー</param>
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
 	WorldTransform* GetWorldTransform() { return &worldTransform_; }
@@ -36,13 +51,20 @@ public:
 
 private:
 
-	//曲線の作成
+	/// <summary>
+	/// スプライン曲線の生成。
+	/// </summary>
+	/// <param name="controlPoints">スプライン曲線の制御点のリスト</param>
 	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
 
-	//向きの初期化
+	/// <summary>
+	/// 向きの初期化。
+	/// </summary>
 	void InitializeRotate();
 
-	//向きを更新
+	/// <summary>
+	/// 回転の更新。
+	/// </summary>
 	void UpdateRotate();
 
 	// スプライン曲線制御点(通過点)Add commentMore actions

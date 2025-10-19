@@ -48,12 +48,24 @@ public:
 
 private:
 
+	/// <summary>
+	/// 開始部の更新。
+	/// </summary>
 	void UpdateStart();
 
+	/// <summary>
+	/// メイン部の更新。
+	/// </summary>
 	void UpdateMain();
 
+	/// <summary>
+	/// 終了部の更新。
+	/// </summary>
 	void UpdateEnd();
 
+	/// <summary>
+	/// レベルの生成。
+	/// </summary>
 	void CreateLevel();
 
 	//デバイス

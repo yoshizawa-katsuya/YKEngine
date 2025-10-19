@@ -19,47 +19,89 @@ class Player : public BaseCharacter
 {
 public:
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="model">モデル</param>
+	/// <param name="viewPortMatrix">ビューポート行列。レティクルをワールド座標に変換するために使用。</param>
+	/// <param name="parent">親のワールド変換</param>
+	/// <param name="heartTextureHandle">ハートテクスチャのハンドル</param>
+	/// <param name="heartEmptyTexturehandle">空のハートテクスチャのハンドル</param>
 	void Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
 
+	/// <summary>
+	/// 更新。
+	/// </summary>
+	/// <param name="railCamera">レールカメラ。レティクルをワールド座標に変換するために使用。</param>
 	void Update(Camera* railCamera);
 
 	//旋回
 	//void Rotate();
 
-	//衝突時に呼ばれる関数
+	/// <summary>
+	/// 衝突時の処理。
+	/// </summary>
+	/// <param name="other">衝突したコライダー</param>
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
-	//UI描画
+	/// <summary>
+	/// UI描画。
+	/// </summary>
 	void DrawUI();
 
+	/// <summary>
+	/// ロックオンターゲットの設定。
+	/// </summary>
+	/// <param name="enemies">敵のリスト</param>
+	/// <param name="railCamera">レールカメラ。敵の位置をスクリーン座標に変換するために使用。</param>
 	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera);
 
-	//ワールド座標を取得
+	/// <summary>
+	/// ワールド座標の取得。
+	/// </summary>
+	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition();
 
 	void SetPlayerBulletManager(PlayerBulletManager* playerBulletManager) { playerBulletManager_ = playerBulletManager; }
 
 private:
 
-	//HUD初期化
+	/// <summary>
+	/// HUDの初期化。
+	/// </summary>
+	/// <param name="heartTextureHandle">ハートテクスチャのハンドル</param>
+	/// <param name="heartEmptyTexturehandle">空のハートテクスチャのハンドル</param>
 	void HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
 
-	//移動入力
+	/// <summary>
+	/// 移動入力の処理
+	/// </summary>
 	void HandleMoveInput();
 
-	//回転
+	/// <summary>
+	/// 回転処理。レティクルの方向に向く。
+	/// </summary>
 	void Rotate();
 
-	//照準
+	/// <summary>
+	/// レティクルの更新。
+	/// </summary>
+	/// <param name="railCamera">レールカメラ。レティクルをワールド座標に変換するために使用。</param>
 	void ReticleUpdate(Camera* railCamera);
 
-	//攻撃
+	/// <summary>
+	/// 攻撃処理。
+	/// </summary>
 	void Attack();
 
-	//チャージ
+	/// <summary>
+	/// チャージ処理。
+	/// </summary>
 	void Charge();
 
-	//チャージリセット
+	/// <summary>
+	/// チャージリセット処理。
+	/// </summary>
 	void ChargeReset();
 
 	//キーボード入力

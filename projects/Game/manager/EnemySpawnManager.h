@@ -13,15 +13,33 @@ class EnemySpawnManager
 {
 public:
 
-	void Initialize(); // 初期化メソッド
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	void Initialize();
 
-	void Update(); // 更新メソッド
+	/// <summary>
+	/// 更新。
+	/// </summary>
+	void Update();
 
-	void Draw(Camera* camera); // 描画メソッド
+	/// <summary>
+	/// 描画。
+	/// </summary>
+	/// <param name="camera">描画に使用するカメラ</param>
+	void Draw(Camera* camera);
 
+    /// <summary>
+	/// 敵の出現データを追加する。
+    /// </summary>
+	/// <param name="spawnData">追加する敵の出現データ</param>
     void AddSpawnData(const EnemySpawn& spawnData);
 
-	void WaveStart(uint32_t waveNum); // ウェーブ開始メソッド
+	/// <summary>
+	/// 指定したウェーブの敵出現を開始する。
+	/// </summary>
+	/// <param name="waveNum">開始するウェーブのインデックス</param>
+	void WaveStart(uint32_t waveNum);
 
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; } // 敵管理クラスのポインタを設定する
 

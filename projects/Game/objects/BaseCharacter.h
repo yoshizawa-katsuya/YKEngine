@@ -14,6 +14,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
+	/// <param name="model">モデル</param>
 	virtual void Initialize(BaseModel* model);
 
 	/// <summary>
@@ -24,7 +25,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	/// <param name="viewProjection">ビュープロジェクション(参照渡し)</param>
+	/// <param name="camera">描画に使用するカメラ</param>
 	virtual void Draw(Camera* camera);
 
 	bool IsDead() const { return isDead_; }

@@ -14,20 +14,38 @@ class Collider
 {
 public:
 
+	/// <summary>
+	/// デストラクタ。純粋仮想関数。
+	/// </summary>
 	virtual ~Collider() = default;
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	//衝突時に呼ばれる関数
+	/// <summary>
+	/// 衝突時の処理。
+	/// </summary>
+	/// <param name="other">衝突相手のCollider</param>
 	virtual void OnCollision([[maybe_unused]] Collider* other) {}
 
-	//画面に表示されているかどうかを取得
+	/// <summary>
+	/// カメラに映っているかどうか。
+	/// </summary>
+	/// <param name="camera">判定に使用するカメラ</param>
+	/// </returns>映っているならtrue、映っていないならfalse</returns>
 	virtual bool IsVisible(Camera* camera);
 
-	//中心座標を取得
+	/// <summary>
+	/// 中心座標を取得。
+	/// </summary>
+	/// <returns>中心座標</returns>
 	virtual Vector3 GetCenterPosition();
 
 	//半径を取得

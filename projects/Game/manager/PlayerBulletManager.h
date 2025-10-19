@@ -13,19 +13,34 @@ class PlayerBulletManager
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize();
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	//描画
+	/// <summary>
+	/// 描画。
+	/// </summary>
+	/// <param name="camera">描画に使用するカメラ</param>
 	void Draw(Camera* camera);
 
-	//弾の追加
+	/// <summary>
+	/// プレイヤーの弾を追加。
+	/// </summary>
+	/// <param name="worldPosition">弾のワールド座標</param>
+	/// <param name="velocity">弾の速度ベクトル</param>
+	/// <param name="bulletType">弾の種類</param>
 	void AddPlayerBullet(const Vector3& worldPosition, const Vector3& velocity, PlayerBulletType bulletType);
 
-	//コライダー登録
+	/// <summary>
+	/// 弾をコリジョンマネージャーに登録。
+	/// </summary>
+	/// <param name="collisionManager">コリジョンマネージャー</param>
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
 private:

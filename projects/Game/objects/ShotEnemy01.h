@@ -9,6 +9,9 @@ class ShotEnemy01 : public BaseEnemy
 {
 public:
 
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	~ShotEnemy01() override;
 
 private:

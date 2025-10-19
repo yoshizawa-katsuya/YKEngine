@@ -13,24 +13,44 @@ class BaseEnemy : public BaseCharacter
 {
 public:
 
-	//デストラクタ
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	virtual ~BaseEnemy();
 
-	// 初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="model">モデル</param>
+	/// <param name="spawnData">出現データ</param>
+	/// <param name="viewPortMatrix">ビューポート行列</param>
+	/// <param name="railCamera">レールカメラ。画面内に入っているか判定するために使用。</param>
 	void Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera);
 
-	// 更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	virtual void Update() override;
 
-	//衝突時に呼ばれる関数
+	/// <summary>
+	/// 衝突時の処理。
+	/// </summary>
+	/// <param name="other">衝突相手のコライダー</param>
 	virtual void OnCollision([[maybe_unused]] Collider* other) override;
 
 	void SetPlayer(Player* player) { player_ = player; }
 
-	//ワールド座標を取得
+	/// <summary>
+	/// ワールド座標を取得。
+	/// </summary>
+	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition();
 
-	//スクリーン座標を取得
+	/// <summary>
+	/// スクリーン座標を取得。
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <returns>スクリーン座標</returns>
 	Vector2 GetScreenPosition(Camera* camera);
 
 	// 弾リストを取得
@@ -42,27 +62,55 @@ public:
 
 protected:
 	
+	/// <summary>
+	/// コライダーIDの設定。
+	/// </summary>
 	virtual void SetColliderID();
 
+	/// <summary>
+	/// メイン部の初期化。
+	/// </summary>
 	void MainInitialize();
 
+	/// <summary>
+	/// 接近更新。
+	/// </summary>
 	virtual void UpdateApproach();
+
+	/// <summary>
+	/// メイン更新。
+	/// </summary>
 	virtual void UpdateMain();
+
+	/// <summary>
+	/// 離脱更新。
+	/// </summary>
 	virtual void UpdateLeave();
 
-	//弾発射
+	/// <summary>
+	/// 弾の発射。
+	/// </summary>
 	void Fire();
 
-	//曲線の作成
+	/// <summary>
+	/// 移動に使うスプライン曲線の作成。
+	/// </summary>
+	/// <param name="controlPoints">制御点の配列</param>
 	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
 
-	//移動
+	/// <summary>
+	/// 移動。
+	/// </summary>
 	virtual void Move();
 
-	//回転
+	/// <summary>
+	/// 回転。プレイヤーの方向を向く。
+	/// </summary>
 	void Rotate();
 
-	//レールに沿って移動
+	/// <summary>
+	/// レールに沿って移動。
+	/// </summary>
 	void MoveAlongRail();
 
 	//自キャラ

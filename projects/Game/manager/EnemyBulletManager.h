@@ -11,14 +11,36 @@ class EnemyBulletManager
 {
 public:
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 更新。レールカメラは弾が画面外に出たかの判定に使用する。
+	/// </summary>
+	/// </ <param name="railCamera">レールカメラ</param>
 	void Update(Camera* railCamera);
 
+	/// <summary>
+	/// 描画。
+	/// </summary>
+	/// <param name="camera">描画に使うカメラ</param>
 	void Draw(Camera* camera);
 
+	/// <summary>
+	/// 敵の弾を追加する。
+	/// </summary>
+	/// <param name="worldPosition">弾のワールド座標</param>
+	/// <param name="velocity">弾の速度ベクトル</param>
+	/// <param name="target">弾のターゲットとなるプレイヤー</param>
+	/// <param name="speed">弾の速度</param>
 	void AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity, Player* target, float speed);
 
+	/// <summary>
+	/// コライダーを衝突管理クラスに登録する。
+	/// </summary>
+	/// <param name="collisionManager">衝突管理クラス</param>
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
 private:

@@ -15,19 +15,36 @@ class EnemyManager
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="player">プレイヤーのポインタ。敵の弾の発射先に使用。</param>
+	/// <param name="railCamera">レールカメラのポインタ。カメラに映っているかの判定に使用。</param>
+	/// <param name="viewPortMatrix">ビューポート変換行列のポインタ。スクリーン座標への変換に使用。</param>
+	/// <param name="enemyBulletManager">敵弾マネージャーのポインタ。敵弾の生成に使用。</param>
 	void Initialize(Player* player, Camera* railCamera, Matrix4x4* viewPortMatrix, EnemyBulletManager* enemyBulletManager);
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	//描画
+	/// <summary>
+	/// 描画。
+	/// </summary>
+	/// <param name="camera">描画に使用するカメラ</param>
 	void Draw(Camera* camera);
 
-	//敵の生成
+	/// <summary>
+	/// 敵の生成。
+	/// </summary>
+	/// <param name="spawnData">生成データ</param>
 	void PopEnemy(const EnemySpawn& spawnData);
 
-	//コライダー登録
+	/// <summary>
+	/// 敵をコリジョンマネージャーに登録。
+	/// </summary>
+	/// <param name="collisionManager">コリジョンマネージャーのポインタ</param>
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
 	const std::list<std::unique_ptr<BaseEnemy>>& GetEnemies() { return enemys_; }

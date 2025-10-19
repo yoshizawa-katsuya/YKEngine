@@ -10,15 +10,23 @@
 class RailCamera {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="camera">レールカメラとして使用するカメラ。</param>
+	/// <param name="parent">親ワールド変換データ。</param>
 	void Initialize(Camera* camera, WorldTransform* parent);
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
 private:
 
-	//カメラを更新
+	/// <summary>
+	/// カメラの更新。
+	/// </summary>
 	void UpdateCamera();
 
 	//ワールド変換データ

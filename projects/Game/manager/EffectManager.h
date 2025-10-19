@@ -13,16 +13,26 @@ class EffectManager
 {
 public:
 
-	//シングルトンインスタンスの取得
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>エフェクト管理クラスのインスタンス</returns>
 	static EffectManager* GetInstance();
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize();
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	//ヒットエフェクトの生成
+	/// <summary>
+	/// ヒットエフェクトの生成。
+	/// </summary>
+	/// <param name="position">生成位置</param>
 	void SpawnHitEffect(const Vector3& position);
 
 private:

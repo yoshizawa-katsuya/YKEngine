@@ -13,10 +13,22 @@ class EnemySpawnObject
 {
 public:
 	
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="nowSpanwDatas">今回の敵出現データリスト</param>
+	/// <param name="model">敵出現エフェクトモデル</param>
 	void Initialize(const std::vector<EnemySpawn>& nowSpanwDatas, std::shared_ptr<BaseModel> model);
 
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// 描画。
+	/// </summary>
+	/// <param name="camera"></param>
 	void Draw(Camera* camera);
 
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; } // 敵管理クラスのポインタを設定する
@@ -25,13 +37,25 @@ public:
 
 private:
 
-	void UpdateWaveStart(); // ウェーブ開始更新メソッド
+	/// <summary>
+	/// ウェーブ開始更新処理。
+	/// </summary>
+	void UpdateWaveStart();
 
-	void UpdateWaveInterval(); // ウェーブ中間更新メソッド
+	/// <summary>
+	/// ウェーブ中間更新処理。
+	/// </summary>
+	void UpdateWaveInterval();
 
-	void UpdateWaveEnd(); // ウェーブ終了更新メソッド
+	/// <summary>
+	/// ウェーブ終了更新処理。
+	/// </summary>
+	void UpdateWaveEnd();
 
-	void SpawnEnemies(); // 敵出現メソッド
+	/// <summary>
+	/// 敵出現処理。
+	/// </summary>
+	void SpawnEnemies();
 
 	//フェーズ
 	enum class Phase {

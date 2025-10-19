@@ -13,13 +13,22 @@ class EventTriggerManager
 {
 public:
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	//コリジョンマネージャーに登録
+	/// <summary>
+	/// イベントトリガーをコリジョンマネージャーに登録する。
+	/// </summary>
+	/// <param name="collisionManager">コリジョンマネージャー</param>
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
-	//イベント追加
+	/// <summary>
+	/// イベントトリガーを追加する。
+	/// </summary>
+	/// <param name="eventName">イベントの種類</param>
+	/// <param name="objectData">イベントトリガーのデータ</param>
 	void AddEvent(std::string eventName, const ObjectData& objectData);
 
 private:

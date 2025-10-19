@@ -16,18 +16,38 @@ class ReticleController
 {
 public:
 
+	/// <summary>
+	/// 初期化処理。
+	/// </summary>
+	/// <param name="viewPortMatrix">ビューポート行列へのポインタ。ワールド座標への変換に使用される。</param>
 	void Initialize(Matrix4x4* viewPortMatrix);
 
+	/// <summary>
+	/// 更新処理。
+	/// </summary>
+	/// <param name="railCamera">レールカメラへのポインタ。ワールド座標への変換に使用される。</param>
 	void Update(Camera* railCamera);
 
+	/// <summary>
+	/// 描画処理。
+	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// ロックオン対象の設定。
+	/// </summary>
+	/// <param name="enemies">敵キャラクターのリスト</param>
+	/// <param name="railCamera">レールカメラへのポインタ。敵の位置をスクリーン座標に変換するために使用される。</param>
 	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera);
 
-	//チャージマックス時の処理
+	/// <summary>
+	/// チャージマックス時の処理。
+	/// </summary>
 	void ChargeMax();
 
-	//チャージリセット時の処理
+	/// <summary>
+	/// チャージリセット時の処理。
+	/// </summary>
 	void ChargeReset();
 
 	bool IsLockOn() const { return isLockOn_; }
@@ -38,8 +58,16 @@ public:
 
 private:
 
+	/// <summary>
+	/// チャージ更新処理。
+	/// </summary>
 	void ChargeUpdate();
 
+	/// <summary>
+	/// ロックオン処理。
+	/// </summary>
+	/// <param name="position">ターゲットのスクリーン座標上の位置</param>
+	/// <param name="targetPosition">ターゲットのワールド座標上の位置</param>
 	void LockOn(const Vector2& position, const Vector3& targetPosition);
 
 	//3Dレティクル用ワールドトランスフォーム
