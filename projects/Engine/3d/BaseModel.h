@@ -87,29 +87,78 @@ public:
 
 	//void Initialize(ModelPlatform* modelPlatform);
 
-	//ModelPlatformから呼び出す
+	/// <summary>
+	/// モデルデータの読み込みと頂点・インデックス・マテリアルデータの作成を行う。
+	/// ModelPlatformクラス経由で呼び出す。
+	/// </summary>
+	/// <param name="directoryPath">モデルファイルのディレクトリパス</param>
+	/// <param name="filename">モデルファイル名</param>
+	/// <param name="color">マテリアルの色</param>
 	virtual void CreateModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
+	/// <summary>
+	/// 球モデルの作成を行う。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void CreateSphere(uint32_t textureHandle);
 
+	/// <summary>
+	///	キューブモデルの作成を行う。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void CreateCube(uint32_t textureHandle);
 
+	/// <summary>
+	/// 平面モデルの作成を行う。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void CreatePlane(uint32_t textureHandle);
 
+	/// <summary>
+	/// 輪っかモデルの作成を行う。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void CreateRing(uint32_t textureHandle);
 
+	/// <summary>
+	/// 円柱モデルの作成を行う。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void CreateCylinder(uint32_t textureHandle);
 
+	/// <summary>
+	/// スカイボックスモデルの作成を行う。
+	/// キューブテクスチャを使用する。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void CreateSkyBox(uint32_t textureHandle);
 
-	//3dObjectクラス経由で呼び出す
+	/// <summary>
+	/// モデルの描画を行う。
+	/// 3DObjectクラス経由で呼び出す。
+	/// </summary>
+	/// <param name="usedMaterial">3DObjectのマテリアルを使用するかどうか</param>
 	virtual void Draw(bool usedMaterial);
 
-	//3dObjectクラス経由で呼び出す
+	/// <summary>
+	/// モデルの描画を行う。(テクスチャハンドル指定版)
+	/// 3DObjectクラス経由で呼び出す。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="usedMaterial">3DObjectのマテリアルを使用するかどうか</param>
 	virtual void Draw(uint32_t textureHandle, bool usedMaterial);
 
+	/// <summary>
+	/// インスタンシング描画を行う。
+	/// </summary>
+	/// <param name="numInstance">インスタンス数</param>
 	virtual void InstancingDraw(uint32_t numInstance);
 
+	/// <summary>
+	/// インスタンシング描画を行う。(テクスチャハンドル指定版)
+	/// </summary>
+	/// <param name="numInstance">インスタンス数</param>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void InstancingDraw(uint32_t numInstance, uint32_t textureHandle);
 
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
@@ -140,31 +189,60 @@ public:
 
 protected:
 
-	//頂点データ作成
+	/// <summary>
+	/// 頂点データ作成。
+	/// </summary>
 	void CreateVertexData();
 
-	//インデックスデータ作成
+	/// <summary>
+	/// インデックスデータ作成。
+	/// </summary>
 	void CreateIndexData();
 
-	//マテリアルデータ作成
+	/// <summary>
+	/// マテリアルデータ作成。
+	/// </summary>
+	/// <param name="color">マテリアルの色</param>
 	void CreateMaterialData(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
 	/*
 	//座標行列変換データ作成
 	void CreateTransformData();
 	*/
-	//objファイルの読み込み
+	
+	/// <summary>
+	/// モデルファイルの読み込み。
+	/// </summary>
+	/// <param name="directoryPath">モデルファイルのディレクトリパス</param>
+	/// <param name="filename">モデルファイル名</param>
 	virtual void LoadModelFile(const std::string& directoryPath, const std::string& filename);
 
-	//頂点データ読み込み
+	/// <summary>
+	/// 頂点データ読み込み。
+	/// </summary>
+	/// <param name="mesh">Assimpのメッシュデータ</param>
 	void LoadVertexData(aiMesh* mesh);
 
-	//インデックスデータ読み込み
+	/// <summary>
+	/// インデックスデータ読み込み。
+	/// </summary>
+	/// <param name="mesh">Assimpのメッシュデータ</param>
 	void LoadIndexData(aiMesh* mesh);
 
+	/// <summary>
+	/// 頂点数設定。
+	/// </summary>
 	void SetVerticesNum();
 
+	/// <summary>
+	/// インデックス数設定。
+	/// </summary>
 	void SetIndecesNum();
 
+	/// <summary>
+	/// ノード読み込み。
+	/// </summary>
+	/// <param name="node">Assimpのノードデータ</param>
+	/// <returns>ノード情報</returns>
 	Node ReadNode(aiNode* node);
 	
 	ModelPlatform* modelPlatform_ = nullptr;

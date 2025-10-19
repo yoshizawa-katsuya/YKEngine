@@ -1,8 +1,27 @@
 #pragma once
 #include "Struct.h"
 
+/// <summary>
+/// カプセルと円の衝突判定
+/// </summary>
+/// <param name="capsuleA">カプセルの始点</param>
+/// <param name="capsuleB">カプセルの終点</param>
+/// <param name="CircleC">円の中心座標</param>
+/// <param name="radiusC">円の半径</param>
+/// <param name="radiusA">カプセルの半径</param>
+/// <returns>衝突していればtrue。していなければfalse。</returns>
 bool CapsuleCollision(Vector2 capsuleA, Vector2 capsuleB, Vector2 CircleC, float radiusC, float radiusA);
 
+/// <summary>
+/// 四角同士の衝突判定
+/// </summary>
+/// <param name="boxA">四角Aの中心座標</param>
+/// <param name="boxAwidht">四角Aの幅</param>
+/// <param name="boxAhight">四角Aの高さ</param>
+/// <param name="boxB">四角Bの中心座標</param>
+/// <param name="boxBwidht">四角Bの幅</param>
+/// <param name="boxBhight">四角Bの高さ</param>
+/// <returns>衝突していればtrue。していなければfalse。</returns>
 bool BoxCollision(Vector2 boxA, int boxAwidht, int boxAhight, Vector2 boxB, int boxBwidht, int boxBhight);
 
 //四角と点の衝突判定

@@ -14,20 +14,41 @@
 class ThreadPool {
 public:
     
-    //シングルトンインスタンスの取得
+    /// <summary>
+	/// シングルトンインスタンスを取得する。
+    /// </summary>
+	/// <returns>ThreadPoolのシングルトンインスタンス</returns>
     static ThreadPool* GetInstance();
 
+    /// <summary>
+	/// スレッドプールを初期化する。
+    /// </summary>
     void Initlaize();
 
+    /// <summary>
+	/// スレッドプールを終了する。
+    /// </summary>
     void Finalize();
 
-    // タスクを追加する
+    /// <summary>
+	/// タスクをキューに追加する。
+    /// </summary>
+	/// <param name="task">実行するタスク(関数オブジェクト)</param>
     void enqueueTask(std::function<void()> task);
 
+    /// <summary>
+	/// 可変引数を持つ関数をタスクとしてキューに追加する。
+    /// </summary>
+	/// <typeparam name="F">関数オブジェクトの型</typeparam>
+	/// <typeparam name="Args">関数の引数の型</typeparam>
+	/// <param name="f">関数オブジェクト</param>
+	/// <param name="args">関数の引数</param>
     template<class F, class... Args>
     void enqueueTask(F&& f, Args&&... args);
 
-    // すべてのタスクが完了するのを待つ
+    /// <summary>
+	/// すべてのタスクの完了を待機する。
+    /// </summary>
     void waitForCompletion();
 
 private:
@@ -38,7 +59,9 @@ private:
     const ThreadPool& operator=(ThreadPool&) = delete;
 
 
-    // ワーカースレッドの関数
+    /// <summary>
+	/// ワーカースレッドのメインループ。
+    /// </summary>
     void worker();
 
     std::vector<std::thread> workers_;

@@ -33,7 +33,9 @@ public:
 		float padding;
 	};
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize();
 
 	//描画

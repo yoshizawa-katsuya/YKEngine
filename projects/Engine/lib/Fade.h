@@ -15,24 +15,42 @@ public:
 		FadeOut, // フェードアウト中
 	};
 
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	~Fade();
 
-	// 初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize();
 
-	// 更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	// 描画
+	/// <summary>
+	/// 描画。
+	/// </summary>
 	void Draw();
 
-	//フェード開始
+	/// <summary>
+	/// フェード開始。
+	/// </summary>
+	/// <param name="status">フェードの状。</param>
+	/// <param name="duration">フェードの持続時間</param>
 	void Start(Status status, float duration);
 
-	//フェード停止
+	/// <summary>
+	/// フェード停止。
+	/// </summary>
 	void Stop();
 
-	//フェード終了判定
+	/// <summary>
+	/// フェードが終了したかどうか。
+	/// </summary>
+	/// <returns>終了していればtrue、そうでなければfalse。</returns>
 	bool IsFinished();
 
 private:

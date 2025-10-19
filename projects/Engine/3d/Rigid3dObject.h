@@ -10,6 +10,9 @@ class Rigid3dObject : public Base3dObject
 {
 public:
 
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	~Rigid3dObject() override;
 
 private:

@@ -28,7 +28,9 @@ public:
 		float padding[2];
 	};
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize();
 
 	//描画

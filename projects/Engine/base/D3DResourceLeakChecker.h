@@ -7,6 +7,10 @@
 class D3DResourceLeakChecker
 {
 public:
+	/// <summary>
+	/// デストラクタ。
+	/// リソースが解放されていなければアサートを発生させる。
+	/// </summary>
 	~D3DResourceLeakChecker();
 
 };

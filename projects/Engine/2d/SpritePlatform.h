@@ -11,19 +11,32 @@ class SpritePlatform
 {
 public:
 
-	//シングルトンインスタンスの取得
+	/// <summary>
+	/// シングルトンインスタンスの取得。
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static SpritePlatform* GetInstance();
 
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize();
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="dxCommon">DirectX共通クラス</param>
+	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
 	void Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer);
 
-	//背景描画前設定
+	/// <summary>
+	/// 背景描画前の共通設定。
+	/// </summary>
 	void PreBackGroundDraw();
 
-	//共通描画設定
+	/// <summary>
+	/// スプライト描画前の共通設定。
+	/// </summary>
 	void PreDraw();
 
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }

@@ -11,31 +11,65 @@ class SrvHeapManager
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="dxCommon">DirectXCommonのポインタ</param>
 	void Initialize(DirectXCommon* dxCommon);
 
-	//描画前処理
+	/// <summary>
+	/// 描画前処理。
+	/// </summary>
 	void PreDraw();
 
-	// デスクリプタテーブルをセット
+	/// <summary>
+	/// グラフィックスコマンドリストにSRVヒープをセット。
+	/// </summary>
+	/// <param name="RootParameterIndex">ルートパラメータのインデックス</param>
+	/// <param name="srvIndex">SRVのインデックス</param>
 	void SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uint32_t srvIndex);
 
-	//確保関数
+	/// <summary>
+	/// SRVの割り当て。
+	/// </summary>
+	/// <returns>割り当てたSRVのインデックス</returns>
 	uint32_t Allocate();
 
-	//確保可能チェック
+	/// <summary>
+	/// SRVヒープの空き確認。
+	/// </summary>
+	/// <returns>空きがあればtrue、なければfalse</returns>
 	bool Check();
 
-	//SRV作成（テクスチャ用）
+	/// <summary>
+	/// SRV生成（Texture2D用）
+	/// </summary>
+	/// <param name="srvIndex">SRVのインデックス</param>
+	/// <param name="pResource">SRVを作成するリソース</param>
+	/// <param name="metadata">テクスチャのメタデータ</param>
 	void CreateSRVforTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DirectX::TexMetadata& metadata);
 
-	//SRV生成（Structured Buffer用）
+	/// <summary>
+	/// SRV生成（StructuredBuffer用）
+	/// </summary>
+	/// <param name="srvIndex">SRVのインデックス</param>
+	/// <param name="pResource">SRVを作成するリソース</param>
+	/// <param name="numElements">要素数</param>
+	/// <param name="structureByteStride">構造体のバイトサイズ</param>
 	void CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
 
-	//SRV作成(RenderTexture用)
+	/// <summary>
+	/// SRV生成（RenderTexture用）
+	/// </summary>
+	/// <param name="srvIndex">SRVのインデックス</param>
+	/// <param name="pResource">SRVを作成するリソース</param>
 	void CreateSRVforRenderTexture(uint32_t srvIndex, ID3D12Resource* pResource);
 
-	//SRV作成(DepthTexture用)
+	/// <summary>
+	/// SRV生成（DepthTexture用）
+	/// </summary>
+	/// <param name="srvIndex">SRVのインデックス</param>
+	/// <param name="pResource">SRVを作成するリソース</param>
 	void CreateSRVforDepthTexture(uint32_t srvIndex, ID3D12Resource* pResource);
 
 	ID3D12DescriptorHeap* GetDescriptorHeap() { return descriptorHeap_.Get(); }
@@ -45,11 +79,15 @@ public:
 	/// <summary>
 	/// SRVの指定番号のCPUデスクリプタハンドルを取得
 	/// </summary>
+	/// <param name="index">SRVのインデックス</param>
+	/// <returns>CPUデスクリプタハンドル</returns>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
 
 	/// <summary>
 	/// SRVの指定番号のGPUデスクリプタハンドルを取得
 	/// </summary>
+	/// <param name="index">SRVのインデックス</param>
+	/// <returns>GPUデスクリプタハンドル</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
 
 	// 最大SRV数

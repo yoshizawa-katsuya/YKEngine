@@ -4,6 +4,14 @@
 #include <cmath>
 #include <vector>
 
+/// <summary>
+/// ベジェ曲線の点を計算する。
+/// </summary>
+/// <param name="p0">制御点0。</param>
+/// <param name="p1">制御点1。</param>
+/// <param name="p2">制御点2。</param>
+/// <param name="t">パラメータ（0.0〜1.0）。</param>
+/// <returns>計算された点。</returns>
 Vector2 Bezier(const Vector2& p0, const Vector2& p1, const Vector2& p2, float t);
 
 /*
@@ -11,8 +19,25 @@ void DrawBezier(const Vector3& controlPoint0, const Vector3& controlPoint1, cons
 	const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 */
 
+/// <summary>
+/// ベジェ曲線の点を計算する。
+/// </summary>
+/// <param name="p0">制御点0。</param>
+/// <param name="p1">制御点1。</param>
+/// <param name="p2">制御点2。</param>
+/// <param name="t">パラメータ（0.0〜1.0）。</param>
+/// <returns>計算された点。</returns>
 Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3 p2, float t);
 
+/// <summary>
+/// Catmull-Romスプラインの点を計算する。
+/// </summary>
+/// <param name="p0">制御点0。</param>
+/// <param name="p1">制御点1。</param>
+/// <param name="p2">制御点2。</param>
+/// <param name="p3">制御点3。</param>
+/// <param name="t">パラメータ（0.0〜1.0）。</param>
+/// <returns>計算された点。</returns>
 Vector2 CatmullRom(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Vector2& p3, float t);
 
 /*
@@ -20,8 +45,29 @@ void DrawCatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, 
 	const Vector3& controlPoint3, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 */
 
+/// <summary>
+/// Catmull-Romスプラインの点を計算する。
+/// </summary>
+/// <param name="p0">制御点0。</param>
+/// <param name="p1">制御点1。</param>
+/// <param name="p2">制御点2。</param>
+/// <param name="p3">制御点3。</param>
+/// <param name="t">パラメータ（0.0〜1.0）。</param>
+/// <returns>計算された点。</returns>
 Vector3 CatmullRom(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t);
 
+/// <summary>
+/// Catmull-Romスプラインの点群を生成する。
+/// </summary>
+/// <param name="controlPoints">制御点群。</param>
+/// <param name="numPoints">生成する点の数。</param>
+/// <returns>生成された点群。</returns>
 std::vector<Vector3> GenerateCatmullRomSplinePoints(std::vector<Vector3>& controlPoints, uint32_t numPoints);
 
+/// <summary>
+/// Catmull-Romスプラインの点群をループさせて生成する。
+/// </summary>
+/// <param name="controlPoints">制御点群。</param>
+/// <param name="numPoints">生成する点の数。</param>
+/// <returns>生成された点群。</returns>
 std::vector<Vector3> GenerateCatmullRomSplinePointsLoop(std::vector<Vector3>& controlPoints, uint32_t numPoints);

@@ -12,13 +12,25 @@ class Camera
 {
 public:
 
+	/// <summary>
+	/// コンストラクタ。
+	/// </summary>
 	Camera();
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// ConstantBufferにカメラの情報をセットする。
+	/// </summary>
 	void SetCameraReaource();
 
+	/// <summary>
+	/// ビルボード行列の作成。
+	/// </summary>
+	/// <returns>ビルボード行列</returns>
 	Matrix4x4 MakeBillBoardMatrix();
 
 	//getter
@@ -51,7 +63,11 @@ public:
 
 private:
 
-	struct CameraForGPU {
+	/// <summary>
+	/// GPU用カメラ構造体。
+	/// </summary>
+	struct CameraForGPU 
+	{
 		Vector3 worldPosition;
 	};
 
