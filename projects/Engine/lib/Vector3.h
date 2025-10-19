@@ -8,9 +8,13 @@ struct Vector3 {
 	float y;
 	float z;
 
+	//スカラー倍
 	Vector3& operator*=(float s) { x *= s;  y *= s; z *= s; return *this; }
+	//減算
 	Vector3& operator-=(const Vector3& v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
+	//加算
 	Vector3& operator+=(const Vector3& v) { x += v.x; y += v.y; z += v.z; return *this; }
+	//スカラー除算
 	Vector3& operator/=(float s) { x /= s;  y /= s; z /= s; return *this; }
 
 };
@@ -51,16 +55,23 @@ Vector3 Perpendicular(const Vector3& vector);
 //スクリーン座標に変換
 //Vector3 ConvertingToScreen(const Vector3& position, const ViewProjection& viewProjection);
 
+//加算
 Vector3 operator+(const Vector3& v1, const Vector3& v2);
 
+//減算
 Vector3 operator-(const Vector3& v1, const Vector3& v2);
 
+//スカラー倍
 Vector3 operator*(float s, const Vector3& v);
 
+//スカラー倍
 Vector3 operator*(const Vector3& v, float s);
 
+//スカラー除算
 Vector3 operator/(const Vector3& v, float s);
 
+//単項マイナス
 Vector3 operator-(const Vector3& v);
 
+//単項プラス
 Vector3 operator+(const Vector3& v);

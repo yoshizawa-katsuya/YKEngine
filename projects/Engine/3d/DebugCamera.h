@@ -11,14 +11,24 @@ class DebugCamera
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// デバッグカメラとして使用するカメラと入力を指定する。
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <param name="input">入力</param>
 	void Initialize(Camera* camera, Input* input);
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
 private:
 
+	/// <summary>
+	/// ビュー行列の更新。
+	/// </summary>
 	void ViewMatrixUpdate();
 
 	Camera* camera_;

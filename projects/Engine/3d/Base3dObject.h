@@ -10,35 +10,90 @@ class Base3dObject
 {
 public:
 
+	/// <summary>
+	/// コンストラクタ。	
+	/// </summary>
 	Base3dObject();
 
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	virtual ~Base3dObject() = 0;
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="model">モデル</param>
 	virtual void Initialize(BaseModel* model);
 
 	//virtual void Update(const WorldTransform& worldTransform, Camera* camera_);
 
 	//virtual void Update(const WorldTransform& worldTransform, Camera* camera_, Animation* animation);
 
+	/// <summary>
+	/// ワールド変換行列の更新。
+	/// </summary>
+	/// <param name="worldTransform">ワールド変換行列</param>
 	virtual void WorldTransformUpdate(const WorldTransform& worldTransform);
 
-	//WorldTransformUpdateの後に実行する
+	/// <summary>
+	/// アニメーションの更新。
+	/// </summary>
+	/// <param name="animation">アニメーション</param>
 	virtual void AnimationUpdate(Animation* animation);
 
+	/// <summary>
+	/// カメラの更新。
+	/// </summary>
+	/// <param name="camera">カメラ</param>
 	virtual void CameraUpdate(Camera* camera);
 
+	/// <summary>
+	/// 描画。
+	/// </summary>
 	virtual void Draw();
 
+	/// <summary>
+	/// 描画（テクスチャハンドル指定）。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャ</param>
 	virtual void Draw(uint32_t textureHandle);
 
+	/// <summary>
+	/// UV変換の設定。
+	/// マテリアルデータを生成する。
+	/// </summary>
+	/// <param name = "scale">スケール< / param>
+	/// <param name="rotate">回転</param>
+	/// <param name="translate">平行移動</param>
 	void SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
+	/// <summary>
+	/// UV変換の設定。
+	/// マテリアルデータを生成する。
+	/// </summary>
+	/// <param name="uvTransform">UV変換</param>
 	void SetUVTransform(const EulerTransform& uvTransform);
 
+	/// <summary>
+	/// ライティングの有効・無効設定。
+	/// マテリアルデータを生成する。
+	/// </summary>
+	/// <param name="enableLighting">ライティングの有効・無効</param>
 	void SetEnableLighting(bool enableLighting);
 
+	/// <summary>
+	/// 色の設定。
+	/// マテリアルデータを生成する。
+	/// </summary>
+	/// <param name="color">色</param>
 	void SetColor(const Vector4& color);
 
+	/// <summary>
+	/// 環境光係数の設定。
+	/// マテリアルデータを生成する。
+	/// </summary>
+	/// <param name="coefficient">環境光係数</param>
 	void SetEnviromentCoefficient(float coefficient);
 
 	const BaseModel& GetModel() const { return *model_; }
@@ -46,7 +101,9 @@ public:
 
 protected:
 
-	//マテリアルデータ作成
+	/// <summary>
+	///	マテリアルデータの作成。
+	/// </summary>
 	void CreateMaterialData();
 
 	DirectXCommon* dxCommon_;

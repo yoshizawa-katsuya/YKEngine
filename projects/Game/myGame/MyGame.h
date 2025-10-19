@@ -11,16 +11,24 @@ class MyGame : public YKFramework
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize() override;
 
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize() override;
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update() override;
 
-	//描画
+	/// <summary>
+	/// 描画。
+	/// </summary>
 	void Draw() override;
 
 	

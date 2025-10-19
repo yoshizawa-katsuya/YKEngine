@@ -24,16 +24,27 @@ public:
 	/// <param name = 'frequency'>発生頻度</param>
 	ParticleEmitter(const std::string& name, uint32_t count, float frequency);
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="model">モデル</param>
 	void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model);
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// 時間経過で発生頻度に達したらパーティクルを発生させる。
+	/// </summary>
 	void Update();
 
-	//発生させる
+	/// <summary>
+	/// パーティクルを発生させる。
+	/// </summary>
 	void Emit();
 
-	//グローバル変数の内容を反映させる
+	/// <summary>
+	/// グローバル変数を適用する。
+	/// </summary>
 	void ApplyGlobalVariables();
 
 	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
@@ -92,6 +103,11 @@ public:
 
 	void SetCount(uint32_t count) { count_ = count; }
 
+	/// <summary>
+	/// 発生頻度の設定。
+	/// タイマーをリセットする。
+	/// </summary>
+	/// <param name="frequency">発生頻度</param>
 	void SetFrequency(float frequency);
 
 	Vector3& GetTranslate() { return transform_.translation; }
@@ -141,7 +157,9 @@ public:
 
 private:
 
-	//グローバル変数の初期化
+	/// <summary>
+	/// グローバル変数の初期化。
+	/// </summary>
 	void InitializeGlobalVariables();
 
 	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();	

@@ -74,8 +74,17 @@ public:
 		Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState;
 	};
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="dxCommon">DirectX共通クラス</param>
 	void Initialize(DirectXCommon* dxCommon);
 
+	/// <summary>
+	/// コマンドリストにパイプラインをセットする。
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="blendMode">描画モード</param>
 	void SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode);
 
 	//ID3D12RootSignature* GetRootSignature() { return rootSignature_.Get(); }
@@ -84,7 +93,12 @@ public:
 
 private:
 
-	//パイプライン生成
+	/// <summary>
+	/// グラフィックスパイプラインの生成。
+	/// </summary>
+	/// <param name="blendMode">描画モード</param>
+	/// <param name="dxCommon">DirectX共通クラス</param>
+	/// <returns>パイプラインセット</returns>
 	std::unique_ptr<PipelineSet> CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon);
 
 	//Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;

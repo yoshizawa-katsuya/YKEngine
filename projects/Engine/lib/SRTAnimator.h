@@ -11,10 +11,18 @@ class SRTAnimator
 {
 public:
 
-	//アニメーションを設定
+	/// <summary>
+	/// アニメーションの設定。
+	/// </summary>
+	/// <param name="startVector">開始ベクトル</param>
+	/// <param name="endVector">終了ベクトル</param>
+	/// <param name="duration">所要時間（秒）</param>
 	void SetAnimation(const Vector3& startVector, const Vector3& endVector, float duration);
 
-	//更新
+	/// <summary>
+	/// 更新。経過時間を内部で管理する
+	/// </summary>
+	/// <returns>現在のベクトル</returns>
 	Vector3 Update();
 
 	//更新。経過時間を外部で管理する

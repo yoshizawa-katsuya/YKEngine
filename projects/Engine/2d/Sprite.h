@@ -16,10 +16,15 @@ class Sprite
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Initialize(uint32_t textureHandle);
 
-	//描画
+	/// <summary>
+	///	描画。
+	/// </summary>
 	void Draw();
 
 	const Vector2& GetSize() const { return size_; }
@@ -83,16 +88,24 @@ public:
 
 protected:
 
-	//頂点データ作成
+	/// <summary>
+	/// 頂点データ作成。
+	/// </summary>
 	void CreateVertexData();
 
-	//マテリアルデータ作成
+	/// <summary>
+	/// マテリアルデータ作成。
+	/// </summary>
 	void CreateMaterialData();
 
-	//座標行列変換データ作成
+	/// <summary>
+	/// 変換行列データ作成。
+	/// </summary>
 	void CreateTransformData();
 
-	//テクスチャサイズをイメージに合わせる
+	/// <summary>
+	/// スプライトサイズを画像サイズに合わせて調整。
+	/// </summary>
 	void AdjustTextureSize();
 
 	SpritePlatform* spritePlatform_ = nullptr;

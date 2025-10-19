@@ -19,20 +19,55 @@ class ParticleManager
 {
 public:
 
-	//シングルトンインスタンスの取得
+	/// <summary>
+	/// シングルトンのインスタンスを取得。
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static ParticleManager* GetInstance();
 
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize();
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="dxCommon">DirectX共通クラス</param>
+	/// <param name="srvHeapManager">SRVヒープマネージャー</param>
+	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
 	void Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer);
 
+	/// <summary>
+	/// パーティクルの更新。
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <param name="accelerationField">加速度フィールド</param>
 	void Update(Camera* camera, AccelerationField* accelerationField = nullptr);
 
+	/// <summary>
+	/// パーティクルの描画。
+	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// パーティクルグループの作成。
+	/// </summary>
+	/// <param name="name">パーティクルグループの名前</param>
+	/// <param name="textureHandle">パーティクルのテクスチャハンドル</param>
+	/// <param name="model">パーティクルのモデル</param>
+	/// <param name="behavior">パーティクルの挙動</param>
 	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
 
+	/// <summary>
+	/// パーティクルの発生。
+	/// </summary>
+	/// <param name="name">パーティクルグループの名前</param>
+	/// <param name="transform">エミッターの座標変換情報</param>
+	/// <param name="count">発生させるパーティクルの数</param>
+	/// <param name="randomFlags">ランダム化フラグ</param>
+	/// <param name="color">パーティクルの色</param>
+	/// <param name="rangeParams">エミッター範囲パラメータ</param>
 	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
 		const Color& color, const EmitterRangeParams& rangeParams);
 

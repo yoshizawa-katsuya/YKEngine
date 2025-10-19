@@ -14,39 +14,118 @@
 /// </summary>
 class GlobalVariables {
 public:
+	/// <summary>
+	/// シングルトンインスタンスの取得。
+	/// </summary>
+	/// <returns>グローバル変数管理クラスのインスタンス</returns>
 	static GlobalVariables* GetInstance();
 
-	//毎フレーム処理
+	/// <summary>
+	/// 更新処理。
+	/// </summary>
 	void Update();
 
-	//グループの作成
+	/// <summary>
+	/// グループの作成。
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
 	void CreateGroup(const std::string& groupName);
 
-	//値のセット(int)
+	/// <summary>
+	/// 値のセット(int)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void SetValue(const std::string& groupName, const std::string& key, int32_t value);
-	//値のセット(float)
+
+	/// <summary>
+	/// 値のセット(float)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void SetValue(const std::string& groupName, const std::string& key, float value);
-	// 値のセット(Vector3)
+
+	/// <summary>
+	/// 値のセット(Vector3)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void SetValue(const std::string& groupName, const std::string& key, const Vector3& value);
-	// 値のセット(Vector4)
+
+	/// <summary>
+	/// 値のセット(Vector4)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void SetValue(const std::string& groupName, const std::string& key, const Vector4& value);
-	// 値のセット(Color)
+
+	/// <summary>
+	/// 値のセット(Color)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void SetValue(const std::string& groupName, const std::string& key, const Color& value);
-	//値のセット(bool)
+
+	/// <summary>
+	/// 値のセット(bool)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void SetValue(const std::string& groupName, const std::string& key, bool value);
 	
 
-	//項目の追加(int)
+	/// <summary>
+	/// 項目の追加(int)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void AddItem(const std::string& groupName, const std::string& key, int32_t value);
-	// 項目の追加(float)
+	
+	/// <summary>
+	/// 項目の追加(float)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void AddItem(const std::string& groupName, const std::string& key, float value);
-	// 項目の追加(Vector3)
+	
+	/// <summary>
+	/// 項目の追加(Vector3)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void AddItem(const std::string& groupName, const std::string& key, const Vector3& value);
-	// 項目の追加(Vector4)
+	
+	/// <summary>
+	/// 項目の追加(Vector4)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void AddItem(const std::string& groupName, const std::string& key, const Vector4& value);
-	// 項目の追加(Color)
+	
+	/// <summary>
+	/// 項目の追加(Color)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void AddItem(const std::string& groupName, const std::string& key, const Color& value);
-	//項目の追加(bool)
+	
+	/// <summary>
+	/// 項目の追加(bool)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
 	void AddItem(const std::string& groupName, const std::string& key, bool value);
 
 	///<summary>
@@ -66,12 +145,52 @@ public:
 	/// <param name="groupName">グループ</param>
 	void LoadFile(const std::string& groupName);
 
-	//値の取得
+	/// <summary>
+	/// 値の取得(int)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <returns>値</returns>
 	int32_t GetIntValue(const std::string& groupName, const std::string& key) const;
+
+	/// <summary>
+	/// 値の取得(float)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <returns>値</returns>
 	float GetFloatValue(const std::string& groupName, const std::string& key) const;
+
+	/// <summary>
+	/// 値の取得(Vector3)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <returns>値</returns>
 	Vector3 GetVector3Value(const std::string& groupName, const std::string& key) const;
+
+	/// <summary>
+	/// 値の取得(Vector4)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <returns>値</returns>
 	Vector4 GetVector4Value(const std::string& groupName, const std::string& key) const;
+
+	/// <summary>
+	/// 値の取得(Color)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <returns>値</returns>
 	Color GetColorValue(const std::string& groupName, const std::string& key) const;
+
+	/// <summary>
+	/// 値の取得(bool)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <returns>値</returns>
 	bool GetBoolValue(const std::string& groupName, const std::string& key) const;
 
 private:

@@ -12,13 +12,19 @@ class SceneManager
 {
 public:
 
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize();
 
-	//更新
+	/// <summary>
+	/// 更新処理。
+	/// </summary>
 	void Update();
 
-	//描画
+	/// <summary>
+	/// 描画処理。
+	/// </summary>
 	void Draw();
 
 	//次シーン予約
@@ -27,7 +33,10 @@ public:
 	//シーンファクトリーのsetter
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { sceneFactory_ = sceneFactory; }
 
-	//シーン切り替え
+	/// <summary>
+	/// シーンの変更。
+	/// </summary>
+	/// <param name="sceneName">変更先シーン名</param>
 	void ChengeScene(const std::string& sceneName);
 
 private:

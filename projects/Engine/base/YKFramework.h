@@ -35,23 +35,39 @@ class YKFramework
 {
 public:
 
+	/// <summary>
+	/// デストラクタ。純粋仮想関数として宣言。
+	/// </summary>
 	virtual ~YKFramework() = default;
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	virtual void Initialize();
 
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	virtual void Finalize();
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	virtual void Update();
 
+	/// <summary>
+	/// フレーム終了処理。
+	/// </summary>
 	void EndFrame();
 
-	//描画
+	/// <summary>
+	/// 描画。純粋仮想関数として宣言。
+	/// </summary>
 	virtual void Draw() = 0;
 
-	//実行
+	/// <summary>
+	/// ゲームループの実行。
+	/// </summary>
 	void Run();
 
 	//終了フラグのチェック

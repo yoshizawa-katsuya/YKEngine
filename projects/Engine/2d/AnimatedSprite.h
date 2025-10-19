@@ -10,47 +10,94 @@ class AnimatedSprite : public Sprite
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="horizontalDivisionNum">横の分割数</param>
+	/// <param name="verticalDivisionNum">縦の分割数</param>
 	void Initialize(uint32_t textureHandle, int32_t horizontalDivisionNum, int32_t verticalDivisionNum);
 
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
-	//アニメーションを逆再生する際の初期化
+	/// <summary>
+	/// 逆再生用の初期化。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="horizontalDivisionNum">横の分割数</param>
+	/// <param name="verticalDivisionNum">縦の分割数</param>
 	void InitializeReverseAnimation(uint32_t textureHandle, uint32_t horizontalDivisionNum, uint32_t verticalDivisionNum);
 
-	//アニメーションをリセットする
+	/// <summary>
+	/// アニメーションをリセットする。
+	/// </summary>
 	void Reset();
 
-	//アニメーションをリセットして逆再生する
+	/// <summary>
+	/// 逆再生アニメーションをリセットする。
+	/// </summary>
 	void ResetReverseAnimation();
 
+	/// <summary>
+	/// アニメーションの更新に必要なフレーム数を設定する。
+	/// </summary>
+	/// <param name="updateFrame">更新に必要なフレーム数</param>
 	void SetUpdateFrame(uint32_t updateFrame) { updateFrame_ = updateFrame; }
 
+	/// <summary>
+	/// アニメーションをループ再生するか設定する。
+	/// </summary>
+	/// <param name="isLoop">ループするかどうか</param>
 	void SetIsLoop(bool isLoop) { isLoop_ = isLoop; }
 
+	/// <summary>
+	/// アニメーションを逆再生するか設定する。
+	/// </summary>
+	/// <param name="isReverse">逆再生するかどうか</param>
 	void SetIsReverse(bool isReverse) { isReverse_ = isReverse; }
 
+	/// <summary>
+	/// アニメーションが最後まで到達したか取得する。
+	/// </summary>
+	/// <returns>最後まで到達したか</returns>
 	bool GetIsEnd() { return isEnd_; }
 
 private:
 
-	//初期化の共通処理
+	/// <summary>
+	/// 共通の初期化処理
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="horizontalDivisionNum">横の分割数</param>
+	/// <param name="verticalDivisionNum">縦の分割数</param>
 	void CommonInitialize(uint32_t textureHandle, int32_t horizontalDivisionNum, int32_t verticalDivisionNum);
 
-	//最後に到達したら最初に戻る更新
+	/// <summary>
+	/// アニメーションをループ再生する更新。
+	/// </summary>
 	void LoopUpdate();
 
-	//最後に到達したら止まる更新
+	/// <summary>
+	/// アニメーションを再生する更新。
+	/// </summary>
 	void NoLoopUpdate();
 
-	//アニメーションをループ逆再生する更新
+	/// <summary>
+	/// アニメーションをループ逆再生する更新。
+	/// </summary>
 	void ReverseLoopUpdate();
 
-	//アニメーションを逆再生する更新
+	/// <summary>
+	/// アニメーションを逆再生する更新。
+	/// </summary>
 	void ReverseNoLoopUpdate();
 
-	//更新の共通処理
+	/// <summary>
+	/// 共通の更新処理。
+	/// </summary>
 	void CommonUpdate();
 
 	//分割数

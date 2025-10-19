@@ -12,15 +12,29 @@ class WinApp
 {
 public:
 
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	~WinApp();
 
-	//ウィンドウプロシージャ
+	/// <summary>
+	/// ウィンドウプロシージャ。
+	/// </summary>
+	/// <param name="hwnd">ウィンドウハンドル</param>
+	/// <param name="msg">メッセージ</param>
+	/// <param name="wparam">メッセージの追加情報</param>
+	/// <param name="lparam">メッセージの追加情報</param>
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize();
 
-	//メッセージの処理
+	/// <summary>
+	/// メッセージ処理。
+	/// </summary>
+	/// <returns>終了メッセージが来たらtrueを返す。それ以外はfalseを返す。</returns>
 	bool ProcessMessage();
 
 
@@ -34,10 +48,14 @@ public:
 
 private:
 
-	//ゲームウィンドウの作成
+	/// <summary>
+	/// ゲームウィンドウの生成。
+	/// </summary>
 	void CreateGameWindow();
 
-	//ゲームウィンドウの破棄
+	/// <summary>
+	/// ゲームウィンドウの破棄。
+	/// </summary>
 	void TerminateGameWindow();
 
 	//ウィンドウクラス

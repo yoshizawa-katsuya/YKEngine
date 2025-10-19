@@ -5,18 +5,25 @@
 #include <math.h>
 #include <cmath>
 
+//平行移動行列の作成
 Matrix3x3 MakeTranslateMatrix(Vector2 translate);
 
+//逆行列の作成
 Matrix3x3 Invarse(Matrix3x3 matrix);
 
+//正射影行列の作成
 Matrix3x3 MakeOrthographicMatrix(float left, float top, float right, float bottom);
 
+//ビューポート変換行列の作成
 Matrix3x3 MakeViewportMatrix(float left, float top, float width, float height);
 
+//行列の積
 Matrix3x3 Multiply(Matrix3x3 matrix1, Matrix3x3 matrix2);
 
+//座標変換
 Vector2 Transform(Vector2 vector, Matrix3x3 matrix);
 
+//回転行列の作成
 Matrix3x3 MakeRotateMatrix(float theta);
 
 //行列の加法
@@ -63,13 +70,16 @@ Matrix4x4 MakeRotateYMatrix(float radian);
 //Z軸回転行列
 Matrix4x4 MakeRotateZMatrix(float radian);
 
+//クォータニオンから回転行列
 Matrix4x4 MakeRotateMatrix(Quaternion q);
 
 //アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
+//アフィン変換（オイラー角）
 Matrix4x4 MakeAffineMatrix(const EulerTransform& transform);
 
+//アフィン変換（クォータニオン）
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const Vector3& translate);
 
 //透視投影行列
@@ -83,8 +93,11 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 
 bool IsCollision(const AABB& aabb, const Vector3& point);
 
+//行列の加算
 Matrix4x4 operator+(const Matrix4x4& m1, const Matrix4x4& m2);
 
+//行列の減算
 Matrix4x4 operator-(const Matrix4x4& m1, const Matrix4x4& m2);
 
+//行列の乗算
 Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);

@@ -21,11 +21,11 @@ public:
 	WorldTransform* parent_ = nullptr;
 
 	/// <summary>
-	/// 初期化
+	/// 初期化。
 	/// </summary>
 	void Initialize();
 	/// <summary>
-	/// 行列を計算する
+	/// 行列の更新。
 	/// </summary>
 	void UpdateMatrix();
 	/// <summary>
