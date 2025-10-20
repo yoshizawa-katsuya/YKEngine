@@ -28,6 +28,8 @@ public:
 	//更新。経過時間を外部で管理する
 	Vector3 Update(float& elapsedTime);
 
+	bool GetIsEnd() { return isEnd_; }
+
 private:
 
 	Vector3 startVector_;
@@ -38,6 +40,9 @@ private:
 
 	//合計経過時間。単位は秒
 	float elapsedTime_ = 0.0f;
+
+	//アニメーションが終わっていたらtrue
+	bool isEnd_;
 
 	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
 };

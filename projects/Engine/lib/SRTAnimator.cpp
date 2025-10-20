@@ -7,6 +7,7 @@ void SRTAnimator::SetAnimation(const Vector3& startVector, const Vector3& endVec
 	endVector_ = endVector;
 	duration_ = duration;
 	elapsedTime_ = 0.0f;
+	isEnd_ = false;
 }
 
 Vector3 SRTAnimator::Update()
@@ -17,6 +18,7 @@ Vector3 SRTAnimator::Update()
 		if (elapsedTime_ > duration_) 
 		{
 			elapsedTime_ = duration_;
+			isEnd_ = true;
 		}
 	}
 	
@@ -31,6 +33,7 @@ Vector3 SRTAnimator::Update(float& elapsedTime)
 		if (elapsedTime > duration_)
 		{
 			elapsedTime = duration_;
+			isEnd_ = true;
 		}
 	}
 
