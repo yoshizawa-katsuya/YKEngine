@@ -128,6 +128,7 @@ void GameScene::Update() {
 	//emitter_->Update();
 
 	particleEmitter_->Update();
+	particleEmitter_->ApplyGlobalVariables();
 
 	ParticleManager::GetInstance()->Update(mainCamera_);
 
@@ -224,7 +225,7 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	/*player_->Draw(mainCamera_);*/
 
 	/*modelPlatform_->SkyBoxPreDraw();
 

@@ -1,0 +1,77 @@
+{
+    "debug": {
+        "bahaviorEasingTypeForScale": 0,
+        "bahaviorIsSceleToDisappear": false,
+        "behaviorIsConstantVelocity": false,
+        "behaviorIsDownVelocity": false,
+        "behaviorIsFaceToVelocityDirection": false,
+        "behaviorIsScaleToAppear": false,
+        "behaviorIsUseBillboard": true,
+        "behaviorSpeed": 1.0,
+        "count": 3,
+        "frequency": 0.5,
+        "randomFlagsColor": false,
+        "randomFlagsLifeTime": false,
+        "randomFlagsRotation": false,
+        "randomFlagsScale": false,
+        "randomFlagsTranslation": false,
+        "randomFlagsVelocity": false,
+        "rangeParamsLifeTimeMax": 3.0,
+        "rangeParamsLifeTimeMin": 1.0,
+        "rangeParamsRotateMax": [
+            3.1415927410125732,
+            3.1415927410125732,
+            3.1415927410125732
+        ],
+        "rangeParamsRotateMin": [
+            -3.1415927410125732,
+            -3.1415927410125732,
+            -3.1415927410125732
+        ],
+        "rangeParamsScaleMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsScaleMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsTranslateMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsTranslateMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsVelocityMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsVelocityMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "translation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}
