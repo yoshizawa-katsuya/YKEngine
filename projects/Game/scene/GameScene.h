@@ -86,6 +86,7 @@ private:
 
 	std::shared_ptr<BaseModel> modelPlayer_;
 
+	std::unique_ptr<ParticleEmitter> particleEmitter_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;

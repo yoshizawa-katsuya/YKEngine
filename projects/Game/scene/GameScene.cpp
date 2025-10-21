@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 	modelPlatform_->SetCamera(mainCamera_);
 	//modelPlatform_->SetSpotLight(spotLight_.get());
 
-	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
+	uint32_t textureHandleParticle = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
@@ -73,6 +73,10 @@ void GameScene::Initialize() {
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
+
+	//パーティクルエミッターの生成
+	particleEmitter_ = std::make_unique<ParticleEmitter>("debug", 3, 0.5f);
+	particleEmitter_->Initialize(textureHandleParticle, modelPlatform_->CreatePlane(textureHandle_, "ParticleDebug"));
 
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
@@ -123,7 +127,9 @@ void GameScene::Update() {
 
 	//emitter_->Update();
 
-	//ParticleManager::GetInstance()->Update(mainCamera_);
+	particleEmitter_->Update();
+
+	ParticleManager::GetInstance()->Update(mainCamera_);
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
@@ -234,7 +240,7 @@ void GameScene::Draw() {
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
-	//ParticleManager::GetInstance()->Draw();
+	ParticleManager::GetInstance()->Draw();
 
 }
 
