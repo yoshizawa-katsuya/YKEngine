@@ -302,7 +302,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 
 	if (behavior.isfixedDistance)
 	{
-		particle.transform.translation = Normalize(particle.transform.translation) * behavior.distance;
+		particle.transform.translation = Normalize(particle.transform.translation - transform.translation) * behavior.distance + transform.translation;
 	}
 
 	if (behavior.isHeadCenter)
