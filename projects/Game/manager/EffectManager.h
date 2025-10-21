@@ -35,6 +35,12 @@ public:
 	/// <param name="position">生成位置</param>
 	void SpawnHitEffect(const Vector3& position);
 
+	/// <summary>
+	/// プレイヤー開始エフェクトの生成。
+	/// </summary>
+	/// <param name="position">生成位置</param>
+	void SpawnPlayerStartEffect(const Vector3& position);
+
 private:
 
 	EffectManager() = default;
@@ -44,6 +50,7 @@ private:
 
 	//パーティクル
 	std::unique_ptr<ParticleEmitter> emitter_;
+	std::unique_ptr<ParticleEmitter> playerSpawnEmitter_;
 
 	ModelPlatform* modelPlatform_ = nullptr;
 };

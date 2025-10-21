@@ -298,6 +298,9 @@ void GameScene::Draw() {
 		instancingObject->Draw();
 	}
 	
+	//パーティクルの描画
+	ParticleManager::GetInstance()->Draw();
+
 	modelPlatform_->LinePreDraw();
 
 	railMover_->DrawRail(mainCamera_);
@@ -311,9 +314,6 @@ void GameScene::Draw() {
 	{
 		spriteSceneChange_->Draw();
 	}
-
-	//パーティクルの描画
-	ParticleManager::GetInstance()->Draw();
 
 }
 

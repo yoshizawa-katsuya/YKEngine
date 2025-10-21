@@ -9,6 +9,7 @@
 #include "TransformHelpers.h"
 #include "bullet/PlayerBulletType.h"
 #include "Matrix.h"
+#include "manager/EffectManager.h"
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle) {
 
@@ -23,7 +24,7 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransf
 	BaseCharacter::Update();
 
 	startAnime_ = std::make_unique<SRTAnimator>();
-	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f);
+	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 1.5f);
 
 	reticleController_ = std::make_unique<ReticleController>();
 	reticleController_->Initialize(viewPortMatrix);
@@ -173,6 +174,8 @@ void Player::UpdateStart()
 {
 	characterWorldTransform_.scale_ = startAnime_->Update();
 	BaseCharacter::Update();
+	
+	EffectManager::GetInstance()->SpawnPlayerStartEffect(GetWorldPosition());
 
 	if (startAnime_->GetIsEnd())
 	{

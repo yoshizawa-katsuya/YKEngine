@@ -1,0 +1,81 @@
+{
+    "PlayerStartEffect01": {
+        "bahaviorEasingTypeForScale": 0,
+        "bahaviorIsSceleToDisappear": false,
+        "behaviorDistance": 6.0,
+        "behaviorIsConstantVelocity": false,
+        "behaviorIsDownVelocity": false,
+        "behaviorIsFaceToVelocityDirection": false,
+        "behaviorIsFixedDistance": true,
+        "behaviorIsHeadCenter": true,
+        "behaviorIsScaleToAppear": false,
+        "behaviorIsTimeFadeOut": false,
+        "behaviorIsUseBillboard": true,
+        "behaviorSpeed": 1.0,
+        "count": 2,
+        "frequency": 0.5,
+        "randomFlagsColor": false,
+        "randomFlagsLifeTime": true,
+        "randomFlagsRotation": false,
+        "randomFlagsScale": false,
+        "randomFlagsTranslation": true,
+        "randomFlagsVelocity": false,
+        "rangeParamsLifeTimeMax": 0.10000000149011612,
+        "rangeParamsLifeTimeMin": 0.10000000149011612,
+        "rangeParamsRotateMax": [
+            3.1415927410125732,
+            3.1415927410125732,
+            3.1415927410125732
+        ],
+        "rangeParamsRotateMin": [
+            -3.1415927410125732,
+            -3.1415927410125732,
+            -3.1415927410125732
+        ],
+        "rangeParamsScaleMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsScaleMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsTranslateMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsTranslateMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsVelocityMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsVelocityMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            0.20000000298023224,
+            0.20000000298023224,
+            0.20000000298023224
+        ],
+        "translation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}
