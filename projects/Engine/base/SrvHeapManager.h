@@ -41,9 +41,6 @@ public:
 	/// <returns>割り当てたSRVのインデックス</returns>
 	uint32_t Allocate();
 
-	//解放関数
-	void Free(uint32_t srvIndex);
-
 	/// <summary>
 	/// srvIndexの解放処理。
 	/// </summary>
