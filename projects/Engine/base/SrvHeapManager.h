@@ -45,6 +45,12 @@ public:
 	void Free(uint32_t srvIndex);
 
 	/// <summary>
+	/// srvIndexの解放処理。
+	/// </summary>
+	/// <param name="srvIndex">解放したいsrvIndex</param>
+	void Free(uint32_t srvIndex);
+
+	/// <summary>
 	/// SRVヒープの空き確認。
 	/// </summary>
 	/// <returns>空きがあればtrue、なければfalse</returns>
