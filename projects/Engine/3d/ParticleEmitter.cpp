@@ -76,6 +76,10 @@ void ParticleEmitter::ApplyGlobalVariables()
 	behavior_->easingTypeForScale = static_cast<EasingType>(globalVariables_->GetIntValue(name_, "bahaviorEasingTypeForScale"));
 	behavior_->isUseBillboard = globalVariables_->GetBoolValue(name_, "behaviorIsUseBillboard");
 	behavior_->isdownVelocity = globalVariables_->GetBoolValue(name_, "behaviorIsDownVelocity");
+	behavior_->isfixedDistance = globalVariables_->GetBoolValue(name_, "behaviorIsFixedDistance");
+	behavior_->distance = globalVariables_->GetFloatValue(name_, "behaviorDistance");
+	behavior_->isHeadCenter = globalVariables_->GetBoolValue(name_, "behaviorIsHeadCenter");
+	behavior_->isTimeFadeOut = globalVariables_->GetBoolValue(name_, "behaviorIsTimeFadeOut");
 	color_ = globalVariables_->GetColorValue(name_, "color");
 
 
@@ -122,6 +126,10 @@ void ParticleEmitter::InitializeGlobalVariables()
 	globalVariables_->AddItem(name_, "bahaviorEasingTypeForScale", static_cast<int32_t>(behavior_->easingTypeForScale));
 	globalVariables_->AddItem(name_, "behaviorIsUseBillboard", behavior_->isUseBillboard);
 	globalVariables_->AddItem(name_, "behaviorIsDownVelocity", behavior_->isdownVelocity);
+	globalVariables_->AddItem(name_, "behaviorIsFixedDistance", behavior_->isfixedDistance);
+	globalVariables_->AddItem(name_, "behaviorDistance", behavior_->distance);
+	globalVariables_->AddItem(name_, "behaviorIsHeadCenter", behavior_->isHeadCenter);
+	globalVariables_->AddItem(name_, "behaviorIsTimeFadeOut", behavior_->isTimeFadeOut);
 	globalVariables_->AddItem(name_, "color", color_);
 
 	ApplyGlobalVariables();	//初期値を反映

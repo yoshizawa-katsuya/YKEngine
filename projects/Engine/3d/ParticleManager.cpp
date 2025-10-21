@@ -113,9 +113,12 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].World = worldMatrix;
 				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color = particleIterator->color;
 
-				float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
-				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color.a = alpha;
-
+				if (particleGroupIterator->second.behavior->isTimeFadeOut)
+				{
+					float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+					particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color.a = alpha;
+				}
+				
 				++particleGroupIterator->second.numInstance;
 			}
 
@@ -222,6 +225,17 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 
 	Particle particle{};
 
+	//生存時間
+	if (randomFlags.lifeTime)
+	{
+		std::uniform_real_distribution<float> distTime(rangeParams.lifeTime.min, rangeParams.lifeTime.max);
+		particle.lifeTime = distTime(randomEngine_);
+	}
+	else
+	{
+		particle.lifeTime = 1.0f;
+	}
+
 	if (randomFlags.velocity)
 	{
 		std::uniform_real_distribution<float> distributionX(rangeParams.velocity.min.x, rangeParams.velocity.max.x);
@@ -286,6 +300,16 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		particle.transform.translation = transform.translation;
 	}
 
+	if (behavior.isfixedDistance)
+	{
+		particle.transform.translation = Normalize(particle.transform.translation) * behavior.distance;
+	}
+
+	if (behavior.isHeadCenter)
+	{
+		particle.velocity = (transform.translation - particle.transform.translation) / particle.lifeTime;
+	}
+
 	if (randomFlags.color)
 	{
 		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
@@ -294,16 +318,6 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	else 
 	{
 		particle.color = color;
-	}
-
-	if (randomFlags.lifeTime)
-	{
-		std::uniform_real_distribution<float> distTime(rangeParams.lifeTime.min, rangeParams.lifeTime.max);
-		particle.lifeTime = distTime(randomEngine_);
-	}
-	else
-	{
-		particle.lifeTime = 1.0f;
 	}
 	
 	particle.currentTime = 0.0f;
