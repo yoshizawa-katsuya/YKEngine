@@ -22,6 +22,8 @@ void GameScene::Initialize() {
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
+	dxCommon_->ResetDeltaTime();
+
 	viewPortMatrix_ = MakeViewportMatrix(
 		0.0f,
 		0.0f,
@@ -342,7 +344,9 @@ void GameScene::CheckAllColision() {
 void GameScene::UpdateStart()
 {
 	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd())
+	//プレイヤーの更新
+	player_->Update(camera_.get());
+	if (player_->StartCompleted())
 	{
 		phase_ = Phase::kMain;
 	}

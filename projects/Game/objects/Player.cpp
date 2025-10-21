@@ -22,6 +22,9 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransf
 	
 	BaseCharacter::Update();
 
+	startAnime_ = std::make_unique<SRTAnimator>();
+	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f);
+
 	reticleController_ = std::make_unique<ReticleController>();
 	reticleController_->Initialize(viewPortMatrix);
 
@@ -49,30 +52,18 @@ void Player::Update(Camera* railCamera) {
 
 #endif // _DEBUG	
 
+	switch (phase_)
+	{
+	case Player::Phase::Start:
+		UpdateStart();
+		break;
+	case Player::Phase::Main:
+		UpdateMain(railCamera);
+		break;
+	default:
+		break;
+	}
 	
-	HandleMoveInput();
-
-	//移動限界座標
-	const float kMoveLimitX = 8.9f;
-	const float kMoveLimitY = 4.8f;
-
-	//範囲を超えない処理
-	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
-	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
-
-	//回転
-	Rotate();
-
-	BaseCharacter::Update();
-
-	//照準オブジェクトの更新
-	ReticleUpdate(railCamera);
-
-	//チャージ処理
-	Charge();
-
-	//キャラクター攻撃処理
-	Attack();
 	
 }
 
@@ -176,6 +167,44 @@ void Player::HandleMoveInput()
 
 	//座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move;
+}
+
+void Player::UpdateStart()
+{
+	characterWorldTransform_.scale_ = startAnime_->Update();
+	BaseCharacter::Update();
+
+	if (startAnime_->GetIsEnd())
+	{
+		phase_ = Phase::Main;
+	}
+}
+
+void Player::UpdateMain(Camera* railCamera)
+{
+	HandleMoveInput();
+
+	//移動限界座標
+	const float kMoveLimitX = 8.9f;
+	const float kMoveLimitY = 4.8f;
+
+	//範囲を超えない処理
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
+
+	//回転
+	Rotate();
+
+	BaseCharacter::Update();
+
+	//照準オブジェクトの更新
+	ReticleUpdate(railCamera);
+
+	//チャージ処理
+	Charge();
+
+	//キャラクター攻撃処理
+	Attack();
 }
 
 void Player::Rotate()

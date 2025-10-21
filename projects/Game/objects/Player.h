@@ -64,6 +64,9 @@ public:
 
 	void SetPlayerBulletManager(PlayerBulletManager* playerBulletManager) { playerBulletManager_ = playerBulletManager; }
 
+	//スタート処理が終わっていたらtrue
+	bool StartCompleted() { return phase_ != Phase::Start; }
+
 private:
 
 	/// <summary>
@@ -77,6 +80,16 @@ private:
 	/// 移動入力の処理
 	/// </summary>
 	void HandleMoveInput();
+
+	/// <summary>
+	/// 開始部の更新
+	/// </summary>
+	void UpdateStart();
+
+	/// <summary>
+	/// メインの更新
+	/// </summary>
+	void UpdateMain(Camera* railCamera);
 
 	/// <summary>
 	/// 回転処理。レティクルの方向に向く。
@@ -107,10 +120,20 @@ private:
 	//キーボード入力
 	Input* input_ = nullptr;
 
+	enum class Phase 
+	{
+		Start,	// 開始
+		Main,	// メイン
+	};
+	//フェーズ
+	Phase phase_ = Phase::Start;
+
 	//自機の弾のマネージャー
 	PlayerBulletManager* playerBulletManager_ = nullptr;
 
 	std::unique_ptr<ReticleController> reticleController_ = nullptr;
+
+	std::unique_ptr<SRTAnimator> startAnime_;
 
 	Vector3 direction_{};	//方向
 
