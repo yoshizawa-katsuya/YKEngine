@@ -88,7 +88,7 @@ protected:
 	OffscreenRenderer* offscreenRenderer_ = nullptr;
 	GlobalVariables* globalVariables_ = nullptr;
 
-	SceneManager* sceneManager_ = nullptr;
+	std::unique_ptr<SceneManager> sceneManager_;
 
 	//シーンファクトリー
 	std::unique_ptr<AbstractSceneFactory> sceneFactory_;

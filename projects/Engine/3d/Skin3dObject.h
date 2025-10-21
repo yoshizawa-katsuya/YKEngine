@@ -97,6 +97,7 @@ private:
 
 	SkinCluster skinCluster_;
 
+	uint32_t srvIndex_;
 
 };
 

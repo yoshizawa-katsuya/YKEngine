@@ -5,6 +5,7 @@
 
 Skin3dObject::~Skin3dObject()
 {
+	model_->GetModelPlatform()->GetSrvHeapManager()->Free(srvIndex_);	//srvHeapManagerに登録されているSkinClusterのSRVを解放
 }
 
 void Skin3dObject::Initialize(BaseModel* model)
@@ -173,10 +174,10 @@ void Skin3dObject::CreateSkinCluster()
 	skinCluster_.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 	skinCluster_.mappedPalette = { mappedPalette, skeleton_.joints.size() };	//spanを使ってアクセスするようにする
 
-	int32_t srvIndex = srvHeapManager->Allocate();
+	srvIndex_ = srvHeapManager->Allocate();
 
-	skinCluster_.paletteSrvHandle.first = srvHeapManager->GetCPUDescriptorHandle(srvIndex);
-	skinCluster_.paletteSrvHandle.second = srvHeapManager->GetGPUDescriptorHandle(srvIndex);
+	skinCluster_.paletteSrvHandle.first = srvHeapManager->GetCPUDescriptorHandle(srvIndex_);
+	skinCluster_.paletteSrvHandle.second = srvHeapManager->GetGPUDescriptorHandle(srvIndex_);
 
 	//palette用のsrvを作成。StructuredBufferでアクセスできるようにする。
 	D3D12_SHADER_RESOURCE_VIEW_DESC palletteSrvDesc{};

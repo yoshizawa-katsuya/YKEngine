@@ -10,6 +10,11 @@ InstancingObjects::InstancingObjects()
 {
 }
 
+InstancingObjects::~InstancingObjects()
+{
+	srvHeapManager_->Free(instancingSrvIndex_);
+}
+
 void InstancingObjects::Initialize(BaseModel* model, uint32_t maxInstances)
 {
 	assert(model);
