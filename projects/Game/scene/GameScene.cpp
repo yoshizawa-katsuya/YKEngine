@@ -76,7 +76,7 @@ void GameScene::Initialize() {
 
 	//パーティクルエミッターの生成
 	particleEmitter_ = std::make_unique<ParticleEmitter>("debug", 3, 0.5f);
-	particleEmitter_->Initialize(textureHandleParticle, modelPlatform_->CreatePlane(textureHandle_, "ParticleDebug"));
+	particleEmitter_->Initialize(textureHandle_, modelPlatform_->CreateSphere(textureHandle_, "ParticleDebug"));
 
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
