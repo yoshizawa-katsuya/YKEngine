@@ -75,4 +75,11 @@ struct ParticleBehavior
 	bool isUseBillboard = true;
 	//少しずつ速度を下げるかどうか
 	bool isdownVelocity = false;
+	//パーティクルの初期位置をemitterから一定の距離に固定するか
+	bool isfixedDistance = false;
+	float distance = 1.0f;
+	//パーティクルがエミッターの中心地点に向かうならtrue
+	bool isHeadCenter = false;
+	//時間経過で透明になっていくならtrue
+	bool isTimeFadeOut = true;
 };
