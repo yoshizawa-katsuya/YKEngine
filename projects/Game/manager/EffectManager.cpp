@@ -13,11 +13,11 @@ void EffectManager::Initialize()
 	TextureManager* textureManager = TextureManager::GetInstance();
 
 	//パーティクル
-	emitter_ = std::make_unique<ParticleEmitter>("HitEffect01", 3, 1.5f);
+	emitter_ = std::make_unique<ParticleEmitter>("HitEffect01");
 	uint32_t textureHandle3 = textureManager->Load("./Resources/circle2.png");
 	emitter_->Initialize(textureHandle3, modelPlatform_->CreatePlane(textureHandle3));
 
-	playerSpawnEmitter_ = std::make_unique<ParticleEmitter>("PlayerStartEffect01", 1, 1.0f / 60.0f);
+	playerSpawnEmitter_ = std::make_unique<ParticleEmitter>("PlayerStartEffect01");
 	uint32_t whiteTextureHandle = textureManager->Load("./Resources/white.png");
 	playerSpawnEmitter_->Initialize(whiteTextureHandle, modelPlatform_->CreateSphere(whiteTextureHandle));
 }
