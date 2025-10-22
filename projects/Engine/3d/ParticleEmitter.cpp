@@ -1,12 +1,10 @@
 #include "ParticleEmitter.h"
 #include "ParticleManager.h"
 
-ParticleEmitter::ParticleEmitter(const std::string& name, uint32_t count, float frequency)
+ParticleEmitter::ParticleEmitter(const std::string& name)
 {
 
 	name_ = name;
-	count_ = count;
-	frequency_ = frequency;
 
 	frequencyTime_ = 0.0f;
 
