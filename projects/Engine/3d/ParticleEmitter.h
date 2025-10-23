@@ -20,9 +20,7 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name = 'name'>パーティクルグループの名前</param>
-	/// <param name = 'count'>発生数</param>
-	/// <param name = 'frequency'>発生頻度</param>
-	ParticleEmitter(const std::string& name, uint32_t count, float frequency);
+	ParticleEmitter(const std::string& name);
 
 	/// <summary>
 	/// 初期化。
@@ -166,8 +164,8 @@ private:
 
 	std::string name_;
 	EulerTransform transform_; //!< エミッタのTransform
-	uint32_t count_;	//!< 発生数
-	float frequency_; //!<　発生頻度
+	uint32_t count_ = 3;	//!< 発生数
+	float frequency_ = 1.0f; //!<　発生頻度
 	float frequencyTime_; //!<頻度用時刻
 	const float kDeltaTime_ = 1.0f / 60.0f;
 	Color color_ = { 1.0f, 1.0f, 1.0f, 1.0f }; //!< 色

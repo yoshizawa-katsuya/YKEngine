@@ -16,6 +16,11 @@ public:
 	InstancingObjects();
 	
 	/// <summary>
+	/// デストラクタ。
+	/// </summary>
+	~InstancingObjects();
+
+	/// <summary>
 	/// 初期化。
 	/// </summary>
 	/// <param name="model">描画するモデル</param>

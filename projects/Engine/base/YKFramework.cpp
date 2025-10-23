@@ -60,7 +60,7 @@ void YKFramework::Initialize()
 	globalVariables_->LoadFiles();
 
 	//シーンマネージャの生成
-	sceneManager_ = SceneManager::GetInstance();
+	sceneManager_ = std::make_unique<SceneManager>();
 
 }
 
