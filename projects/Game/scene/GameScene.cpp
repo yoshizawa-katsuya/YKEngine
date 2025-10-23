@@ -75,7 +75,8 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_.get());
 
 	//パーティクルエミッターの生成
-	particleEmitter_ = std::make_unique<ParticleEmitter>("debug", 3, 0.5f);
+	//生成したjsonファイルを利用する場合、中身の名前も変更することを忘れずに
+	particleEmitter_ = std::make_unique<ParticleEmitter>("debug");
 	particleEmitter_->Initialize(textureHandle_, modelPlatform_->CreateSphere(textureHandle_, "ParticleDebug"));
 
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
