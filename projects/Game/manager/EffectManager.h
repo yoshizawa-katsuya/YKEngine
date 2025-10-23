@@ -2,6 +2,13 @@
 #include <memory>
 #include "ParticleEmitter.h"
 class ModelPlatform;
+class BaseModel;
+
+enum class EffectType
+{
+	HitEffect01,
+	PlayerStartEffect01,
+};
 
 /// <summary>
 /// エフェクト管理クラス。
@@ -30,16 +37,10 @@ public:
 	void Update();
 
 	/// <summary>
-	/// ヒットエフェクトの生成。
+	/// エフェクトの生成。
 	/// </summary>
 	/// <param name="position">生成位置</param>
-	void SpawnHitEffect(const Vector3& position);
-
-	/// <summary>
-	/// プレイヤー開始エフェクトの生成。
-	/// </summary>
-	/// <param name="position">生成位置</param>
-	void SpawnPlayerStartEffect(const Vector3& position);
+	void SpawnEffect(EffectType effectType, const Vector3& position);
 
 private:
 
@@ -48,9 +49,23 @@ private:
 	EffectManager(EffectManager&) = delete;
 	const EffectManager& operator=(EffectManager&) = delete;
 
+	std::shared_ptr<BaseModel> LoadEffectModel(std::string modelName, uint32_t textureHnadle);
+
+	struct EffectData
+	{
+		std::string name;
+		std::string textureFilePath;
+		std::string modelName;
+	};
+
+	std::unordered_map<EffectType, EffectData> effectDatas_
+	{
+		{{EffectType::HitEffect01}, {"HitEffect01", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::PlayerStartEffect01}, {"PlayerStartEffect01", "./Resources/white.png", "primitiveSphere"}},
+	};
+
 	//パーティクル
-	std::unique_ptr<ParticleEmitter> emitter_;
-	std::unique_ptr<ParticleEmitter> playerSpawnEmitter_;
+	std::unordered_map<EffectType, std::unique_ptr<ParticleEmitter>> effectEmitters_;
 
 	ModelPlatform* modelPlatform_ = nullptr;
 };

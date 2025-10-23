@@ -175,7 +175,7 @@ void Player::UpdateStart()
 	characterWorldTransform_.scale_ = startAnime_->Update();
 	BaseCharacter::Update();
 	
-	EffectManager::GetInstance()->SpawnPlayerStartEffect(GetWorldPosition());
+	EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerStartEffect01, GetWorldPosition());
 
 	if (startAnime_->GetIsEnd())
 	{

@@ -12,34 +12,51 @@ void EffectManager::Initialize()
 	modelPlatform_ = ModelPlatform::GetInstance();
 	TextureManager* textureManager = TextureManager::GetInstance();
 
-	//パーティクル
-	emitter_ = std::make_unique<ParticleEmitter>("HitEffect01");
-	uint32_t textureHandle3 = textureManager->Load("./Resources/circle2.png");
-	emitter_->Initialize(textureHandle3, modelPlatform_->CreatePlane(textureHandle3));
-
-	playerSpawnEmitter_ = std::make_unique<ParticleEmitter>("PlayerStartEffect01");
 	uint32_t whiteTextureHandle = textureManager->Load("./Resources/white.png");
-	playerSpawnEmitter_->Initialize(whiteTextureHandle, modelPlatform_->CreateSphere(whiteTextureHandle));
+
+	//パーティクルエミッター生成
+	for (const std::pair<EffectType, EffectData>& effectData : effectDatas_)
+	{
+		std::unique_ptr<ParticleEmitter>& emitter = effectEmitters_[effectData.first];
+		emitter = std::make_unique<ParticleEmitter>(effectData.second.name);
+		uint32_t textureHandle = textureManager->Load(effectData.second.textureFilePath);
+		std::shared_ptr<BaseModel> model = LoadEffectModel(effectData.second.modelName, whiteTextureHandle);
+		emitter->Initialize(textureHandle, model);
+	}
+
 }
 
 void EffectManager::Update()
 {
 #ifdef _DEBUG
 
-	emitter_->ApplyGlobalVariables();
-	playerSpawnEmitter_->ApplyGlobalVariables();
+	for (const std::pair<const EffectType, std::unique_ptr<ParticleEmitter>>& emitter : effectEmitters_)
+	{
+		emitter.second->ApplyGlobalVariables();
+	}
 
 #endif // _DEBUG
 }
 
-void EffectManager::SpawnHitEffect(const Vector3& position)
+void EffectManager::SpawnEffect(EffectType effectType, const Vector3& position)
 {
-	emitter_->SetTranslation(position); // パーティクルの位置を設定
-	emitter_->Emit(); // パーティクルを発生させる
+	std::unique_ptr<ParticleEmitter>& emitter = effectEmitters_[effectType];
+	emitter->SetTranslation(position); // パーティクルの位置を設定
+	emitter->Emit(); // パーティクルを発生させる
 }
 
-void EffectManager::SpawnPlayerStartEffect(const Vector3& position)
+std::shared_ptr<BaseModel> EffectManager::LoadEffectModel(std::string modelName, uint32_t textureHnadle)
 {
-	playerSpawnEmitter_->SetTranslation(position);
-	playerSpawnEmitter_->Emit();
+	std::string tag = "Effect";
+	if (modelName == "primitivePlane")
+	{
+		return modelPlatform_->CreatePlane(textureHnadle, tag);
+	}
+	else if (modelName == "primitiveSphere")
+	{
+		return modelPlatform_->CreateSphere(textureHnadle, tag);
+	}
+
+	assert(false);
+	return modelPlatform_->CreatePlane(textureHnadle, tag);
 }
