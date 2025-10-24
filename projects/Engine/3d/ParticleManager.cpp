@@ -141,7 +141,7 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 void ParticleManager::Draw()
 {
 
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeAddParticle);
+	/*primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeAddParticle);*/
 
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -155,6 +155,7 @@ void ParticleManager::Draw()
 	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
 		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) {
 
+		primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), particleDrawModes_[static_cast<int32_t>(particleGroupIterator->second.behavior->blendMode)]);
 
 		//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
 		//TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(particleGroupIterator->second.textureHandle);

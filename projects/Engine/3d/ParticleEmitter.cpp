@@ -78,6 +78,7 @@ void ParticleEmitter::ApplyGlobalVariables()
 	behavior_->distance = globalVariables_->GetFloatValue(name_, "behaviorDistance");
 	behavior_->isHeadCenter = globalVariables_->GetBoolValue(name_, "behaviorIsHeadCenter");
 	behavior_->isTimeFadeOut = globalVariables_->GetBoolValue(name_, "behaviorIsTimeFadeOut");
+	behavior_->blendMode = static_cast<ParticleBlendMode>(globalVariables_->GetIntValue(name_, "behaviorBlendMode"));
 	color_ = globalVariables_->GetColorValue(name_, "color");
 
 
@@ -128,6 +129,7 @@ void ParticleEmitter::InitializeGlobalVariables()
 	globalVariables_->AddItem(name_, "behaviorDistance", behavior_->distance);
 	globalVariables_->AddItem(name_, "behaviorIsHeadCenter", behavior_->isHeadCenter);
 	globalVariables_->AddItem(name_, "behaviorIsTimeFadeOut", behavior_->isTimeFadeOut);
+	globalVariables_->AddItem(name_, "behaviorBlendMode", static_cast<int32_t>(behavior_->blendMode));
 	globalVariables_->AddItem(name_, "color", color_);
 
 	ApplyGlobalVariables();	//初期値を反映

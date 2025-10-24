@@ -49,6 +49,15 @@ struct EmitterRangeParams
 };
 
 /// <summary>
+/// パーティクルのブレンドモード
+/// </summary>
+enum class ParticleBlendMode
+{
+	AddBlend,
+	NormalBlend,
+};
+
+/// <summary>
 /// パーティクルの挙動を定義する構造体。
 /// </summary>
 /// <param name="isFaceToVelocityDirection">進行方向を向くかどうか。</param>
@@ -82,4 +91,6 @@ struct ParticleBehavior
 	bool isHeadCenter = false;
 	//時間経過で透明になっていくならtrue
 	bool isTimeFadeOut = true;
+	//ブレンドモード
+	ParticleBlendMode blendMode = ParticleBlendMode::AddBlend;
 };
