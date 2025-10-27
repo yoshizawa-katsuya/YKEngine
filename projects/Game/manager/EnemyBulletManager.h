@@ -43,6 +43,8 @@ public:
 	/// <param name="collisionManager">衝突管理クラス</param>
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
+	void SetIsGameOver(bool isGameOver) { isGameOver_ = isGameOver; }
+
 private:
 
 	//弾のモデル	
@@ -53,5 +55,8 @@ private:
 
 	//弾
 	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+
+	//ゲームオーバーならtrue
+	bool isGameOver_ = false;
 };
 

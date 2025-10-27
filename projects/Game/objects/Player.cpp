@@ -112,6 +112,36 @@ Vector3 Player::GetWorldPosition() {
 
 }
 
+Vector3 Player::GetInverseLocalDirection()
+{
+	return -direction_;
+}
+
+void Player::GameOverRotate()
+{
+	Vector3 toPosition;
+	if (reticleController_->IsLockOn())
+	{
+		toPosition = reticleController_->GetTargetPosition();
+	}
+	else
+	{
+		toPosition = reticleController_->Get3DReticlePosition();
+	}
+	direction_ = Subtract(toPosition, GetWorldPosition());
+
+	//親の回転を考慮した方向ベクトルの計算
+	Matrix4x4 parentMat = MakeRotateMatrix(worldTransform_.parent_->rotation_);
+	Matrix4x4 invParentMat = Inverse(parentMat);
+
+	//親の回転を打ち消す
+	Vector3 localDirection = TransformNormal(direction_, invParentMat);
+	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
+	
+	worldTransform_.rotation_ = targetRotation;
+	BaseCharacter::Update();
+}
+
 void Player::HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
 {
 	heratSprites_.resize(maxHitPoint_);

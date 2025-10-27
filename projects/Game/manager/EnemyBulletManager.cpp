@@ -35,6 +35,11 @@ void EnemyBulletManager::Draw(Camera* camera)
 
 void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity, Player* target, float speed)
 {
+	//ゲームオーバー時は弾を生成しない
+	if (isGameOver_)
+	{
+		return;
+	}
 	//リストに登録する
 	//弾を生成し、初期化
 	std::unique_ptr<EnemyBullet>& bullet = enemyBullets_.emplace_back();

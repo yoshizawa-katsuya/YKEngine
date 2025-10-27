@@ -405,6 +405,14 @@ void GameScene::UpdateGameOver()
 	//レールカメラの更新
 	railCamera_->Update();
 
+	//敵管理クラスの更新
+	enemyManager_->Update();
+
+	//敵の弾の更新
+	enemyBulletManager_->Update(camera_.get());
+
+	CheckAllColision();
+
 	spriteSceneChange_->Update();
 	if (spriteSceneChange_->GetIsEnd())
 	{
@@ -438,7 +446,10 @@ void GameScene::CheckGameOver()
 	if (player_->IsDead()) {
 		phase_ = Phase::kGameOver;
 		spriteSceneChange_->ResetReverseAnimation();
+		player_->GameOverRotate();
 		railCamera_->SetGameOver();
+		railCamera_->CreateTargetRotationFromPlayer(player_->GetInverseLocalDirection());
+		enemyBulletManager_->SetIsGameOver(true);
 	}
 }
 

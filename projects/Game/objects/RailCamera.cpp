@@ -62,6 +62,11 @@ void RailCamera::SetGameOver()
 	t_ = 0.0f;
 }
 
+void RailCamera::CreateTargetRotationFromPlayer(const Vector3& direction)
+{
+	targetRotation_ = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction);
+}
+
 void RailCamera::UpdateMain()
 {
 	//カメラの更新
@@ -89,10 +94,10 @@ void RailCamera::UpdateGameOver()
 	//カメラの更新
 	// カメラの位置をプレイヤーの位置に徐々に近づける
 	camera_->SetTranslate(Lerp(worldTransform_.GetWorldPosition(), playerParentWorldTransform_.GetWorldPosition(), t_));
-	/*camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, playerParentWorldTransform_.parent_->rotation_, t_));*/
 	// プレイヤーの正面を向くようにカメラの回転を調整する
-	Vector3 targetAngle = playerParentWorldTransform_.parent_->rotation_ + Vector3(-playerParentWorldTransform_.parent_->rotation_.x * 2.0f, std::numbers::pi_v<float>, 0.0f);
-	camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, targetAngle, t_));
+	//Vector3 targetAngle = playerParentWorldTransform_.parent_->rotation_ + Vector3(-playerParentWorldTransform_.parent_->rotation_.x * 2.0f, std::numbers::pi_v<float>, 0.0f);
+	//targetAngle += {-worldTransform_.parent_->rotation_.x, worldTransform_.parent_->rotation_.y, worldTransform_.parent_->rotation_.z}; // 親の回転を加算
+	camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, targetRotation_, t_));
 	camera_->Update();
 
 }

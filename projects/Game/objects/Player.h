@@ -62,6 +62,16 @@ public:
 	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition();
 
+	/// <summary>
+	/// 自機の逆向きベクトルの取得。
+	/// </summary>
+	Vector3 GetInverseLocalDirection();
+
+	/// <summary>
+	/// ゲームオーバーになった瞬間の回転。
+	/// </summary>
+	void GameOverRotate();
+
 	WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
 	void SetPlayerBulletManager(PlayerBulletManager* playerBulletManager) { playerBulletManager_ = playerBulletManager; }

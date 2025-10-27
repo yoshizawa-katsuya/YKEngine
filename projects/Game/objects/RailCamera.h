@@ -28,6 +28,11 @@ public:
 	/// </summary>
 	void SetGameOver();
 
+	/// <summary>
+	/// 自機の逆ローカル方向からtargetRotation_を作成。
+	/// </summary>
+	void CreateTargetRotationFromPlayer(const Vector3& direction);
+
 private:
 
 	/// <summary>
@@ -58,5 +63,7 @@ private:
 
 	// カメラ
 	Camera* camera_;
+
+	Vector3 targetRotation_{};
 
 };
