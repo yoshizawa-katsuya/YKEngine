@@ -62,6 +62,8 @@ public:
 	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition();
 
+	WorldTransform* GetWorldTransform() { return &worldTransform_; }
+
 	void SetPlayerBulletManager(PlayerBulletManager* playerBulletManager) { playerBulletManager_ = playerBulletManager; }
 
 	//スタート処理が終わっていたらtrue

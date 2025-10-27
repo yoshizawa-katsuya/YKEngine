@@ -228,7 +228,7 @@ void TitleScene::CreateLevel()
 	// レールカメラの生成
 	railCamera_ = std::make_unique<RailCamera>();
 	// レールカメラの初期化
-	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform());
+	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform(), nullptr);
 
 	//オブジェクトの生成
 	std::string key;

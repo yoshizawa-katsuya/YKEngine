@@ -402,6 +402,9 @@ void GameScene::UpdateGameClear()
 
 void GameScene::UpdateGameOver()
 {
+	//レールカメラの更新
+	railCamera_->Update();
+
 	spriteSceneChange_->Update();
 	if (spriteSceneChange_->GetIsEnd())
 	{
@@ -435,6 +438,7 @@ void GameScene::CheckGameOver()
 	if (player_->IsDead()) {
 		phase_ = Phase::kGameOver;
 		spriteSceneChange_->ResetReverseAnimation();
+		railCamera_->SetGameOver();
 	}
 }
 
@@ -460,7 +464,7 @@ void GameScene::CreateLevel()
 	// レールカメラの生成
 	railCamera_ = std::make_unique<RailCamera>();
 	// レールカメラの初期化
-	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform());
+	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform(), player_->GetWorldTransform());
 
 	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns)
 	{

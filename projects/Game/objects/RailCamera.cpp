@@ -5,26 +5,45 @@
 #include "Curve.h"
 #include "TransformHelpers.h"
 #include "ModelPlatform.h"
+#include <numbers>
 
-void RailCamera::Initialize(Camera* camera, WorldTransform* parent) {
+void RailCamera::Initialize(Camera* camera, WorldTransform* parent, WorldTransform* playerWorldTransform)
+{
 
 	//ワールドトランスフォームの初期設定
 	worldTransform_.Initialize();
-	worldTransform_.translation_.z = -13.0f; // Z軸方向に-13.0fの位置にカメラを配置
+	worldTransform_.translation_.z = -13.0f; 
 	worldTransform_.parent_ = parent; // 親ワールドトランスフォームを設定
+
+	playerParentWorldTransform_.Initialize();
+	playerParentWorldTransform_.translation_.z = 8.0f;
+	playerParentWorldTransform_.parent_ = playerWorldTransform;
 
 	camera_ = camera;
 
 	worldTransform_.UpdateMatrix();
 
-	UpdateCamera();
+	//カメラの更新
+	camera_->SetTranslate(worldTransform_.GetWorldPosition());
+	camera_->SetRotate(worldTransform_.parent_->rotation_);
+	camera_->Update();
 }
 
 void RailCamera::Update() {
 
 	worldTransform_.UpdateMatrix();
 
-	UpdateCamera();
+	switch (phase_)
+	{
+	case RailCamera::Phase::Main:
+		UpdateMain();
+		break;
+	case RailCamera::Phase::GameOver:
+		UpdateGameOver();
+		break;
+	default:
+		break;
+	}
 
 #ifdef _DEBUG
 
@@ -37,9 +56,43 @@ void RailCamera::Update() {
 #endif // _DEBUG	
 }
 
-void RailCamera::UpdateCamera()
+void RailCamera::SetGameOver()
 {
+	phase_ = Phase::GameOver;
+	t_ = 0.0f;
+}
+
+void RailCamera::UpdateMain()
+{
+	//カメラの更新
 	camera_->SetTranslate(worldTransform_.GetWorldPosition());
 	camera_->SetRotate(worldTransform_.parent_->rotation_);
 	camera_->Update();
+}
+
+void RailCamera::UpdateGameOver()
+{
+	playerParentWorldTransform_.UpdateMatrix();
+
+	// t_が1.0f以上になったら処理を終了する
+	if (t_ >= 1.0f) 
+	{
+		return;
+	}
+	// t_を0.0fから1.0fまで徐々に増加させる
+	t_ += 0.02f;
+	if (t_ > 1.0f) 
+	{
+		t_ = 1.0f;
+	}
+	
+	//カメラの更新
+	// カメラの位置をプレイヤーの位置に徐々に近づける
+	camera_->SetTranslate(Lerp(worldTransform_.GetWorldPosition(), playerParentWorldTransform_.GetWorldPosition(), t_));
+	/*camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, playerParentWorldTransform_.parent_->rotation_, t_));*/
+	// プレイヤーの正面を向くようにカメラの回転を調整する
+	Vector3 targetAngle = playerParentWorldTransform_.parent_->rotation_ + Vector3(-playerParentWorldTransform_.parent_->rotation_.x * 2.0f, std::numbers::pi_v<float>, 0.0f);
+	camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, targetAngle, t_));
+	camera_->Update();
+
 }
