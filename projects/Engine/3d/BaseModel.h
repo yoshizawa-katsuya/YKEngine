@@ -163,6 +163,18 @@ public:
 
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
+	/// <summary>
+	/// マテリアルの色設定。
+	/// </summary>
+	/// <param name="color">色</param>
+	void SetColor(const Vector4& color);
+
+	/// <summary>
+	/// マテリアルのアルファ値設定。
+	/// </summary>
+	/// <param name="alpha">アルファ値</param>
+	void SetAlpha(float alpha);
+
 	//TODO:mtlファイルからuvTransform情報を読み込めるようにする
 	virtual void SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 

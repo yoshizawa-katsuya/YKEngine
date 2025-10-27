@@ -169,6 +169,18 @@ void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
 {
 }
 
+void BaseModel::SetColor(const Vector4& color)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	materialData_->color = color;
+}	
+
+void BaseModel::SetAlpha(float alpha)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	materialData_->color.w = alpha;
+}
+
 void BaseModel::SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
 {
 	ThreadPool::GetInstance()->waitForCompletion();
