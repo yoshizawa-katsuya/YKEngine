@@ -2,6 +2,7 @@
     "PlayerStartEffect01": {
         "bahaviorEasingTypeForScale": 0,
         "bahaviorIsSceleToDisappear": false,
+        "behaviorBlendMode": 1,
         "behaviorDistance": 6.0,
         "behaviorIsConstantVelocity": false,
         "behaviorIsDownVelocity": false,

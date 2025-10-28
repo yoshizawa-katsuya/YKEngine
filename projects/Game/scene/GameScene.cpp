@@ -402,6 +402,9 @@ void GameScene::UpdateGameClear()
 
 void GameScene::UpdateGameOver()
 {
+	//プレイヤーの更新
+	player_->Update(camera_.get());
+
 	//レールカメラの更新
 	railCamera_->Update();
 
@@ -447,6 +450,7 @@ void GameScene::CheckGameOver()
 		phase_ = Phase::kGameOver;
 		spriteSceneChange_->ResetReverseAnimation();
 		player_->GameOverRotate();
+		player_->SetGameOver();
 		railCamera_->SetGameOver();
 		railCamera_->CreateTargetRotationFromPlayer(player_->GetInverseLocalDirection());
 		enemyBulletManager_->SetIsGameOver(true);

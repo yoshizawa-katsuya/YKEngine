@@ -10,6 +10,7 @@
 #include "bullet/PlayerBulletType.h"
 #include "Matrix.h"
 #include "manager/EffectManager.h"
+#include "Random.h"
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle) {
 
@@ -60,6 +61,9 @@ void Player::Update(Camera* railCamera) {
 		break;
 	case Player::Phase::Main:
 		UpdateMain(railCamera);
+		break;
+	case Player::Phase::GameOver:
+		UpdateGameOver();
 		break;
 	default:
 		break;
@@ -238,6 +242,21 @@ void Player::UpdateMain(Camera* railCamera)
 
 	//キャラクター攻撃処理
 	Attack();
+}
+
+void Player::UpdateGameOver()
+{
+	//乱数での移動量の設定
+	const float kMoveRange = 0.1f;
+
+	std::uniform_real_distribution<float> distribution(-kMoveRange, kMoveRange);
+
+	//乱数生成エンジンへのポインタ
+	std::mt19937* randomEngine = Random::GetInstance()->GetRandomEnginePtr();
+
+	characterWorldTransform_.translation_ = { distribution(*randomEngine), distribution(*randomEngine), distribution(*randomEngine) };
+
+	BaseCharacter::Update();
 }
 
 void Player::Rotate()

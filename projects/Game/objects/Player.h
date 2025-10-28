@@ -79,6 +79,11 @@ public:
 	//スタート処理が終わっていたらtrue
 	bool StartCompleted() { return phase_ != Phase::Start; }
 
+	/// <summary>
+	/// ゲームオーバーになったことを伝える。
+	/// </summary>
+	void SetGameOver() { phase_ = Phase::GameOver; }
+
 private:
 
 	/// <summary>
@@ -102,6 +107,11 @@ private:
 	/// メインの更新
 	/// </summary>
 	void UpdateMain(Camera* railCamera);
+
+	/// <summary>
+	/// ゲームオーバー時の更新
+	/// </summary>
+	void UpdateGameOver();
 
 	/// <summary>
 	/// 回転処理。レティクルの方向に向く。
@@ -136,6 +146,7 @@ private:
 	{
 		Start,	// 開始
 		Main,	// メイン
+		GameOver, // ゲームオーバー
 	};
 	//フェーズ
 	Phase phase_ = Phase::Start;
