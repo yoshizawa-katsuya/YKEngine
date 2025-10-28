@@ -1,5 +1,6 @@
 #include "YKFramework.h"
 #include "OffscreenRenderer.h"
+#include "Random.h"
 
 void YKFramework::Initialize()
 {
@@ -48,6 +49,9 @@ void YKFramework::Initialize()
 	//スプライト共通部の初期化
 	spritePlatform_ = SpritePlatform::GetInstance();
 	spritePlatform_->Initialize(dxCommon_, primitiveDrawer_.get());
+
+	//乱数クラスの初期化
+	Random::GetInstance()->Initialize();
 
 	//ParticleManagerの初期化
 	ParticleManager::GetInstance()->Initialize(dxCommon_, srvHeapManager_.get(), primitiveDrawer_.get());
