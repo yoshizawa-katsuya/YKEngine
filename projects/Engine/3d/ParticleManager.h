@@ -116,15 +116,20 @@ private:
 
 	const float kDeltaTime_ = 1.0f / 60.0f;
 
+	//パーティクル用の描画モード配列
+	std::vector<DrawMode> particleDrawModes_ = {
+		DrawMode::kBlendModeAddParticle,
+		DrawMode::kBlendModeNormalParticle,
+	};
 
-	//ランダムエンジン
-	std::random_device seedGenerator_;
-	std::mt19937 randomEngine_;
+	//乱数生成エンジンへのポインタ
+	std::mt19937* randomEngine_;
 
 	std::unordered_map<std::string, ParticleGroup> particleGroups_;
 
 	//AccelerationField accelerationField_;
 	bool useAccelerationField_ = false;
 
+	
 };
 
