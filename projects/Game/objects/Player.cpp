@@ -257,6 +257,9 @@ void Player::UpdateGameOver()
 	characterWorldTransform_.translation_ = { distribution(*randomEngine), distribution(*randomEngine), distribution(*randomEngine) };
 
 	BaseCharacter::Update();
+
+	EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerEndEffect01, characterWorldTransform_.GetWorldPosition());
+
 }
 
 void Player::Rotate()

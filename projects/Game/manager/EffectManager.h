@@ -8,6 +8,7 @@ enum class EffectType
 {
 	HitEffect01,
 	PlayerStartEffect01,
+	PlayerEndEffect01,
 };
 
 /// <summary>
@@ -62,6 +63,7 @@ private:
 	{
 		{{EffectType::HitEffect01}, {"HitEffect01", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::PlayerStartEffect01}, {"PlayerStartEffect01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::PlayerEndEffect01}, {"PlayerEndEffect01", "./Resources/white.png", "primitiveSphere"}},
 	};
 
 	//パーティクル

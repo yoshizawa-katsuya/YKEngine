@@ -1,0 +1,82 @@
+{
+    "PlayerEndEffect01": {
+        "bahaviorEasingTypeForScale": 0,
+        "bahaviorIsSceleToDisappear": false,
+        "behaviorBlendMode": 1,
+        "behaviorDistance": 1.0,
+        "behaviorIsConstantVelocity": true,
+        "behaviorIsDownVelocity": false,
+        "behaviorIsFaceToVelocityDirection": false,
+        "behaviorIsFixedDistance": false,
+        "behaviorIsHeadCenter": false,
+        "behaviorIsScaleToAppear": false,
+        "behaviorIsTimeFadeOut": false,
+        "behaviorIsUseBillboard": false,
+        "behaviorSpeed": 4.0,
+        "count": 1,
+        "frequency": 0.5,
+        "randomFlagsColor": false,
+        "randomFlagsLifeTime": true,
+        "randomFlagsRotation": false,
+        "randomFlagsScale": false,
+        "randomFlagsTranslation": false,
+        "randomFlagsVelocity": true,
+        "rangeParamsLifeTimeMax": 0.5,
+        "rangeParamsLifeTimeMin": 0.5,
+        "rangeParamsRotateMax": [
+            3.1415927410125732,
+            3.1415927410125732,
+            3.1415927410125732
+        ],
+        "rangeParamsRotateMin": [
+            -3.1415927410125732,
+            -3.1415927410125732,
+            -3.1415927410125732
+        ],
+        "rangeParamsScaleMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsScaleMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsTranslateMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsTranslateMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsVelocityMax": [
+            2.0,
+            2.0,
+            2.0
+        ],
+        "rangeParamsVelocityMin": [
+            -2.0,
+            -2.0,
+            -2.0
+        ],
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+        ],
+        "translation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}
