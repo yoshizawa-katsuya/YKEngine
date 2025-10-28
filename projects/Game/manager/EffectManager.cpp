@@ -45,6 +45,16 @@ void EffectManager::SpawnEffect(EffectType effectType, const Vector3& position)
 	emitter->Emit(); // パーティクルを発生させる
 }
 
+void EffectManager::SpawnEffect(EffectType effectType, const Vector3& position, uint32_t count)
+{
+	std::unique_ptr<ParticleEmitter>& emitter = effectEmitters_[effectType];
+	emitter->SetTranslation(position); // パーティクルの位置を設定
+	for (uint32_t i = 0; i < count; i++)
+	{
+		emitter->Emit(); // パーティクルを発生させる
+	}
+}
+
 std::shared_ptr<BaseModel> EffectManager::LoadEffectModel(std::string modelName, uint32_t textureHnadle)
 {
 	std::string tag = "Effect";

@@ -85,7 +85,7 @@ void RailCamera::UpdateGameOver()
 		return;
 	}
 	// t_を0.0fから1.0fまで徐々に増加させる
-	t_ += 0.02f;
+	t_ += 0.03f;
 	if (t_ > 1.0f) 
 	{
 		t_ = 1.0f;

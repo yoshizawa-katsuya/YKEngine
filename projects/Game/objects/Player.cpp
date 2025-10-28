@@ -246,6 +246,10 @@ void Player::UpdateMain(Camera* railCamera)
 
 void Player::UpdateGameOver()
 {
+	if (isGameOverEnd_)
+	{
+		return;
+	}
 	//乱数での移動量の設定
 	const float kMoveRange = 0.1f;
 
@@ -256,10 +260,18 @@ void Player::UpdateGameOver()
 
 	characterWorldTransform_.translation_ = { distribution(*randomEngine), distribution(*randomEngine), distribution(*randomEngine) };
 
-	BaseCharacter::Update();
-
 	EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerEndEffect01, characterWorldTransform_.GetWorldPosition());
 
+	gameOverTimer_ += 1.0f / 60.0f;
+
+	if (gameOverTimer_ >= 1.5f)
+	{
+		isGameOverEnd_ = true;
+		characterWorldTransform_.scale_ = { 0.0f, 0.0f, 0.0f };
+		EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerEndEffect01, characterWorldTransform_.GetWorldPosition(), 100);
+	}
+
+	BaseCharacter::Update();
 }
 
 void Player::Rotate()

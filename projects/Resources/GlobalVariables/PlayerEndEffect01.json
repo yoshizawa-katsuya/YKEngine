@@ -16,7 +16,7 @@
         "count": 1,
         "frequency": 0.5,
         "randomFlagsColor": false,
-        "randomFlagsLifeTime": true,
+        "randomFlagsLifeTime": false,
         "randomFlagsRotation": false,
         "randomFlagsScale": false,
         "randomFlagsTranslation": false,

@@ -43,6 +43,14 @@ public:
 	/// <param name="position">生成位置</param>
 	void SpawnEffect(EffectType effectType, const Vector3& position);
 
+	/// <summary>
+	/// エフェクトの生成。
+	/// </summary>
+	/// <param name="effectType">エフェクトの種類</param>
+	/// <param name="position">生成位置</param>
+	/// <param name="count">生成数</param>
+	void SpawnEffect(EffectType effectType, const Vector3& position, uint32_t count);
+
 private:
 
 	EffectManager() = default;

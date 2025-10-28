@@ -416,6 +416,11 @@ void GameScene::UpdateGameOver()
 
 	CheckAllColision();
 
+	if (!player_->GetIsGameOverEnd())
+	{
+		return;
+	}
+
 	spriteSceneChange_->Update();
 	if (spriteSceneChange_->GetIsEnd())
 	{

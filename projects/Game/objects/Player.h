@@ -74,6 +74,8 @@ public:
 
 	WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
+	bool GetIsGameOverEnd() { return isGameOverEnd_; }
+
 	void SetPlayerBulletManager(PlayerBulletManager* playerBulletManager) { playerBulletManager_ = playerBulletManager; }
 
 	//スタート処理が終わっていたらtrue
@@ -169,5 +171,9 @@ private:
 	float chargeTime_ = 0.0f; // チャージ時間
 	const float maxChargeTime_ = 1.0f; // 最大チャージ時間
 	bool isChargeMax_ = false; // チャージが最大かどうか
+
+	//ゲームオーバー時の時間を計る変数
+	float gameOverTimer_ = 0.0f;
+	bool isGameOverEnd_ = false;	//ゲームオーバー処理が終わっていたらtrue
 };
 
