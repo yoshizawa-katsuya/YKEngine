@@ -192,6 +192,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\ShotEnemy01.cpp" />
     <ClCompile Include="Game\objects\bullet\PlayerBullet01.cpp" />
     <ClCompile Include="Game\objects\TackleEnemy01.cpp" />
+    <ClCompile Include="Engine\lib\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -450,6 +451,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\bullet\PlayerBullet01.h" />
     <ClInclude Include="Game\objects\bullet\PlayerBulletType.h" />
     <ClInclude Include="Game\objects\TackleEnemy01.h" />
+    <ClInclude Include="Engine\lib\Random.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

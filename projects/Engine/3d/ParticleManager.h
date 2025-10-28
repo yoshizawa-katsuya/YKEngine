@@ -122,14 +122,14 @@ private:
 		DrawMode::kBlendModeNormalParticle,
 	};
 
-	//ランダムエンジン
-	std::random_device seedGenerator_;
-	std::mt19937 randomEngine_;
+	//乱数生成エンジンへのポインタ
+	std::mt19937* randomEngine_;
 
 	std::unordered_map<std::string, ParticleGroup> particleGroups_;
 
 	//AccelerationField accelerationField_;
 	bool useAccelerationField_ = false;
 
+	
 };
 

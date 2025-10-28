@@ -5,6 +5,7 @@
 #include "imgui/imgui.h"
 #include "TransformHelpers.h"
 #include "Lerp.h"
+#include "Random.h"
 
 ParticleManager* ParticleManager::GetInstance()
 {
@@ -24,8 +25,7 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHea
 	srvHeapManager_ = srvHeapManager;
 	primitiveDrawer_ = primitiveDrawer;
 
-	std::mt19937 randomEngine(seedGenerator_());
-	randomEngine_ = randomEngine;
+	randomEngine_ = Random::GetInstance()->GetRandomEnginePtr();
 
 	//Create();
 	/*
@@ -231,7 +231,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	if (randomFlags.lifeTime)
 	{
 		std::uniform_real_distribution<float> distTime(rangeParams.lifeTime.min, rangeParams.lifeTime.max);
-		particle.lifeTime = distTime(randomEngine_);
+		particle.lifeTime = distTime(*randomEngine_);
 	}
 	else
 	{
@@ -244,7 +244,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		std::uniform_real_distribution<float> distributionY(rangeParams.velocity.min.y, rangeParams.velocity.max.y);
 		std::uniform_real_distribution<float> distributionZ(rangeParams.velocity.min.z, rangeParams.velocity.max.z);
 
-		particle.velocity = { distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		particle.velocity = { distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 
 		if (behavior.isConstantVelocity) 
 		{
@@ -262,7 +262,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		std::uniform_real_distribution<float> distributionY(rangeParams.scale.min.y, rangeParams.scale.max.y);
 		std::uniform_real_distribution<float> distributionZ(rangeParams.scale.min.z, rangeParams.scale.max.z);
 
-		Vector3 randomscale{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		Vector3 randomscale{ distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 		particle.transform.scale = transform.scale + randomscale;
 	}
 	else
@@ -275,7 +275,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		std::uniform_real_distribution<float> distributionY(rangeParams.rotate.min.y, rangeParams.rotate.max.y);
 		std::uniform_real_distribution<float> distributionZ(rangeParams.rotate.min.z, rangeParams.rotate.max.z);
 
-		Vector3 randomrotate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		Vector3 randomrotate{ distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 		particle.transform.rotation = transform.rotation + randomrotate;
 	}
 	else if (behavior.isFaceToVelocityDirection)
@@ -294,7 +294,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		std::uniform_real_distribution<float> distributionY(rangeParams.translate.min.y, rangeParams.translate.max.y);
 		std::uniform_real_distribution<float> distributionZ(rangeParams.translate.min.z, rangeParams.translate.max.z);
 
-		Vector3 randomTranslate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		Vector3 randomTranslate{ distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 		particle.transform.translation = transform.translation + randomTranslate;
 	}
 	else
@@ -315,7 +315,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	if (randomFlags.color)
 	{
 		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
-		particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
+		particle.color = { distcolor(*randomEngine_), distcolor(*randomEngine_), distcolor(*randomEngine_), 1.0f };
 	}
 	else 
 	{
