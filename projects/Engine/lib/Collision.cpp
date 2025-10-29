@@ -4,7 +4,8 @@
 #include "Vector3.h"
 #include <algorithm>
 
-bool CapsuleCollision(Vector2 capsuleA, Vector2 capsuleB, Vector2 CircleC, float radiusC, float radiusA) {
+bool CapsuleCollision(Vector2 capsuleA, Vector2 capsuleB, Vector2 CircleC, float radiusC, float radiusA) 
+{
 	float length;
 
 	float dot;
@@ -107,7 +108,8 @@ bool IsCollision(const Square& square, const Circle& circle)
 
 }
 
-bool IsCollision(const Sphere& s1, const Sphere& s2) {
+bool IsCollision(const Sphere& s1, const Sphere& s2) 
+{
 
 	//2つの球の中心点間の距離を求める
 	float distance = Length(Subtract(s2.center, s1.center));
@@ -118,7 +120,8 @@ bool IsCollision(const Sphere& s1, const Sphere& s2) {
 	return true;
 }
 
-bool IsCollision(const Sphere& sphere, const Plane& plane) {
+bool IsCollision(const Sphere& sphere, const Plane& plane) 
+{
 
 	float k = Dot(plane.normal, sphere.center) - plane.distance;
 	if (k < 0) {
@@ -131,7 +134,8 @@ bool IsCollision(const Sphere& sphere, const Plane& plane) {
 	return true;
 }
 
-bool IsCollision(const Line& line, const Plane& plane) {
+bool IsCollision(const Line& line, const Plane& plane) 
+{
 
 	float dot = Dot(line.diff, plane.normal);
 	if (dot == 0.0f) {
@@ -141,7 +145,8 @@ bool IsCollision(const Line& line, const Plane& plane) {
 
 }
 
-bool IsCollision(const Ray& ray, const Plane& plane) {
+bool IsCollision(const Ray& ray, const Plane& plane)
+{
 
 	float dot = Dot(ray.diff, plane.normal);
 	if (dot == 0.0f) {
@@ -157,7 +162,8 @@ bool IsCollision(const Ray& ray, const Plane& plane) {
 
 }
 
-bool IsCollision(const Segment& segment, const Plane& plane) {
+bool IsCollision(const Segment& segment, const Plane& plane) 
+{
 
 	float dot = Dot(segment.diff, plane.normal);
 	if (dot == 0.0f) {
@@ -172,7 +178,8 @@ bool IsCollision(const Segment& segment, const Plane& plane) {
 
 }
 
-bool IsCollision(const Triangle& triangle, const Line& line) {
+bool IsCollision(const Triangle& triangle, const Line& line) 
+{
 
 	Plane plane;
 	Vector3 v01 = Subtract(triangle.vertices[1], triangle.vertices[0]);
@@ -204,14 +211,12 @@ bool IsCollision(const Triangle& triangle, const Line& line) {
 		return true;
 	}
 
-
-
 	return false;
-
 
 }
 
-bool IsCollision(const Triangle& triangle, const Ray& ray) {
+bool IsCollision(const Triangle& triangle, const Ray& ray)
+{
 
 	Plane plane;
 	Vector3 v01 = Subtract(triangle.vertices[1], triangle.vertices[0]);
@@ -247,10 +252,10 @@ bool IsCollision(const Triangle& triangle, const Ray& ray) {
 
 	return false;
 
-
 }
 
-bool IsCollision(const Triangle& triangle, const Segment& segment) {
+bool IsCollision(const Triangle& triangle, const Segment& segment) 
+{
 
 	Plane plane;
 	Vector3 v01 = Subtract(triangle.vertices[1], triangle.vertices[0]);
@@ -288,7 +293,8 @@ bool IsCollision(const Triangle& triangle, const Segment& segment) {
 
 }
 
-bool IsCollision(const AABB& aabb1, const AABB& aabb2) {
+bool IsCollision(const AABB& aabb1, const AABB& aabb2) 
+{
 
 	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) &&
 		(aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) &&
@@ -300,7 +306,8 @@ bool IsCollision(const AABB& aabb1, const AABB& aabb2) {
 
 }
 
-bool IsCollision(const AABB& aabb, const Sphere& sphere) {
+bool IsCollision(const AABB& aabb, const Sphere& sphere)
+{
 
 	Vector3 closestPoint{ std::clamp(sphere.center.x, aabb.min.x, aabb.max.x),
 						  std::clamp(sphere.center.y, aabb.min.y, aabb.max.y),
@@ -316,7 +323,8 @@ bool IsCollision(const AABB& aabb, const Sphere& sphere) {
 
 }
 
-bool IsCollision(const AABB& aabb, const Line& line) {
+bool IsCollision(const AABB& aabb, const Line& line)
+{
 
 
 	float txMin = (aabb.min.x - line.origin.x) / line.diff.x;
@@ -342,10 +350,10 @@ bool IsCollision(const AABB& aabb, const Line& line) {
 
 	return false;
 
-
 }
 
-bool IsCollision(const AABB& aabb, const Ray& ray) {
+bool IsCollision(const AABB& aabb, const Ray& ray) 
+{
 
 	float txMin = (aabb.min.x - ray.origin.x) / ray.diff.x;
 	float txMax = (aabb.max.x - ray.origin.x) / ray.diff.x;
@@ -374,7 +382,8 @@ bool IsCollision(const AABB& aabb, const Ray& ray) {
 
 }
 
-bool IsCollision(const AABB& aabb, const Segment& segment) {
+bool IsCollision(const AABB& aabb, const Segment& segment) 
+{
 
 	float txMin = (aabb.min.x - segment.origin.x) / segment.diff.x;
 	float txMax = (aabb.max.x - segment.origin.x) / segment.diff.x;
@@ -406,7 +415,8 @@ bool IsCollision(const AABB& aabb, const Segment& segment) {
 
 }
 
-bool IsCollision(const OBB& obb, const Sphere& sphere) {
+bool IsCollision(const OBB& obb, const Sphere& sphere) 
+{
 
 	Matrix4x4 obbWorldMatrixInverse = Inverse(Matrix4x4{ { {obb.orientations[0].x,obb.orientations[0].y,obb.orientations[0].z, 0.0f},
 													   {obb.orientations[1].x,obb.orientations[1].y,obb.orientations[1].z, 0.0f},
@@ -422,7 +432,8 @@ bool IsCollision(const OBB& obb, const Sphere& sphere) {
 
 }
 
-bool IsCollision(const OBB& obb, const Line& line) {
+bool IsCollision(const OBB& obb, const Line& line) 
+{
 
 	Matrix4x4 obbWorldMatrixInverse = Inverse(Matrix4x4{ { {obb.orientations[0].x,obb.orientations[0].y,obb.orientations[0].z, 0.0f},
 													   {obb.orientations[1].x,obb.orientations[1].y,obb.orientations[1].z, 0.0f},
@@ -442,7 +453,8 @@ bool IsCollision(const OBB& obb, const Line& line) {
 
 }
 
-bool IsCollision(const OBB& obb, const Ray& ray) {
+bool IsCollision(const OBB& obb, const Ray& ray) 
+{
 
 	Matrix4x4 obbWorldMatrixInverse = Inverse(Matrix4x4{ { {obb.orientations[0].x,obb.orientations[0].y,obb.orientations[0].z, 0.0f},
 													   {obb.orientations[1].x,obb.orientations[1].y,obb.orientations[1].z, 0.0f},
@@ -462,7 +474,8 @@ bool IsCollision(const OBB& obb, const Ray& ray) {
 
 }
 
-bool IsCollision(const OBB& obb, const Segment& segemnt) {
+bool IsCollision(const OBB& obb, const Segment& segemnt)
+{
 
 	Matrix4x4 obbWorldMatrixInverse = Inverse(Matrix4x4{ { {obb.orientations[0].x,obb.orientations[0].y,obb.orientations[0].z, 0.0f},
 													   {obb.orientations[1].x,obb.orientations[1].y,obb.orientations[1].z, 0.0f},
@@ -482,7 +495,8 @@ bool IsCollision(const OBB& obb, const Segment& segemnt) {
 
 }
 
-bool IsCollision(const OBB& obb1, const OBB& obb2) {
+bool IsCollision(const OBB& obb1, const OBB& obb2) 
+{
 
 	Vector3 separationAxis;
 

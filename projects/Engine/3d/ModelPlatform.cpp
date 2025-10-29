@@ -93,7 +93,6 @@ void ModelPlatform::EndFrame()
 
 	lineIndex_ = 0;
 	sphereIndex_ = 0;
-	//modelIndex_ = 0;
 
 }
 
@@ -180,8 +179,7 @@ void ModelPlatform::LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& wor
 	//wvp用のCBufferの場所を設定
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, LineWVPResources_[lineIndex_]->GetGPUVirtualAddress());
 	
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
 
 	lineIndex_++;
@@ -214,8 +212,7 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 	//wvp用のCBufferの場所を設定
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, SphereWVPResources_[sphereIndex_]->GetGPUVirtualAddress());
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
 
 	sphereIndex_++;

@@ -33,9 +33,6 @@ public:
 	/// </summary>
 	void Initialize();
 
-	//描画
-	//void Draw();
-
 	PointLightData& GetPointLightData() { return *data_; }
 	const PointLightData& GetPointLightData() const { return *data_; }
 

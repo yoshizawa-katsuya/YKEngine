@@ -27,12 +27,6 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHea
 
 	randomEngine_ = Random::GetInstance()->GetRandomEnginePtr();
 
-	//Create();
-	/*
-	accelerationField_.accerelation = { 15.0f, 0.0f, 0.0f };
-	accelerationField_.area.min = { -1.0f, -1.0f, -1.0f };
-	accelerationField_.area.max = { 1.0f, 1.0f, 1.0f };
-	*/
 }
 
 void ParticleManager::Update(Camera* camera, AccelerationField* accelerationField)
@@ -97,7 +91,6 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				}
 				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
 				Matrix4x4 rotateMatrix = MakeRotateMatrix(particleIterator->transform.rotation);
-				//Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
 				Matrix4x4 worldMatrix;
 				if (particleGroupIterator->second.behavior->isUseBillboard) 
 				{
@@ -141,34 +134,18 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 void ParticleManager::Draw()
 {
 
-	/*primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeAddParticle);*/
-
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	//dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-
-	//マテリアルのCBufferの場所を設定
-	//dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
 	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
 		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) {
 
 		primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), particleDrawModes_[static_cast<int32_t>(particleGroupIterator->second.behavior->blendMode)]);
 
-		//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-		//TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(particleGroupIterator->second.textureHandle);
 		
 		//instancing用のDataを読むためにStructBufferのSRVを設定する
 		srvHeapManager_->SetGraphicsRootDescriptorTable(1, particleGroupIterator->second.instancingSrvIndex);
 		
 		particleGroupIterator->second.model->InstancingDraw(particleGroupIterator->second.numInstance, particleGroupIterator->second.textureHandle);
-
-		//描画!6頂点のポリゴンを、numInstanceだけInstance描画を行う
-		//dxCommon_->GetCommandList()->DrawInstanced(6, particleGroupIterator->second.numInstance, 0, 0);
-		//dxCommon_->GetCommandList()->DrawIndexedInstanced(6, particleGroupIterator->second.numInstance, 0, 0, 0);
-
 
 	}
 

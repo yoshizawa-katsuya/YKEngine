@@ -127,7 +127,6 @@ private:
 
 	std::unordered_map<std::string, ParticleGroup> particleGroups_;
 
-	//AccelerationField accelerationField_;
 	bool useAccelerationField_ = false;
 
 	

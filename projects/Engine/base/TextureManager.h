@@ -126,7 +126,6 @@ private:
 	};
 
 	// テクスチャコンテナ
-	//std::array<Texture, SrvHeapManager::kMaxSrvDescriptors_> textures_;
 	std::unordered_map<uint32_t, Texture> textures_;
 	std::unordered_map<std::string, uint32_t> textureHandles_;
 

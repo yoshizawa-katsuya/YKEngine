@@ -19,8 +19,6 @@ void DebugCamera::Update()
 	if (input_->TrigerMouseLeft()) {
 
 		target_ = camera_->GetTranslate() + TransformNormal(Vector3{0.0f, 0.0f, 10.0f}, camera_->GetWorldMatrix());
-
-		//target_ = TransformNormal(target_, camera_->GetWorldMatrix());
 	}
 
 	if (input_->PushMouseCenter()) {
@@ -47,9 +45,6 @@ void DebugCamera::Update()
 		Vector3 move = { speed, speed, 0 };
 		move.x *= mousevelocity.y;
 		move.y *= mousevelocity.x;
-		
-		//camera_->SetRotateX(camera_->GetRotate().x + move.x);
-		//camera_->SetRotateY(camera_->GetRotate().y + move.y);
 
 		Matrix4x4 matRotDelta = MakeIdentity4x4();
 		matRotDelta = matRotDelta * MakeRotateXMatrix(move.x);

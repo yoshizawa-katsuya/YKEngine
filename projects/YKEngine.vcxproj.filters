@@ -369,6 +369,9 @@
     <ClCompile Include="Engine\lib\Random.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\lib\MyMath.cpp">
+      <Filter>ソース ファイル\engine\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -718,6 +721,12 @@
     <ClInclude Include="Engine\lib\GlobalVariables.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\lib\Random.h">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\MyMath.h">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
     <ClInclude Include="Game\objects\TackleEnemy01.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
@@ -725,9 +734,6 @@
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Engine\lib\Color.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\lib\Random.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
   </ItemGroup>

@@ -85,8 +85,6 @@ public:
 
 	virtual ~BaseModel() = 0;
 
-	//void Initialize(ModelPlatform* modelPlatform);
-
 	/// <summary>
 	/// モデルデータの読み込みと頂点・インデックス・マテリアルデータの作成を行う。
 	/// ModelPlatformクラス経由で呼び出す。
@@ -195,10 +193,6 @@ public:
 
 	ModelPlatform* GetModelPlatform() { return modelPlatform_; }
 
-	//Transforms& GetTransformAddress() { return transform_; }
-
-	//void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
-
 protected:
 
 	/// <summary>
@@ -216,10 +210,6 @@ protected:
 	/// </summary>
 	/// <param name="color">マテリアルの色</param>
 	void CreateMaterialData(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
-	/*
-	//座標行列変換データ作成
-	void CreateTransformData();
-	*/
 	
 	/// <summary>
 	/// モデルファイルの読み込み。
@@ -277,13 +267,6 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	//マテリアルにデータを書き込む
 	Material* materialData_ = nullptr;
-
-	/*
-	//TransformationMatrix用のリソースを作る
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResource_;
-	//データを書き込む
-	TransformationMatrix* transformationMatrixData_ = nullptr;
-	*/
 
 	uint32_t verticesNum_;
 	uint32_t indecesNum_;

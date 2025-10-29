@@ -10,7 +10,6 @@ SkinModel::~SkinModel()
 
 void SkinModel::Draw(bool usedMaterial)
 {
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera_);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	if (!usedMaterial)
@@ -19,20 +18,16 @@ void SkinModel::Draw(bool usedMaterial)
 		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
 	}
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
+	//テクスチャハンドルを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。	
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 }
 
 void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera_);
-
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	if (!usedMaterial)
 	{
@@ -40,12 +35,10 @@ void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
 	}
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
+	//テクスチャハンドルを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 
 }

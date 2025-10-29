@@ -51,10 +51,6 @@ public:
 
 private:
 
-	//DirectXCommon* dxCommon_;
-
-	//平行光源用のResourceを作成
-	//Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 	//データを書き込む
 	DirectionalLightData* data_;
 

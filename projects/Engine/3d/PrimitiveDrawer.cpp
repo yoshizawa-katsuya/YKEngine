@@ -103,21 +103,6 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	descriptorRangeEnvironmentTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
 	descriptorRangeEnvironmentTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
 
-	/*
-	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
-	descriptorRangeForInstancing[0].BaseShaderRegister = 0;	//0から始まる
-	descriptorRangeForInstancing[0].NumDescriptors = 1;	//数は1つ
-	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
-
-	D3D12_DESCRIPTOR_RANGE descriptorRangeSkinning[1] = {};
-	if (blendMode == DrawMode::kSkinModelMode) {
-		descriptorRangeSkinning[0].BaseShaderRegister = 0;
-		descriptorRangeSkinning[0].NumDescriptors = 1;	//数は1つ
-		descriptorRangeSkinning[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-		descriptorRangeSkinning[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
-	}
-	*/
 	//RootParameter作成。複数設定できるので配列。
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters = {};
 
