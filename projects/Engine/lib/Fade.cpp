@@ -7,7 +7,8 @@ Fade::~Fade()
 {
 }
 
-void Fade::Initialize() {
+void Fade::Initialize() 
+{
 
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./resources/white.png");
 
@@ -18,7 +19,8 @@ void Fade::Initialize() {
 
 }
 
-void Fade::Update() {
+void Fade::Update() 
+{
 
 	//フェード状態による分岐
 	switch (status_) {
@@ -56,7 +58,8 @@ void Fade::Update() {
 
 }
 
-void Fade::Draw() {
+void Fade::Draw() 
+{
 
 	if (status_ == Status::None) {
 		return;
@@ -66,7 +69,8 @@ void Fade::Draw() {
 
 }
 
-void Fade::Start(Status status, float duration) {
+void Fade::Start(Status status, float duration) 
+{
 
 	status_ = status;
 	duration_ = duration;
@@ -74,13 +78,15 @@ void Fade::Start(Status status, float duration) {
 
 }
 
-void Fade::Stop() {
+void Fade::Stop() 
+{
 
 	status_ = Status::None;
 
 }
 
-bool Fade::IsFinished() { 
+bool Fade::IsFinished() 
+{ 
 	
 	//フェード状態による分岐
 	switch (status_) {

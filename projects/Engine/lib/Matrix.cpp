@@ -350,15 +350,6 @@ Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix)
 	return result;
 }
 
-/*void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label) {
-	Novice::ScreenPrintf(x, y, "%s", label);
-	for (int row = 0; row < 4; ++row) {
-		for (int column = 0; column < 4; ++column) {
-			Novice::ScreenPrintf(x + column * kColumnWidth, y + (row + 1) * kRowHeight, "%6.02f", matrix.m[row][column]);
-		}
-	}
-}*/
-
 Matrix4x4 MakeRotateMatrix(const Vector3& rotate)
 {
 	return (MakeRotateXMatrix(rotate.x) * MakeRotateYMatrix(rotate.y) * MakeRotateZMatrix(rotate.z));

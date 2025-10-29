@@ -3,7 +3,8 @@
 #include <cmath>
 #include "Lerp.h"
 
-Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
+Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) 
+{
 
 	//内積を求める
 	float dot = Dot(v1, v2);
@@ -11,7 +12,8 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 	//誤差により1.0fを超えるのを防ぐ
 	dot = (std::min)(dot, 1.0f);
 
-	if (dot == 1.0f) {
+	if (dot == 1.0f)
+	{
 		return Lerp(v1, v2, t);
 	}
 
@@ -43,16 +45,11 @@ Quaternion Slerp(const Quaternion& q1, const Quaternion& q2, float t)
 	//誤差により1.0fを超えるのを防ぐ
 	dot = (std::min)(dot, 1.0f);
 
-	if (dot == 1.0f) {
+	if (dot == 1.0f) 
+	{
 		return Lerp(q1, q2, t);
 	}
-	/*
-	else if (dot < 0.0f)
-	{
-		q1 = -q1;
-		dot = -dot;
-	}
-	*/
+	
 	//アークコサインでθの角度を求める
 	float theta = std::acos(dot);
 	//θの角度からsinθを求める

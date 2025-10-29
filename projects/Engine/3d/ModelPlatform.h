@@ -158,8 +158,6 @@ public:
 
 	SrvHeapManager* GetSrvHeapManager() const { return srvHeapManager_; }
 
-	//void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
-
 	/// <summary>
 	/// ライト描画前処理。
 	/// ライトカウントをリセットする。
@@ -172,15 +170,11 @@ public:
 	/// <param name="directionalLight">平行光源データ</param>
 	void DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight);
 
-	//void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
-
 	/// <summary>
 	/// 点光源更新。
 	/// </summary>
 	/// <param name="pointLight">点光源データ</param>
 	void PointLightUpdate(const PointLight::PointLightData& pointLight);
-
-	//void SetSpotLight(SpotLight* spotLight) { spotLight_ = spotLight; }
 
 	/// <summary>
 	/// スポット光源更新。
@@ -223,8 +217,6 @@ private:
 
 	PrimitiveDrawer* primitiveDrawer_;
 
-	//DirectionalLight* directionalLight_ = nullptr;
-
 	std::unordered_map<std::string, std::shared_ptr<BaseModel>> models_;
 
 	LightCount* lightCount_;
@@ -233,17 +225,12 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResouce_;
 	DirectionalLight::DirectionalLightData* directionalLightDatas_ = nullptr;
 	uint32_t kNumMaxDirectionalLight_ = 100;
-	//uint32_t numDirectionalLight_ = 0;
 	uint32_t directionalLightSrvIndex_;
-
-	//PointLight* pointLight_ = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResouce_;
 	PointLight::PointLightData* pointLightDatas_ = nullptr;
 	uint32_t kNumMaxPointLight_ = 100;
 	uint32_t pointLightSrvIndex_;
-
-	//SpotLight* spotLight_ = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResouce_;
 	SpotLight::SpotLightData* spotLightDatas_ = nullptr;
@@ -260,35 +247,22 @@ private:
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
-	//static const uint32_t resourceNum_ = 2048;
+	//デバッグ用の球と線分のリソース数。
 	static const uint32_t resourceNum_ = 1;
 
 	//TransformationMatrix用のリソースを作る 線分用
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> LineWVPResources_;
-	//Microsoft::WRL::ComPtr<ID3D12Resource> LineWVPResource_;
 	//データを書き込む
 	std::array<LineWVP*, resourceNum_> LineWVPDatas_;
-	//LineWVP* LineWVPData_ = nullptr;
 
 	uint32_t lineIndex_ = 0;
 
 	//TransformationMatrix用のリソースを作る。球用
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> SphereWVPResources_;
-	//Microsoft::WRL::ComPtr<ID3D12Resource> WVPResource_;
 	//データを書き込む
 	std::array<Matrix4x4*, resourceNum_> SphereWVPDatas_;
-	//Matrix4x4* WVPData_ = nullptr;
 
 	uint32_t sphereIndex_ = 0;
-	/*
-	//TransformationMatrix用のリソースを作る。モデル用
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> ModelWVPResources_;
-	//Microsoft::WRL::ComPtr<ID3D12Resource> WVPResource_;
-	//データを書き込む
-	std::array<TransformationMatrix*, resourceNum_> ModelWVPDatas_;
-	//Matrix4x4* WVPData_ = nullptr;
 	
-	uint32_t modelIndex_ = 0;
-	*/
 };
 

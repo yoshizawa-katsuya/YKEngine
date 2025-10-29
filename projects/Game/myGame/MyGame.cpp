@@ -20,11 +20,6 @@ void MyGame::Initialize()
 void MyGame::Finalize()
 {
 
-	//解放処理
-	//delete gameScene_;
-	//gameScene_ = nullptr;
-
-
 	YKFramework::Finalize();
 
 }
@@ -33,10 +28,6 @@ void MyGame::Update()
 {
 
 	YKFramework::Update();
-
-	//ゲームの処理
-	//gameScene_->Update();
-
 
 	YKFramework::EndFrame();
 

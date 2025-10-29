@@ -15,16 +15,13 @@ void TextureManager::Finalize()
 	
 }
 
-void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager) {
+void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager) 
+{
 
 	assert(dxCommon);
 
 	dxCommon_ = dxCommon;
 	srvHeapManager_ = srvHeapManager;
-	
-	
-	//全テクスチャリセット
-	//ResetAll();
 
 }
 
@@ -152,7 +149,6 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 	}
 
 	//ミップマップ付きのデータを返す
-	//textureResource.filePath = filePath;
 	texture.metadata = image.GetMetadata();
 	texture.resource = dxCommon_->CreateTextureResource(texture.metadata);
 
@@ -191,22 +187,5 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureData(ID3D12R
 	commandList->ResourceBarrier(1, &barrier);
 
 	return intermediateResource;
-	/*
-	//Meta情報を取得
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	//全MipMapについて
-	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
-		//MipMapLevelを指定して各Imageを取得
-		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
-		//Textureに転送
-		HRESULT hr = textureResource->WriteToSubresource(
-			UINT(mipLevel),
-			nullptr,				//全領域へコピー
-			img->pixels,			//元データアドレス
-			UINT(img->rowPitch),	//1ラインサイズ
-			UINT(img->slicePitch)	//1枚サイズ
-		);
-		assert(SUCCEEDED(hr));
-	}
-	*/
+	
 }

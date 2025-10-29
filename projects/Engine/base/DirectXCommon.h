@@ -140,8 +140,6 @@ public:
 
 private:
 
-	//static DirectXCommon* instance_;
-
 	DirectXCommon() = default;
 	~DirectXCommon() = default;
 	DirectXCommon(DirectXCommon&) = delete;
@@ -196,9 +194,6 @@ private:
 	/// DXCコンパイラの初期化。
 	/// </summary>
 	void CreateDXCCompiler();
-
-	//ImGuiの初期化
-	//void ImGuiInitialize();
 
 	/// <summary>
 	/// FPS固定初期化。

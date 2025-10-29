@@ -165,6 +165,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\lib\TransformHelpers.cpp" />
     <ClCompile Include="Engine\base\OffscreenRenderer.cpp" />
     <ClCompile Include="Engine\lib\Random.cpp" />
+    <ClCompile Include="Engine\lib\MyMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -393,6 +394,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\TransformHelpers.h" />
     <ClInclude Include="Engine\base\OffscreenRenderer.h" />
     <ClInclude Include="Engine\lib\Random.h" />
+    <ClInclude Include="Engine\lib\MyMath.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

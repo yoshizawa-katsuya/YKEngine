@@ -2,8 +2,6 @@
 
 void PointLight::Initialize()
 {
-
-	//データを書き込む
 	//デフォルト値
 	data_ = new PointLightData();
 	data_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -14,11 +12,3 @@ void PointLight::Initialize()
 
 }
 
-/*
-void PointLight::Draw()
-{
-
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(5, resource_->GetGPUVirtualAddress());
-
-}
-*/

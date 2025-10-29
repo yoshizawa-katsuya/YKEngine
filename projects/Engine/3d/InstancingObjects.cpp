@@ -45,17 +45,7 @@ void InstancingObjects::WorldTransformUpdate(const WorldTransform& worldTransfor
 	return;
 }
 
-/*
-void InstancingObjects::AddWorldTransform(const WorldTransform& worldTransform)
-{
 
-	instancingData_[numInstance_].World = worldTransform.worldMatrix_;
-	numInstance_++;
-
-	return;
-
-}
-*/
 void InstancingObjects::CameraUpdate(Camera* camera)
 {
 
