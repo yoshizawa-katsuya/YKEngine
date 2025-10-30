@@ -99,6 +99,11 @@ Vector3 SlerpTranslteByCenter(const Vector3& start, const Vector3& end, float t)
 	return SlerpTranslate(start - center, end - center, t) + center;
 }
 
+Vector3 SlerpTranslteByCenter(const Vector3& center, const Vector3& start, const Vector3& end, float t)
+{
+	return SlerpTranslate(start - center, end - center, t) + center;
+}
+
 Quaternion Slerp(const Quaternion& q1, const Quaternion& q2, float t)
 {
 
