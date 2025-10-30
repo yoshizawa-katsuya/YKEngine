@@ -91,6 +91,14 @@ Vector3 SlerpTranslate(const Vector3& start, const Vector3& end, float t)
 	return dir * radius;
 }
 
+Vector3 SlerpTranslteByCenter(const Vector3& start, const Vector3& end, float t)
+{
+	// 2点の中心を求める
+	Vector3 center = (start + end) * 0.5f;
+
+	return SlerpTranslate(start - center, end - center, t) + center;
+}
+
 Quaternion Slerp(const Quaternion& q1, const Quaternion& q2, float t)
 {
 
