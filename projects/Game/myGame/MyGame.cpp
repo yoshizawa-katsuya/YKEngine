@@ -15,10 +15,14 @@ void MyGame::Initialize()
 	//シーンファクトリを生成し、マネージャにセット
 	sceneFactory_ = std::make_unique<SceneFactory>();
 	sceneManager_->SetSceneFactory(sceneFactory_.get());
-	//シーンマネージャに最初のシーンをセット
-	sceneManager_->ChengeScene("GameScene");
 
-	
+	//シーンマネージャに最初のシーンをセット
+#ifdef _DEBUG
+	sceneManager_->ChengeScene("GameScene");
+#else
+	sceneManager_->ChengeScene("TitleScene");
+#endif
+
 }
 
 void MyGame::Finalize()
