@@ -146,7 +146,6 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnem
 			targetScreenPosition = ScreenPosB;
 			targetWorldPosition = enemy->GetWorldPosition();
 			isLockOn_ = true;
-			/*player_->LockOn(ScreenPosB, enemy->GetWorldPosition());*/
 		}
 
 	}

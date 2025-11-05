@@ -95,8 +95,6 @@ void RailCamera::UpdateGameOver()
 	// カメラの位置をプレイヤーの位置に徐々に近づける
 	camera_->SetTranslate(SlerpTranslateByCenterAxis(playerParentWorldTransform_.parent_->GetWorldPosition(), Vector3{ 0.0f, 1.0f, 0.0f }, worldTransform_.GetWorldPosition(), playerParentWorldTransform_.GetWorldPosition(), t_));
 	// プレイヤーの正面を向くようにカメラの回転を調整する
-	//Vector3 targetAngle = playerParentWorldTransform_.parent_->rotation_ + Vector3(-playerParentWorldTransform_.parent_->rotation_.x * 2.0f, std::numbers::pi_v<float>, 0.0f);
-	//targetAngle += {-worldTransform_.parent_->rotation_.x, worldTransform_.parent_->rotation_.y, worldTransform_.parent_->rotation_.z}; // 親の回転を加算
 	camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, targetRotation_, t_));
 	camera_->Update();
 

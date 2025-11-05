@@ -10,8 +10,8 @@
 #include "Vector2.h"
 #include "ShotEnemy01.h"
 
-GameScene::~GameScene() {
-	//Finalize();
+GameScene::~GameScene() 
+{
 }
 
 void GameScene::Initialize() {
@@ -154,8 +154,6 @@ void GameScene::Update() {
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
-	//modelPlatform_->PointLightUpdate(pointLight_->GetPointLightData());
-	//modelPlatform_->SpotLightUpdate(spotLight_->GetSpotLightData());
 
 	
 	ParticleManager::GetInstance()->Update(mainCamera_);
@@ -249,12 +247,8 @@ void GameScene::Update() {
 
 }
 
-void GameScene::Draw() {
-
-	//Spriteの背景描画前処理
-	//spritePlatform_->PreBackGroundDraw();
-
-	//sprite_->Draw();
+void GameScene::Draw()
+{
 
 	//背景の描画
 	modelPlatform_->SkyBoxPreDraw();
@@ -266,8 +260,6 @@ void GameScene::Draw() {
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	TextureManager::GetInstance()->SetEnvironmentMap(textureHandleSkyBox_);
-	
-	//modelPlatform_->SkinPreDraw();
 	
 	//地面の描画
 	ground_->CameraUpdate(mainCamera_);

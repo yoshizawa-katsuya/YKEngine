@@ -5,7 +5,6 @@
 
 TitleScene::~TitleScene()
 {
-	//Finalize();
 }
 
 void TitleScene::Initialize()

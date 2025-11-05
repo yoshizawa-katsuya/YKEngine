@@ -20,7 +20,6 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransf
 	input_ = Input::GetInstance();
 
 	worldTransform_.parent_ = parent;
-	//worldTransform_.translation_.z = 20.0f;
 	
 	BaseCharacter::Update();
 
@@ -294,8 +293,7 @@ void Player::Rotate()
 	//親の回転を打ち消す
 	Vector3 localDirection = TransformNormal(direction_, invParentMat);
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
-	/*Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
-	targetRotation -= worldTransform_.parent_->rotation_;*/
+	
 	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 }
 

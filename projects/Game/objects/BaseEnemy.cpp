@@ -9,12 +9,8 @@
 #include "Lerp.h"
 #include "Curve.h"
 
-BaseEnemy::~BaseEnemy() {
-	/*
-	for (EnemyBullet* bullet : enemyBullets_) {
-		delete bullet;
-	}
-	*/
+BaseEnemy::~BaseEnemy() 
+{
 }
 
 void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera) {
