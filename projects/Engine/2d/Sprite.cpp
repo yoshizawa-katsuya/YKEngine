@@ -19,8 +19,9 @@ void Sprite::Initialize(uint32_t textureHandle) {
 
 }
 
-void Sprite::Draw() {
-
+void Sprite::Draw()
+{
+	//頂点データの計算
 	float left = 0.0f - anchorPoint_.x;
 	float right = 1.0f - anchorPoint_.x;
 	float top = 0.0f - anchorPoint_.y;
@@ -44,6 +45,7 @@ void Sprite::Draw() {
 	vertexData_[2].position = { right, bottom, 0.0f, 1.0f };//右下
 	vertexData_[3].position = { right, top, 0.0f, 1.0f };//右上
 	
+	//UV計算
 	const DirectX::TexMetadata& metaData = TextureManager::GetInstance()->GetMetaData(textureHandle_);
 	float tex_left = textureLeftTop_.x / metaData.width;
 	float tex_right = (textureLeftTop_.x + textureSize_.x) / metaData.width;

@@ -139,7 +139,6 @@ void ModelPlatform::InstancingPreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormalinstancing);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//directionalLight_->Draw();
 	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
 	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
 	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
@@ -160,7 +159,7 @@ void ModelPlatform::LinePreDraw()
 
 void ModelPlatform::LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& worldMatrix2, Camera* camera)
 {
-
+	//線の始点と終点のワールドビュー射影行列を計算
 	Matrix4x4 worldViewProjectionMatrix1;
 	Matrix4x4 worldViewProjectionMatrix2;
 	if (camera) {
@@ -220,7 +219,9 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
 {
-	if (models_.contains(filename)) {
+	//すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(filename)) 
+	{
 		return models_[filename];
 	}
 	models_[filename] = std::make_shared<RigidModel>();
@@ -231,7 +232,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateRigidModel(const std::string& di
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
 {
-	if (models_.contains(filename)) {
+	//すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(filename))
+	{
 		return models_[filename];
 	}
 	models_[filename] = std::make_shared<SkinModel>();
@@ -243,7 +246,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& dir
 std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveSphere" + modelName;
-	if (models_.contains(name)) {
+	//すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name))
+	{
 		return models_[name];
 	}
 	models_[name] = std::make_shared<RigidModel>();
@@ -255,7 +260,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle, c
 std::shared_ptr<BaseModel> ModelPlatform::CreateCube(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveCube" + modelName;
-	if (models_.contains(name)) {
+	//すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name))
+	{
 		return models_[name];
 	}
 	models_[name] = std::make_shared<RigidModel>();
@@ -267,7 +274,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateCube(uint32_t textureHandle, con
 std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitivePlane" + modelName;
-	if (models_.contains(name)) {
+	//すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name)) 
+	{
 		return models_[name];
 	}
 	models_[name] = std::make_shared<RigidModel>();
@@ -279,7 +288,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle, co
 std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveRing" + modelName;
-	if (models_.contains(name)) {
+	//すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name))
+	{
 		return models_[name];
 	}
 	models_[name] = std::make_shared<RigidModel>();
@@ -291,7 +302,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle, con
 std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveCylinder" + modelName;
-	if (models_.contains(name)) {
+	//すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name))
+	{
 		return models_[name];
 	}
 	models_[name] = std::make_shared<RigidModel>();
@@ -303,7 +316,9 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle,
 std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveSkyBox" + modelName;
-	if (models_.contains(name)) {
+	//すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name)) 
+	{
 		return models_[name];
 	}
 	models_[name] = std::make_shared<RigidModel>();

@@ -32,7 +32,7 @@ void ImGuiManager::Initialize(DirectXCommon* dxCommon, WinApp* winApp, SrvHeapMa
 
 void ImGuiManager::Begin()
 {
-
+	//ImGuiフレーム開始
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -41,7 +41,7 @@ void ImGuiManager::Begin()
 
 void ImGuiManager::End()
 {
-
+	//ImGuiフレーム終了
 	ImGui::Render();
 
 }

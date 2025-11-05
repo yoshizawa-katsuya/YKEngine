@@ -95,11 +95,6 @@ private:
 	/// </summary>
 	void ReverseNoLoopUpdate();
 
-	/// <summary>
-	/// 共通の更新処理。
-	/// </summary>
-	void CommonUpdate();
-
 	//分割数
 	int32_t horizontalDivisionNum_ = 1;
 	int32_t verticalDivisionNum_ = 1;

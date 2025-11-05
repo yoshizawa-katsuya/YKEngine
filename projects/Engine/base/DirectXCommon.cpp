@@ -20,7 +20,7 @@ DirectXCommon* DirectXCommon::GetInstance()
 
 void DirectXCommon::Finalize()
 {
-	
+	//Fence用のイベントを閉じる
 	CloseHandle(fenceEvent_);
 
 }

@@ -18,6 +18,7 @@ Audio* Audio::GetInstance()
 
 void Audio::Finalize()
 {
+	//MFの終了
 	MFShutdown();
 }
 
@@ -36,7 +37,8 @@ void Audio::Initialize()
 SoundData Audio::SoundLoadWave(const std::string& fileName)
 {
 	
-	if (fileName.ends_with(".mp3")) {
+	if (fileName.ends_with(".mp3"))
+	{
 		//MP3ファイルの読み込み
 		return SoundLoadMp3(fileName);
 	}
@@ -228,7 +230,8 @@ SoundData Audio::SoundLoadMp3(const std::string& fileName)
 
 	SoundData soundData = {};
 
-	while (true) {
+	while (true) 
+	{
 		DWORD dwFlags = 0;
 		IMFSample* pSample = nullptr;
 		IMFMediaBuffer* pBuffer = nullptr;
@@ -238,11 +241,14 @@ SoundData Audio::SoundLoadMp3(const std::string& fileName)
 			0, nullptr, &dwFlags, nullptr, &pSample
 		);
 
-		if (FAILED(hr) || (dwFlags & MF_SOURCE_READERF_ENDOFSTREAM)) {
+		if (FAILED(hr) || (dwFlags & MF_SOURCE_READERF_ENDOFSTREAM))
+		{
 			break; // 読み終わり
 		}
 
-		if (pSample) {
+		// サンプルからバッファを取得
+		if (pSample)
+		{
 			pSample->ConvertToContiguousBuffer(&pBuffer);
 
 			BYTE* pAudioData = nullptr;
@@ -260,8 +266,6 @@ SoundData Audio::SoundLoadMp3(const std::string& fileName)
 	pReader->Release();
 
 	//returnするための音声データ
-	
-
 	soundData.wfex = *pWaveFormat;
 	soundData.pBuffer = soundData.pcmData.data();
 	soundData.bufferSize = (UINT32)soundData.pcmData.size();

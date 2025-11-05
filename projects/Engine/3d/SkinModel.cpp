@@ -45,7 +45,7 @@ void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 
 void SkinModel::SetSkinCluster(const SkinCluster& skinCluster)
 {
-
+	//頂点バッファビュー配列を作成
 	std::array<D3D12_VERTEX_BUFFER_VIEW, 2> vbvs = {
 			vertexBufferView_,
 			skinCluster.influenceBufferView

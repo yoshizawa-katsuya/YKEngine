@@ -224,7 +224,8 @@ void Skin3dObject::ApplyAnimation(Animation* animation)
 void Skin3dObject::SkeletonUpdate()
 {
 	//全てのJointを更新。親が若いので通常ループで処理可能になっている
-	for (Joint& joint : skeleton_.joints) {
+	for (Joint& joint : skeleton_.joints) 
+	{
 		joint.localMatrix = MakeAffineMatrix(joint.transform.scale, joint.transform.rotation, joint.transform.translation);
 		if (joint.parent) {	//親がいれば親の行列を掛ける
 			joint.skeletonSpaceMatrix = joint.localMatrix * skeleton_.joints[*joint.parent].skeletonSpaceMatrix;
@@ -237,8 +238,10 @@ void Skin3dObject::SkeletonUpdate()
 
 void Skin3dObject::SkinClusterUpdate()
 {
-	for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) {
+	for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) 
+	{
 		assert(jointIndex < skinCluster_.inverseBindPoseMatrices.size());
+		//inverseBindPoseMatrixと現在のskeletonSpaceMatrixを掛け合わせて、mappedPaletteを更新
 		skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix =
 			skinCluster_.inverseBindPoseMatrices[jointIndex] * skeleton_.joints[jointIndex].skeletonSpaceMatrix;
 		skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =

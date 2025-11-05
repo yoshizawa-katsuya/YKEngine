@@ -122,13 +122,16 @@ bool IsCollision(const Sphere& s1, const Sphere& s2)
 
 bool IsCollision(const Sphere& sphere, const Plane& plane) 
 {
-
+	//球の中心から平面までの距離を求める
 	float k = Dot(plane.normal, sphere.center) - plane.distance;
-	if (k < 0) {
+	//距離が負の場合は正に変換
+	if (k < 0) 
+	{
 		k *= -1;
 	}
-
-	if (!(k <= sphere.radius)) {
+	//距離が半径以下なら衝突
+	if (!(k <= sphere.radius)) 
+	{
 		return false;
 	}
 	return true;
@@ -136,9 +139,11 @@ bool IsCollision(const Sphere& sphere, const Plane& plane)
 
 bool IsCollision(const Line& line, const Plane& plane) 
 {
-
+	//直線と平面の法線ベクトルの内積を求める
 	float dot = Dot(line.diff, plane.normal);
-	if (dot == 0.0f) {
+	//内積が0の場合は直線と平面が平行なので衝突しない
+	if (dot == 0.0f)
+	{
 		return false;
 	}
 	return true;
@@ -147,14 +152,18 @@ bool IsCollision(const Line& line, const Plane& plane)
 
 bool IsCollision(const Ray& ray, const Plane& plane)
 {
-
+	//直線と平面の法線ベクトルの内積を求める
 	float dot = Dot(ray.diff, plane.normal);
-	if (dot == 0.0f) {
+	//内積が0の場合は直線と平面が平行なので衝突しない
+	if (dot == 0.0f)
+	{
 		return false;
 	}
-
+	//半直線と平面の交点を求める
 	float t = (plane.distance - Dot(ray.origin, plane.normal)) / dot;
-	if (0 <= t) {
+	//交点が半直線上にあるか判定
+	if (0 <= t)
+	{
 		return true;
 	}
 	return false;
@@ -164,14 +173,18 @@ bool IsCollision(const Ray& ray, const Plane& plane)
 
 bool IsCollision(const Segment& segment, const Plane& plane) 
 {
-
+	//直線と平面の法線ベクトルの内積を求める
 	float dot = Dot(segment.diff, plane.normal);
-	if (dot == 0.0f) {
+	//内積が0の場合は直線と平面が平行なので衝突しない
+	if (dot == 0.0f) 
+	{
 		return false;
 	}
-
+	//線分と平面の交点を求める
 	float t = (plane.distance - Dot(segment.origin, plane.normal)) / dot;
-	if (0 <= t && t <= 1) {
+	//交点が線分上にあるか判定
+	if (0 <= t && t <= 1) 
+	{
 		return true;
 	}
 	return false;
@@ -186,15 +199,17 @@ bool IsCollision(const Triangle& triangle, const Line& line)
 	Vector3 v12 = Subtract(triangle.vertices[2], triangle.vertices[1]);
 	plane.normal = Normalize(Cross(v01, v12));
 	plane.distance = Dot(triangle.vertices[0], plane.normal);
-
+	//直線と平面の法線ベクトルの内積を求める
 	float dot = Dot(line.diff, plane.normal);
-	if (dot == 0.0f) {
+	//内積が0の場合は直線と平面が平行なので衝突しない
+	if (dot == 0.0f)
+	{
 		return false;
 	}
-
+	//直線と平面の交点を求める
 	float t = (plane.distance - Dot(line.origin, plane.normal)) / dot;
 
-
+	
 	Vector3 p = Add(line.origin, Multiply(t, line.diff));
 	Vector3 v20 = Subtract(triangle.vertices[0], triangle.vertices[2]);
 	Vector3 v1p = Subtract(p, triangle.vertices[1]);
@@ -204,7 +219,7 @@ bool IsCollision(const Triangle& triangle, const Line& line)
 	Vector3 cross01 = Cross(v01, v1p);
 	Vector3 cross12 = Cross(v12, v2p);
 	Vector3 cross20 = Cross(v20, v0p);
-
+	//三角形の内側に交点があるか判定
 	if (Dot(cross01, plane.normal) >= 0.0f &&
 		Dot(cross12, plane.normal) >= 0.0f &&
 		Dot(cross20, plane.normal) >= 0.0f) {
@@ -223,14 +238,18 @@ bool IsCollision(const Triangle& triangle, const Ray& ray)
 	Vector3 v12 = Subtract(triangle.vertices[2], triangle.vertices[1]);
 	plane.normal = Normalize(Cross(v01, v12));
 	plane.distance = Dot(triangle.vertices[0], plane.normal);
-
+	//直線と平面の法線ベクトルの内積を求める
 	float dot = Dot(ray.diff, plane.normal);
-	if (dot == 0.0f) {
+	//内積が0の場合は直線と平面が平行なので衝突しない
+	if (dot == 0.0f)
+	{
 		return false;
 	}
-
+	//半直線と平面の交点を求める
 	float t = (plane.distance - Dot(ray.origin, plane.normal)) / dot;
-	if (t >= 0) {
+	//交点が半直線上にあるか判定
+	if (t >= 0) 
+	{
 
 		Vector3 p = Add(ray.origin, Multiply(t, ray.diff));
 		Vector3 v20 = Subtract(triangle.vertices[0], triangle.vertices[2]);
@@ -241,7 +260,7 @@ bool IsCollision(const Triangle& triangle, const Ray& ray)
 		Vector3 cross01 = Cross(v01, v1p);
 		Vector3 cross12 = Cross(v12, v2p);
 		Vector3 cross20 = Cross(v20, v0p);
-
+		//三角形の内側に交点があるか判定
 		if (Dot(cross01, plane.normal) >= 0.0f &&
 			Dot(cross12, plane.normal) >= 0.0f &&
 			Dot(cross20, plane.normal) >= 0.0f) {
@@ -262,14 +281,18 @@ bool IsCollision(const Triangle& triangle, const Segment& segment)
 	Vector3 v12 = Subtract(triangle.vertices[2], triangle.vertices[1]);
 	plane.normal = Normalize(Cross(v01, v12));
 	plane.distance = Dot(triangle.vertices[0], plane.normal);
-
+	//直線と平面の法線ベクトルの内積を求める
 	float dot = Dot(segment.diff, plane.normal);
-	if (dot == 0.0f) {
+	//内積が0の場合は直線と平面が平行なので衝突しない
+	if (dot == 0.0f) 
+	{
 		return false;
 	}
-
+	//線分と平面の交点を求める
 	float t = (plane.distance - Dot(segment.origin, plane.normal)) / dot;
-	if (0 <= t && t <= 1) {
+	//交点が線分上にあるか判定
+	if (0 <= t && t <= 1) 
+	{
 
 		Vector3 p = Add(segment.origin, Multiply(t, segment.diff));
 		Vector3 v20 = Subtract(triangle.vertices[0], triangle.vertices[2]);
@@ -280,7 +303,7 @@ bool IsCollision(const Triangle& triangle, const Segment& segment)
 		Vector3 cross01 = Cross(v01, v1p);
 		Vector3 cross12 = Cross(v12, v2p);
 		Vector3 cross20 = Cross(v20, v0p);
-
+		//三角形の内側に交点があるか判定
 		if (Dot(cross01, plane.normal) >= 0.0f &&
 			Dot(cross12, plane.normal) >= 0.0f &&
 			Dot(cross20, plane.normal) >= 0.0f) {
@@ -295,7 +318,7 @@ bool IsCollision(const Triangle& triangle, const Segment& segment)
 
 bool IsCollision(const AABB& aabb1, const AABB& aabb2) 
 {
-
+	
 	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) &&
 		(aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) &&
 		(aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
@@ -308,14 +331,16 @@ bool IsCollision(const AABB& aabb1, const AABB& aabb2)
 
 bool IsCollision(const AABB& aabb, const Sphere& sphere)
 {
-
+	//AABBと球の最近接点を求める
 	Vector3 closestPoint{ std::clamp(sphere.center.x, aabb.min.x, aabb.max.x),
 						  std::clamp(sphere.center.y, aabb.min.y, aabb.max.y),
 						  std::clamp(sphere.center.z, aabb.min.z, aabb.max.z) };
 
 	float distance = Length(Subtract(sphere.center, closestPoint));
 
-	if (distance <= sphere.radius) {
+	//距離が半径以下なら衝突
+	if (distance <= sphere.radius) 
+	{
 		return true;
 	}
 
@@ -326,7 +351,7 @@ bool IsCollision(const AABB& aabb, const Sphere& sphere)
 bool IsCollision(const AABB& aabb, const Line& line)
 {
 
-
+	//各軸のtの最小値と最大値を求める
 	float txMin = (aabb.min.x - line.origin.x) / line.diff.x;
 	float txMax = (aabb.max.x - line.origin.x) / line.diff.x;
 	float tyMin = (aabb.min.y - line.origin.y) / line.diff.y;
@@ -334,6 +359,7 @@ bool IsCollision(const AABB& aabb, const Line& line)
 	float tzMin = (aabb.min.z - line.origin.z) / line.diff.z;
 	float tzMax = (aabb.max.z - line.origin.z) / line.diff.z;
 
+	//各軸のtの近接値と遠方値を求める
 	float tNearX = (std::min)(txMin, txMax);
 	float tFarX = (std::max)(txMin, txMax);
 	float tNearY = (std::min)(tyMin, tyMax);
@@ -341,10 +367,13 @@ bool IsCollision(const AABB& aabb, const Line& line)
 	float tNearZ = (std::min)(tzMin, tzMax);
 	float tFarZ = (std::max)(tzMin, tzMax);
 
+	//全体のtの近接値と遠方値を求める
 	float tmin = (std::max)((std::max)(tNearX, tNearY), tNearZ);
 	float tmax = (std::min)((std::min)(tFarX, tFarY), tFarZ);
-
-	if (tmin <= tmax) {
+	
+	//tの近接値が遠方値以下なら衝突
+	if (tmin <= tmax)
+	{
 		return true;
 	}
 
@@ -354,7 +383,7 @@ bool IsCollision(const AABB& aabb, const Line& line)
 
 bool IsCollision(const AABB& aabb, const Ray& ray) 
 {
-
+	//各軸のtの最小値と最大値を求める
 	float txMin = (aabb.min.x - ray.origin.x) / ray.diff.x;
 	float txMax = (aabb.max.x - ray.origin.x) / ray.diff.x;
 	float tyMin = (aabb.min.y - ray.origin.y) / ray.diff.y;
@@ -362,6 +391,7 @@ bool IsCollision(const AABB& aabb, const Ray& ray)
 	float tzMin = (aabb.min.z - ray.origin.z) / ray.diff.z;
 	float tzMax = (aabb.max.z - ray.origin.z) / ray.diff.z;
 
+	//各軸のtの近接値と遠方値を求める
 	float tNearX = (std::min)(txMin, txMax);
 	float tFarX = (std::max)(txMin, txMax);
 	float tNearY = (std::min)(tyMin, tyMax);
@@ -369,11 +399,16 @@ bool IsCollision(const AABB& aabb, const Ray& ray)
 	float tNearZ = (std::min)(tzMin, tzMax);
 	float tFarZ = (std::max)(tzMin, tzMax);
 
+	//全体のtの近接値と遠方値を求める
 	float tmin = (std::max)((std::max)(tNearX, tNearY), tNearZ);
 	float tmax = (std::min)((std::min)(tFarX, tFarY), tFarZ);
 
-	if (tmin <= tmax) {
-		if (tmax >= 0.0f) {
+	//tの近接値が遠方値以下か判定
+	if (tmin <= tmax) 
+	{
+		//交点が半直線上にあるか判定
+		if (tmax >= 0.0f)
+		{
 			return true;
 		}
 	}
@@ -384,7 +419,7 @@ bool IsCollision(const AABB& aabb, const Ray& ray)
 
 bool IsCollision(const AABB& aabb, const Segment& segment) 
 {
-
+	//各軸のtの最小値と最大値を求める
 	float txMin = (aabb.min.x - segment.origin.x) / segment.diff.x;
 	float txMax = (aabb.max.x - segment.origin.x) / segment.diff.x;
 	float tyMin = (aabb.min.y - segment.origin.y) / segment.diff.y;
@@ -392,6 +427,7 @@ bool IsCollision(const AABB& aabb, const Segment& segment)
 	float tzMin = (aabb.min.z - segment.origin.z) / segment.diff.z;
 	float tzMax = (aabb.max.z - segment.origin.z) / segment.diff.z;
 
+	//各軸のtの近接値と遠方値を求める
 	float tNearX = (std::min)(txMin, txMax);
 	float tFarX = (std::max)(txMin, txMax);
 	float tNearY = (std::min)(tyMin, tyMax);
@@ -399,14 +435,21 @@ bool IsCollision(const AABB& aabb, const Segment& segment)
 	float tNearZ = (std::min)(tzMin, tzMax);
 	float tFarZ = (std::max)(tzMin, tzMax);
 
+	//全体のtの近接値と遠方値を求める
 	float tmin = (std::max)((std::max)(tNearX, tNearY), tNearZ);
 	float tmax = (std::min)((std::min)(tFarX, tFarY), tFarZ);
 
-	if (tmin <= tmax) {
-		if ((tmin >= 0.0f && tmin <= 1.0f) || (tmax >= 0.0f && tmax <= 1.0f)) {
+	//tの近接値が遠方値以下か判定
+	if (tmin <= tmax) 
+	{
+		//交点が線分上にあるか判定
+		if ((tmin >= 0.0f && tmin <= 1.0f) || (tmax >= 0.0f && tmax <= 1.0f))
+		{
 			return true;
 		}
-		else if (tmin < 0.0f && tmax > 1.0f) {
+		//交点が線分を完全に包含している場合
+		else if (tmin < 0.0f && tmax > 1.0f) 
+		{
 			return true;
 		}
 	}
@@ -424,7 +467,7 @@ bool IsCollision(const OBB& obb, const Sphere& sphere)
 													   {obb.center.x,obb.center.y,obb.center.z, 1.0f}, } });
 
 	Vector3 centerInOBBLocalSpace = Transform(sphere.center, obbWorldMatrixInverse);
-
+	//OBBのローカル空間でAABBとSphereの衝突判定を行う
 	AABB aabbOBBLocal{ Multiply(-1.0f, obb.size), obb.size };
 	Sphere sphereOBBLocal{ centerInOBBLocalSpace, sphere.radius };
 	//ローカル空間で衝突判定
@@ -533,7 +576,9 @@ bool IsCollision(const OBB& obb1, const OBB& obb2)
 
 		float distance = std::abs(Dot(Subtract(obb2.center, obb1.center), separationAxis));
 
-		if (!(distance <= (projection1 + projection2))) {
+		// 投影範囲が重なっているか判定
+		if (!(distance <= (projection1 + projection2))) 
+		{
 			return false;
 		}
 

@@ -25,7 +25,6 @@ void InstancingObjects::Initialize(BaseModel* model, uint32_t maxInstances)
 	instancingResouce_ = dxCommon_->CreateBufferResource(sizeof(TransformationMatrix) * kNumMaxInstance_);
 	instancingResouce_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
-	//TODO: ゲームループなどで初期化するたびにsrvIndexが先に進んでいくので改善する
 	instancingSrvIndex_ = srvHeapManager_->Allocate();
 
 	srvHeapManager_->CreateSRVforStructuredBuffer(instancingSrvIndex_, instancingResouce_.Get(), kNumMaxInstance_, sizeof(TransformationMatrix));
@@ -49,7 +48,8 @@ void InstancingObjects::WorldTransformUpdate(const WorldTransform& worldTransfor
 void InstancingObjects::CameraUpdate(Camera* camera)
 {
 
-	for (uint32_t index = 0; index < numInstance_; ++index) {
+	for (uint32_t index = 0; index < numInstance_; ++index) 
+	{
 		instancingData_[index].WVP = Multiply(instancingData_[index].World, camera->GetViewProjection());
 		instancingData_[index].WorldInverseTranspose = Transpose(Inverse(instancingData_[index].World));
 	}

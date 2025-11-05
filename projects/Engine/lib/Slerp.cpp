@@ -124,7 +124,8 @@ Vector3 SlerpTranslateByCenterAxis(const Vector3& center, const Vector3& axis, c
 	float lenE = Length(ePerp);
 
 	// ほぼ軸方向なら線形補間
-	if (lenS < EPS || lenE < EPS) {
+	if (lenS < EPS || lenE < EPS) 
+	{
 		return Lerp(start, end, t);
 	}
 
