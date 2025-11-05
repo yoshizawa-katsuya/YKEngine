@@ -75,14 +75,14 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				Matrix4x4 scaleMatrix{};
 				if (particleGroupIterator->second.behavior->isScaleToDisappear) 
 				{
+					//時間経過で小さくなる
 					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
-					//消えるときにScaleを小さくする
 					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, t));
 				}
 				else if (particleGroupIterator->second.behavior->isScaleToAppear)
 				{
+					//時間経過で大きくなる
 					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
-					//出現するときにScaleを大きくする
 					scaleMatrix = MakeScaleMatrix(Lerp({ 0.0f, 0.0f, 0.0f }, particleIterator->transform.scale, t));
 				}
 				else
@@ -94,6 +94,7 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				Matrix4x4 worldMatrix;
 				if (particleGroupIterator->second.behavior->isUseBillboard) 
 				{
+					//カメラの方向を向く
 					worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
 				}
 				else
@@ -108,6 +109,7 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 
 				if (particleGroupIterator->second.behavior->isTimeFadeOut)
 				{
+					//時間経過で透明になる
 					float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
 					particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color.a = alpha;
 				}
@@ -175,7 +177,8 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 	particleGroup.instancingResouce->Map(0, nullptr, reinterpret_cast<void**>(&particleGroup.instancingData));
 
 	//単位行列を書き込んでおく
-	for (uint32_t index = 0; index < particleGroup.kNumMaxInstance; ++index) {
+	for (uint32_t index = 0; index < particleGroup.kNumMaxInstance; ++index)
+	{
 		particleGroup.instancingData[index].WVP = MakeIdentity4x4();
 		particleGroup.instancingData[index].World = MakeIdentity4x4();
 		particleGroup.instancingData[index].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -192,7 +195,8 @@ void ParticleManager::Emit(const std::string name, const EulerTransform& transfo
 {
 	assert(particleGroups_.contains(name));
 	ParticleGroup& particleGroup = particleGroups_[name];
-	for (uint32_t i = 0; i < count; ++i) {
+	for (uint32_t i = 0; i < count; ++i) 
+	{
 		particleGroup.particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams, *particleGroup.behavior.get()));
 	}
 }
@@ -206,6 +210,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	//生存時間
 	if (randomFlags.lifeTime)
 	{
+		//ランダムな生存時間を設定
 		std::uniform_real_distribution<float> distTime(rangeParams.lifeTime.min, rangeParams.lifeTime.max);
 		particle.lifeTime = distTime(*randomEngine_);
 	}
@@ -280,11 +285,13 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 
 	if (behavior.isfixedDistance)
 	{
+		//発生位置から一定距離離す
 		particle.transform.translation = Normalize(particle.transform.translation - transform.translation) * behavior.distance + transform.translation;
 	}
 
 	if (behavior.isHeadCenter)
 	{
+		//発生位置から中心に向かう速度を設定
 		particle.velocity = (transform.translation - particle.transform.translation) / particle.lifeTime;
 	}
 

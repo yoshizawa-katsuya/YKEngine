@@ -15,13 +15,15 @@ void DebugCamera::Initialize(Camera* camera, Input* input)
 
 void DebugCamera::Update()
 {
-
-	if (input_->TrigerMouseLeft()) {
-
+	//マウス左クリックで注視点を設定
+	if (input_->TrigerMouseLeft()) 
+	{
 		target_ = camera_->GetTranslate() + TransformNormal(Vector3{0.0f, 0.0f, 10.0f}, camera_->GetWorldMatrix());
 	}
 
-	if (input_->PushMouseCenter()) {
+	//マウス中央クリックでカメラ移動
+	if (input_->PushMouseCenter()) 
+	{
 		Vector2 mousevelocity = input_->GetMouseVelocity();
 
 		const float speed = 0.01f;
@@ -34,8 +36,9 @@ void DebugCamera::Update()
 
 		camera_->SetTranslate(camera_->GetTranslate() + move);
 	}
-
-	else if (input_->PushMouseLeft()) {
+	//マウス左クリックで注視点を中心に回転
+	else if (input_->PushMouseLeft()) 
+	{
 
 		Vector2 mousevelocity = input_->GetMouseVelocity();
 
@@ -63,8 +66,9 @@ void DebugCamera::Update()
 		camera_->SetTranslate(target_ + offset);
 
 	}
-
-	else {
+	//マウスホイールで前後移動
+	else 
+	{
 		const float speed = 0.01f;
 
 		//カメラ移動ベクトル
@@ -74,8 +78,9 @@ void DebugCamera::Update()
 
 		camera_->SetTranslate(camera_->GetTranslate() + move);
 	}
-	
-	if (input_->PushKey(DIK_Z)) {
+	//ZキーでZ軸回転
+	if (input_->PushKey(DIK_Z)) 
+	{
 		const float speed = 0.01f;
 
 		camera_->SetRotateZ(camera_->GetRotate().z + speed);

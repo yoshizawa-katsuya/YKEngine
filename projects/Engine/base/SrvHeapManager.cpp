@@ -65,7 +65,8 @@ void SrvHeapManager::Free(uint32_t srvIndex)
 
 bool SrvHeapManager::Check()
 {
-	if (useIndex_ < kMaxSrvDescriptors_) {
+	if (useIndex_ < kMaxSrvDescriptors_) 
+	{
 		return true;
 	}
 	return false;

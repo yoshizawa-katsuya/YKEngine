@@ -24,6 +24,7 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 	//モデル読み込み
 	LoadModelFile(directoryPath, filename);
 	
+	//スレッドに処理を投げる
 	ThreadPool::GetInstance()->enqueueTask([this, color]() {
 		CreateVertexData();
 		CreateIndexData();
@@ -242,7 +243,8 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 
 	assert(scene->HasMeshes());	//メッシュがないのは対応しない
 
-	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
+	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
+	{
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
@@ -254,7 +256,9 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 
 	}
 
-	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
+	//マテリアル情報の読み込み
+	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex)
+	{
 		aiMaterial* material = scene->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
@@ -273,7 +277,8 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 
 void BaseModel::LoadVertexData(aiMesh* mesh)
 {
-	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
+	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) 
+	{
 		aiVector3D& position = mesh->mVertices[vertexIndex];
 		aiVector3D& normal = mesh->mNormals[vertexIndex];
 		aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
@@ -286,11 +291,15 @@ void BaseModel::LoadVertexData(aiMesh* mesh)
 
 void BaseModel::LoadIndexData(aiMesh* mesh)
 {
-	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
+	//面ごとに情報を読み込む
+	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) 
+	{
 		aiFace& face = mesh->mFaces[faceIndex];
 		assert(face.mNumIndices == 3);
 
-		for (uint32_t element = 0; element < face.mNumIndices; ++element) {
+		//面を構成する頂点インデックスを読み込む
+		for (uint32_t element = 0; element < face.mNumIndices; ++element) 
+		{
 			uint32_t vertexIndex = face.mIndices[element];
 			modelData_->indeces.push_back(vertexIndex);
 		}
@@ -323,7 +332,8 @@ Node BaseModel::ReadNode(aiNode* node)
 
 	result.name = node->mName.C_Str();	//Node名を格納
 	result.children.resize(node->mNumChildren);	//子供の数だけ確保
-	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
+	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex)
+	{
 		//再帰的に読んで階層構造を作っていく
 		result.children[childIndex] = ReadNode(node->mChildren[childIndex]);
 	}

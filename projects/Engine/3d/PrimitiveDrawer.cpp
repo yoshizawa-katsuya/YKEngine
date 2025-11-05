@@ -4,8 +4,9 @@
 #include <format>
 #include "DirectXCommon.h"
 
-void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon) {
-
+void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon)
+{
+	//DrawMode分のパイプラインを作成
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNone)) = CreateGraphicsPipeline(DrawMode::kBlendModeNone, dxCommon);
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNormal)) = CreateGraphicsPipeline(DrawMode::kBlendModeNormal, dxCommon);
@@ -949,7 +950,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	return pipelineSet;
 }
 
-void PrimitiveDrawer::SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode) {
+void PrimitiveDrawer::SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode)
+{
 
 	commandList->SetGraphicsRootSignature(pipelineSets_.at(static_cast<uint16_t>(blendMode))->rootSignature.Get());
 	commandList->SetPipelineState(pipelineSets_.at(static_cast<uint16_t>(blendMode))->graphicsPipelineState.Get());	//PSOを設定

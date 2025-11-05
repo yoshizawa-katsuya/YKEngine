@@ -3,7 +3,8 @@
 #include <fstream>
 #include <Windows.h>
 
-GlobalVariables* GlobalVariables::GetInstance() {
+GlobalVariables* GlobalVariables::GetInstance()
+{
 
 	static GlobalVariables instance;
 	return &instance;
@@ -13,11 +14,13 @@ GlobalVariables* GlobalVariables::GetInstance() {
 void GlobalVariables::Update() {
 
 #ifdef _DEBUG
-	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) {
+	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) 
+	{
 		ImGui::End();
 		return;
 	}
-	if (!ImGui::BeginMenuBar()) {
+	if (!ImGui::BeginMenuBar())
+	{
 		return;
 	}
 
@@ -29,7 +32,8 @@ void GlobalVariables::Update() {
 		//グループの参照を取得
 		Group& group = itGroup->second;
 
-		if (!ImGui::BeginMenu(groupName.c_str())) {
+		if (!ImGui::BeginMenu(groupName.c_str()))
+		{
 			continue;
 		}
 
@@ -43,37 +47,43 @@ void GlobalVariables::Update() {
 			Item& item = itItem->second;
 
 			//int32_t型の値を保持していれば
-			if (std::holds_alternative<int32_t>(item)) {
+			if (std::holds_alternative<int32_t>(item))
+			{
 				int32_t* ptr = std::get_if<int32_t>(&item);
 				ImGui::DragInt(itemName.c_str(), ptr, 0.01f);
 			}
 
 			//float型の値を保持していれば
-			else if (std::holds_alternative<float>(item)) {
+			else if (std::holds_alternative<float>(item))
+			{
 				float* ptr = std::get_if<float>(&item);
 				ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
 			}
 
 			//Vector3型の値を保持していれば
-			else if (std::holds_alternative<Vector3>(item)) {
+			else if (std::holds_alternative<Vector3>(item)) 
+			{
 				Vector3* ptr = std::get_if<Vector3>(&item);
 				ImGui::DragFloat3(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
 			}
 
 			// Vector4型の値を保持していれば
-			else if (std::holds_alternative<Vector4>(item)) {
+			else if (std::holds_alternative<Vector4>(item)) 
+			{
 				Vector4* ptr = std::get_if<Vector4>(&item);
 				ImGui::DragFloat4(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
 			}
 
 			// ColorEdit4で編集できるようにする
-			else if (std::holds_alternative<Color>(item)) {
+			else if (std::holds_alternative<Color>(item)) 
+			{
 				Color* ptr = std::get_if<Color>(&item);
 				ImGui::ColorEdit4(itemName.c_str(), reinterpret_cast<float*>(ptr));
 			}
 
 			// bool型の値を保持していれば
-			else if (std::holds_alternative<bool>(item)) {
+			else if (std::holds_alternative<bool>(item)) 
+			{
 				bool* ptr = std::get_if<bool>(&item);
 				ImGui::Checkbox(itemName.c_str(), ptr);
 			}
@@ -82,7 +92,9 @@ void GlobalVariables::Update() {
 		//改行
 		ImGui::Text("\n");
 
-		if (ImGui::Button("Save")) {
+		//jsonファイル保存ボタン
+		if (ImGui::Button("Save")) 
+		{
 			SaveFile(groupName);
 			std::string message = std::format("{}.json saved.", groupName);
 			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
@@ -97,14 +109,16 @@ void GlobalVariables::Update() {
 #endif // _DEBUG
 }
 
-void GlobalVariables::CreateGroup(const std::string& groupName) {
+void GlobalVariables::CreateGroup(const std::string& groupName) 
+{
 
 	//指定名のオブジェクトがなければ追加する
 	datas_[groupName];
 
 }
 
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, int32_t value) {
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, int32_t value)
+{
 
 	//グループの参照を取得
 	Group& group = datas_[groupName];
@@ -116,7 +130,8 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 
 }
 
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, float value) {
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, float value) 
+{
 
 	// グループの参照を取得
 	Group& group = datas_[groupName];
@@ -127,7 +142,8 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector3& value) {
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector3& value) 
+{
 
 	// グループの参照を取得
 	Group& group = datas_[groupName];
@@ -160,7 +176,8 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group[key] = newItem;
 }
 
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, bool value) {
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, bool value) 
+{
 
 	// グループの参照を取得
 	Group& group = datas_[groupName];
@@ -172,51 +189,64 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value) {
-
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value)
+{
+	//項目が未登録の場合のみ追加
+	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) 
+	{
 		SetValue(groupName, key, value);
 	}
 
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) {
-
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) 
+{
+	//項目が未登録の場合のみ追加
+	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) 
+	{
 		SetValue(groupName, key, value);
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value) {
-
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value) 
+{
+	//項目が未登録の場合のみ追加
+	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end())
+	{
 		SetValue(groupName, key, value);
 	}
 }
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector4& value)
 {
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
+	//項目が未登録の場合のみ追加
+	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end())
+	{
 		SetValue(groupName, key, value);
 	}
 }
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Color& value)
 {
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
+	//項目が未登録の場合のみ追加
+	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) 
+	{
 		SetValue(groupName, key, value);
 	}
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, bool value) {
-
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) {
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, bool value)
+{
+	//項目が未登録の場合のみ追加
+	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) 
+	{
 		SetValue(groupName, key, value);
 	}
 
 }
 
-void GlobalVariables::SaveFile(const std::string& groupName) {
+void GlobalVariables::SaveFile(const std::string& groupName)
+{
 
 	//グループを検索
 	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
@@ -241,26 +271,30 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 		Item& item = itItem->second;
 
 		// int32_t型の値を保持していれば
-		if (std::holds_alternative<int32_t>(item)) {
+		if (std::holds_alternative<int32_t>(item)) 
+		{
 			//int32_t型の値を登録
 			root[groupName][itemName] = std::get<int32_t>(item);
 		}
 
 		// float型の値を保持していれば
-		else if (std::holds_alternative<float>(item)) {
+		else if (std::holds_alternative<float>(item)) 
+		{
 			//floatの値を登録
 			root[groupName][itemName] = std::get<float>(item);
 		}
 
 		// Vector3型の値を保持していれば
-		else if (std::holds_alternative<Vector3>(item)) {
+		else if (std::holds_alternative<Vector3>(item))
+		{
 			//float型のjson配列登録
 			Vector3 value = std::get<Vector3>(item);
 			root[groupName][itemName] = json::array({value.x, value.y, value.z});
 		}
 
 		// bool型の値を保持していれば
-		else if (std::holds_alternative<bool>(item)) {
+		else if (std::holds_alternative<bool>(item)) 
+		{
 			// boolの値を登録
 			root[groupName][itemName] = std::get<bool>(item);
 		}
@@ -268,7 +302,8 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 
 	//ディレクトリがなければ作成する
 	std::filesystem::path dir(kDirectoryPath);
-	if (!std::filesystem::exists(dir)) {
+	if (!std::filesystem::exists(dir)) 
+	{
 		std::filesystem::create_directory(dir);
 	}
 
@@ -294,16 +329,19 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 
 }
 
-void GlobalVariables::LoadFiles() {
+void GlobalVariables::LoadFiles()
+{
 
 	// ディレクトリがなければスキップする
 	std::filesystem::path dir(kDirectoryPath);
-	if (!std::filesystem::exists(dir)) {
+	if (!std::filesystem::exists(dir))
+	{
 		return;
 	}
 
 	std::filesystem::directory_iterator dir_it(dir);
-	for (const std::filesystem::directory_entry& entry : dir_it) {
+	for (const std::filesystem::directory_entry& entry : dir_it)
+	{
 	
 		//ファイルパスを取得
 		const std::filesystem::path& filePath = entry.path();
@@ -322,7 +360,8 @@ void GlobalVariables::LoadFiles() {
 
 }
 
-void GlobalVariables::LoadFile(const std::string& groupName) {
+void GlobalVariables::LoadFile(const std::string& groupName)
+{
 
 	//読み込むJSONファイルのファイルパスを合成する
 	std::string filePath = kDirectoryPath + groupName + ".json";
@@ -353,13 +392,15 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 	assert(itGroup != root.end());
 
 	//各アイテムについて
-	for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+	for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem)
+	{
 	
 		//アイテム名を取得
 		const std::string& itemName = itItem.key();
 	
 		//int32_t型の値を保持していれば
-		if (itItem->is_number_integer()) {
+		if (itItem->is_number_integer()) 
+		{
 			//int32_t型の値を登録
 			int32_t value = itItem->get<int32_t>();
 			SetValue(groupName, itemName, value);
@@ -367,21 +408,24 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 		}
 
 		// float型の値を保持していれば
-		else if (itItem->is_number_float()) {
+		else if (itItem->is_number_float())
+		{
 			// float型の値を登録
 			double value = itItem->get<double>();
 			SetValue(groupName, itemName, static_cast<float>(value));
 		}
 
 		// 要素数3の配列であれば
-		else if (itItem->is_array() && itItem->size() == 3) {
+		else if (itItem->is_array() && itItem->size() == 3) 
+		{
 			// float型のjson配列登録
 			Vector3 value = {itItem->at(0), itItem->at(1), itItem->at(2)};
 			SetValue(groupName, itemName, value);
 		}
 
 		// bool型の値を保持していれば
-		else if (itItem->is_boolean()) {
+		else if (itItem->is_boolean()) 
+		{
 			// bool型の値を登録
 			bool value = itItem->get<bool>();
 			SetValue(groupName, itemName, value);
@@ -390,7 +434,8 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 
 }
 
-int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const {
+int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const 
+{
 
 	assert(datas_.find(groupName) != datas_.end());
 
@@ -403,7 +448,8 @@ int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::st
 
 }
 
-float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) const {
+float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) const 
+{
 
 	assert(datas_.find(groupName) != datas_.end());
 
@@ -415,7 +461,8 @@ float GlobalVariables::GetFloatValue(const std::string& groupName, const std::st
 	return std::get<float>(group.at(key));
 }
 
-Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) const {
+Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) const
+{
 
 	assert(datas_.find(groupName) != datas_.end());
 
@@ -451,7 +498,8 @@ Color GlobalVariables::GetColorValue(const std::string& groupName, const std::st
 	return std::get<Color>(group.at(key));
 }
 
-bool GlobalVariables::GetBoolValue(const std::string& groupName, const std::string& key) const {
+bool GlobalVariables::GetBoolValue(const std::string& groupName, const std::string& key) const
+{
 	
 	assert(datas_.find(groupName) != datas_.end());
 

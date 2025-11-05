@@ -30,7 +30,7 @@ Vector2 CatmullRom(const Vector2& p0, const Vector2& p1, const Vector2& p2, cons
 {
 
 	Vector2 anser;
-
+	
 	anser.x = (1.0f / 2.0f) * ((-p0.x + 3.0f * p1.x - 3.0f * p2.x + p3.x) * (t * t * t) +
 						(2.0f * p0.x - 5.0f * p1.x + 4.0f * p2.x - p3.x) * (t * t) +
 						(-p0.x + p2.x) * t + 2.0f * p1.x);
@@ -58,7 +58,9 @@ std::vector<Vector3> GenerateCatmullRomSplinePoints(std::vector<Vector3>& contro
 {
 	std::vector<Vector3> splinePoints;
 
-	if (controlPoints.size() < 3) {
+	// 制御点が3点未満の場合は空のベクトルを返す
+	if (controlPoints.size() < 3)
+	{
 		return splinePoints;
 	}
 
@@ -67,13 +69,15 @@ std::vector<Vector3> GenerateCatmullRomSplinePoints(std::vector<Vector3>& contro
 	Vector3 p1 = controlPoints[0];
 	Vector3 p2 = controlPoints[1];
 	Vector3 p3 = controlPoints[2];
-
-	for (uint32_t j = 0; j <= numPoints; ++j) {
+	// 最初のセグメント
+	for (uint32_t j = 0; j <= numPoints; ++j)
+	{
 		float t = static_cast<float>(j) / static_cast<float>(numPoints);
 		splinePoints.push_back(CatmullRom(p0, p1, p2, p3, t));
 	}
 
 	size_t i = 0;
+	// 中間のセグメント
 	for (; i < controlPoints.size() - 3; ++i) {
 		p0 = controlPoints[i];
 		p1 = controlPoints[i + 1];
@@ -90,8 +94,9 @@ std::vector<Vector3> GenerateCatmullRomSplinePoints(std::vector<Vector3>& contro
 	p1 = controlPoints[i + 1];
 	p2 = controlPoints[i + 2];
 	p3 = controlPoints[i + 2];
-
-	for (uint32_t j = 0; j <= numPoints; ++j) {
+	// 最後のセグメント
+	for (uint32_t j = 0; j <= numPoints; ++j) 
+	{
 		float t = static_cast<float>(j) / static_cast<float>(numPoints);
 		splinePoints.push_back(CatmullRom(p0, p1, p2, p3, t));
 	}

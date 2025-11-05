@@ -12,10 +12,13 @@ void ThreadPool::Initlaize()
     isStop_ = false;
     activeTasks_ = 0;
 
+	// ハードウェアのスレッド数に基づいてワーカースレッドを作成
     uint32_t numThreads = std::thread::hardware_concurrency() - 1;
     assert(numThreads > 0);
-
-    for (size_t i = 0; i < numThreads; ++i) {
+    
+	// ワーカースレッドを生成して開始
+    for (size_t i = 0; i < numThreads; ++i) 
+    {
         workers_.emplace_back([this] { worker(); });
     }
 }
@@ -28,7 +31,9 @@ void ThreadPool::Finalize()
     }
     condition_.notify_all();
 
-    for (std::thread& worker : workers_) {
+	// すべてのワーカースレッドが終了するのを待つ
+    for (std::thread& worker : workers_) 
+    {
         worker.join();
     }
 }

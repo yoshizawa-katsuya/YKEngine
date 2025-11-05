@@ -5,6 +5,7 @@
 
 float ApplyEasing(EasingType type, float t)
 {
+	//各イージング関数を適用
 	switch (type)
 	{
 	case EasingType::Linear:
@@ -41,11 +42,13 @@ float ApplyEasing(EasingType type, float t)
 	return t;
 }
 
-float EaseInSine(float x) {
+float EaseInSine(float x) 
+{
 	return (1 - std::cos((x * std::numbers::pi_v<float>) / 2));
 }
 
-float EaseOutSine(float x) {
+float EaseOutSine(float x) 
+{
 	return std::sin((x * std::numbers::pi_v<float>) / 2);
 }
 

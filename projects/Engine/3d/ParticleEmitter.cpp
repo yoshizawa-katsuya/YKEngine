@@ -44,7 +44,7 @@ void ParticleEmitter::Emit()
 
 void ParticleEmitter::ApplyGlobalVariables()
 {
-
+	//グローバル変数適用
 	transform_.translation = globalVariables_->GetVector3Value(name_, "translation");
 	transform_.rotation = globalVariables_->GetVector3Value(name_, "rotation");
 	transform_.scale = globalVariables_->GetVector3Value(name_, "scale");

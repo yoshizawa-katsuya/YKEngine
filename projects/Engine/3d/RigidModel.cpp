@@ -103,8 +103,10 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
 
-	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
+	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) 
+	{
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex)
+		{
 
 			uint32_t index = (latIndex * kSubdivision + lonIndex) * 6;
 			uint32_t index2 = (latIndex * kSubdivision + lonIndex) * 4;

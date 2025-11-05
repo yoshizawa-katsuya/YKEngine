@@ -27,7 +27,9 @@ void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeap
 
 void TextureManager::PostDraw()
 {
-	if (!intermediateResources_.empty()) {
+	// 中間バッファの解放
+	if (!intermediateResources_.empty()) 
+	{
 		intermediateResources_.clear(); // 必要なときだけ呼ぶ
 	}
 }

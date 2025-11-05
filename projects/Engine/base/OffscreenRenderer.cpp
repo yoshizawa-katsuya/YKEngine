@@ -168,7 +168,7 @@ void OffscreenRenderer::UpdateOutlineMaterialData(const Matrix4x4& projectionMat
 
 void OffscreenRenderer::CreateRenderTexture()
 {
-	const Vector4 kRenderTargetClearValue{ 1.0f, 0.0f, 0.0f, 1.0f };	//一旦分かりやすいように赤
+	const Vector4 kRenderTargetClearValue{ 1.0f, 0.0f, 0.0f, 1.0f };	//赤でクリア
 	CreateRenderTextureResource(WinApp::kClientWidth, WinApp::kClientHeight,
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
 
@@ -207,6 +207,7 @@ void OffscreenRenderer::CreateRenderTextureResource(int32_t width, int32_t heigh
 	D3D12_HEAP_PROPERTIES heapProperties{};
 	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;	//VRAM上に作る
 
+	//ClearValueの設定
 	D3D12_CLEAR_VALUE clearValue;
 	clearValue.Format = format;
 	clearValue.Color[0] = clearColor.x;
