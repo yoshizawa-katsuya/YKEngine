@@ -80,6 +80,7 @@ void EnemySpawnObject::UpdateWaveStart()
 
 void EnemySpawnObject::UpdateWaveInterval()
 {
+	//時間経過で敵を出現させる
 	timer_ += deltaTime_;
 	if (timer_ >= intervalTime_)
 	{

@@ -68,6 +68,7 @@ void TackleEnemy01::UpdateLeave()
 		isDead_ = true;
 	}
 
+	//画面内に戻ってきたらメインフェーズへ
 	if (IsVisible(railCamera_))
 	{
 		phase_ = Phase::Main;

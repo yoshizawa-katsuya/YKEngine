@@ -40,7 +40,9 @@ void RailMover::Update()
 
 #endif // _DEBUG
 
-	if (pointsDrawing_.size() > moveCount_) {
+	//曲線に沿って移動する処理
+	if (pointsDrawing_.size() > moveCount_) 
+	{
 		//残りの移動距離計算用の変数
 		float remainingMoveDistance = speed_;
 

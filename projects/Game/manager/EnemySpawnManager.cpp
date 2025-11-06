@@ -10,6 +10,7 @@ void EnemySpawnManager::Initialize()
 
 void EnemySpawnManager::Update()
 {
+	//完了した敵出現オブジェクトを削除
 	std::erase_if(enemySpawnObjects_, [](const std::unique_ptr<EnemySpawnObject>& obj) { return obj->IsCompleted(); });
 
 	for (std::unique_ptr<EnemySpawnObject>& spawnObject : enemySpawnObjects_)

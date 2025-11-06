@@ -12,7 +12,8 @@
 #include "manager/EffectManager.h"
 #include "Random.h"
 
-void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle) {
+void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
+{
 
 	BaseCharacter::Initialize(model);
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
@@ -23,6 +24,7 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransf
 	
 	BaseCharacter::Update();
 
+	//開始時のアニメーション設定
 	startAnime_ = std::make_unique<SRTAnimator>();
 	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 1.5f);
 
@@ -275,6 +277,7 @@ void Player::UpdateGameOver()
 
 void Player::Rotate()
 {
+	//向く方向の計算
 	Vector3 toPosition;
 	if (reticleController_->IsLockOn())
 	{
@@ -304,7 +307,8 @@ void Player::ReticleUpdate(Camera* railCamera)
 
 void Player::Attack() {
 
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	{
 
 		//弾の速度
 		const float kBulletSpeed = 2.0f;

@@ -28,7 +28,8 @@ void EnemyBulletManager::Update(Camera* railCamera)
 
 void EnemyBulletManager::Draw(Camera* camera)
 {
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) 
+	{
 		bullet->Draw(camera);
 	}
 }
@@ -49,7 +50,8 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 
 void EnemyBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)
 {
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) 
+	{
 		collisionManager->AddCollider(bullet.get());
 	}
 }

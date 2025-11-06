@@ -86,7 +86,8 @@ void GameOverScene::UpdateStart()
 
 void GameOverScene::UpdateMain()
 {
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) 
+	{
 		phase_ = Phase::kEnd;
 		spriteSceneChange_->ResetReverseAnimation();
 	}

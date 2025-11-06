@@ -7,6 +7,7 @@ void CollisionManager::Initialize()
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");
 	model_ = ModelPlatform::GetInstance()->CreateSphere(textureHandle, "Collider");
 
+	// コライダー描画用オブジェクトの初期化
 	objects_ = std::make_unique<InstancingObjects>();
 	objects_->Initialize(model_.get(), 255);
 
@@ -28,12 +29,14 @@ void CollisionManager::Update()
 void CollisionManager::Draw(Camera* camera)
 {
 	// 非表示なら抜ける
-	if (!isDrawCollider_) {
+	if (!isDrawCollider_) 
+	{
 		return;
 	}
 
 	objects_->PreUpdate();
-	for (Collider* collider : colliders_) {
+	for (Collider* collider : colliders_) 
+	{
 		// コライダーのワールドトランスフォームを取得
 		WorldTransform worldTransform = collider->GetWorldTransform();
 
@@ -54,14 +57,16 @@ void CollisionManager::CheckAllCollisions()
 {
 	//リスト内のペアを総当たり
 	std::list<Collider*>::iterator itrA = colliders_.begin();
-	for (; itrA != colliders_.end(); ++itrA) {
+	for (; itrA != colliders_.end(); ++itrA) 
+	{
 		Collider* colliderA = *itrA;
 
 		//イテレータBはイテレータAの次の要素から回す(重複判定を回避)
 		std::list<Collider*>::iterator itrB = itrA;
 		itrB++;
 
-		for (; itrB != colliders_.end(); ++itrB) {
+		for (; itrB != colliders_.end(); ++itrB)
+		{
 			Collider* colliderB = *itrB;
 
 			//ペアの当たり判定
@@ -79,6 +84,7 @@ void CollisionManager::CheckColliderPair(Collider* colliderA, Collider* collider
 {
 	CollisionTypeIdDef typeID = colliderA->GetTypeID();
 	
+	//タイプIDによって処理を分岐
 	switch (typeID)
 	{
 	case CollisionTypeIdDef::kDefault:
@@ -119,7 +125,8 @@ void CollisionManager::CheckPlayerCollisions(Collider* player, Collider* collide
 	case CollisionTypeIdDef::kEnemyBullet:
 	case CollisionTypeIdDef::kTackleEnemy:
 		//球と球の交差判定
-		if (IsCollision(Sphere{ player->GetCenterPosition(), player->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+		if (IsCollision(Sphere{ player->GetCenterPosition(), player->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) 
+		{
 			// プレイヤーの衝突時
 			player->OnCollision(colliderB);
 			colliderB->OnCollision(player);
@@ -139,7 +146,8 @@ void CollisionManager::CheckEnemyCollisions(Collider* enemy, Collider* colliderB
 	{
 	case CollisionTypeIdDef::kPlayerBullet:
 		//球と球の交差判定
-		if (IsCollision(Sphere{ enemy->GetCenterPosition(), enemy->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+		if (IsCollision(Sphere{ enemy->GetCenterPosition(), enemy->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) 
+		{
 			// 敵の衝突時
 			enemy->OnCollision(colliderB);
 			colliderB->OnCollision(enemy);
@@ -160,7 +168,8 @@ void CollisionManager::CheckTackleEnemyCollisions(Collider* tackleEnemy, Collide
 	case CollisionTypeIdDef::kPlayerBullet:
 	case CollisionTypeIdDef::kPlayer:
 		//球と球の交差判定
-		if (IsCollision(Sphere{ tackleEnemy->GetCenterPosition(), tackleEnemy->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+		if (IsCollision(Sphere{ tackleEnemy->GetCenterPosition(), tackleEnemy->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) 
+		{
 			// 敵の衝突時
 			tackleEnemy->OnCollision(colliderB);
 			colliderB->OnCollision(tackleEnemy);
@@ -180,7 +189,8 @@ void CollisionManager::CheckPlayerBulletCollisions(Collider* playerBullet, Colli
 	case CollisionTypeIdDef::kEnemy:
 	case CollisionTypeIdDef::kTackleEnemy:
 		//球と球の交差判定
-		if (IsCollision(Sphere{ playerBullet->GetCenterPosition(), playerBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+		if (IsCollision(Sphere{ playerBullet->GetCenterPosition(), playerBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() }))
+		{
 			// プレイヤー弾の衝突時
 			playerBullet->OnCollision(colliderB);
 			colliderB->OnCollision(playerBullet);
@@ -199,7 +209,8 @@ void CollisionManager::CheckEnemyBulletCollisions(Collider* enemyBullet, Collide
 	{
 	case CollisionTypeIdDef::kPlayer:
 		//球と球の交差判定
-		if (IsCollision(Sphere{ enemyBullet->GetCenterPosition(), enemyBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+		if (IsCollision(Sphere{ enemyBullet->GetCenterPosition(), enemyBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) 
+		{
 			// 敵弾の衝突時
 			enemyBullet->OnCollision(colliderB);
 			colliderB->OnCollision(enemyBullet);
@@ -219,8 +230,9 @@ void CollisionManager::CheakRailMoverCollisions(Collider* railMover, Collider* c
 	{
 	case CollisionTypeIdDef::kEvent:
 		//球と球の交差判定
-		if (IsCollision(Sphere{ railMover->GetCenterPosition(), railMover->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
-			// 敵弾の衝突時
+		if (IsCollision(Sphere{ railMover->GetCenterPosition(), railMover->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() }))
+		{
+			// レールムーバーの衝突時
 			railMover->OnCollision(colliderB);
 			colliderB->OnCollision(railMover);
 		}
@@ -239,7 +251,8 @@ void CollisionManager::CheckEventCollisions(Collider* event, Collider* colliderB
 	{
 	case CollisionTypeIdDef::kRailMover:
 		//球と球の交差判定
-		if (IsCollision(Sphere{ event->GetCenterPosition(), event->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) {
+		if (IsCollision(Sphere{ event->GetCenterPosition(), event->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() }))
+		{
 			// 波イベントの衝突時
 			event->OnCollision(colliderB);
 			colliderB->OnCollision(event);

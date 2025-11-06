@@ -18,6 +18,7 @@ void EnemyBullet::Update(Camera* railCamera)
 {
 	BaseBullet::Update();
 
+	//画面外に出たら消す
 	if (!IsVisible(railCamera))
 	{
 		isDead_ = true;

@@ -534,6 +534,7 @@ void GameScene::CreateLevel()
 			continue;
 		}
 
+		//インスタンスオブジェクトが存在しない場合は生成
 		if (!instancingObjects_.contains(key))
 		{
 			instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());

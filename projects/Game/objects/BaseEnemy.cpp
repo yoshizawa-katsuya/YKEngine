@@ -13,7 +13,8 @@ BaseEnemy::~BaseEnemy()
 {
 }
 
-void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera) {
+void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera) 
+{
 
 	BaseCharacter::Initialize(model);
 	SetColliderID();
@@ -81,7 +82,8 @@ void BaseEnemy::OnCollision(Collider* other)
 	}
 }
 
-Vector3 BaseEnemy::GetWorldPosition() {
+Vector3 BaseEnemy::GetWorldPosition() 
+{
 
 	return worldTransform_.GetWorldPosition();
 
@@ -103,13 +105,15 @@ void BaseEnemy::SetColliderID()
 	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
 }
 
-void BaseEnemy::MainInitialize() {
+void BaseEnemy::MainInitialize() 
+{
 	//発射タイマーを初期化
 	fireTimer = kFireInterval;
 
 }
 
-void BaseEnemy::UpdateApproach() {
+void BaseEnemy::UpdateApproach()
+{
 
 	// 移動
 	Move();
@@ -126,7 +130,8 @@ void BaseEnemy::UpdateApproach() {
 
 }
 
-void BaseEnemy::UpdateMain() {
+void BaseEnemy::UpdateMain() 
+{
 
 	//発射タイマーカウントダウン
 	fireTimer--;
@@ -162,6 +167,7 @@ void BaseEnemy::UpdateLeave()
 		isDead_ = true;
 	}
 
+	//画面内に戻ってきたらメインフェーズへ。画面の揺れなどで戻ってきた場合を考慮し、離脱タイマーもリセットする
 	if (IsVisible(railCamera_))
 	{
 		phase_ = Phase::Main;
@@ -213,6 +219,7 @@ void BaseEnemy::Move()
 
 void BaseEnemy::Rotate()
 {
+	// プレイヤーの方向を向く
 	Vector3 toPosition = player_->GetWorldPosition();
 	direction_ = toPosition - GetWorldPosition();
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
@@ -221,7 +228,8 @@ void BaseEnemy::Rotate()
 
 void BaseEnemy::MoveAlongRail()
 {
-	if (corvePoints_.size() > moveCount_) {
+	if (corvePoints_.size() > moveCount_) 
+	{
 		//残りの移動距離計算用の変数
 		float remainingMoveDistance = speed_;
 

@@ -11,6 +11,7 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, Matrix4x4* vie
 	viewPortMatrix_ = viewPortMatrix;
 	enemyBulletManager_ = enemyBulletManager;
 
+	// 敵モデルの読み込み
 	modelEnemyMap_[EnemyType::Shot01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 	modelEnemyMap_[EnemyType::Tackle01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
 
@@ -26,14 +27,16 @@ void EnemyManager::Update()
 		return false;
 		});
 	// 敵の更新
-	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_)
+	{
 		enemy->Update();
 	}
 }
 
 void EnemyManager::Draw(Camera* camera)
 {
-	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_)
+	{
 		enemy->Draw(camera);
 	}
 }
@@ -66,7 +69,8 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 
 void EnemyManager::RegisterToCollisionManager(CollisionManager* collisionManager)
 {
-	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) {
+	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) 
+	{
 		collisionManager->AddCollider(enemy.get());
 	}
 }

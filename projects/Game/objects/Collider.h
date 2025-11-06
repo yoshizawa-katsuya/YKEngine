@@ -63,6 +63,11 @@ public:
 
 protected:
 
+	/// <summary>
+	/// クリップ座標を取得。
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <returns>クリップ座標</returns>
 	Vector4 ClipPosition(Camera* camera);
 
 	//Transform変数を作る

@@ -24,7 +24,8 @@ void PlayerBulletManager::Update()
 		return false;
 		});
 	//弾更新
-	for (std::unique_ptr<BasePlayerBullet>& bullet : playerBullets_) {
+	for (std::unique_ptr<BasePlayerBullet>& bullet : playerBullets_) 
+	{
 		bullet->Update();
 	}
 }
@@ -58,7 +59,8 @@ void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Ve
 
 void PlayerBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)
 {
-	for (std::unique_ptr<BasePlayerBullet>& bullet : playerBullets_) {
+	for (std::unique_ptr<BasePlayerBullet>& bullet : playerBullets_) 
+	{
 		collisionManager->AddCollider(bullet.get());
 	}
 }

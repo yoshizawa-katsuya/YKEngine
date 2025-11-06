@@ -120,15 +120,16 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnem
 	Vector2 ScreenPosA = spriteLargeReticle_->GetPosition();
 	Vector2 SizeA = spriteLargeReticle_->GetSize();
 
-	/*player_->SetIsLockOn(false);*/
 	isLockOn_ = false;
+	//一番近い敵を探すため、最大値で初期化
 	float closestDistance = (std::numeric_limits<float>::max)();
 	Vector2 targetScreenPosition = { 0.0f, 0.0f };
 	Vector3 targetWorldPosition = { 0.0f, 0.0f , 0.0f};
 
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemies) {
 
-		if (!enemy->IsVisible(railCamera)) {
+		if (!enemy->IsVisible(railCamera))
+		{
 			continue; // 敵が見えない場合はスキップ
 		}
 
@@ -138,7 +139,8 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnem
 			//一番近い敵を探す
 			float distance = Length(ScreenPosA - ScreenPosB);
 
-			if (closestDistance < distance) {
+			if (closestDistance < distance) 
+			{
 				continue; // 既に近い敵がいるのでスキップ
 			}
 
@@ -180,6 +182,7 @@ void ReticleController::ChargeUpdate()
 		chargeMaxTimer_ = chargeMaxChangeTime_;
 	}
 
+	//色の線形補間
 	Vector4 color = Lerp(defaultColor_, chargeMaxColor_, chargeMaxTimer_ / chargeMaxChangeTime_);
 	spriteLargeReticle_->SetColor(color);
 }

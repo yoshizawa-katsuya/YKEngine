@@ -154,7 +154,8 @@ void TitleScene::Draw()
 	modelPlatform_->InstancingPreDraw();
 
 	//オブジェクトの描画
-	for (const auto& [name, instancingObject] : instancingObjects_) {
+	for (const auto& [name, instancingObject] : instancingObjects_) 
+	{
 		instancingObject->CameraUpdate(mainCamera_);
 		instancingObject->Draw();
 	}

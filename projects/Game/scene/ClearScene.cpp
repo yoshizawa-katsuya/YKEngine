@@ -77,6 +77,7 @@ void ClearScene::Finalize()
 
 void ClearScene::UpdateStart()
 {
+	//シーン切り替えアニメーション更新
 	spriteSceneChange_->Update();
 	if (spriteSceneChange_->GetIsEnd())
 	{
@@ -86,7 +87,9 @@ void ClearScene::UpdateStart()
 
 void ClearScene::UpdateMain()
 {
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+	//スペースキーまたはAボタンで終了
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A))
+	{
 		phase_ = Phase::kEnd;
 		spriteSceneChange_->ResetReverseAnimation();
 	}
