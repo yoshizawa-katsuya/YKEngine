@@ -4,7 +4,6 @@
 #include "DirectXCommon.h"
 #include "Audio.h"
 #include "SrvHeapManager.h"
-#include "ImGuiManager.h"
 #include "TextureManager.h"
 #include "Sprite.h"
 #include "SpritePlatform.h"
@@ -23,6 +22,10 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 class OffscreenRenderer;
+
+#ifdef  USE_IMGUI
+#include "ImGuiManager.h"
+#endif //  USE_IMGUI
 
 /// <summary>
 /// フレームワーククラス。
@@ -80,13 +83,18 @@ protected:
 	DirectXCommon* dxCommon_ = nullptr;
 	Audio* audio_ = nullptr;
 	std::unique_ptr<SrvHeapManager> srvHeapManager_;
-	std::unique_ptr<ImGuiManager> imGuiManager_;
 	Input* input_ = nullptr;
 	std::unique_ptr<PrimitiveDrawer> primitiveDrawer_;
 	SpritePlatform* spritePlatform_ = nullptr;
 	ModelPlatform* modelPlatform_ = nullptr;
 	OffscreenRenderer* offscreenRenderer_ = nullptr;
 	GlobalVariables* globalVariables_ = nullptr;
+
+#ifdef USE_IMGUI
+	std::unique_ptr<ImGuiManager> imGuiManager_;
+#endif // USE_IMGUI
+
+	
 
 	std::unique_ptr<SceneManager> sceneManager_;
 

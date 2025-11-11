@@ -1,7 +1,10 @@
 #include "TitleScene.h"
-#include "imgui/imgui.h"
 #include "SceneManager.h"
 #include "LevelDataLoader.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 TitleScene::~TitleScene()
 {
@@ -85,7 +88,7 @@ void TitleScene::Initialize()
 void TitleScene::Update()
 {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	
 	ImGui::Begin("Window");
 	ImGui::Text("Title");
@@ -106,7 +109,7 @@ void TitleScene::Update()
 	}
 	ImGui::End();
 	
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	if (isActiveDebugCamera_)
 	{

@@ -1,11 +1,13 @@
 #include "RailCamera.h"
 #include "Matrix.h"
-#include "ImGuiManager.h"
-#include "imgui/imgui.h"
 #include "Curve.h"
 #include "TransformHelpers.h"
 #include "ModelPlatform.h"
 #include "Slerp.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 void RailCamera::Initialize(Camera* camera, WorldTransform* parent, WorldTransform* playerWorldTransform)
 {
@@ -45,7 +47,7 @@ void RailCamera::Update() {
 		break;
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//カメラの座標を画面表示する処理
 	ImGui::Begin("Camera");
@@ -53,7 +55,7 @@ void RailCamera::Update() {
 	ImGui::SliderFloat3("rotation", &worldTransform_.rotation_.x, -20.0f, 20.0f);
 	ImGui::End();
 
-#endif // _DEBUG	
+#endif // USE_IMGUI	
 }
 
 void RailCamera::SetGameOver()

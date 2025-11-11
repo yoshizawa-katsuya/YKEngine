@@ -1,6 +1,5 @@
 #include "GameScene.h"
 #include "dx12.h"
-#include "imgui/imgui.h"
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
@@ -9,6 +8,10 @@
 #include "LevelDataLoader.h"
 #include "Vector2.h"
 #include "ShotEnemy01.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 GameScene::~GameScene() 
 {
@@ -158,7 +161,7 @@ void GameScene::Update() {
 	
 	ParticleManager::GetInstance()->Update(mainCamera_);
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 
 	ImGui::Begin("Window");
@@ -242,7 +245,7 @@ void GameScene::Update() {
 	ImGui::End();
 		
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 	
 
 }

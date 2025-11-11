@@ -2,8 +2,11 @@
 #include "Input.h"
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
-#include "imgui/imgui.h"
 #include "SceneManager.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 GameOverScene::~GameOverScene()
 {
@@ -31,13 +34,13 @@ void GameOverScene::Initialize()
 
 void GameOverScene::Update()
 {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("Window");
 	ImGui::Text("GameOver");
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	switch (phase_)
 	{

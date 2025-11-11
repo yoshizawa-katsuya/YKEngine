@@ -27,12 +27,10 @@ void YKFramework::Initialize()
 	offscreenRenderer_ = OffscreenRenderer::GetInstance();
 	offscreenRenderer_->Initialize(srvHeapManager_.get());
 
-#ifdef _DEBUG
-
+#ifdef  USE_IMGUI
 	imGuiManager_ = std::make_unique<ImGuiManager>();
 	imGuiManager_->Initialize(dxCommon_, winApp_.get(), srvHeapManager_.get());
-
-#endif // _DEBUG
+#endif //  USE_IMGUI
 
 	
 	//入力の初期化
@@ -85,12 +83,12 @@ void YKFramework::Update()
 		isEndReqest_ = true;
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//imGuiに、フレームが始まる旨を伝える
 	imGuiManager_->Begin();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	
 
@@ -108,12 +106,12 @@ void YKFramework::EndFrame()
 
 	modelPlatform_->EndFrame();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//ImGuiの内部コマンドを生成する
 	imGuiManager_->End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 

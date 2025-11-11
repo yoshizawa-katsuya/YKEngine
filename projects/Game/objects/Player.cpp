@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "imgui/imgui.h"
 #include "Rigid3dObject.h"
 #include "WinApp.h"
 #include "Camera.h"
@@ -11,6 +10,10 @@
 #include "Matrix.h"
 #include "manager/EffectManager.h"
 #include "Random.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
 {
@@ -38,7 +41,7 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransf
 void Player::Update(Camera* railCamera) {
 
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("Player");
 	if (ImGui::TreeNode("Object")) {
@@ -53,7 +56,7 @@ void Player::Update(Camera* railCamera) {
 	ImGui::End();
 
 
-#endif // _DEBUG	
+#endif // USE_IMGUI
 
 	switch (phase_)
 	{

@@ -8,7 +8,10 @@
 #include "eventTrigger/SpeedEventTrigger.h"
 #include "eventTrigger/RotateEventTrigger.h"
 #include "eventTrigger/RotateResetEventTrigger.h"
+
+#ifdef USE_IMGUI
 #include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager, bool isLoop)
 {
@@ -32,13 +35,13 @@ void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawn
 
 void RailMover::Update()
 {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("RailMover");
 	ImGui::Checkbox("DrawRail", &isDrawRail_);
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	//曲線に沿って移動する処理
 	if (pointsDrawing_.size() > moveCount_) 

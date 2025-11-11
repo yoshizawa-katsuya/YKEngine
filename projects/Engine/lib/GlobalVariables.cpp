@@ -1,7 +1,10 @@
 #include "GlobalVariables.h"
-#include "imgui/imgui.h"
 #include <fstream>
 #include <Windows.h>
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 GlobalVariables* GlobalVariables::GetInstance()
 {
@@ -13,7 +16,7 @@ GlobalVariables* GlobalVariables::GetInstance()
 
 void GlobalVariables::Update() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) 
 	{
 		ImGui::End();
@@ -106,7 +109,7 @@ void GlobalVariables::Update() {
 	ImGui::EndMenuBar();
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void GlobalVariables::CreateGroup(const std::string& groupName) 
