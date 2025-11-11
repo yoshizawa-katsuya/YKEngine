@@ -1,7 +1,10 @@
 #include "ImGuiManager.h"
+
+#ifdef USE_IMGUI
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx12.h"
 #include "imgui/imgui_impl_win32.h"
+#endif // USE_IMGUI
 
 ImGuiManager::~ImGuiManager()
 {

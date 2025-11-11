@@ -479,6 +479,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ProjectReference Include="Engine\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ProjectReference Include="Engine\externals\imgui\imgui.vcxproj">
       <Project>{458d3705-c58c-4ac6-a496-3654120f73af}</Project>
     </ProjectReference>
