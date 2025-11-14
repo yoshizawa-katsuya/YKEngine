@@ -10,15 +10,22 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+ParticleManager* ParticleManager::instance_ = nullptr;
+
 ParticleManager* ParticleManager::GetInstance()
 {
-	static ParticleManager instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new ParticleManager();
+	}
+	return instance_;
 }
 
 void ParticleManager::Finalize()
 {
-
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer)

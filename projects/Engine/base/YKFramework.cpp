@@ -28,8 +28,10 @@ void YKFramework::Initialize()
 	offscreenRenderer_->Initialize(srvHeapManager_.get());
 
 #ifdef  USE_IMGUI
+
 	imGuiManager_ = std::make_unique<ImGuiManager>();
 	imGuiManager_->Initialize(dxCommon_, winApp_.get(), srvHeapManager_.get());
+
 #endif //  USE_IMGUI
 
 	
@@ -68,9 +70,25 @@ void YKFramework::Initialize()
 
 void YKFramework::Finalize()
 {
-	dxCommon_->Finalize();
+	globalVariables_->Finalize();
+
+	modelPlatform_->Finalize();
+
+	ParticleManager::GetInstance()->Finalize();
+
+	Random::GetInstance()->Finalize();
+
+	spritePlatform_->Finalize();
+
+	TextureManager::GetInstance()->Finalize();
+
+	input_->Finalize();
+
+	offscreenRenderer_->Finalize();
 
 	audio_->Finalize();
+
+	dxCommon_->Finalize();
 
 	threadPool_->Finalize();
 }

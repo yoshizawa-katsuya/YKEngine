@@ -94,8 +94,6 @@ protected:
 	std::unique_ptr<ImGuiManager> imGuiManager_;
 #endif // USE_IMGUI
 
-	
-
 	std::unique_ptr<SceneManager> sceneManager_;
 
 	//シーンファクトリー

@@ -7,7 +7,6 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 
 #endif // USE_IMGUI
 
-
 #pragma comment(lib, "winmm.lib")
 
 WinApp::~WinApp()

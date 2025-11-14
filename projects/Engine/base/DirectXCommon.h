@@ -139,6 +139,8 @@ public:
 	ID3D12Resource* GetDepthStencilResource() const { return depthStencilResource_.Get(); }
 
 private:
+	// シングルトンインスタンス
+	static DirectXCommon* instance_;
 
 	DirectXCommon() = default;
 	~DirectXCommon() = default;

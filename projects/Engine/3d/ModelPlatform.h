@@ -206,6 +206,9 @@ private:
 		float padding;
 	};
 
+	// シングルトンインスタンス
+	static ModelPlatform* instance_;
+
 	ModelPlatform() = default;
 	~ModelPlatform() = default;
 	ModelPlatform(ModelPlatform&) = default;

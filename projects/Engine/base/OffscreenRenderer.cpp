@@ -3,10 +3,15 @@
 #include "PrimitiveDrawer.h"
 #include "Matrix.h"
 
+OffscreenRenderer* OffscreenRenderer::instance_ = nullptr;
+
 OffscreenRenderer* OffscreenRenderer::GetInstance()
 {
-	static OffscreenRenderer instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new OffscreenRenderer();
+	}
+	return instance_;
 }
 
 void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
@@ -47,6 +52,13 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 	randomMaterialResource_->Map(0, nullptr, reinterpret_cast<void**>(&randomMaterialData_));
 	randomMaterialData_->time = 0.1f;	//初期値を設定
 
+}
+
+void OffscreenRenderer::Finalize()
+{
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void OffscreenRenderer::PreDrawRenderTexture()

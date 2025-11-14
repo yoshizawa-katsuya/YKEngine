@@ -52,6 +52,7 @@ void ImGuiManager::End()
 	//ImGuiフレーム終了
 	ImGui::Render();
 #endif // USE_IMGUI
+
 }
 
 void ImGuiManager::Draw()
@@ -59,13 +60,16 @@ void ImGuiManager::Draw()
 #ifdef USE_IMGUI
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), dxCommon_->GetCommandList());
 #endif // USE_IMGUI
+
 }
 
 void ImGuiManager::Finalize()
 {
+
 #ifdef USE_IMGUI
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 #endif // USE_IMGUI
+
 }

@@ -6,18 +6,28 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+GlobalVariables* GlobalVariables::instance_ = nullptr;
+
 GlobalVariables* GlobalVariables::GetInstance()
 {
+	if (instance_ == nullptr)
+	{
+		instance_ = new GlobalVariables();
+	}
+	return instance_;
+}
 
-	static GlobalVariables instance;
-	return &instance;
-
+void GlobalVariables::Finalize()
+{
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void GlobalVariables::Update() {
 
 #ifdef USE_IMGUI
-	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) 
+	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar))
 	{
 		ImGui::End();
 		return;
