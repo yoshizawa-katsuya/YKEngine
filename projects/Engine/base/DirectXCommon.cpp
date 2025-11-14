@@ -12,10 +12,15 @@
 
 using namespace Microsoft::WRL;
 
+DirectXCommon* DirectXCommon::instance_ = nullptr;
+
 DirectXCommon* DirectXCommon::GetInstance()
 {
-	static DirectXCommon instance;
-	return &instance;
+	if (instance_ == nullptr) 
+	{
+		instance_ = new DirectXCommon();
+	}
+	return instance_;
 }
 
 void DirectXCommon::Finalize()
@@ -23,6 +28,9 @@ void DirectXCommon::Finalize()
 	//Fence用のイベントを閉じる
 	CloseHandle(fenceEvent_);
 
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void DirectXCommon::Initialize(WinApp* winApp)

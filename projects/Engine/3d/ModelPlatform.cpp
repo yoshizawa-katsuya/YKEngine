@@ -4,15 +4,22 @@
 #include "RigidModel.h"
 #include "SkinModel.h"
 
+ModelPlatform* ModelPlatform::instance_ = nullptr;
+
 ModelPlatform* ModelPlatform::GetInstance()
 {
-	static ModelPlatform instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new ModelPlatform();
+	}
+	return instance_;
 }
 
 void ModelPlatform::Finalize()
 {
-	
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)

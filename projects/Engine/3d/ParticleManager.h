@@ -78,6 +78,9 @@ public:
 
 private:
 
+	// シングルトンインスタンス
+	static ParticleManager* instance_;
+
 	ParticleManager() = default;
 	~ParticleManager() = default;
 	ParticleManager(ParticleManager&) = default;

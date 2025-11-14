@@ -3,12 +3,22 @@
 #include <fstream>
 #include <Windows.h>
 
+GlobalVariables* GlobalVariables::instance_ = nullptr;
+
 GlobalVariables* GlobalVariables::GetInstance()
 {
+	if (instance_ == nullptr)
+	{
+		instance_ = new GlobalVariables();
+	}
+	return instance_;
+}
 
-	static GlobalVariables instance;
-	return &instance;
-
+void GlobalVariables::Finalize()
+{
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void GlobalVariables::Update() {

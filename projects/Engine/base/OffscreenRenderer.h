@@ -52,6 +52,11 @@ public:
 	void Initialize(SrvHeapManager* srvHeapManager);
 
 	/// <summary>
+	/// 終了処理。
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
 	/// レンダーテクスチャへの描画前処理。
 	/// </summary>
 	void PreDrawRenderTexture();
@@ -85,6 +90,9 @@ public:
 	void SetRenderTextureType(RenderTextureType type) { renderTextureType_ = type; }
 
 private:
+
+	// シングルトンインスタンス
+	static OffscreenRenderer* instance_;
 
 	OffscreenRenderer() = default;
 	~OffscreenRenderer() = default;

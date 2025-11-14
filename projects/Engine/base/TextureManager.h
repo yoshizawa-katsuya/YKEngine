@@ -98,6 +98,9 @@ private:
 	/// <returns>アップロード用バッファリソース</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages);
 
+	// シングルトンインスタンス
+	static TextureManager* instance_;
+
 	TextureManager() = default;
 	~TextureManager() = default;
 	TextureManager(TextureManager&) = default;
