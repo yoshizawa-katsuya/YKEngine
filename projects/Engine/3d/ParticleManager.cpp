@@ -2,10 +2,13 @@
 #include "TextureManager.h"
 #include "Matrix.h"
 #include <numbers>
-#include "imgui/imgui.h"
 #include "TransformHelpers.h"
 #include "Lerp.h"
 #include "Random.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 ParticleManager* ParticleManager::instance_ = nullptr;
 
@@ -130,13 +133,13 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("ParticleManager");
 	ImGui::Checkbox("useAccelerationField", &useAccelerationField_);
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 

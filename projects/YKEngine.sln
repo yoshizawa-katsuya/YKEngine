@@ -13,6 +13,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "Engine\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YKEngine", "YKEngine.vcxproj", "{C937FE25-B27C-4DFE-A9D5-982E1EA6673A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{458D3705-C58C-4AC6-A496-3654120F73AF} = {458D3705-C58C-4AC6-A496-3654120F73AF}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

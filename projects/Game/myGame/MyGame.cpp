@@ -58,12 +58,12 @@ void MyGame::Draw()
 
 	offscreenRenderer_->PostDrawRenderTexture(primitiveDrawer_.get(), srvHeapManager_.get());
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//実際のcommandListのImGuiの描画コマンドを積む
 	imGuiManager_->Draw();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	dxCommon_->PostDraw();
 

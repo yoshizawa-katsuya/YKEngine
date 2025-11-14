@@ -1,6 +1,9 @@
 #include "TitleScene.h"
-#include "imgui/imgui.h"
 #include "SceneManager.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 TitleScene::~TitleScene()
 {
@@ -28,13 +31,13 @@ void TitleScene::Initialize()
 void TitleScene::Update()
 {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	
 	ImGui::Begin("Window");
 	ImGui::Text("Title");
 	ImGui::End();
 	
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
