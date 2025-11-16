@@ -97,6 +97,11 @@ private:
 	void CheckGameOver();
 
 	/// <summary>
+	/// ゲームオーバーに移行する際の処理。
+	/// </summary>
+	void ProcessGameOver();
+
+	/// <summary>
 	/// 全ての衝突判定を行う。
 	/// </summary>
 	void CheckAllColision();

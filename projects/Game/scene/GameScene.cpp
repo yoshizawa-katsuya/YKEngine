@@ -236,8 +236,7 @@ void GameScene::Update() {
 	}
 	if (ImGui::Button("GameOver")) 
 	{
-		phase_ = Phase::kGameOver;
-		spriteSceneChange_->ResetReverseAnimation();
+		ProcessGameOver();
 	}
 
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
@@ -436,7 +435,8 @@ void GameScene::UpdateTitleReturn()
 
 void GameScene::CheckGameClear()
 {
-	if (railMover_->IsEnd()) {
+	if (railMover_->IsEnd()) 
+	{
 		//ゲームクリア
 		phase_ = Phase::kGameClear;
 		spriteSceneChange_->ResetReverseAnimation();
@@ -446,15 +446,21 @@ void GameScene::CheckGameClear()
 void GameScene::CheckGameOver()
 {
 	//プレイヤーが死んだらゲームオーバー
-	if (player_->IsDead()) {
-		phase_ = Phase::kGameOver;
-		spriteSceneChange_->ResetReverseAnimation();
-		player_->GameOverRotate();
-		player_->SetGameOver();
-		railCamera_->SetGameOver();
-		railCamera_->CreateTargetRotationFromPlayer(player_->GetInverseLocalDirection());
-		enemyBulletManager_->SetIsGameOver(true);
+	if (player_->IsDead())
+	{
+		ProcessGameOver();
 	}
+}
+
+void GameScene::ProcessGameOver()
+{
+	phase_ = Phase::kGameOver;
+	spriteSceneChange_->ResetReverseAnimation();
+	player_->GameOverRotate();
+	player_->SetGameOver();
+	railCamera_->SetGameOver();
+	railCamera_->CreateTargetRotationFromPlayer(player_->GetInverseLocalDirection());
+	enemyBulletManager_->SetIsGameOver(true);
 }
 
 void GameScene::CreateLevel()
