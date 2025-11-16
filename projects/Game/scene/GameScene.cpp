@@ -231,8 +231,7 @@ void GameScene::Update() {
 	}
 	if (ImGui::Button("GameClear")) 
 	{
-		phase_ = Phase::kGameClear;
-		spriteSceneChange_->ResetReverseAnimation();
+		ProcessGameClear();
 	}
 	if (ImGui::Button("GameOver")) 
 	{
@@ -438,8 +437,7 @@ void GameScene::CheckGameClear()
 	if (railMover_->IsEnd()) 
 	{
 		//ゲームクリア
-		phase_ = Phase::kGameClear;
-		spriteSceneChange_->ResetReverseAnimation();
+		ProcessGameClear();
 	}
 }
 
@@ -461,6 +459,12 @@ void GameScene::ProcessGameOver()
 	railCamera_->SetGameOver();
 	railCamera_->CreateTargetRotationFromPlayer(player_->GetInverseLocalDirection());
 	enemyBulletManager_->SetIsGameOver(true);
+}
+
+void GameScene::ProcessGameClear()
+{
+	phase_ = Phase::kGameClear;
+	spriteSceneChange_->ResetReverseAnimation();
 }
 
 void GameScene::CreateLevel()

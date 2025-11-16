@@ -102,6 +102,11 @@ private:
 	void ProcessGameOver();
 
 	/// <summary>
+	/// クリアに移行する際の処理。
+	/// </summary>
+	void ProcessGameClear();
+
+	/// <summary>
 	/// 全ての衝突判定を行う。
 	/// </summary>
 	void CheckAllColision();
