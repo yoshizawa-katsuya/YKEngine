@@ -153,6 +153,54 @@ Vector3 SlerpTranslateByCenterAxis(const Vector3& center, const Vector3& axis, c
 	return result + center;
 }
 
+Vector3 SlerpTranslateByCenterAxis(const Vector3& center, const Vector3& axis, const Vector3& start, const Vector3& end, float sign, float t)
+{
+	const float EPS = 1e-6f;
+
+	// 原点をcenterに移動
+	Vector3 s = start - center;
+	Vector3 e = end - center;
+
+	Vector3 n = Normalize(axis);
+
+	// 各ベクトルを軸方向成分と垂直成分に分解
+	float sAxis = Dot(s, n);
+	float eAxis = Dot(e, n);
+	Vector3 sPerp = s - n * sAxis;
+	Vector3 ePerp = e - n * eAxis;
+
+	float lenS = Length(sPerp);
+	float lenE = Length(ePerp);
+
+	// ほぼ軸方向なら線形補間
+	if (lenS < EPS || lenE < EPS)
+	{
+		return Lerp(start, end, t);
+	}
+
+	sPerp /= lenS;
+	ePerp /= lenE;
+
+	// 回転角を求める
+	float dot = std::clamp(Dot(sPerp, ePerp), -1.0f, 1.0f);
+	float unsignedAngle = std::acos(dot);
+	float angle = unsignedAngle * sign * t;
+
+	// sPerp を n 回りに回転（Rodrigues）
+	Vector3 rotatedPerp =
+		sPerp * std::cos(angle) +
+		Cross(n, sPerp) * std::sin(angle);
+
+	// 半径と軸方向を補間
+	float radius = Lerp(lenS, lenE, t);
+	float axisPos = Lerp(sAxis, eAxis, t);
+
+	// 軸方向＋回転方向を合成
+	Vector3 result = rotatedPerp * radius + n * axisPos;
+
+	return result + center;
+}
+
 Quaternion Slerp(const Quaternion& q1, const Quaternion& q2, float t)
 {
 
