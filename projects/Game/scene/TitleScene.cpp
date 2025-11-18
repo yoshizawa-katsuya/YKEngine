@@ -6,10 +6,6 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
-#ifdef USE_IMGUI
-#include "imgui/imgui.h"
-#endif // USE_IMGUI
-
 TitleScene::~TitleScene()
 {
 }

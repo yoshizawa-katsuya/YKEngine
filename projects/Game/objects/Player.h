@@ -35,9 +35,6 @@ public:
 	/// <param name="railCamera">レールカメラ。レティクルをワールド座標に変換するために使用。</param>
 	void Update(Camera* railCamera);
 
-	//旋回
-	//void Rotate();
-
 	/// <summary>
 	/// 衝突時の処理。
 	/// </summary>

@@ -1,6 +1,13 @@
 #pragma once
 #include "BaseScene.h"
 #include "AnimatedSprite.h"
+#include "DebugCamera.h"
+#include "Rigid3dObject.h"
+#include "RailMover.h"
+#include "RailCamera.h"
+#include "InstancingObjects.h"
+#include "DirectionalLight.h"
+#include "DemoPlayer.h"
 class Input;
 class ModelPlatform;
 
@@ -54,6 +61,11 @@ private:
 	/// </summary>
 	void UpdateEnd();
 
+	/// <summary>
+	/// レベルの生成。
+	/// </summary>
+	void CreateLevel();
+
 	//デバイス
 	DirectXCommon* dxCommon_;
 
@@ -62,9 +74,43 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 
+	//平行光源
+	std::unique_ptr<DirectionalLight> directionalLight_;
+
+	//カメラ
+	Camera* mainCamera_ = nullptr;
+
+	std::unique_ptr<Camera> camera_;
+	std::unique_ptr<Camera> camera2_;
+
+	std::unique_ptr<DebugCamera> debugCamera_;
+
+	bool isActiveDebugCamera_ = false;
+
 	std::unique_ptr<Sprite> spriteBackGround_;
 
 	std::unique_ptr<AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
+
+	std::shared_ptr<BaseModel> modelGround_;
+	std::shared_ptr<BaseModel> modelPlayer_;
+
+	//テクスチャハンドル
+	uint32_t textureHandleSkyBox_;
+
+	//スカイボックス
+	std::unique_ptr<Rigid3dObject> skyBox_;
+
+	//地面
+	std::unique_ptr<Rigid3dObject> ground_;
+
+	//レールムーバー
+	std::unique_ptr<RailMover> railMover_;
+
+	//レールカメラ
+	std::unique_ptr<RailCamera> railCamera_;
+
+	//デモプレイヤー
+	std::unique_ptr<DemoPlayer> demoPlayer_;
 
 	//シーンのフェーズ
 	enum class Phase {

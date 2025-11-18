@@ -29,9 +29,14 @@ public:
 	void SetGameOver();
 
 	/// <summary>
-	/// 自機の逆ローカル方向からtargetRotation_を作成。
+	/// クリアシーンに移行したことを通知。
 	/// </summary>
-	void CreateTargetRotationFromPlayer(const Vector3& direction);
+	void SetClearScene();
+
+	/// <summary>
+	/// 方向からtargetRotation_を作成。
+	/// </summary>
+	void CreateTargetRotationFromDirection(const Vector3& direction);
 
 private:
 
@@ -45,18 +50,24 @@ private:
 	/// </summary>
 	void UpdateGameOver();
 
+	/// <summary>
+	/// クリアシーンフェーズの更新。
+	/// </summary>
+	void UpdateClearScene();
+
 	enum class Phase
 	{
 		Main,	// メイン
 		GameOver,	// ゲームオーバー
+		ClearScene,	// クリアシーン
 	};
 	Phase phase_ = Phase::Main;
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 
-	//自機を親とするワールド変換データ
-	WorldTransform playerParentWorldTransform_;
+	//目標を注視するためのワールド変換データ
+	WorldTransform targetParentWorldTransform_;
 
 	// 自機を注視する際の係数
 	float t_ = 0.0f;

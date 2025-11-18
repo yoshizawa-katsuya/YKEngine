@@ -457,7 +457,7 @@ void GameScene::ProcessGameOver()
 	player_->GameOverRotate();
 	player_->SetGameOver();
 	railCamera_->SetGameOver();
-	railCamera_->CreateTargetRotationFromPlayer(player_->GetInverseLocalDirection());
+	railCamera_->CreateTargetRotationFromDirection(player_->GetInverseLocalDirection());
 	enemyBulletManager_->SetIsGameOver(true);
 }
 

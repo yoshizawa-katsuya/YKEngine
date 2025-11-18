@@ -372,6 +372,9 @@
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\DemoPlayer.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -735,6 +738,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\Color.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\DemoPlayer.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

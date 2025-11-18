@@ -49,6 +49,8 @@ public:
 
 	uint32_t GetNextRotateResetWaveNumber() const { return nextRotateResetEventNumber_; }
 
+	const Vector3& GetForward() const { return forward_; }
+
 private:
 
 	/// <summary>
