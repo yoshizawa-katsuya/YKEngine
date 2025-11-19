@@ -46,7 +46,7 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 
 	*vertexData_ = {0.0f, 0.0f, 0.0f, 1.0f};
 
-	for (uint32_t i = 0; i < resourceNum_; i++) {
+	for (uint32_t i = 0; i < kResourceNum_; i++) {
 		//transformationMatrixのリソースを作る
 		LineWVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(LineWVP));
 		//書き込むためのアドレスを取得
@@ -56,7 +56,7 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 		LineWVPDatas_[i]->WVP2 = MakeIdentity4x4();
 	}
 
-	for (uint32_t i = 0; i < resourceNum_; i++) {
+	for (uint32_t i = 0; i < kResourceNum_; i++) {
 		SphereWVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(Matrix4x4));
 		SphereWVPResources_[i]->Map(0, nullptr, reinterpret_cast<void**>(&SphereWVPDatas_[i]));
 		*SphereWVPDatas_[i] = MakeIdentity4x4();

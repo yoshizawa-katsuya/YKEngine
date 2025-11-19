@@ -22,7 +22,7 @@ Vector3 SRTAnimator::Update()
 		}
 	}
 	
-	return Lerp(startVector_, endVector_, (elapsedTime_ / duration_));
+	return Lerp(startVector_, endVector_, ApplyEasing(easingType_, elapsedTime_ / duration_));
 }
 
 Vector3 SRTAnimator::Update(float& elapsedTime)

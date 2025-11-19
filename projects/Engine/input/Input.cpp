@@ -207,16 +207,16 @@ bool Input::GamePadUpdate(uint32_t padNo)
 	if (dwResult == ERROR_SUCCESS) 
 	{
 
-		if (std::abs(gamePadState_.Gamepad.sThumbLX) < deadZone_) {
+		if (std::abs(gamePadState_.Gamepad.sThumbLX) < kDeadZone_) {
 			gamePadState_.Gamepad.sThumbLX = 0;
 		}
-		if (std::abs(gamePadState_.Gamepad.sThumbLY) < deadZone_) {
+		if (std::abs(gamePadState_.Gamepad.sThumbLY) < kDeadZone_) {
 			gamePadState_.Gamepad.sThumbLY = 0;
 		}
-		if (std::abs(gamePadState_.Gamepad.sThumbRX) < deadZone_) {
+		if (std::abs(gamePadState_.Gamepad.sThumbRX) < kDeadZone_) {
 			gamePadState_.Gamepad.sThumbRX = 0;
 		}
-		if (std::abs(gamePadState_.Gamepad.sThumbRY) < deadZone_) {
+		if (std::abs(gamePadState_.Gamepad.sThumbRY) < kDeadZone_) {
 			gamePadState_.Gamepad.sThumbRY = 0;
 		}
 
