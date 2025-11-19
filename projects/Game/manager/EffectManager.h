@@ -33,6 +33,11 @@ public:
 	void Initialize();
 
 	/// <summary>
+	/// 終了処理。
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
 	/// 更新。
 	/// </summary>
 	void Update();
@@ -52,6 +57,8 @@ public:
 	void SpawnEffect(EffectType effectType, const Vector3& position, uint32_t count);
 
 private:
+	// シングルトンインスタンス
+	static EffectManager* instance_;
 
 	EffectManager() = default;
 	~EffectManager() = default;

@@ -1,10 +1,15 @@
 #include "EffectManager.h"
 #include "ModelPlatform.h"
 
+EffectManager* EffectManager::instance_ = nullptr;
+
 EffectManager* EffectManager::GetInstance()
 {
-	static EffectManager instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new EffectManager();
+	}
+	return instance_;
 }
 
 void EffectManager::Initialize()
@@ -24,6 +29,13 @@ void EffectManager::Initialize()
 		emitter->Initialize(textureHandle, model);
 	}
 
+}
+
+void EffectManager::Finalize()
+{
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void EffectManager::Update()

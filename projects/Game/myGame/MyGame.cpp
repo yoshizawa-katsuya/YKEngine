@@ -27,6 +27,7 @@ void MyGame::Initialize()
 
 void MyGame::Finalize()
 {
+	effectManager_->Finalize();
 
 	//解放処理
 	YKFramework::Finalize();
