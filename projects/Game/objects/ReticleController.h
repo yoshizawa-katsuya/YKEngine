@@ -91,6 +91,6 @@ private:
 	bool isChargeMax_ = false;
 	float chargeMaxTimer_ = 0.0f;
 	//チャージマックス時に色に変化し終わるまでの時間
-	const float chargeMaxChangeTime_ = 0.1f;
+	const float kChargeMaxColorChangeTime_ = 0.1f;
 };
 

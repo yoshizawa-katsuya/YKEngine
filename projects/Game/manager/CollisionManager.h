@@ -108,7 +108,7 @@ private:
 	//グローバル変数
 	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();
 
-	const char* groupName_ = "Colliders";
+	const std::string kGroupName_ = "Colliders";
 
 	//コライダー
 	std::list<Collider*> colliders_;

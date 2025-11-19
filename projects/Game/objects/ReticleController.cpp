@@ -177,13 +177,13 @@ void ReticleController::ChargeUpdate()
 		return;
 	}
 	chargeMaxTimer_ += 1.0f / 60.0f;
-	if (chargeMaxTimer_ > chargeMaxChangeTime_) 
+	if (chargeMaxTimer_ > kChargeMaxColorChangeTime_) 
 	{
-		chargeMaxTimer_ = chargeMaxChangeTime_;
+		chargeMaxTimer_ = kChargeMaxColorChangeTime_;
 	}
 
 	//色の線形補間
-	Vector4 color = Lerp(defaultColor_, chargeMaxColor_, chargeMaxTimer_ / chargeMaxChangeTime_);
+	Vector4 color = Lerp(defaultColor_, chargeMaxColor_, chargeMaxTimer_ / kChargeMaxColorChangeTime_);
 	spriteLargeReticle_->SetColor(color);
 }
 

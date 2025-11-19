@@ -202,7 +202,7 @@ void BaseEnemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
 		controlPoints_.push_back(controlPoint);
 	}
 	// Catmull-Romスプラインのポイントを生成
-	corvePoints_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
+	corvePoints_ = GenerateCatmullRomSplinePoints(controlPoints_, kSegmentCount_);
 }
 
 void BaseEnemy::Move()

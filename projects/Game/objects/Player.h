@@ -159,14 +159,14 @@ private:
 
 	Vector3 direction_{};	//方向
 
-	const int maxHitPoint_ = 5; // 最大ヒットポイント
-	int hitPoint_ = maxHitPoint_; // プレイヤーのヒットポイント
+	const int kMaxHitPoint_ = 5; // 最大ヒットポイント
+	int hitPoint_ = kMaxHitPoint_; // プレイヤーのヒットポイント
 
 	std::vector<std::unique_ptr<Sprite>> heratSprites_; // ヒットポイントのスプライト
 	std::vector<std::unique_ptr<Sprite>> heratEmptySprites_; // ヒットポイントがないときのスプライト
 
 	float chargeTime_ = 0.0f; // チャージ時間
-	const float maxChargeTime_ = 1.0f; // 最大チャージ時間
+	const float kMaxChargeTime_ = 1.0f; // 最大チャージ時間
 	bool isChargeMax_ = false; // チャージが最大かどうか
 
 	//ゲームオーバー時の時間を計る変数

@@ -12,16 +12,16 @@ void CollisionManager::Initialize()
 	objects_->Initialize(model_.get(), 255);
 
 	// グループを追加
-	globalVariables_->CreateGroup(groupName_);
-	globalVariables_->AddItem(groupName_, "isDrawCollider", isDrawCollider_);
-	isDrawCollider_ = globalVariables_->GetBoolValue(groupName_, "isDrawCollider");
+	globalVariables_->CreateGroup(kGroupName_);
+	globalVariables_->AddItem(kGroupName_, "isDrawCollider", isDrawCollider_);
+	isDrawCollider_ = globalVariables_->GetBoolValue(kGroupName_, "isDrawCollider");
 }
 
 void CollisionManager::Update()
 {
 #ifdef _DEBUG
 
-	isDrawCollider_ = globalVariables_->GetBoolValue(groupName_, "isDrawCollider");
+	isDrawCollider_ = globalVariables_->GetBoolValue(kGroupName_, "isDrawCollider");
 
 #endif //DEBUG
 }

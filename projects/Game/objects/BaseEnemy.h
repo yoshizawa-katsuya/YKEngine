@@ -53,9 +53,6 @@ public:
 	/// <returns>スクリーン座標</returns>
 	Vector2 GetScreenPosition(Camera* camera);
 
-	// 弾リストを取得
-	//const std::list<EnemyBullet*>& GetBullets() const { return enemyBullets_; }
-
 	const float GetRadius() const { return radius_; }
 
 	void SetEnemyBulletManager(EnemyBulletManager* enemyBulletManager) { enemyBulletManager_ = enemyBulletManager; }
@@ -152,7 +149,7 @@ protected:
 	// スプライン曲線上の点
 	std::vector<Vector3> corvePoints_;
 	// 線分の数
-	const uint32_t segmentCount_ = 63;
+	const uint32_t kSegmentCount_ = 63;
 	uint32_t moveCount_ = 0;
 
 	float speed_ = 0.1f;

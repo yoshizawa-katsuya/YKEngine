@@ -55,9 +55,9 @@ void EnemySpawnObject::UpdateWaveStart()
 {
 	objects_->PreUpdate();
 
-	timer_ += deltaTime_;
+	timer_ += kDeltaTime_;
 	// 経過時間をスイッチ時間で割る
-	float time = timer_ / switchTime_;
+	float time = timer_ / kPhaseSwitchTime_;
 
 	// イージングで変化させる
 	Vector3 scale = Lerp(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), EaseInCubic(time));
@@ -71,7 +71,7 @@ void EnemySpawnObject::UpdateWaveStart()
 		objects_->WorldTransformUpdate(worldTransform);
 	}
 
-	if (timer_ >= switchTime_)
+	if (timer_ >= kPhaseSwitchTime_)
 	{
 		timer_ = 0.0f;
 		phase_ = Phase::kWaveInterval;
@@ -81,10 +81,10 @@ void EnemySpawnObject::UpdateWaveStart()
 void EnemySpawnObject::UpdateWaveInterval()
 {
 	//時間経過で敵を出現させる
-	timer_ += deltaTime_;
-	if (timer_ >= intervalTime_)
+	timer_ += kDeltaTime_;
+	if (timer_ >= kIntervalTime_)
 	{
-		timer_ = switchTime_;
+		timer_ = kPhaseSwitchTime_;
 		phase_ = Phase::kWaveEnd;
 		SpawnEnemies();
 
@@ -95,9 +95,9 @@ void EnemySpawnObject::UpdateWaveEnd()
 {
 	objects_->PreUpdate();
 
-	timer_ -= deltaTime_;
+	timer_ -= kDeltaTime_;
 	// 経過時間をスイッチ時間で割る
-	float time = timer_ / switchTime_;
+	float time = timer_ / kPhaseSwitchTime_;
 
 	if (timer_ <= 0.0f)
 	{

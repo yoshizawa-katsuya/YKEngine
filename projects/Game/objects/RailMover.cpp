@@ -162,10 +162,10 @@ void RailMover::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
 	// Catmull-Romスプラインのポイントを生成
 	if (isLoop_) 
 	{
-		pointsDrawing_ = GenerateCatmullRomSplinePointsLoop(controlPoints_, segmentCount_);
+		pointsDrawing_ = GenerateCatmullRomSplinePointsLoop(controlPoints_, kSegmentCount_);
 		return;
 	}
-	pointsDrawing_ = GenerateCatmullRomSplinePoints(controlPoints_, segmentCount_);
+	pointsDrawing_ = GenerateCatmullRomSplinePoints(controlPoints_, kSegmentCount_);
 }
 
 void RailMover::InitializeRotate()

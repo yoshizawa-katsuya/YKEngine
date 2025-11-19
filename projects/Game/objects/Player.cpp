@@ -96,7 +96,7 @@ void Player::DrawUI()
 	reticleController_->Draw();
 
 	//HPの表示
-	for (int i = 0; i < maxHitPoint_; i++)
+	for (int i = 0; i < kMaxHitPoint_; i++)
 	{
 		if (i < hitPoint_)
 		{
@@ -152,10 +152,10 @@ void Player::GameOverRotate()
 
 void Player::HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
 {
-	heratSprites_.resize(maxHitPoint_);
-	heratEmptySprites_.resize(maxHitPoint_);
+	heratSprites_.resize(kMaxHitPoint_);
+	heratEmptySprites_.resize(kMaxHitPoint_);
 
-	for (int i = 0; i < maxHitPoint_; i++)
+	for (int i = 0; i < kMaxHitPoint_; i++)
 	{
 		heratSprites_[i] = std::make_unique<Sprite>();
 		heratSprites_[i]->Initialize(heartTextureHandle);
@@ -347,9 +347,9 @@ void Player::Charge()
 
 	//チャージ
 	chargeTime_ += 1.0f / 60.0f;
-	if (chargeTime_ >= maxChargeTime_) 
+	if (chargeTime_ >= kMaxChargeTime_) 
 	{
-		chargeTime_ = maxChargeTime_;
+		chargeTime_ = kMaxChargeTime_;
 		isChargeMax_ = true;
 		reticleController_->ChargeMax();
 	}

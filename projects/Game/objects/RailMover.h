@@ -75,7 +75,7 @@ private:
 	// 線分で描画する用の頂点リスト
 	std::vector<Vector3> pointsDrawing_;
 	// 線分の数
-	const uint32_t segmentCount_ = 100;
+	const uint32_t kSegmentCount_ = 100;
 
 	Vector3 target_;
 	Vector3 forward_;

@@ -73,9 +73,9 @@ private:
 
 	std::vector<EnemySpawn> spawnDatas_; // 敵の出現データリスト
 
-	const float deltaTime_ = 1.0f / 60.0f; // 仮のデルタタイム（60FPS想定）
-	const float switchTime_ = 0.3f; // フェーズ切り替え時間
-	const float intervalTime_ = 0.2f; // インターバル時間
+	const float kDeltaTime_ = 1.0f / 60.0f; // 仮のデルタタイム（60FPS想定）
+	const float kPhaseSwitchTime_ = 0.3f; // フェーズ切り替え時間
+	const float kIntervalTime_ = 0.2f; // インターバル時間
 	float timer_ = 0.0f; // タイマー
 	std::vector<WorldTransform> worldTransforms_; // ワールド変換行列のリスト
 
