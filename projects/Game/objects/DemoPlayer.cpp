@@ -1,4 +1,5 @@
 #include "DemoPlayer.h"
+#include "manager/EffectManager.h"
 
 void DemoPlayer::Initialize(BaseModel* model, WorldTransform* parent)
 {
@@ -59,6 +60,8 @@ void DemoPlayer::UpdateStart()
 	{
 		phase_ = Phase::Main;
 		animator_->SetAnimation(worldTransform_.translation_, { 0.0f, 0.0f, 50.0f }, 2);
+
+		EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerEndEffect01, worldTransform_.GetWorldPosition(), 30);
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "SpritePlatform.h"
 #include "SceneManager.h"
 #include "LevelDataLoader.h"
+#include "ParticleManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -132,6 +133,9 @@ void ClearScene::Update()
 	default:
 		break;
 	}
+
+	ParticleManager::GetInstance()->Update(mainCamera_);
+
 }
 
 void ClearScene::Draw()
@@ -157,6 +161,9 @@ void ClearScene::Draw()
 	modelPlatform_->LinePreDraw();
 
 	railMover_->DrawRail(mainCamera_);
+
+	//パーティクルの描画
+	ParticleManager::GetInstance()->Draw();
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
