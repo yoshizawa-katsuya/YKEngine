@@ -51,6 +51,7 @@ void DemoPlayer::Draw(Camera* camera)
 void DemoPlayer::SceneEnd()
 {
 	phase_ = Phase::End;
+	animator_->SetAnimation(worldTransform_.translation_, { 0.0f, 0.0f, 50.0f }, 2);
 }
 
 void DemoPlayer::UpdateStart()
@@ -59,7 +60,6 @@ void DemoPlayer::UpdateStart()
 	if (animator_->GetIsEnd())
 	{
 		phase_ = Phase::Main;
-		animator_->SetAnimation(worldTransform_.translation_, { 0.0f, 0.0f, 50.0f }, 2);
 
 		EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerEndEffect01, worldTransform_.GetWorldPosition(), 30);
 	}
