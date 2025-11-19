@@ -167,7 +167,7 @@ private:
 
 	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
 
-	const uint32_t renderTextureTypeCount_ = 10; // RenderTextureTypeの数
+	const uint32_t kRenderTextureTypeCount_ = 10; // RenderTextureTypeの数
 
 	std::vector<DrawMode> renderTextureDrawModes_;
 

@@ -21,7 +21,7 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 	viewport_ = dxCommon_->GetViewport();
 	scissorRect_ = dxCommon_->GetScissorRect();
 
-	renderTextureDrawModes_.resize(renderTextureTypeCount_);
+	renderTextureDrawModes_.resize(kRenderTextureTypeCount_);
 
 	renderTextureDrawModes_ = {
 		DrawMode::kOffScreenRendering,	//オフスクリーンレンダリング

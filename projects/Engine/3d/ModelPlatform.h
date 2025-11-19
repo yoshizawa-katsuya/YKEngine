@@ -251,19 +251,19 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
 	//デバッグ用の球と線分のリソース数。
-	static const uint32_t resourceNum_ = 1;
+	static const uint32_t kResourceNum_ = 1;
 
 	//TransformationMatrix用のリソースを作る 線分用
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> LineWVPResources_;
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kResourceNum_> LineWVPResources_;
 	//データを書き込む
-	std::array<LineWVP*, resourceNum_> LineWVPDatas_;
+	std::array<LineWVP*, kResourceNum_> LineWVPDatas_;
 
 	uint32_t lineIndex_ = 0;
 
 	//TransformationMatrix用のリソースを作る。球用
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> SphereWVPResources_;
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kResourceNum_> SphereWVPResources_;
 	//データを書き込む
-	std::array<Matrix4x4*, resourceNum_> SphereWVPDatas_;
+	std::array<Matrix4x4*, kResourceNum_> SphereWVPDatas_;
 
 	uint32_t sphereIndex_ = 0;
 	
