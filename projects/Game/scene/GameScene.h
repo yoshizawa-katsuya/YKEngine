@@ -139,12 +139,6 @@ private:
 	//平行光源
 	std::unique_ptr<DirectionalLight> directionalLight_;
 
-	//点光源
-	std::unique_ptr<PointLight> pointLight_;
-
-	//スポットライト
-	std::unique_ptr<SpotLight> spotLight_;
-
 	//3Dモデル
 	std::shared_ptr<BaseModel> modelGround_;
 	std::shared_ptr<BaseModel> modelPlayer_;
