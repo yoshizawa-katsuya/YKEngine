@@ -186,7 +186,8 @@ private:
 	std::unique_ptr<RailCamera> railCamera_;
 
 	//シーンのフェーズ
-	enum class Phase {
+	enum class Phase 
+	{
 		kStart,	//開始部
 		kMain,	//メイン部
 		kGameClear,	//クリア部

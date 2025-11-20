@@ -122,13 +122,14 @@ protected:
 	//発射タイマー
 	int32_t fireTimer = 0;
 
-	enum class Phase {
-		Approach, // 接近する
-		Main,	// メイン
-		Leave,	// 離脱する
+	enum class Phase 
+	{
+		kApproach, // 接近する
+		kMain,	// メイン
+		kLeave,	// 離脱する
 	};
 	//フェーズ
-	Phase phase_ = Phase::Approach;
+	Phase phase_ = Phase::kApproach;
 
 	// キャラクターの移動速さ
 	Vector3 velocity_ = {0.0f, 0.0f, 1.0f};

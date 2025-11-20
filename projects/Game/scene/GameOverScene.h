@@ -66,7 +66,8 @@ private:
 	std::unique_ptr<AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
 
 	//シーンのフェーズ
-	enum class Phase {
+	enum class Phase 
+	{
 		kStart,	//開始部
 		kMain,	//メイン部
 		kEnd,	//終了部

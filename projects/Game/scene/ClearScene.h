@@ -113,7 +113,8 @@ private:
 	std::unique_ptr<DemoPlayer> demoPlayer_;
 
 	//シーンのフェーズ
-	enum class Phase {
+	enum class Phase 
+	{
 		kStart,	//開始部
 		kMain,	//メイン部
 		kEnd,	//終了部

@@ -50,13 +50,13 @@ void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix
 void BaseEnemy::Update() {
 
 	switch (phase_) {
-	case Phase::Approach:
+	case Phase::kApproach:
 		UpdateApproach();
 		break;
-	case Phase::Main:
+	case Phase::kMain:
 		UpdateMain();
 		break;
-	case Phase::Leave:
+	case Phase::kLeave:
 		UpdateLeave();
 		break;
 	}
@@ -121,7 +121,7 @@ void BaseEnemy::UpdateApproach()
 	//レールカメラに映っていたらメインフェーズへ
 	if (IsVisible(railCamera_))
 	{
-		phase_ = Phase::Main;
+		phase_ = Phase::kMain;
 		MainInitialize();
 	}
 
@@ -152,7 +152,7 @@ void BaseEnemy::UpdateMain()
 	//レールカメラに映っていなかったら離脱フェーズへ
 	if (!hasRail_ && !IsVisible(railCamera_))
 	{
-		phase_ = Phase::Leave;
+		phase_ = Phase::kLeave;
 	}
 
 }
@@ -170,7 +170,7 @@ void BaseEnemy::UpdateLeave()
 	//画面内に戻ってきたらメインフェーズへ。画面の揺れなどで戻ってきた場合を考慮し、離脱タイマーもリセットする
 	if (IsVisible(railCamera_))
 	{
-		phase_ = Phase::Main;
+		phase_ = Phase::kMain;
 		leaveTimer_ = 0.0f;
 		MainInitialize();
 	}

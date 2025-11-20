@@ -9,8 +9,8 @@
 /// </summary>
 enum class EnemyType
 {
-	Shot01,
-	Tackle01,
+	kShot01,
+	kTackle01,
 };
 
 /// <summary>

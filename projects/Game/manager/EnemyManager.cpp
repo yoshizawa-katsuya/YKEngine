@@ -12,8 +12,8 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, Matrix4x4* vie
 	enemyBulletManager_ = enemyBulletManager;
 
 	// 敵モデルの読み込み
-	modelEnemyMap_[EnemyType::Shot01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
-	modelEnemyMap_[EnemyType::Tackle01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
+	modelEnemyMap_[EnemyType::kShot01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
+	modelEnemyMap_[EnemyType::kTackle01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
 
 }
 
@@ -48,12 +48,12 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 	// 敵の初期化
 	switch (spawnData.type)
 	{
-	case EnemyType::Shot01:
+	case EnemyType::kShot01:
 		enemy = std::make_unique<ShotEnemy01>();
 
 		break;
 
-	case EnemyType::Tackle01:
+	case EnemyType::kTackle01:
 		enemy = std::make_unique<TackleEnemy01>();
 
 		break;

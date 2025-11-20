@@ -21,6 +21,6 @@ void BasePlayerBullet::OnCollision(Collider* other)
 		isDead_ = true;
 
 		// エフェクト生成
-		EffectManager::GetInstance()->SpawnEffect(EffectType::HitEffect01, worldTransform_.GetWorldPosition());
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
 	}
 }

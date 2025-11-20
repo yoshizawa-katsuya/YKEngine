@@ -34,7 +34,7 @@ void TackleEnemy01::UpdateApproach()
 	//レールカメラに映っていたらメインフェーズへ
 	if (IsVisible(railCamera_))
 	{
-		phase_ = Phase::Main;
+		phase_ = Phase::kMain;
 		MainInitialize();
 	}
 
@@ -54,7 +54,7 @@ void TackleEnemy01::UpdateMain()
 	//レールカメラに映っていなかったら離脱フェーズへ
 	if (!hasRail_ && !IsVisible(railCamera_))
 	{
-		phase_ = Phase::Leave;
+		phase_ = Phase::kLeave;
 	}
 }
 
@@ -71,7 +71,7 @@ void TackleEnemy01::UpdateLeave()
 	//画面内に戻ってきたらメインフェーズへ
 	if (IsVisible(railCamera_))
 	{
-		phase_ = Phase::Main;
+		phase_ = Phase::kMain;
 		leaveTimer_ = 0.0f;
 		MainInitialize();
 	}

@@ -45,11 +45,11 @@ void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Ve
 	std::unique_ptr<BasePlayerBullet>& bullet = playerBullets_.emplace_back();
 	switch (bulletType)
 	{
-	case PlayerBulletType::Normal:
+	case PlayerBulletType::kNormal:
 		bullet = std::make_unique<PlayerBullet01>();
 
 		break;
-	case PlayerBulletType::Charge:
+	case PlayerBulletType::kCharge:
 		bullet = std::make_unique<ChargePlayerBullet01>();
 
 		break;

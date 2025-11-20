@@ -6,9 +6,9 @@ class BaseModel;
 
 enum class EffectType
 {
-	HitEffect01,
-	PlayerStartEffect01,
-	PlayerEndEffect01,
+	kHit01,
+	kGather01,	//集まるエフェクト
+	kScatter01,	//散らばるエフェクト
 };
 
 /// <summary>
@@ -76,9 +76,9 @@ private:
 
 	std::unordered_map<EffectType, EffectData> effectDatas_
 	{
-		{{EffectType::HitEffect01}, {"HitEffect01", "./Resources/circle2.png", "primitivePlane"}},
-		{{EffectType::PlayerStartEffect01}, {"PlayerStartEffect01", "./Resources/white.png", "primitiveSphere"}},
-		{{EffectType::PlayerEndEffect01}, {"PlayerEndEffect01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kHit01}, {"HitEffect01", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kGather01}, {"GatherEffect01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kScatter01}, {"ScatterEffect01", "./Resources/white.png", "primitiveSphere"}},
 	};
 
 	//パーティクル

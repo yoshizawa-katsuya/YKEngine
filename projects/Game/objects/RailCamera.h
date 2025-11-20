@@ -57,11 +57,11 @@ private:
 
 	enum class Phase
 	{
-		Main,	// メイン
-		GameOver,	// ゲームオーバー
-		ClearScene,	// クリアシーン
+		kMain,	// メイン
+		kGameOver,	// ゲームオーバー
+		kClearScene,	// クリアシーン
 	};
-	Phase phase_ = Phase::Main;
+	Phase phase_ = Phase::kMain;
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;

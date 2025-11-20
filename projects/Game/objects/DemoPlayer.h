@@ -56,12 +56,12 @@ private:
 
 	enum class Phase
 	{
-		Start,	// 開始
-		Main,	// メイン
-		End, // 終わり
+		kStart,	// 開始
+		kMain,	// メイン
+		kEnd, // 終わり
 	};
 	//フェーズ
-	Phase phase_ = Phase::Start;
+	Phase phase_ = Phase::kStart;
 
 	std::unique_ptr<SRTAnimator> animator_;
 };

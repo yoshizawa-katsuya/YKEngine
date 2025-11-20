@@ -63,7 +63,7 @@ void Player::Update(Camera* railCamera) {
 	case Player::Phase::Start:
 		UpdateStart();
 		break;
-	case Player::Phase::Main:
+	case Player::Phase::kMain:
 		UpdateMain(railCamera);
 		break;
 	case Player::Phase::GameOver:
@@ -213,11 +213,11 @@ void Player::UpdateStart()
 	characterWorldTransform_.scale_ = startAnime_->Update();
 	BaseCharacter::Update();
 	
-	EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerStartEffect01, GetWorldPosition());
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kGather01, GetWorldPosition());
 
 	if (startAnime_->GetIsEnd())
 	{
-		phase_ = Phase::Main;
+		phase_ = Phase::kMain;
 	}
 }
 
@@ -264,7 +264,7 @@ void Player::UpdateGameOver()
 
 	characterWorldTransform_.translation_ = { distribution(*randomEngine), distribution(*randomEngine), distribution(*randomEngine) };
 
-	EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerEndEffect01, characterWorldTransform_.GetWorldPosition());
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, characterWorldTransform_.GetWorldPosition());
 
 	gameOverTimer_ += 1.0f / 60.0f;
 
@@ -272,7 +272,7 @@ void Player::UpdateGameOver()
 	{
 		isGameOverEnd_ = true;
 		characterWorldTransform_.scale_ = { 0.0f, 0.0f, 0.0f };
-		EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerEndEffect01, characterWorldTransform_.GetWorldPosition(), 100);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, characterWorldTransform_.GetWorldPosition(), 100);
 	}
 
 	BaseCharacter::Update();
@@ -322,14 +322,14 @@ void Player::Attack() {
 		if (isChargeMax_)
 		{
 			//チャージ最大なら強力な弾を撃つ
-			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::Charge);
+			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::kCharge);
 
 			//チャージをリセット
 			ChargeReset();
 			return;
 		}
 
-		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::Normal);
+		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::kNormal);
 		//チャージをリセット
 		ChargeReset();
 

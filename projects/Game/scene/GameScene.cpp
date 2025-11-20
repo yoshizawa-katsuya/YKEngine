@@ -467,11 +467,11 @@ void GameScene::CreateLevel()
 		//敵の種類を取得
 		if (enemySpawnData.type == "EnemySpawn")
 		{
-			enemySpawn.type = EnemyType::Shot01;
+			enemySpawn.type = EnemyType::kShot01;
 		}
 		else if (enemySpawnData.type == "TackleEnemySpawn")
 		{
-			enemySpawn.type = EnemyType::Tackle01;
+			enemySpawn.type = EnemyType::kTackle01;
 		}
 		else
 		{

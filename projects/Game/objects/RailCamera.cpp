@@ -37,13 +37,13 @@ void RailCamera::Update() {
 
 	switch (phase_)
 	{
-	case RailCamera::Phase::Main:
+	case RailCamera::Phase::kMain:
 		UpdateMain();
 		break;
-	case RailCamera::Phase::GameOver:
+	case RailCamera::Phase::kGameOver:
 		UpdateGameOver();
 		break;
-	case RailCamera::Phase::ClearScene:
+	case RailCamera::Phase::kClearScene:
 		UpdateClearScene();
 		break;
 	default:
@@ -63,14 +63,13 @@ void RailCamera::Update() {
 
 void RailCamera::SetGameOver()
 {
-	phase_ = Phase::GameOver;
+	phase_ = Phase::kGameOver;
 	t_ = 0.0f;
 }
 
 void RailCamera::SetClearScene()
 {
-	phase_ = Phase::ClearScene;
-	//targetParentWorldTransform_.translation_.y = 1.0f;
+	phase_ = Phase::kClearScene;
 
 	targetParentWorldTransform_.UpdateMatrix();
 

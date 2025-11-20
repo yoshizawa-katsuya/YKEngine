@@ -58,7 +58,8 @@ private:
 	void SpawnEnemies();
 
 	//フェーズ
-	enum class Phase {
+	enum class Phase 
+	{
 		kWaveStart,	//ウェーブ開始部
 		kWaveInterval, //ウェーブ中間部
 		kWaveEnd,	//ウェーブ終了部

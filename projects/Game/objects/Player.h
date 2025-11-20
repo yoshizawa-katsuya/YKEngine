@@ -144,7 +144,7 @@ private:
 	enum class Phase 
 	{
 		Start,	// 開始
-		Main,	// メイン
+		kMain,	// メイン
 		GameOver, // ゲームオーバー
 	};
 	//フェーズ

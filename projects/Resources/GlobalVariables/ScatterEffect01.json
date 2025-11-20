@@ -1,28 +1,28 @@
 {
-    "PlayerStartEffect01": {
+    "ScatterEffect01": {
         "bahaviorEasingTypeForScale": 0,
         "bahaviorIsSceleToDisappear": false,
         "behaviorBlendMode": 1,
-        "behaviorDistance": 6.0,
-        "behaviorIsConstantVelocity": false,
+        "behaviorDistance": 1.0,
+        "behaviorIsConstantVelocity": true,
         "behaviorIsDownVelocity": false,
         "behaviorIsFaceToVelocityDirection": false,
-        "behaviorIsFixedDistance": true,
-        "behaviorIsHeadCenter": true,
+        "behaviorIsFixedDistance": false,
+        "behaviorIsHeadCenter": false,
         "behaviorIsScaleToAppear": false,
         "behaviorIsTimeFadeOut": false,
-        "behaviorIsUseBillboard": true,
-        "behaviorSpeed": 1.0,
-        "count": 2,
+        "behaviorIsUseBillboard": false,
+        "behaviorSpeed": 4.0,
+        "count": 1,
         "frequency": 0.5,
         "randomFlagsColor": false,
-        "randomFlagsLifeTime": true,
+        "randomFlagsLifeTime": false,
         "randomFlagsRotation": false,
         "randomFlagsScale": false,
-        "randomFlagsTranslation": true,
-        "randomFlagsVelocity": false,
-        "rangeParamsLifeTimeMax": 0.10000000149011612,
-        "rangeParamsLifeTimeMin": 0.10000000149011612,
+        "randomFlagsTranslation": false,
+        "randomFlagsVelocity": true,
+        "rangeParamsLifeTimeMax": 0.5,
+        "rangeParamsLifeTimeMin": 0.5,
         "rangeParamsRotateMax": [
             3.1415927410125732,
             3.1415927410125732,
@@ -54,14 +54,14 @@
             -1.0
         ],
         "rangeParamsVelocityMax": [
-            1.0,
-            1.0,
-            1.0
+            2.0,
+            2.0,
+            2.0
         ],
         "rangeParamsVelocityMin": [
-            -1.0,
-            -1.0,
-            -1.0
+            -2.0,
+            -2.0,
+            -2.0
         ],
         "rotation": [
             0.0,
@@ -69,9 +69,9 @@
             0.0
         ],
         "scale": [
-            0.20000000298023224,
-            0.20000000298023224,
-            0.20000000298023224
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
         ],
         "translation": [
             0.0,

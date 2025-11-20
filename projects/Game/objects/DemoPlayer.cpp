@@ -27,13 +27,13 @@ void DemoPlayer::Update()
 
 	switch (phase_)
 	{
-	case DemoPlayer::Phase::Start:
+	case DemoPlayer::Phase::kStart:
 		UpdateStart();
 		break;
-	case DemoPlayer::Phase::Main:
+	case DemoPlayer::Phase::kMain:
 		UpdateMain();
 		break;
-	case DemoPlayer::Phase::End:
+	case DemoPlayer::Phase::kEnd:
 		UpdateEnd();
 		break;
 	default:
@@ -50,7 +50,7 @@ void DemoPlayer::Draw(Camera* camera)
 
 void DemoPlayer::SceneEnd()
 {
-	phase_ = Phase::End;
+	phase_ = Phase::kEnd;
 	animator_->SetAnimation(worldTransform_.translation_, { 0.0f, 0.0f, 50.0f }, 2);
 }
 
@@ -59,9 +59,9 @@ void DemoPlayer::UpdateStart()
 	worldTransform_.translation_ = animator_->Update();
 	if (animator_->GetIsEnd())
 	{
-		phase_ = Phase::Main;
+		phase_ = Phase::kMain;
 
-		EffectManager::GetInstance()->SpawnEffect(EffectType::PlayerEndEffect01, worldTransform_.GetWorldPosition(), 30);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, worldTransform_.GetWorldPosition(), 30);
 	}
 }
 

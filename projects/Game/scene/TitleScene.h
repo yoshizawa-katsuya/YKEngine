@@ -115,7 +115,8 @@ private:
 	std::map<std::string, std::unique_ptr<InstancingObjects>> instancingObjects_;
 
 	//シーンのフェーズ
-	enum class Phase {
+	enum class Phase
+	{
 		kStart,	//開始部
 		kMain,	//メイン部
 		kEnd,	//終了部
