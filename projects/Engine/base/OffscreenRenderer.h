@@ -17,16 +17,16 @@ enum class DrawMode;
 enum class RenderTextureType
 {
 	// オフスクリーンレンダリング用のテクスチャ
-	OffscreenRender,
-	GrayScale,
-	Vignette,
-	BoxFilter,
-	GaussianFilter,
-	LuminanceOutline,
-	Outline,
-	RadialBlur,
-	Dissolve,
-	Random,
+	kOffscreenRender,
+	kGrayScale,
+	kVignette,
+	kBoxFilter,
+	kGaussianFilter,
+	kLuminanceOutline,
+	kDepthOutline,
+	kRadialBlur,
+	kDissolve,
+	kRandom,
 };
 
 /// <summary>
@@ -165,7 +165,7 @@ private:
 	//マスクテクスチャのハンドル
 	uint32_t maskTextureHandle_;
 
-	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
+	RenderTextureType renderTextureType_ = RenderTextureType::kOffscreenRender;
 
 	const uint32_t kRenderTextureTypeCount_ = 10; // RenderTextureTypeの数
 

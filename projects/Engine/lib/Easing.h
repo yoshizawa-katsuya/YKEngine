@@ -6,15 +6,15 @@
 /// </summary>
 enum class EasingType
 {
-	Linear,
-	EaseInSine,
-	EaseOutSine,
-	EaseInQuad,
-	EaseOutQuad,
-	EaseInCubic,
-	EaseOutCubic,
-	EaseInBack,
-	EaseOutBack,
+	kLinear,
+	kEaseInSine,
+	kEaseOutSine,
+	kEaseInQuad,
+	kEaseOutQuad,
+	kEaseInCubic,
+	kEaseOutCubic,
+	kEaseInBack,
+	kEaseInOutBack,
 };
 
 /// <summary>

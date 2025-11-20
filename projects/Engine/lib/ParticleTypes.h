@@ -53,8 +53,8 @@ struct EmitterRangeParams
 /// </summary>
 enum class ParticleBlendMode
 {
-	AddBlend,
-	NormalBlend,
+	kAddBlend,
+	kNormalBlend,
 };
 
 /// <summary>
@@ -79,7 +79,7 @@ struct ParticleBehavior
 	bool isScaleToDisappear = false;
 	//少しずつScaleを大きくするかどうか
 	bool isScaleToAppear = false;
-	EasingType easingTypeForScale = EasingType::Linear;
+	EasingType easingTypeForScale = EasingType::kLinear;
 	//ビルボードを使用するかどうか
 	bool isUseBillboard = true;
 	//少しずつ速度を下げるかどうか
@@ -92,5 +92,5 @@ struct ParticleBehavior
 	//時間経過で透明になっていくならtrue
 	bool isTimeFadeOut = true;
 	//ブレンドモード
-	ParticleBlendMode blendMode = ParticleBlendMode::AddBlend;
+	ParticleBlendMode blendMode = ParticleBlendMode::kAddBlend;
 };
