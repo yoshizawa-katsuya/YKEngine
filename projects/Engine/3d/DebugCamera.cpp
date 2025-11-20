@@ -18,7 +18,8 @@ void DebugCamera::Update()
 	//マウス左クリックで注視点を設定
 	if (input_->TrigerMouseLeft()) 
 	{
-		target_ = camera_->GetTranslate() + TransformNormal(Vector3{0.0f, 0.0f, 10.0f}, camera_->GetWorldMatrix());
+		Vector3 offset = { 0.0f, 0.0f, 10.0f };
+		target_ = camera_->GetTranslate() + TransformNormal(offset, camera_->GetWorldMatrix());
 	}
 
 	//マウス中央クリックでカメラ移動
@@ -28,8 +29,8 @@ void DebugCamera::Update()
 
 		const float speed = 0.01f;
 
-		//カメラ移動ベクトル
-		Vector3 move = { speed, speed, 0 };
+		//カメラ移動ベクトル。xy平面移動
+		Vector3 move = { speed, speed, 0.0f };
 		move.x *= -mousevelocity.x;
 		move.y *= mousevelocity.y;
 		move = TransformNormal(move, camera_->GetWorldMatrix());
@@ -44,7 +45,7 @@ void DebugCamera::Update()
 
 		const float speed = 0.001f;
 
-		//カメラ移動ベクトル
+		//カメラ回転ベクトル。xy平面回転
 		Vector3 move = { speed, speed, 0 };
 		move.x *= mousevelocity.y;
 		move.y *= mousevelocity.x;
@@ -71,7 +72,7 @@ void DebugCamera::Update()
 	{
 		const float speed = 0.01f;
 
-		//カメラ移動ベクトル
+		//カメラ移動ベクトル。Z軸移動
 		Vector3 move = { 0, 0, speed };
 		move.z *= input_->GetMouseWheel();
 		move = TransformNormal(move, camera_->GetWorldMatrix());
