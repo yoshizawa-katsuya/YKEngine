@@ -8,31 +8,31 @@ float ApplyEasing(EasingType type, float t)
 	//各イージング関数を適用
 	switch (type)
 	{
-	case EasingType::Linear:
+	case EasingType::kLinear:
 		return t;
 		break;
-	case EasingType::EaseInSine:
+	case EasingType::kEaseInSine:
 		return EaseInSine(t);
 		break;
-	case EasingType::EaseOutSine:
+	case EasingType::kEaseOutSine:
 		return EaseOutSine(t);
 		break;
-	case EasingType::EaseInQuad:
+	case EasingType::kEaseInQuad:
 		return EaseInQuad(t);
 		break;
-	case EasingType::EaseOutQuad:
+	case EasingType::kEaseOutQuad:
 		return EaseOutQuad(t);
 		break;
-	case EasingType::EaseInCubic:
+	case EasingType::kEaseInCubic:
 		return EaseInCubic(t);
 		break;
-	case EasingType::EaseOutCubic:
+	case EasingType::kEaseOutCubic:
 		return EaseOutCubic(t);
 		break;
-	case EasingType::EaseInBack:
+	case EasingType::kEaseInBack:
 		return EaseInBack(t);
 		break;
-	case EasingType::EaseOutBack:
+	case EasingType::kEaseInOutBack:
 		return EaseOutBack(t);
 		break;
 	default:

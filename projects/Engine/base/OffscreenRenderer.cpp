@@ -108,7 +108,7 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	primitiveDrawer->SetPipelineSet(commandList_, renderTextureDrawModes_[static_cast<uint32_t>(renderTextureType_)]);
 	srvHeapManager->SetGraphicsRootDescriptorTable(0, renderTextureSRVIndex_);
 
-	if (renderTextureType_ == RenderTextureType::Outline) {
+	if (renderTextureType_ == RenderTextureType::kDepthOutline) {
 
 		//TransitionBarrierの設定
 		D3D12_RESOURCE_BARRIER depthBarrier{};
@@ -126,11 +126,11 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 		srvHeapManager->SetGraphicsRootDescriptorTable(1, depthTextureSRVIndex_);	//アウトラインレンダリングの場合はDepthTextureのSRVもセットする
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, outlineMaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
 	}
-	else if (renderTextureType_ == RenderTextureType::Dissolve)
+	else if (renderTextureType_ == RenderTextureType::kDissolve)
 	{
 		srvHeapManager->SetGraphicsRootDescriptorTable(1, maskTextureHandle_);	//ディゾルブレンダリングの場合はマスクテクスチャのSRVもセットする
 	}
-	else if (renderTextureType_ == RenderTextureType::Random)
+	else if (renderTextureType_ == RenderTextureType::kRandom)
 	{
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, randomMaterialResource_->GetGPUVirtualAddress());	//ランダムマテリアルの設定
 		randomMaterialData_->time += 0.01f;	//時間を更新
@@ -153,7 +153,7 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	//TransitionBarrierを張る
 	commandList_->ResourceBarrier(1, &barrier2);
 
-	if (renderTextureType_ == RenderTextureType::Outline) {
+	if (renderTextureType_ == RenderTextureType::kDepthOutline) {
 		//TransitionBarrierの設定
 		D3D12_RESOURCE_BARRIER depthBarrier{};
 		//今回のバリアはTransition

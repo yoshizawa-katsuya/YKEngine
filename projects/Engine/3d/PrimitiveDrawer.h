@@ -16,7 +16,7 @@ class DirectXCommon;
 /// </summary>
 enum class DrawMode {
 	kBlendModeNone, //ブレンドなし
-	kBlendModeNormal, //NormalBlend
+	kBlendModeNormal, //kNormalBlend
 	kBlendModeAdd,	//加算
 	kBlendModeSubtract,	//減算
 	kBlendModeMultiply,	//乗算

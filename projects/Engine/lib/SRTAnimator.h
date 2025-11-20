@@ -47,7 +47,7 @@ private:
 	//アニメーションが終わっていたらtrue
 	bool isEnd_;
 
-	EasingType easingType_ = EasingType::Linear;
+	EasingType easingType_ = EasingType::kLinear;
 
 	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
 };
