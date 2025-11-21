@@ -51,7 +51,7 @@ enum class DrawMode {
 
 	kSkyboxMode,
 
-	kCountOfBlendMode,	//利用してはいけない
+	kCount,	//利用してはいけない
 };
 
 //TODO:クラス名を変更する
@@ -98,7 +98,7 @@ private:
 	std::unique_ptr<PipelineSet> CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon);
 
 	//パイプライン。ブレンドモードの数だけ用意する
-	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCountOfBlendMode> pipelineSets_;
+	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCount> pipelineSets_;
 
 };
 

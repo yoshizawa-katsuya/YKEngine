@@ -68,10 +68,10 @@ enum class SkinModelRootParam
 	kLightCount = 7,
 	kEnvironmentMap = 8,
 	kWell = 9,
-	kCount
+	kCount,
 };
 
-//モデル用ルートパラメータ。パーティクルやインスタンシングにも使用。
+//モデル用ルートパラメータ。インスタンシングにも使用。
 enum class ModelRootParam
 {
 	kMaterial = 0,
@@ -83,5 +83,21 @@ enum class ModelRootParam
 	kSpotLight = 6,
 	kLightCount = 7,
 	kEnvironmentMap = 8,
-	kCount
+	kCount,
+};
+
+enum class SpriteRootParam
+{
+	kMaterial = 0,
+	kTransformationMatrix = 1,
+	kTexture = 2,
+	kCount,
+};
+
+enum class ParticleRootParam
+{
+	kMaterial = 0,
+	kParticleForGPU = 1,
+	kTexture = 2,
+	kCount,
 };
