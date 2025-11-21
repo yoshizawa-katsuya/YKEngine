@@ -32,13 +32,12 @@ void Camera::Update()
 	viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);
 }
 
-// TODO : RootParamを引数で受け取るように変更する
-void Camera::SetCameraReaource()
+void Camera::SetCameraReaource(uint32_t rootParamIndex)
 {
 
 	cameraForGPUData_->worldPosition = transform_.translation;
 
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kCamera), cameraResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(rootParamIndex, cameraResource_->GetGPUVirtualAddress());
 
 }
 

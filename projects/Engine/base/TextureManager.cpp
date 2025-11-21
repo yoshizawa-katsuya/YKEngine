@@ -61,20 +61,18 @@ uint32_t TextureManager::Load(const std::string& fileName) {
 	return index;
 }
 
-// TODO : RootParamを引数で受け取るように変更する
-void TextureManager::SetGraphicsRootDescriptorTable(uint32_t textureHandle) 
+void TextureManager::SetGraphicsRootDescriptorTable(uint32_t rootParamIndex, uint32_t textureHandle)
 {
 
 	// テクスチャをセット
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SpriteRootParam::kTexture), textureHandle);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(rootParamIndex, textureHandle);
 	
 }
 
-// TODO : RootParamを引数で受け取るように変更する
-void TextureManager::SetEnvironmentMap(uint32_t textureHandle)
+void TextureManager::SetEnvironmentMap(uint32_t rootParamIndex, uint32_t textureHandle)
 {
 	// 環境マップをセット
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandle);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(rootParamIndex, textureHandle);
 }
 
 const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureHandle)
