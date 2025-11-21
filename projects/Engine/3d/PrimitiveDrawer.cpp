@@ -329,6 +329,57 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 		break;
 	}
+	case DrawMode::kBlendModeNoneSprite:
+	case DrawMode::kBlendModeNormalSprite:
+	case DrawMode::kBackGroundSprite:
+	{
+		rootParameters.resize(static_cast<size_t>(SpriteRootParam::kCount));
+		//マテリアル
+		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(SpriteRootParam::kMaterial)];
+		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+		//TransformationMatrix
+		D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(SpriteRootParam::kTransformationMatrix)];
+		transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+		//テクスチャ
+		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(SpriteRootParam::kTexture)];
+		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+		break;
+	}
+	case DrawMode::kBlendModeAddParticle:
+	case DrawMode::kBlendModeNormalParticle:
+	{
+		rootParameters.resize(static_cast<size_t>(ParticleRootParam::kCount));
+
+		//マテリアル
+		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(ParticleRootParam::kMaterial)];
+		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+		//ParticleForGPU
+		D3D12_ROOT_PARAMETER& particleParam = rootParameters[static_cast<size_t>(ParticleRootParam::kParticleForGPU)];
+		particleParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		particleParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+		particleParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		particleParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+
+		//テクスチャ
+		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(ParticleRootParam::kTexture)];
+		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
+		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
+
+		break;
+	}
+
 	default:
 	{
 		rootParameters.resize(static_cast<size_t>(ModelRootParam::kCount));

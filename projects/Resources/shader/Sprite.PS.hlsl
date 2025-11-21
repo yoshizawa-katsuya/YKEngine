@@ -1,5 +1,6 @@
 #include "Sprite.hlsli"
 
+//TODO : Material構造体の内容を適切に変更する
 struct Material
 {
     float32_t4 color;
@@ -15,7 +16,6 @@ struct DirectionalLight
 };
 
 ConstantBuffer<Material> gMaterial : register(b0);
-ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
 Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 
