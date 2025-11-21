@@ -3,6 +3,7 @@
 #include <cassert>
 #include "dx12.h"
 #include "DirectXTex/d3dx12.h"
+#include "RootParams.h"
 
 TextureManager* TextureManager::instance_ = nullptr;
 
@@ -60,17 +61,20 @@ uint32_t TextureManager::Load(const std::string& fileName) {
 	return index;
 }
 
-void TextureManager::SetGraphicsRootDescriptorTable(uint32_t textureHandle) {
+// TODO : RootParamを引数で受け取るように変更する
+void TextureManager::SetGraphicsRootDescriptorTable(uint32_t textureHandle) 
+{
 
-	// シェーダリソースビューをセット
-	srvHeapManager_->SetGraphicsRootDescriptorTable(2, textureHandle);
+	// テクスチャをセット
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SpriteRootParam::kTexture), textureHandle);
 	
 }
 
+// TODO : RootParamを引数で受け取るように変更する
 void TextureManager::SetEnvironmentMap(uint32_t textureHandle)
 {
-	// シェーダリソースビューをセット
-	srvHeapManager_->SetGraphicsRootDescriptorTable(8, textureHandle);
+	// 環境マップをセット
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandle);
 }
 
 const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureHandle)

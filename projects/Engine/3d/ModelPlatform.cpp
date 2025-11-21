@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "RigidModel.h"
 #include "SkinModel.h"
+#include "RootParams.h"
 
 ModelPlatform* ModelPlatform::instance_ = nullptr;
 
@@ -110,12 +111,12 @@ void ModelPlatform::PreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormal);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kPointLight), pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kSpotLight), spotLightSrvIndex_);
 	camera_->SetCameraReaource();
 
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
 
 }
 
@@ -131,12 +132,12 @@ void ModelPlatform::SkinPreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kSkinModelMode);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kPointLight), pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kSpotLight), spotLightSrvIndex_);
 	camera_->SetCameraReaource();
 
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
 
 }
 
@@ -146,12 +147,12 @@ void ModelPlatform::InstancingPreDraw()
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormalinstancing);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kPointLight), pointLightSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kSpotLight), spotLightSrvIndex_);
 	camera_->SetCameraReaource();
 
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
 
 }
 
@@ -183,7 +184,7 @@ void ModelPlatform::LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& wor
 	LineWVPDatas_[lineIndex_]->WVP2 = worldViewProjectionMatrix2;
 
 	//wvp用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, LineWVPResources_[lineIndex_]->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(DebudLineRootParam::kWVP), LineWVPResources_[lineIndex_]->GetGPUVirtualAddress());
 	
 	//描画1(DrawCall/ドローコール)。
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
@@ -216,7 +217,7 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 	*SphereWVPDatas_[sphereIndex_] = worldViewProjectionMatrix;
 
 	//wvp用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, SphereWVPResources_[sphereIndex_]->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(DebugSphereRootParam::kWVP), SphereWVPResources_[sphereIndex_]->GetGPUVirtualAddress());
 
 	//描画1(DrawCall/ドローコール)。
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
