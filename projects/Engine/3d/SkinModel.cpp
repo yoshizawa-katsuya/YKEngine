@@ -20,7 +20,7 @@ void SkinModel::Draw(bool usedMaterial)
 
 	}
 	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SkinModelRootParam::kTexture), textureHandle_);
 
 	//描画1(DrawCall/ドローコール)。	
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
@@ -37,7 +37,7 @@ void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 
 	}
 	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SkinModelRootParam::kTexture), textureHandle);
 
 	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);

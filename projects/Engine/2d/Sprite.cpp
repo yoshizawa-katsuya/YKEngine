@@ -85,7 +85,7 @@ void Sprite::Draw()
 	//TransformationMatrixCBufferの場所を設定
 	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SpriteRootParam::kTransformationMatrix), transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVの設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SpriteRootParam::kTexture), textureHandle_);
 	//描画
 	spritePlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 

@@ -72,7 +72,7 @@ void BaseModel::Draw(bool usedMaterial) {
 
 	}
 	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle_);
 
 	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
@@ -93,7 +93,7 @@ void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 
 	}
 	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
 
 	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
@@ -114,7 +114,7 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 	//マテリアルのCBufferの場所を設定
 	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle_);
 
 	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
@@ -134,7 +134,7 @@ void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
 	//マテリアルのCBufferの場所を設定
 	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
 
 	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);

@@ -55,13 +55,13 @@ public:
 	/// グラフィックスルートディスクリプタテーブルを設定。
 	/// </summary>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	void SetGraphicsRootDescriptorTable(uint32_t textureHandle);
+	void SetGraphicsRootDescriptorTable(uint32_t rootParamIndex, uint32_t textureHandle);
 
 	/// <summary>
 	/// 環境マップを設定。
 	/// </summary>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	void SetEnvironmentMap(uint32_t textureHandle);
+	void SetEnvironmentMap(uint32_t rootParamIndex, uint32_t textureHandle);
 
 	/// <summary>
 	/// テクスチャのメタデータを取得。
