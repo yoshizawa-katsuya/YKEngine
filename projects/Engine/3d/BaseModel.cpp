@@ -9,6 +9,7 @@
 #include "Animation.h"
 #include "Struct.h"
 #include "ThreadPool.h"
+#include "RootParams.h"
 
 BaseModel::BaseModel()
 	: modelPlatform_(ModelPlatform::GetInstance())
@@ -67,7 +68,7 @@ void BaseModel::Draw(bool usedMaterial) {
 	if (!usedMaterial) 
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
 	//テクスチャハンドルを設定
@@ -88,7 +89,7 @@ void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 	if (!usedMaterial)
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
 	//テクスチャハンドルを設定
@@ -115,7 +116,7 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 	//テクスチャハンドルを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
 
@@ -135,7 +136,7 @@ void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 	//テクスチャハンドルを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
 

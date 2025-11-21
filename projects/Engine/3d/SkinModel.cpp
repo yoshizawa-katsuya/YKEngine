@@ -3,6 +3,7 @@
 #include "Matrix.h"
 #include "Animation.h"
 #include "Camera.h"
+#include "RootParams.h"
 
 SkinModel::~SkinModel()
 {
@@ -15,7 +16,7 @@ void SkinModel::Draw(bool usedMaterial)
 	if (!usedMaterial)
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
 	//テクスチャハンドルを設定
@@ -32,7 +33,7 @@ void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 	if (!usedMaterial)
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
 	//テクスチャハンドルを設定

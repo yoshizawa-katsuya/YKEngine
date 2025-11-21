@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include <cassert>
 #include "SpritePlatform.h"
+#include "RootParams.h"
 
 void Sprite::Initialize(uint32_t textureHandle) {
 
@@ -78,11 +79,11 @@ void Sprite::Draw()
 
 	//Spriteの描画。変更が必要なものだけ変更する
 	//マテリアルのCBufferの場所を設定
-	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SpriteRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 	spritePlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 	spritePlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);	//IBVを設定
 	//TransformationMatrixCBufferの場所を設定
-	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
+	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SpriteRootParam::kTransformationMatrix), transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVの設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
 	//描画

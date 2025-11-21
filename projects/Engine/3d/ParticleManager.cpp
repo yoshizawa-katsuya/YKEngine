@@ -5,6 +5,7 @@
 #include "TransformHelpers.h"
 #include "Lerp.h"
 #include "Random.h"
+#include "RootParams.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -155,7 +156,7 @@ void ParticleManager::Draw()
 
 		
 		//instancing用のDataを読むためにStructBufferのSRVを設定する
-		srvHeapManager_->SetGraphicsRootDescriptorTable(1, particleGroupIterator->second.instancingSrvIndex);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ParticleRootParam::kParticleForGPU), particleGroupIterator->second.instancingSrvIndex);
 		
 		particleGroupIterator->second.model->InstancingDraw(particleGroupIterator->second.numInstance, particleGroupIterator->second.textureHandle);
 

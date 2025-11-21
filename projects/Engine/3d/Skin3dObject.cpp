@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include "ModelPlatform.h"
 #include "Animation.h"
+#include "RootParams.h"
 
 Skin3dObject::~Skin3dObject()
 {
@@ -32,14 +33,14 @@ void Skin3dObject::AnimationUpdate(Animation* animation)
 void Skin3dObject::Draw()
 {
 	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, TransformationResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
 
 	model_->SetSkinCluster(skinCluster_);
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 		model_->Draw(true);
 		return;
 	}
@@ -51,14 +52,14 @@ void Skin3dObject::Draw()
 void Skin3dObject::Draw(uint32_t textureHandle)
 {
 	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, TransformationResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
 
 	model_->SetSkinCluster(skinCluster_);
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 		model_->Draw(textureHandle, true);
 		return;
 	}

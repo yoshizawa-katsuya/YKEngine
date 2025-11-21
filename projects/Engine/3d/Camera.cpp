@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include "Matrix.h"
 #include <numbers>
+#include "RootParams.h"
 
 Camera::Camera()
 	: transform_({ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} })
@@ -31,12 +32,13 @@ void Camera::Update()
 	viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);
 }
 
+// TODO : RootParamを引数で受け取るように変更する
 void Camera::SetCameraReaource()
 {
 
 	cameraForGPUData_->worldPosition = transform_.translation;
 
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kCamera), cameraResource_->GetGPUVirtualAddress());
 
 }
 

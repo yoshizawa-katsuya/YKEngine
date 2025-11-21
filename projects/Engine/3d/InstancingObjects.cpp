@@ -2,6 +2,7 @@
 #include "ModelPlatform.h"
 #include "Camera.h"
 #include "Matrix.h"
+#include "RootParams.h"
 
 InstancingObjects::InstancingObjects()
 	: dxCommon_(DirectXCommon::GetInstance())
@@ -59,7 +60,7 @@ void InstancingObjects::CameraUpdate(Camera* camera)
 void InstancingObjects::Draw()
 {
 
-	srvHeapManager_->SetGraphicsRootDescriptorTable(1, instancingSrvIndex_);
+	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kTransformationMatrix), instancingSrvIndex_);
 
 	model_->InstancingDraw(numInstance_);
 

@@ -2,6 +2,7 @@
 #include "SrvHeapManager.h"
 #include "PrimitiveDrawer.h"
 #include "Matrix.h"
+#include "RootParams.h"
 
 OffscreenRenderer* OffscreenRenderer::instance_ = nullptr;
 
@@ -107,7 +108,7 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 
 	//コピー実行
 	primitiveDrawer->SetPipelineSet(commandList_, renderTextureDrawModes_[static_cast<uint32_t>(renderTextureType_)]);
-	srvHeapManager->SetGraphicsRootDescriptorTable(0, renderTextureSRVIndex_);
+	srvHeapManager->SetGraphicsRootDescriptorTable(static_cast<size_t>(PostEffectRootParam::kTexture), renderTextureSRVIndex_);
 
 	if (renderTextureType_ == RenderTextureType::kDepthOutline)
 	{
@@ -125,16 +126,16 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 		//TransitionBarrierを張る
 		commandList_->ResourceBarrier(1, &depthBarrier);
 
-		srvHeapManager->SetGraphicsRootDescriptorTable(1, depthTextureSRVIndex_);	//アウトラインレンダリングの場合はDepthTextureのSRVもセットする
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, outlineMaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
+		srvHeapManager->SetGraphicsRootDescriptorTable(static_cast<size_t>(DepthOutlineRootParam::kDepthTexture), depthTextureSRVIndex_);	//アウトラインレンダリングの場合はDepthTextureのSRVもセットする
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(DepthOutlineRootParam::kMaterial), outlineMaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
 	}
 	else if (renderTextureType_ == RenderTextureType::kDissolve)
 	{
-		srvHeapManager->SetGraphicsRootDescriptorTable(1, maskTextureHandle_);	//ディゾルブレンダリングの場合はマスクテクスチャのSRVもセットする
+		srvHeapManager->SetGraphicsRootDescriptorTable(static_cast<size_t>(DissolveRootParam::kMaskTexture), maskTextureHandle_);	//ディゾルブレンダリングの場合はマスクテクスチャのSRVもセットする
 	}
 	else if (renderTextureType_ == RenderTextureType::kRandom)
 	{
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, randomMaterialResource_->GetGPUVirtualAddress());	//ランダムマテリアルの設定
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(RandomRootParam::kMaterial), randomMaterialResource_->GetGPUVirtualAddress());	//ランダムマテリアルの設定
 		randomMaterialData_->time += 0.01f;	//時間を更新
 	}
 
