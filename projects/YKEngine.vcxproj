@@ -395,6 +395,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\OffscreenRenderer.h" />
     <ClInclude Include="Engine\lib\Random.h" />
     <ClInclude Include="Engine\lib\MyMath.h" />
+    <ClInclude Include="Engine\lib\RootParams.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
