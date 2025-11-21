@@ -742,6 +742,9 @@
     <ClInclude Include="Game\objects\DemoPlayer.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\lib\RootParams.h">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

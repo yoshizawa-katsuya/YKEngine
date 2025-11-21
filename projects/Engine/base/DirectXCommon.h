@@ -243,10 +243,14 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_ = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_ = nullptr;
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, 2> swapChainResources_;
+
+	static constexpr UINT kBufferCount = 2;
+
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kBufferCount> swapChainResources_;
+	std::array<D3D12_CPU_DESCRIPTOR_HANDLE, kBufferCount> rtvHandles_;
+
 	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource_ = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_ = nullptr;
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_ = nullptr;
 	uint64_t fenceValue_ = 0;

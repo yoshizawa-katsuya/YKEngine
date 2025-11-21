@@ -85,7 +85,8 @@ void OffscreenRenderer::PreDrawRenderTexture()
 
 void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
-	if (!useOffscreenRender_) {
+	if (!useOffscreenRender_) 
+	{
 		return;	//オフスクリーンレンダリングを使用しない場合は何もしない
 	}
 
@@ -108,7 +109,8 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	primitiveDrawer->SetPipelineSet(commandList_, renderTextureDrawModes_[static_cast<uint32_t>(renderTextureType_)]);
 	srvHeapManager->SetGraphicsRootDescriptorTable(0, renderTextureSRVIndex_);
 
-	if (renderTextureType_ == RenderTextureType::kDepthOutline) {
+	if (renderTextureType_ == RenderTextureType::kDepthOutline)
+	{
 
 		//TransitionBarrierの設定
 		D3D12_RESOURCE_BARRIER depthBarrier{};
