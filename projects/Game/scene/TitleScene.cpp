@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
 #include "LevelDataLoader.h"
+#include "RootParams.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -148,7 +149,7 @@ void TitleScene::Draw()
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
-	TextureManager::GetInstance()->SetEnvironmentMap(textureHandleSkyBox_);
+	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
 
 	//地面の描画
 	ground_->CameraUpdate(mainCamera_);

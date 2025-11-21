@@ -8,6 +8,7 @@
 #include "LevelDataLoader.h"
 #include "Vector2.h"
 #include "ShotEnemy01.h"
+#include "RootParams.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -228,7 +229,7 @@ void GameScene::Draw()
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
-	TextureManager::GetInstance()->SetEnvironmentMap(textureHandleSkyBox_);
+	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
 	
 	//地面の描画
 	ground_->CameraUpdate(mainCamera_);

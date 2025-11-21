@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "LevelDataLoader.h"
 #include "ParticleManager.h"
+#include "RootParams.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -149,7 +150,7 @@ void ClearScene::Draw()
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
-	TextureManager::GetInstance()->SetEnvironmentMap(textureHandleSkyBox_);
+	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
 	
 	//デモ用プレイヤーの描画
 	demoPlayer_->Draw(mainCamera_);
