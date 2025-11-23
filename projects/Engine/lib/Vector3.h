@@ -38,22 +38,14 @@ float Length(const Vector3& v);
 //正規化
 Vector3 Normalize(const Vector3& v);
 
-//void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label);
-
 //クロス積
 Vector3 Cross(const Vector3& v1, const Vector3& v2);
 
 //正射影ベクトル
 Vector3 Project(const Vector3& v1, const Vector3& v2);
 
-//最近接点
-//Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
-
 //垂直なベクトルを求める
 Vector3 Perpendicular(const Vector3& vector);
-
-//スクリーン座標に変換
-//Vector3 ConvertingToScreen(const Vector3& position, const ViewProjection& viewProjection);
 
 //加算
 Vector3 operator+(const Vector3& v1, const Vector3& v2);

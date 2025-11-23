@@ -55,13 +55,13 @@ public:
 	/// グラフィックスルートディスクリプタテーブルを設定。
 	/// </summary>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	void SetGraphicsRootDescriptorTable(uint32_t textureHandle);
+	void SetGraphicsRootDescriptorTable(uint32_t rootParamIndex, uint32_t textureHandle);
 
 	/// <summary>
 	/// 環境マップを設定。
 	/// </summary>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	void SetEnvironmentMap(uint32_t textureHandle);
+	void SetEnvironmentMap(uint32_t rootParamIndex, uint32_t textureHandle);
 
 	/// <summary>
 	/// テクスチャのメタデータを取得。
@@ -98,6 +98,9 @@ private:
 	/// <returns>アップロード用バッファリソース</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages);
 
+	// シングルトンインスタンス
+	static TextureManager* instance_;
+
 	TextureManager() = default;
 	~TextureManager() = default;
 	TextureManager(TextureManager&) = default;
@@ -126,7 +129,6 @@ private:
 	};
 
 	// テクスチャコンテナ
-	//std::array<Texture, SrvHeapManager::kMaxSrvDescriptors_> textures_;
 	std::unordered_map<uint32_t, Texture> textures_;
 	std::unordered_map<std::string, uint32_t> textureHandles_;
 

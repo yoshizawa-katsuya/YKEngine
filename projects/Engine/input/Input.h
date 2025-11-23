@@ -215,6 +215,9 @@ private:
 	XINPUT_GAMEPAD_Y
 	*/
 
+	// シングルトンインスタンス
+	static Input* instance_;
+
 	Input() = default;
 	~Input() = default;
 	Input(Input&) = default;
@@ -241,7 +244,7 @@ private:
 	DIMOUSESTATE mouseState_;
 	DIMOUSESTATE preMouseState_;
 
-	const int32_t deadZone_ = 8000;
+	const int32_t kDeadZone_ = 8000;
 	XINPUT_STATE gamePadState_;
 	XINPUT_STATE preGamePadState_;
 

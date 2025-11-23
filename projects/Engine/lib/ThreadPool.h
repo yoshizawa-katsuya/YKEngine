@@ -53,6 +53,9 @@ public:
 
 private:
 
+    // シングルトンインスタンス
+    static ThreadPool* instance_;
+
     ThreadPool() = default;
     ~ThreadPool() = default;
     ThreadPool(ThreadPool*) = delete;

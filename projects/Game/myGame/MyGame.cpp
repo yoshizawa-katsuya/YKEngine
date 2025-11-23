@@ -20,11 +20,6 @@ void MyGame::Initialize()
 void MyGame::Finalize()
 {
 
-	//解放処理
-	//delete gameScene_;
-	//gameScene_ = nullptr;
-
-
 	YKFramework::Finalize();
 
 }
@@ -33,10 +28,6 @@ void MyGame::Update()
 {
 
 	YKFramework::Update();
-
-	//ゲームの処理
-	//gameScene_->Update();
-
 
 	YKFramework::EndFrame();
 
@@ -67,12 +58,12 @@ void MyGame::Draw()
 
 	offscreenRenderer_->PostDrawRenderTexture(primitiveDrawer_.get(), srvHeapManager_.get());
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//実際のcommandListのImGuiの描画コマンドを積む
 	imGuiManager_->Draw();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	dxCommon_->PostDraw();
 

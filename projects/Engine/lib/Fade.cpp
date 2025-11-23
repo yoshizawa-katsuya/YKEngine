@@ -7,7 +7,8 @@ Fade::~Fade()
 {
 }
 
-void Fade::Initialize() {
+void Fade::Initialize() 
+{
 
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./resources/white.png");
 
@@ -18,14 +19,15 @@ void Fade::Initialize() {
 
 }
 
-void Fade::Update() {
+void Fade::Update() 
+{
 
 	//フェード状態による分岐
 	switch (status_) {
-	case Fade::Status::None:
+	case Fade::Status::kNone:
 		//何もしない
 		break;
-	case Fade::Status::FadeIn:
+	case Fade::Status::kFadeIn:
 
 		// 1フレーム分の秒数をカウントアップ
 		counter_ += 1.0f / 60.0f;
@@ -38,7 +40,7 @@ void Fade::Update() {
 
 
 		break;
-	case Fade::Status::FadeOut:
+	case Fade::Status::kFadeOut:
 
 		//1フレーム分の秒数をカウントアップ
 		counter_ += 1.0f / 60.0f;
@@ -56,9 +58,10 @@ void Fade::Update() {
 
 }
 
-void Fade::Draw() {
+void Fade::Draw() 
+{
 
-	if (status_ == Status::None) {
+	if (status_ == Status::kNone) {
 		return;
 	}
 
@@ -66,7 +69,8 @@ void Fade::Draw() {
 
 }
 
-void Fade::Start(Status status, float duration) {
+void Fade::Start(Status status, float duration) 
+{
 
 	status_ = status;
 	duration_ = duration;
@@ -74,18 +78,20 @@ void Fade::Start(Status status, float duration) {
 
 }
 
-void Fade::Stop() {
+void Fade::Stop() 
+{
 
-	status_ = Status::None;
+	status_ = Status::kNone;
 
 }
 
-bool Fade::IsFinished() { 
+bool Fade::IsFinished() 
+{ 
 	
 	//フェード状態による分岐
 	switch (status_) {
-	case Fade::Status::FadeIn:
-	case Fade::Status::FadeOut:
+	case Fade::Status::kFadeIn:
+	case Fade::Status::kFadeOut:
 
 		return counter_ >= duration_;
 

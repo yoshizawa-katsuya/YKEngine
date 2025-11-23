@@ -1,7 +1,6 @@
 #pragma once
 #include "Struct.h"
 #include <assert.h>
-//#include <Novice.h>
 #include <math.h>
 #include <cmath>
 
@@ -55,8 +54,6 @@ Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
 
 //回転とスケールのみの座標変換
 Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix);
-
-//void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label);
 
 //回転行列 XYZの順
 Matrix4x4 MakeRotateMatrix(const Vector3& rotate);

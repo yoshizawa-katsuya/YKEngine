@@ -38,9 +38,6 @@ public:
 	/// </summary>
 	void Initialize();
 
-	//描画
-	//void Draw();
-
 	SpotLightData& GetSpotLightData() { return *data_; }
 	const SpotLightData& GetSpotLightData() const { return *data_; }
 

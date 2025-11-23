@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include "ModelPlatform.h"
 #include "Animation.h"
+#include "RootParams.h"
 
 Skin3dObject::~Skin3dObject()
 {
@@ -29,38 +30,17 @@ void Skin3dObject::AnimationUpdate(Animation* animation)
 	SkinClusterUpdate();
 }
 
-/*
-void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera)
-{
-
-	Base3dObject::Update(worldTransform, camera);
-
-	SkeletonUpdate();
-
-	SkinClusterUpdate();
-
-}
-
-void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation)
-{
-
-	ApplyAnimation(animation);
-
-	Update(worldTransform, camera);
-
-}
-*/
 void Skin3dObject::Draw()
 {
 	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, TransformationResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
 
 	model_->SetSkinCluster(skinCluster_);
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 		model_->Draw(true);
 		return;
 	}
@@ -72,14 +52,14 @@ void Skin3dObject::Draw()
 void Skin3dObject::Draw(uint32_t textureHandle)
 {
 	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, TransformationResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
 
 	model_->SetSkinCluster(skinCluster_);
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 		model_->Draw(textureHandle, true);
 		return;
 	}
@@ -245,7 +225,8 @@ void Skin3dObject::ApplyAnimation(Animation* animation)
 void Skin3dObject::SkeletonUpdate()
 {
 	//全てのJointを更新。親が若いので通常ループで処理可能になっている
-	for (Joint& joint : skeleton_.joints) {
+	for (Joint& joint : skeleton_.joints) 
+	{
 		joint.localMatrix = MakeAffineMatrix(joint.transform.scale, joint.transform.rotation, joint.transform.translation);
 		if (joint.parent) {	//親がいれば親の行列を掛ける
 			joint.skeletonSpaceMatrix = joint.localMatrix * skeleton_.joints[*joint.parent].skeletonSpaceMatrix;
@@ -258,8 +239,10 @@ void Skin3dObject::SkeletonUpdate()
 
 void Skin3dObject::SkinClusterUpdate()
 {
-	for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) {
+	for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) 
+	{
 		assert(jointIndex < skinCluster_.inverseBindPoseMatrices.size());
+		//inverseBindPoseMatrixと現在のskeletonSpaceMatrixを掛け合わせて、mappedPaletteを更新
 		skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix =
 			skinCluster_.inverseBindPoseMatrices[jointIndex] * skeleton_.joints[jointIndex].skeletonSpaceMatrix;
 		skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =

@@ -16,10 +16,18 @@ public:
 	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
+	void Finalize();
+
 	const std::mt19937& GetRandomEngine() const { return randomEngine_; }
 	std::mt19937* GetRandomEnginePtr() { return &randomEngine_; }
 
 private:
+
+	// シングルトンインスタンス
+	static Random* instance_;
 
 	Random() = default;
 	~Random() = default;

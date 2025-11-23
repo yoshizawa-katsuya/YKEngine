@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include "Camera.h"
 #include "Animation.h"
+#include "RootParams.h"
 
 Base3dObject::Base3dObject()
 	: dxCommon_(DirectXCommon::GetInstance())
@@ -18,6 +19,7 @@ void Base3dObject::Initialize(BaseModel* model)
 	assert(model);
 	model_ = model;
 
+	//Transform用のリソースを作る。今回は行列3つ分のサイズを用意する
 	TransformationResource_ = dxCommon_->CreateBufferResource(sizeof(TransformationMatrix));
 	TransformationResource_->Map(0, nullptr, reinterpret_cast<void**>(&TransformationData_));
 	TransformationData_->World = MakeIdentity4x4();
@@ -35,12 +37,13 @@ void Base3dObject::WorldTransformUpdate(const WorldTransform& worldTransform)
 
 void Base3dObject::AnimationUpdate(Animation* animation)
 {
+	//RootNodeの変換行列を取得してワールド行列に掛け合わせる
 	TransformationData_->World = Multiply(TransformationData_->World, animation->Reproducing(model_));
 }
 
 void Base3dObject::CameraUpdate(Camera* camera)
 {
-
+	//ワールド行列とビュー射影行列を掛け合わせてWVP行列を計算
 	Matrix4x4 worldViewProjectionMatrix;
 	if (camera) {
 		worldViewProjectionMatrix = Multiply(TransformationData_->World, camera->GetViewProjection());
@@ -48,8 +51,8 @@ void Base3dObject::CameraUpdate(Camera* camera)
 	else {
 		worldViewProjectionMatrix = TransformationData_->World;
 	}
-
 	TransformationData_->WVP = worldViewProjectionMatrix;
+	//ワールド行列の逆行列の転置行列を計算
 	TransformationData_->WorldInverseTranspose = Transpose(Inverse(TransformationData_->World));
 
 }
@@ -57,12 +60,12 @@ void Base3dObject::CameraUpdate(Camera* camera)
 void Base3dObject::Draw()
 {
 	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, TransformationResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
 
 	if (materialData_) 
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 		model_->Draw(true);
 		return;
 	}
@@ -74,12 +77,12 @@ void Base3dObject::Draw()
 void Base3dObject::Draw(uint32_t textureHandle)
 {
 	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, TransformationResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 		model_->Draw(textureHandle, true);
 		return;
 	}
@@ -90,6 +93,7 @@ void Base3dObject::Draw(uint32_t textureHandle)
 
 void Base3dObject::SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
 {
+	//マテリアルデータがなければ作る
 	if (!materialData_)
 	{
 		CreateMaterialData();
@@ -100,6 +104,7 @@ void Base3dObject::SetUVTransform(const Vector3& scale, const Vector3& rotate, c
 
 void Base3dObject::SetUVTransform(const EulerTransform& uvTransform)
 {
+	//マテリアルデータがなければ作る
 	if (!materialData_)
 	{
 		CreateMaterialData();
@@ -110,6 +115,7 @@ void Base3dObject::SetUVTransform(const EulerTransform& uvTransform)
 
 void Base3dObject::SetEnableLighting(bool enableLighting)
 {
+	//マテリアルデータがなければ作る
 	if (!materialData_)
 	{
 		CreateMaterialData();
@@ -119,6 +125,7 @@ void Base3dObject::SetEnableLighting(bool enableLighting)
 
 void Base3dObject::SetColor(const Vector4& color)
 {
+	//マテリアルデータがなければ作る
 	if (!materialData_)
 	{
 		CreateMaterialData();
@@ -128,6 +135,7 @@ void Base3dObject::SetColor(const Vector4& color)
 
 void Base3dObject::SetEnviromentCoefficient(float coefficient)
 {
+	//マテリアルデータがなければ作る
 	if (!materialData_)
 	{
 		CreateMaterialData();

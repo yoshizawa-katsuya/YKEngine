@@ -1,7 +1,10 @@
 #include "ImGuiManager.h"
+
+#ifdef USE_IMGUI
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx12.h"
 #include "imgui/imgui_impl_win32.h"
+#endif // USE_IMGUI
 
 ImGuiManager::~ImGuiManager()
 {
@@ -14,6 +17,7 @@ void ImGuiManager::Initialize(DirectXCommon* dxCommon, WinApp* winApp, SrvHeapMa
 	dxCommon_ = dxCommon;
 	uint32_t index = srvHeapManager->Allocate();
 
+#ifdef USE_IMGUI
 	//ImGuiの初期化
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -27,37 +31,45 @@ void ImGuiManager::Initialize(DirectXCommon* dxCommon, WinApp* winApp, SrvHeapMa
 		srvHeapManager->GetDescriptorHeap(),
 		srvHeapManager->GetCPUDescriptorHandle(index),
 		srvHeapManager->GetGPUDescriptorHandle(index));
+#endif // USE_IMGUI
 
 }
 
 void ImGuiManager::Begin()
 {
-
+#ifdef USE_IMGUI
+	//ImGuiフレーム開始
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+#endif // USE_IMGUI
 
 }
 
 void ImGuiManager::End()
 {
-
+#ifdef USE_IMGUI
+	//ImGuiフレーム終了
 	ImGui::Render();
+#endif // USE_IMGUI
 
 }
 
 void ImGuiManager::Draw()
 {
-
+#ifdef USE_IMGUI
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), dxCommon_->GetCommandList());
+#endif // USE_IMGUI
 
 }
 
 void ImGuiManager::Finalize()
 {
 
+#ifdef USE_IMGUI
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+#endif // USE_IMGUI
 
 }

@@ -77,10 +77,13 @@ void AnimatedSprite::CommonInitialize(uint32_t textureHandle, int32_t horizontal
 
 	horizontalDivisionNum_ = horizontalDivisionNum;
 	verticalDivisionNum_ = verticalDivisionNum;
+	//スプライトのサイズをアニメーション一枚分に変更
 	size_.x /= static_cast<float>(horizontalDivisionNum_);
 	size_.y /= static_cast<float>(verticalDivisionNum_);
+	//UV移動量を計算
 	horizontalMovingDistance_ = 1.0f / static_cast<float>(horizontalDivisionNum_);
 	verticalMovingDistance_ = 1.0f / static_cast<float>(verticalDivisionNum_);
+	//UVスケールをアニメーション一枚分に設定
 	uvTransform_.scale.x = horizontalMovingDistance_;
 	uvTransform_.scale.y = verticalMovingDistance_;
 
@@ -89,7 +92,14 @@ void AnimatedSprite::CommonInitialize(uint32_t textureHandle, int32_t horizontal
 
 void AnimatedSprite::LoopUpdate()
 {
-	CommonUpdate();
+	//フレームカウントを進める
+	currentFrame_++;
+	//更新フレームに達していなかったら処理しない
+	if (currentFrame_ < updateFrame_) 
+	{
+		return;
+	}
+	currentFrame_ = 0;
 
 	//横方向インデックスが最大値に達したら折り返す
 	if (horizontalIndex_ >= horizontalDivisionNum_)
@@ -133,7 +143,14 @@ void AnimatedSprite::NoLoopUpdate()
 
 void AnimatedSprite::ReverseLoopUpdate()
 {
-	CommonUpdate();
+	//フレームカウントを進める
+	currentFrame_++;
+	//更新フレームに達していなかったら処理しない
+	if (currentFrame_ < updateFrame_)
+	{
+		return;
+	}
+	currentFrame_ = 0;
 
 	//横方向インデックスが最低値に達したら折り返す
 	if (horizontalIndex_ < 0)
@@ -172,13 +189,4 @@ void AnimatedSprite::ReverseNoLoopUpdate()
 
 	ReverseLoopUpdate();
 
-}
-
-void AnimatedSprite::CommonUpdate()
-{
-	currentFrame_++;
-	if (currentFrame_ < updateFrame_) {
-		return;
-	}
-	currentFrame_ = 0;
 }

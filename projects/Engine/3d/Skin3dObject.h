@@ -23,10 +23,6 @@ public:
 	/// <param name="model">ベースモデル。</param>
 	void Initialize(BaseModel* model) override;
 
-	//void Update(const WorldTransform& worldTransform, Camera* camera) override;
-
-	//void Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation) override;
-
 	/// <summary>
 	/// アニメーションの適用と更新。
 	/// </summary>

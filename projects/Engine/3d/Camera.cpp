@@ -1,8 +1,8 @@
 #include "Camera.h"
 #include "Matrix.h"
 #include <numbers>
+#include "RootParams.h"
 
-//コロンを使って初期化する際順番はヘッダーで定義した順になる
 Camera::Camera()
 	: transform_({ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} })
 	, fovY_(0.45f)
@@ -32,12 +32,12 @@ void Camera::Update()
 	viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);
 }
 
-void Camera::SetCameraReaource()
+void Camera::SetCameraReaource(uint32_t rootParamIndex)
 {
 
 	cameraForGPUData_->worldPosition = transform_.translation;
 
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(rootParamIndex, cameraResource_->GetGPUVirtualAddress());
 
 }
 

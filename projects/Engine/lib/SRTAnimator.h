@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include "DirectXCommon.h"
+#include "Easing.h"
 
 /// <summary>
 /// SRTアニメーション。
@@ -30,6 +31,8 @@ public:
 
 	bool GetIsEnd() { return isEnd_; }
 
+	void SetEasingType(EasingType easingType) { easingType_ = easingType; }
+
 private:
 
 	Vector3 startVector_;
@@ -43,6 +46,8 @@ private:
 
 	//アニメーションが終わっていたらtrue
 	bool isEnd_;
+
+	EasingType easingType_ = EasingType::kLinear;
 
 	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
 };

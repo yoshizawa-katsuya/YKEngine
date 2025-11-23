@@ -28,9 +28,7 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 	//頂点リソースにデータを書き込む
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	//頂点データをリソースにコピー
-	//std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
-
+	
 	//経度分割1つ分の角度 φ
 	const float kLonEvery = pi * 2.0f / float(kSubdivision);
 	//緯度分割1つ分の角度 θ
@@ -105,8 +103,10 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
 
-	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
+	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) 
+	{
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex)
+		{
 
 			uint32_t index = (latIndex * kSubdivision + lonIndex) * 6;
 			uint32_t index2 = (latIndex * kSubdivision + lonIndex) * 4;
@@ -129,8 +129,6 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 	SetIndecesNum();
 
 	CreateMaterialData();
-
-	//CreateTransformData();
 
 	textureHandle_ = textureHandle;
 
@@ -282,14 +280,6 @@ void RigidModel::CreatePlane(uint32_t textureHandle)
 
 	modelData_->vertices.resize(4);
 	SetVerticesNum();
-	/*
-	vertexData_[0] = { .position = {1.0f, 1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左上
-	vertexData_[1] = { .position = {-1.0f, 1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右上
-	vertexData_[2] = { .position = {1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
-	vertexData_[3] = { .position = {1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
-	vertexData_[4] = { .position = {-1.0f, 1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 0.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右上
-	vertexData_[5] = { .position = {-1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右下
-	*/
 
 	//IndexResources作成
 	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * 6);

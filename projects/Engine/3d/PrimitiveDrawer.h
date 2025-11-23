@@ -16,7 +16,7 @@ class DirectXCommon;
 /// </summary>
 enum class DrawMode {
 	kBlendModeNone, //ブレンドなし
-	kBlendModeNormal, //NormalBlend
+	kBlendModeNormal, //kNormalBlend
 	kBlendModeAdd,	//加算
 	kBlendModeSubtract,	//減算
 	kBlendModeMultiply,	//乗算
@@ -28,6 +28,9 @@ enum class DrawMode {
 
 	kBlendModeAddParticle,
 	kBlendModeNormalParticle,
+
+	kBlendModeAddBackDrawParticle,	//背面描画用加算
+	kBlendModeNormalBackDrawParticle,	//背面描画用通常
 
 	kLineMode,
 
@@ -51,7 +54,7 @@ enum class DrawMode {
 
 	kSkyboxMode,
 
-	kCountOfBlendMode,	//利用してはいけない
+	kCount,	//利用してはいけない
 };
 
 //TODO:クラス名を変更する
@@ -87,10 +90,6 @@ public:
 	/// <param name="blendMode">描画モード</param>
 	void SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode);
 
-	//ID3D12RootSignature* GetRootSignature() { return rootSignature_.Get(); }
-
-	//ID3D12PipelineState* GetGrahicsPipelineState() { return graphicsPipelineState_.Get(); }
-
 private:
 
 	/// <summary>
@@ -101,11 +100,8 @@ private:
 	/// <returns>パイプラインセット</returns>
 	std::unique_ptr<PipelineSet> CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon);
 
-	//Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
-
 	//パイプライン。ブレンドモードの数だけ用意する
-	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCountOfBlendMode> pipelineSets_;
-	//Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
+	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCount> pipelineSets_;
 
 };
 

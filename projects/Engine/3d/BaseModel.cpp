@@ -9,6 +9,7 @@
 #include "Animation.h"
 #include "Struct.h"
 #include "ThreadPool.h"
+#include "RootParams.h"
 
 BaseModel::BaseModel()
 	: modelPlatform_(ModelPlatform::GetInstance())
@@ -23,17 +24,8 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 
 	//モデル読み込み
 	LoadModelFile(directoryPath, filename);
-
-	//CreateVertexData();
-	//threadpool->enqueueTask(&BaseModel::CreateVertexData, this);
-
-	//CreateIndexData();
-	//threadpool->enqueueTask(&BaseModel::CreateIndexData, this);
-
-	//CreateMaterialData();
-	//threadpool->enqueueTask(&BaseModel::CreateMaterialData, this);
-
 	
+	//スレッドに処理を投げる
 	ThreadPool::GetInstance()->enqueueTask([this, color]() {
 		CreateVertexData();
 		CreateIndexData();
@@ -69,8 +61,6 @@ void BaseModel::CreateSkyBox(uint32_t textureHandle)
 }
 
 void BaseModel::Draw(bool usedMaterial) {
-
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 	
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
@@ -78,15 +68,13 @@ void BaseModel::Draw(bool usedMaterial) {
 	if (!usedMaterial) 
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle_);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 
 
@@ -95,30 +83,25 @@ void BaseModel::Draw(bool usedMaterial) {
 void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
-
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	if (!usedMaterial)
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 
 }
 
 void BaseModel::InstancingDraw(uint32_t numInstance)
 {
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	if (numInstance == 0)
 	{
@@ -129,13 +112,11 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle_);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }
 
@@ -151,13 +132,11 @@ void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }
 
@@ -254,20 +233,7 @@ void BaseModel::CreateMaterialData(const Vector4& color)
 	materialData_->uvTransform = MakeIdentity4x4();
 	
 }
-/*
-void Model::CreateTransformData()
-{
 
-	//transformationMatrixのリソースを作る
-	transformationMatrixResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(TransformationMatrix));
-	//データを書き込む
-	//書き込むためのアドレスを取得
-	transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
-	//単位行列を書き込んでおく
-	transformationMatrixData_->WVP = MakeIdentity4x4();
-
-}
-*/
 void BaseModel::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
 
 	modelData_ = std::make_unique<ModelData>();
@@ -278,7 +244,8 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 
 	assert(scene->HasMeshes());	//メッシュがないのは対応しない
 
-	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
+	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
+	{
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
@@ -290,7 +257,9 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 
 	}
 
-	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
+	//マテリアル情報の読み込み
+	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex)
+	{
 		aiMaterial* material = scene->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
@@ -304,86 +273,13 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 	}
 
 	modelData_->rootNode = ReadNode(scene->mRootNode);
-
-	/*
-	//1.中で必要となる変数の宣言
-	
-	std::vector<Vector4> positions;	//位置
-	std::vector<Vector3> normals;	//法線
-	std::vector<Vector2> texcords;	//テクスチャ座標
-	std::string line;	//ファイルから読んだ1行を格納するもの
-
-	//2.ファイルを開く
-	std::ifstream file(directoryPath + "/" + filename);	//ファイルを開く
-	assert(file.is_open());	//とりあえず開けなかったら止める
-
-	//3.実際にファイルを読み、ModelDataを構築していく
-	while (std::getline(file, line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;	//先頭の識別子を読む
-
-		if (identifier == "v") {
-			Vector4 position;
-			s >> position.x >> position.y >> position.z;
-			position.x *= -1.0f;
-			position.w = 1.0f;
-			positions.push_back(position);
-		}
-		else if (identifier == "vt") {
-			Vector2 texcord;
-			s >> texcord.x >> texcord.y;
-			texcord.y = 1.0f - texcord.y;
-			texcords.push_back(texcord);
-		}
-		else if (identifier == "vn") {
-			Vector3 normal;
-			s >> normal.x >> normal.y >> normal.z;
-			normal.x *= -1.0f;
-			normals.push_back(normal);
-		}
-		else if (identifier == "f") {
-			VertexData triangle[3];
-			//面は三角形限定。その他は未対応
-			for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
-				std::string vertexDefinition;
-				s >> vertexDefinition;
-				//頂点への要素へのIndexは「位置/UV/法線」で格納されているので、分解してIndexを取得する
-				std::istringstream v(vertexDefinition);
-				uint32_t elementIndices[3];
-				for (int32_t element = 0; element < 3; ++element) {
-					std::string index;
-					std::getline(v, index, '/');	//区切りでインデックスを読んでいく
-					elementIndices[element] = std::stoi(index);
-				}
-				//要素へのIndexから、実際の要素の値を取得して、頂点を構築する
-				Vector4 position = positions[elementIndices[0] - 1];
-				Vector2 texcord = texcords[elementIndices[1] - 1];
-				Vector3 normal = normals[elementIndices[2] - 1];
-				//VertexData vertex = { position, texcord, normal };
-				//modelData.vertices.push_back(vertex);
-				triangle[faceVertex] = { position, texcord, normal };
-			}
-			modelData_.vertices.push_back(triangle[2]);
-			modelData_.vertices.push_back(triangle[1]);
-			modelData_.vertices.push_back(triangle[0]);
-		}
-		else if (identifier == "mtllib") {
-			//materialTemplateLibraryファイルの名前を取得する
-			std::string materialFilename;
-			s >> materialFilename;
-			//基本的にobjファイルと同一階層にmtlは存在させるので、ディレクトリ名とファイル名を渡す
-			LoadMaterialTemplateFile(directoryPath, materialFilename);
-		}
-
-	}
-	*/
 	
 }
 
 void BaseModel::LoadVertexData(aiMesh* mesh)
 {
-	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
+	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) 
+	{
 		aiVector3D& position = mesh->mVertices[vertexIndex];
 		aiVector3D& normal = mesh->mNormals[vertexIndex];
 		aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
@@ -396,11 +292,15 @@ void BaseModel::LoadVertexData(aiMesh* mesh)
 
 void BaseModel::LoadIndexData(aiMesh* mesh)
 {
-	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
+	//面ごとに情報を読み込む
+	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) 
+	{
 		aiFace& face = mesh->mFaces[faceIndex];
 		assert(face.mNumIndices == 3);
 
-		for (uint32_t element = 0; element < face.mNumIndices; ++element) {
+		//面を構成する頂点インデックスを読み込む
+		for (uint32_t element = 0; element < face.mNumIndices; ++element) 
+		{
 			uint32_t vertexIndex = face.mIndices[element];
 			modelData_->indeces.push_back(vertexIndex);
 		}
@@ -419,46 +319,9 @@ void BaseModel::SetIndecesNum()
 	modelData_->indeces.clear();
 }
 
-/*
-void BaseModel::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
-
-	//1.中で必要となる変数の宣言
-	std::string line;	//ファイルから読んだ1行を格納するもの
-
-	//2.ファイルを開く
-	std::ifstream file(directoryPath + "/" + filename);	//ファイルを開く
-	assert(file.is_open());	//とりあえず開けなかったら止める
-
-	//3.実際にファイルを読み、ModelDataを構築していく
-	while (std::getline(file, line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;
-
-		//identifierに応じた処理
-		if (identifier == "map_Kd") {
-			std::string textureFilename;
-			s >> textureFilename;
-			//連結してファイルパスにする
-			modelData_.material.textureFilePath = directoryPath + "/" + textureFilename;
-		}
-	}
-
-	
-}
-*/
 Node BaseModel::ReadNode(aiNode* node)
 {
 	Node result;
-	/*
-	aiMatrix4x4 aiLocalMatrix = node->mTransformation;	//nodeのlocalMatrixを取得
-	aiLocalMatrix.Transpose();	//列ベクトルを行ベクトル形式に転置
-	for (uint32_t i = 0; i < 4; i++) {
-		for (uint32_t j = 0; j < 4; j++) {
-			result.localMatrix.m[i][j] = aiLocalMatrix[i][j];	//他の要素も同様に
-		}
-	}
-	*/
 
 	aiVector3D scale, translate;
 	aiQuaternion rotate;
@@ -470,7 +333,8 @@ Node BaseModel::ReadNode(aiNode* node)
 
 	result.name = node->mName.C_Str();	//Node名を格納
 	result.children.resize(node->mNumChildren);	//子供の数だけ確保
-	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
+	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; ++childIndex)
+	{
 		//再帰的に読んで階層構造を作っていく
 		result.children[childIndex] = ReadNode(node->mChildren[childIndex]);
 	}

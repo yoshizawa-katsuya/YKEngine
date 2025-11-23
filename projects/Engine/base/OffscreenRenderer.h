@@ -17,16 +17,16 @@ enum class DrawMode;
 enum class RenderTextureType
 {
 	// オフスクリーンレンダリング用のテクスチャ
-	OffscreenRender,
-	GrayScale,
-	Vignette,
-	BoxFilter,
-	GaussianFilter,
-	LuminanceOutline,
-	Outline,
-	RadialBlur,
-	Dissolve,
-	Random,
+	kOffscreenRender,
+	kGrayScale,
+	kVignette,
+	kBoxFilter,
+	kGaussianFilter,
+	kLuminanceOutline,
+	kDepthOutline,
+	kRadialBlur,
+	kDissolve,
+	kRandom,
 };
 
 /// <summary>
@@ -50,6 +50,11 @@ public:
 	/// </summary>
 	/// <param name="dxCommon">DirectX共通クラス</param>
 	void Initialize(SrvHeapManager* srvHeapManager);
+
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
+	void Finalize();
 
 	/// <summary>
 	/// レンダーテクスチャへの描画前処理。
@@ -85,6 +90,9 @@ public:
 	void SetRenderTextureType(RenderTextureType type) { renderTextureType_ = type; }
 
 private:
+
+	// シングルトンインスタンス
+	static OffscreenRenderer* instance_;
 
 	OffscreenRenderer() = default;
 	~OffscreenRenderer() = default;
@@ -157,9 +165,9 @@ private:
 	//マスクテクスチャのハンドル
 	uint32_t maskTextureHandle_;
 
-	RenderTextureType renderTextureType_ = RenderTextureType::OffscreenRender;
+	RenderTextureType renderTextureType_ = RenderTextureType::kOffscreenRender;
 
-	const uint32_t renderTextureTypeCount_ = 10; // RenderTextureTypeの数
+	const uint32_t kRenderTextureTypeCount_ = 10; // RenderTextureTypeの数
 
 	std::vector<DrawMode> renderTextureDrawModes_;
 

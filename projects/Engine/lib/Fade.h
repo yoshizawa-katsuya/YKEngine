@@ -9,10 +9,11 @@ class Fade {
 public:
 
 	// フェードの状態
-	enum class Status {
-		None,    // フェードなし
-		FadeIn,  // フェードイン中
-		FadeOut, // フェードアウト中
+	enum class Status 
+	{
+		kNone,    // フェードなし
+		kFadeIn,  // フェードイン中
+		kFadeOut, // フェードアウト中
 	};
 
 	/// <summary>
@@ -58,7 +59,7 @@ private:
 	std::unique_ptr<Sprite> sprite_; //フェード用スプライト
 
 	//現在のフェードの状態
-	Status status_ = Status::None;
+	Status status_ = Status::kNone;
 
 	//フェードの持続時間
 	float duration_ = 0.0f;

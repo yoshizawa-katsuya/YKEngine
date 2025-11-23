@@ -2,20 +2,31 @@
 #include "TextureManager.h"
 #include "Matrix.h"
 #include <numbers>
-#include "imgui/imgui.h"
 #include "TransformHelpers.h"
 #include "Lerp.h"
 #include "Random.h"
+#include "RootParams.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
+
+ParticleManager* ParticleManager::instance_ = nullptr;
 
 ParticleManager* ParticleManager::GetInstance()
 {
-	static ParticleManager instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new ParticleManager();
+	}
+	return instance_;
 }
 
 void ParticleManager::Finalize()
 {
-
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer)
@@ -27,12 +38,6 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHea
 
 	randomEngine_ = Random::GetInstance()->GetRandomEnginePtr();
 
-	//Create();
-	/*
-	accelerationField_.accerelation = { 15.0f, 0.0f, 0.0f };
-	accelerationField_.area.min = { -1.0f, -1.0f, -1.0f };
-	accelerationField_.area.max = { 1.0f, 1.0f, 1.0f };
-	*/
 }
 
 void ParticleManager::Update(Camera* camera, AccelerationField* accelerationField)
@@ -81,14 +86,14 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				Matrix4x4 scaleMatrix{};
 				if (particleGroupIterator->second.behavior->isScaleToDisappear) 
 				{
+					//時間経過で小さくなる
 					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
-					//消えるときにScaleを小さくする
 					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, t));
 				}
 				else if (particleGroupIterator->second.behavior->isScaleToAppear)
 				{
+					//時間経過で大きくなる
 					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
-					//出現するときにScaleを大きくする
 					scaleMatrix = MakeScaleMatrix(Lerp({ 0.0f, 0.0f, 0.0f }, particleIterator->transform.scale, t));
 				}
 				else
@@ -97,10 +102,10 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				}
 				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
 				Matrix4x4 rotateMatrix = MakeRotateMatrix(particleIterator->transform.rotation);
-				//Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
 				Matrix4x4 worldMatrix;
 				if (particleGroupIterator->second.behavior->isUseBillboard) 
 				{
+					//カメラの方向を向く
 					worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
 				}
 				else
@@ -115,6 +120,7 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 
 				if (particleGroupIterator->second.behavior->isTimeFadeOut)
 				{
+					//時間経過で透明になる
 					float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
 					particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color.a = alpha;
 				}
@@ -128,47 +134,31 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("ParticleManager");
 	ImGui::Checkbox("useAccelerationField", &useAccelerationField_);
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 
 void ParticleManager::Draw()
 {
 
-	/*primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeAddParticle);*/
-
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	//dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-
-	//マテリアルのCBufferの場所を設定
-	//dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
 	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
 		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) {
 
-		primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), particleDrawModes_[static_cast<int32_t>(particleGroupIterator->second.behavior->blendMode)]);
+		primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), particleDrawModes_[static_cast<int32_t>(particleGroupIterator->second.behavior->drawMode)]);
 
-		//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-		//TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(particleGroupIterator->second.textureHandle);
 		
 		//instancing用のDataを読むためにStructBufferのSRVを設定する
-		srvHeapManager_->SetGraphicsRootDescriptorTable(1, particleGroupIterator->second.instancingSrvIndex);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ParticleRootParam::kParticleForGPU), particleGroupIterator->second.instancingSrvIndex);
 		
 		particleGroupIterator->second.model->InstancingDraw(particleGroupIterator->second.numInstance, particleGroupIterator->second.textureHandle);
-
-		//描画!6頂点のポリゴンを、numInstanceだけInstance描画を行う
-		//dxCommon_->GetCommandList()->DrawInstanced(6, particleGroupIterator->second.numInstance, 0, 0);
-		//dxCommon_->GetCommandList()->DrawIndexedInstanced(6, particleGroupIterator->second.numInstance, 0, 0, 0);
-
 
 	}
 
@@ -198,7 +188,8 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 	particleGroup.instancingResouce->Map(0, nullptr, reinterpret_cast<void**>(&particleGroup.instancingData));
 
 	//単位行列を書き込んでおく
-	for (uint32_t index = 0; index < particleGroup.kNumMaxInstance; ++index) {
+	for (uint32_t index = 0; index < particleGroup.kNumMaxInstance; ++index)
+	{
 		particleGroup.instancingData[index].WVP = MakeIdentity4x4();
 		particleGroup.instancingData[index].World = MakeIdentity4x4();
 		particleGroup.instancingData[index].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -215,7 +206,8 @@ void ParticleManager::Emit(const std::string name, const EulerTransform& transfo
 {
 	assert(particleGroups_.contains(name));
 	ParticleGroup& particleGroup = particleGroups_[name];
-	for (uint32_t i = 0; i < count; ++i) {
+	for (uint32_t i = 0; i < count; ++i) 
+	{
 		particleGroup.particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams, *particleGroup.behavior.get()));
 	}
 }
@@ -229,6 +221,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	//生存時間
 	if (randomFlags.lifeTime)
 	{
+		//ランダムな生存時間を設定
 		std::uniform_real_distribution<float> distTime(rangeParams.lifeTime.min, rangeParams.lifeTime.max);
 		particle.lifeTime = distTime(*randomEngine_);
 	}
@@ -303,11 +296,13 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 
 	if (behavior.isfixedDistance)
 	{
+		//発生位置から一定距離離す
 		particle.transform.translation = Normalize(particle.transform.translation - transform.translation) * behavior.distance + transform.translation;
 	}
 
 	if (behavior.isHeadCenter)
 	{
+		//発生位置から中心に向かう速度を設定
 		particle.velocity = (transform.translation - particle.transform.translation) / particle.lifeTime;
 	}
 

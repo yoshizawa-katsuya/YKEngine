@@ -26,10 +26,6 @@ public:
 	/// <param name="model">モデル</param>
 	virtual void Initialize(BaseModel* model);
 
-	//virtual void Update(const WorldTransform& worldTransform, Camera* camera);
-
-	//virtual void Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation);
-
 	/// <summary>
 	/// ワールド変換行列の更新。
 	/// </summary>

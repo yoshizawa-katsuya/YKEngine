@@ -2,11 +2,17 @@
 #include "SrvHeapManager.h"
 #include "PrimitiveDrawer.h"
 #include "Matrix.h"
+#include "RootParams.h"
+
+OffscreenRenderer* OffscreenRenderer::instance_ = nullptr;
 
 OffscreenRenderer* OffscreenRenderer::GetInstance()
 {
-	static OffscreenRenderer instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new OffscreenRenderer();
+	}
+	return instance_;
 }
 
 void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
@@ -16,7 +22,7 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 	viewport_ = dxCommon_->GetViewport();
 	scissorRect_ = dxCommon_->GetScissorRect();
 
-	renderTextureDrawModes_.resize(renderTextureTypeCount_);
+	renderTextureDrawModes_.resize(kRenderTextureTypeCount_);
 
 	renderTextureDrawModes_ = {
 		DrawMode::kOffScreenRendering,	//オフスクリーンレンダリング
@@ -49,6 +55,13 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 
 }
 
+void OffscreenRenderer::Finalize()
+{
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
+}
+
 void OffscreenRenderer::PreDrawRenderTexture()
 {
 	if (!useOffscreenRender_) {
@@ -73,7 +86,8 @@ void OffscreenRenderer::PreDrawRenderTexture()
 
 void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
-	if (!useOffscreenRender_) {
+	if (!useOffscreenRender_) 
+	{
 		return;	//オフスクリーンレンダリングを使用しない場合は何もしない
 	}
 
@@ -94,9 +108,10 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 
 	//コピー実行
 	primitiveDrawer->SetPipelineSet(commandList_, renderTextureDrawModes_[static_cast<uint32_t>(renderTextureType_)]);
-	srvHeapManager->SetGraphicsRootDescriptorTable(0, renderTextureSRVIndex_);
+	srvHeapManager->SetGraphicsRootDescriptorTable(static_cast<size_t>(PostEffectRootParam::kTexture), renderTextureSRVIndex_);
 
-	if (renderTextureType_ == RenderTextureType::Outline) {
+	if (renderTextureType_ == RenderTextureType::kDepthOutline)
+	{
 
 		//TransitionBarrierの設定
 		D3D12_RESOURCE_BARRIER depthBarrier{};
@@ -111,16 +126,16 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 		//TransitionBarrierを張る
 		commandList_->ResourceBarrier(1, &depthBarrier);
 
-		srvHeapManager->SetGraphicsRootDescriptorTable(1, depthTextureSRVIndex_);	//アウトラインレンダリングの場合はDepthTextureのSRVもセットする
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, outlineMaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
+		srvHeapManager->SetGraphicsRootDescriptorTable(static_cast<size_t>(DepthOutlineRootParam::kDepthTexture), depthTextureSRVIndex_);	//アウトラインレンダリングの場合はDepthTextureのSRVもセットする
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(DepthOutlineRootParam::kMaterial), outlineMaterialResource_->GetGPUVirtualAddress());	//アウトラインマテリアルの設定
 	}
-	else if (renderTextureType_ == RenderTextureType::Dissolve)
+	else if (renderTextureType_ == RenderTextureType::kDissolve)
 	{
-		srvHeapManager->SetGraphicsRootDescriptorTable(1, maskTextureHandle_);	//ディゾルブレンダリングの場合はマスクテクスチャのSRVもセットする
+		srvHeapManager->SetGraphicsRootDescriptorTable(static_cast<size_t>(DissolveRootParam::kMaskTexture), maskTextureHandle_);	//ディゾルブレンダリングの場合はマスクテクスチャのSRVもセットする
 	}
-	else if (renderTextureType_ == RenderTextureType::Random)
+	else if (renderTextureType_ == RenderTextureType::kRandom)
 	{
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, randomMaterialResource_->GetGPUVirtualAddress());	//ランダムマテリアルの設定
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(RandomRootParam::kMaterial), randomMaterialResource_->GetGPUVirtualAddress());	//ランダムマテリアルの設定
 		randomMaterialData_->time += 0.01f;	//時間を更新
 	}
 
@@ -141,7 +156,7 @@ void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, 
 	//TransitionBarrierを張る
 	commandList_->ResourceBarrier(1, &barrier2);
 
-	if (renderTextureType_ == RenderTextureType::Outline) {
+	if (renderTextureType_ == RenderTextureType::kDepthOutline) {
 		//TransitionBarrierの設定
 		D3D12_RESOURCE_BARRIER depthBarrier{};
 		//今回のバリアはTransition
@@ -168,7 +183,7 @@ void OffscreenRenderer::UpdateOutlineMaterialData(const Matrix4x4& projectionMat
 
 void OffscreenRenderer::CreateRenderTexture()
 {
-	const Vector4 kRenderTargetClearValue{ 1.0f, 0.0f, 0.0f, 1.0f };	//一旦分かりやすいように赤
+	const Vector4 kRenderTargetClearValue{ 1.0f, 0.0f, 0.0f, 1.0f };	//赤でクリア
 	CreateRenderTextureResource(WinApp::kClientWidth, WinApp::kClientHeight,
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
 
@@ -207,6 +222,7 @@ void OffscreenRenderer::CreateRenderTextureResource(int32_t width, int32_t heigh
 	D3D12_HEAP_PROPERTIES heapProperties{};
 	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;	//VRAM上に作る
 
+	//ClearValueの設定
 	D3D12_CLEAR_VALUE clearValue;
 	clearValue.Format = format;
 	clearValue.Color[0] = clearColor.x;

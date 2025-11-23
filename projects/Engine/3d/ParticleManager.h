@@ -78,6 +78,9 @@ public:
 
 private:
 
+	// シングルトンインスタンス
+	static ParticleManager* instance_;
+
 	ParticleManager() = default;
 	~ParticleManager() = default;
 	ParticleManager(ParticleManager&) = default;
@@ -120,6 +123,8 @@ private:
 	std::vector<DrawMode> particleDrawModes_ = {
 		DrawMode::kBlendModeAddParticle,
 		DrawMode::kBlendModeNormalParticle,
+		DrawMode::kBlendModeAddBackDrawParticle,
+		DrawMode::kBlendModeNormalBackDrawParticle
 	};
 
 	//乱数生成エンジンへのポインタ
@@ -127,7 +132,6 @@ private:
 
 	std::unordered_map<std::string, ParticleGroup> particleGroups_;
 
-	//AccelerationField accelerationField_;
 	bool useAccelerationField_ = false;
 
 	

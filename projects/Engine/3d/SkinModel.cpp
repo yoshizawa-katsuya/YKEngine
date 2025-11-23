@@ -3,6 +3,7 @@
 #include "Matrix.h"
 #include "Animation.h"
 #include "Camera.h"
+#include "RootParams.h"
 
 SkinModel::~SkinModel()
 {
@@ -10,49 +11,42 @@ SkinModel::~SkinModel()
 
 void SkinModel::Draw(bool usedMaterial)
 {
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	if (!usedMaterial)
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SkinModelRootParam::kTexture), textureHandle_);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。	
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 }
 
 void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
-
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	if (!usedMaterial)
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SkinModelRootParam::kTexture), textureHandle);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 
 }
 
 void SkinModel::SetSkinCluster(const SkinCluster& skinCluster)
 {
-
+	//頂点バッファビュー配列を作成
 	std::array<D3D12_VERTEX_BUFFER_VIEW, 2> vbvs = {
 			vertexBufferView_,
 			skinCluster.influenceBufferView

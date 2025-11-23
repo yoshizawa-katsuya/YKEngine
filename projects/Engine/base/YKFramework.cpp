@@ -27,12 +27,12 @@ void YKFramework::Initialize()
 	offscreenRenderer_ = OffscreenRenderer::GetInstance();
 	offscreenRenderer_->Initialize(srvHeapManager_.get());
 
-#ifdef _DEBUG
+#ifdef  USE_IMGUI
 
 	imGuiManager_ = std::make_unique<ImGuiManager>();
 	imGuiManager_->Initialize(dxCommon_, winApp_.get(), srvHeapManager_.get());
 
-#endif // _DEBUG
+#endif //  USE_IMGUI
 
 	
 	//入力の初期化
@@ -70,9 +70,25 @@ void YKFramework::Initialize()
 
 void YKFramework::Finalize()
 {
-	dxCommon_->Finalize();
+	globalVariables_->Finalize();
+
+	modelPlatform_->Finalize();
+
+	ParticleManager::GetInstance()->Finalize();
+
+	Random::GetInstance()->Finalize();
+
+	spritePlatform_->Finalize();
+
+	TextureManager::GetInstance()->Finalize();
+
+	input_->Finalize();
+
+	offscreenRenderer_->Finalize();
 
 	audio_->Finalize();
+
+	dxCommon_->Finalize();
 
 	threadPool_->Finalize();
 }
@@ -85,12 +101,12 @@ void YKFramework::Update()
 		isEndReqest_ = true;
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//imGuiに、フレームが始まる旨を伝える
 	imGuiManager_->Begin();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	
 
@@ -108,12 +124,12 @@ void YKFramework::EndFrame()
 
 	modelPlatform_->EndFrame();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//ImGuiの内部コマンドを生成する
 	imGuiManager_->End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 

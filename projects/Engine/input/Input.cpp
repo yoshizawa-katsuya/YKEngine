@@ -4,14 +4,22 @@
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
+Input* Input::instance_ = nullptr;
+
 Input* Input::GetInstance()
 {
-	static Input instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new Input();
+	}
+	return instance_;
 }
 
 void Input::Finalize()
 {
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void Input::Initialize(WinApp* winApp)
@@ -56,8 +64,10 @@ void Input::Update()
 	//全キーの入力情報を取得する
 	keyboard_->GetDeviceState(sizeof(key_), key_);
 
+	//前回のマウス入力を保存
 	preMouseState_ = mouseState_;
 
+	//マウス情報の取得開始
 	mouse_->Acquire();
 	mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState_);
 
@@ -69,7 +79,8 @@ void Input::Update()
 bool Input::PushKey(BYTE keyNumber)
 {
 	//指定キーを押していればtrueを返す
-	if (key_[keyNumber]) {
+	if (key_[keyNumber])
+	{
 		return true;
 	}
 	//そうでなければfalseを返す
@@ -79,7 +90,8 @@ bool Input::PushKey(BYTE keyNumber)
 bool Input::TriggerKey(BYTE keyNumber)
 {
 	//指定キーを押した瞬間でtrueを返す
-	if (!keyPre_[keyNumber] && key_[keyNumber]) {
+	if (!keyPre_[keyNumber] && key_[keyNumber]) 
+	{
 		return true;
 	}
 	//そうでなければfalseを返す
@@ -89,7 +101,8 @@ bool Input::TriggerKey(BYTE keyNumber)
 bool Input::ReleaseKey(BYTE keyNumber)
 {
 	//指定キーを離した瞬間でtrueを返す
-	if (keyPre_[keyNumber] && !key_[keyNumber]) {
+	if (keyPre_[keyNumber] && !key_[keyNumber])
+	{
 		return true;
 	}
 	//そうでなければfalseを返す
@@ -99,7 +112,8 @@ bool Input::ReleaseKey(BYTE keyNumber)
 bool Input::HoldKey(BYTE keyNumber)
 {
 	//指定キーを押し続けていればtrueを返す
-	if (keyPre_[keyNumber] && key_[keyNumber]) {
+	if (keyPre_[keyNumber] && key_[keyNumber])
+	{
 		return true;
 	}
 	//そうでなければfalseを返す
@@ -108,7 +122,8 @@ bool Input::HoldKey(BYTE keyNumber)
 
 bool Input::PushMouseLeft()
 {
-	if (mouseState_.rgbButtons[0] & 0x80) {
+	if (mouseState_.rgbButtons[0] & 0x80)
+	{
 		return true;
 	}
 	return false;
@@ -116,7 +131,8 @@ bool Input::PushMouseLeft()
 
 bool Input::TrigerMouseLeft()
 {
-	if (!(preMouseState_.rgbButtons[0] & 0x80) && mouseState_.rgbButtons[0] & 0x80) {
+	if (!(preMouseState_.rgbButtons[0] & 0x80) && mouseState_.rgbButtons[0] & 0x80)
+	{
 		return true;
 	}
 	return false;
@@ -124,7 +140,8 @@ bool Input::TrigerMouseLeft()
 
 bool Input::ReleaseMouseLeft()
 {
-	if (preMouseState_.rgbButtons[0] & 0x80 && !(mouseState_.rgbButtons[0] & 0x80)) {
+	if (preMouseState_.rgbButtons[0] & 0x80 && !(mouseState_.rgbButtons[0] & 0x80))
+	{
 		return true;
 	}
 	return false;
@@ -132,7 +149,8 @@ bool Input::ReleaseMouseLeft()
 
 bool Input::HoldMouseLeft()
 {
-	if (preMouseState_.rgbButtons[0] & 0x80 && mouseState_.rgbButtons[0] & 0x80) {
+	if (preMouseState_.rgbButtons[0] & 0x80 && mouseState_.rgbButtons[0] & 0x80)
+	{
 		return true;
 	}
 	return false;
@@ -140,7 +158,8 @@ bool Input::HoldMouseLeft()
 
 bool Input::PushMouseCenter()
 {
-	if (mouseState_.rgbButtons[2] & 0x80) {
+	if (mouseState_.rgbButtons[2] & 0x80) 
+	{
 		return true;
 	}
 	return false;
@@ -169,7 +188,8 @@ Vector2 Input::GetMousePosition()
 
 bool Input::IsPushKeyPre(BYTE keyNumber)
 {
-	if (keyPre_[keyNumber]) {
+	if (keyPre_[keyNumber]) 
+	{
 		return true;
 	}
 
@@ -183,18 +203,20 @@ bool Input::GamePadUpdate(uint32_t padNo)
 	preGamePadState_ = gamePadState_;
 	DWORD dwResult = XInputGetState(padNo, &gamePadState_);
 	
-	if (dwResult == ERROR_SUCCESS) {
+	//デッドゾーン処理。わずかな傾きを無視する
+	if (dwResult == ERROR_SUCCESS) 
+	{
 
-		if (std::abs(gamePadState_.Gamepad.sThumbLX) < deadZone_) {
+		if (std::abs(gamePadState_.Gamepad.sThumbLX) < kDeadZone_) {
 			gamePadState_.Gamepad.sThumbLX = 0;
 		}
-		if (std::abs(gamePadState_.Gamepad.sThumbLY) < deadZone_) {
+		if (std::abs(gamePadState_.Gamepad.sThumbLY) < kDeadZone_) {
 			gamePadState_.Gamepad.sThumbLY = 0;
 		}
-		if (std::abs(gamePadState_.Gamepad.sThumbRX) < deadZone_) {
+		if (std::abs(gamePadState_.Gamepad.sThumbRX) < kDeadZone_) {
 			gamePadState_.Gamepad.sThumbRX = 0;
 		}
-		if (std::abs(gamePadState_.Gamepad.sThumbRY) < deadZone_) {
+		if (std::abs(gamePadState_.Gamepad.sThumbRY) < kDeadZone_) {
 			gamePadState_.Gamepad.sThumbRY = 0;
 		}
 
@@ -206,7 +228,8 @@ bool Input::GamePadUpdate(uint32_t padNo)
 
 bool Input::PushButton(uint32_t xinput)
 {
-	if (gamePadState_.Gamepad.wButtons & xinput) {
+	if (gamePadState_.Gamepad.wButtons & xinput)
+	{
 		return true;
 	}
 	
@@ -215,7 +238,8 @@ bool Input::PushButton(uint32_t xinput)
 
 bool Input::TriggerButton(uint32_t xinput)
 {
-	if ((gamePadState_.Gamepad.wButtons & xinput) && !(preGamePadState_.Gamepad.wButtons & xinput)) {
+	if ((gamePadState_.Gamepad.wButtons & xinput) && !(preGamePadState_.Gamepad.wButtons & xinput))
+	{
 		return true;
 	}
 
@@ -224,7 +248,8 @@ bool Input::TriggerButton(uint32_t xinput)
 
 bool Input::ReleaseButton(uint32_t xinput)
 {
-	if (!(gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) {
+	if (!(gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) 
+	{
 		return true;
 	}
 
@@ -233,7 +258,8 @@ bool Input::ReleaseButton(uint32_t xinput)
 
 bool Input::TrigerRT()
 {
-	if ((gamePadState_.Gamepad.bRightTrigger > 0) && !(preGamePadState_.Gamepad.bRightTrigger > 0)) {
+	if ((gamePadState_.Gamepad.bRightTrigger > 0) && !(preGamePadState_.Gamepad.bRightTrigger > 0))
+	{
 		return true;
 	}
 
@@ -242,7 +268,8 @@ bool Input::TrigerRT()
 
 bool Input::HoldButton(uint32_t xinput)
 {
-	if ((gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) {
+	if ((gamePadState_.Gamepad.wButtons & xinput) && (preGamePadState_.Gamepad.wButtons & xinput)) 
+	{
 		return true;
 	}
 
@@ -261,7 +288,8 @@ float Input::GetLeftStickY()
 
 bool Input::TrigerLeftStickDown()
 {
-	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) < 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) < 0.0f)) {
+	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) < 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) < 0.0f))
+	{
 		return true;
 	}
 	return false;
@@ -269,7 +297,8 @@ bool Input::TrigerLeftStickDown()
 
 bool Input::TrigerLeftStickUp()
 {
-	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) > 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) > 0.0f)) {
+	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) > 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) > 0.0f))
+	{
 		return true;
 	}
 	return false;

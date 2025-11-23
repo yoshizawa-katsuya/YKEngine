@@ -50,8 +50,6 @@ public:
 
 	const std::map<std::string, NodeAnimation>& GetNodeAnimations() const { return nodeAnimations_; }
 
-	//const NodeAnimation& GetNodeAnimation(const std::string& nodeName) const { return nodeAnimations_.find(nodeName); }
-
 	float GetAnimationTime() { return animationTime_; }
 
 private:

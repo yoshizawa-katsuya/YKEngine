@@ -3,7 +3,8 @@
 #include <cmath>
 #include "TransformHelpers.h"
 
-float Lerp(const float& p0, const float& p1, float t) {
+float Lerp(const float& p0, const float& p1, float t)
+{
 	return (1 - t) * p0 + t * p1;
 }
 
