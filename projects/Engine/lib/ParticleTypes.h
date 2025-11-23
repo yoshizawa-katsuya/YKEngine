@@ -51,10 +51,12 @@ struct EmitterRangeParams
 /// <summary>
 /// パーティクルのブレンドモード
 /// </summary>
-enum class ParticleBlendMode
+enum class ParticleDrawMode
 {
 	kAddBlend,
 	kNormalBlend,
+	kAddBlendBackDraw,
+	kNormalBlendBackDraw,
 };
 
 /// <summary>
@@ -92,5 +94,5 @@ struct ParticleBehavior
 	//時間経過で透明になっていくならtrue
 	bool isTimeFadeOut = true;
 	//ブレンドモード
-	ParticleBlendMode blendMode = ParticleBlendMode::kAddBlend;
+	ParticleDrawMode drawMode = ParticleDrawMode::kAddBlend;
 };

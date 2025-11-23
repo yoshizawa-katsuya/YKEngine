@@ -123,6 +123,8 @@ private:
 	std::vector<DrawMode> particleDrawModes_ = {
 		DrawMode::kBlendModeAddParticle,
 		DrawMode::kBlendModeNormalParticle,
+		DrawMode::kBlendModeAddBackDrawParticle,
+		DrawMode::kBlendModeNormalBackDrawParticle
 	};
 
 	//乱数生成エンジンへのポインタ

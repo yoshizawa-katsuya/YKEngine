@@ -30,6 +30,10 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon)
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNormalParticle)) = CreateGraphicsPipeline(DrawMode::kBlendModeNormalParticle, dxCommon);
 	
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeAddBackDrawParticle)) = CreateGraphicsPipeline(DrawMode::kBlendModeAddBackDrawParticle, dxCommon);
+
+	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNormalBackDrawParticle)) = CreateGraphicsPipeline(DrawMode::kBlendModeNormalBackDrawParticle, dxCommon);
+
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kLineMode)) = CreateGraphicsPipeline(DrawMode::kLineMode, dxCommon);
 
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kSphereMode)) = CreateGraphicsPipeline(DrawMode::kSphereMode, dxCommon);
@@ -354,6 +358,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	}
 	case DrawMode::kBlendModeAddParticle:
 	case DrawMode::kBlendModeNormalParticle:
+	case DrawMode::kBlendModeAddBackDrawParticle:
+	case DrawMode::kBlendModeNormalBackDrawParticle:
 	{
 		rootParameters.resize(static_cast<size_t>(ParticleRootParam::kCount));
 
@@ -401,8 +407,6 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 			transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
 			break;
 		}
-		case DrawMode::kBlendModeAddParticle:
-		case DrawMode::kBlendModeNormalParticle:
 		case DrawMode::kBlendModeNormalinstancing:
 		{
 			//Particle用、instancing用
@@ -654,6 +658,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kBlendModeNormalSprite:
 	case DrawMode::kBlendModeNormalinstancing:
 	case DrawMode::kBlendModeNormalParticle:
+	case DrawMode::kBlendModeNormalBackDrawParticle:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
@@ -663,6 +668,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	case DrawMode::kBlendModeAdd:
 	case DrawMode::kBlendModeAddParticle:
+	case DrawMode::kBlendModeAddBackDrawParticle:
 		blendDesc.RenderTarget[0].BlendEnable = TRUE;
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
@@ -697,6 +703,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kBlendModeNoneSprite:
 	case DrawMode::kBlendModeNormalSprite:
 	case DrawMode::kBackGroundSprite:
+	case DrawMode::kBlendModeAddBackDrawParticle:
+	case DrawMode::kBlendModeNormalBackDrawParticle:
 		//裏面（時計回り）を表示する
 		rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 		break;
@@ -865,6 +873,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	case DrawMode::kBlendModeAddParticle:
 	case DrawMode::kBlendModeNormalParticle:
+	case DrawMode::kBlendModeAddBackDrawParticle:
+	case DrawMode::kBlendModeNormalBackDrawParticle:
 
 		//Particle用
 		vertexShaderBlob = dxCommon->CompilerShader(L"resources/shader/Particle.VS.hlsl",
@@ -972,6 +982,8 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		break;
 	case DrawMode::kBlendModeAddParticle:
 	case DrawMode::kBlendModeNormalParticle:
+	case DrawMode::kBlendModeAddBackDrawParticle:
+	case DrawMode::kBlendModeNormalBackDrawParticle:
 		//Depthの機能を有効化する
 		depthStencilDesc.DepthEnable = true;
 		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
