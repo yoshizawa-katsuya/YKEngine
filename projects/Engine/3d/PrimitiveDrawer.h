@@ -29,6 +29,9 @@ enum class DrawMode {
 	kBlendModeAddParticle,
 	kBlendModeNormalParticle,
 
+	kBlendModeAddBackDrawParticle,	//背面描画用加算
+	kBlendModeNormalBackDrawParticle,	//背面描画用通常
+
 	kLineMode,
 
 	kSphereMode,
