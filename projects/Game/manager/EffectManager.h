@@ -8,6 +8,7 @@ enum class EffectType
 {
 	kHit01,
 	kGather01,	//集まるエフェクト
+	kGather02,	//集まるエフェクト２
 	kScatter01,	//散らばるエフェクト
 };
 
@@ -78,6 +79,7 @@ private:
 	{
 		{{EffectType::kHit01}, {"HitEffect01", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kGather01}, {"GatherEffect01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kGather02}, {"GatherEffect02", "./Resources/white.png", "primitiveCube"}},
 		{{EffectType::kScatter01}, {"ScatterEffect01", "./Resources/white.png", "primitiveSphere"}},
 	};
 

@@ -214,10 +214,12 @@ void Player::UpdateStart()
 	BaseCharacter::Update();
 	
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kGather01, GetWorldPosition());
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kGather02, GetWorldPosition());
 
 	if (startAnime_->GetIsEnd())
 	{
 		phase_ = Phase::kMain;
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, GetWorldPosition(), 30);
 	}
 }
 

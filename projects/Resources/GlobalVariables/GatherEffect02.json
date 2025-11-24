@@ -1,5 +1,5 @@
 {
-    "GatherEffect01": {
+    "GatherEffect02": {
         "bahaviorEasingTypeForScale": 0,
         "bahaviorIsSceleToDisappear": false,
         "behaviorBlendMode": 0,
@@ -17,7 +17,7 @@
         "frequency": 0.5,
         "randomFlagsColor": true,
         "randomFlagsLifeTime": true,
-        "randomFlagsRotation": false,
+        "randomFlagsRotation": true,
         "randomFlagsScale": false,
         "randomFlagsTranslation": true,
         "randomFlagsVelocity": false,
