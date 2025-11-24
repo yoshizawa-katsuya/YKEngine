@@ -5,24 +5,24 @@
         "behaviorBlendMode": 1,
         "behaviorDistance": 1.0,
         "behaviorIsConstantVelocity": true,
-        "behaviorIsDownVelocity": false,
+        "behaviorIsDownVelocity": true,
         "behaviorIsFaceToVelocityDirection": false,
         "behaviorIsFixedDistance": false,
         "behaviorIsHeadCenter": false,
         "behaviorIsScaleToAppear": false,
-        "behaviorIsTimeFadeOut": false,
+        "behaviorIsTimeFadeOut": true,
         "behaviorIsUseBillboard": false,
-        "behaviorSpeed": 4.0,
+        "behaviorSpeed": 10.0,
         "count": 1,
         "frequency": 0.5,
         "randomFlagsColor": false,
-        "randomFlagsLifeTime": false,
+        "randomFlagsLifeTime": true,
         "randomFlagsRotation": false,
         "randomFlagsScale": false,
         "randomFlagsTranslation": false,
         "randomFlagsVelocity": true,
-        "rangeParamsLifeTimeMax": 0.5,
-        "rangeParamsLifeTimeMin": 0.5,
+        "rangeParamsLifeTimeMax": 1.5,
+        "rangeParamsLifeTimeMin": 1.0,
         "rangeParamsRotateMax": [
             3.1415927410125732,
             3.1415927410125732,
@@ -54,14 +54,14 @@
             -1.0
         ],
         "rangeParamsVelocityMax": [
-            2.0,
-            2.0,
-            2.0
+            5.0,
+            5.0,
+            5.0
         ],
         "rangeParamsVelocityMin": [
-            -2.0,
-            -2.0,
-            -2.0
+            -5.0,
+            -5.0,
+            -5.0
         ],
         "rotation": [
             0.0,

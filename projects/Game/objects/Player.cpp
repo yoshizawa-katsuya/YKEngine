@@ -213,13 +213,16 @@ void Player::UpdateStart()
 	characterWorldTransform_.scale_ = startAnime_->Update();
 	BaseCharacter::Update();
 	
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kGather01, GetWorldPosition());
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kGather02, GetWorldPosition());
+	EffectManager* effectManager = EffectManager::GetInstance();
+
+	effectManager->SpawnEffect(EffectType::kGather01, GetWorldPosition());
+	effectManager->SpawnEffect(EffectType::kGather02, GetWorldPosition());
 
 	if (startAnime_->GetIsEnd())
 	{
 		phase_ = Phase::kMain;
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, GetWorldPosition(), 30);
+		
+		effectManager->SpawnEffect(EffectType::kScatter01, GetWorldPosition(), 30);
 	}
 }
 

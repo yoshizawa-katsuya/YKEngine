@@ -1,5 +1,6 @@
 #include "EffectManager.h"
 #include "ModelPlatform.h"
+#include "ParticleManager.h"
 
 EffectManager* EffectManager::instance_ = nullptr;
 
@@ -65,6 +66,11 @@ void EffectManager::SpawnEffect(EffectType effectType, const Vector3& position, 
 	{
 		emitter->Emit(); // パーティクルを発生させる
 	}
+}
+
+void EffectManager::ClearEffects(EffectType effectType)
+{
+	ParticleManager::GetInstance()->ClearParticles(effectDatas_[effectType].name);
 }
 
 std::shared_ptr<BaseModel> EffectManager::LoadEffectModel(std::string modelName, uint32_t textureHnadle)

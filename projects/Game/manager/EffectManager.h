@@ -7,8 +7,8 @@ class BaseModel;
 enum class EffectType
 {
 	kHit01,
-	kGather01,	//集まるエフェクト
-	kGather02,	//集まるエフェクト２
+	kGather01,	//集まるエフェクト1。カラフルな球
+	kGather02,	//集まるエフェクト2。カラフルな四角
 	kScatter01,	//散らばるエフェクト
 };
 
@@ -56,6 +56,12 @@ public:
 	/// <param name="position">生成位置</param>
 	/// <param name="count">生成数</param>
 	void SpawnEffect(EffectType effectType, const Vector3& position, uint32_t count);
+
+	/// <summary>
+	/// エフェクトの削除。
+	/// </summary>
+	/// <param name="effectType">エフェクトの種類</param>
+	void ClearEffects(EffectType effectType);
 
 private:
 	// シングルトンインスタンス
