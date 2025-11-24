@@ -22,5 +22,6 @@ void BasePlayerBullet::OnCollision(Collider* other)
 
 		// エフェクト生成
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, worldTransform_.GetWorldPosition(), 10);
 	}
 }

@@ -1,7 +1,7 @@
 {
     "HitEffect01": {
         "bahaviorEasingTypeForScale": 0,
-        "bahaviorIsSceleToDisappear": false,
+        "bahaviorIsSceleToDisappear": true,
         "behaviorBlendMode": 0,
         "behaviorDistance": 1.0,
         "behaviorIsConstantVelocity": false,
@@ -10,7 +10,7 @@
         "behaviorIsFixedDistance": false,
         "behaviorIsHeadCenter": false,
         "behaviorIsScaleToAppear": false,
-        "behaviorIsTimeFadeOut": true,
+        "behaviorIsTimeFadeOut": false,
         "behaviorIsUseBillboard": true,
         "behaviorSpeed": 1.0,
         "color": [
@@ -22,14 +22,14 @@
         "count": 3,
         "frequency": 1.5,
         "randomFlagsColor": false,
-        "randomFlagsLifeTime": false,
+        "randomFlagsLifeTime": true,
         "randomFlagsRotation": true,
         "randomFlagsScale": true,
         "randomFlagsSpeed": false,
         "randomFlagsTranslation": false,
         "randomFlagsVelocity": false,
-        "rangeParamsLifeTimeMax": 3.0,
-        "rangeParamsLifeTimeMin": 1.0,
+        "rangeParamsLifeTimeMax": 0.20000000298023224,
+        "rangeParamsLifeTimeMin": 0.20000000298023224,
         "rangeParamsRotateMax": [
             0.0,
             0.0,
@@ -79,8 +79,8 @@
         ],
         "scale": [
             0.10000000149011612,
-            2.0,
-            2.0
+            5.0,
+            5.0
         ],
         "translation": [
             0.0,
