@@ -256,7 +256,7 @@ void GameScene::Draw()
 
 	//オブジェクトの描画
 	for (const auto& [name, instancingObject] : instancingObjects_) 
-{
+	{
 		instancingObject->CameraUpdate(mainCamera_);
 		instancingObject->Draw();
 	}

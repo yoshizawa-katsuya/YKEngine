@@ -1,10 +1,10 @@
 {
-    "ScatterEffect01": {
+    "ScatterEffect03": {
         "bahaviorEasingTypeForScale": 0,
         "bahaviorIsSceleToDisappear": false,
         "behaviorBlendMode": 1,
         "behaviorDistance": 1.0,
-        "behaviorIsConstantVelocity": false,
+        "behaviorIsConstantVelocity": true,
         "behaviorIsDownVelocity": true,
         "behaviorIsFaceToVelocityDirection": false,
         "behaviorIsFixedDistance": false,
@@ -25,7 +25,7 @@
         "randomFlagsLifeTime": true,
         "randomFlagsRotation": false,
         "randomFlagsScale": false,
-        "randomFlagsSpeed": true,
+        "randomFlagsSpeed": false,
         "randomFlagsTranslation": false,
         "randomFlagsVelocity": true,
         "rangeParamsLifeTimeMax": 1.5,
@@ -50,8 +50,8 @@
             -1.0,
             -1.0
         ],
-        "rangeParamsSpeedMax": 7.0,
-        "rangeParamsSpeedMin": 3.0,
+        "rangeParamsSpeedMax": 1.0,
+        "rangeParamsSpeedMin": 0.5,
         "rangeParamsTranslateMax": [
             1.0,
             1.0,

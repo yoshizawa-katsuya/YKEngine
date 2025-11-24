@@ -11,6 +11,7 @@ enum class EffectType
 	kGather02,	//集まるエフェクト2。カラフルな四角
 	kScatter01,	//散らばるエフェクト1
 	kScatter02,	//散らばるエフェクト2。高速
+	kScatter03,	//散らばるエフェクト3。高速。黒い球
 };
 
 /// <summary>
@@ -64,6 +65,11 @@ public:
 	/// <param name="effectType">エフェクトの種類</param>
 	void ClearEffects(EffectType effectType);
 
+	/// <summary>
+	/// 全てのエフェクトの削除。
+	/// </summary>
+	void ClearAllEffects();
+
 private:
 	// シングルトンインスタンス
 	static EffectManager* instance_;
@@ -89,6 +95,7 @@ private:
 		{{EffectType::kGather02}, {"GatherEffect02", "./Resources/white.png", "primitiveCube"}},
 		{{EffectType::kScatter01}, {"ScatterEffect01", "./Resources/white.png", "primitiveSphere"}},
 		{{EffectType::kScatter02}, {"ScatterEffect02", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kScatter03}, {"ScatterEffect03", "./Resources/black.png", "primitiveSphere"}},
 	};
 
 	//パーティクル

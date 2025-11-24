@@ -12,7 +12,7 @@
         "behaviorIsScaleToAppear": false,
         "behaviorIsTimeFadeOut": true,
         "behaviorIsUseBillboard": false,
-        "behaviorSpeed": 90.0,
+        "behaviorSpeed": 25.0,
         "color": [
             1.0,
             1.0,

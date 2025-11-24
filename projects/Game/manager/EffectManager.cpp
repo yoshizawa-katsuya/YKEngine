@@ -73,6 +73,14 @@ void EffectManager::ClearEffects(EffectType effectType)
 	ParticleManager::GetInstance()->ClearParticles(effectDatas_[effectType].name);
 }
 
+void EffectManager::ClearAllEffects()
+{
+	for (const std::pair<EffectType, EffectData>& effectData : effectDatas_)
+	{
+		ParticleManager::GetInstance()->ClearParticles(effectData.second.name);
+	}
+}
+
 std::shared_ptr<BaseModel> EffectManager::LoadEffectModel(std::string modelName, uint32_t textureHnadle)
 {
 	std::string tag = "Effect";
