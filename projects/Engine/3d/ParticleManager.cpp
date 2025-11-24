@@ -220,6 +220,16 @@ void ParticleManager::ClearParticles(const std::string name)
 	particleGroup.numInstance = 0;
 }
 
+void ParticleManager::ClearAllParticles()
+{
+	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
+		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) 
+	{
+		particleGroupIterator->second.particles.clear();
+		particleGroupIterator->second.numInstance = 0;
+	}
+}
+
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
 	const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {

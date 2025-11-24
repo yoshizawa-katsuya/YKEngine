@@ -77,6 +77,11 @@ public:
 	/// <param name="name">パーティクルグループの名前</param>
 	void ClearParticles(const std::string name);
 
+	/// <summary>
+	/// 全てのパーティクルを削除。
+	/// </summary>
+	void ClearAllParticles();
+
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 
 	bool& GetUseAccelerationField() { return useAccelerationField_; }
