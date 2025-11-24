@@ -55,6 +55,7 @@ void ParticleEmitter::ApplyGlobalVariables()
 	randomFlags_.rotate = globalVariables_->GetBoolValue(name_, "randomFlagsRotation");
 	randomFlags_.scale = globalVariables_->GetBoolValue(name_, "randomFlagsScale");
 	randomFlags_.velocity = globalVariables_->GetBoolValue(name_, "randomFlagsVelocity");
+	randomFlags_.speed = globalVariables_->GetBoolValue(name_, "randomFlagsSpeed");
 	randomFlags_.lifeTime = globalVariables_->GetBoolValue(name_, "randomFlagsLifeTime");
 	rangeParams_.translate.max = globalVariables_->GetVector3Value(name_, "rangeParamsTranslateMax");
 	rangeParams_.translate.min = globalVariables_->GetVector3Value(name_, "rangeParamsTranslateMin");
@@ -106,6 +107,7 @@ void ParticleEmitter::InitializeGlobalVariables()
 	globalVariables_->AddItem(name_, "randomFlagsRotation", randomFlags_.rotate);
 	globalVariables_->AddItem(name_, "randomFlagsScale", randomFlags_.scale);
 	globalVariables_->AddItem(name_, "randomFlagsVelocity", randomFlags_.velocity);
+	globalVariables_->AddItem(name_, "randomFlagsSpeed", randomFlags_.speed);
 	globalVariables_->AddItem(name_, "randomFlagsLifeTime", randomFlags_.lifeTime);
 	globalVariables_->AddItem(name_, "rangeParamsTranslateMax", rangeParams_.translate.max);
 	globalVariables_->AddItem(name_, "rangeParamsTranslateMin", rangeParams_.translate.min);
