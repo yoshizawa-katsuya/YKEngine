@@ -13,6 +13,7 @@ struct ParticleRandomizationFlags
 	bool velocity = false;
 	bool rotate = false;
 	bool scale = false;
+	bool speed = false;
 	bool lifeTime = false;
 };
 
@@ -38,6 +39,7 @@ struct EmitterRangeParams
 		, scale ({ { 1.0f, 1.0f, 1.0f } , { -1.0f, -1.0f, -1.0f } })
 		, rotate ({ { std::numbers::pi_v<float>, std::numbers::pi_v<float>, std::numbers::pi_v<float> } ,{ -std::numbers::pi_v<float>, -std::numbers::pi_v<float>, -std::numbers::pi_v<float> } })
 		, velocity({ Vector3{ 1.0f, 1.0f, 1.0f }, Vector3{ -1.0f, -1.0f, -1.0f } })
+		, speed({ 1.0f, 0.5f })
 		, lifeTime({3.0f, 1.0f})
 	{
 	}
@@ -45,6 +47,7 @@ struct EmitterRangeParams
 	RandomRange<Vector3> scale;
 	RandomRange<Vector3> rotate;
 	RandomRange<Vector3> velocity;
+	RandomRange<float> speed;
 	RandomRange<float> lifeTime;
 };
 

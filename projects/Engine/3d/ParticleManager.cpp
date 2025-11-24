@@ -257,6 +257,13 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		particle.velocity = { 0.0f, 0.0f, 0.0f };
 	}
 
+	if (randomFlags.speed)
+	{
+		std::uniform_real_distribution<float> distSpeed(rangeParams.speed.min, rangeParams.speed.max);
+		float randomSpeed = distSpeed(*randomEngine_);
+		particle.velocity = Normalize(particle.velocity) * randomSpeed;
+	}
+
 	if (randomFlags.scale) 
 	{
 		std::uniform_real_distribution<float> distributionX(rangeParams.scale.min.x, rangeParams.scale.max.x);
