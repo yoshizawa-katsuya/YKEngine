@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "ParticleManager.h"
 #include <cassert>
 
 void SceneManager::Finalize()
@@ -10,7 +11,8 @@ void SceneManager::Update()
 {
 
 	//次シーンの予約があるなら
-	if (nextScene_) {
+	if (nextScene_) 
+	{
 		//シーン切り替え
 		scene_.reset(nextScene_);
 		nextScene_ = nullptr;
@@ -20,6 +22,9 @@ void SceneManager::Update()
 
 		//次シーンを初期化する
 		scene_->Initialize();
+
+		//パーティクルを全削除
+		ParticleManager::GetInstance()->ClearAllParticles();
 	}
 
 	//実行中シーンを更新する
