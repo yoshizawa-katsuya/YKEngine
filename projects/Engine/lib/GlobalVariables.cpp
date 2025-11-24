@@ -27,15 +27,12 @@ void GlobalVariables::Finalize()
 void GlobalVariables::Update() {
 
 #ifdef USE_IMGUI
-	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar))
+	if (!ImGui::Begin("Global Variables", nullptr))
 	{
 		ImGui::End();
 		return;
 	}
-	if (!ImGui::BeginMenuBar())
-	{
-		return;
-	}
+	
 
 	for (std::map<std::string, Group>::iterator itGroup = datas_.begin();
 		itGroup != datas_.end(); ++itGroup) {
@@ -45,7 +42,7 @@ void GlobalVariables::Update() {
 		//グループの参照を取得
 		Group& group = itGroup->second;
 
-		if (!ImGui::BeginMenu(groupName.c_str()))
+		if (!ImGui::TreeNode(groupName.c_str()))
 		{
 			continue;
 		}
@@ -113,10 +110,9 @@ void GlobalVariables::Update() {
 			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 		}
 
-		ImGui::EndMenu();
+		ImGui::TreePop();
 	}
 
-	ImGui::EndMenuBar();
 	ImGui::End();
 
 #endif // USE_IMGUI
