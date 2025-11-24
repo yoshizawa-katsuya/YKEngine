@@ -25,6 +25,7 @@
         "randomFlagsLifeTime": true,
         "randomFlagsRotation": false,
         "randomFlagsScale": false,
+        "randomFlagsSpeed": false,
         "randomFlagsTranslation": true,
         "randomFlagsVelocity": false,
         "rangeParamsLifeTimeMax": 0.30000001192092896,
@@ -49,6 +50,8 @@
             -1.0,
             -1.0
         ],
+        "rangeParamsSpeedMax": 1.0,
+        "rangeParamsSpeedMin": 0.5,
         "rangeParamsTranslateMax": [
             1.0,
             1.0,

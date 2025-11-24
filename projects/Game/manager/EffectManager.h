@@ -9,7 +9,8 @@ enum class EffectType
 	kHit01,
 	kGather01,	//集まるエフェクト1。カラフルな球
 	kGather02,	//集まるエフェクト2。カラフルな四角
-	kScatter01,	//散らばるエフェクト
+	kScatter01,	//散らばるエフェクト1
+	kScatter02,	//散らばるエフェクト2。高速
 };
 
 /// <summary>
@@ -87,6 +88,7 @@ private:
 		{{EffectType::kGather01}, {"GatherEffect01", "./Resources/white.png", "primitiveSphere"}},
 		{{EffectType::kGather02}, {"GatherEffect02", "./Resources/white.png", "primitiveCube"}},
 		{{EffectType::kScatter01}, {"ScatterEffect01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kScatter02}, {"ScatterEffect02", "./Resources/white.png", "primitiveSphere"}},
 	};
 
 	//パーティクル

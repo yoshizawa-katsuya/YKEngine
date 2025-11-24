@@ -222,7 +222,7 @@ void Player::UpdateStart()
 	{
 		phase_ = Phase::kMain;
 		
-		effectManager->SpawnEffect(EffectType::kScatter01, GetWorldPosition(), 30);
+		effectManager->SpawnEffect(EffectType::kScatter02, GetWorldPosition(), 30);
 	}
 }
 
@@ -277,7 +277,7 @@ void Player::UpdateGameOver()
 	{
 		isGameOverEnd_ = true;
 		characterWorldTransform_.scale_ = { 0.0f, 0.0f, 0.0f };
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, characterWorldTransform_.GetWorldPosition(), 100);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter02, characterWorldTransform_.GetWorldPosition(), 100);
 	}
 
 	BaseCharacter::Update();
