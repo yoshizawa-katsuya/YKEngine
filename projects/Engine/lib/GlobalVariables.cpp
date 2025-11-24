@@ -301,6 +301,22 @@ void GlobalVariables::SaveFile(const std::string& groupName)
 			root[groupName][itemName] = json::array({value.x, value.y, value.z});
 		}
 
+		// Vector4型の値を保持していれば
+		else if (std::holds_alternative<Vector4>(item))
+		{
+			//float型のjson配列登録
+			Vector4 value = std::get<Vector4>(item);
+			root[groupName][itemName] = json::array({value.x, value.y, value.z, value.w});
+		}
+
+		// Color型の値を保持していれば
+		else if (std::holds_alternative<Color>(item))
+		{
+			//float型のjson配列登録
+			Color value = std::get<Color>(item);
+			root[groupName][itemName] = json::array({value.r, value.g, value.b, value.a});
+		}
+
 		// bool型の値を保持していれば
 		else if (std::holds_alternative<bool>(item)) 
 		{
@@ -429,6 +445,14 @@ void GlobalVariables::LoadFile(const std::string& groupName)
 		{
 			// float型のjson配列登録
 			Vector3 value = {itItem->at(0), itItem->at(1), itItem->at(2)};
+			SetValue(groupName, itemName, value);
+		}
+
+		// 要素数4の配列であればColorとして登録
+		else if (itItem->is_array() && itItem->size() == 4) 
+		{
+			// float型のjson配列登録
+			Color value = {itItem->at(0), itItem->at(1), itItem->at(2), itItem->at(3)};
 			SetValue(groupName, itemName, value);
 		}
 
