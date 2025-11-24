@@ -2,12 +2,23 @@
     "HitEffect01": {
         "bahaviorEasingTypeForScale": 0,
         "bahaviorIsSceleToDisappear": false,
+        "behaviorBlendMode": 0,
+        "behaviorDistance": 1.0,
         "behaviorIsConstantVelocity": false,
         "behaviorIsDownVelocity": false,
         "behaviorIsFaceToVelocityDirection": false,
+        "behaviorIsFixedDistance": false,
+        "behaviorIsHeadCenter": false,
         "behaviorIsScaleToAppear": false,
+        "behaviorIsTimeFadeOut": true,
         "behaviorIsUseBillboard": true,
         "behaviorSpeed": 1.0,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
         "count": 3,
         "frequency": 1.5,
         "randomFlagsColor": false,
