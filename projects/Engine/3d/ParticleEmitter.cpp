@@ -65,6 +65,8 @@ void ParticleEmitter::ApplyGlobalVariables()
 	rangeParams_.rotate.min = globalVariables_->GetVector3Value(name_, "rangeParamsRotateMin");
 	rangeParams_.velocity.max = globalVariables_->GetVector3Value(name_, "rangeParamsVelocityMax");
 	rangeParams_.velocity.min = globalVariables_->GetVector3Value(name_, "rangeParamsVelocityMin");
+	rangeParams_.speed.max = globalVariables_->GetFloatValue(name_, "rangeParamsSpeedMax");
+	rangeParams_.speed.min = globalVariables_->GetFloatValue(name_, "rangeParamsSpeedMin");
 	rangeParams_.lifeTime.max = globalVariables_->GetFloatValue(name_, "rangeParamsLifeTimeMax");
 	rangeParams_.lifeTime.min = globalVariables_->GetFloatValue(name_, "rangeParamsLifeTimeMin");
 	behavior_->isFaceToVelocityDirection = globalVariables_->GetBoolValue(name_, "behaviorIsFaceToVelocityDirection");
@@ -117,6 +119,8 @@ void ParticleEmitter::InitializeGlobalVariables()
 	globalVariables_->AddItem(name_, "rangeParamsRotateMin", rangeParams_.rotate.min);
 	globalVariables_->AddItem(name_, "rangeParamsVelocityMax", rangeParams_.velocity.max);
 	globalVariables_->AddItem(name_, "rangeParamsVelocityMin", rangeParams_.velocity.min);
+	globalVariables_->AddItem(name_, "rangeParamsSpeedMax", rangeParams_.speed.max);
+	globalVariables_->AddItem(name_, "rangeParamsSpeedMin", rangeParams_.speed.min);
 	globalVariables_->AddItem(name_, "rangeParamsLifeTimeMax", rangeParams_.lifeTime.max);
 	globalVariables_->AddItem(name_, "rangeParamsLifeTimeMin", rangeParams_.lifeTime.min);
 	globalVariables_->AddItem(name_, "behaviorIsFaceToVelocityDirection", behavior_->isFaceToVelocityDirection);
