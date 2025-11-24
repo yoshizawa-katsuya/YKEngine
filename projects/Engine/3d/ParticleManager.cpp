@@ -212,6 +212,14 @@ void ParticleManager::Emit(const std::string name, const EulerTransform& transfo
 	}
 }
 
+void ParticleManager::ClearParticles(const std::string name)
+{
+	assert(particleGroups_.contains(name));
+	ParticleGroup& particleGroup = particleGroups_[name];
+	particleGroup.particles.clear();
+	particleGroup.numInstance = 0;
+}
+
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
 	const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
