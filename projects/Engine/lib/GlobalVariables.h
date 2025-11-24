@@ -210,6 +210,7 @@ private:
 
 	using json = nlohmann::json;
 
+	//TODO: jsonの項目にtypeを追加して型安全にする
 	//項目
 	using Item = std::variant<int32_t, float, Vector3, Vector4, Color, bool>;
 
