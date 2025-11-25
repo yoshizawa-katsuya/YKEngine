@@ -61,7 +61,7 @@ void DemoPlayer::UpdateStart()
 	{
 		phase_ = Phase::kMain;
 
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, worldTransform_.GetWorldPosition(), 30);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter04, worldTransform_.GetWorldPosition(), 100);
 	}
 }
 

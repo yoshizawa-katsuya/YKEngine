@@ -1,8 +1,8 @@
 {
-    "ScatterEffect02": {
+    "ScatterEffect04": {
         "bahaviorEasingTypeForScale": 0,
         "bahaviorIsSceleToDisappear": false,
-        "behaviorBlendMode": 1,
+        "behaviorBlendMode": 0,
         "behaviorDistance": 1.0,
         "behaviorIsConstantVelocity": true,
         "behaviorIsDownVelocity": true,
@@ -15,13 +15,13 @@
         "behaviorSpeed": 25.0,
         "color": [
             1.0,
-            0.8344867825508118,
-            0.19607841968536377,
+            1.0,
+            1.0,
             1.0
         ],
         "count": 1,
         "frequency": 0.5,
-        "randomFlagsColor": false,
+        "randomFlagsColor": true,
         "randomFlagsLifeTime": true,
         "randomFlagsRotation": false,
         "randomFlagsScale": false,
@@ -78,9 +78,9 @@
             0.0
         ],
         "scale": [
-            0.20000000298023224,
-            0.20000000298023224,
-            0.20000000298023224
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
         ],
         "translation": [
             0.0,
