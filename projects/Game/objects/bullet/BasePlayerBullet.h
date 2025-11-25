@@ -19,6 +19,11 @@ public:
 	virtual void Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle) override;
 
 	/// <summary>
+	/// 更新。
+	/// </summary>
+	virtual void Update() override;
+
+	/// <summary>
 	/// 衝突時の処理。
 	/// </summary>
 	/// <param name="other">衝突相手のコライダー</param>

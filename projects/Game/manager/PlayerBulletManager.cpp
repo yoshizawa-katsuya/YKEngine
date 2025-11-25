@@ -7,11 +7,10 @@
 void PlayerBulletManager::Initialize()
 {
 	//テクスチャ読み込み
-	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/black.png");
+	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 
 	//モデル生成
-	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(textureHandlePlayerBullet_, "Bullet");
-
+	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(textureHandlePlayerBullet_, "PlayerBullet");
 }
 
 void PlayerBulletManager::Update()

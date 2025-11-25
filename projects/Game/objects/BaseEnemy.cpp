@@ -280,9 +280,13 @@ void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, worldTransform_.GetWorldPosition(), 10);
 
-	if (hitPoint_ > 0) {
+	if (hitPoint_ > 0) 
+	{
 		return;
 	}
 	// 体力が0以下になったら死亡
 	isDead_ = true;
+
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter04, worldTransform_.GetWorldPosition(), 50);
+
 }

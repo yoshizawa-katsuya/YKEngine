@@ -8,7 +8,7 @@ void EnemyBulletManager::Initialize()
 	textureHandleEnemyBullet_ = TextureManager::GetInstance()->Load("./Resources/red.png");
 
 	//モデル生成
-	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(textureHandleEnemyBullet_, "Bullet");
+	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(textureHandleEnemyBullet_, "EnemyBullet");
 }
 
 void EnemyBulletManager::Update(Camera* railCamera)
