@@ -291,6 +291,7 @@ struct Particle
 {
 	EulerTransform transform;
 	Vector3 velocity;
+	Vector3 rotationVelocity;
 	Color color;
 	float lifeTime;
 	float currentTime;
