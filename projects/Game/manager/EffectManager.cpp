@@ -96,6 +96,10 @@ std::shared_ptr<BaseModel> EffectManager::LoadEffectModel(std::string modelName,
 	{
 		return modelPlatform_->CreateCube(textureHnadle, tag);
 	}
+	else if (modelName == "primitivePlane")
+	{
+		return modelPlatform_->CreatePlane(textureHnadle, tag);
+	}
 
 	assert(false);
 	return modelPlatform_->CreatePlane(textureHnadle, tag);

@@ -6,6 +6,7 @@
 #include "LevelDataLoader.h"
 #include "ParticleManager.h"
 #include "RootParams.h"
+#include "manager/EffectManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -116,6 +117,8 @@ void ClearScene::Update()
 	{
 		debugCamera_->Update();
 	}
+
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kConfetti01, railMover_->GetWorldTransform()->GetWorldPosition());
 
 	switch (phase_)
 	{

@@ -24,6 +24,7 @@
         "randomFlagsColor": false,
         "randomFlagsLifeTime": true,
         "randomFlagsRotation": false,
+        "randomFlagsRotationVelocity": false,
         "randomFlagsScale": false,
         "randomFlagsSpeed": false,
         "randomFlagsTranslation": false,
@@ -39,6 +40,16 @@
             -3.1415927410125732,
             -3.1415927410125732,
             -3.1415927410125732
+        ],
+        "rangeParamsRotationVelocityMax": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+        ],
+        "rangeParamsRotationVelocityMin": [
+            -0.10000000149011612,
+            -0.10000000149011612,
+            -0.10000000149011612
         ],
         "rangeParamsScaleMax": [
             1.0,

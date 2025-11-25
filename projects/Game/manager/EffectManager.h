@@ -14,6 +14,7 @@ enum class EffectType
 	kScatter03,	//散らばるエフェクト3。高速。黒い球
 	kScatter04,	//散らばるエフェクト4。高速。カラフルな球
 	kPlayerBulletTrac01, //弾丸の軌跡エフェクト
+	kConfetti01,	//紙吹雪エフェクト1。カラフルな四角板
 };
 
 /// <summary>
@@ -100,6 +101,7 @@ private:
 		{{EffectType::kScatter03}, {"ScatterEffect03", "./Resources/black.png", "primitiveSphere"}},
 		{{EffectType::kScatter04}, {"ScatterEffect04", "./Resources/white.png", "primitiveSphere"}},
 		{{EffectType::kPlayerBulletTrac01}, {"PlayerBulletTrac01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kConfetti01}, {"ConfettiEffect01", "./Resources/white.png", "primitivePlane"}},
 	};
 
 	//パーティクル
