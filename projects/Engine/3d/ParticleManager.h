@@ -71,6 +71,17 @@ public:
 	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
 		const Color& color, const EmitterRangeParams& rangeParams);
 
+	/// <summary>
+	/// パーティクルを削除。
+	/// </summary>
+	/// <param name="name">パーティクルグループの名前</param>
+	void ClearParticles(const std::string name);
+
+	/// <summary>
+	/// 全てのパーティクルを削除。
+	/// </summary>
+	void ClearAllParticles();
+
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 
 	bool& GetUseAccelerationField() { return useAccelerationField_; }

@@ -101,6 +101,9 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 					scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
 				}
 				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
+
+				//回転を更新
+				particleIterator->transform.rotation += particleIterator->rotationVelocity;
 				Matrix4x4 rotateMatrix = MakeRotateMatrix(particleIterator->transform.rotation);
 				Matrix4x4 worldMatrix;
 				if (particleGroupIterator->second.behavior->isUseBillboard) 
@@ -212,6 +215,24 @@ void ParticleManager::Emit(const std::string name, const EulerTransform& transfo
 	}
 }
 
+void ParticleManager::ClearParticles(const std::string name)
+{
+	assert(particleGroups_.contains(name));
+	ParticleGroup& particleGroup = particleGroups_[name];
+	particleGroup.particles.clear();
+	particleGroup.numInstance = 0;
+}
+
+void ParticleManager::ClearAllParticles()
+{
+	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
+		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) 
+	{
+		particleGroupIterator->second.particles.clear();
+		particleGroupIterator->second.numInstance = 0;
+	}
+}
+
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
 	const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
@@ -248,6 +269,13 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		particle.velocity = { 0.0f, 0.0f, 0.0f };
 	}
 
+	if (randomFlags.speed)
+	{
+		std::uniform_real_distribution<float> distSpeed(rangeParams.speed.min, rangeParams.speed.max);
+		float randomSpeed = distSpeed(*randomEngine_);
+		particle.velocity = Normalize(particle.velocity) * randomSpeed;
+	}
+
 	if (randomFlags.scale) 
 	{
 		std::uniform_real_distribution<float> distributionX(rangeParams.scale.min.x, rangeParams.scale.max.x);
@@ -278,6 +306,15 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 	else 
 	{
 		particle.transform.rotation = transform.rotation;
+	}
+
+	if (randomFlags.rotationVelocity)
+	{
+		std::uniform_real_distribution<float> distributionX(rangeParams.rotationVelocity.min.x, rangeParams.rotationVelocity.max.x);
+		std::uniform_real_distribution<float> distributionY(rangeParams.rotationVelocity.min.y, rangeParams.rotationVelocity.max.y);
+		std::uniform_real_distribution<float> distributionZ(rangeParams.rotationVelocity.min.z, rangeParams.rotationVelocity.max.z);
+
+		particle.rotationVelocity = { distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 	}
 
 	if (randomFlags.translate)

@@ -27,15 +27,12 @@ void GlobalVariables::Finalize()
 void GlobalVariables::Update() {
 
 #ifdef USE_IMGUI
-	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar))
+	if (!ImGui::Begin("Global Variables", nullptr))
 	{
 		ImGui::End();
 		return;
 	}
-	if (!ImGui::BeginMenuBar())
-	{
-		return;
-	}
+	
 
 	for (std::map<std::string, Group>::iterator itGroup = datas_.begin();
 		itGroup != datas_.end(); ++itGroup) {
@@ -45,7 +42,7 @@ void GlobalVariables::Update() {
 		//グループの参照を取得
 		Group& group = itGroup->second;
 
-		if (!ImGui::BeginMenu(groupName.c_str()))
+		if (!ImGui::TreeNode(groupName.c_str()))
 		{
 			continue;
 		}
@@ -113,10 +110,9 @@ void GlobalVariables::Update() {
 			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 		}
 
-		ImGui::EndMenu();
+		ImGui::TreePop();
 	}
 
-	ImGui::EndMenuBar();
 	ImGui::End();
 
 #endif // USE_IMGUI
@@ -305,6 +301,22 @@ void GlobalVariables::SaveFile(const std::string& groupName)
 			root[groupName][itemName] = json::array({value.x, value.y, value.z});
 		}
 
+		// Vector4型の値を保持していれば
+		else if (std::holds_alternative<Vector4>(item))
+		{
+			//float型のjson配列登録
+			Vector4 value = std::get<Vector4>(item);
+			root[groupName][itemName] = json::array({value.x, value.y, value.z, value.w});
+		}
+
+		// Color型の値を保持していれば
+		else if (std::holds_alternative<Color>(item))
+		{
+			//float型のjson配列登録
+			Color value = std::get<Color>(item);
+			root[groupName][itemName] = json::array({value.r, value.g, value.b, value.a});
+		}
+
 		// bool型の値を保持していれば
 		else if (std::holds_alternative<bool>(item)) 
 		{
@@ -433,6 +445,14 @@ void GlobalVariables::LoadFile(const std::string& groupName)
 		{
 			// float型のjson配列登録
 			Vector3 value = {itItem->at(0), itItem->at(1), itItem->at(2)};
+			SetValue(groupName, itemName, value);
+		}
+
+		// 要素数4の配列であればColorとして登録
+		else if (itItem->is_array() && itItem->size() == 4) 
+		{
+			// float型のjson配列登録
+			Color value = {itItem->at(0), itItem->at(1), itItem->at(2), itItem->at(3)};
 			SetValue(groupName, itemName, value);
 		}
 
