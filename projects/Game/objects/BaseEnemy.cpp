@@ -8,6 +8,7 @@
 #include "TransformHelpers.h"
 #include "Lerp.h"
 #include "Curve.h"
+#include "manager/EffectManager.h"
 
 BaseEnemy::~BaseEnemy() 
 {
@@ -68,17 +69,9 @@ void BaseEnemy::OnCollision(Collider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet) 
 	{
-		// 弾と衝突したら体力を減らす
-		BaseBullet* bullet = dynamic_cast<BaseBullet*>(other);
-		assert(bullet);
-
-		hitPoint_ -= bullet->GetAttackPower();
-
-		if (hitPoint_ > 0) {
-			return;
-		}
-		// 体力が0以下になったら死亡
-		isDead_ = true;
+		
+		OnCollisionPlayerBullet(other);
+		
 	}
 }
 
@@ -272,4 +265,24 @@ void BaseEnemy::MoveAlongRail()
 			hasRail_ = false;
 		}
 	}
+}
+
+void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
+{
+
+	// 弾と衝突したら体力を減らす
+	BaseBullet* bullet = dynamic_cast<BaseBullet*>(other);
+	assert(bullet);
+
+	hitPoint_ -= bullet->GetAttackPower();
+
+	// エフェクト生成
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, worldTransform_.GetWorldPosition(), 10);
+
+	if (hitPoint_ > 0) {
+		return;
+	}
+	// 体力が0以下になったら死亡
+	isDead_ = true;
 }

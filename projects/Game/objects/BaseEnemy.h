@@ -110,6 +110,12 @@ protected:
 	/// </summary>
 	void MoveAlongRail();
 
+	/// <summary>
+	/// プレイヤーの弾と衝突したときの処理。
+	/// </summary>
+	/// <param name="bullet">衝突した弾</param>
+	virtual void OnCollisionPlayerBullet(Collider* other);
+
 	//自キャラ
 	Player* player_ = nullptr;
 	//敵の弾マネージャー

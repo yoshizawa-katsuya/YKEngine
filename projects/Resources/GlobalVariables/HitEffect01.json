@@ -1,6 +1,6 @@
 {
     "HitEffect01": {
-        "bahaviorEasingTypeForScale": 0,
+        "bahaviorEasingTypeForScale": 7,
         "bahaviorIsSceleToDisappear": true,
         "behaviorBlendMode": 0,
         "behaviorDistance": 1.0,
@@ -28,8 +28,8 @@
         "randomFlagsSpeed": false,
         "randomFlagsTranslation": false,
         "randomFlagsVelocity": false,
-        "rangeParamsLifeTimeMax": 0.20000000298023224,
-        "rangeParamsLifeTimeMin": 0.20000000298023224,
+        "rangeParamsLifeTimeMax": 0.30000001192092896,
+        "rangeParamsLifeTimeMin": 0.30000001192092896,
         "rangeParamsRotateMax": [
             0.0,
             0.0,

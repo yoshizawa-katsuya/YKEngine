@@ -9,17 +9,7 @@ void TackleEnemy01::OnCollision(Collider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet)
 	{
-		// 弾と衝突したら体力を減らす
-		BaseBullet* bullet = dynamic_cast<BaseBullet*>(other);
-		assert(bullet);
-
-		hitPoint_ -= bullet->GetAttackPower();
-
-		if (hitPoint_ > 0) {
-			return;
-		}
-		// 体力が0以下になったら死亡
-		isDead_ = true;
+		OnCollisionPlayerBullet(other);
 	}
 	else if (other->GetTypeID() == CollisionTypeIdDef::kPlayer)
 	{
