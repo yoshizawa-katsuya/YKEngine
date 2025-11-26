@@ -36,19 +36,24 @@ void EventTriggerManager::AddEvent(std::string eventName, const ObjectData& obje
 	else if (eventName == "speedEvent")
 	{
 		//スピードイベントの生成
-		std::unique_ptr<BaseEventTrigger>& speedEvent = events_.emplace_back();
-		SpeedEventTrigger* speedEventPtr = new SpeedEventTrigger();
-		speedEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
-		speedEvent = std::make_unique<SpeedEventTrigger>(*speedEventPtr);
+		std::unique_ptr<SpeedEventTrigger> speedEvent = std::make_unique<SpeedEventTrigger>();
 
+		// 派生クラス側のInitializeを呼ぶ
+		speedEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
+
+		// BaseEventTrigger 側としてコンテナに追加
+		events_.emplace_back(std::move(speedEvent));
 	}
 	else if (eventName == "rotateEvent")
 	{
-		//回転イベントの生成
-		std::unique_ptr<BaseEventTrigger>& rotateEvent = events_.emplace_back();
-		RotateEventTrigger* rotateEventPtr = new RotateEventTrigger();
-		rotateEventPtr->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
-		rotateEvent = std::make_unique<RotateEventTrigger>(*rotateEventPtr);
+		// 回転イベントの生成
+		std::unique_ptr<RotateEventTrigger> rotateEvent = std::make_unique<RotateEventTrigger>();
+
+		// 派生クラス側のInitializeを呼ぶ
+		rotateEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
+
+		// BaseEventTrigger 側としてコンテナに追加
+		events_.emplace_back(std::move(rotateEvent));
 
 	}
 	else if (eventName == "rotateResetEvent")
