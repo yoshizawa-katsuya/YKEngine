@@ -27,11 +27,6 @@ void EffectManager::Initialize()
 
 }
 
-void EffectManager::Finalize()
-{
-	
-}
-
 void EffectManager::Update()
 {
 #ifdef _DEBUG
