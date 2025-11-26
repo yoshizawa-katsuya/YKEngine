@@ -74,8 +74,6 @@ public:
 	void ClearAllEffects();
 
 private:
-	// シングルトンインスタンス
-	static EffectManager* instance_;
 
 	EffectManager() = default;
 	~EffectManager() = default;

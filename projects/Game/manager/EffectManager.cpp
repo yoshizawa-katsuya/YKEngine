@@ -2,15 +2,10 @@
 #include "ModelPlatform.h"
 #include "ParticleManager.h"
 
-EffectManager* EffectManager::instance_ = nullptr;
-
 EffectManager* EffectManager::GetInstance()
 {
-	if (instance_ == nullptr)
-	{
-		instance_ = new EffectManager();
-	}
-	return instance_;
+	static EffectManager instance;
+	return &instance;
 }
 
 void EffectManager::Initialize()
@@ -34,9 +29,7 @@ void EffectManager::Initialize()
 
 void EffectManager::Finalize()
 {
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	
 }
 
 void EffectManager::Update()
