@@ -100,8 +100,8 @@ SoundData Audio::SoundLoadWave(const std::string& fileName)
 	}
 
 	//Dataチャンクのデータ部(波形データ)の読み込み
-	char* pBuffer = new char[data.size];
-	file.read(pBuffer, data.size);
+	std::vector<BYTE> buffer(data.size);
+	file.read(reinterpret_cast<char*>(buffer.data()), data.size);
 
 	//Waveファイルを閉じる
 	file.close();
@@ -110,8 +110,7 @@ SoundData Audio::SoundLoadWave(const std::string& fileName)
 	SoundData soundData = {};
 
 	soundData.wfex = format.fmt;
-	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-	soundData.bufferSize = data.size;
+	soundData.buffer = std::move(buffer);
 
 	return soundData;
 
@@ -142,8 +141,8 @@ void Audio::SoundPlayWave(const SoundData& soundData, float volume)
 
 	//再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundData.pBuffer;
-	buf.AudioBytes = soundData.bufferSize;
+	buf.pAudioData = soundData.buffer.data();
+	buf.AudioBytes = static_cast<UINT32>(soundData.buffer.size());
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 
 	//波形データの再生
@@ -160,8 +159,8 @@ void Audio::SoundLoopPlayWave(const LoopSoundData& loopSoundData, float volume)
 
 	//再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = loopSoundData.soundData.pBuffer;
-	buf.AudioBytes = loopSoundData.soundData.bufferSize;
+	buf.pAudioData = loopSoundData.soundData.buffer.data();
+	buf.AudioBytes = static_cast<UINT32>(loopSoundData.soundData.buffer.size());
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 
 	//ループ再生の設定
@@ -189,10 +188,10 @@ void Audio::SoundUnload(SoundData* soundData)
 {
 
 	//バッファのメモリを解放
-	delete[] soundData->pBuffer;
+	delete[] soundData->buffer.data();
 
-	soundData->pBuffer = 0;
-	soundData->bufferSize = 0;
+	/*soundData->buffer = 0;
+	soundData->bufferSize = 0;*/
 	soundData->wfex = {};
 
 }
@@ -268,8 +267,7 @@ SoundData Audio::SoundLoadMp3(const std::string& fileName)
 
 	//returnするための音声データ
 	soundData.wfex = *pWaveFormat;
-	soundData.pBuffer = soundData.pcmData.data();
-	soundData.bufferSize = (UINT32)soundData.pcmData.size();
+	soundData.buffer = soundData.pcmData;
 
 	return soundData;
 }
