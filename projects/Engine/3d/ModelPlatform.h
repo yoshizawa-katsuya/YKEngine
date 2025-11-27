@@ -168,19 +168,19 @@ public:
 	/// 平行光源更新。
 	/// </summary>
 	/// <param name="directionalLight">平行光源データ</param>
-	void DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight);
+	void DirectionalLightUpdate(const DirectionalLight& directionalLight);
 
 	/// <summary>
 	/// 点光源更新。
 	/// </summary>
 	/// <param name="pointLight">点光源データ</param>
-	void PointLightUpdate(const PointLight::PointLightData& pointLight);
+	void PointLightUpdate(const PointLight& pointLight);
 
 	/// <summary>
 	/// スポット光源更新。
 	/// </summary>
 	/// <param name="spotLight">スポット光源データ</param>
-	void SpotLightUpdate(const SpotLight::SpotLightData& spotLight);
+	void SpotLightUpdate(const SpotLight& spotLight);
 
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
@@ -226,17 +226,17 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> lightCountResource_;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResouce_;
-	DirectionalLight::DirectionalLightData* directionalLightDatas_ = nullptr;
+	DirectionalLight* directionalLightDatas_ = nullptr;
 	uint32_t kNumMaxDirectionalLight_ = 100;
 	uint32_t directionalLightSrvIndex_;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResouce_;
-	PointLight::PointLightData* pointLightDatas_ = nullptr;
+	PointLight* pointLightDatas_ = nullptr;
 	uint32_t kNumMaxPointLight_ = 100;
 	uint32_t pointLightSrvIndex_;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResouce_;
-	SpotLight::SpotLightData* spotLightDatas_ = nullptr;
+	SpotLight* spotLightDatas_ = nullptr;
 	uint32_t kNumMaxSpotLight_ = 100;
 	uint32_t spotLightSrvIndex_;
 

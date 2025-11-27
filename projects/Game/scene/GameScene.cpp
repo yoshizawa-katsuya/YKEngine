@@ -37,10 +37,6 @@ void GameScene::Initialize() {
 		1.0f
 	);
 
-	//平行光源の生成
-	directionalLight_ = std::make_unique<DirectionalLight>();
-	directionalLight_->Initialize();
-
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
@@ -149,7 +145,7 @@ void GameScene::Update() {
 	}
 
 	modelPlatform_->LightPreUpdate();
-	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
+	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 	
 	ParticleManager::GetInstance()->Update(mainCamera_);
@@ -168,9 +164,9 @@ void GameScene::Update() {
 
 	if (ImGui::TreeNode("DirectionalLight")) 
 	{
-		ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
-		ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
-		ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
+		ImGui::ColorEdit4("color", &directionalLight_.color.x);
+		ImGui::DragFloat3("direction", &directionalLight_.direction.x, 0.01f);
+		ImGui::DragFloat("intensity", &directionalLight_.intensity, 0.01f);
 
 		ImGui::TreePop();
 	}

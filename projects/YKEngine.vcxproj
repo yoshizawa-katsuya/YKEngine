@@ -138,7 +138,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\3d\Camera.cpp" />
     <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp" />
-    <ClCompile Include="Engine\3d\DirectionalLight.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\lib\dx12.cpp" />
     <ClCompile Include="Game\objects\BaseEnemy.cpp" />
@@ -175,8 +174,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\SkinModel.cpp" />
     <ClCompile Include="Engine\3d\Rigid3dObject.cpp" />
     <ClCompile Include="Engine\3d\Skin3dObject.cpp" />
-    <ClCompile Include="Engine\3d\PointLight.cpp" />
-    <ClCompile Include="Engine\3d\SpotLight.cpp" />
     <ClCompile Include="Engine\lib\ThreadPool.cpp" />
     <ClCompile Include="Engine\lib\Vector2.cpp" />
     <ClCompile Include="Engine\lib\Vector4.cpp" />

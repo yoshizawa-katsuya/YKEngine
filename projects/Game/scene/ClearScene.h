@@ -75,7 +75,7 @@ private:
 	ModelPlatform* modelPlatform_;
 
 	//平行光源
-	std::unique_ptr<DirectionalLight> directionalLight_;
+	DirectionalLight directionalLight_;
 
 	//カメラ
 	Camera* mainCamera_ = nullptr;

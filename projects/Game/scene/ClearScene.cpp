@@ -23,12 +23,8 @@ void ClearScene::Initialize()
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
-	//平行光源の生成
-	directionalLight_ = std::make_unique<DirectionalLight>();
-	directionalLight_->Initialize();
-
 	modelPlatform_->LightPreUpdate();
-	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
+	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();

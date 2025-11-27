@@ -137,7 +137,7 @@ private:
 	bool isActiveDebugCamera_ = false;
 
 	//平行光源
-	std::unique_ptr<DirectionalLight> directionalLight_;
+	DirectionalLight directionalLight_;
 
 	//3Dモデル
 	std::shared_ptr<BaseModel> modelGround_;
