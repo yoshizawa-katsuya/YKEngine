@@ -76,13 +76,13 @@ private:
 	bool isActiveDebugCamera_ = false;
 
 	//平行光源
-	std::unique_ptr<DirectionalLight> directionalLight_;
+	DirectionalLight directionalLight_;
 
 	//点光源
-	std::unique_ptr<PointLight> pointLight_;
+	PointLight pointLight_;
 
 	//スポットライト
-	std::unique_ptr<SpotLight> spotLight_;
+	SpotLight spotLight_;
 
 	std::shared_ptr<BaseModel> modelPlayer_;
 

@@ -71,28 +71,28 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 	lightCount_->spot = 0;
 
 	//平行光源
-	directionalLightResouce_ = dxCommon_->CreateBufferResource(sizeof(DirectionalLight::DirectionalLightData) * kNumMaxDirectionalLight_);
+	directionalLightResouce_ = dxCommon_->CreateBufferResource(sizeof(DirectionalLight) * kNumMaxDirectionalLight_);
 	directionalLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDatas_));
 
 	directionalLightSrvIndex_ = srvHeapManager_->Allocate();
 
-	srvHeapManager_->CreateSRVforStructuredBuffer(directionalLightSrvIndex_, directionalLightResouce_.Get(), kNumMaxDirectionalLight_, sizeof(DirectionalLight::DirectionalLightData));
+	srvHeapManager_->CreateSRVforStructuredBuffer(directionalLightSrvIndex_, directionalLightResouce_.Get(), kNumMaxDirectionalLight_, sizeof(DirectionalLight));
 
 	//点光源
-	pointLightResouce_ = dxCommon_->CreateBufferResource(sizeof(PointLight::PointLightData) * kNumMaxPointLight_);
+	pointLightResouce_ = dxCommon_->CreateBufferResource(sizeof(PointLight) * kNumMaxPointLight_);
 	pointLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightDatas_));
 
 	pointLightSrvIndex_ = srvHeapManager_->Allocate();
 
-	srvHeapManager_->CreateSRVforStructuredBuffer(pointLightSrvIndex_, pointLightResouce_.Get(), kNumMaxPointLight_, sizeof(PointLight::PointLightData));
+	srvHeapManager_->CreateSRVforStructuredBuffer(pointLightSrvIndex_, pointLightResouce_.Get(), kNumMaxPointLight_, sizeof(PointLight));
 
 	//スポットライト
-	spotLightResouce_ = dxCommon_->CreateBufferResource(sizeof(SpotLight::SpotLightData) * kNumMaxSpotLight_);
+	spotLightResouce_ = dxCommon_->CreateBufferResource(sizeof(SpotLight) * kNumMaxSpotLight_);
 	spotLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightDatas_));
 
 	spotLightSrvIndex_ = srvHeapManager_->Allocate();
 
-	srvHeapManager_->CreateSRVforStructuredBuffer(spotLightSrvIndex_, spotLightResouce_.Get(), kNumMaxSpotLight_, sizeof(SpotLight::SpotLightData));
+	srvHeapManager_->CreateSRVforStructuredBuffer(spotLightSrvIndex_, spotLightResouce_.Get(), kNumMaxSpotLight_, sizeof(SpotLight));
 
 }
 
@@ -342,7 +342,7 @@ void ModelPlatform::LightPreUpdate()
 	lightCount_->spot = 0;
 }
 
-void ModelPlatform::DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight)
+void ModelPlatform::DirectionalLightUpdate(const DirectionalLight& directionalLight)
 {
 	directionalLightDatas_[lightCount_->directional] = directionalLight;
 	directionalLightDatas_[lightCount_->directional].direction = Normalize(directionalLightDatas_[lightCount_->directional].direction);
@@ -351,7 +351,7 @@ void ModelPlatform::DirectionalLightUpdate(const DirectionalLight::DirectionalLi
 	return;
 }
 
-void ModelPlatform::PointLightUpdate(const PointLight::PointLightData& pointLight)
+void ModelPlatform::PointLightUpdate(const PointLight& pointLight)
 {
 	pointLightDatas_[lightCount_->point] = pointLight;
 	lightCount_->point++;
@@ -359,7 +359,7 @@ void ModelPlatform::PointLightUpdate(const PointLight::PointLightData& pointLigh
 	return;
 }
 
-void ModelPlatform::SpotLightUpdate(const SpotLight::SpotLightData& spotLight)
+void ModelPlatform::SpotLightUpdate(const SpotLight& spotLight)
 {
 	spotLightDatas_[lightCount_->spot] = spotLight;
 	spotLightDatas_[lightCount_->spot].direction = Normalize(spotLightDatas_[lightCount_->spot].direction);
