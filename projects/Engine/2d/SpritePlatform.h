@@ -18,11 +18,6 @@ public:
 	static SpritePlatform* GetInstance();
 
 	/// <summary>
-	/// 終了処理。
-	/// </summary>
-	void Finalize();
-
-	/// <summary>
 	/// 初期化。
 	/// </summary>
 	/// <param name="dxCommon">DirectX共通クラス</param>
@@ -42,9 +37,6 @@ public:
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
 private:
-
-	// シングルトンインスタンス
-	static SpritePlatform* instance_;
 
 	SpritePlatform() = default;
 	~SpritePlatform() = default;

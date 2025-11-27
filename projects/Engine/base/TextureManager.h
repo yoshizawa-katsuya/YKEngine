@@ -98,7 +98,7 @@ private:
 	/// <returns>アップロード用バッファリソース</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages);
 
-	// シングルトンインスタンス
+	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
 	static TextureManager* instance_;
 
 	TextureManager() = default;

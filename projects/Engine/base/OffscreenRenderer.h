@@ -91,7 +91,7 @@ public:
 
 private:
 
-	// シングルトンインスタンス
+	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
 	static OffscreenRenderer* instance_;
 
 	OffscreenRenderer() = default;

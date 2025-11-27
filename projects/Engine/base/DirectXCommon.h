@@ -139,7 +139,7 @@ public:
 	ID3D12Resource* GetDepthStencilResource() const { return depthStencilResource_.Get(); }
 
 private:
-	// シングルトンインスタンス
+	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
 	static DirectXCommon* instance_;
 
 	DirectXCommon() = default;

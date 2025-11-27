@@ -21,11 +21,6 @@ public:
 	static GlobalVariables* GetInstance();
 
 	/// <summary>
-	/// 終了処理。
-	/// </summary>
-	void Finalize();
-
-	/// <summary>
 	/// 更新処理。
 	/// </summary>
 	void Update();
@@ -199,9 +194,6 @@ public:
 	bool GetBoolValue(const std::string& groupName, const std::string& key) const;
 
 private:
-
-	// シングルトンインスタンス
-	static GlobalVariables* instance_;
 
 	GlobalVariables() = default;
 	~GlobalVariables() = default;

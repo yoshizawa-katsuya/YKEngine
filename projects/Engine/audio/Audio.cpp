@@ -10,15 +10,10 @@
 #pragma comment(lib, "mfreadwrite.lib")
 #pragma comment(lib, "mfuuid.lib")
 
-Audio* Audio::instance_ = nullptr;
-
 Audio* Audio::GetInstance()
 {
-	if (instance_ == nullptr)
-	{
-		instance_ = new Audio();
-	}
-	return instance_;
+	static Audio instance;
+	return &instance;
 }
 
 void Audio::Finalize()
@@ -26,9 +21,6 @@ void Audio::Finalize()
 	//MFの終了
 	MFShutdown();
 
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
 }
 
 void Audio::Initialize()

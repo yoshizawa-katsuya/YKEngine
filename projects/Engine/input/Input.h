@@ -215,9 +215,6 @@ private:
 	XINPUT_GAMEPAD_Y
 	*/
 
-	// シングルトンインスタンス
-	static Input* instance_;
-
 	Input() = default;
 	~Input() = default;
 	Input(Input&) = default;

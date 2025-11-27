@@ -70,19 +70,11 @@ void YKFramework::Initialize()
 
 void YKFramework::Finalize()
 {
-	globalVariables_->Finalize();
-
 	modelPlatform_->Finalize();
 
 	ParticleManager::GetInstance()->Finalize();
 
-	Random::GetInstance()->Finalize();
-
-	spritePlatform_->Finalize();
-
 	TextureManager::GetInstance()->Finalize();
-
-	input_->Finalize();
 
 	offscreenRenderer_->Finalize();
 
