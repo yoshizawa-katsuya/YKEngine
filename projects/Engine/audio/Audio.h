@@ -83,9 +83,6 @@ private:
 	/// <returns>音声データ</returns>
 	SoundData SoundLoadMp3(const std::string& fileName);
 
-	// シングルトンインスタンス
-	static Audio* instance_;
-
 	Audio() = default;
 	~Audio() = default;
 	Audio(Audio&) = delete;

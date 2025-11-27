@@ -206,7 +206,7 @@ private:
 		float padding;
 	};
 
-	// シングルトンインスタンス
+	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
 	static ModelPlatform* instance_;
 
 	ModelPlatform() = default;

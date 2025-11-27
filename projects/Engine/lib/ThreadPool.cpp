@@ -1,15 +1,11 @@
 #include "ThreadPool.h"
 #include <cassert>
 
-ThreadPool* ThreadPool::instance_ = nullptr;
 
 ThreadPool* ThreadPool::GetInstance()
 {
-    if (instance_ == nullptr)
-    {
-        instance_ = new ThreadPool();
-    }
-    return instance_;
+	static ThreadPool instance;
+	return &instance;
 }
 
 void ThreadPool::Initlaize()
@@ -42,9 +38,6 @@ void ThreadPool::Finalize()
         worker.join();
     }
 
-    //インスタンスを破棄
-    delete instance_;
-    instance_ = nullptr;
 }
 
 void ThreadPool::enqueueTask(std::function<void()> task) {
