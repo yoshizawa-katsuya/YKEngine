@@ -85,6 +85,9 @@ void GameScene::Initialize() {
 	worldTransform2_.UpdateMatrix();
 	*/
 
+	bgm1_ = audio_->LoopSoundLoadWave("./Resources/sound/gameScene.wav");
+	se1_ = audio_->SoundLoadWave("./Resources/sound/HitSE1.wav");
+
 }
 
 void GameScene::Update() {
@@ -120,6 +123,8 @@ void GameScene::Update() {
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("TitleScene");
 	}
+
+	audio_->SoundLoopPlayWave(bgm1_, 0.5f);
 
 #ifdef USE_IMGUI
 
@@ -180,6 +185,11 @@ void GameScene::Update() {
 	}
 		
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
+
+	if (ImGui::Button("PlaySE"))
+	{
+		audio_->SoundPlayWave(se1_, 0.5f);
+	}
 
 	/*
 	if (ImGui::Button("BGMstop")) {
