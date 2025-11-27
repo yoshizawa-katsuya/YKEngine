@@ -10,6 +10,7 @@
 
 GameScene::~GameScene() {
 	//Finalize();
+	audio_->SoundStopWave(bgm1_);
 }
 
 void GameScene::Initialize() {
