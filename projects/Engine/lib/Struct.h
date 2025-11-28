@@ -358,17 +358,15 @@ struct FormatChunk
 /// 音声データ
 /// </summary>
 /// <param name="wfex">波形フォーマット</param>
-/// param name="pBuffer">バッファの先頭アドレス</param>
+/// param name="pBuffer">バッファ</param>
 /// param name="bufferSize">バッファのサイズ</param>
 /// param name="pcmData">PCMデータ</param>
 struct SoundData
 {
 	//波形フォーマット
 	WAVEFORMATEX wfex;
-	//バッファの先頭アドレス
-	BYTE* pBuffer;
-	//バッファのサイズ
-	unsigned int bufferSize;
+	//バッファ
+	std::vector<BYTE> buffer;
 
 	std::vector<BYTE> pcmData;
 };
