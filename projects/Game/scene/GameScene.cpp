@@ -435,14 +435,14 @@ void GameScene::ProcessGameClear()
 
 void GameScene::CreateLevel()
 {
-	LevelData* levelData;
+	LevelData levelData;
 	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
 
-	assert(!levelData->splines.empty());
+	assert(!levelData.splines.empty());
 
 	//レールムーバーの生成
 	railMover_ = std::make_unique<RailMover>();
-	railMover_->Initialize(levelData->splines[0].controlPoints, enemySpawnManager_.get(), false);
+	railMover_->Initialize(levelData.splines[0].controlPoints, enemySpawnManager_.get(), false);
 
 	uint32_t heratTextureHandle = TextureManager::GetInstance()->Load("./Resources/heart.png");
 	uint32_t heratFrameTextureHandle = TextureManager::GetInstance()->Load("./Resources/heartFrame.png");
@@ -457,7 +457,7 @@ void GameScene::CreateLevel()
 	// レールカメラの初期化
 	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform(), player_->GetWorldTransform());
 
-	for (const EnemySpawnData& enemySpawnData : levelData->enemySpawns)
+	for (const EnemySpawnData& enemySpawnData : levelData.enemySpawns)
 	{
 		EnemySpawn enemySpawn;
 
@@ -500,7 +500,7 @@ void GameScene::CreateLevel()
 	//オブジェクトの生成
 	std::string key;
 
-	for (const ObjectData& objectData : levelData->objects)
+	for (const ObjectData& objectData : levelData.objects)
 	{
 
 		key = objectData.fileName;

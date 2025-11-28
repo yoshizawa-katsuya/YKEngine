@@ -216,14 +216,14 @@ void TitleScene::UpdateEnd()
 
 void TitleScene::CreateLevel()
 {
-	LevelData* levelData;
+	LevelData levelData;
 	levelData = LevelDataLoad("./resources/LevelData/", "TitleScene", ".json");
 
-	assert(!levelData->splines.empty());
+	assert(!levelData.splines.empty());
 
 	//レールムーバーの生成
 	railMover_ = std::make_unique<RailMover>();
-	railMover_->Initialize(levelData->splines[0].controlPoints, nullptr, true);
+	railMover_->Initialize(levelData.splines[0].controlPoints, nullptr, true);
 
 	// レールカメラの生成
 	railCamera_ = std::make_unique<RailCamera>();
@@ -233,7 +233,7 @@ void TitleScene::CreateLevel()
 	//オブジェクトの生成
 	std::string key;
 
-	for (const ObjectData& objectData : levelData->objects)
+	for (const ObjectData& objectData : levelData.objects)
 	{
 
 		key = objectData.fileName;

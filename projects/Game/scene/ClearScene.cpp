@@ -243,14 +243,14 @@ void ClearScene::UpdateEnd()
 
 void ClearScene::CreateLevel()
 {
-	LevelData* levelData;
+	LevelData levelData;
 	levelData = LevelDataLoad("./resources/LevelData/", "ClearScene", ".json");
 
-	assert(!levelData->splines.empty());
+	assert(!levelData.splines.empty());
 
 	//レールムーバーの生成
 	railMover_ = std::make_unique<RailMover>();
-	railMover_->Initialize(levelData->splines[0].controlPoints, nullptr, true);
+	railMover_->Initialize(levelData.splines[0].controlPoints, nullptr, true);
 	railMover_->Update();
 
 	// レールカメラの生成
