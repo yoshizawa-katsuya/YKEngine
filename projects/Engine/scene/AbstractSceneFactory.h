@@ -2,6 +2,7 @@
 
 #include "BaseScene.h"
 #include <string>
+#include <memory>
 
 /// <summary>
 /// シーン工場(概念)
@@ -22,6 +23,6 @@ public:
 	/// </summary>
 	/// <param name="sceneName">生成するシーンの名前</param>
 	/// <returns>生成されたシーンのポインタ</returns>
-	virtual BaseScene* CreateScene(const std::string& sceneName) = 0;
+	virtual std::unique_ptr<BaseScene> CreateScene(const std::string& sceneName) = 0;
 
 };

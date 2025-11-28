@@ -14,8 +14,8 @@ void SceneManager::Update()
 	if (nextScene_) 
 	{
 		//シーン切り替え
-		scene_.reset(nextScene_);
-		nextScene_ = nullptr;
+		scene_ = std::move(nextScene_);
+		nextScene_.reset();
 
 		//シーンマネージャをセット
 		scene_->SetSceneManager(this);
@@ -46,13 +46,13 @@ void SceneManager::ChengeScene(const std::string& sceneName)
 	assert(nextScene_ == nullptr);
 
 	//次シーンを生成
-	nextScene_ = sceneFactory_->CreateScene(sceneName);
+	nextScene_ = std::move(sceneFactory_->CreateScene(sceneName));
 
 	if (!scene_) {
 
 		//シーン切り替え
-		scene_.reset(nextScene_);
-		nextScene_ = nullptr;
+		scene_ = std::move(nextScene_);
+		nextScene_.reset();
 
 		//シーンマネージャをセット
 		scene_->SetSceneManager(this);
