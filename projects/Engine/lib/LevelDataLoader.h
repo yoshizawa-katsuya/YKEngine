@@ -74,7 +74,7 @@ struct LevelData
 /// <param name="fileName">レベルデータファイル名</param>
 /// <param name="kExtension">レベルデータファイル拡張子</param>
 /// <returns>レベルデータ</returns>
-LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
+LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
 
 /// <summary>
 /// Transformのロード。

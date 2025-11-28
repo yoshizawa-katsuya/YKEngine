@@ -3,7 +3,7 @@
 #include "cassert"
 #include <numbers>
 
-LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension)
+LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension)
 {
 	
 	//連結してフルパスを得る
@@ -36,7 +36,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 	assert(name.compare("scene") == 0);
 
 	//レベルデータ格納用インスタンスを生成
-	LevelData* levelData = new LevelData();
+	LevelData levelData;
 
 	//"objects"の全オブジェクトを走査
 	for (nlohmann::json& object : deserialized["objects"]) {
@@ -58,7 +58,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 		//MESH
 		if (type.compare("MESH") == 0) {
 			//要素追加
-			ObjectData& objectData = levelData->objects.emplace_back();
+			ObjectData& objectData = levelData.objects.emplace_back();
 
 			if (object.contains("file_name")) 
 			{
@@ -81,7 +81,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 		//自キャラ発生ポイント
 		else if (type.compare("PlayerSpawn") == 0) {
 			//要素追加
-			PlayerSpawnData& playerSpawnData = levelData->playerSpawns.emplace_back();
+			PlayerSpawnData& playerSpawnData = levelData.playerSpawns.emplace_back();
 
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
@@ -93,7 +93,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 		//敵発生ポイント
 		else if (type.compare("EnemySpawn") == 0) {
 			//要素追加
-			EnemySpawnData& enemySpawnData = levelData->enemySpawns.emplace_back();
+			EnemySpawnData& enemySpawnData = levelData.enemySpawns.emplace_back();
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 
@@ -117,7 +117,7 @@ LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::st
 		else if (type.compare("CURVE") == 0)
 		{
 			//要素追加
-			SplineData& splineData = levelData->splines.emplace_back();
+			SplineData& splineData = levelData.splines.emplace_back();
 			
 			for (nlohmann::json& point : object["control_point"])
 			{
