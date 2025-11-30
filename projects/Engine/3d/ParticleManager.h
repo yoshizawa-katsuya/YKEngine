@@ -112,7 +112,8 @@ private:
 	/// <param name="numInstance">現在のインスタンス数</param>
 	/// <param name="instancingData">インスタンシング用データ</param>
 	/// <param name="behavior">パーティクルの挙動</param>
-	struct ParticleGroup {
+	struct ParticleGroup 
+	{
 		std::shared_ptr<BaseModel> model;
 		uint32_t textureHandle;
 		std::list<Particle> particles;

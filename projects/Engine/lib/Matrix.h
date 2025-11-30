@@ -8,7 +8,7 @@
 Matrix3x3 MakeTranslateMatrix(Vector2 translate);
 
 //逆行列の作成
-Matrix3x3 Invarse(Matrix3x3 matrix);
+Matrix3x3 Invarse(const Matrix3x3& matrix);
 
 //正射影行列の作成
 Matrix3x3 MakeOrthographicMatrix(float left, float top, float right, float bottom);
@@ -17,7 +17,7 @@ Matrix3x3 MakeOrthographicMatrix(float left, float top, float right, float botto
 Matrix3x3 MakeViewportMatrix(float left, float top, float width, float height);
 
 //行列の積
-Matrix3x3 Multiply(Matrix3x3 matrix1, Matrix3x3 matrix2);
+Matrix3x3 Multiply(const Matrix3x3& matrix1, const Matrix3x3& matrix2);
 
 //座標変換
 Vector2 Transform(Vector2 vector, Matrix3x3 matrix);
@@ -68,7 +68,7 @@ Matrix4x4 MakeRotateYMatrix(float radian);
 Matrix4x4 MakeRotateZMatrix(float radian);
 
 //クォータニオンから回転行列
-Matrix4x4 MakeRotateMatrix(Quaternion q);
+Matrix4x4 MakeRotateMatrix(const Quaternion& q);
 
 //アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);

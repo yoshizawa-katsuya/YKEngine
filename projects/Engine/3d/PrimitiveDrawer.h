@@ -14,7 +14,8 @@ class DirectXCommon;
 /// 描画モード。
 /// ブレンドモードや、オフスクリーンレンダリングの種類を指定する。
 /// </summary>
-enum class DrawMode {
+enum class DrawMode 
+{
 	kBlendModeNone, //ブレンドなし
 	kBlendModeNormal, //kNormalBlend
 	kBlendModeAdd,	//加算

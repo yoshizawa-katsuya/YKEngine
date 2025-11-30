@@ -8,7 +8,7 @@
 /// <param name="p1">終了点</param>
 /// <param name="t">補完率(0.0~1.0)</param>
 /// <returns>補完結果</returns>
-float Lerp(const float& p0, const float& p1, float t);
+float Lerp(float p0, float p1, float t);
 
 /// <summary>
 /// 線形補完。
@@ -17,7 +17,7 @@ float Lerp(const float& p0, const float& p1, float t);
 /// <param name="p1">終了点</param>
 /// <param name="t">補完率(0.0~1.0)</param>
 /// <returns>補完結果</returns>
-Vector2 Lerp(const Vector2& p0, const Vector2& p1, float t);
+Vector2 Lerp(Vector2 p0, Vector2 p1, float t);
 
 /// <summary>
 /// 線形補完。
