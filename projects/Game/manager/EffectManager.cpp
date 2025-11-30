@@ -69,7 +69,7 @@ void EffectManager::ClearAllEffects()
 	}
 }
 
-std::shared_ptr<BaseModel> EffectManager::LoadEffectModel(std::string modelName, uint32_t textureHnadle)
+std::shared_ptr<BaseModel> EffectManager::LoadEffectModel(const std::string& modelName, uint32_t textureHnadle)
 {
 	std::string tag = "Effect";
 	if (modelName == "primitivePlane")

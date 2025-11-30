@@ -68,7 +68,7 @@ private:
 	/// </summary>
 	/// <param name="position">ターゲットのスクリーン座標上の位置</param>
 	/// <param name="targetPosition">ターゲットのワールド座標上の位置</param>
-	void LockOn(const Vector2& position, const Vector3& targetPosition);
+	void LockOn(Vector2 position, const Vector3& targetPosition);
 
 	//3Dレティクル用ワールドトランスフォーム
 	WorldTransform worldTransform3DReticle_;

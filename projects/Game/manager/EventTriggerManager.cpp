@@ -23,7 +23,7 @@ void EventTriggerManager::RegisterToCollisionManager(CollisionManager* collision
 	}
 }
 
-void EventTriggerManager::AddEvent(std::string eventName, const ObjectData& objectData)
+void EventTriggerManager::AddEvent(const std::string& eventName, const ObjectData& objectData)
 {
 	if (eventName == "waveEvent")
 	{

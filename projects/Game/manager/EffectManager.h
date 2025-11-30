@@ -75,7 +75,7 @@ private:
 	EffectManager(EffectManager&) = delete;
 	const EffectManager& operator=(EffectManager&) = delete;
 
-	std::shared_ptr<BaseModel> LoadEffectModel(std::string modelName, uint32_t textureHnadle);
+	std::shared_ptr<BaseModel> LoadEffectModel(const std::string& modelName, uint32_t textureHnadle);
 
 	struct EffectData
 	{

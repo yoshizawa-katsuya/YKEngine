@@ -187,7 +187,7 @@ void ReticleController::ChargeUpdate()
 	spriteLargeReticle_->SetColor(color);
 }
 
-void ReticleController::LockOn(const Vector2& position, const Vector3& targetPosition)
+void ReticleController::LockOn(Vector2 position, const Vector3& targetPosition)
 {
 	spriteSmallReticle_->SetPosition(position);
 	spriteSmallReticle_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
