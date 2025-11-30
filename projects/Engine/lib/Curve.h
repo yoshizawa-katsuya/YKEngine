@@ -12,7 +12,7 @@
 /// <param name="p2">制御点2。</param>
 /// <param name="t">パラメータ（0.0〜1.0）。</param>
 /// <returns>計算された点。</returns>
-Vector2 Bezier(const Vector2& p0, const Vector2& p1, const Vector2& p2, float t);
+Vector2 Bezier(Vector2 p0, Vector2 p1, Vector2 p2, float t);
 
 /// <summary>
 /// ベジェ曲線の点を計算する。
@@ -33,7 +33,7 @@ Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3 p2, float t);
 /// <param name="p3">制御点3。</param>
 /// <param name="t">パラメータ（0.0〜1.0）。</param>
 /// <returns>計算された点。</returns>
-Vector2 CatmullRom(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Vector2& p3, float t);
+Vector2 CatmullRom(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t);
 
 /// <summary>
 /// Catmull-Romスプラインの点を計算する。

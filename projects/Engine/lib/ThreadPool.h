@@ -34,7 +34,7 @@ public:
 	/// タスクをキューに追加する。
     /// </summary>
 	/// <param name="task">実行するタスク(関数オブジェクト)</param>
-    void enqueueTask(std::function<void()> task);
+    void enqueueTask(const std::function<void()>& task);
 
     /// <summary>
 	/// 可変引数を持つ関数をタスクとしてキューに追加する。

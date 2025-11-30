@@ -16,7 +16,8 @@ class Animation;
 /// </summary>
 /// <param name="weight">ウェイト値</param>
 /// <param name="vertexIndex">頂点インデックス</param>
-struct VertexWeightData {
+struct VertexWeightData 
+{
 	float weight;
 	uint32_t vertexIndex;
 };
@@ -26,7 +27,8 @@ struct VertexWeightData {
 /// </summary>
 /// <param name="inverseBindPoseMatrix">逆バインドポーズ行列</param>
 /// <param name="vertexWeights">頂点ウェイト情報の配列</param>
-struct JointWeightData {
+struct JointWeightData 
+{
 	Matrix4x4 inverseBindPoseMatrix;
 	std::vector<VertexWeightData> vertexWeights;
 };
@@ -47,7 +49,8 @@ struct MaterialData
 /// <param name="localMatrix">ノードのローカル変換行列</param>
 /// <param name="name">ノードの名前</param>
 /// <param name="children">子ノードの配列</param>
-struct Node {
+struct Node
+{
 	QuaternionTransform transform;
 	Matrix4x4 localMatrix;
 	std::string name;
@@ -62,7 +65,8 @@ struct Node {
 /// <param name="indeces">インデックスデータの配列</param>
 /// <param name="material">マテリアル情報</param>
 /// <param name="rootNode">ルートノード情報</param>
-struct ModelData {
+struct ModelData
+{
 	std::map<std::string, JointWeightData> skinClusterData;
 	std::vector<VertexData> vertices;
 	std::vector<uint32_t> indeces;

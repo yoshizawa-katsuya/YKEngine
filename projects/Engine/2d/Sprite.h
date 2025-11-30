@@ -60,23 +60,23 @@ public:
 	EulerTransform& GetUVTransform() { return uvTransform_; }
 	const EulerTransform& GetUVTransform() const { return uvTransform_; }
 
-	void SetSize(const Vector2& size) { size_ = size; }
+	void SetSize(Vector2 size) { size_ = size; }
 
-	void SetPosition(const Vector2& position) { position_ = position; }
+	void SetPosition(Vector2 position) { position_ = position; }
 
 	void SetRotation(float rotation) { rotation_ = rotation; }
 
 	void SetColor(const Vector4& color) { materialData_->color = color; }
 
-	void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
+	void SetAnchorPoint(Vector2 anchorPoint) { anchorPoint_ = anchorPoint; }
 
 	void SetIsFlipX(bool IsFlipX) { isFlipX_ = IsFlipX; }
 
 	void SetIsFlipY(bool IsFlipY) { isFlipY_ = IsFlipY; }
 
-	void SetTextureLeftTop(const Vector2& textureLeftTop) { textureLeftTop_ = textureLeftTop; }
+	void SetTextureLeftTop(Vector2 textureLeftTop) { textureLeftTop_ = textureLeftTop; }
 
-	void SetTextureSize(const Vector2& textureSize) { textureSize_ = textureSize; }
+	void SetTextureSize(Vector2 textureSize) { textureSize_ = textureSize; }
 
 	void SetTexture(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 

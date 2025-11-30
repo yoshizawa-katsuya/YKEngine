@@ -40,7 +40,7 @@ void ThreadPool::Finalize()
 
 }
 
-void ThreadPool::enqueueTask(std::function<void()> task) {
+void ThreadPool::enqueueTask(const std::function<void()>& task) {
     {
         std::unique_lock<std::mutex> lock(queueMutex_);
         tasks_.push(task);

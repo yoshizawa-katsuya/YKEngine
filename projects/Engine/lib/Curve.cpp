@@ -1,7 +1,7 @@
 #include "Curve.h"
 #include "Matrix.h"
 
-Vector2 Bezier(const Vector2& p0, const Vector2& p1, const Vector2& p2, float t)
+Vector2 Bezier(Vector2 p0, Vector2 p1, Vector2 p2, float t)
 {
 
 	Vector2 p0p1 = Lerp(p0, p1, t);
@@ -26,7 +26,7 @@ Vector3 Bezier(const Vector3& p0, const Vector3& p1, const Vector3 p2, float t)
 
 }
 
-Vector2 CatmullRom(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Vector2& p3, float t)
+Vector2 CatmullRom(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t)
 {
 
 	Vector2 anser;
