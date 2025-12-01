@@ -68,10 +68,8 @@ void GameOverScene::Draw()
 
 	spriteBackGround_->Draw();
 
-	if (phase_ != Phase::kMain)
-	{
-		spriteSceneChange_->Draw();
-	}
+	spriteSceneChange_->Draw();
+
 }
 
 void GameOverScene::Finalize()

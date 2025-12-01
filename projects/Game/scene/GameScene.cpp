@@ -269,10 +269,7 @@ void GameScene::Draw()
 
 	player_->DrawUI();
 
-	if (phase_ != Phase::kMain) 
-	{
-		spriteSceneChange_->Draw();
-	}
+	spriteSceneChange_->Draw();
 
 }
 

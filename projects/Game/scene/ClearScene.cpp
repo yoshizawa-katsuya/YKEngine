@@ -170,10 +170,7 @@ void ClearScene::Draw()
 
 	spriteBackGround_->Draw();
 
-	if (phase_ != Phase::kMain)
-	{
-		spriteSceneChange_->Draw();
-	}
+	spriteSceneChange_->Draw();
 }
 
 void ClearScene::Finalize()
