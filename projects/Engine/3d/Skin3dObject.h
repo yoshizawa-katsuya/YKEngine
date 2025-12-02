@@ -89,6 +89,16 @@ private:
 	/// </summary>
 	void SkinClusterUpdate();
 
+	/// <summary>
+	/// 描画処理共通部分。
+	/// </summary>
+	void DrawCommonProcess();
+
+	/// <summary>
+	/// マテリアル用のCBufferの場所を設定.
+	/// </summary>
+	void SetMaterialBufferView() override;
+
 	Skeleton skeleton_;
 
 	SkinCluster skinCluster_;

@@ -107,16 +107,9 @@ void ModelPlatform::EndFrame()
 void ModelPlatform::PreDraw()
 {
 
-	
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormal);
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kPointLight), pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kSpotLight), spotLightSrvIndex_);
-	camera_->SetCameraReaource(static_cast<uint32_t>(ModelRootParam::kCamera));
-
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
+	
+	CommonPreDraw(false);
 
 }
 
@@ -130,14 +123,8 @@ void ModelPlatform::SkinPreDraw()
 {
 
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kSkinModelMode);
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kPointLight), pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kSpotLight), spotLightSrvIndex_);
-	camera_->SetCameraReaource(static_cast<uint32_t>(SkinModelRootParam::kCamera));
-
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
+	
+	CommonPreDraw(true);
 
 }
 
@@ -145,14 +132,8 @@ void ModelPlatform::InstancingPreDraw()
 {
 
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormalinstancing);
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kPointLight), pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kSpotLight), spotLightSrvIndex_);
-	camera_->SetCameraReaource(static_cast<uint32_t>(ModelRootParam::kCamera));
-
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
+	
+	CommonPreDraw(false);
 
 }
 
@@ -227,112 +208,86 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
 {
-	//すでに同じ名前のモデルがあればそれを返す
-	if (models_.contains(filename)) 
-	{
-		return models_[filename];
-	}
-	models_[filename] = std::make_shared<RigidModel>();
-	models_[filename]->CreateModel(directoryPath, filename, color);
-
-	return models_[filename];
+	return CreateModelCommon<RigidModel>(filename,
+		[&](RigidModel* model) {
+			model->CreateModel(directoryPath, filename, color);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
 {
-	//すでに同じ名前のモデルがあればそれを返す
-	if (models_.contains(filename))
-	{
-		return models_[filename];
-	}
-	models_[filename] = std::make_shared<SkinModel>();
-	models_[filename]->CreateModel(directoryPath, filename, color);
-
-	return models_[filename];
+	return CreateModelCommon<SkinModel>(filename,
+		[&](SkinModel* model) {
+			model->CreateModel(directoryPath, filename, color);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveSphere" + modelName;
-	//すでに同じ名前のモデルがあればそれを返す
-	if (models_.contains(name))
-	{
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateSphere(textureHandle);
 
-	return models_[name];
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateSphere(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateCube(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveCube" + modelName;
-	//すでに同じ名前のモデルがあればそれを返す
-	if (models_.contains(name))
-	{
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateCube(textureHandle);
 
-	return models_[name];
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateCube(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitivePlane" + modelName;
-	//すでに同じ名前のモデルがあればそれを返す
-	if (models_.contains(name)) 
-	{
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreatePlane(textureHandle);
 
-	return models_[name];
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreatePlane(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveRing" + modelName;
-	//すでに同じ名前のモデルがあればそれを返す
-	if (models_.contains(name))
-	{
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateRing(textureHandle);
 
-	return models_[name];
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateRing(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveCylinder" + modelName;
-	//すでに同じ名前のモデルがあればそれを返す
-	if (models_.contains(name))
-	{
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateCylinder(textureHandle);
-
-	return models_[name];
+	
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateCylinder(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveSkyBox" + modelName;
-	//すでに同じ名前のモデルがあればそれを返す
-	if (models_.contains(name)) 
-	{
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateSkyBox(textureHandle);
-
-	return models_[name];
+	
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateSkyBox(textureHandle);
+		}
+	);
 }
 
 void ModelPlatform::LightPreUpdate()
@@ -366,4 +321,28 @@ void ModelPlatform::SpotLightUpdate(const SpotLight& spotLight)
 	lightCount_->spot++;
 
 	return;
+}
+
+void ModelPlatform::CommonPreDraw(bool isSkin)
+{
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	if (isSkin)
+	{
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kPointLight), pointLightSrvIndex_);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kSpotLight), spotLightSrvIndex_);
+		camera_->SetCameraReaource(static_cast<uint32_t>(SkinModelRootParam::kCamera));
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
+	}
+	else 
+	{
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kPointLight), pointLightSrvIndex_);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kSpotLight), spotLightSrvIndex_);
+		camera_->SetCameraReaource(static_cast<uint32_t>(ModelRootParam::kCamera));
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
+
+	}
+
 }

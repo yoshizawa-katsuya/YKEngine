@@ -102,6 +102,17 @@ protected:
 	/// </summary>
 	void CreateMaterialData();
 
+
+	/// <summary>
+	/// Transformation用のCBufferの場所を設定.
+	/// </summary>
+	void SetTransformationBufferView();
+
+	/// <summary>
+	/// マテリアル用のCBufferの場所を設定.
+	/// </summary>
+	virtual void SetMaterialBufferView();
+
 	DirectXCommon* dxCommon_;
 
 	//TransformationMatrix用のリソースを作る。モデル用

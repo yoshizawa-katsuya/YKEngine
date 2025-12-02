@@ -32,15 +32,12 @@ void Skin3dObject::AnimationUpdate(Animation* animation)
 
 void Skin3dObject::Draw()
 {
-	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
-
-	model_->SetSkinCluster(skinCluster_);
+	DrawCommonProcess();
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+		SetMaterialBufferView();
 		model_->Draw(true);
 		return;
 	}
@@ -51,15 +48,12 @@ void Skin3dObject::Draw()
 
 void Skin3dObject::Draw(uint32_t textureHandle)
 {
-	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
-
-	model_->SetSkinCluster(skinCluster_);
+	DrawCommonProcess();
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+		SetMaterialBufferView();
 		model_->Draw(textureHandle, true);
 		return;
 	}
@@ -248,4 +242,17 @@ void Skin3dObject::SkinClusterUpdate()
 		skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
 			Transpose(Inverse(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
 	}
+}
+
+void Skin3dObject::DrawCommonProcess()
+{
+	//Transform用のCBufferの場所を設定
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
+
+	model_->SetSkinCluster(skinCluster_);
+}
+
+void Skin3dObject::SetMaterialBufferView()
+{
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 }
