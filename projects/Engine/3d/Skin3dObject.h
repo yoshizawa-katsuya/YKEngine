@@ -105,5 +105,7 @@ private:
 
 	uint32_t srvIndex_;
 
+	SrvHeapManager* srvHeapManager_ = nullptr;
+
 };
 
