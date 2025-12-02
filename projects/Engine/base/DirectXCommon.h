@@ -11,6 +11,7 @@
 
 #include "WinApp.h"
 #include "DirectXTex/DirectXTex.h"
+#include "Struct.h"
 
 /// <summary>
 /// DirectX共通機能。
@@ -133,6 +134,8 @@ public:
 	void ResetDeltaTime() { deltaTimeReset_ = true; }
 
 	D3D12_VIEWPORT* GetViewport() { return &viewport_; }
+
+	Matrix4x4& GetViewPortMatrix() { return viewPortMatrix_; }
 
 	D3D12_RECT* GetScissorRect() { return &scissorRect_; }
 
@@ -265,6 +268,7 @@ private:
 	uint32_t descriptorSizeDSV_;
 
 	D3D12_VIEWPORT viewport_{};
+	Matrix4x4 viewPortMatrix_;
 
 	D3D12_RECT scissorRect_{};
 

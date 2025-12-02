@@ -4,6 +4,7 @@
 #include <dx12.h>
 #include <thread>
 #include "OffscreenRenderer.h"
+#include "Matrix.h"
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -332,6 +333,14 @@ void DirectXCommon::CreateViewport()
 	viewport_.MinDepth = 0.0f;
 	viewport_.MaxDepth = 1.0f;
 
+	viewPortMatrix_ = MakeViewportMatrix(
+		0.0f,
+		0.0f,
+		static_cast<float>(WinApp::kClientWidth),
+		static_cast<float>(WinApp::kClientHeight),
+		0.0f,
+		1.0f
+	);
 }
 
 void DirectXCommon::CreateScissorRect()
