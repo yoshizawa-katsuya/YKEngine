@@ -7,7 +7,7 @@
 #include "Collision.h"
 #include "Lerp.h"
 
-void ReticleController::Initialize(Matrix4x4* viewPortMatrix)
+void ReticleController::Initialize()
 {
 	//3Dレティクルのワールドトランスフォーム初期化
 	worldTransform3DReticle_.Initialize();
@@ -29,7 +29,7 @@ void ReticleController::Initialize(Matrix4x4* viewPortMatrix)
 	spriteSmallReticle_->SetAnchorPoint({ 0.5f, 0.5f });
 	spriteSmallReticle_->SetColor(defaultColor_);
 
-	viewPortMatrix_ = viewPortMatrix;
+	viewPortMatrix_ = &DirectXCommon::GetInstance()->GetViewPortMatrix();
 
 	input_ = Input::GetInstance();
 }

@@ -14,7 +14,7 @@ BaseEnemy::~BaseEnemy()
 {
 }
 
-void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera) 
+void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera* railCamera) 
 {
 
 	BaseCharacter::Initialize(model);
@@ -43,7 +43,7 @@ void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix
 		velocity_ = TransformNormal(velocity_, rotateMatrix);
 	}
 
-	viewPortMatrix_ = viewPortMatrix;
+	viewPortMatrix_ = &DirectXCommon::GetInstance()->GetViewPortMatrix();
 
 	worldTransform_.rotation_ = spawnData.rotation;
 }

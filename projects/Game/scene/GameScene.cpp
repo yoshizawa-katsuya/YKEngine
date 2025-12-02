@@ -28,15 +28,6 @@ void GameScene::Initialize() {
 
 	dxCommon_->ResetDeltaTime();
 
-	viewPortMatrix_ = MakeViewportMatrix(
-		0.0f,
-		0.0f,
-		static_cast<float>(WinApp::kClientWidth),
-		static_cast<float>(WinApp::kClientHeight),
-		0.0f,
-		1.0f
-	);
-
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
@@ -75,7 +66,7 @@ void GameScene::Initialize() {
 
 	//敵マネージャーの生成
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(player_.get(), camera_.get(), &viewPortMatrix_, enemyBulletManager_.get());
+	enemyManager_->Initialize(player_.get(), camera_.get(), enemyBulletManager_.get());
 	enemySpawnManager_->SetEnemyManager(enemyManager_.get());
 
 	//デバッグカメラの生成
@@ -446,7 +437,7 @@ void GameScene::CreateLevel()
 
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get(), &viewPortMatrix_, railMover_->GetWorldTransform(), heratTextureHandle, heratFrameTextureHandle);
+	player_->Initialize(modelPlayer_.get(), railMover_->GetWorldTransform(), heratTextureHandle, heratFrameTextureHandle);
 	player_->SetPlayerBulletManager(playerBulletManager_.get());
 
 	// レールカメラの生成

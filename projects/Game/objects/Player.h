@@ -27,7 +27,7 @@ public:
 	/// <param name="parent">親のワールド変換</param>
 	/// <param name="heartTextureHandle">ハートテクスチャのハンドル</param>
 	/// <param name="heartEmptyTexturehandle">空のハートテクスチャのハンドル</param>
-	void Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
+	void Initialize(BaseModel* model, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
 
 	/// <summary>
 	/// 更新。

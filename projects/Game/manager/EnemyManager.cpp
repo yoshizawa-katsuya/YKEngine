@@ -4,11 +4,10 @@
 #include "TackleEnemy01.h"
 #include "CollisionManager.h"
 
-void EnemyManager::Initialize(Player* player, Camera* railCamera, Matrix4x4* viewPortMatrix, EnemyBulletManager* enemyBulletManager)
+void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletManager* enemyBulletManager)
 {
 	player_ = player;
 	railCamera_ = railCamera;
-	viewPortMatrix_ = viewPortMatrix;
 	enemyBulletManager_ = enemyBulletManager;
 
 	// 敵モデルの読み込み
@@ -61,7 +60,7 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 	default:
 		break;
 	}
-	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), spawnData, viewPortMatrix_, railCamera_);
+	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), spawnData, railCamera_);
 	enemy->SetPlayer(player_);
 	// 敵キャラにゲームシーンを渡す
 	enemy->SetEnemyBulletManager(enemyBulletManager_);

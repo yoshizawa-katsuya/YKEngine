@@ -25,7 +25,7 @@ public:
 	/// <param name="spawnData">出現データ</param>
 	/// <param name="viewPortMatrix">ビューポート行列</param>
 	/// <param name="railCamera">レールカメラ。画面内に入っているか判定するために使用。</param>
-	void Initialize(BaseModel* model, const EnemySpawn& spawnData, Matrix4x4* viewPortMatrix, Camera* railCamera);
+	void Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera* railCamera);
 
 	/// <summary>
 	/// 更新。

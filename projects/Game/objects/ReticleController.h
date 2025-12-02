@@ -20,7 +20,7 @@ public:
 	/// 初期化処理。
 	/// </summary>
 	/// <param name="viewPortMatrix">ビューポート行列へのポインタ。ワールド座標への変換に使用される。</param>
-	void Initialize(Matrix4x4* viewPortMatrix);
+	void Initialize();
 
 	/// <summary>
 	/// 更新処理。

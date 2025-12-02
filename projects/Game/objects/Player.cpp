@@ -15,7 +15,7 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
-void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
+void Player::Initialize(BaseModel* model, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
 {
 
 	BaseCharacter::Initialize(model);
@@ -32,7 +32,7 @@ void Player::Initialize(BaseModel* model, Matrix4x4* viewPortMatrix, WorldTransf
 	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 1.5f);
 
 	reticleController_ = std::make_unique<ReticleController>();
-	reticleController_->Initialize(viewPortMatrix);
+	reticleController_->Initialize();
 
 	HUDInitialize(heartTextureHandle, heartEmptyTexturehandle);
 
