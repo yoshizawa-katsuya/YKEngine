@@ -1,13 +1,20 @@
 #pragma once
 
+/// <summary>
+/// 3次元ベクトル
+/// </summary>
 struct Vector3 {
 	float x;
 	float y;
 	float z;
 
+	//スカラー倍
 	Vector3& operator*=(float s) { x *= s;  y *= s; z *= s; return *this; }
+	//減算
 	Vector3& operator-=(const Vector3& v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
+	//加算
 	Vector3& operator+=(const Vector3& v) { x += v.x; y += v.y; z += v.z; return *this; }
+	//スカラー除算
 	Vector3& operator/=(float s) { x /= s;  y /= s; z /= s; return *this; }
 
 };
@@ -31,33 +38,32 @@ float Length(const Vector3& v);
 //正規化
 Vector3 Normalize(const Vector3& v);
 
-//void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label);
-
 //クロス積
 Vector3 Cross(const Vector3& v1, const Vector3& v2);
 
 //正射影ベクトル
 Vector3 Project(const Vector3& v1, const Vector3& v2);
 
-//最近接点
-//Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
-
 //垂直なベクトルを求める
 Vector3 Perpendicular(const Vector3& vector);
 
-//スクリーン座標に変換
-//Vector3 ConvertingToScreen(const Vector3& position, const ViewProjection& viewProjection);
-
+//加算
 Vector3 operator+(const Vector3& v1, const Vector3& v2);
 
+//減算
 Vector3 operator-(const Vector3& v1, const Vector3& v2);
 
+//スカラー倍
 Vector3 operator*(float s, const Vector3& v);
 
+//スカラー倍
 Vector3 operator*(const Vector3& v, float s);
 
+//スカラー除算
 Vector3 operator/(const Vector3& v, float s);
 
+//単項マイナス
 Vector3 operator-(const Vector3& v);
 
+//単項プラス
 Vector3 operator+(const Vector3& v);

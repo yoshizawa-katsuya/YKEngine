@@ -6,11 +6,6 @@ SpritePlatform* SpritePlatform::GetInstance()
 	return &instance;
 }
 
-void SpritePlatform::Finalize()
-{
-	
-}
-
 void SpritePlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer)
 {
 

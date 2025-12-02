@@ -3,21 +3,28 @@
 #include "AbstractSceneFactory.h"
 #include <memory>
 
-//シーン管理
+/// <summary>
+/// シーンの管理クラス。
+/// シーンの更新、描画、切り替えを行う。
+/// シーンの生成はシーンファクトリーに任せる。
+/// </summary>
 class SceneManager
 {
 public:
 
-	//シングルトンインスタンスの取得
-	static SceneManager* GetInstance();
-
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize();
 
-	//更新
+	/// <summary>
+	/// 更新処理。
+	/// </summary>
 	void Update();
 
-	//描画
+	/// <summary>
+	/// 描画処理。
+	/// </summary>
 	void Draw();
 
 	//次シーン予約
@@ -26,21 +33,25 @@ public:
 	//シーンファクトリーのsetter
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { sceneFactory_ = sceneFactory; }
 
-	//シーン切り替え
+	/// <summary>
+	/// シーンの変更。
+	/// </summary>
+	/// <param name="sceneName">変更先シーン名</param>
 	void ChengeScene(const std::string& sceneName);
 
 private:
 
-	SceneManager() = default;
-	~SceneManager() = default;
-	SceneManager(SceneManager&) = delete;
-	SceneManager& operator=(SceneManager&) = delete;
+
+	/// <summary>
+	/// シーンの切り替え処理。
+	/// </summary>
+	void ChangeSceneProcess();
 
 	//今のシーン(実行中シーン)
 	std::unique_ptr<BaseScene> scene_;
 
 	//次のシーン
-	BaseScene* nextScene_ = nullptr;
+	std::unique_ptr<BaseScene> nextScene_;
 
 	//シーンファクトリー(借りてくる)
 	AbstractSceneFactory* sceneFactory_ = nullptr;

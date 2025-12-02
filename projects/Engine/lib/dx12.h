@@ -6,18 +6,34 @@
 
 
 
-//ログ
+/// <summary>
+/// ログ出力ユーティリティ
+/// </summary>
 namespace Logger
 {
+	/// <summary>
+	/// ログ出力。
+	/// </summary>
+	/// <param name="message">ログメッセージ</param>
 	void Log(const std::string& message);
 }
 
-//文字コードユーティリティ
+/// <summary>
+/// 文字列変換ユーティリティ
+/// </summary>
 namespace StringUtility 
 {
-	//wstringに変換
+	/// <summary>
+	/// wstringに変換。
+	/// </summary>
+	/// <param name="str">変換するstring</param>
+	/// <returns>変換後のwstring</returns>
 	std::wstring ConvertString(const std::string& str);
 
-	//stringに変換
+	/// <summary>
+	/// stringに変換。
+	/// </summary>
+	/// <param name="str">変換するwstring</param>
+	/// <returns>変換後のstring</returns>
 	std::string ConvertString(const std::wstring& str);
 }

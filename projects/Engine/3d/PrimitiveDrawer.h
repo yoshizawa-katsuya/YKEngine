@@ -10,10 +10,14 @@
 #include <memory>
 class DirectXCommon;
 
-//描画モード
-enum class DrawMode {
+/// <summary>
+/// 描画モード。
+/// ブレンドモードや、オフスクリーンレンダリングの種類を指定する。
+/// </summary>
+enum class DrawMode 
+{
 	kBlendModeNone, //ブレンドなし
-	kBlendModeNormal, //NormalBlend
+	kBlendModeNormal, //kNormalBlend
 	kBlendModeAdd,	//加算
 	kBlendModeSubtract,	//減算
 	kBlendModeMultiply,	//乗算
@@ -25,6 +29,9 @@ enum class DrawMode {
 
 	kBlendModeAddParticle,
 	kBlendModeNormalParticle,
+
+	kBlendModeAddBackDrawParticle,	//背面描画用加算
+	kBlendModeNormalBackDrawParticle,	//背面描画用通常
 
 	kLineMode,
 
@@ -39,41 +46,63 @@ enum class DrawMode {
 	kGrayScaleRendering,
 	kVignetteRendering,
 	kBoxFilterRendering,
+	kGaussianFilterRendering,
+	kLuminanceOutlineRendering,
+	kOutlineRendering,
+	kRadialBlurRendering,
+	kDissolveRendering,
+	kRandomRendering,
 
 	kSkyboxMode,
 
-	kCountOfBlendMode,	//利用してはいけない
+	kCount,	//利用してはいけない
 };
 
+//TODO:クラス名を変更する
+/// <summary>
+/// プリミティブ描画クラス。
+/// パイプラインステートを管理する。
+/// </summary>
 class PrimitiveDrawer
 {
 public:
 
-	//パイプラインセット
+	/// <summary>
+	/// パイプラインセット
+	/// </summary>
+	/// <param name="rootSignature">ルートシグネチャ</param>
+	/// <param name="graphicsPipelineState">グラフィックスパイプラインステート</param>
 	struct PipelineSet
 	{
 		Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature;
 		Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState;
 	};
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="dxCommon">DirectX共通クラス</param>
 	void Initialize(DirectXCommon* dxCommon);
 
+	/// <summary>
+	/// コマンドリストにパイプラインをセットする。
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="blendMode">描画モード</param>
 	void SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode);
-
-	//ID3D12RootSignature* GetRootSignature() { return rootSignature_.Get(); }
-
-	//ID3D12PipelineState* GetGrahicsPipelineState() { return graphicsPipelineState_.Get(); }
 
 private:
 
-	//パイプライン生成
+	/// <summary>
+	/// グラフィックスパイプラインの生成。
+	/// </summary>
+	/// <param name="blendMode">描画モード</param>
+	/// <param name="dxCommon">DirectX共通クラス</param>
+	/// <returns>パイプラインセット</returns>
 	std::unique_ptr<PipelineSet> CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon);
 
-	//Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
-
 	//パイプライン。ブレンドモードの数だけ用意する
-	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCountOfBlendMode> pipelineSets_;
-	//Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
+	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCount> pipelineSets_;
 
 };
 

@@ -1,6 +1,10 @@
 #pragma once
 #include "Struct.h"
 
+/// <summary>
+/// ワールド変換データ。
+/// 親子関係を持つことができる。
+/// </summary>
 class WorldTransform
 {
 public:
@@ -17,11 +21,11 @@ public:
 	WorldTransform* parent_ = nullptr;
 
 	/// <summary>
-	/// 初期化
+	/// 初期化。
 	/// </summary>
 	void Initialize();
 	/// <summary>
-	/// 行列を計算する
+	/// 行列の更新。
 	/// </summary>
 	void UpdateMatrix();
 };

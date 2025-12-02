@@ -6,6 +6,9 @@
 class Camera;
 class MapChipField;
 
+/// <summary>
+/// プレイヤークラス
+/// </summary>
 class Player
 {
 public:

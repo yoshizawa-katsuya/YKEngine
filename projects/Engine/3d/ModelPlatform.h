@@ -9,80 +9,195 @@
 #include "BaseModel.h"
 class Camera;
 
+/// <summary>
+/// モデルの基盤クラス。
+/// モデルの生成、管理、描画前処理などを行う。
+/// シングルトン。
+/// </summary>
 class ModelPlatform
 {
 public:
 
-	//シングルトンインスタンスの取得
+	/// <summary>
+	/// シングルトンインスタンスの取得。
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
 	static ModelPlatform* GetInstance();
 
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize();
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="dxCommon">DirectX共通クラス</param>
+	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
+	/// <param name="srvHeapManager">SRVヒープマネージャー</param>
 	void Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
 
+	/// <summary>
+	/// フレーム終了処理。
+	/// </summary>
 	void EndFrame();
 
-	//共通描画設定
+	/// <summary>
+	/// 描画前処理。
+	/// </summary>
 	void PreDraw();
 
+	/// <summary>
+	/// スカイボックス描画前処理。
+	/// </summary>
 	void SkyBoxPreDraw();
 
+	/// <summary>
+	/// スキンモデル描画前処理。
+	/// </summary>
 	void SkinPreDraw();
 
+	/// <summary>
+	/// インスタンシング描画前処理。
+	/// </summary>
 	void InstancingPreDraw();
 
+	/// <summary>
+	/// 線分描画前処理。
+	/// </summary>
 	void LinePreDraw();
 
+	/// <summary>
+	/// 線分描画。
+	/// </summary>
+	/// <param name="worldMatrix1">線分の始点のワールド行列</param>
+	/// <param name="worldMatrix2">線分の終点のワールド行列</param>
+	/// <param name="camera">カメラ</param>
 	void LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& worldMatrix2, Camera* camera);
 
+	/// <summary>
+	/// 球(ワイヤーフレーム)描画前処理。
+	/// </summary>
 	void SpherePreDraw();
 
+	/// <summary>
+	/// 球(ワイヤーフレーム)描画。
+	/// </summary>
+	/// <param name="worldMatrix">球のワールド行列</param>
+	/// <param name="camera">カメラ</param>
 	void SphereDraw(const Matrix4x4& worldMatrix, Camera* camera);
 
+	/// <summary>
+	/// リジッドモデル生成。
+	/// </summary>
+	/// <param name="directoryPath">モデルファイルのディレクトリパス</param>
+	/// <param name="filename">モデルファイル名</param>
+	/// <param name="color">モデルの色</param>
+	/// <returns>リジッドモデル</returns>
 	std::shared_ptr<BaseModel> CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
+	/// <summary>
+	/// スキンモデル生成。
+	/// </summary>
+	/// <param name="directoryPath">モデルファイルのディレクトリパス</param>
+	/// <param name="filename">モデルファイル名</param>
+	/// <param name="color">モデルの色</param>
+	/// <returns>スキンモデル</returns>
 	std::shared_ptr<BaseModel> CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
+	/// <summary>
+	/// 球モデル生成。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="modelName">モデル名</param>
+	/// <returns>球モデル</returns>
 	std::shared_ptr<BaseModel> CreateSphere(uint32_t textureHandle, const std::string& modelName = "");
 
+	/// <summary>
+	/// 立方体モデル生成。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="modelName">モデル名</param>
+	/// <returns>立方体モデル</returns>
+	std::shared_ptr<BaseModel> CreateCube(uint32_t textureHandle, const std::string& modelName = "");
+
+	/// <summary>
+	/// 平面モデル生成。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="modelName">モデル名</param>
+	/// <returns>平面モデル</returns>
 	std::shared_ptr<BaseModel> CreatePlane(uint32_t textureHandle, const std::string& modelName = "");
 
+	/// <summary>
+	/// リングモデル生成。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="modelName">モデル名</param>
+	/// <returns>リングモデル</returns>
 	std::shared_ptr<BaseModel> CreateRing(uint32_t textureHandle, const std::string& modelName = "");
 
+	/// <summary>
+	/// 円柱モデル生成。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="modelName">モデル名</param>
+	/// <returns>円柱モデル</returns>
 	std::shared_ptr<BaseModel> CreateCylinder(uint32_t textureHandle, const std::string& modelName = "");
 
+	/// <summary>
+	/// スカイボックスモデル生成。
+	/// キューブマップテクスチャを使用する。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="modelName">モデル名</param>
+	/// <returns>スカイボックスモデル</returns>
 	std::shared_ptr<BaseModel> CreateSkyBox(uint32_t textureHandle, const std::string& modelName = "");
 
 	DirectXCommon* GetDxCommon() const { return dxCommon_; }
 
 	SrvHeapManager* GetSrvHeapManager() const { return srvHeapManager_; }
 
-	//void SetDirectionalLight(DirectionalLight* directionalLight) { directionalLight_ = directionalLight; }
-
+	/// <summary>
+	/// ライト描画前処理。
+	/// ライトカウントをリセットする。
+	/// </summary>
 	void LightPreUpdate();
 
-	void DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight);
+	/// <summary>
+	/// 平行光源更新。
+	/// </summary>
+	/// <param name="directionalLight">平行光源データ</param>
+	void DirectionalLightUpdate(const DirectionalLight& directionalLight);
 
-	//void SetPointLight(PointLight* pointLight) { pointLight_ = pointLight; }
+	/// <summary>
+	/// 点光源更新。
+	/// </summary>
+	/// <param name="pointLight">点光源データ</param>
+	void PointLightUpdate(const PointLight& pointLight);
 
-	void PointLightUpdate(const PointLight::PointLightData& pointLight);
-
-	//void SetSpotLight(SpotLight* spotLight) { spotLight_ = spotLight; }
-
-	void SpotLightUpdate(const SpotLight::SpotLightData& spotLight);
+	/// <summary>
+	/// スポット光源更新。
+	/// </summary>
+	/// <param name="spotLight">スポット光源データ</param>
+	void SpotLightUpdate(const SpotLight& spotLight);
 
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
 private:
 
+	/// <summary>
+	/// 線分のワールド・ビュー・プロジェクション行列構造体。
+	/// </summary>
 	struct LineWVP
 	{
 		Matrix4x4 WVP1;
 		Matrix4x4 WVP2;
 	};
 
+	/// <summary>
+	/// 光源数構造体。
+	/// </summary>
 	struct LightCount
 	{
 		uint32_t directional;
@@ -90,6 +205,18 @@ private:
 		uint32_t spot;
 		float padding;
 	};
+
+	/// <summary>
+	/// 描画前処理共通。
+	/// </summary>
+	void CommonPreDraw(bool isSkin);
+
+	template<class T, class F>
+	std::shared_ptr<BaseModel> CreateModelCommon(const std::string& name, F createFunc);
+	
+
+	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
+	static ModelPlatform* instance_;
 
 	ModelPlatform() = default;
 	~ModelPlatform() = default;
@@ -102,30 +229,23 @@ private:
 
 	PrimitiveDrawer* primitiveDrawer_;
 
-	//DirectionalLight* directionalLight_ = nullptr;
-
 	std::unordered_map<std::string, std::shared_ptr<BaseModel>> models_;
 
 	LightCount* lightCount_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> lightCountResource_;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResouce_;
-	DirectionalLight::DirectionalLightData* directionalLightDatas_ = nullptr;
+	DirectionalLight* directionalLightDatas_ = nullptr;
 	uint32_t kNumMaxDirectionalLight_ = 100;
-	//uint32_t numDirectionalLight_ = 0;
 	uint32_t directionalLightSrvIndex_;
 
-	//PointLight* pointLight_ = nullptr;
-
 	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResouce_;
-	PointLight::PointLightData* pointLightDatas_ = nullptr;
+	PointLight* pointLightDatas_ = nullptr;
 	uint32_t kNumMaxPointLight_ = 100;
 	uint32_t pointLightSrvIndex_;
 
-	//SpotLight* spotLight_ = nullptr;
-
 	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResouce_;
-	SpotLight::SpotLightData* spotLightDatas_ = nullptr;
+	SpotLight* spotLightDatas_ = nullptr;
 	uint32_t kNumMaxSpotLight_ = 100;
 	uint32_t spotLightSrvIndex_;
 
@@ -139,35 +259,39 @@ private:
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
-	//static const uint32_t resourceNum_ = 2048;
-	static const uint32_t resourceNum_ = 1;
+	//デバッグ用の球と線分のリソース数。
+	static const uint32_t kResourceNum_ = 1;
 
 	//TransformationMatrix用のリソースを作る 線分用
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> LineWVPResources_;
-	//Microsoft::WRL::ComPtr<ID3D12Resource> LineWVPResource_;
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kResourceNum_> LineWVPResources_;
 	//データを書き込む
-	std::array<LineWVP*, resourceNum_> LineWVPDatas_;
-	//LineWVP* LineWVPData_ = nullptr;
+	std::array<LineWVP*, kResourceNum_> LineWVPDatas_;
 
 	uint32_t lineIndex_ = 0;
 
 	//TransformationMatrix用のリソースを作る。球用
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> SphereWVPResources_;
-	//Microsoft::WRL::ComPtr<ID3D12Resource> WVPResource_;
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kResourceNum_> SphereWVPResources_;
 	//データを書き込む
-	std::array<Matrix4x4*, resourceNum_> SphereWVPDatas_;
-	//Matrix4x4* WVPData_ = nullptr;
+	std::array<Matrix4x4*, kResourceNum_> SphereWVPDatas_;
 
 	uint32_t sphereIndex_ = 0;
-	/*
-	//TransformationMatrix用のリソースを作る。モデル用
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, resourceNum_> ModelWVPResources_;
-	//Microsoft::WRL::ComPtr<ID3D12Resource> WVPResource_;
-	//データを書き込む
-	std::array<TransformationMatrix*, resourceNum_> ModelWVPDatas_;
-	//Matrix4x4* WVPData_ = nullptr;
 	
-	uint32_t modelIndex_ = 0;
-	*/
 };
 
+template<class T, class F>
+inline std::shared_ptr<BaseModel> ModelPlatform::CreateModelCommon(const std::string& name, F createFunc)
+{
+	// すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+
+	// モデル生成
+	std::shared_ptr<T> model = std::make_shared<T>();
+
+	// 生成処理（ラムダで受ける）
+	createFunc(model.get());
+
+	models_[name] = model;
+	return model;
+}

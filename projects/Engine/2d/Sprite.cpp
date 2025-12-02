@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include <cassert>
 #include "SpritePlatform.h"
+#include "RootParams.h"
 
 void Sprite::Initialize(uint32_t textureHandle) {
 
@@ -19,8 +20,9 @@ void Sprite::Initialize(uint32_t textureHandle) {
 
 }
 
-void Sprite::Draw() {
-
+void Sprite::Draw()
+{
+	//頂点データの計算
 	float left = 0.0f - anchorPoint_.x;
 	float right = 1.0f - anchorPoint_.x;
 	float top = 0.0f - anchorPoint_.y;
@@ -44,6 +46,7 @@ void Sprite::Draw() {
 	vertexData_[2].position = { right, bottom, 0.0f, 1.0f };//右下
 	vertexData_[3].position = { right, top, 0.0f, 1.0f };//右上
 	
+	//UV計算
 	const DirectX::TexMetadata& metaData = TextureManager::GetInstance()->GetMetaData(textureHandle_);
 	float tex_left = textureLeftTop_.x / metaData.width;
 	float tex_right = (textureLeftTop_.x + textureSize_.x) / metaData.width;
@@ -76,17 +79,15 @@ void Sprite::Draw() {
 
 	//Spriteの描画。変更が必要なものだけ変更する
 	//マテリアルのCBufferの場所を設定
-	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SpriteRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 	spritePlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
 	spritePlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);	//IBVを設定
 	//TransformationMatrixCBufferの場所を設定
-	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
+	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SpriteRootParam::kTransformationMatrix), transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVの設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
-	//dxCommon->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SpriteRootParam::kTexture), textureHandle_);
 	//描画
 	spritePlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
-	//commandList_->DrawInstanced(6, 1, 0, 0);
 
 }
 

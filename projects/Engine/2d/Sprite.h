@@ -7,14 +7,24 @@
 #include "TextureManager.h"
 class SpritePlatform;
 
+/// <summary>
+/// 2D画像を表示するためのクラス。
+/// テクスチャを貼り付けた四角形を表示する。
+/// 四角形の大きさ、位置、回転、色、テクスチャの切り出し範囲などを設定できる。
+/// </summary>
 class Sprite
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
 	void Initialize(uint32_t textureHandle);
 
-	//描画
+	/// <summary>
+	///	描画。
+	/// </summary>
 	void Draw();
 
 	const Vector2& GetSize() const { return size_; }
@@ -44,46 +54,58 @@ public:
 	Vector2& GetTextureSize() { return textureSize_; }
 	const Vector2& GetTextureSize() const { return textureSize_; }
 
-	EulerTransform GetTransform() { return transform_; }
-	EulerTransform GetUVTransform() { return uvTransform_; }
+	EulerTransform& GetTransform() { return transform_; }
+	const EulerTransform& GetTransform() const { return transform_; }
 
-	EulerTransform& GetTransformAddress() { return transform_; }
-	EulerTransform& GetUVTransformAddress() { return uvTransform_; }
+	EulerTransform& GetUVTransform() { return uvTransform_; }
+	const EulerTransform& GetUVTransform() const { return uvTransform_; }
 
-	void SetSize(const Vector2& size) { size_ = size; }
+	void SetSize(Vector2 size) { size_ = size; }
 
-	void SetPosition(const Vector2& position) { position_ = position; }
+	void SetPosition(Vector2 position) { position_ = position; }
 
 	void SetRotation(float rotation) { rotation_ = rotation; }
 
 	void SetColor(const Vector4& color) { materialData_->color = color; }
 
-	void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
+	void SetAnchorPoint(Vector2 anchorPoint) { anchorPoint_ = anchorPoint; }
 
 	void SetIsFlipX(bool IsFlipX) { isFlipX_ = IsFlipX; }
 
 	void SetIsFlipY(bool IsFlipY) { isFlipY_ = IsFlipY; }
 
-	void SetTextureLeftTop(const Vector2& textureLeftTop) { textureLeftTop_ = textureLeftTop; }
+	void SetTextureLeftTop(Vector2 textureLeftTop) { textureLeftTop_ = textureLeftTop; }
 
-	void SetTextureSize(const Vector2& textureSize) { textureSize_ = textureSize; }
+	void SetTextureSize(Vector2 textureSize) { textureSize_ = textureSize; }
 
 	void SetTexture(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 
+	void SetUVTransform(const EulerTransform& uvTransform) { uvTransform_ = uvTransform; }
+
+	void SetUVTranslate(const Vector3& translate) { uvTransform_.translation = translate; }
+
 	uint32_t GetTeture() { return textureHandle_; }
 
-private:
+protected:
 
-	//頂点データ作成
+	/// <summary>
+	/// 頂点データ作成。
+	/// </summary>
 	void CreateVertexData();
 
-	//マテリアルデータ作成
+	/// <summary>
+	/// マテリアルデータ作成。
+	/// </summary>
 	void CreateMaterialData();
 
-	//座標行列変換データ作成
+	/// <summary>
+	/// 変換行列データ作成。
+	/// </summary>
 	void CreateTransformData();
 
-	//テクスチャサイズをイメージに合わせる
+	/// <summary>
+	/// スプライトサイズを画像サイズに合わせて調整。
+	/// </summary>
 	void AdjustTextureSize();
 
 	SpritePlatform* spritePlatform_ = nullptr;

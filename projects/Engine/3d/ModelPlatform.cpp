@@ -3,16 +3,24 @@
 #include "Camera.h"
 #include "RigidModel.h"
 #include "SkinModel.h"
+#include "RootParams.h"
+
+ModelPlatform* ModelPlatform::instance_ = nullptr;
 
 ModelPlatform* ModelPlatform::GetInstance()
 {
-	static ModelPlatform instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new ModelPlatform();
+	}
+	return instance_;
 }
 
 void ModelPlatform::Finalize()
 {
-	
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
@@ -39,7 +47,7 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 
 	*vertexData_ = {0.0f, 0.0f, 0.0f, 1.0f};
 
-	for (uint32_t i = 0; i < resourceNum_; i++) {
+	for (uint32_t i = 0; i < kResourceNum_; i++) {
 		//transformationMatrixのリソースを作る
 		LineWVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(LineWVP));
 		//書き込むためのアドレスを取得
@@ -49,7 +57,7 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 		LineWVPDatas_[i]->WVP2 = MakeIdentity4x4();
 	}
 
-	for (uint32_t i = 0; i < resourceNum_; i++) {
+	for (uint32_t i = 0; i < kResourceNum_; i++) {
 		SphereWVPResources_[i] = dxCommon_->CreateBufferResource(sizeof(Matrix4x4));
 		SphereWVPResources_[i]->Map(0, nullptr, reinterpret_cast<void**>(&SphereWVPDatas_[i]));
 		*SphereWVPDatas_[i] = MakeIdentity4x4();
@@ -63,28 +71,28 @@ void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primiti
 	lightCount_->spot = 0;
 
 	//平行光源
-	directionalLightResouce_ = dxCommon_->CreateBufferResource(sizeof(DirectionalLight::DirectionalLightData) * kNumMaxDirectionalLight_);
+	directionalLightResouce_ = dxCommon_->CreateBufferResource(sizeof(DirectionalLight) * kNumMaxDirectionalLight_);
 	directionalLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDatas_));
 
 	directionalLightSrvIndex_ = srvHeapManager_->Allocate();
 
-	srvHeapManager_->CreateSRVforStructuredBuffer(directionalLightSrvIndex_, directionalLightResouce_.Get(), kNumMaxDirectionalLight_, sizeof(DirectionalLight::DirectionalLightData));
+	srvHeapManager_->CreateSRVforStructuredBuffer(directionalLightSrvIndex_, directionalLightResouce_.Get(), kNumMaxDirectionalLight_, sizeof(DirectionalLight));
 
 	//点光源
-	pointLightResouce_ = dxCommon_->CreateBufferResource(sizeof(PointLight::PointLightData) * kNumMaxPointLight_);
+	pointLightResouce_ = dxCommon_->CreateBufferResource(sizeof(PointLight) * kNumMaxPointLight_);
 	pointLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightDatas_));
 
 	pointLightSrvIndex_ = srvHeapManager_->Allocate();
 
-	srvHeapManager_->CreateSRVforStructuredBuffer(pointLightSrvIndex_, pointLightResouce_.Get(), kNumMaxPointLight_, sizeof(PointLight::PointLightData));
+	srvHeapManager_->CreateSRVforStructuredBuffer(pointLightSrvIndex_, pointLightResouce_.Get(), kNumMaxPointLight_, sizeof(PointLight));
 
 	//スポットライト
-	spotLightResouce_ = dxCommon_->CreateBufferResource(sizeof(SpotLight::SpotLightData) * kNumMaxSpotLight_);
+	spotLightResouce_ = dxCommon_->CreateBufferResource(sizeof(SpotLight) * kNumMaxSpotLight_);
 	spotLightResouce_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightDatas_));
 
 	spotLightSrvIndex_ = srvHeapManager_->Allocate();
 
-	srvHeapManager_->CreateSRVforStructuredBuffer(spotLightSrvIndex_, spotLightResouce_.Get(), kNumMaxSpotLight_, sizeof(SpotLight::SpotLightData));
+	srvHeapManager_->CreateSRVforStructuredBuffer(spotLightSrvIndex_, spotLightResouce_.Get(), kNumMaxSpotLight_, sizeof(SpotLight));
 
 }
 
@@ -93,23 +101,15 @@ void ModelPlatform::EndFrame()
 
 	lineIndex_ = 0;
 	sphereIndex_ = 0;
-	//modelIndex_ = 0;
 
 }
 
 void ModelPlatform::PreDraw()
 {
 
-	
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormal);
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
-	camera_->SetCameraReaource();
-
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
+	
+	CommonPreDraw(false);
 
 }
 
@@ -123,14 +123,8 @@ void ModelPlatform::SkinPreDraw()
 {
 
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kSkinModelMode);
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
-	camera_->SetCameraReaource();
-
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
+	
+	CommonPreDraw(true);
 
 }
 
@@ -138,15 +132,8 @@ void ModelPlatform::InstancingPreDraw()
 {
 
 	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeNormalinstancing);
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//directionalLight_->Draw();
-	srvHeapManager_->SetGraphicsRootDescriptorTable(3, directionalLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(5, pointLightSrvIndex_);
-	srvHeapManager_->SetGraphicsRootDescriptorTable(6, spotLightSrvIndex_);
-	camera_->SetCameraReaource();
-
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(7, lightCountResource_->GetGPUVirtualAddress());
+	
+	CommonPreDraw(false);
 
 }
 
@@ -161,7 +148,7 @@ void ModelPlatform::LinePreDraw()
 
 void ModelPlatform::LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& worldMatrix2, Camera* camera)
 {
-
+	//線の始点と終点のワールドビュー射影行列を計算
 	Matrix4x4 worldViewProjectionMatrix1;
 	Matrix4x4 worldViewProjectionMatrix2;
 	if (camera) {
@@ -178,10 +165,9 @@ void ModelPlatform::LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& wor
 	LineWVPDatas_[lineIndex_]->WVP2 = worldViewProjectionMatrix2;
 
 	//wvp用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, LineWVPResources_[lineIndex_]->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(DebudLineRootParam::kWVP), LineWVPResources_[lineIndex_]->GetGPUVirtualAddress());
 	
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
 
 	lineIndex_++;
@@ -212,10 +198,9 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 	*SphereWVPDatas_[sphereIndex_] = worldViewProjectionMatrix;
 
 	//wvp用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, SphereWVPResources_[sphereIndex_]->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(DebugSphereRootParam::kWVP), SphereWVPResources_[sphereIndex_]->GetGPUVirtualAddress());
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
 
 	sphereIndex_++;
@@ -223,84 +208,86 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateRigidModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
 {
-	if (models_.contains(filename)) {
-		return models_[filename];
-	}
-	models_[filename] = std::make_shared<RigidModel>();
-	models_[filename]->CreateModel(directoryPath, filename, color);
-
-	return models_[filename];
+	return CreateModelCommon<RigidModel>(filename,
+		[&](RigidModel* model) {
+			model->CreateModel(directoryPath, filename, color);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateSkinModel(const std::string& directoryPath, const std::string& filename, const Vector4& color)
 {
-	if (models_.contains(filename)) {
-		return models_[filename];
-	}
-	models_[filename] = std::make_shared<SkinModel>();
-	models_[filename]->CreateModel(directoryPath, filename, color);
-
-	return models_[filename];
+	return CreateModelCommon<SkinModel>(filename,
+		[&](SkinModel* model) {
+			model->CreateModel(directoryPath, filename, color);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateSphere(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveSphere" + modelName;
-	if (models_.contains(name)) {
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateSphere(textureHandle);
 
-	return models_[name];
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateSphere(textureHandle);
+		}
+	);
+}
+
+std::shared_ptr<BaseModel> ModelPlatform::CreateCube(uint32_t textureHandle, const std::string& modelName)
+{
+	std::string name = "PrimitiveCube" + modelName;
+
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateCube(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreatePlane(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitivePlane" + modelName;
-	if (models_.contains(name)) {
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreatePlane(textureHandle);
 
-	return models_[name];
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreatePlane(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateRing(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveRing" + modelName;
-	if (models_.contains(name)) {
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateRing(textureHandle);
 
-	return models_[name];
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateRing(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateCylinder(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveCylinder" + modelName;
-	if (models_.contains(name)) {
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateCylinder(textureHandle);
-
-	return models_[name];
+	
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateCylinder(textureHandle);
+		}
+	);
 }
 
 std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle, const std::string& modelName)
 {
 	std::string name = "PrimitiveSkyBox" + modelName;
-	if (models_.contains(name)) {
-		return models_[name];
-	}
-	models_[name] = std::make_shared<RigidModel>();
-	models_[name]->CreateSkyBox(textureHandle);
-
-	return models_[name];
+	
+	return CreateModelCommon<RigidModel>(name,
+		[&](RigidModel* model) {
+			model->CreateSkyBox(textureHandle);
+		}
+	);
 }
 
 void ModelPlatform::LightPreUpdate()
@@ -310,7 +297,7 @@ void ModelPlatform::LightPreUpdate()
 	lightCount_->spot = 0;
 }
 
-void ModelPlatform::DirectionalLightUpdate(const DirectionalLight::DirectionalLightData& directionalLight)
+void ModelPlatform::DirectionalLightUpdate(const DirectionalLight& directionalLight)
 {
 	directionalLightDatas_[lightCount_->directional] = directionalLight;
 	directionalLightDatas_[lightCount_->directional].direction = Normalize(directionalLightDatas_[lightCount_->directional].direction);
@@ -319,7 +306,7 @@ void ModelPlatform::DirectionalLightUpdate(const DirectionalLight::DirectionalLi
 	return;
 }
 
-void ModelPlatform::PointLightUpdate(const PointLight::PointLightData& pointLight)
+void ModelPlatform::PointLightUpdate(const PointLight& pointLight)
 {
 	pointLightDatas_[lightCount_->point] = pointLight;
 	lightCount_->point++;
@@ -327,11 +314,35 @@ void ModelPlatform::PointLightUpdate(const PointLight::PointLightData& pointLigh
 	return;
 }
 
-void ModelPlatform::SpotLightUpdate(const SpotLight::SpotLightData& spotLight)
+void ModelPlatform::SpotLightUpdate(const SpotLight& spotLight)
 {
 	spotLightDatas_[lightCount_->spot] = spotLight;
 	spotLightDatas_[lightCount_->spot].direction = Normalize(spotLightDatas_[lightCount_->spot].direction);
 	lightCount_->spot++;
 
 	return;
+}
+
+void ModelPlatform::CommonPreDraw(bool isSkin)
+{
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	if (isSkin)
+	{
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kPointLight), pointLightSrvIndex_);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(SkinModelRootParam::kSpotLight), spotLightSrvIndex_);
+		camera_->SetCameraReaource(static_cast<uint32_t>(SkinModelRootParam::kCamera));
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
+	}
+	else 
+	{
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kDirectionalLight), directionalLightSrvIndex_);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kPointLight), pointLightSrvIndex_);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ModelRootParam::kSpotLight), spotLightSrvIndex_);
+		camera_->SetCameraReaource(static_cast<uint32_t>(ModelRootParam::kCamera));
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kLightCount), lightCountResource_->GetGPUVirtualAddress());
+
+	}
+
 }

@@ -3,18 +3,34 @@
 #include "WinApp.h"
 #include "DirectXCommon.h"
 
-//カメラ
+/// <summary>
+/// カメラクラス。
+/// 3D空間上の視点を表す。
+/// 視点の位置、向き、投影方法を管理する。
+/// </summary>
 class Camera
 {
 public:
 
+	/// <summary>
+	/// コンストラクタ。
+	/// </summary>
 	Camera();
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	void SetCameraReaource();
+	/// <summary>
+	/// ConstantBufferにカメラの情報をセットする。
+	/// </summary>
+	void SetCameraReaource(uint32_t rootParamIndex);
 
+	/// <summary>
+	/// ビルボード行列の作成。
+	/// </summary>
+	/// <returns>ビルボード行列</returns>
 	Matrix4x4 MakeBillBoardMatrix();
 
 	//getter
@@ -47,7 +63,11 @@ public:
 
 private:
 
-	struct CameraForGPU {
+	/// <summary>
+	/// GPU用カメラ構造体。
+	/// </summary>
+	struct CameraForGPU 
+	{
 		Vector3 worldPosition;
 	};
 

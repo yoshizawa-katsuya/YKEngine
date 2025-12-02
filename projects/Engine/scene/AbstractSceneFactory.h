@@ -2,17 +2,27 @@
 
 #include "BaseScene.h"
 #include <string>
+#include <memory>
 
-///<summary>
-///シーン工場(概念)
+/// <summary>
+/// シーン工場(概念)
+/// シーンを生成するインターフェースを提供する。
+/// 継承して使用する。
 /// </summary>
 class AbstractSceneFactory
 {
 public:
 
-	//仮想デストラクタ
+	/// <summary>
+	/// デストラクタ。純粋仮想関数。
+	/// </summary>
 	virtual ~AbstractSceneFactory() = default;
-	//シーン生成
-	virtual BaseScene* CreateScene(const std::string& sceneName) = 0;
+	
+	/// <summary>
+	/// シーンを生成する。純粋仮想関数。
+	/// </summary>
+	/// <param name="sceneName">生成するシーンの名前</param>
+	/// <returns>生成されたシーンのポインタ</returns>
+	virtual std::unique_ptr<BaseScene> CreateScene(const std::string& sceneName) = 0;
 
 };

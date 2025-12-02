@@ -1,11 +1,6 @@
 #include "SceneManager.h"
+#include "ParticleManager.h"
 #include <cassert>
-
-SceneManager* SceneManager::GetInstance()
-{
-	static SceneManager instance;
-	return &instance;
-}
 
 void SceneManager::Finalize()
 {
@@ -16,16 +11,12 @@ void SceneManager::Update()
 {
 
 	//次シーンの予約があるなら
-	if (nextScene_) {
-		//シーン切り替え
-		scene_.reset(nextScene_);
-		nextScene_ = nullptr;
+	if (nextScene_) 
+	{
+		ChangeSceneProcess();
 
-		//シーンマネージャをセット
-		scene_->SetSceneManager(this);
-
-		//次シーンを初期化する
-		scene_->Initialize();
+		//パーティクルを全削除
+		ParticleManager::GetInstance()->ClearAllParticles();
 	}
 
 	//実行中シーンを更新する
@@ -47,19 +38,23 @@ void SceneManager::ChengeScene(const std::string& sceneName)
 	assert(nextScene_ == nullptr);
 
 	//次シーンを生成
-	nextScene_ = sceneFactory_->CreateScene(sceneName);
+	nextScene_ = std::move(sceneFactory_->CreateScene(sceneName));
 
-	if (!scene_) {
-
-		//シーン切り替え
-		scene_.reset(nextScene_);
-		nextScene_ = nullptr;
-
-		//シーンマネージャをセット
-		scene_->SetSceneManager(this);
-
-		//次シーンを初期化する
-		scene_->Initialize();
-
+	if (!scene_) 
+	{
+		ChangeSceneProcess();
 	}
+}
+
+void SceneManager::ChangeSceneProcess()
+{
+	//シーン切り替え
+	scene_ = std::move(nextScene_);
+	nextScene_.reset();
+
+	//シーンマネージャをセット
+	scene_->SetSceneManager(this);
+
+	//次シーンを初期化する
+	scene_->Initialize();
 }

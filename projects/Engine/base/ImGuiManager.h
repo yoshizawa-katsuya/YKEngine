@@ -2,26 +2,46 @@
 #include "SrvHeapManager.h"
 #include "DirectXCommon.h"
 
+/// <summary>
+/// ImGui管理クラス。
+/// ImGuiの初期化、描画を行う。
+/// </summary>
 class ImGuiManager
 {
 public:
 
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
 	~ImGuiManager();
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="dxCommon">DirectX共通クラス。</param>
+	/// <param name="winApp">ウィンドウアプリケーションクラス。</param>
+	/// <param name="srvHeapManager">SRVヒープマネージャークラス。</param>
 	void Initialize(DirectXCommon* dxCommon, WinApp* winApp, SrvHeapManager* srvHeapManager);
 
-	//ImGui受付開始
+	/// <summary>
+	/// ImGui受付開始。
+	/// </summary>
 	void Begin();
 
-	//ImGui受付終了
+	/// <summary>
+	/// ImGui受付終了。
+	/// </summary>
 	void End();
 
-	//画面への描画
+	/// <summary>
+	/// 描画。
+	/// </summary>
 	void Draw();
 
 private:
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize();
 
 	DirectXCommon* dxCommon_;

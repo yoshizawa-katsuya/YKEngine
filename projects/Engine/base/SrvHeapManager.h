@@ -1,35 +1,88 @@
 #pragma once
 #include "DirectXCommon.h"
 #include <mutex>
+#include <queue>
 
-//SRV管理
+/// <summary>
+/// SRVヒープ管理クラス。
+/// SRVヒープの生成、SRVの生成、SRVヒープの管理を行う。
+/// SRVヒープは1つのみ生成し、SRVは最大512個まで生成可能。
+/// </summary>
 class SrvHeapManager
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
+	~SrvHeapManager();
+
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="dxCommon">DirectXCommonのポインタ</param>
 	void Initialize(DirectXCommon* dxCommon);
 
-	//描画前処理
+	/// <summary>
+	/// 描画前処理。
+	/// </summary>
 	void PreDraw();
 
-	// デスクリプタテーブルをセット
+	/// <summary>
+	/// グラフィックスコマンドリストにSRVヒープをセット。
+	/// </summary>
+	/// <param name="RootParameterIndex">ルートパラメータのインデックス</param>
+	/// <param name="srvIndex">SRVのインデックス</param>
 	void SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uint32_t srvIndex);
 
-	//確保関数
+	/// <summary>
+	/// SRVの割り当て。
+	/// </summary>
+	/// <returns>割り当てたSRVのインデックス</returns>
 	uint32_t Allocate();
 
-	//確保可能チェック
+	/// <summary>
+	/// srvIndexの解放処理。
+	/// </summary>
+	/// <param name="srvIndex">解放したいsrvIndex</param>
+	void Free(uint32_t srvIndex);
+
+	/// <summary>
+	/// SRVヒープの空き確認。
+	/// </summary>
+	/// <returns>空きがあればtrue、なければfalse</returns>
 	bool Check();
 
-	//SRV作成（テクスチャ用）
+	/// <summary>
+	/// SRV生成（Texture2D用）
+	/// </summary>
+	/// <param name="srvIndex">SRVのインデックス</param>
+	/// <param name="pResource">SRVを作成するリソース</param>
+	/// <param name="metadata">テクスチャのメタデータ</param>
 	void CreateSRVforTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DirectX::TexMetadata& metadata);
 
-	//SRV生成（Structured Buffer用）
+	/// <summary>
+	/// SRV生成（StructuredBuffer用）
+	/// </summary>
+	/// <param name="srvIndex">SRVのインデックス</param>
+	/// <param name="pResource">SRVを作成するリソース</param>
+	/// <param name="numElements">要素数</param>
+	/// <param name="structureByteStride">構造体のバイトサイズ</param>
 	void CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
 
-	//SRV作成(RenderTexture用)
+	/// <summary>
+	/// SRV生成（RenderTexture用）
+	/// </summary>
+	/// <param name="srvIndex">SRVのインデックス</param>
+	/// <param name="pResource">SRVを作成するリソース</param>
 	void CreateSRVforRenderTexture(uint32_t srvIndex, ID3D12Resource* pResource);
+
+	/// <summary>
+	/// SRV生成（DepthTexture用）
+	/// </summary>
+	/// <param name="srvIndex">SRVのインデックス</param>
+	/// <param name="pResource">SRVを作成するリソース</param>
+	void CreateSRVforDepthTexture(uint32_t srvIndex, ID3D12Resource* pResource);
 
 	ID3D12DescriptorHeap* GetDescriptorHeap() { return descriptorHeap_.Get(); }
 
@@ -38,11 +91,15 @@ public:
 	/// <summary>
 	/// SRVの指定番号のCPUデスクリプタハンドルを取得
 	/// </summary>
+	/// <param name="index">SRVのインデックス</param>
+	/// <returns>CPUデスクリプタハンドル</returns>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
 
 	/// <summary>
 	/// SRVの指定番号のGPUデスクリプタハンドルを取得
 	/// </summary>
+	/// <param name="index">SRVのインデックス</param>
+	/// <returns>GPUデスクリプタハンドル</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
 
 	// 最大SRV数
@@ -59,8 +116,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
 
 	//次に使用するSRVインデックス
-	uint32_t useIndex = 0;
+	uint32_t useIndex_ = 0;
 
+	//SRVの空きリスト
+	std::queue<uint32_t> freeList_;
 
 	std::mutex mutex_;
 };

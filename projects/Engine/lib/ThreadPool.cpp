@@ -1,10 +1,11 @@
 #include "ThreadPool.h"
 #include <cassert>
 
+
 ThreadPool* ThreadPool::GetInstance()
 {
-    static ThreadPool instance;
-    return &instance;
+	static ThreadPool instance;
+	return &instance;
 }
 
 void ThreadPool::Initlaize()
@@ -12,10 +13,13 @@ void ThreadPool::Initlaize()
     isStop_ = false;
     activeTasks_ = 0;
 
+	// ハードウェアのスレッド数に基づいてワーカースレッドを作成
     uint32_t numThreads = std::thread::hardware_concurrency() - 1;
     assert(numThreads > 0);
-
-    for (size_t i = 0; i < numThreads; ++i) {
+    
+	// ワーカースレッドを生成して開始
+    for (size_t i = 0; i < numThreads; ++i) 
+    {
         workers_.emplace_back([this] { worker(); });
     }
 }
@@ -28,12 +32,15 @@ void ThreadPool::Finalize()
     }
     condition_.notify_all();
 
-    for (std::thread& worker : workers_) {
+	// すべてのワーカースレッドが終了するのを待つ
+    for (std::thread& worker : workers_) 
+    {
         worker.join();
     }
+
 }
 
-void ThreadPool::enqueueTask(std::function<void()> task) {
+void ThreadPool::enqueueTask(const std::function<void()>& task) {
     {
         std::unique_lock<std::mutex> lock(queueMutex_);
         tasks_.push(task);

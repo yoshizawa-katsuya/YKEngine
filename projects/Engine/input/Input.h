@@ -10,101 +10,189 @@
 
 using namespace Microsoft::WRL;
 
-//入力
+/// <summary>
+/// 入力クラス。
+/// キーボード、マウス、ゲームパッドの入力を管理する。
+/// 押した瞬間、押している、離した瞬間、押しっぱなしをチェックできる。
+/// </summary>
 class Input
 {
 public:
 	
-	//シングルトンインスタンスの取得
+	/// <summary>
+	/// シングルトンインスタンスの取得。
+	/// </summary>
+	/// <returns>入力クラスのインスタンス</returns>
 	static Input* GetInstance();
 
-	//終了
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
 	void Finalize();
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="winApp">ウィンドウアプリケーションクラス</param>
 	void Initialize(WinApp* winApp);
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// キーの押下をチェック
+	/// キーの押下をチェック。
 	/// </summary>
 	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
-	/// <returns>押されているか</returns>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
 	bool PushKey(BYTE keyNumber);
 
 	/// <summary>
-	/// キーの押した瞬間をチェック
+	/// キーの押した瞬間をチェック。
 	/// </summary>
 	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
-	/// <returns>トリガーか</returns>
+	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
 	bool TriggerKey(BYTE keyNumber);
 
 	/// <summary>
-	/// キーの離した瞬間をチェック
+	/// キーの離した瞬間をチェック。
 	/// </summary>
 	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
-	/// <returns>トリガーか</returns>
+	/// <returns>離した瞬間であればtrue。そうでなければfalse。</returns>
 	bool ReleaseKey(BYTE keyNumber);
 
 	/// <summary>
-	/// キーを押しっぱなしにしているかチェック
+	/// キーを押しっぱなしにしているかチェック。
 	/// </summary>
 	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
-	/// <returns>トリガーか</returns>
+	/// <returns>押しっぱなしであればtrue。そうでなければfalse。</returns>
 	bool HoldKey(BYTE keyNumber);
 
+	/// <summary>
+	/// マウスを左クリックしているかチェック。
+	/// </summary>
+	/// <returns>左クリックしていればtrue。そうでなければfalse。</returns>
 	bool PushMouseLeft();
 
+	/// <summary>
+	/// マウスを左クリックした瞬間かチェック。
+	/// </summary>
+	/// <returns>左クリックした瞬間であればtrue。そうでなければfalse。</returns>
 	bool TrigerMouseLeft();
 
+	/// <summary>
+	/// マウスの左クリックを離した瞬間かチェック。
+	/// </summary>
+	/// <returns>左クリックを離した瞬間であればtrue。そうでなければfalse。</returns>
 	bool ReleaseMouseLeft();
 
-	//マウスを左クリックし続けているかをチェック
+	/// <summary>
+	/// マウスの左クリックを押し続けているかチェック。
+	/// </summary>
+	/// <returns>左クリックを押し続けていればtrue。そうでなければfalse。</returns>
 	bool HoldMouseLeft();
 
+	/// <summary>
+	/// マウスを中央(マウスホイール)クリックしているかチェック。
+	/// </summary>
+	/// <returns>中央クリックしていればtrue。そうでなければfalse。</returns>
 	bool PushMouseCenter();
 
+	/// <summary>
+	/// マウスホイールを回転した量を取得。
+	/// </summary>
+	/// <returns>マウスホイールの回転量。正の値で前方、負の値で後方。</returns>
 	float GetMouseWheel();
 
+	/// <summary>
+	/// マウスの移動量を取得。
+	/// </summary>
+	/// <returns>マウスの移動量ベクトル。</returns>
 	Vector2 GetMouseVelocity();
 
+	/// <summary>
+	/// マウスの座標を取得。
+	/// ウィンドウ内での座標系。
+	/// </summary>
+	/// <returns>マウスの座標。</returns>
 	Vector2 GetMousePosition();
 
+	/// <summary>
+	/// 前フレームのキーの押下をチェック。
+	/// </summary>
+	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
 	bool IsPushKeyPre(BYTE keyNumber);
 
-	//ゲームパッドのボタンを押しているかチェック
+	/// <summary>
+	/// ゲームパッドのボタンを押しているかをチェック。
+	/// </summary>
+	/// <param name="xinput">どのボタンか(XINPUT_GAMEPAD_A等)</param>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
 	bool PushButton(uint32_t xinput);
 
-	//ゲームパッドのボタンを押した瞬間をチェック
+	/// <summary>
+	/// ゲームパッドのボタンを押した瞬間をチェック。
+	/// </summary>
+	/// <param name="xinput">どのボタンか(XINPUT_GAMEPAD_A等)</param>
+	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
 	bool TriggerButton(uint32_t xinput);
 
-	//ゲームパッドのボタンを離した瞬間をチェック
+	/// <summary>
+	/// ゲームパッドのボタンを離した瞬間をチェック。
+	/// </summary>
+	/// <param name="xinput">どのボタンか(XINPUT_GAMEPAD_A等)</param>
+	/// <returns>離した瞬間であればtrue。そうでなければfalse。</returns>
 	bool ReleaseButton(uint32_t xinput);
 
-	//右トリガーを押した瞬間をチェック
+	/// <summary>
+	/// ゲームパッドの右トリガーを押した瞬間をチェック。
+	/// </summary>
+	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
 	bool TrigerRT();
 
-	//ゲームパッドのボタンを押し続けているかをチェック
+	/// <summary>
+	/// ゲームパッドのボタンを押しっぱなしにしているかチェック。
+	/// </summary>
+	/// <param name="xinput">どのボタンか(XINPUT_GAMEPAD_A等)</param>
+	/// <returns>押しっぱなしであればtrue。そうでなければfalse。</returns>
 	bool HoldButton(uint32_t xinput);
 
-	//左スティックのX方向の入力。0.0f~1.0fの範囲
+	/// <summary>
+	/// 左スティックのX方向の入力。-1.0f~1.0fの範囲。
+	/// </summary>
+	/// <returns>左スティックのX方向の入力値。</returns>
 	float GetLeftStickX();
 
-	//左スティックのY方向の入力。0.0f~1.0fの範囲
+	/// <summary>
+	/// 左スティックのY方向の入力。-1.0f~1.0fの範囲。
+	/// </summary>
+	/// <returns>左スティックのY方向の入力値。</returns>
 	float GetLeftStickY();
 
-	//左スティックを下に倒した瞬間をチェック
+	/// <summary>
+	/// 左スティックを下に倒した瞬間をチェック。
+	/// </summary>
+	/// <returns>下に倒した瞬間であればtrue。そうでなければfalse。</returns>
 	bool TrigerLeftStickDown();
 
-	//左スティックを上に倒した瞬間をチェック
+	/// <summary>
+	/// 左スティックを上に倒した瞬間をチェック。
+	/// </summary>
+	/// <returns>上に倒した瞬間であればtrue。そうでなければfalse。</returns>
 	bool TrigerLeftStickUp();
 
-	//右スティックのX方向の入力。0.0f~1.0fの範囲
+	/// <summary>
+	/// 右スティックのX方向の入力。-1.0f~1.0fの範囲。
+	/// </summary>
+	/// <returns>右スティックのX方向の入力値。</returns>
 	float GetRightStickX();
 
-	//右スティックのY方向の入力。0.0f~1.0fの範囲
+	/// <summary>
+	/// 右スティックのY方向の入力。-1.0f~1.0fの範囲。
+	/// </summary>
+	/// <returns>右スティックのY方向の入力値。</returns>
 	float GetRightStickY();
 
 private:
@@ -132,7 +220,11 @@ private:
 	Input(Input&) = default;
 	Input& operator=(Input&) = default;
 
-	//ゲームパッドの状態を得る
+	/// <summary>
+	/// ゲームパッドの状態更新。
+	/// </summary>
+	/// <param name="padNo">パッド番号</param>
+	/// <returns>接続されていればtrue。そうでなければfalse。</returns>
 	bool GamePadUpdate(uint32_t padNo = 0);
 
 	//WindowsAPI
@@ -149,7 +241,7 @@ private:
 	DIMOUSESTATE mouseState_;
 	DIMOUSESTATE preMouseState_;
 
-	const int32_t deadZone_ = 8000;
+	const int32_t kDeadZone_ = 8000;
 	XINPUT_STATE gamePadState_;
 	XINPUT_STATE preGamePadState_;
 

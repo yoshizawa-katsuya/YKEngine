@@ -3,26 +3,33 @@
 class Camera;
 class Input;
 
-
+/// <summary>
+/// デバッグ用カメラ。
+/// マウスで操作可能。
+/// </summary>
 class DebugCamera
 {
 public:
 
-	//初期化
+	/// <summary>
+	/// 初期化。
+	/// デバッグカメラとして使用するカメラと入力を指定する。
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <param name="input">入力</param>
 	void Initialize(Camera* camera, Input* input);
 
-	//更新
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update();
 
-	void ViewMatrixUpdate();
-
-	void AddRotateX(float rotateX);
-
-	void AddRotateY(float rotateY);
-
-	void AddRotateZ(float rotateZ);
-
 private:
+
+	/// <summary>
+	/// ビュー行列の更新。
+	/// </summary>
+	void ViewMatrixUpdate();
 
 	Camera* camera_;
 	Input* input_;

@@ -19,18 +19,37 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 
+/// <summary>
+/// ゲームシーン。
+/// ゲームのメイン処理を行う。
+/// </summary>
 class GameScene : public BaseScene
 {
 public:
 
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~GameScene() override;
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
 	void Initialize() override;
 
+	/// <summary>
+	/// 更新。
+	/// </summary>
 	void Update() override;
 
+	/// <summary>
+	/// 描画。
+	/// </summary>
 	void Draw() override;
 
+	/// <summary>
+	/// 終了。
+	/// </summary>
 	void Finalize() override;
 
 private:
@@ -57,13 +76,13 @@ private:
 	bool isActiveDebugCamera_ = false;
 
 	//平行光源
-	std::unique_ptr<DirectionalLight> directionalLight_;
+	DirectionalLight directionalLight_;
 
 	//点光源
-	std::unique_ptr<PointLight> pointLight_;
+	PointLight pointLight_;
 
 	//スポットライト
-	std::unique_ptr<SpotLight> spotLight_;
+	SpotLight spotLight_;
 
 	//モデル
 	std::shared_ptr<BaseModel> modelPlayer_;

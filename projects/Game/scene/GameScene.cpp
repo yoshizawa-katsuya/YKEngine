@@ -1,11 +1,14 @@
 #include "GameScene.h"
 #include "dx12.h"
-#include "imgui/imgui.h"
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
 #include "RigidModel.h"
 #include "SkinModel.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
 
 GameScene::~GameScene() {
 	//Finalize();
@@ -18,18 +21,6 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
-
-	//平行光源の生成
-	directionalLight_ = std::make_unique<DirectionalLight>();
-	directionalLight_->Initialize();
-	
-	//点光源の生成
-	pointLight_ = std::make_unique<PointLight>();
-	pointLight_->Initialize();
-	
-	//スポットライトの生成
-	spotLight_ = std::make_unique<SpotLight>();
-	spotLight_->Initialize();
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
@@ -96,11 +87,10 @@ void GameScene::Initialize() {
 	worldTransform2_.translation_.x = 1.0f;
 	worldTransform2_.UpdateMatrix();
 	*/
+
 }
 
 void GameScene::Update() {
-
-	
 
 	//カメラの更新
 	camera_->Update();
@@ -113,9 +103,9 @@ void GameScene::Update() {
 	player_->Update();
 
 	modelPlatform_->LightPreUpdate();
-	modelPlatform_->DirectionalLightUpdate(directionalLight_->GetDirectionalLightData());
-	//modelPlatform_->PointLightUpdate(pointLight_->GetPointLightData());
-	//modelPlatform_->SpotLightUpdate(spotLight_->GetSpotLightData());
+	modelPlatform_->DirectionalLightUpdate(directionalLight_);
+	/*modelPlatform_->PointLightUpdate(pointLight_);
+	modelPlatform_->SpotLightUpdate(spotLight_);*/
 
 	/*
 	objects_->PreUpdate();
@@ -134,7 +124,7 @@ void GameScene::Update() {
 		sceneManager_->ChengeScene("TitleScene");
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 
 	ImGui::Begin("Window");
@@ -147,32 +137,32 @@ void GameScene::Update() {
 	}
 
 	if (ImGui::TreeNode("DirectionalLight")) {
-		ImGui::ColorEdit4("color", &directionalLight_->GetColor().x);
-		ImGui::DragFloat3("direction", &directionalLight_->GetDirection().x, 0.01f);
-		ImGui::DragFloat("intensity", &directionalLight_->GetIntensity(), 0.01f);
+		ImGui::ColorEdit4("color", &directionalLight_.color.x);
+		ImGui::DragFloat3("direction", &directionalLight_.direction.x, 0.01f);
+		ImGui::DragFloat("intensity", &directionalLight_.intensity, 0.01f);
 
 		ImGui::TreePop();
 	}
 
 	if (ImGui::TreeNode("PointLight")) {
-		ImGui::ColorEdit4("color", &pointLight_->GetColor().x);
-		ImGui::DragFloat3("position", &pointLight_->GetPosition().x, 0.01f);
-		ImGui::DragFloat("intensity", &pointLight_->GetIntensity(), 0.01f);
-		ImGui::DragFloat("radius", &pointLight_->GetRadius(), 0.01f);
-		ImGui::DragFloat("decay", &pointLight_->GetDecay(), 0.01f);
+		ImGui::ColorEdit4("color", &pointLight_.color.x);
+		ImGui::DragFloat3("position", &pointLight_.position.x, 0.01f);
+		ImGui::DragFloat("intensity", &pointLight_.intensity, 0.01f);
+		ImGui::DragFloat("radius", &pointLight_.radius, 0.01f);
+		ImGui::DragFloat("decay", &pointLight_.decay, 0.01f);
 
 		ImGui::TreePop();
 	}
 
 	if (ImGui::TreeNode("SpotLight")) {
-		ImGui::ColorEdit4("color", &spotLight_->GetColor().x);
-		ImGui::DragFloat3("position", &spotLight_->GetPosition().x, 0.01f);
-		ImGui::DragFloat("intensity", &spotLight_->GetIntensity(), 0.01f);
-		ImGui::DragFloat3("direction", &spotLight_->GetDirection().x, 0.01f);
-		ImGui::DragFloat("distance", &spotLight_->GetDistance(), 0.01f);
-		ImGui::DragFloat("decay", &spotLight_->GetDecay(), 0.01f);
-		ImGui::DragFloat("cosAngle", &spotLight_->GetCosAngle(), 0.01f);
-		ImGui::DragFloat("cosFalloffStart", &spotLight_->GetCosFalloffStart(), 0.01f);
+		ImGui::ColorEdit4("color", &spotLight_.color.x);
+		ImGui::DragFloat3("position", &spotLight_.position.x, 0.01f);
+		ImGui::DragFloat("intensity", &spotLight_.intensity, 0.01f);
+		ImGui::DragFloat3("direction", &spotLight_.direction.x, 0.01f);
+		ImGui::DragFloat("distance", &spotLight_.distance, 0.01f);
+		ImGui::DragFloat("decay", &spotLight_.decay, 0.01f);
+		ImGui::DragFloat("cosAngle", &spotLight_.cosAngle, 0.01f);
+		ImGui::DragFloat("cosFalloffStart", &spotLight_.cosFalloffStart, 0.01f);
 
 		ImGui::TreePop();
 	}
@@ -202,7 +192,7 @@ void GameScene::Update() {
 	ImGui::End();
 		
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 	
 
 }

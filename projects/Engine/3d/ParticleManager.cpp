@@ -2,19 +2,31 @@
 #include "TextureManager.h"
 #include "Matrix.h"
 #include <numbers>
-#include "imgui/imgui.h"
 #include "TransformHelpers.h"
 #include "Lerp.h"
+#include "Random.h"
+#include "RootParams.h"
+
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
+
+ParticleManager* ParticleManager::instance_ = nullptr;
 
 ParticleManager* ParticleManager::GetInstance()
 {
-	static ParticleManager instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new ParticleManager();
+	}
+	return instance_;
 }
 
 void ParticleManager::Finalize()
 {
-
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer)
@@ -24,15 +36,8 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHea
 	srvHeapManager_ = srvHeapManager;
 	primitiveDrawer_ = primitiveDrawer;
 
-	std::mt19937 randomEngine(seedGenerator_());
-	randomEngine_ = randomEngine;
+	randomEngine_ = Random::GetInstance()->GetRandomEnginePtr();
 
-	//Create();
-	/*
-	accelerationField_.accerelation = { 15.0f, 0.0f, 0.0f };
-	accelerationField_.area.min = { -1.0f, -1.0f, -1.0f };
-	accelerationField_.area.max = { 1.0f, 1.0f, 1.0f };
-	*/
 }
 
 void ParticleManager::Update(Camera* camera, AccelerationField* accelerationField)
@@ -81,14 +86,14 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				Matrix4x4 scaleMatrix{};
 				if (particleGroupIterator->second.behavior->isScaleToDisappear) 
 				{
+					//時間経過で小さくなる
 					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
-					//消えるときにScaleを小さくする
 					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, t));
 				}
 				else if (particleGroupIterator->second.behavior->isScaleToAppear)
 				{
+					//時間経過で大きくなる
 					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
-					//出現するときにScaleを大きくする
 					scaleMatrix = MakeScaleMatrix(Lerp({ 0.0f, 0.0f, 0.0f }, particleIterator->transform.scale, t));
 				}
 				else
@@ -96,11 +101,14 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 					scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
 				}
 				Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translation);
+
+				//回転を更新
+				particleIterator->transform.rotation += particleIterator->rotationVelocity;
 				Matrix4x4 rotateMatrix = MakeRotateMatrix(particleIterator->transform.rotation);
-				//Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
 				Matrix4x4 worldMatrix;
 				if (particleGroupIterator->second.behavior->isUseBillboard) 
 				{
+					//カメラの方向を向く
 					worldMatrix = scaleMatrix * rotateMatrix * billboardMatrix * translateMatrix;
 				}
 				else
@@ -113,9 +121,13 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].World = worldMatrix;
 				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color = particleIterator->color;
 
-				float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
-				particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color.w = alpha;
-
+				if (particleGroupIterator->second.behavior->isTimeFadeOut)
+				{
+					//時間経過で透明になる
+					float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+					particleGroupIterator->second.instancingData[particleGroupIterator->second.numInstance].color.a = alpha;
+				}
+				
 				++particleGroupIterator->second.numInstance;
 			}
 
@@ -125,46 +137,31 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("ParticleManager");
 	ImGui::Checkbox("useAccelerationField", &useAccelerationField_);
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 
 void ParticleManager::Draw()
 {
 
-	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kBlendModeAddParticle);
-
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	//dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-
-	//マテリアルのCBufferの場所を設定
-	//dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
 	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
 		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) {
 
+		primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), particleDrawModes_[static_cast<int32_t>(particleGroupIterator->second.behavior->drawMode)]);
 
-		//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-		//TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(particleGroupIterator->second.textureHandle);
 		
 		//instancing用のDataを読むためにStructBufferのSRVを設定する
-		srvHeapManager_->SetGraphicsRootDescriptorTable(1, particleGroupIterator->second.instancingSrvIndex);
+		srvHeapManager_->SetGraphicsRootDescriptorTable(static_cast<size_t>(ParticleRootParam::kParticleForGPU), particleGroupIterator->second.instancingSrvIndex);
 		
 		particleGroupIterator->second.model->InstancingDraw(particleGroupIterator->second.numInstance, particleGroupIterator->second.textureHandle);
-
-		//描画!6頂点のポリゴンを、numInstanceだけInstance描画を行う
-		//dxCommon_->GetCommandList()->DrawInstanced(6, particleGroupIterator->second.numInstance, 0, 0);
-		//dxCommon_->GetCommandList()->DrawIndexedInstanced(6, particleGroupIterator->second.numInstance, 0, 0, 0);
-
 
 	}
 
@@ -194,10 +191,11 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 	particleGroup.instancingResouce->Map(0, nullptr, reinterpret_cast<void**>(&particleGroup.instancingData));
 
 	//単位行列を書き込んでおく
-	for (uint32_t index = 0; index < particleGroup.kNumMaxInstance; ++index) {
+	for (uint32_t index = 0; index < particleGroup.kNumMaxInstance; ++index)
+	{
 		particleGroup.instancingData[index].WVP = MakeIdentity4x4();
 		particleGroup.instancingData[index].World = MakeIdentity4x4();
-		particleGroup.instancingData[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		particleGroup.instancingData[index].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	particleGroup.instancingSrvIndex = srvHeapManager_->Allocate();
@@ -207,19 +205,51 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 }
 
 void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
+	const Color& color, const EmitterRangeParams& rangeParams)
 {
 	assert(particleGroups_.contains(name));
-	for (uint32_t i = 0; i < count; ++i) {
-		particleGroups_[name].particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams, behavior));
+	ParticleGroup& particleGroup = particleGroups_[name];
+	for (uint32_t i = 0; i < count; ++i) 
+	{
+		particleGroup.particles.push_back(MakeNewParticle(transform, randomFlags, color, rangeParams, *particleGroup.behavior.get()));
+	}
+}
+
+void ParticleManager::ClearParticles(const std::string name)
+{
+	assert(particleGroups_.contains(name));
+	ParticleGroup& particleGroup = particleGroups_[name];
+	particleGroup.particles.clear();
+	particleGroup.numInstance = 0;
+}
+
+void ParticleManager::ClearAllParticles()
+{
+	for (std::unordered_map<std::string, ParticleGroup>::iterator particleGroupIterator = particleGroups_.begin();
+		particleGroupIterator != particleGroups_.end(); ++particleGroupIterator) 
+	{
+		particleGroupIterator->second.particles.clear();
+		particleGroupIterator->second.numInstance = 0;
 	}
 }
 
 Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
-	const Vector4& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
+	const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior)
 {
 
 	Particle particle{};
+
+	//生存時間
+	if (randomFlags.lifeTime)
+	{
+		//ランダムな生存時間を設定
+		std::uniform_real_distribution<float> distTime(rangeParams.lifeTime.min, rangeParams.lifeTime.max);
+		particle.lifeTime = distTime(*randomEngine_);
+	}
+	else
+	{
+		particle.lifeTime = 1.0f;
+	}
 
 	if (randomFlags.velocity)
 	{
@@ -227,7 +257,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		std::uniform_real_distribution<float> distributionY(rangeParams.velocity.min.y, rangeParams.velocity.max.y);
 		std::uniform_real_distribution<float> distributionZ(rangeParams.velocity.min.z, rangeParams.velocity.max.z);
 
-		particle.velocity = { distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		particle.velocity = { distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 
 		if (behavior.isConstantVelocity) 
 		{
@@ -239,13 +269,20 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		particle.velocity = { 0.0f, 0.0f, 0.0f };
 	}
 
+	if (randomFlags.speed)
+	{
+		std::uniform_real_distribution<float> distSpeed(rangeParams.speed.min, rangeParams.speed.max);
+		float randomSpeed = distSpeed(*randomEngine_);
+		particle.velocity = Normalize(particle.velocity) * randomSpeed;
+	}
+
 	if (randomFlags.scale) 
 	{
 		std::uniform_real_distribution<float> distributionX(rangeParams.scale.min.x, rangeParams.scale.max.x);
 		std::uniform_real_distribution<float> distributionY(rangeParams.scale.min.y, rangeParams.scale.max.y);
 		std::uniform_real_distribution<float> distributionZ(rangeParams.scale.min.z, rangeParams.scale.max.z);
 
-		Vector3 randomscale{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		Vector3 randomscale{ distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 		particle.transform.scale = transform.scale + randomscale;
 	}
 	else
@@ -258,7 +295,7 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		std::uniform_real_distribution<float> distributionY(rangeParams.rotate.min.y, rangeParams.rotate.max.y);
 		std::uniform_real_distribution<float> distributionZ(rangeParams.rotate.min.z, rangeParams.rotate.max.z);
 
-		Vector3 randomrotate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		Vector3 randomrotate{ distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 		particle.transform.rotation = transform.rotation + randomrotate;
 	}
 	else if (behavior.isFaceToVelocityDirection)
@@ -271,13 +308,22 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		particle.transform.rotation = transform.rotation;
 	}
 
+	if (randomFlags.rotationVelocity)
+	{
+		std::uniform_real_distribution<float> distributionX(rangeParams.rotationVelocity.min.x, rangeParams.rotationVelocity.max.x);
+		std::uniform_real_distribution<float> distributionY(rangeParams.rotationVelocity.min.y, rangeParams.rotationVelocity.max.y);
+		std::uniform_real_distribution<float> distributionZ(rangeParams.rotationVelocity.min.z, rangeParams.rotationVelocity.max.z);
+
+		particle.rotationVelocity = { distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
+	}
+
 	if (randomFlags.translate)
 	{
 		std::uniform_real_distribution<float> distributionX(rangeParams.translate.min.x, rangeParams.translate.max.x);
 		std::uniform_real_distribution<float> distributionY(rangeParams.translate.min.y, rangeParams.translate.max.y);
 		std::uniform_real_distribution<float> distributionZ(rangeParams.translate.min.z, rangeParams.translate.max.z);
 
-		Vector3 randomTranslate{ distributionX(randomEngine_), distributionY(randomEngine_), distributionZ(randomEngine_) };
+		Vector3 randomTranslate{ distributionX(*randomEngine_), distributionY(*randomEngine_), distributionZ(*randomEngine_) };
 		particle.transform.translation = transform.translation + randomTranslate;
 	}
 	else
@@ -285,24 +331,26 @@ Particle ParticleManager::MakeNewParticle(const EulerTransform& transform, const
 		particle.transform.translation = transform.translation;
 	}
 
+	if (behavior.isfixedDistance)
+	{
+		//発生位置から一定距離離す
+		particle.transform.translation = Normalize(particle.transform.translation - transform.translation) * behavior.distance + transform.translation;
+	}
+
+	if (behavior.isHeadCenter)
+	{
+		//発生位置から中心に向かう速度を設定
+		particle.velocity = (transform.translation - particle.transform.translation) / particle.lifeTime;
+	}
+
 	if (randomFlags.color)
 	{
 		std::uniform_real_distribution<float> distcolor(0.0f, 1.0f);
-		particle.color = { distcolor(randomEngine_), distcolor(randomEngine_), distcolor(randomEngine_), 1.0f };
+		particle.color = { distcolor(*randomEngine_), distcolor(*randomEngine_), distcolor(*randomEngine_), 1.0f };
 	}
 	else 
 	{
 		particle.color = color;
-	}
-
-	if (randomFlags.lifeTime)
-	{
-		std::uniform_real_distribution<float> distTime(rangeParams.lifeTime.min, rangeParams.lifeTime.max);
-		particle.lifeTime = distTime(randomEngine_);
-	}
-	else
-	{
-		particle.lifeTime = 1.0f;
 	}
 	
 	particle.currentTime = 0.0f;

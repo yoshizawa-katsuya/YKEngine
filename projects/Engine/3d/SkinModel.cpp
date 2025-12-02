@@ -3,6 +3,7 @@
 #include "Matrix.h"
 #include "Animation.h"
 #include "Camera.h"
+#include "RootParams.h"
 
 SkinModel::~SkinModel()
 {
@@ -10,49 +11,42 @@ SkinModel::~SkinModel()
 
 void SkinModel::Draw(bool usedMaterial)
 {
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
 
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	if (!usedMaterial)
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle_);
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SkinModelRootParam::kTexture), textureHandle_);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。	
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 }
 
 void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
-	//modelPlatform_->ModelDraw(worldViewProjectionMatrix, worldTransform.worldMatrix_, camera);
-
 	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	if (!usedMaterial)
 	{
 		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 
 	}
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である。
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(textureHandle);
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SkinModelRootParam::kTexture), textureHandle);
 
-	//描画1(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-		//commandList_->DrawIndexedInstanced((kSubdivision * kSubdivision * 6), 1, 0, 0, 0);
-	//modelPlatform_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	//描画1(DrawCall/ドローコール)。
 	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
 
 }
 
 void SkinModel::SetSkinCluster(const SkinCluster& skinCluster)
 {
-
+	//頂点バッファビュー配列を作成
 	std::array<D3D12_VERTEX_BUFFER_VIEW, 2> vbvs = {
 			vertexBufferView_,
 			skinCluster.influenceBufferView
@@ -64,44 +58,11 @@ void SkinModel::SetSkinCluster(const SkinCluster& skinCluster)
 
 }
 
-void SkinModel::LoadModelFile(const std::string& directoryPath, const std::string& filename)
+void SkinModel::LoadMeshData(aiMesh* mesh)
 {
-	modelData_ = std::make_unique<ModelData>();
+	BaseModel::LoadMeshData(mesh);
 
-	Assimp::Importer importer;
-	std::string filepath = directoryPath + "/" + filename;
-	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
-
-	assert(scene->HasMeshes());	//メッシュがないのは対応しない
-
-	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
-		aiMesh* mesh = scene->mMeshes[meshIndex];
-		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
-		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
-		modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
-
-		LoadVertexData(mesh);
-
-		LoadIndexData(mesh);
-
-		LoadSkinCluster(mesh);
-	}
-
-	//現状だと1つのモデルに複数のテクスチャをつけるのは不可能
-	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
-		aiMaterial* material = scene->mMaterials[materialIndex];
-		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
-			aiString textureFilePath;
-			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			modelData_->material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
-			break;
-		}
-		else {
-			modelData_->material.textureFilePath = "./resources/white.png";
-		}
-	}
-
-	modelData_->rootNode = ReadNode(scene->mRootNode);
+	LoadSkinCluster(mesh);
 
 }
 

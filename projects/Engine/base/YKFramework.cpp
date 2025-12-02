@@ -1,5 +1,6 @@
 #include "YKFramework.h"
 #include "OffscreenRenderer.h"
+#include "Random.h"
 
 void YKFramework::Initialize()
 {
@@ -26,12 +27,12 @@ void YKFramework::Initialize()
 	offscreenRenderer_ = OffscreenRenderer::GetInstance();
 	offscreenRenderer_->Initialize(srvHeapManager_.get());
 
-#ifdef _DEBUG
+#ifdef  USE_IMGUI
 
 	imGuiManager_ = std::make_unique<ImGuiManager>();
 	imGuiManager_->Initialize(dxCommon_, winApp_.get(), srvHeapManager_.get());
 
-#endif // _DEBUG
+#endif //  USE_IMGUI
 
 	
 	//入力の初期化
@@ -49,6 +50,9 @@ void YKFramework::Initialize()
 	spritePlatform_ = SpritePlatform::GetInstance();
 	spritePlatform_->Initialize(dxCommon_, primitiveDrawer_.get());
 
+	//乱数クラスの初期化
+	Random::GetInstance()->Initialize();
+
 	//ParticleManagerの初期化
 	ParticleManager::GetInstance()->Initialize(dxCommon_, srvHeapManager_.get(), primitiveDrawer_.get());
 
@@ -56,13 +60,26 @@ void YKFramework::Initialize()
 	modelPlatform_ = ModelPlatform::GetInstance();
 	modelPlatform_->Initialize(dxCommon_, primitiveDrawer_.get(), srvHeapManager_.get());
 
+	globalVariables_ = GlobalVariables::GetInstance();
+	globalVariables_->LoadFiles();
+
 	//シーンマネージャの生成
-	sceneManager_ = SceneManager::GetInstance();
+	sceneManager_ = std::make_unique<SceneManager>();
 
 }
 
 void YKFramework::Finalize()
 {
+	modelPlatform_->Finalize();
+
+	ParticleManager::GetInstance()->Finalize();
+
+	TextureManager::GetInstance()->Finalize();
+
+	offscreenRenderer_->Finalize();
+
+	audio_->Finalize();
+
 	dxCommon_->Finalize();
 
 	threadPool_->Finalize();
@@ -76,17 +93,19 @@ void YKFramework::Update()
 		isEndReqest_ = true;
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//imGuiに、フレームが始まる旨を伝える
 	imGuiManager_->Begin();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	
 
 	//入力の更新
 	input_->Update();
+
+	globalVariables_->Update();
 
 	sceneManager_->Update();
 
@@ -97,12 +116,12 @@ void YKFramework::EndFrame()
 
 	modelPlatform_->EndFrame();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	//ImGuiの内部コマンドを生成する
 	imGuiManager_->End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 

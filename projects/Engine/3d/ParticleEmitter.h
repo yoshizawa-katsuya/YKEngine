@@ -3,7 +3,15 @@
 #include "ParticleTypes.h"
 #include <memory>
 #include "BaseModel.h"
+#include "GlobalVariables.h"
+#include "Color.h"
 
+/// <summary>
+/// パーティクル生成クラス。
+/// パーティクルの発生数、発生頻度、ランダム化の有無、挙動などを管理する。
+/// GlobalVariablesクラスを通して、パーティクルエディターとしての役割も担う。
+/// パーティクルの実体はParticleManagerクラスが管理する。
+/// </summary>
 class ParticleEmitter
 {
 public:
@@ -12,15 +20,30 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name = 'name'>パーティクルグループの名前</param>
-	/// <param name = 'count'>発生数</param>
-	/// <param name = 'frequency'>発生頻度</param>
-	ParticleEmitter(const std::string& name, uint32_t count, float frequency);
+	ParticleEmitter(const std::string& name);
 
+	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="textureHandle">テクスチャハンドル</param>
+	/// <param name="model">モデル</param>
 	void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model);
 
-	void Update(const Vector4& color = {1.0f, 1.0f, 1.0f, 1.0f});
+	/// <summary>
+	/// 更新。
+	/// 時間経過で発生頻度に達したらパーティクルを発生させる。
+	/// </summary>
+	void Update();
 
-	void Emit(const Vector4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+	/// <summary>
+	/// パーティクルを発生させる。
+	/// </summary>
+	void Emit();
+
+	/// <summary>
+	/// グローバル変数を適用する。
+	/// </summary>
+	void ApplyGlobalVariables();
 
 	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
 
@@ -68,7 +91,7 @@ public:
 
 	void SetSpeed(float speed) { behavior_->speed = speed; }
 
-	void SetIsScaleToDisappear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }
+	void SetIsScaleToDisAppear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }
 
 	void SetIsScaleToAppear(bool isScaleToAppear) { behavior_->isScaleToAppear = isScaleToAppear; }
 
@@ -78,6 +101,11 @@ public:
 
 	void SetCount(uint32_t count) { count_ = count; }
 
+	/// <summary>
+	/// 発生頻度の設定。
+	/// タイマーをリセットする。
+	/// </summary>
+	/// <param name="frequency">発生頻度</param>
 	void SetFrequency(float frequency);
 
 	Vector3& GetTranslate() { return transform_.translation; }
@@ -127,12 +155,20 @@ public:
 
 private:
 
+	/// <summary>
+	/// グローバル変数の初期化。
+	/// </summary>
+	void InitializeGlobalVariables();
+
+	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();	
+
 	std::string name_;
 	EulerTransform transform_; //!< エミッタのTransform
-	uint32_t count_;	//!< 発生数
-	float frequency_; //!<　発生頻度
+	uint32_t count_ = 3;	//!< 発生数
+	float frequency_ = 1.0f; //!<　発生頻度
 	float frequencyTime_; //!<頻度用時刻
 	const float kDeltaTime_ = 1.0f / 60.0f;
+	Color color_ = { 1.0f, 1.0f, 1.0f, 1.0f }; //!< 色
 
 	ParticleRandomizationFlags randomFlags_;
 

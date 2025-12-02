@@ -1,5 +1,9 @@
 #include "Player.h"
+#include "Rigid3dObject.h"
+
+#ifdef USE_IMGUI
 #include "imgui/imgui.h"
+#endif // USE_IMGUI
 #include "Rigid3dObject.h"
 #include "Skin3dObject.h"
 
@@ -20,7 +24,7 @@ void Player::Initialize(BaseModel* model, Animation* animation) {
 void Player::Update() {
 
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("Player");
 	if (ImGui::TreeNode("Model")) {
@@ -39,7 +43,7 @@ void Player::Update() {
 	ImGui::End();
 
 
-#endif // _DEBUG	
+#endif // USE_IMGUI	
 
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);

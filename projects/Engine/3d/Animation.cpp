@@ -22,7 +22,9 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 	for (uint32_t channelIndex = 0; channelIndex < animationAssimp->mNumChannels; ++channelIndex) {
 		aiNodeAnim* nodeAnimationAssimp = animationAssimp->mChannels[channelIndex];
 		NodeAnimation& nodeAnimation = nodeAnimations_[nodeAnimationAssimp->mNodeName.C_Str()];
-		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumPositionKeys; ++keyIndex) {
+		//位置、回転、拡縮のキーフレームをそれぞれ登録していく
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumPositionKeys; ++keyIndex) 
+		{
 			aiVectorKey& keyAssimp = nodeAnimationAssimp->mPositionKeys[keyIndex];
 			KeyframeVector3 keyframe;
 			keyframe.time = static_cast<float>(keyAssimp.mTime / animationAssimp->mTicksPerSecond);	//ここも秒に変換
@@ -30,7 +32,8 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 			nodeAnimation.translate.keyframes.push_back(keyframe);
 		}
 
-		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) {
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) 
+		{
 			aiQuatKey& keyAssimp = nodeAnimationAssimp->mRotationKeys[keyIndex];
 			KeyframeQuaternion keyframe;
 			keyframe.time = static_cast<float>(keyAssimp.mTime / animationAssimp->mTicksPerSecond);	//ここも秒に変換
@@ -38,7 +41,8 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 			nodeAnimation.rotate.keyframes.push_back(keyframe);
 		}
 
-		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex) {
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex)
+		{
 			aiVectorKey& keyAssimp = nodeAnimationAssimp->mScalingKeys[keyIndex];
 			KeyframeVector3 keyframe;
 			keyframe.time = static_cast<float>(keyAssimp.mTime / animationAssimp->mTicksPerSecond);	//ここも秒に変換

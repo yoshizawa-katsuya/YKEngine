@@ -2,15 +2,19 @@
 #include "Matrix.h"
 #include "ModelPlatform.h"
 #include "Animation.h"
+#include "RootParams.h"
 
 Skin3dObject::~Skin3dObject()
 {
+	srvHeapManager_->Free(srvIndex_);	//srvHeapManagerに登録されているSkinClusterのSRVを解放
 }
 
 void Skin3dObject::Initialize(BaseModel* model)
 {
 
 	Base3dObject::Initialize(model);
+
+	srvHeapManager_ = model_->GetModelPlatform()->GetSrvHeapManager();
 
 	CreateSkelton();
 
@@ -28,38 +32,14 @@ void Skin3dObject::AnimationUpdate(Animation* animation)
 	SkinClusterUpdate();
 }
 
-/*
-void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera)
-{
-
-	Base3dObject::Update(worldTransform, camera);
-
-	SkeletonUpdate();
-
-	SkinClusterUpdate();
-
-}
-
-void Skin3dObject::Update(const WorldTransform& worldTransform, Camera* camera, Animation* animation)
-{
-
-	ApplyAnimation(animation);
-
-	Update(worldTransform, camera);
-
-}
-*/
 void Skin3dObject::Draw()
 {
-	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, TransformationResource_->GetGPUVirtualAddress());
-
-	model_->SetSkinCluster(skinCluster_);
+	DrawCommonProcess();
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		SetMaterialBufferView();
 		model_->Draw(true);
 		return;
 	}
@@ -70,15 +50,12 @@ void Skin3dObject::Draw()
 
 void Skin3dObject::Draw(uint32_t textureHandle)
 {
-	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, TransformationResource_->GetGPUVirtualAddress());
-
-	model_->SetSkinCluster(skinCluster_);
+	DrawCommonProcess();
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		SetMaterialBufferView();
 		model_->Draw(textureHandle, true);
 		return;
 	}
@@ -163,7 +140,6 @@ void Skin3dObject::CreateSkinCluster()
 {
 
 	ModelPlatform* modelPlatform = model_->GetModelPlatform();
-	SrvHeapManager* srvHeapManager = modelPlatform->GetSrvHeapManager();
 	ModelData& modelData = model_->GetModelData();
 	uint32_t verticesNum = model_->GetVerticesNum();
 
@@ -173,10 +149,10 @@ void Skin3dObject::CreateSkinCluster()
 	skinCluster_.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 	skinCluster_.mappedPalette = { mappedPalette, skeleton_.joints.size() };	//spanを使ってアクセスするようにする
 
-	int32_t srvIndex = srvHeapManager->Allocate();
+	srvIndex_ = srvHeapManager_->Allocate();
 
-	skinCluster_.paletteSrvHandle.first = srvHeapManager->GetCPUDescriptorHandle(srvIndex);
-	skinCluster_.paletteSrvHandle.second = srvHeapManager->GetGPUDescriptorHandle(srvIndex);
+	skinCluster_.paletteSrvHandle.first = srvHeapManager_->GetCPUDescriptorHandle(srvIndex_);
+	skinCluster_.paletteSrvHandle.second = srvHeapManager_->GetGPUDescriptorHandle(srvIndex_);
 
 	//palette用のsrvを作成。StructuredBufferでアクセスできるようにする。
 	D3D12_SHADER_RESOURCE_VIEW_DESC palletteSrvDesc{};
@@ -244,7 +220,8 @@ void Skin3dObject::ApplyAnimation(Animation* animation)
 void Skin3dObject::SkeletonUpdate()
 {
 	//全てのJointを更新。親が若いので通常ループで処理可能になっている
-	for (Joint& joint : skeleton_.joints) {
+	for (Joint& joint : skeleton_.joints) 
+	{
 		joint.localMatrix = MakeAffineMatrix(joint.transform.scale, joint.transform.rotation, joint.transform.translation);
 		if (joint.parent) {	//親がいれば親の行列を掛ける
 			joint.skeletonSpaceMatrix = joint.localMatrix * skeleton_.joints[*joint.parent].skeletonSpaceMatrix;
@@ -257,11 +234,26 @@ void Skin3dObject::SkeletonUpdate()
 
 void Skin3dObject::SkinClusterUpdate()
 {
-	for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) {
+	for (size_t jointIndex = 0; jointIndex < skeleton_.joints.size(); ++jointIndex) 
+	{
 		assert(jointIndex < skinCluster_.inverseBindPoseMatrices.size());
+		//inverseBindPoseMatrixと現在のskeletonSpaceMatrixを掛け合わせて、mappedPaletteを更新
 		skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix =
 			skinCluster_.inverseBindPoseMatrices[jointIndex] * skeleton_.joints[jointIndex].skeletonSpaceMatrix;
 		skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
 			Transpose(Inverse(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
 	}
+}
+
+void Skin3dObject::DrawCommonProcess()
+{
+	//Transform用のCBufferの場所を設定
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
+
+	model_->SetSkinCluster(skinCluster_);
+}
+
+void Skin3dObject::SetMaterialBufferView()
+{
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 }

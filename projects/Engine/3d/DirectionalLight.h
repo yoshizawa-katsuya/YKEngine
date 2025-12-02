@@ -1,49 +1,17 @@
 #pragma once
-#include "DirectXCommon.h"
-#include <Struct.h>
+#include <Vector3.h>
+#include <Vector4.h>
 
-class DirectionalLight
+/// <summary>
+/// 平行光源。
+/// 使用する場合、modelPtalformへデータをセットすること。
+/// </summary>
+///	<param name="color">ライトの色</param>
+/// <param name="direction">ライトの向き</param>
+/// <param name="intensity">輝度</param>
+struct DirectionalLight
 {
-public:
-
-	struct DirectionalLightData {
-		Vector4 color;	//ライトの色
-		Vector3 direction;	//ライトの向き
-		float intensity;	//輝度
-	};
-
-	//初期化
-	void Initialize();
-
-	//描画
-	//void Draw();
-
-	DirectionalLightData& GetDirectionalLightData() { return *data_; }
-	const DirectionalLightData& GetDirectionalLightData() const { return *data_; }
-
-	Vector4& GetColor() { return data_->color; }
-	const Vector4& GetColor() const { return data_->color; }
-
-	Vector3& GetDirection() { return data_->direction; }
-	const Vector3& GetDirection() const { return data_->direction; }
-
-	float& GetIntensity() { return data_->intensity; }
-	float GetIntensity() const { return data_->intensity; }
-
-	void SetColor(const Vector4& color) { data_->color = color; }
-
-	void SetDirection(const Vector3& direction) { data_->direction = direction; }
-
-	void SetIntensity(float intensity) { data_->intensity = intensity; }
-
-private:
-
-	//DirectXCommon* dxCommon_;
-
-	//平行光源用のResourceを作成
-	//Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
-	//データを書き込む
-	DirectionalLightData* data_;
-
+	Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f };	//ライトの色
+	Vector3 direction = { -0.3f, -1.0f, -0.3f };	//ライトの向き
+	float intensity = 1.0f;	//輝度
 };
-

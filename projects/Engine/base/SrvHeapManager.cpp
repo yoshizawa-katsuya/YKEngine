@@ -1,6 +1,10 @@
 #include "SrvHeapManager.h"
 #include <cassert>
 
+SrvHeapManager::~SrvHeapManager()
+{
+}
+
 void SrvHeapManager::Initialize(DirectXCommon* dxCommon)
 {
 
@@ -32,21 +36,37 @@ void SrvHeapManager::SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uin
 uint32_t SrvHeapManager::Allocate()
 {
 	std::unique_lock<std::mutex> lock(mutex_);
-	assert(useIndex < kMaxSrvDescriptors_);
+	assert(useIndex_ < kMaxSrvDescriptors_);
 	
+	uint32_t index;
+
+	if (!freeList_.empty())
+	{
+		//空いている番号がある場合は、そこを使う
+		index = freeList_.front();
+		freeList_.pop();
+		return index;
+	}
+
 	//returnする番号を記録しておく
-	uint32_t index = useIndex;
+	index = useIndex_;
 	//次回のために番号を1進める
-	useIndex++;
+	useIndex_++;
 	
 	//上で記録した値をreturn
 	return index;
 
 }
 
+void SrvHeapManager::Free(uint32_t srvIndex)
+{
+	freeList_.push(srvIndex);
+}
+
 bool SrvHeapManager::Check()
 {
-	if (useIndex < kMaxSrvDescriptors_) {
+	if (useIndex_ < kMaxSrvDescriptors_) 
+	{
 		return true;
 	}
 	return false;
@@ -105,6 +125,19 @@ void SrvHeapManager::CreateSRVforRenderTexture(uint32_t srvIndex, ID3D12Resource
 
 	//SRVの生成
 	dxCommon_->GetDevice()->CreateShaderResourceView(pResource, &renderTextureSrvDesc, GetCPUDescriptorHandle(srvIndex));
+}
+
+void SrvHeapManager::CreateSRVforDepthTexture(uint32_t srvIndex, ID3D12Resource* pResource)
+{
+	D3D12_SHADER_RESOURCE_VIEW_DESC depthTextureSrvDesc{};
+	// DXGI_FORMAT_D24_UNORM_S8_UINTのDepthを読むときはDXGI_FORMAT_R24_UNORM_X8_TYPELESS
+	depthTextureSrvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS; // 深度テクスチャのフォーマット
+	depthTextureSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	depthTextureSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D; // 2Dテクスチャ
+	depthTextureSrvDesc.Texture2D.MipLevels = 1; // ミップレベルは1
+
+	// SRVの生成
+	dxCommon_->GetDevice()->CreateShaderResourceView(pResource, &depthTextureSrvDesc, GetCPUDescriptorHandle(srvIndex));
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE SrvHeapManager::GetCPUDescriptorHandle(uint32_t index)

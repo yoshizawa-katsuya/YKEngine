@@ -3,34 +3,41 @@
 #include <cassert>
 #include "dx12.h"
 #include "DirectXTex/d3dx12.h"
+#include "RootParams.h"
+
+TextureManager* TextureManager::instance_ = nullptr;
 
 TextureManager* TextureManager::GetInstance()
 {
-	static TextureManager instance;
-	return &instance;
+	if (instance_ == nullptr)
+	{
+		instance_ = new TextureManager();
+	}
+	return instance_;
 }
 
 void TextureManager::Finalize()
 {
-	
+	//インスタンスを破棄
+	delete instance_;
+	instance_ = nullptr;
 }
 
-void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager) {
+void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager) 
+{
 
 	assert(dxCommon);
 
 	dxCommon_ = dxCommon;
 	srvHeapManager_ = srvHeapManager;
-	
-	
-	//全テクスチャリセット
-	//ResetAll();
 
 }
 
 void TextureManager::PostDraw()
 {
-	if (!intermediateResources_.empty()) {
+	// 中間バッファの解放
+	if (!intermediateResources_.empty()) 
+	{
 		intermediateResources_.clear(); // 必要なときだけ呼ぶ
 	}
 }
@@ -54,17 +61,18 @@ uint32_t TextureManager::Load(const std::string& fileName) {
 	return index;
 }
 
-void TextureManager::SetGraphicsRootDescriptorTable(uint32_t textureHandle) {
+void TextureManager::SetGraphicsRootDescriptorTable(uint32_t rootParamIndex, uint32_t textureHandle)
+{
 
-	// シェーダリソースビューをセット
-	srvHeapManager_->SetGraphicsRootDescriptorTable(2, textureHandle);
+	// テクスチャをセット
+	srvHeapManager_->SetGraphicsRootDescriptorTable(rootParamIndex, textureHandle);
 	
 }
 
-void TextureManager::SetEnvironmentMap(uint32_t textureHandle)
+void TextureManager::SetEnvironmentMap(uint32_t rootParamIndex, uint32_t textureHandle)
 {
-	// シェーダリソースビューをセット
-	srvHeapManager_->SetGraphicsRootDescriptorTable(8, textureHandle);
+	// 環境マップをセット
+	srvHeapManager_->SetGraphicsRootDescriptorTable(rootParamIndex, textureHandle);
 }
 
 const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureHandle)
@@ -152,7 +160,6 @@ void TextureManager::LoadTexture(const std::string& filePath, uint32_t index) {
 	}
 
 	//ミップマップ付きのデータを返す
-	//textureResource.filePath = filePath;
 	texture.metadata = image.GetMetadata();
 	texture.resource = dxCommon_->CreateTextureResource(texture.metadata);
 
@@ -191,22 +198,5 @@ Microsoft::WRL::ComPtr<ID3D12Resource> TextureManager::UploadTextureData(ID3D12R
 	commandList->ResourceBarrier(1, &barrier);
 
 	return intermediateResource;
-	/*
-	//Meta情報を取得
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	//全MipMapについて
-	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
-		//MipMapLevelを指定して各Imageを取得
-		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
-		//Textureに転送
-		HRESULT hr = textureResource->WriteToSubresource(
-			UINT(mipLevel),
-			nullptr,				//全領域へコピー
-			img->pixels,			//元データアドレス
-			UINT(img->rowPitch),	//1ラインサイズ
-			UINT(img->slicePitch)	//1枚サイズ
-		);
-		assert(SUCCEEDED(hr));
-	}
-	*/
+	
 }
