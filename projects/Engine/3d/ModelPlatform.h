@@ -206,6 +206,15 @@ private:
 		float padding;
 	};
 
+	/// <summary>
+	/// 描画前処理共通。
+	/// </summary>
+	void CommonPreDraw(bool isSkin);
+
+	template<class T, class F>
+	std::shared_ptr<BaseModel> CreateModelCommon(const std::string& name, F createFunc);
+	
+
 	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
 	static ModelPlatform* instance_;
 
@@ -269,3 +278,20 @@ private:
 	
 };
 
+template<class T, class F>
+inline std::shared_ptr<BaseModel> ModelPlatform::CreateModelCommon(const std::string& name, F createFunc)
+{
+	// すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+
+	// モデル生成
+	std::shared_ptr<T> model = std::make_shared<T>();
+
+	// 生成処理（ラムダで受ける）
+	createFunc(model.get());
+
+	models_[name] = model;
+	return model;
+}

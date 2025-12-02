@@ -41,6 +41,12 @@ public:
 
 private:
 
+
+	/// <summary>
+	/// シーンの切り替え処理。
+	/// </summary>
+	void ChangeSceneProcess();
+
 	//今のシーン(実行中シーン)
 	std::unique_ptr<BaseScene> scene_;
 

@@ -209,6 +209,24 @@ private:
 	//グループ
 	using Group = std::map<std::string, Item>;
 
+	/// <summary>
+	/// 値の内部セット処理。
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
+	void SetValueInternal(const std::string& groupName, const std::string& key, const Item& value);
+
+	/// <summary>
+	/// 項目の内部追加処理。
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
+	void AddItemInternal(const std::string& groupName, const std::string& key, const Item& value);
+
+	void GetValueInternal(const std::string& groupName, const std::string& key, Item& outValue) const;
+
 	//全データ
 	std::map<std::string, Group> datas_;
 

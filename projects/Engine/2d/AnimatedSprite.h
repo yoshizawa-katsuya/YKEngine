@@ -95,6 +95,11 @@ private:
 	/// </summary>
 	void ReverseNoLoopUpdate();
 
+	/// <summary>
+	/// UV座標を更新する。
+	/// </summary>
+	void UpdateUV();
+
 	//分割数
 	int32_t horizontalDivisionNum_ = 1;
 	int32_t verticalDivisionNum_ = 1;

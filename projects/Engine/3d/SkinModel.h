@@ -39,11 +39,10 @@ public:
 private:
 
 	/// <summary>
-	/// モデルファイル読み込み。
+	/// メッシュデータを読み込む。
 	/// </summary>
-	/// <param name="directoryPath">ディレクトリパス</param>
-	/// <param name="filename">ファイル名</param>
-	void LoadModelFile(const std::string& directoryPath, const std::string& filename) override;
+	/// <param name="mesh">Assimpのメッシュデータ</param>
+	void LoadMeshData(aiMesh* mesh) override;
 
 	/// <summary>
 	/// スキンクラスター作成用のデータを読み込む。

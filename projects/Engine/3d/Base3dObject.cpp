@@ -60,12 +60,12 @@ void Base3dObject::CameraUpdate(Camera* camera)
 void Base3dObject::Draw()
 {
 	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
+	SetTransformationBufferView();
 
 	if (materialData_) 
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+		SetMaterialBufferView();
 		model_->Draw(true);
 		return;
 	}
@@ -77,12 +77,12 @@ void Base3dObject::Draw()
 void Base3dObject::Draw(uint32_t textureHandle)
 {
 	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
+	SetTransformationBufferView();
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+		SetMaterialBufferView();
 		model_->Draw(textureHandle, true);
 		return;
 	}
@@ -93,58 +93,51 @@ void Base3dObject::Draw(uint32_t textureHandle)
 
 void Base3dObject::SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
 {
-	//マテリアルデータがなければ作る
-	if (!materialData_)
-	{
-		CreateMaterialData();
-	}
+	CreateMaterialData();
+
 	Matrix4x4 uvTransformMatrix = MakeAffineMatrix(scale, rotate, translate);
 	materialData_->uvTransform = uvTransformMatrix;
 }
 
 void Base3dObject::SetUVTransform(const EulerTransform& uvTransform)
 {
-	//マテリアルデータがなければ作る
-	if (!materialData_)
-	{
-		CreateMaterialData();
-	}
+	
+	CreateMaterialData();
+	
 	Matrix4x4 uvTransformMatrix = MakeAffineMatrix(uvTransform);
 	materialData_->uvTransform = uvTransformMatrix;
 }
 
 void Base3dObject::SetEnableLighting(bool enableLighting)
 {
-	//マテリアルデータがなければ作る
-	if (!materialData_)
-	{
-		CreateMaterialData();
-	}
+	CreateMaterialData();
+
 	materialData_->enableLighting = enableLighting;
 }
 
 void Base3dObject::SetColor(const Vector4& color)
 {
-	//マテリアルデータがなければ作る
-	if (!materialData_)
-	{
-		CreateMaterialData();
-	}
+	CreateMaterialData();
+	
 	materialData_->color = color;
 }
 
 void Base3dObject::SetEnviromentCoefficient(float coefficient)
 {
-	//マテリアルデータがなければ作る
-	if (!materialData_)
-	{
-		CreateMaterialData();
-	}
+	
+	CreateMaterialData();
+
 	materialData_->enviromentCoefficient = coefficient;
 }
 
 void Base3dObject::CreateMaterialData()
 {
+	//すでにマテリアルデータがあれば何もしない
+	if (materialData_)
+	{
+		return;
+	}
+
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_ = dxCommon_->CreateBufferResource(sizeof(Material));
 	//マテリアルにデータを書き込む
@@ -156,4 +149,14 @@ void Base3dObject::CreateMaterialData()
 	materialData_->shininess = 40.0f;
 	materialData_->enviromentCoefficient = 0.0f; // 環境光の係数を0に設定
 	materialData_->uvTransform = MakeIdentity4x4();
+}
+
+void Base3dObject::SetTransformationBufferView()
+{
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
+}
+
+void Base3dObject::SetMaterialBufferView()
+{
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 }

@@ -58,44 +58,11 @@ void SkinModel::SetSkinCluster(const SkinCluster& skinCluster)
 
 }
 
-void SkinModel::LoadModelFile(const std::string& directoryPath, const std::string& filename)
+void SkinModel::LoadMeshData(aiMesh* mesh)
 {
-	modelData_ = std::make_unique<ModelData>();
+	BaseModel::LoadMeshData(mesh);
 
-	Assimp::Importer importer;
-	std::string filepath = directoryPath + "/" + filename;
-	const aiScene* scene = importer.ReadFile(filepath.c_str(), aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
-
-	assert(scene->HasMeshes());	//メッシュがないのは対応しない
-
-	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
-		aiMesh* mesh = scene->mMeshes[meshIndex];
-		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
-		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
-		modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
-
-		LoadVertexData(mesh);
-
-		LoadIndexData(mesh);
-
-		LoadSkinCluster(mesh);
-	}
-
-	//現状だと1つのモデルに複数のテクスチャをつけるのは不可能
-	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
-		aiMaterial* material = scene->mMaterials[materialIndex];
-		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
-			aiString textureFilePath;
-			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			modelData_->material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
-			break;
-		}
-		else {
-			modelData_->material.textureFilePath = "./resources/white.png";
-		}
-	}
-
-	modelData_->rootNode = ReadNode(scene->mRootNode);
+	LoadSkinCluster(mesh);
 
 }
 

@@ -220,7 +220,7 @@ protected:
 	/// </summary>
 	/// <param name="directoryPath">モデルファイルのディレクトリパス</param>
 	/// <param name="filename">モデルファイル名</param>
-	virtual void LoadModelFile(const std::string& directoryPath, const std::string& filename);
+	void LoadModelFile(const std::string& directoryPath, const std::string& filename);
 
 	/// <summary>
 	/// 頂点データ読み込み。
@@ -233,6 +233,12 @@ protected:
 	/// </summary>
 	/// <param name="mesh">Assimpのメッシュデータ</param>
 	void LoadIndexData(aiMesh* mesh);
+
+	/// <summary>
+	/// メッシュデータ読み込み。
+	/// </summary>
+	/// <param name="mesh">Assimpのメッシュデータ</param>
+	virtual void LoadMeshData(aiMesh* mesh);
 
 	/// <summary>
 	/// 頂点数設定。
@@ -251,6 +257,11 @@ protected:
 	/// <returns>ノード情報</returns>
 	Node ReadNode(aiNode* node);
 	
+	/// <summary>
+	/// 描画共通処理。
+	/// </summary>
+	void DrawCommonProcess(bool usedMaterial, uint32_t textureHandle, uint32_t numInstance = 1);
+
 	ModelPlatform* modelPlatform_ = nullptr;
 
 	std::unique_ptr<ModelData> modelData_;

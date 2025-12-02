@@ -60,43 +60,17 @@ void BaseModel::CreateSkyBox(uint32_t textureHandle)
 {
 }
 
-void BaseModel::Draw(bool usedMaterial) {
+void BaseModel::Draw(bool usedMaterial) 
+{
 	
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	if (!usedMaterial) 
-	{
-		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
-
-	}
-	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle_);
-
-	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
-
+	DrawCommonProcess(usedMaterial, textureHandle_);
 
 }
 
 void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	if (!usedMaterial)
-	{
-		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
-
-	}
-	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
-
-	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
+	DrawCommonProcess(usedMaterial, textureHandle);
 
 }
 
@@ -107,41 +81,15 @@ void BaseModel::InstancingDraw(uint32_t numInstance)
 		return; // インスタンス数が0の場合は描画しない
 	}
 
-	if (numInstance == 0)
-	{
-		return; // インスタンス数が0の場合は描画しない
-	}
+	DrawCommonProcess(false, textureHandle_, numInstance);
 
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
-	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle_);
-
-	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }
 
 void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
 {
 
-	if (numInstance == 0)
-	{
-		return; // インスタンス数が0の場合は描画しない
-	}
+	DrawCommonProcess(false, textureHandle, numInstance);
 
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
-	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
-
-	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }
 
 void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
@@ -255,9 +203,7 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
 		modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
 
-		LoadVertexData(mesh);
-
-		LoadIndexData(mesh);
+		LoadMeshData(mesh);
 
 	}
 
@@ -311,6 +257,14 @@ void BaseModel::LoadIndexData(aiMesh* mesh)
 	}
 }
 
+void BaseModel::LoadMeshData(aiMesh* mesh)
+{
+	LoadVertexData(mesh);
+
+	LoadIndexData(mesh);
+
+}
+
 void BaseModel::SetVerticesNum()
 {
 	verticesNum_ = static_cast<uint32_t>(modelData_->vertices.size());
@@ -344,4 +298,28 @@ Node BaseModel::ReadNode(aiNode* node)
 	}
 
 	return result;
+}
+
+void BaseModel::DrawCommonProcess(bool usedMaterial, uint32_t textureHandle, uint32_t numInstance)
+{
+
+	if (numInstance == 0)
+	{
+		return; // インスタンス数が0の場合は描画しない
+	}
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);	//IBVを設定
+	if (!usedMaterial)
+	{
+		//マテリアルのCBufferの場所を設定
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+	}
+
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
+
+	//描画1(DrawCall/ドローコール)。
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }

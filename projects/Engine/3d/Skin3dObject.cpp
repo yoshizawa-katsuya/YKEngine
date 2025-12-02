@@ -6,13 +6,15 @@
 
 Skin3dObject::~Skin3dObject()
 {
-	model_->GetModelPlatform()->GetSrvHeapManager()->Free(srvIndex_);	//srvHeapManagerに登録されているSkinClusterのSRVを解放
+	srvHeapManager_->Free(srvIndex_);	//srvHeapManagerに登録されているSkinClusterのSRVを解放
 }
 
 void Skin3dObject::Initialize(BaseModel* model)
 {
 
 	Base3dObject::Initialize(model);
+
+	srvHeapManager_ = model_->GetModelPlatform()->GetSrvHeapManager();
 
 	CreateSkelton();
 
@@ -32,15 +34,12 @@ void Skin3dObject::AnimationUpdate(Animation* animation)
 
 void Skin3dObject::Draw()
 {
-	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
-
-	model_->SetSkinCluster(skinCluster_);
+	DrawCommonProcess();
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+		SetMaterialBufferView();
 		model_->Draw(true);
 		return;
 	}
@@ -51,15 +50,12 @@ void Skin3dObject::Draw()
 
 void Skin3dObject::Draw(uint32_t textureHandle)
 {
-	//Transform用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
-
-	model_->SetSkinCluster(skinCluster_);
+	DrawCommonProcess();
 
 	if (materialData_)
 	{
 		//マテリアルのCBufferの場所を設定
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+		SetMaterialBufferView();
 		model_->Draw(textureHandle, true);
 		return;
 	}
@@ -144,7 +140,6 @@ void Skin3dObject::CreateSkinCluster()
 {
 
 	ModelPlatform* modelPlatform = model_->GetModelPlatform();
-	SrvHeapManager* srvHeapManager = modelPlatform->GetSrvHeapManager();
 	ModelData& modelData = model_->GetModelData();
 	uint32_t verticesNum = model_->GetVerticesNum();
 
@@ -154,10 +149,10 @@ void Skin3dObject::CreateSkinCluster()
 	skinCluster_.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 	skinCluster_.mappedPalette = { mappedPalette, skeleton_.joints.size() };	//spanを使ってアクセスするようにする
 
-	srvIndex_ = srvHeapManager->Allocate();
+	srvIndex_ = srvHeapManager_->Allocate();
 
-	skinCluster_.paletteSrvHandle.first = srvHeapManager->GetCPUDescriptorHandle(srvIndex_);
-	skinCluster_.paletteSrvHandle.second = srvHeapManager->GetGPUDescriptorHandle(srvIndex_);
+	skinCluster_.paletteSrvHandle.first = srvHeapManager_->GetCPUDescriptorHandle(srvIndex_);
+	skinCluster_.paletteSrvHandle.second = srvHeapManager_->GetGPUDescriptorHandle(srvIndex_);
 
 	//palette用のsrvを作成。StructuredBufferでアクセスできるようにする。
 	D3D12_SHADER_RESOURCE_VIEW_DESC palletteSrvDesc{};
@@ -248,4 +243,17 @@ void Skin3dObject::SkinClusterUpdate()
 		skinCluster_.mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix =
 			Transpose(Inverse(skinCluster_.mappedPalette[jointIndex].skeletonSpaceMatrix));
 	}
+}
+
+void Skin3dObject::DrawCommonProcess()
+{
+	//Transform用のCBufferの場所を設定
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
+
+	model_->SetSkinCluster(skinCluster_);
+}
+
+void Skin3dObject::SetMaterialBufferView()
+{
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SkinModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 }

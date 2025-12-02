@@ -13,15 +13,7 @@ void SceneManager::Update()
 	//次シーンの予約があるなら
 	if (nextScene_) 
 	{
-		//シーン切り替え
-		scene_ = std::move(nextScene_);
-		nextScene_.reset();
-
-		//シーンマネージャをセット
-		scene_->SetSceneManager(this);
-
-		//次シーンを初期化する
-		scene_->Initialize();
+		ChangeSceneProcess();
 
 		//パーティクルを全削除
 		ParticleManager::GetInstance()->ClearAllParticles();
@@ -48,17 +40,21 @@ void SceneManager::ChengeScene(const std::string& sceneName)
 	//次シーンを生成
 	nextScene_ = std::move(sceneFactory_->CreateScene(sceneName));
 
-	if (!scene_) {
-
-		//シーン切り替え
-		scene_ = std::move(nextScene_);
-		nextScene_.reset();
-
-		//シーンマネージャをセット
-		scene_->SetSceneManager(this);
-
-		//次シーンを初期化する
-		scene_->Initialize();
-
+	if (!scene_) 
+	{
+		ChangeSceneProcess();
 	}
+}
+
+void SceneManager::ChangeSceneProcess()
+{
+	//シーン切り替え
+	scene_ = std::move(nextScene_);
+	nextScene_.reset();
+
+	//シーンマネージャをセット
+	scene_->SetSceneManager(this);
+
+	//次シーンを初期化する
+	scene_->Initialize();
 }
