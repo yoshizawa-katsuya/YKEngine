@@ -109,7 +109,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
-    <ClCompile Include="Engine\3d\Base3dObject.cpp" />
+    <ClCompile Include="Engine\3d\My3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
     <ClCompile Include="Engine\lib\Collision.cpp" />
     <ClCompile Include="Engine\lib\Curve.cpp" />
@@ -153,7 +153,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\3d\RigidModel.cpp" />
     <ClCompile Include="Engine\3d\SkinModel.cpp" />
-    <ClCompile Include="Engine\3d\Rigid3dObject.cpp" />
     <ClCompile Include="Engine\3d\Skin3dObject.cpp" />
     <ClCompile Include="Engine\lib\ThreadPool.cpp" />
     <ClCompile Include="Engine\lib\Vector2.cpp" />
@@ -333,7 +332,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="Engine\lib\Color.h" />
     <ClInclude Include="Engine\2d\AnimatedSprite.h" />
-    <ClInclude Include="Engine\3d\Base3dObject.h" />
+    <ClInclude Include="Engine\3d\My3dObject.h" />
     <ClInclude Include="Engine\3d\Animation.h" />
     <ClInclude Include="Engine\lib\Collision.h" />
     <ClInclude Include="Engine\lib\Curve.h" />
@@ -378,7 +377,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\3d\RigidModel.h" />
     <ClInclude Include="Engine\3d\SkinModel.h" />
-    <ClInclude Include="Engine\3d\Rigid3dObject.h" />
     <ClInclude Include="Engine\3d\Skin3dObject.h" />
     <ClInclude Include="Engine\3d\PointLight.h" />
     <ClInclude Include="Engine\3d\SpotLight.h" />

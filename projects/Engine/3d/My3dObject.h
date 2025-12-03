@@ -2,23 +2,23 @@
 #include "BaseModel.h"
 
 /// <summary>
-/// 3Dオブジェクトの基底クラス。
+/// 3Dオブジェクトのクラス。
 /// 3Dオブジェクトはモデルを持ち、ワールド変換行列を持つ。
 /// モデルは複数の3Dオブジェクトで共有できる。
 /// </summary>
-class Base3dObject
+class My3dObject
 {
 public:
 
 	/// <summary>
 	/// コンストラクタ。	
 	/// </summary>
-	Base3dObject();
+	My3dObject();
 
 	/// <summary>
 	/// デストラクタ。
 	/// </summary>
-	virtual ~Base3dObject() = 0;
+	virtual ~My3dObject() = default;
 
 	/// <summary>
 	/// 初期化。

@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Rigid3dObject.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -7,7 +6,7 @@
 
 void Player::Initialize(BaseModel* model) {
 
-	object_ = std::make_unique<Rigid3dObject>();
+	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(model);
 
 	worldTransform_.Initialize();
