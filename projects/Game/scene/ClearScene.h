@@ -2,7 +2,7 @@
 #include "BaseScene.h"
 #include "AnimatedSprite.h"
 #include "DebugCamera.h"
-#include "Rigid3dObject.h"
+#include "My3dObject.h"
 #include "RailMover.h"
 #include "RailCamera.h"
 #include "InstancingObjects.h"
@@ -98,10 +98,10 @@ private:
 	uint32_t textureHandleSkyBox_;
 
 	//スカイボックス
-	std::unique_ptr<Rigid3dObject> skyBox_;
+	std::unique_ptr<My3dObject> skyBox_;
 
 	//地面
-	std::unique_ptr<Rigid3dObject> ground_;
+	std::unique_ptr<My3dObject> ground_;
 
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;

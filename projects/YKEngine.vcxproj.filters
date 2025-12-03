@@ -219,10 +219,7 @@
     <ClCompile Include="Engine\3d\SkinModel.cpp">
       <Filter>ソース ファイル\engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Base3dObject.cpp">
-      <Filter>ソース ファイル\engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Rigid3dObject.cpp">
+    <ClCompile Include="Engine\3d\My3dObject.cpp">
       <Filter>ソース ファイル\engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\Skin3dObject.cpp">
@@ -565,10 +562,7 @@
     <ClInclude Include="Engine\3d\SkinModel.h">
       <Filter>ヘッダー ファイル\engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Base3dObject.h">
-      <Filter>ヘッダー ファイル\engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Rigid3dObject.h">
+    <ClInclude Include="Engine\3d\My3dObject.h">
       <Filter>ヘッダー ファイル\engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\Skin3dObject.h">

@@ -12,7 +12,7 @@ Skin3dObject::~Skin3dObject()
 void Skin3dObject::Initialize(BaseModel* model)
 {
 
-	Base3dObject::Initialize(model);
+	My3dObject::Initialize(model);
 
 	srvHeapManager_ = model_->GetModelPlatform()->GetSrvHeapManager();
 

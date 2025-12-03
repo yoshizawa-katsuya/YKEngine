@@ -1,5 +1,5 @@
 #pragma once
-#include "Base3dObject.h"
+#include "My3dObject.h"
 
 /// <summary>
 /// スキンモデルを扱うクラス。
@@ -8,7 +8,7 @@
 /// スキニングアニメーションをサポートしており、ボーンとジョイントの管理も行う。
 /// ボーンとジョイントのデバッグ描画機能も備えている。
 /// </summary>
-class Skin3dObject : public Base3dObject
+class Skin3dObject : public My3dObject
 {
 public:
 

@@ -7,7 +7,7 @@ void BaseCharacter::Initialize(BaseModel* model)
 
 	Collider::Initialize();
 
-	object_ = std::make_unique<Rigid3dObject>();
+	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(model);
 
 	characterWorldTransform_.Initialize();

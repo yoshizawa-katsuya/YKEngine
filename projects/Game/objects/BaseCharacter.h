@@ -1,6 +1,6 @@
 #pragma once
 #include "Collider.h"
-#include "Rigid3dObject.h"
+#include "My3dObject.h"
 
 /// <summary>
 /// キャラクターの基底クラス。
@@ -32,7 +32,7 @@ public:
 
 protected:
 
-	std::unique_ptr<Rigid3dObject> object_;
+	std::unique_ptr<My3dObject> object_;
 	//ワールド変換データ
 	WorldTransform characterWorldTransform_;
 

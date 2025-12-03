@@ -1,6 +1,6 @@
 #pragma once
 #include "WorldTransform.h"
-#include "Rigid3dObject.h"
+#include "My3dObject.h"
 #include "SRTAnimator.h"
 
 /// <summary>
@@ -50,7 +50,7 @@ private:
 	/// </summary>
 	void UpdateEnd();
 
-	std::unique_ptr<Rigid3dObject> object_;
+	std::unique_ptr<My3dObject> object_;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 

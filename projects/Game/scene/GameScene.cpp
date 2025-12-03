@@ -88,7 +88,7 @@ void GameScene::Initialize() {
 	
 
 	//スカイボックスの生成
-	skyBox_ = std::make_unique<Rigid3dObject>();
+	skyBox_ = std::make_unique<My3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandleSkyBox_).get());
 	WorldTransform skyBoxTransform;
 	skyBoxTransform.Initialize();
@@ -97,7 +97,7 @@ void GameScene::Initialize() {
 	skyBox_->WorldTransformUpdate(skyBoxTransform);
 
 	//地面の生成
-	ground_ = std::make_unique<Rigid3dObject>();
+	ground_ = std::make_unique<My3dObject>();
 	ground_->Initialize(modelGround_.get());
 	WorldTransform groundTransform;
 	groundTransform.Initialize();

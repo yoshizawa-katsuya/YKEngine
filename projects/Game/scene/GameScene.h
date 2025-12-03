@@ -166,10 +166,10 @@ private:
 	std::unique_ptr<EnemyBulletManager> enemyBulletManager_;
 
 	//スカイボックス
-	std::unique_ptr<Rigid3dObject> skyBox_;
+	std::unique_ptr<My3dObject> skyBox_;
 
 	//地面
-	std::unique_ptr<Rigid3dObject> ground_;
+	std::unique_ptr<My3dObject> ground_;
 
 	//オブジェクト
 	std::map<std::string, std::unique_ptr<InstancingObjects>> instancingObjects_;

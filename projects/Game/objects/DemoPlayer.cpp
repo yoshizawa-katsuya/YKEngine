@@ -6,7 +6,7 @@ void DemoPlayer::Initialize(BaseModel* model, WorldTransform* parent)
 	// NULLポインタチェック
 	assert(model);
 
-	object_ = std::make_unique<Rigid3dObject>();
+	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(model);
 
 	worldTransform_.Initialize();
