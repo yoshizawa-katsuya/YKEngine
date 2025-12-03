@@ -41,7 +41,7 @@ void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Ve
 {
 	//リストに登録する
 	//弾を生成し、初期化
-	std::unique_ptr<BasePlayerBullet>& bullet = playerBullets_.emplace_back();
+	std::unique_ptr<BasePlayerBullet> bullet;
 	switch (bulletType)
 	{
 	case PlayerBulletType::kNormal:
@@ -54,6 +54,9 @@ void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Ve
 		break;
 	}
 	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandlePlayerBullet_);
+
+	//リストに登録
+	playerBullets_.push_back(std::move(bullet));
 }
 
 void PlayerBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)

@@ -42,28 +42,28 @@ void EnemyManager::Draw(Camera* camera)
 
 void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 {
-	// 敵の生成
-	std::unique_ptr<BaseEnemy>& enemy = enemys_.emplace_back();
-	// 敵の初期化
+	std::unique_ptr<BaseEnemy> enemy;
+
 	switch (spawnData.type)
 	{
 	case EnemyType::kShot01:
 		enemy = std::make_unique<ShotEnemy01>();
-
 		break;
 
 	case EnemyType::kTackle01:
 		enemy = std::make_unique<TackleEnemy01>();
-
 		break;
 
 	default:
 		break;
 	}
+	// 敵の初期化
 	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), spawnData, railCamera_);
 	enemy->SetPlayer(player_);
-	// 敵キャラにゲームシーンを渡す
 	enemy->SetEnemyBulletManager(enemyBulletManager_);
+
+	// 敵リストに追加
+	enemys_.push_back(std::move(enemy));
 }
 
 void EnemyManager::RegisterToCollisionManager(CollisionManager* collisionManager)

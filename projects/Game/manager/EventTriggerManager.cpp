@@ -28,10 +28,11 @@ void EventTriggerManager::AddEvent(const std::string& eventName, const ObjectDat
 	if (eventName == "waveEvent")
 	{
 		//波イベントの生成
-		std::unique_ptr<BaseEventTrigger>& waveEvent = events_.emplace_back();
-		waveEvent = std::make_unique<EnemySpawnEventTrigger>();
+		std::unique_ptr<BaseEventTrigger> waveEvent = std::make_unique<EnemySpawnEventTrigger>();
 		waveEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
 
+		// リストに追加
+		events_.push_back(std::move(waveEvent));
 	}
 	else if (eventName == "speedEvent")
 	{
@@ -41,8 +42,8 @@ void EventTriggerManager::AddEvent(const std::string& eventName, const ObjectDat
 		// 派生クラス側のInitializeを呼ぶ
 		speedEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
 
-		// BaseEventTrigger 側としてコンテナに追加
-		events_.emplace_back(std::move(speedEvent));
+		// BaseEventTrigger 側としてリストに追加
+		events_.push_back(std::move(speedEvent));
 	}
 	else if (eventName == "rotateEvent")
 	{
@@ -52,16 +53,17 @@ void EventTriggerManager::AddEvent(const std::string& eventName, const ObjectDat
 		// 派生クラス側のInitializeを呼ぶ
 		rotateEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
 
-		// BaseEventTrigger 側としてコンテナに追加
-		events_.emplace_back(std::move(rotateEvent));
+		// BaseEventTrigger 側としてリストに追加
+		events_.push_back(std::move(rotateEvent));
 
 	}
 	else if (eventName == "rotateResetEvent")
 	{
 		//回転リセットイベントの生成
-		std::unique_ptr<BaseEventTrigger>& rotateResetEvent = events_.emplace_back();
-		rotateResetEvent = std::make_unique<RotateResetEventTrigger>();
+		std::unique_ptr<BaseEventTrigger> rotateResetEvent = std::make_unique<RotateResetEventTrigger>();
 		rotateResetEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
 
+		// リストに追加
+		events_.push_back(std::move(rotateResetEvent));
 	}
 }

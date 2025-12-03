@@ -41,11 +41,14 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 	{
 		return;
 	}
-	//リストに登録する
+	
 	//弾を生成し、初期化
-	std::unique_ptr<EnemyBullet>& bullet = enemyBullets_.emplace_back();
+	std::unique_ptr<EnemyBullet> bullet;
 	bullet = std::make_unique<EnemyBullet>();
 	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandleEnemyBullet_, target, speed);
+
+	//リストに登録する
+	enemyBullets_.push_back(std::move(bullet));
 }
 
 void EnemyBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)
