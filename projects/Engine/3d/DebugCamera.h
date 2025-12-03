@@ -1,5 +1,6 @@
 #pragma once
 #include "Struct.h"
+#include <memory>
 class Camera;
 class Input;
 
@@ -15,14 +16,14 @@ public:
 	/// 初期化。
 	/// デバッグカメラとして使用するカメラと入力を指定する。
 	/// </summary>
-	/// <param name="camera">カメラ</param>
-	/// <param name="input">入力</param>
-	void Initialize(Camera* camera, Input* input);
+	void Initialize();
 
 	/// <summary>
 	/// 更新。
 	/// </summary>
 	void Update();
+
+	Camera* GetCamera() { return camera_.get(); }
 
 private:
 
@@ -31,7 +32,7 @@ private:
 	/// </summary>
 	void ViewMatrixUpdate();
 
-	Camera* camera_;
+	std::unique_ptr<Camera> camera_;
 	Input* input_;
 
 	Matrix4x4 matRot_;

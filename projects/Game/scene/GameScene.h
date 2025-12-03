@@ -69,7 +69,6 @@ private:
 
 
 	std::unique_ptr<Camera> camera_;
-	std::unique_ptr<Camera> camera2_;
 
 	std::unique_ptr<DebugCamera> debugCamera_;
 
