@@ -70,11 +70,8 @@ void GameScene::Initialize() {
 	enemySpawnManager_->SetEnemyManager(enemyManager_.get());
 
 	//デバッグカメラの生成
-	camera2_ = std::make_unique<Camera>();
-	camera2_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera2_->SetTranslate({ 0.0f, 0.0f, -10.0f });
 	debugCamera_ = std::make_unique<DebugCamera>();
-	debugCamera_->Initialize(camera2_.get(), input_);
+	debugCamera_->Initialize();
 
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
@@ -175,7 +172,7 @@ void GameScene::Update() {
 	{
 		isActiveDebugCamera_ = true;
 
-		mainCamera_ = camera2_.get();
+		mainCamera_ = debugCamera_->GetCamera();
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
