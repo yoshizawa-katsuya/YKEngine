@@ -85,6 +85,15 @@ void ClearScene::Update()
 
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kConfetti01, railMover_->GetWorldTransform()->GetWorldPosition());
 
+	//レールムーバーの更新
+	railMover_->Update();
+
+	// デモ用プレイヤーの更新
+	demoPlayer_->Update();
+
+	//レールカメラの更新
+	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
+
 	switch (phase_)
 	{
 	case Phase::kStart:
@@ -150,15 +159,6 @@ void ClearScene::Finalize()
 
 void ClearScene::UpdateStart()
 {
-	//レールムーバーの更新
-	railMover_->Update();
-
-	// デモ用プレイヤーの更新
-	demoPlayer_->Update();
-
-	//レールカメラの更新
-	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
-
 	//シーン切り替えアニメーション更新
 	spriteSceneChange_->Update();
 	if (spriteSceneChange_->GetIsEnd())
@@ -169,15 +169,6 @@ void ClearScene::UpdateStart()
 
 void ClearScene::UpdateMain()
 {
-	//レールムーバーの更新
-	railMover_->Update();
-
-	// デモ用プレイヤーの更新
-	demoPlayer_->Update();
-
-	//レールカメラの更新
-	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
-
 	//スペースキーまたはAボタンで終了
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A))
 	{
@@ -189,15 +180,6 @@ void ClearScene::UpdateMain()
 
 void ClearScene::UpdateEnd()
 {
-	//レールムーバーの更新
-	railMover_->Update();
-
-	// デモ用プレイヤーの更新
-	demoPlayer_->Update();
-
-	//レールカメラの更新
-	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
-
 	spriteSceneChange_->Update();
 	if (spriteSceneChange_->GetIsEnd())
 	{

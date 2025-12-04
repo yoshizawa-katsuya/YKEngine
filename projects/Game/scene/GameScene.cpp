@@ -230,7 +230,8 @@ void GameScene::Finalize()
 
 }
 
-void GameScene::CheckAllColision() {
+void GameScene::CheckAllColision()
+{
 
 	//衝突マネージャのリセット
 	collisionManager_->Reset();

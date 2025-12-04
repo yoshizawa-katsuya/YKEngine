@@ -18,7 +18,8 @@ void EventTriggerManager::Update()
 
 void EventTriggerManager::RegisterToCollisionManager(CollisionManager* collisionManager)
 {
-	for (std::unique_ptr<BaseEventTrigger>& event : events_) {
+	for (std::unique_ptr<BaseEventTrigger>& event : events_) 
+	{
 		collisionManager->AddCollider(event.get());
 	}
 }

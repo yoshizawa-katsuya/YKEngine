@@ -32,7 +32,8 @@ void PlayerBulletManager::Update()
 void PlayerBulletManager::Draw(Camera* camera)
 {
 	//弾描画
-	for (std::unique_ptr<BasePlayerBullet>& bullet : playerBullets_) {
+	for (std::unique_ptr<BasePlayerBullet>& bullet : playerBullets_) 
+	{
 		bullet->Draw(camera);
 	}
 }

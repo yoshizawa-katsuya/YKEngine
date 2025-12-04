@@ -26,7 +26,7 @@ void Player::Initialize(BaseModel* model, WorldTransform* parent, uint32_t heart
 	
 	BaseCharacter::Update();
 
-	//�J�n���̃A�j���[�V�����ݒ�
+	//開始時のアニメーション設定
 	startAnime_ = std::make_unique<SRTAnimator>();
 	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 1.5f);
 
@@ -94,7 +94,7 @@ void Player::DrawUI()
 {
 	reticleController_->Draw();
 
-	//HP�̕\��
+	//HPの表示
 	for (int i = 0; i < kMaxHitPoint_; i++)
 	{
 		if (i < hitPoint_)
@@ -137,11 +137,11 @@ void Player::GameOverRotate()
 	}
 	direction_ = Subtract(toPosition, GetWorldPosition());
 
-	//�e�̉�]��l�����������x�N�g���̌v�Z
+	//親の回転を考慮した方向ベクトルの計算
 	Matrix4x4 parentMat = MakeRotateMatrix(worldTransform_.parent_->rotation_);
 	Matrix4x4 invParentMat = Inverse(parentMat);
 
-	//�e�̉�]��ł�����
+	//親の回転を打ち消す
 	Vector3 localDirection = TransformNormal(direction_, invParentMat);
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
 	
@@ -158,27 +158,27 @@ void Player::HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTextu
 	{
 		heratSprites_[i] = std::make_unique<Sprite>();
 		heratSprites_[i]->Initialize(heartTextureHandle);
-		heratSprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 50.0f)); //�ʒu��ݒ�
-		heratSprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //�T�C�Y��ݒ�
+		heratSprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 50.0f)); //位置を設定
+		heratSprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
 
 		heratEmptySprites_[i] = std::make_unique<Sprite>();
 		heratEmptySprites_[i]->Initialize(heartEmptyTexturehandle);
-		heratEmptySprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 50.0f)); //�ʒu��ݒ�
-		heratEmptySprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //�T�C�Y��ݒ�
+		heratEmptySprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 50.0f)); //位置を設定
+		heratEmptySprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
 	}
 }
 
 void Player::HandleMoveInput()
 {
-	//�L�����N�^�[�̈ړ��x�N�g��
+	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
 
 	move.x = input_->GetLeftStickX();
 	move.y = input_->GetLeftStickY();
 
 	if (move.x == 0 && move.y == 0) {
-		//���X�e�B�b�N���j���[�g�����Ȃ�A�L�[�{�[�h���͂�m�F
-		//�����������ňړ��x�N�g����ύX(���E)
+		//左スティックがニュートラルなら、キーボード入力を確認
+		//押した方向で移動ベクトルを変更(左右)
 		if (input_->PushKey(DIK_A)) {
 			move.x = -1.0f;
 		}
@@ -186,7 +186,7 @@ void Player::HandleMoveInput()
 			move.x = 1.0f;
 		}
 
-		// �����������ňړ��x�N�g����ύX(�㉺)
+		// 押した方向で移動ベクトルを変更(上下)
 		if (input_->PushKey(DIK_S)) {
 			move.y = -1.0f;
 		}
@@ -194,16 +194,16 @@ void Player::HandleMoveInput()
 			move.y = 1.0f;
 		}
 
-		move = Normalize(move); //�ړ��x�N�g���̐��K��
+		move = Normalize(move); //移動ベクトルの正規化
 
 	}
 
-	//�L�����N�^�[�̈ړ�����
+	//キャラクターの移動速さ
 	const float kCharacterSpeed = 0.2f;
-	//�ړ��x�N�g���̑����̓K�p
+	//移動ベクトルの速さの適用
 	move *= kCharacterSpeed;
 
-	//���W�ړ�(�x�N�g���̉��Z)
+	//座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move;
 }
 
@@ -229,26 +229,26 @@ void Player::UpdateMain(Camera* railCamera)
 {
 	HandleMoveInput();
 
-	//�ړ����E���W
+	//移動限界座標
 	const float kMoveLimitX = 8.9f;
 	const float kMoveLimitY = 4.8f;
 
-	//�͈͂𒴂��Ȃ�����
+	//範囲を超えない処理
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
 	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
 
-	//��]
+	//回転
 	Rotate();
 
 	BaseCharacter::Update();
 
-	//�Ə��I�u�W�F�N�g�̍X�V
+	//照準オブジェクトの更新
 	ReticleUpdate(railCamera);
 
-	//�`���[�W����
+	//チャージ処理
 	Charge();
 
-	//�L�����N�^�[�U������
+	//キャラクター攻撃処理
 	Attack();
 }
 
@@ -258,12 +258,12 @@ void Player::UpdateGameOver()
 	{
 		return;
 	}
-	//�����ł̈ړ��ʂ̐ݒ�
+	//乱数での移動量の設定
 	const float kMoveRange = 0.1f;
 
 	std::uniform_real_distribution<float> distribution(-kMoveRange, kMoveRange);
 
-	//���������G���W���ւ̃|�C���^
+	//乱数生成エンジンへのポインタ
 	std::mt19937* randomEngine = Random::GetInstance()->GetRandomEnginePtr();
 
 	characterWorldTransform_.translation_ = { distribution(*randomEngine), distribution(*randomEngine), distribution(*randomEngine) };
@@ -284,7 +284,7 @@ void Player::UpdateGameOver()
 
 void Player::Rotate()
 {
-	//���������̌v�Z
+	//向く方向の計算
 	Vector3 toPosition;
 	if (reticleController_->IsLockOn())
 	{
@@ -296,11 +296,11 @@ void Player::Rotate()
 	}
 	direction_ = Subtract(toPosition, GetWorldPosition());
 	
-	//�e�̉�]��l�����������x�N�g���̌v�Z
+	//親の回転を考慮した方向ベクトルの計算
 	Matrix4x4 parentMat = MakeRotateMatrix(worldTransform_.parent_->rotation_);
 	Matrix4x4 invParentMat = Inverse(parentMat);
 
-	//�e�̉�]��ł�����
+	//親の回転を打ち消す
 	Vector3 localDirection = TransformNormal(direction_, invParentMat);
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
 	
@@ -317,24 +317,24 @@ void Player::Attack() {
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 
-		//�e�̑��x
+		//弾の速度
 		const float kBulletSpeed = 2.0f;
 
 		Vector3 velocity = Multiply(kBulletSpeed, Normalize(direction_));
 		
-		//�e�𐶐����A������
+		//弾を生成し、初期化
 		if (isChargeMax_)
 		{
-			//�`���[�W�ő�Ȃ狭�͂Ȓe�����
+			//チャージ最大なら強力な弾を撃つ
 			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::kCharge);
 
-			//�`���[�W����Z�b�g
+			//チャージをリセット
 			ChargeReset();
 			return;
 		}
 
 		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::kNormal);
-		//�`���[�W����Z�b�g
+		//チャージをリセット
 		ChargeReset();
 
 	}
@@ -343,13 +343,13 @@ void Player::Attack() {
 
 void Player::Charge()
 {
-	//�`���[�W���ő�Ȃ珈�����Ȃ�
+	//チャージが最大なら処理しない
 	if (isChargeMax_)
 	{
 		return;
 	}
 
-	//�`���[�W
+	//チャージ
 	chargeTime_ += 1.0f / 60.0f;
 	if (chargeTime_ >= kMaxChargeTime_) 
 	{

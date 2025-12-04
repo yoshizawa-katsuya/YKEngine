@@ -21,7 +21,8 @@ void EnemyBulletManager::Update(Camera* railCamera)
 		return false;
 		});
 	// 弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_)
+	{
 		bullet->Update(railCamera);
 	}
 }
