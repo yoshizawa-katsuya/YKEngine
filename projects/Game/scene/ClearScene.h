@@ -1,13 +1,12 @@
 #pragma once
 #include "BaseScene.h"
 #include "AnimatedSprite.h"
-#include "DebugCamera.h"
 #include "My3dObject.h"
 #include "RailMover.h"
-#include "RailCamera.h"
 #include "InstancingObjects.h"
 #include "DirectionalLight.h"
 #include "DemoPlayer.h"
+#include "manager/CameraManager.h"
 class Input;
 class ModelPlatform;
 
@@ -77,14 +76,7 @@ private:
 	//平行光源
 	DirectionalLight directionalLight_;
 
-	//カメラ
-	Camera* mainCamera_ = nullptr;
-
-	std::unique_ptr<Camera> camera_;
-
-	std::unique_ptr<DebugCamera> debugCamera_;
-
-	bool isActiveDebugCamera_ = false;
+	std::unique_ptr<CameraManager> cameraManager_;
 
 	std::unique_ptr<Sprite> spriteBackGround_;
 
@@ -104,9 +96,6 @@ private:
 
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;
-
-	//レールカメラ
-	std::unique_ptr<RailCamera> railCamera_;
 
 	//デモプレイヤー
 	std::unique_ptr<DemoPlayer> demoPlayer_;

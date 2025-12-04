@@ -363,6 +363,9 @@
     <ClCompile Include="Game\objects\DemoPlayer.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\manager\CameraManager.cpp">
+      <Filter>ソース ファイル\application\manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -729,6 +732,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\RootParams.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\manager\CameraManager.h">
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

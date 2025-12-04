@@ -3,12 +3,12 @@
 #include "Vector3.h"
 #include "Matrix.h"
 #include "Player.h"
-#include "GameScene.h"
-#include "WinApp.h"
 #include "TransformHelpers.h"
 #include "Lerp.h"
 #include "Curve.h"
 #include "manager/EffectManager.h"
+#include "Camera.h"
+#include "manager/EnemyBulletManager.h"
 
 BaseEnemy::~BaseEnemy() 
 {

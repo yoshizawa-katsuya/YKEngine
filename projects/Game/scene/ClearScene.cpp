@@ -26,21 +26,6 @@ void ClearScene::Initialize()
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
-	//カメラの生成
-	camera_ = std::make_unique<Camera>();
-	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
-
-	//デバッグカメラの生成
-	debugCamera_ = std::make_unique<DebugCamera>();
-	debugCamera_->Initialize();
-
-	//メインカメラの設定
-	mainCamera_ = camera_.get();
-
-	//モデルを描画する際カメラの設定は必須
-	modelPlatform_->SetCamera(mainCamera_);
-
 	//texture読み込み
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/clear.png");
 	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
@@ -79,6 +64,10 @@ void ClearScene::Initialize()
 	ground_->WorldTransformUpdate(groundTransform);
 
 	CreateLevel();
+
+	//カメラの生成
+	cameraManager_ = std::make_unique<CameraManager>();
+	cameraManager_->InitializeForClearScene(railMover_->GetWorldTransform(), -railMover_->GetForward());
 }
 
 void ClearScene::Update()
@@ -87,29 +76,12 @@ void ClearScene::Update()
 
 	ImGui::Begin("Window");
 	ImGui::Text("Clear");
-	//メインカメラの切り替え
-	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
-		isActiveDebugCamera_ = false;
-
-		mainCamera_ = camera_.get();
-		modelPlatform_->SetCamera(mainCamera_);
-
-	}
-	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
-		isActiveDebugCamera_ = true;
-
-		mainCamera_ = debugCamera_->GetCamera();
-		modelPlatform_->SetCamera(mainCamera_);
-
-	}
+	
 	ImGui::End();
 
 #endif // USE_IMGUI
 
-	if (isActiveDebugCamera_)
-	{
-		debugCamera_->Update();
-	}
+	cameraManager_->Update();
 
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kConfetti01, railMover_->GetWorldTransform()->GetWorldPosition());
 
@@ -131,16 +103,18 @@ void ClearScene::Update()
 		break;
 	}
 
-	ParticleManager::GetInstance()->Update(mainCamera_);
+	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
 
 }
 
 void ClearScene::Draw()
 {
+	Camera* mainCamera = cameraManager_->GetMainCamera();
+
 	//背景の描画
 	modelPlatform_->SkyBoxPreDraw();
 
-	skyBox_->CameraUpdate(mainCamera_);
+	skyBox_->CameraUpdate(mainCamera);
 	skyBox_->Draw();
 
 	//Modelの描画前処理
@@ -149,15 +123,15 @@ void ClearScene::Draw()
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
 	
 	//デモ用プレイヤーの描画
-	demoPlayer_->Draw(mainCamera_);
+	demoPlayer_->Draw(mainCamera);
 
 	//地面の描画
-	ground_->CameraUpdate(mainCamera_);
+	ground_->CameraUpdate(mainCamera);
 	ground_->Draw();
 
 	modelPlatform_->LinePreDraw();
 
-	railMover_->DrawRail(mainCamera_);
+	railMover_->DrawRail(mainCamera);
 
 	//パーティクルの描画
 	ParticleManager::GetInstance()->Draw();
@@ -183,8 +157,7 @@ void ClearScene::UpdateStart()
 	demoPlayer_->Update();
 
 	//レールカメラの更新
-	railCamera_->CreateTargetRotationFromDirection(-railMover_->GetForward());
-	railCamera_->Update();
+	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
 
 	//シーン切り替えアニメーション更新
 	spriteSceneChange_->Update();
@@ -203,8 +176,7 @@ void ClearScene::UpdateMain()
 	demoPlayer_->Update();
 
 	//レールカメラの更新
-	railCamera_->CreateTargetRotationFromDirection(-railMover_->GetForward());
-	railCamera_->Update();
+	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
 
 	//スペースキーまたはAボタンで終了
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A))
@@ -224,8 +196,7 @@ void ClearScene::UpdateEnd()
 	demoPlayer_->Update();
 
 	//レールカメラの更新
-	railCamera_->CreateTargetRotationFromDirection(-railMover_->GetForward());
-	railCamera_->Update();
+	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
 
 	spriteSceneChange_->Update();
 	if (spriteSceneChange_->GetIsEnd())
@@ -246,13 +217,6 @@ void ClearScene::CreateLevel()
 	railMover_ = std::make_unique<RailMover>();
 	railMover_->Initialize(levelData.splines[0].controlPoints, nullptr, true);
 	railMover_->Update();
-
-	// レールカメラの生成
-	railCamera_ = std::make_unique<RailCamera>();
-	// レールカメラの初期化
-	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform(), railMover_->GetWorldTransform());
-	railCamera_->CreateTargetRotationFromDirection(-railMover_->GetForward());
-	railCamera_->SetClearScene();
 
 	//デモ用プレイヤーの生成
 	demoPlayer_ = std::make_unique<DemoPlayer>();

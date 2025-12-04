@@ -1,7 +1,7 @@
 #pragma once
 #include "WorldTransform.h"
-#include "Camera.h"
-class Player;
+#include <memory>
+class Camera;
 
 /// <summary>
 /// レールカメラ。
@@ -16,7 +16,7 @@ public:
 	/// </summary>
 	/// <param name="camera">レールカメラとして使用するカメラ。</param>
 	/// <param name="parent">親ワールド変換データ。</param>
-	void Initialize(Camera* camera, WorldTransform* parent, WorldTransform* playerWorldTransform);
+	void Initialize(WorldTransform* parent, WorldTransform* playerWorldTransform);
 
 	/// <summary>
 	/// 更新。
@@ -37,6 +37,8 @@ public:
 	/// 方向からtargetRotation_を作成。
 	/// </summary>
 	void CreateTargetRotationFromDirection(const Vector3& direction);
+
+	Camera* GetCamera() { return camera_.get(); }
 
 private:
 
@@ -73,7 +75,7 @@ private:
 	float t_ = 0.0f;
 
 	// カメラ
-	Camera* camera_;
+	std::unique_ptr<Camera> camera_;
 
 	Vector3 targetRotation_{};
 

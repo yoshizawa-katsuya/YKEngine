@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\manager\CameraManager.cpp" />
     <ClCompile Include="Game\objects\DemoPlayer.cpp" />
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
     <ClCompile Include="Game\objects\EnemySpawnObject.cpp" />
@@ -359,6 +360,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\manager\CameraManager.h" />
     <ClInclude Include="Game\objects\DemoPlayer.h" />
     <ClInclude Include="Engine\lib\Color.h" />
     <ClInclude Include="Engine\2d\AnimatedSprite.h" />

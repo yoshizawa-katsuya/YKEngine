@@ -13,11 +13,8 @@
 #include "SpotLight.h"
 #include "AnimatedSprite.h"
 #include "Player.h"
-#include "Camera.h"
-#include "DebugCamera.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
-#include "RailCamera.h"
 #include "manager/EnemyManager.h"
 #include "manager/CollisionManager.h"
 #include "manager/EnemySpawnManager.h"
@@ -25,6 +22,7 @@
 #include "manager/EventTriggerManager.h"
 #include "manager/PlayerBulletManager.h"
 #include "manager/EnemyBulletManager.h"
+#include "manager/CameraManager.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -125,13 +123,7 @@ private:
 	SpritePlatform* spritePlatform_;
 	ModelPlatform* modelPlatform_;
 
-	Camera* mainCamera_ = nullptr;
-
-	std::unique_ptr<Camera> camera_;
-
-	std::unique_ptr<DebugCamera> debugCamera_;
-
-	bool isActiveDebugCamera_ = false;
+	std::unique_ptr<CameraManager> cameraManager_;
 
 	//平行光源
 	DirectionalLight directionalLight_;
@@ -178,9 +170,6 @@ private:
 
 	//イベントトリガーマネージャー
 	std::unique_ptr<EventTriggerManager> eventTriggerManager_;
-
-	//レールカメラ
-	std::unique_ptr<RailCamera> railCamera_;
 
 	//シーンのフェーズ
 	enum class Phase 

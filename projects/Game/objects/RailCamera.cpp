@@ -4,12 +4,13 @@
 #include "TransformHelpers.h"
 #include "ModelPlatform.h"
 #include "Slerp.h"
+#include "Camera.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
-void RailCamera::Initialize(Camera* camera, WorldTransform* parent, WorldTransform* playerWorldTransform)
+void RailCamera::Initialize(WorldTransform* parent, WorldTransform* playerWorldTransform)
 {
 
 	//ワールドトランスフォームの初期設定
@@ -21,11 +22,10 @@ void RailCamera::Initialize(Camera* camera, WorldTransform* parent, WorldTransfo
 	targetParentWorldTransform_.translation_.z = 8.0f;
 	targetParentWorldTransform_.parent_ = playerWorldTransform;
 
-	camera_ = camera;
-
 	worldTransform_.UpdateMatrix();
 
-	//カメラの更新
+	//カメラの初期設定
+	camera_ = std::make_unique<Camera>();
 	camera_->SetTranslate(worldTransform_.GetWorldPosition());
 	camera_->SetRotate(worldTransform_.parent_->rotation_);
 	camera_->Update();

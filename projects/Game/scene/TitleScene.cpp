@@ -23,21 +23,6 @@ void TitleScene::Initialize()
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
-	//カメラの生成
-	camera_ = std::make_unique<Camera>();
-	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
-
-	//デバッグカメラの生成
-	debugCamera_ = std::make_unique<DebugCamera>();
-	debugCamera_->Initialize();
-
-	//メインカメラの設定
-	mainCamera_ = camera_.get();
-
-	//モデルを描画する際カメラの設定は必須
-	modelPlatform_->SetCamera(mainCamera_);
-
 	//テクスチャの読み込み
 	uint32_t textureHandleTitle = TextureManager::GetInstance()->Load("./Resources/title.png");
 	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
@@ -77,6 +62,9 @@ void TitleScene::Initialize()
 
 	CreateLevel();
 
+	//カメラの生成
+	cameraManager_ = std::make_unique<CameraManager>();
+	cameraManager_->Initialize(railMover_->GetWorldTransform(), nullptr);
 }
 
 void TitleScene::Update()
@@ -86,29 +74,13 @@ void TitleScene::Update()
 	
 	ImGui::Begin("Window");
 	ImGui::Text("Title");
-	//メインカメラの切り替え
-	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
-		isActiveDebugCamera_ = false;
-
-		mainCamera_ = camera_.get();
-		modelPlatform_->SetCamera(mainCamera_);
-
-	}
-	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
-		isActiveDebugCamera_ = true;
-
-		mainCamera_ = debugCamera_->GetCamera();
-		modelPlatform_->SetCamera(mainCamera_);
-
-	}
+	
 	ImGui::End();
 	
 #endif // USE_IMGUI
 
-	if (isActiveDebugCamera_)
-	{
-		debugCamera_->Update();
-	}
+	//カメラの更新
+	cameraManager_->Update();
 
 	switch (phase_)
 	{
@@ -132,11 +104,12 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+	Camera* mainCamera = cameraManager_->GetMainCamera();
 
 	//背景の描画
 	modelPlatform_->SkyBoxPreDraw();
 
-	skyBox_->CameraUpdate(mainCamera_);
+	skyBox_->CameraUpdate(mainCamera);
 	skyBox_->Draw();
 
 	//Modelの描画前処理
@@ -145,7 +118,7 @@ void TitleScene::Draw()
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
 
 	//地面の描画
-	ground_->CameraUpdate(mainCamera_);
+	ground_->CameraUpdate(mainCamera);
 	ground_->Draw();
 
 	modelPlatform_->InstancingPreDraw();
@@ -153,13 +126,13 @@ void TitleScene::Draw()
 	//オブジェクトの描画
 	for (const auto& [name, instancingObject] : instancingObjects_) 
 	{
-		instancingObject->CameraUpdate(mainCamera_);
+		instancingObject->CameraUpdate(mainCamera);
 		instancingObject->Draw();
 	}
 
 	modelPlatform_->LinePreDraw();
 
-	railMover_->DrawRail(mainCamera_);
+	railMover_->DrawRail(mainCamera);
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
@@ -190,7 +163,7 @@ void TitleScene::UpdateMain()
 	railMover_->Update();
 
 	//レールカメラの更新
-	railCamera_->Update();
+	cameraManager_->UpdateRailCamera();
 
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		phase_ = Phase::kEnd;
@@ -218,11 +191,6 @@ void TitleScene::CreateLevel()
 	//レールムーバーの生成
 	railMover_ = std::make_unique<RailMover>();
 	railMover_->Initialize(levelData.splines[0].controlPoints, nullptr, true);
-
-	// レールカメラの生成
-	railCamera_ = std::make_unique<RailCamera>();
-	// レールカメラの初期化
-	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform(), nullptr);
 
 	//オブジェクトの生成
 	std::string key;

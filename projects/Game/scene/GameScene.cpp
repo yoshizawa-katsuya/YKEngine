@@ -27,11 +27,6 @@ void GameScene::Initialize() {
 	modelPlatform_ = ModelPlatform::GetInstance();
 
 	dxCommon_->ResetDeltaTime();
-
-	//カメラの生成
-	camera_ = std::make_unique<Camera>();
-	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
 	
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
@@ -64,20 +59,14 @@ void GameScene::Initialize() {
 	//ステージの生成
 	CreateLevel();
 
+	//カメラの生成
+	cameraManager_ = std::make_unique<CameraManager>();
+	cameraManager_->Initialize(railMover_->GetWorldTransform(), player_->GetWorldTransform());
+
 	//敵マネージャーの生成
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(player_.get(), camera_.get(), enemyBulletManager_.get());
+	enemyManager_->Initialize(player_.get(), cameraManager_->GetRailCameraInner(), enemyBulletManager_.get());
 	enemySpawnManager_->SetEnemyManager(enemyManager_.get());
-
-	//デバッグカメラの生成
-	debugCamera_ = std::make_unique<DebugCamera>();
-	debugCamera_->Initialize();
-
-	//メインカメラの設定
-	mainCamera_ = camera_.get();
-
-	//モデルを描画する際カメラの設定は必須
-	modelPlatform_->SetCamera(mainCamera_);
 
 	//衝突マネージャの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -104,12 +93,11 @@ void GameScene::Initialize() {
 
 }
 
-void GameScene::Update() {
-
-	if (isActiveDebugCamera_) 
-	{
-		debugCamera_->Update();
-	}
+void GameScene::Update()
+{
+	
+	//カメラマネージャーの更新
+	cameraManager_->Update();
 
 	switch (phase_)
 	{
@@ -136,45 +124,19 @@ void GameScene::Update() {
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 	
-	ParticleManager::GetInstance()->Update(mainCamera_);
+	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
 
 #ifdef USE_IMGUI
 
+	ImGui::Begin("GameScene");
 
-	ImGui::Begin("Window");
-	if (ImGui::TreeNode("camera")) 
-	{
-		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
-		ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
-
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("DirectionalLight")) 
+	if (ImGui::TreeNode("DirectionalLight"))
 	{
 		ImGui::ColorEdit4("color", &directionalLight_.color.x);
 		ImGui::DragFloat3("direction", &directionalLight_.direction.x, 0.01f);
 		ImGui::DragFloat("intensity", &directionalLight_.intensity, 0.01f);
 
 		ImGui::TreePop();
-	}
-
-	//メインカメラの切り替え
-	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) 
-	{
-		isActiveDebugCamera_ = false;
-
-		mainCamera_ = camera_.get();
-		modelPlatform_->SetCamera(mainCamera_);
-
-	}
-	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) 
-	{
-		isActiveDebugCamera_ = true;
-
-		mainCamera_ = debugCamera_->GetCamera();
-		modelPlatform_->SetCamera(mainCamera_);
-
 	}
 	
 	if (ImGui::Button("TitleScene")) 
@@ -203,11 +165,13 @@ void GameScene::Update() {
 
 void GameScene::Draw()
 {
+	//メインカメラを取得
+	Camera* mainCamera = cameraManager_->GetMainCamera();
 
 	//背景の描画
 	modelPlatform_->SkyBoxPreDraw();
 
-	skyBox_->CameraUpdate(mainCamera_);
+	skyBox_->CameraUpdate(mainCamera);
 	skyBox_->Draw();
 
 	//Modelの描画前処理
@@ -216,32 +180,32 @@ void GameScene::Draw()
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
 	
 	//地面の描画
-	ground_->CameraUpdate(mainCamera_);
+	ground_->CameraUpdate(mainCamera);
 	ground_->Draw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	player_->Draw(mainCamera);
 
 	//自機の弾の描画
-	playerBulletManager_->Draw(mainCamera_);
+	playerBulletManager_->Draw(mainCamera);
 
 	// 敵の描画
-	enemyManager_->Draw(mainCamera_);
+	enemyManager_->Draw(mainCamera);
 
 	// 弾描画
-	enemyBulletManager_->Draw(mainCamera_);
+	enemyBulletManager_->Draw(mainCamera);
 
 	modelPlatform_->InstancingPreDraw();
 
 	//衝突マネージャの描画
-	collisionManager_->Draw(mainCamera_);
+	collisionManager_->Draw(mainCamera);
 
-	enemySpawnManager_->Draw(mainCamera_);
+	enemySpawnManager_->Draw(mainCamera);
 
 	//オブジェクトの描画
 	for (const auto& [name, instancingObject] : instancingObjects_) 
 	{
-		instancingObject->CameraUpdate(mainCamera_);
+		instancingObject->CameraUpdate(mainCamera);
 		instancingObject->Draw();
 	}
 	
@@ -250,7 +214,7 @@ void GameScene::Draw()
 
 	modelPlatform_->LinePreDraw();
 
-	railMover_->DrawRail(mainCamera_);
+	railMover_->DrawRail(mainCamera);
 
 	//Spriteの前景描画前処理
 	spritePlatform_->PreDraw();
@@ -289,7 +253,7 @@ void GameScene::UpdateStart()
 {
 	spriteSceneChange_->Update();
 	//プレイヤーの更新
-	player_->Update(camera_.get());
+	player_->Update(cameraManager_->GetRailCameraInner());
 	if (player_->StartCompleted())
 	{
 		phase_ = Phase::kMain;
@@ -299,6 +263,8 @@ void GameScene::UpdateStart()
 
 void GameScene::UpdateMain()
 {
+	//レールカメラの取得
+	Camera* railCamera = cameraManager_->GetRailCameraInner();
 
 	//敵のスポーンマネージャーの更新
 	enemySpawnManager_->Update();
@@ -310,10 +276,10 @@ void GameScene::UpdateMain()
 	railMover_->Update();
 
 	//レールカメラの更新
-	railCamera_->Update();
+	cameraManager_->UpdateRailCamera();
 
 	//プレイヤーの更新
-	player_->Update(camera_.get());
+	player_->Update(railCamera);
 
 	//自機の弾の更新
 	playerBulletManager_->Update();
@@ -322,11 +288,11 @@ void GameScene::UpdateMain()
 	enemyManager_->Update();
 
 	//敵の弾の更新
-	enemyBulletManager_->Update(camera_.get());
+	enemyBulletManager_->Update(railCamera);
 
 	CheckAllColision();
 
-	player_->SetLockOnTarget(enemyManager_->GetEnemies(), camera_.get());
+	player_->SetLockOnTarget(enemyManager_->GetEnemies(), railCamera);
 
 	CheckGameClear();
 
@@ -346,17 +312,20 @@ void GameScene::UpdateGameClear()
 
 void GameScene::UpdateGameOver()
 {
+	//レールカメラの取得
+	Camera* railCamera = cameraManager_->GetRailCameraInner();
+
 	//プレイヤーの更新
-	player_->Update(camera_.get());
+	player_->Update(railCamera);
 
 	//レールカメラの更新
-	railCamera_->Update();
+	cameraManager_->UpdateRailCamera();
 
 	//敵管理クラスの更新
 	enemyManager_->Update();
 
 	//敵の弾の更新
-	enemyBulletManager_->Update(camera_.get());
+	enemyBulletManager_->Update(railCamera);
 
 	CheckAllColision();
 
@@ -407,8 +376,7 @@ void GameScene::ProcessGameOver()
 	spriteSceneChange_->ResetReverseAnimation();
 	player_->GameOverRotate();
 	player_->SetGameOver();
-	railCamera_->SetGameOver();
-	railCamera_->CreateTargetRotationFromDirection(player_->GetInverseLocalDirection());
+	cameraManager_->ProcessGameOver(player_->GetInverseLocalDirection());
 	enemyBulletManager_->SetIsGameOver(true);
 }
 
@@ -436,11 +404,6 @@ void GameScene::CreateLevel()
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get(), railMover_->GetWorldTransform(), heratTextureHandle, heratFrameTextureHandle);
 	player_->SetPlayerBulletManager(playerBulletManager_.get());
-
-	// レールカメラの生成
-	railCamera_ = std::make_unique<RailCamera>();
-	// レールカメラの初期化
-	railCamera_->Initialize(camera_.get(), railMover_->GetWorldTransform(), player_->GetWorldTransform());
 
 	for (const EnemySpawnData& enemySpawnData : levelData.enemySpawns)
 	{
