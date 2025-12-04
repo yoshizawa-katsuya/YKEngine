@@ -82,183 +82,23 @@ void CollisionManager::AddCollider(Collider* collider)
 
 void CollisionManager::CheckColliderPair(Collider* colliderA, Collider* colliderB)
 {
-	CollisionTypeIdDef typeID = colliderA->GetTypeID();
-	
-	//タイプIDによって処理を分岐
-	switch (typeID)
+	//衝突ペアでなければ抜ける
+	if (!IsCollisionPair(colliderA->GetTypeID(), colliderB->GetTypeID()))
 	{
-	case CollisionTypeIdDef::kDefault:
-		break;
-	case CollisionTypeIdDef::kPlayer:
-		CheckPlayerCollisions(colliderA, colliderB);
-		break;
-	case CollisionTypeIdDef::kEnemy:
-		CheckEnemyCollisions(colliderA, colliderB);
-		break;
-	case CollisionTypeIdDef::kTackleEnemy:
-		CheckTackleEnemyCollisions(colliderA, colliderB);
-		break;
-	case CollisionTypeIdDef::kPlayerBullet:
-		CheckPlayerBulletCollisions(colliderA, colliderB);
-		break;
-	case CollisionTypeIdDef::kEnemyBullet:
-		CheckEnemyBulletCollisions(colliderA, colliderB);
-		break;
-	case CollisionTypeIdDef::kRailMover:
-		CheakRailMoverCollisions(colliderA, colliderB);
-		break;
-	case CollisionTypeIdDef::kEvent:
-		CheckEventCollisions(colliderA, colliderB);
-		break;
-		break;
-	default:
-		break;
+		return;
 	}
+
+	if (IsCollision(Sphere{ colliderA->GetCenterPosition(), colliderA->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() }))
+	{
+		// 衝突時の処理
+		colliderA->OnCollision(colliderB);
+		colliderB->OnCollision(colliderA);
+	}
+
 }
 
-void CollisionManager::CheckPlayerCollisions(Collider* player, Collider* colliderB)
+bool CollisionManager::IsCollisionPair(CollisionTypeIdDef typeA, CollisionTypeIdDef typeB)
 {
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kEnemyBullet:
-	case CollisionTypeIdDef::kTackleEnemy:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ player->GetCenterPosition(), player->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) 
-		{
-			// プレイヤーの衝突時
-			player->OnCollision(colliderB);
-			colliderB->OnCollision(player);
-		}
-		return;
-	default:
-		return;
-	}
-	
+	return kCollisionPairs_.contains({ typeA, typeB }) || kCollisionPairs_.contains({ typeB, typeA });
 }
 
-void CollisionManager::CheckEnemyCollisions(Collider* enemy, Collider* colliderB)
-{
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kPlayerBullet:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ enemy->GetCenterPosition(), enemy->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) 
-		{
-			// 敵の衝突時
-			enemy->OnCollision(colliderB);
-			colliderB->OnCollision(enemy);
-		}
-		return;
-	default:
-		return;
-	}
-
-}
-
-void CollisionManager::CheckTackleEnemyCollisions(Collider* tackleEnemy, Collider* colliderB)
-{
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kPlayerBullet:
-	case CollisionTypeIdDef::kPlayer:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ tackleEnemy->GetCenterPosition(), tackleEnemy->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) 
-		{
-			// 敵の衝突時
-			tackleEnemy->OnCollision(colliderB);
-			colliderB->OnCollision(tackleEnemy);
-		}
-		return;
-	default:
-		return;
-	}
-}
-
-void CollisionManager::CheckPlayerBulletCollisions(Collider* playerBullet, Collider* colliderB)
-{
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kEnemy:
-	case CollisionTypeIdDef::kTackleEnemy:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ playerBullet->GetCenterPosition(), playerBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() }))
-		{
-			// プレイヤー弾の衝突時
-			playerBullet->OnCollision(colliderB);
-			colliderB->OnCollision(playerBullet);
-		}
-		return;
-	default:
-		return;
-	}
-}
-
-void CollisionManager::CheckEnemyBulletCollisions(Collider* enemyBullet, Collider* colliderB)
-{
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kPlayer:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ enemyBullet->GetCenterPosition(), enemyBullet->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() })) 
-		{
-			// 敵弾の衝突時
-			enemyBullet->OnCollision(colliderB);
-			colliderB->OnCollision(enemyBullet);
-		}
-		return;
-
-	default:
-		return;
-	}
-}
-
-void CollisionManager::CheakRailMoverCollisions(Collider* railMover, Collider* colliderB)
-{
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kEvent:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ railMover->GetCenterPosition(), railMover->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() }))
-		{
-			// レールムーバーの衝突時
-			railMover->OnCollision(colliderB);
-			colliderB->OnCollision(railMover);
-		}
-		return;
-
-	default:
-		return;
-	}
-}
-
-void CollisionManager::CheckEventCollisions(Collider* event, Collider* colliderB)
-{
-	CollisionTypeIdDef typeID = colliderB->GetTypeID();
-
-	switch (typeID)
-	{
-	case CollisionTypeIdDef::kRailMover:
-		//球と球の交差判定
-		if (IsCollision(Sphere{ event->GetCenterPosition(), event->GetRadius() }, Sphere{ colliderB->GetCenterPosition(), colliderB->GetRadius() }))
-		{
-			// 波イベントの衝突時
-			event->OnCollision(colliderB);
-			colliderB->OnCollision(event);
-		}
-		return;
-	default:
-		return;
-	}
-}

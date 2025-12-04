@@ -3,6 +3,7 @@
 #include "BaseModel.h"
 #include "InstancingObjects.h"
 #include "GlobalVariables.h"
+#include <set>
 
 /// <summary>
 /// 衝突マネージャ。
@@ -56,54 +57,7 @@ private:
 	/// <param name="colliderB">コライダーB</param>
 	void CheckColliderPair(Collider* colliderA, Collider* colliderB);
 
-	/// <summary>
-	/// プレイヤーコライダーと他のコライダーの衝突判定と応答。
-	/// </summary>
-	/// <param name="player">プレイヤーコライダー</param>
-	/// <param name="colliderB">他のコライダー</param>
-	void CheckPlayerCollisions(Collider* player, Collider* colliderB);
-
-	/// <summary>
-	/// 敵コライダーと他のコライダーの衝突判定と応答。
-	/// </summary>
-	/// <param name="enemy">敵コライダー</param>
-	/// <param name="colliderB">他のコライダー</param>
-	void CheckEnemyCollisions(Collider* enemy, Collider* colliderB);
-
-	/// <summary>
-	/// タックルタイプの敵コライダーと他のコライダーの衝突判定と応答。
-	/// </summary>
-	/// <param name="tackleEnemy">タックルタイプの敵コライダー</param>
-	/// <param name="colliderB">他のコライダー</param>
-	void CheckTackleEnemyCollisions(Collider* tackleEnemy, Collider* colliderB);
-
-	/// <summary>
-	/// プレイヤー弾コライダーと他のコライダーの衝突判定と応答。
-	/// </summary>
-	/// <param name="playerBullet">プレイヤー弾コライダー</param>
-	/// <param name="colliderB">他のコライダー</param>
-	void CheckPlayerBulletCollisions(Collider* playerBullet, Collider* colliderB);
-
-	/// <summary>
-	/// 敵弾コライダーと他のコライダーの衝突判定と応答。
-	/// </summary>
-	/// <param name="enemyBullet">敵弾コライダー</param>
-	/// <param name="colliderB">他のコライダー</param>
-	void CheckEnemyBulletCollisions(Collider* enemyBullet, Collider* colliderB);
-
-	/// <summary>
-	/// レールムーバーコライダーと他のコライダーの衝突判定と応答。
-	/// </summary>
-	/// <param name="railMover">レールムーバーコライダー</param>
-	/// <param name="colliderB">他のコライダー</param>
-	void CheakRailMoverCollisions(Collider* railMover, Collider* colliderB);
-
-	/// <summary>
-	/// イベントコライダーと他のコライダーの衝突判定と応答。
-	/// </summary>
-	/// <param name="event">イベントコライダー</param>
-	/// <param name="colliderB">他のコライダー</param>
-	void CheckEventCollisions(Collider* event, Collider* colliderB);
+	bool IsCollisionPair(CollisionTypeIdDef typeA, CollisionTypeIdDef typeB);
 
 	//グローバル変数
 	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();
@@ -119,5 +73,18 @@ private:
 	//デバッグ表示用モデル
 	std::shared_ptr<BaseModel> model_;
 	std::unique_ptr<InstancingObjects> objects_;
+
+	const std::set<std::pair<CollisionTypeIdDef, CollisionTypeIdDef>> kCollisionPairs_ = {
+		{CollisionTypeIdDef::kPlayer, CollisionTypeIdDef::kEnemyBullet},
+		{CollisionTypeIdDef::kPlayer, CollisionTypeIdDef::kTackleEnemy},
+
+		{CollisionTypeIdDef::kEnemy, CollisionTypeIdDef::kPlayerBullet},
+
+		{CollisionTypeIdDef::kTackleEnemy, CollisionTypeIdDef::kPlayerBullet},
+
+		{CollisionTypeIdDef::kRailMover, CollisionTypeIdDef::kEvent},
+
+	};
+
 };
 
