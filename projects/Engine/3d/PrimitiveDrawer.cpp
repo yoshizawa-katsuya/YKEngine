@@ -82,35 +82,20 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 
 	//DescriptorRange
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	descriptorRange[0].BaseShaderRegister = 0;	//0から始まる t0
-	descriptorRange[0].NumDescriptors = 1;	//数は1つ
-	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+	descriptorRange[0] = CreateDescriptorRange(0);	//t0
 	
 	D3D12_DESCRIPTOR_RANGE descriptorRangeDirectionalLight[1] = {};
-	descriptorRangeDirectionalLight[0].BaseShaderRegister = 1;	//t1
-	descriptorRangeDirectionalLight[0].NumDescriptors = 1;	//数は1つ
-	descriptorRangeDirectionalLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-	descriptorRangeDirectionalLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+	descriptorRangeDirectionalLight[0] = CreateDescriptorRange(1);	//t1
 
 	D3D12_DESCRIPTOR_RANGE descriptorRangePointLight[1] = {};
-	descriptorRangePointLight[0].BaseShaderRegister = 2;	//t2
-	descriptorRangePointLight[0].NumDescriptors = 1;	//数は1つ
-	descriptorRangePointLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-	descriptorRangePointLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
-
+	descriptorRangePointLight[0] = CreateDescriptorRange(2);	//t2
+	
 	D3D12_DESCRIPTOR_RANGE descriptorRangeSpotLight[1] = {};
-	descriptorRangeSpotLight[0].BaseShaderRegister = 3;	//t3
-	descriptorRangeSpotLight[0].NumDescriptors = 1;	//数は1つ
-	descriptorRangeSpotLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-	descriptorRangeSpotLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
-
+	descriptorRangeSpotLight[0] = CreateDescriptorRange(3);	//t3
+	
 	D3D12_DESCRIPTOR_RANGE descriptorRangeEnvironmentTexture[1] = {};
-	descriptorRangeEnvironmentTexture[0].BaseShaderRegister = 4;	//t4
-	descriptorRangeEnvironmentTexture[0].NumDescriptors = 1;	//数は1つ
-	descriptorRangeEnvironmentTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-	descriptorRangeEnvironmentTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
-
+	descriptorRangeEnvironmentTexture[0] = CreateDescriptorRange(4);	//t4
+	
 	//RootParameter作成。複数設定できるので配列。
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters = {};
 
@@ -158,11 +143,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	{
 
 		D3D12_DESCRIPTOR_RANGE descriptorRangeDepthTexture[1] = {};
-		descriptorRangeDepthTexture[0].BaseShaderRegister = 1;	//t1
-		descriptorRangeDepthTexture[0].NumDescriptors = 1;	//数は1つ
-		descriptorRangeDepthTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-		descriptorRangeDepthTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
-
+		descriptorRangeDepthTexture[0] = CreateDescriptorRange(1);	//t1
 
 		rootParameters.resize(static_cast<size_t>(DepthOutlineRootParam::kCount));
 
@@ -191,11 +172,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	case DrawMode::kDissolveRendering:
 	{
 		D3D12_DESCRIPTOR_RANGE descriptorMaskTexture[1] = {};
-		descriptorMaskTexture[0].BaseShaderRegister = 1;	//t1
-		descriptorMaskTexture[0].NumDescriptors = 1;	//数は1つ
-		descriptorMaskTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
-		descriptorMaskTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
-
+		descriptorMaskTexture[0] = CreateDescriptorRange(1);	//t1
 
 		rootParameters.resize(static_cast<size_t>(DissolveRootParam::kCount));
 
@@ -1062,6 +1039,17 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	assert(SUCCEEDED(hr));
 
 	return pipelineSet;
+}
+
+D3D12_DESCRIPTOR_RANGE YKEngine::PrimitiveDrawer::CreateDescriptorRange(uint32_t BaseShaderRegister)
+{
+	D3D12_DESCRIPTOR_RANGE descriptorRange{};
+	descriptorRange.BaseShaderRegister = BaseShaderRegister;	//シェーダーレジスタ番号 t0など
+	descriptorRange.NumDescriptors = 1;	//数は1つ
+	descriptorRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	//SRVを使う
+	descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
+
+	return descriptorRange;
 }
 
 void PrimitiveDrawer::SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode)

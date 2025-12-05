@@ -105,6 +105,11 @@ private:
 	/// <returns>パイプラインセット</returns>
 	std::unique_ptr<PipelineSet> CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon);
 
+	/// <summary>
+	/// デスクリプタレンジの生成。
+	/// </summary>
+	D3D12_DESCRIPTOR_RANGE CreateDescriptorRange(uint32_t BaseShaderRegister);
+
 	//パイプライン。ブレンドモードの数だけ用意する
 	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCount> pipelineSets_;
 
