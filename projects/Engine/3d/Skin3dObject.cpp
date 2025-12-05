@@ -4,6 +4,9 @@
 #include "Animation.h"
 #include "RootParams.h"
 
+
+using namespace YKEngine;
+
 Skin3dObject::~Skin3dObject()
 {
 	srvHeapManager_->Free(srvIndex_);	//srvHeapManagerに登録されているSkinClusterのSRVを解放

@@ -1,5 +1,7 @@
 #include "SpritePlatform.h"
 
+using namespace YKEngine;
+
 SpritePlatform* SpritePlatform::GetInstance()
 {
 	static SpritePlatform instance;

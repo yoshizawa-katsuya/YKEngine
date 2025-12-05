@@ -5,7 +5,7 @@
 /// <summary>
 /// シーンの生成を担当するクラス。
 /// </summary>
-class SceneFactory : public AbstractSceneFactory
+class SceneFactory : public YKEngine::AbstractSceneFactory
 {
 public:
 	///<summary>
@@ -13,6 +13,6 @@ public:
 	/// </summary>
 	/// <param name="sceneName">シーン名</param>
 	/// <returns>生成したシーン</returns>
-	std::unique_ptr<BaseScene> CreateScene(const std::string& sceneName) override;
+	std::unique_ptr<YKEngine::BaseScene> CreateScene(const std::string& sceneName) override;
 };
 

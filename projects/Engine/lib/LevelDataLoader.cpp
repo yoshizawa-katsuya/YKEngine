@@ -3,6 +3,9 @@
 #include "cassert"
 #include <numbers>
 
+namespace YKEngine
+{
+
 LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension)
 {
 	
@@ -159,3 +162,5 @@ EulerTransform TranformLoad(nlohmann::json& transformData)
 
 	return transform;
 }
+
+} // namespace YKEngine

@@ -3,6 +3,9 @@
 #include <mutex>
 #include <queue>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// SRVヒープ管理クラス。
 /// SRVヒープの生成、SRVの生成、SRVヒープの管理を行う。
@@ -123,3 +126,5 @@ private:
 
 	std::mutex mutex_;
 };
+
+} // namespace YKEngine

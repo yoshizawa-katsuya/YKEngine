@@ -7,6 +7,9 @@
 #include <array>
 #include "SrvHeapManager.h"
 #include "BaseModel.h"
+
+namespace YKEngine
+{
 class Camera;
 
 /// <summary>
@@ -295,3 +298,5 @@ inline std::shared_ptr<BaseModel> ModelPlatform::CreateModelCommon(const std::st
 	models_[name] = model;
 	return model;
 }
+
+} // namespace YKEngine

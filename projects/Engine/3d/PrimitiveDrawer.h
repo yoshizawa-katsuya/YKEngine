@@ -8,6 +8,10 @@
 #include <cstdlib>
 #include <array>
 #include <memory>
+
+namespace YKEngine
+{
+
 class DirectXCommon;
 
 /// <summary>
@@ -106,3 +110,4 @@ private:
 
 };
 
+} // namespace YKEngine

@@ -5,9 +5,9 @@
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-	D3DResourceLeakChecker leakCheck_;
+	YKEngine::D3DResourceLeakChecker leakCheck_;
 
-	std::unique_ptr<YKFramework> game = std::make_unique<MyGame>();
+	std::unique_ptr<YKEngine::YKFramework> game = std::make_unique<MyGame>();
 
 	game->Run();
 	

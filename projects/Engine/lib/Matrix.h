@@ -4,6 +4,8 @@
 #include <math.h>
 #include <cmath>
 
+namespace YKEngine
+{
 //平行移動行列の作成
 Matrix3x3 MakeTranslateMatrix(Vector2 translate);
 
@@ -98,3 +100,5 @@ Matrix4x4 operator-(const Matrix4x4& m1, const Matrix4x4& m2);
 
 //行列の乗算
 Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);
+
+}	// namespace YKEngine

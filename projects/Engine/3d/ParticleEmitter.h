@@ -6,6 +6,9 @@
 #include "GlobalVariables.h"
 #include "Color.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// パーティクル生成クラス。
 /// パーティクルの発生数、発生頻度、ランダム化の有無、挙動などを管理する。
@@ -179,3 +182,4 @@ private:
 
 };
 
+} // namespace YKEngine

@@ -2,6 +2,9 @@
 #include <Windows.h>
 #include <cstdint>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// Windowsアプリケーションクラス。
 /// シングルトンで実装。
@@ -66,3 +69,4 @@ private:
 	
 };
 
+} // namespace YKEngine

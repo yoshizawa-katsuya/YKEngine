@@ -4,6 +4,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 void Player::Initialize(BaseModel* model) {
 
 	object_ = std::make_unique<My3dObject>();

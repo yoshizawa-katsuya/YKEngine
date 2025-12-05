@@ -8,7 +8,8 @@
 #include "WinApp.h"
 #include "Struct.h"
 
-using namespace Microsoft::WRL;
+namespace YKEngine
+{
 
 /// <summary>
 /// 入力クラス。
@@ -230,9 +231,9 @@ private:
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;
 
-	ComPtr<IDirectInputDevice8> keyboard_;
-	ComPtr<IDirectInputDevice8> mouse_;
-	ComPtr<IDirectInput8> directInput_ = nullptr;
+	Microsoft::WRL::ComPtr<IDirectInputDevice8> keyboard_;
+	Microsoft::WRL::ComPtr<IDirectInputDevice8> mouse_;
+	Microsoft::WRL::ComPtr<IDirectInput8> directInput_ = nullptr;
 	//全キーの入力情報
 	BYTE key_[256] = {};
 	//前回の全キーの入力情報
@@ -247,3 +248,4 @@ private:
 
 };
 
+} // namespace YKEngine

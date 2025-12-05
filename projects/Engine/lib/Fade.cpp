@@ -3,6 +3,8 @@
 #include "TextureManager.h"
 #include <algorithm>
 
+using namespace YKEngine;
+
 Fade::~Fade()
 {
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+namespace YKEngine
+{
+
 /// <summary>
 /// イージングの種類
 /// https://easings.net/ja
@@ -80,3 +83,5 @@ float EaseInBack(float x);
 /// <param name="x">0.0から1.0の範囲の値</param>
 /// <returns>イージングが適用された値</returns>
 float EaseOutBack(float x);
+
+} // namespace YKEngine

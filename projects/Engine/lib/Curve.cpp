@@ -1,6 +1,9 @@
 #include "Curve.h"
 #include "Matrix.h"
 
+namespace YKEngine
+{
+
 Vector2 Bezier(Vector2 p0, Vector2 p1, Vector2 p2, float t)
 {
 
@@ -131,3 +134,5 @@ std::vector<Vector3> GenerateCatmullRomSplinePointsLoop(std::vector<Vector3>& co
 
 	return splinePoints;
 }
+
+} // namespace YKEngine

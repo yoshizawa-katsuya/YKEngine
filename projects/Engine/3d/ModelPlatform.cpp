@@ -5,6 +5,8 @@
 #include "SkinModel.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 ModelPlatform* ModelPlatform::instance_ = nullptr;
 
 ModelPlatform* ModelPlatform::GetInstance()

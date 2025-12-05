@@ -1,6 +1,9 @@
 #pragma once
 #include "Struct.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// カプセルと円の衝突判定
 /// </summary>
@@ -83,3 +86,5 @@ bool IsCollision(const OBB& obb, const Segment& segemnt);
 
 //OBB同士の衝突判定
 bool IsCollision(const OBB& obb1, const OBB& obb2);
+
+}	//namespace YKEngine

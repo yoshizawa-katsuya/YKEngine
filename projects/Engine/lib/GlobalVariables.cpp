@@ -6,6 +6,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 GlobalVariables* GlobalVariables::GetInstance()
 {
 	static GlobalVariables instance;

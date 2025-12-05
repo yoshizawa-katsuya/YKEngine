@@ -8,6 +8,9 @@
 #include "DirectXTex/DirectXTex.h"
 #include "SrvHeapManager.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// テクスチャ管理クラス。
 /// シングルトン。
@@ -136,3 +139,5 @@ private:
 
 	std::mutex mutex_;
 };
+
+} // namespace YKEngine

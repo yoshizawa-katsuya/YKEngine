@@ -1,6 +1,9 @@
 #pragma once
 #include "Vector3.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// Transformに関する便利関数群
 /// </summary>
@@ -28,3 +31,5 @@ namespace TransformHelpers
 	/// <returns>正規化された角度</returns>
 	Vector3 NormalizeAngle(const Vector3& angle);
 }
+
+} // namespace YKEngine

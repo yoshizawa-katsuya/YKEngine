@@ -2,6 +2,8 @@
 #include "OffscreenRenderer.h"
 #include "Random.h"
 
+using namespace YKEngine;
+
 void YKFramework::Initialize()
 {
 	//スレッドプールの作成

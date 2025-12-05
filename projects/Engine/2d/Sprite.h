@@ -5,6 +5,9 @@
 #include <wrl.h>
 #include "Struct.h"
 #include "TextureManager.h"
+
+namespace YKEngine
+{
 class SpritePlatform;
 
 /// <summary>
@@ -160,3 +163,4 @@ protected:
 
 };
 
+} // namespace YKEngine

@@ -1,6 +1,9 @@
 #include "Vector2.h"
 #include <optional>
 
+namespace YKEngine
+{
+
 Vector2 Add(const Vector2& v1, const Vector2& v2)
 {
 	Vector2 anser;
@@ -91,3 +94,5 @@ Vector2 operator+(const Vector2& v)
 {
 	return v;
 }
+
+} // namespace YKEngine

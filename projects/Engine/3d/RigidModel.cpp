@@ -2,6 +2,8 @@
 #include "ModelPlatform.h"
 #include <numbers>
 
+using namespace YKEngine;
+
 RigidModel::~RigidModel()
 {
 }

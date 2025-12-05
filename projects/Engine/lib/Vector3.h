@@ -1,5 +1,7 @@
 #pragma once
 
+namespace YKEngine
+{
 /// <summary>
 /// 3次元ベクトル
 /// </summary>
@@ -67,3 +69,4 @@ Vector3 operator-(const Vector3& v);
 
 //単項プラス
 Vector3 operator+(const Vector3& v);
+}	// namespace YKEngine

@@ -4,6 +4,8 @@
 #include "SpritePlatform.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 void Sprite::Initialize(uint32_t textureHandle) {
 
 	//引数を受け取ってメンバ変数に記録する

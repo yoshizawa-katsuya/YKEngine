@@ -3,6 +3,9 @@
 #include <cmath>
 #include "TransformHelpers.h"
 
+namespace YKEngine
+{
+
 float Lerp(float p0, float p1, float t)
 {
 	return (1 - t) * p0 + t * p1;
@@ -90,3 +93,5 @@ float LeapShortAngle(float a, float b, float t)
 
 	return a + diff * t;
 }
+
+} // namespace YKEngine

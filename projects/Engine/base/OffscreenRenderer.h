@@ -6,6 +6,10 @@
 #include "Vector4.h"
 #include <vector>
 #include "Struct.h"
+
+namespace YKEngine
+{
+
 class SrvHeapManager;
 class PrimitiveDrawer;
 class DirectXCommon;
@@ -175,3 +179,4 @@ private:
 	bool useOffscreenRender_ = false;
 };
 
+} // namespace YKEngine

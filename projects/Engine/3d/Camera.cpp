@@ -3,6 +3,8 @@
 #include <numbers>
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 Camera::Camera()
 	: transform_({ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} })
 	, fovY_(0.45f)

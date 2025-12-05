@@ -1,5 +1,8 @@
 #pragma once
 
+namespace YKEngine
+{
+
 /// <summary>
 /// クォータニオン
 /// x, y, zはベクトル成分、wはスカラー成分
@@ -41,3 +44,5 @@ Quaternion operator/(const Quaternion& q, float s);
 
 //等価比較
 bool operator==(const Quaternion& q1, const Quaternion& q2);
+
+} // namespace YKEngine

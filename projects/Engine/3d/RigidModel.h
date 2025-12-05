@@ -1,6 +1,9 @@
 #pragma once
 #include "BaseModel.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// リジッドモデル。
 /// メッシュの形状は変化しない。
@@ -55,3 +58,4 @@ private:
 
 };
 
+} // namespace YKEngine

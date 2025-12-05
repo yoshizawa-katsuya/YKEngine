@@ -1,6 +1,9 @@
 #pragma once
 #include "Sprite.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// フェードクラス。
 /// 画面のフェードイン・フェードアウトを管理する。
@@ -67,3 +70,5 @@ private:
 	float counter_ = 0.0f;
 
 };
+
+} // namespace YKEngine

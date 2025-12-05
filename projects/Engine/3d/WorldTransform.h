@@ -1,6 +1,9 @@
 #pragma once
 #include "Struct.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// ワールド変換データ。
 /// 親子関係を持つことができる。
@@ -30,3 +33,4 @@ public:
 	void UpdateMatrix();
 };
 
+} // namespace YKEngine

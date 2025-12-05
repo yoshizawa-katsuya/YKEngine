@@ -7,6 +7,9 @@
 #include "Vector4.h"
 #include "Color.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// グローバル変数管理クラス。
 /// グループごとに変数を管理し、ファイルに保存・読み込みが可能。
@@ -234,3 +237,5 @@ private:
 	const std::string kDirectoryPath = "Resources/GlobalVariables/";
 
 };
+
+} // namespace YKEngine
