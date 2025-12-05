@@ -7,6 +7,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 TitleScene::~TitleScene()
 {
 }

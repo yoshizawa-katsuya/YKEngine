@@ -16,7 +16,7 @@ public:
 	/// <param name="position">イベントの位置</param>
 	/// <param name="radius">イベントの半径</param>
 	/// <param name="speed">変更後の速さ</param>
-	void Initialize(uint32_t waveNumber, const Vector3& position, float radius, float speed);
+	void Initialize(uint32_t waveNumber, const YKEngine::Vector3& position, float radius, float speed);
 
 	/// <summary>
 	/// 衝突時の処理。

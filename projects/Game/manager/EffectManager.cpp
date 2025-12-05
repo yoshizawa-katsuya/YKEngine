@@ -2,6 +2,8 @@
 #include "ModelPlatform.h"
 #include "ParticleManager.h"
 
+using namespace YKEngine;
+
 EffectManager* EffectManager::GetInstance()
 {
 	static EffectManager instance;

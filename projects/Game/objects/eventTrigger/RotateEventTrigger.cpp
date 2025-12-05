@@ -1,6 +1,8 @@
 #include "RotateEventTrigger.h"
 #include "RailMover.h"
 
+using namespace YKEngine;
+
 void RotateEventTrigger::Initialize(uint32_t waveNumber, const Vector3& position, const Vector3& rotate, float radius)
 {
 	BaseEventTrigger::Initialize(waveNumber, position, radius);

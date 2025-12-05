@@ -3,6 +3,9 @@
 #include "DirectXCommon.h"
 #include "Easing.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// SRTアニメーション。
 /// SRTとはScale, Rotate, Translateの略。
@@ -52,3 +55,4 @@ private:
 	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
 };
 
+} // namespace YKEngine

@@ -1,6 +1,8 @@
 #include "SRTAnimator.h"
 #include "Lerp.h"
 
+using namespace YKEngine;
+
 void SRTAnimator::SetAnimation(const Vector3& startVector, const Vector3& endVector, float duration)
 {
 	startVector_ = startVector;

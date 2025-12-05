@@ -1,6 +1,9 @@
 #pragma once
 #include "Struct.h"
 #include <memory>
+
+namespace YKEngine
+{
 class Camera;
 class Input;
 
@@ -41,3 +44,4 @@ private:
 
 };
 
+} // namespace YKEngine

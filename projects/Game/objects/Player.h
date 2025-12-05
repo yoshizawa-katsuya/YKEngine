@@ -5,7 +5,6 @@
 #include "Sprite.h"
 #include "BaseCharacter.h"
 #include "ReticleController.h"
-class Camera;
 class BaseEnemy;
 class PlayerBulletManager;
 
@@ -27,13 +26,13 @@ public:
 	/// <param name="parent">親のワールド変換</param>
 	/// <param name="heartTextureHandle">ハートテクスチャのハンドル</param>
 	/// <param name="heartEmptyTexturehandle">空のハートテクスチャのハンドル</param>
-	void Initialize(BaseModel* model, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
+	void Initialize(YKEngine::BaseModel* model, YKEngine::WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
 
 	/// <summary>
 	/// 更新。
 	/// </summary>
 	/// <param name="railCamera">レールカメラ。レティクルをワールド座標に変換するために使用。</param>
-	void Update(Camera* railCamera);
+	void Update(YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// 衝突時の処理。
@@ -51,25 +50,25 @@ public:
 	/// </summary>
 	/// <param name="enemies">敵のリスト</param>
 	/// <param name="railCamera">レールカメラ。敵の位置をスクリーン座標に変換するために使用。</param>
-	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera);
+	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// ワールド座標の取得。
 	/// </summary>
 	/// <returns>ワールド座標</returns>
-	Vector3 GetWorldPosition();
+	YKEngine::Vector3 GetWorldPosition();
 
 	/// <summary>
 	/// 自機の逆向きベクトルの取得。
 	/// </summary>
-	Vector3 GetInverseLocalDirection();
+	YKEngine::Vector3 GetInverseLocalDirection();
 
 	/// <summary>
 	/// ゲームオーバーになった瞬間の回転。
 	/// </summary>
 	void GameOverRotate();
 
-	WorldTransform* GetWorldTransform() { return &worldTransform_; }
+	YKEngine::WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
 	bool GetIsGameOverEnd() { return isGameOverEnd_; }
 
@@ -105,7 +104,7 @@ private:
 	/// <summary>
 	/// メインの更新
 	/// </summary>
-	void UpdateMain(Camera* railCamera);
+	void UpdateMain(YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// ゲームオーバー時の更新
@@ -121,7 +120,7 @@ private:
 	/// レティクルの更新。
 	/// </summary>
 	/// <param name="railCamera">レールカメラ。レティクルをワールド座標に変換するために使用。</param>
-	void ReticleUpdate(Camera* railCamera);
+	void ReticleUpdate(YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// 攻撃処理。
@@ -139,7 +138,7 @@ private:
 	void ChargeReset();
 
 	//キーボード入力
-	Input* input_ = nullptr;
+	YKEngine::Input* input_ = nullptr;
 
 	enum class Phase 
 	{
@@ -155,15 +154,15 @@ private:
 
 	std::unique_ptr<ReticleController> reticleController_ = nullptr;
 
-	std::unique_ptr<SRTAnimator> startAnime_;
+	std::unique_ptr<YKEngine::SRTAnimator> startAnime_;
 
-	Vector3 direction_{};	//方向
+	YKEngine::Vector3 direction_{};	//方向
 
 	const int kMaxHitPoint_ = 5; // 最大ヒットポイント
 	int hitPoint_ = kMaxHitPoint_; // プレイヤーのヒットポイント
 
-	std::vector<std::unique_ptr<Sprite>> heratSprites_; // ヒットポイントのスプライト
-	std::vector<std::unique_ptr<Sprite>> heratEmptySprites_; // ヒットポイントがないときのスプライト
+	std::vector<std::unique_ptr<YKEngine::Sprite>> heratSprites_; // ヒットポイントのスプライト
+	std::vector<std::unique_ptr<YKEngine::Sprite>> heratEmptySprites_; // ヒットポイントがないときのスプライト
 
 	float chargeTime_ = 0.0f; // チャージ時間
 	const float kMaxChargeTime_ = 1.0f; // 最大チャージ時間

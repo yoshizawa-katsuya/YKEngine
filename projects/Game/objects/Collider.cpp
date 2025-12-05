@@ -2,6 +2,8 @@
 #include "Matrix.h"
 #include "Camera.h"
 
+using namespace YKEngine;
+
 void Collider::Initialize()
 {
 	worldTransform_.Initialize();

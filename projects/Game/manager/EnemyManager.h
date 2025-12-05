@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseEnemy.h"
 #include "EnemySpawn.h"
-class Camera;
+class YKEngine::Camera;
 class Player;
 class EnemyBulletManager;
 class CollisionManager;
@@ -21,7 +21,7 @@ public:
 	/// <param name="player">プレイヤーのポインタ。敵の弾の発射先に使用。</param>
 	/// <param name="railCamera">レールカメラのポインタ。カメラに映っているかの判定に使用。</param>
 	/// <param name="enemyBulletManager">敵弾マネージャーのポインタ。敵弾の生成に使用。</param>
-	void Initialize(Player* player, Camera* railCamera, EnemyBulletManager* enemyBulletManager);
+	void Initialize(Player* player, YKEngine::Camera* railCamera, EnemyBulletManager* enemyBulletManager);
 
 	/// <summary>
 	/// 更新。
@@ -32,7 +32,7 @@ public:
 	/// 描画。
 	/// </summary>
 	/// <param name="camera">描画に使用するカメラ</param>
-	void Draw(Camera* camera);
+	void Draw(YKEngine::Camera* camera);
 
 	/// <summary>
 	/// 敵の生成。
@@ -51,7 +51,7 @@ public:
 private:
 
 	//敵のモデル
-	std::map<EnemyType, std::shared_ptr<BaseModel>> modelEnemyMap_;
+	std::map<EnemyType, std::shared_ptr<YKEngine::BaseModel>> modelEnemyMap_;
 
 	//敵のリスト
 	std::list<std::unique_ptr<BaseEnemy>> enemys_;
@@ -60,7 +60,7 @@ private:
 	Player* player_ = nullptr;
 
 	//レールカメラのポインタ
-	Camera* railCamera_ = nullptr;
+	YKEngine::Camera* railCamera_ = nullptr;
 
 	//敵弾マネージャーのポインタ
 	EnemyBulletManager* enemyBulletManager_ = nullptr;

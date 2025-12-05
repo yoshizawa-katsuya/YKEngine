@@ -1,6 +1,9 @@
 #pragma once
 #include "BaseModel.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 3Dモデルのインスタンシング描画を行うクラス。
 /// 複数の同じモデルを描画する際に使用する。
@@ -66,3 +69,4 @@ private:
 	BaseModel* model_;
 };
 
+} // namespace YKEngine

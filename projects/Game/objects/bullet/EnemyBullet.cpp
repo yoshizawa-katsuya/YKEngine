@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Lerp.h"
 
+using namespace YKEngine;
+
 void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle, Player* target, float speed)
 {
 	target_ = target;

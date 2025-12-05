@@ -3,6 +3,9 @@
 #include <cmath>
 #include "Easing.h"
 
+namespace YKEngine
+{
+
 float ApplyEasing(EasingType type, float t)
 {
 	//各イージング関数を適用
@@ -85,3 +88,5 @@ float EaseOutBack(float x)
 	float c3 = c1 + 1.0f;
 	return 1.0f + c3 * std::pow(x - 1.0f, 3.0f) + c1 * std::pow(x - 1.0f, 2.0f);
 }
+
+} // namespace YKEngine

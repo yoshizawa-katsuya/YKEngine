@@ -2,6 +2,8 @@
 #include "ParticleManager.h"
 #include <cassert>
 
+using namespace YKEngine;
+
 void SceneManager::Finalize()
 {
 

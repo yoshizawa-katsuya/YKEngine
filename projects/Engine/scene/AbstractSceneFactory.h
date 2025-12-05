@@ -4,6 +4,9 @@
 #include <string>
 #include <memory>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// シーン工場(概念)
 /// シーンを生成するインターフェースを提供する。
@@ -26,3 +29,5 @@ public:
 	virtual std::unique_ptr<BaseScene> CreateScene(const std::string& sceneName) = 0;
 
 };
+
+} // namespace YKEngine

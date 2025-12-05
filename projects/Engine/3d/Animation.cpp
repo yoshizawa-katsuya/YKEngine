@@ -8,6 +8,8 @@
 #include "BaseModel.h"
 #include "Matrix.h"
 
+using namespace YKEngine;
+
 void Animation::LoadAnimationFile(const std::string& directoryPath, const std::string& filename)
 {
 

@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
 #include "ParticleEmitter.h"
-class ModelPlatform;
-class BaseModel;
+class YKEngine::ModelPlatform;
+class YKEngine::BaseModel;
 
 enum class EffectType
 {
@@ -47,7 +47,7 @@ public:
 	/// エフェクトの生成。
 	/// </summary>
 	/// <param name="position">生成位置</param>
-	void SpawnEffect(EffectType effectType, const Vector3& position);
+	void SpawnEffect(EffectType effectType, const YKEngine::Vector3& position);
 
 	/// <summary>
 	/// エフェクトの生成。
@@ -55,7 +55,7 @@ public:
 	/// <param name="effectType">エフェクトの種類</param>
 	/// <param name="position">生成位置</param>
 	/// <param name="count">生成数</param>
-	void SpawnEffect(EffectType effectType, const Vector3& position, uint32_t count);
+	void SpawnEffect(EffectType effectType, const YKEngine::Vector3& position, uint32_t count);
 
 	/// <summary>
 	/// エフェクトの削除。
@@ -75,7 +75,7 @@ private:
 	EffectManager(EffectManager&) = delete;
 	const EffectManager& operator=(EffectManager&) = delete;
 
-	std::shared_ptr<BaseModel> LoadEffectModel(const std::string& modelName, uint32_t textureHnadle);
+	std::shared_ptr<YKEngine::BaseModel> LoadEffectModel(const std::string& modelName, uint32_t textureHnadle);
 
 	struct EffectData
 	{
@@ -98,8 +98,8 @@ private:
 	};
 
 	//パーティクル
-	std::unordered_map<EffectType, std::unique_ptr<ParticleEmitter>> effectEmitters_;
+	std::unordered_map<EffectType, std::unique_ptr<YKEngine::ParticleEmitter>> effectEmitters_;
 
-	ModelPlatform* modelPlatform_ = nullptr;
+	YKEngine::ModelPlatform* modelPlatform_ = nullptr;
 };
 

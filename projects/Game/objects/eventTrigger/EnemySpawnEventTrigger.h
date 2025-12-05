@@ -15,7 +15,7 @@ public:
 	/// <param name="waveNumber">イベント番号。昇順でイベントが発生する。</param>
 	/// <param name="position">イベントの位置</param>
 	/// <param name="radius">イベントの半径</param>
-	void Initialize(uint32_t waveNumber, const Vector3& position, float radius) override;
+	void Initialize(uint32_t waveNumber, const YKEngine::Vector3& position, float radius) override;
 
 	/// <summary>
 	/// 衝突時処理。

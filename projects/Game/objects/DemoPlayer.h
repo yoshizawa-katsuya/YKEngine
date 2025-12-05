@@ -15,7 +15,7 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="parent">親のワールド変換</param>
-	void Initialize(BaseModel* model, WorldTransform* parent);
+	void Initialize(YKEngine::BaseModel* model, YKEngine::WorldTransform* parent);
 
 	/// <summary>
 	/// 更新
@@ -26,7 +26,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="camera">描画に使用するカメラ</param>
-	virtual void Draw(Camera* camera);
+	virtual void Draw(YKEngine::Camera* camera);
 
 	/// <summary>
 	/// シーンが終わるときの処理
@@ -50,9 +50,9 @@ private:
 	/// </summary>
 	void UpdateEnd();
 
-	std::unique_ptr<My3dObject> object_;
+	std::unique_ptr<YKEngine::My3dObject> object_;
 	//ワールド変換データ
-	WorldTransform worldTransform_;
+	YKEngine::WorldTransform worldTransform_;
 
 	enum class Phase
 	{
@@ -63,5 +63,5 @@ private:
 	//フェーズ
 	Phase phase_ = Phase::kStart;
 
-	std::unique_ptr<SRTAnimator> animator_;
+	std::unique_ptr<YKEngine::SRTAnimator> animator_;
 };

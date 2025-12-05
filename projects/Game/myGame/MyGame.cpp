@@ -3,6 +3,8 @@
 #include "OffscreenRenderer.h"
 #include "manager/EffectManager.h"
 
+using namespace YKEngine;
+
 void MyGame::Initialize()
 {
 

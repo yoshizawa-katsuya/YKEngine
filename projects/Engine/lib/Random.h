@@ -1,6 +1,9 @@
 #pragma once
 #include <random>
 
+namespace YKEngine
+{
+
 class Random
 {
 public:
@@ -31,3 +34,4 @@ private:
 	std::mt19937 randomEngine_;
 };
 
+}	// namespace YKEngine

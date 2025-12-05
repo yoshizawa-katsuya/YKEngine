@@ -2,6 +2,9 @@
 #include <numbers>
 #include "Easing.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// パーティクルのランダム化フラグ。
 /// 各プロパティに対してランダム化を行うかどうかを指定する。
@@ -102,3 +105,5 @@ struct ParticleBehavior
 	//ブレンドモード
 	ParticleDrawMode drawMode = ParticleDrawMode::kAddBlend;
 };
+
+} // namespace YKEngine

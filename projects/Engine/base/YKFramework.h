@@ -21,11 +21,14 @@
 #include <dxcapi.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
-class OffscreenRenderer;
 
 #ifdef  USE_IMGUI
 #include "ImGuiManager.h"
 #endif //  USE_IMGUI
+
+namespace YKEngine
+{
+class OffscreenRenderer;
 
 /// <summary>
 /// フレームワーククラス。
@@ -104,3 +107,4 @@ protected:
 
 };
 
+} // namespace YKEngine

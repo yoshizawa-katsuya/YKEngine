@@ -28,7 +28,7 @@
 /// ゲームシーン。
 /// ゲームのメイン処理を行う。 
 /// </summary>
-class GameScene : public BaseScene
+class GameScene : public YKEngine::BaseScene
 {
 public:
 
@@ -115,29 +115,29 @@ private:
 	void CreateLevel();
 
 	//デバイス
-	DirectXCommon* dxCommon_;
+	YKEngine::DirectXCommon* dxCommon_;
 
-	Audio* audio_;
-	Input* input_;
+	YKEngine::Audio* audio_;
+	YKEngine::Input* input_;
 
-	SpritePlatform* spritePlatform_;
-	ModelPlatform* modelPlatform_;
+	YKEngine::SpritePlatform* spritePlatform_;
+	YKEngine::ModelPlatform* modelPlatform_;
 
 	std::unique_ptr<CameraManager> cameraManager_;
 
 	//平行光源
-	DirectionalLight directionalLight_;
+	YKEngine::DirectionalLight directionalLight_;
 
 	//3Dモデル
-	std::shared_ptr<BaseModel> modelGround_;
-	std::shared_ptr<BaseModel> modelPlayer_;
+	std::shared_ptr<YKEngine::BaseModel> modelGround_;
+	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_;
 	uint32_t textureHandleSkyBox_;
 
 	//スプライト
-	std::unique_ptr<AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
+	std::unique_ptr<YKEngine::AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
 
 	//衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_;
@@ -157,13 +157,13 @@ private:
 	std::unique_ptr<EnemyBulletManager> enemyBulletManager_;
 
 	//スカイボックス
-	std::unique_ptr<My3dObject> skyBox_;
+	std::unique_ptr<YKEngine::My3dObject> skyBox_;
 
 	//地面
-	std::unique_ptr<My3dObject> ground_;
+	std::unique_ptr<YKEngine::My3dObject> ground_;
 
 	//オブジェクト
-	std::map<std::string, std::unique_ptr<InstancingObjects>> instancingObjects_;
+	std::map<std::string, std::unique_ptr<YKEngine::InstancingObjects>> instancingObjects_;
 
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;

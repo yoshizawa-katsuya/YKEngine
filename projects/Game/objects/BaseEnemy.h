@@ -3,7 +3,7 @@
 #include "EnemySpawn.h"
 class Player;
 class EnemyBulletManager;
-class Camera;
+class YKEngine::Camera;
 
 /// <summary>
 /// 敵の基底クラス。
@@ -25,7 +25,7 @@ public:
 	/// <param name="spawnData">出現データ</param>
 	/// <param name="viewPortMatrix">ビューポート行列</param>
 	/// <param name="railCamera">レールカメラ。画面内に入っているか判定するために使用。</param>
-	void Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera* railCamera);
+	void Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// 更新。
@@ -44,14 +44,14 @@ public:
 	/// ワールド座標を取得。
 	/// </summary>
 	/// <returns>ワールド座標</returns>
-	Vector3 GetWorldPosition();
+	YKEngine::Vector3 GetWorldPosition();
 
 	/// <summary>
 	/// スクリーン座標を取得。
 	/// </summary>
 	/// <param name="camera">カメラ</param>
 	/// <returns>スクリーン座標</returns>
-	Vector2 GetScreenPosition(Camera* camera);
+	YKEngine::Vector2 GetScreenPosition(YKEngine::Camera* camera);
 
 	const float GetRadius() const { return radius_; }
 
@@ -93,7 +93,7 @@ protected:
 	/// 移動に使うスプライン曲線の作成。
 	/// </summary>
 	/// <param name="controlPoints">制御点の配列</param>
-	void CreateSplineCurve(const std::vector<Vector3>& controlPoints);
+	void CreateSplineCurve(const std::vector<YKEngine::Vector3>& controlPoints);
 
 	/// <summary>
 	/// 移動。
@@ -138,23 +138,23 @@ protected:
 	Phase phase_ = Phase::kApproach;
 
 	// キャラクターの移動速さ
-	Vector3 velocity_ = {0.0f, 0.0f, 1.0f};
+	YKEngine::Vector3 velocity_ = {0.0f, 0.0f, 1.0f};
 
 	//ビューポート行列
-	Matrix4x4* viewPortMatrix_ = nullptr;
+	YKEngine::Matrix4x4* viewPortMatrix_ = nullptr;
 
 	int hitPoint_ = 3; // ヒットポイント
 
-	Vector3 direction_; // 方向
+	YKEngine::Vector3 direction_; // 方向
 
 	float leaveTimer_ = 0.0f; // 離脱タイマー
 
-	Camera* railCamera_ = nullptr; // レールカメラ
+	YKEngine::Camera* railCamera_ = nullptr; // レールカメラ
 
 	// スプライン曲線制御点(通過点)Add commentMore actions
-	std::vector<Vector3> controlPoints_;
+	std::vector<YKEngine::Vector3> controlPoints_;
 	// スプライン曲線上の点
-	std::vector<Vector3> corvePoints_;
+	std::vector<YKEngine::Vector3> corvePoints_;
 	// 線分の数
 	const uint32_t kSegmentCount_ = 63;
 	uint32_t moveCount_ = 0;

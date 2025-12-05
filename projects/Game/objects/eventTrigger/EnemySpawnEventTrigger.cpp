@@ -1,6 +1,8 @@
 #include "EnemySpawnEventTrigger.h"
 #include "RailMover.h"
 
+using namespace YKEngine;
+
 void EnemySpawnEventTrigger::Initialize(uint32_t waveNumber, const Vector3& position, float radius)
 {
 	BaseEventTrigger::Initialize(waveNumber ,position, radius);

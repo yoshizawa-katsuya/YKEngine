@@ -4,6 +4,8 @@
 #include "bullet/PlayerBullet01.h"
 #include "bullet/ChargePlayerBullet01.h"
 
+using namespace YKEngine;
+
 void PlayerBulletManager::Initialize()
 {
 	//テクスチャ読み込み

@@ -7,6 +7,8 @@
 #include "Collision.h"
 #include "Lerp.h"
 
+using namespace YKEngine;
+
 void ReticleController::Initialize()
 {
 	//3Dレティクルのワールドトランスフォーム初期化

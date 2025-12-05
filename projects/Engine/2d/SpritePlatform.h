@@ -2,6 +2,9 @@
 #include "DirectXCommon.h"
 #include "PrimitiveDrawer.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 2Dスプライト描画の基盤となるクラス。
 /// スプライト描画の前後に必要な設定を行う。
@@ -49,3 +52,4 @@ private:
 
 };
 
+} // namespace YKEngine

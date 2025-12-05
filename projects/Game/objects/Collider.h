@@ -1,7 +1,11 @@
 #pragma once
 #include "WorldTransform.h"
 #include "CollisionTypeIdDef.h"
-class Camera;
+
+namespace YKEngine
+{
+	class Camera;
+}
 
 /// <summary>
 /// 衝突判定オブジェクト。
@@ -40,13 +44,13 @@ public:
 	/// </summary>
 	/// <param name="camera">判定に使用するカメラ</param>
 	/// </returns>映っているならtrue、映っていないならfalse</returns>
-	virtual bool IsVisible(Camera* camera);
+	virtual bool IsVisible(YKEngine::Camera* camera);
 
 	/// <summary>
 	/// 中心座標を取得。
 	/// </summary>
 	/// <returns>中心座標</returns>
-	virtual Vector3 GetCenterPosition();
+	virtual YKEngine::Vector3 GetCenterPosition();
 
 	//半径を取得
 	float GetRadius() { return radius_; }
@@ -59,7 +63,7 @@ public:
 	//種別IDを設定
 	void SetTypeID(CollisionTypeIdDef typeID) { typeID_ = typeID; }
 
-	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
+	const YKEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
 protected:
 
@@ -68,10 +72,10 @@ protected:
 	/// </summary>
 	/// <param name="camera">カメラ</param>
 	/// <returns>クリップ座標</returns>
-	Vector4 ClipPosition(Camera* camera);
+	YKEngine::Vector4 ClipPosition(YKEngine::Camera* camera);
 
 	//Transform変数を作る
-	WorldTransform worldTransform_;
+	YKEngine::WorldTransform worldTransform_;
 
 	//衝突半径
 	float radius_ = 1.0f;

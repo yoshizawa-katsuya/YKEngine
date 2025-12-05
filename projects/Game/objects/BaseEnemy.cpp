@@ -10,6 +10,8 @@
 #include "Camera.h"
 #include "manager/EnemyBulletManager.h"
 
+using namespace YKEngine;
+
 BaseEnemy::~BaseEnemy() 
 {
 }

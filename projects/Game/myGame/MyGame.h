@@ -7,7 +7,7 @@ class EffectManager;
 /// YKFrameworkを継承して作成する。
 /// YKFrameworkの機能を使用してゲームを作成する。
 /// </summary>
-class MyGame : public YKFramework
+class MyGame : public YKEngine::YKFramework
 {
 public:
 

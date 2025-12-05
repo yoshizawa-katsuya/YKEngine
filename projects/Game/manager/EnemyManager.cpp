@@ -4,6 +4,8 @@
 #include "TackleEnemy01.h"
 #include "CollisionManager.h"
 
+using namespace YKEngine;
+
 void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletManager* enemyBulletManager)
 {
 	player_ = player;

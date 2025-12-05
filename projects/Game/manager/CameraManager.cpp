@@ -6,6 +6,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 void CameraManager::Initialize(WorldTransform* railMoverWorldTransform, WorldTransform* playerWorldTransform)
 {
 	//デバッグカメラの生成

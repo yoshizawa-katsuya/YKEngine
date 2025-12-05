@@ -17,6 +17,9 @@
 #include "Quaternion.h"
 #include "Color.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 頂点データ構造体。
 /// </summary>
@@ -453,3 +456,5 @@ struct Skeleton
 	std::map<std::string, int32_t> jointMap;	//Joint名とIndexとの辞書
 	std::vector<Joint> joints;	//所属しているジョイント
 };
+
+}	//namespace YKEngine

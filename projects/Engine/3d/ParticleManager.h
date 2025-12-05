@@ -8,6 +8,9 @@
 #include "BaseModel.h"
 #include "Color.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// パーティクル管理クラス。
 /// シングルトン。
@@ -149,3 +152,4 @@ private:
 	
 };
 
+} // namespace YKEngine

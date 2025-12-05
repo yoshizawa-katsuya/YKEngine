@@ -5,6 +5,8 @@
 #include "DirectXTex/d3dx12.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 TextureManager* TextureManager::instance_ = nullptr;
 
 TextureManager* TextureManager::GetInstance()

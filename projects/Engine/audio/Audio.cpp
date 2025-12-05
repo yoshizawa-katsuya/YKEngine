@@ -10,6 +10,8 @@
 #pragma comment(lib, "mfreadwrite.lib")
 #pragma comment(lib, "mfuuid.lib")
 
+using namespace YKEngine;
+
 Audio* Audio::GetInstance()
 {
 	static Audio instance;

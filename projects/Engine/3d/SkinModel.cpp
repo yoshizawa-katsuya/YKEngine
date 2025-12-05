@@ -5,6 +5,8 @@
 #include "Camera.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 SkinModel::~SkinModel()
 {
 }

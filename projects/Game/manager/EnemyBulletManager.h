@@ -1,6 +1,6 @@
 #pragma once
 #include "bullet/EnemyBullet.h"
-class Camera;
+class YKEngine::Camera;
 class CollisionManager;
 
 /// <summary>
@@ -20,13 +20,13 @@ public:
 	/// 更新。レールカメラは弾が画面外に出たかの判定に使用する。
 	/// </summary>
 	/// </ <param name="railCamera">レールカメラ</param>
-	void Update(Camera* railCamera);
+	void Update(YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// 描画。
 	/// </summary>
 	/// <param name="camera">描画に使うカメラ</param>
-	void Draw(Camera* camera);
+	void Draw(YKEngine::Camera* camera);
 
 	/// <summary>
 	/// 敵の弾を追加する。
@@ -35,7 +35,7 @@ public:
 	/// <param name="velocity">弾の速度ベクトル</param>
 	/// <param name="target">弾のターゲットとなるプレイヤー</param>
 	/// <param name="speed">弾の速度</param>
-	void AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity, Player* target, float speed);
+	void AddEnemyBullet(const YKEngine::Vector3& worldPosition, const YKEngine::Vector3& velocity, Player* target, float speed);
 
 	/// <summary>
 	/// コライダーを衝突管理クラスに登録する。
@@ -48,7 +48,7 @@ public:
 private:
 
 	//弾のモデル	
-	std::shared_ptr<BaseModel> modelBullet_;
+	std::shared_ptr<YKEngine::BaseModel> modelBullet_;
 
 	//弾のテクスチャハンドル
 	uint32_t textureHandleEnemyBullet_;

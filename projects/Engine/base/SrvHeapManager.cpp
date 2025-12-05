@@ -1,6 +1,8 @@
 #include "SrvHeapManager.h"
 #include <cassert>
 
+using namespace YKEngine;
+
 SrvHeapManager::~SrvHeapManager()
 {
 }

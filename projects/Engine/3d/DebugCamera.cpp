@@ -3,6 +3,8 @@
 #include "Input.h"
 #include "Matrix.h"
 
+using namespace YKEngine;
+
 void DebugCamera::Initialize()
 {
 	//カメラ生成

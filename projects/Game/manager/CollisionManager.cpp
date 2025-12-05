@@ -2,6 +2,8 @@
 #include "Collision.h"
 #include "ModelPlatform.h"
 
+using namespace YKEngine;
+
 void CollisionManager::Initialize()
 {
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");

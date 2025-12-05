@@ -5,6 +5,8 @@
 #include "DirectXCommon.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon)
 {
 	//DrawMode分のパイプラインを作成

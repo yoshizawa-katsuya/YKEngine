@@ -4,6 +4,8 @@
 #include "Animation.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 My3dObject::My3dObject()
 	: dxCommon_(DirectXCommon::GetInstance())
 {

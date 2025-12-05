@@ -1,5 +1,7 @@
 #include "AnimatedSprite.h"
 
+using namespace YKEngine;
+
 void AnimatedSprite::Initialize(uint32_t textureHandle, int32_t horizontalDivisionNum, int32_t verticalDivisionNum)
 {
 	CommonInitialize(textureHandle, horizontalDivisionNum, verticalDivisionNum);

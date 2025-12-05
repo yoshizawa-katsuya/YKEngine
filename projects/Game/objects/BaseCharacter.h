@@ -15,7 +15,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>
-	virtual void Initialize(BaseModel* model);
+	virtual void Initialize(YKEngine::BaseModel* model);
 
 	/// <summary>
 	/// 更新
@@ -26,15 +26,15 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="camera">描画に使用するカメラ</param>
-	virtual void Draw(Camera* camera);
+	virtual void Draw(YKEngine::Camera* camera);
 
 	bool IsDead() const { return isDead_; }
 
 protected:
 
-	std::unique_ptr<My3dObject> object_;
+	std::unique_ptr<YKEngine::My3dObject> object_;
 	//ワールド変換データ
-	WorldTransform characterWorldTransform_;
+	YKEngine::WorldTransform characterWorldTransform_;
 
 	//デスフラグ
 	bool isDead_ = false;

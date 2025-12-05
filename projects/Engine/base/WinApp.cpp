@@ -9,6 +9,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 
 #pragma comment(lib, "winmm.lib")
 
+using namespace YKEngine;
+
 WinApp::~WinApp()
 {
 

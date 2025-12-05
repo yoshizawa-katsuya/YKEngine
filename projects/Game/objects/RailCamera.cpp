@@ -10,6 +10,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 void RailCamera::Initialize(WorldTransform* parent, WorldTransform* playerWorldTransform)
 {
 

@@ -11,6 +11,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 ParticleManager* ParticleManager::instance_ = nullptr;
 
 ParticleManager* ParticleManager::GetInstance()
@@ -88,13 +90,13 @@ void ParticleManager::Update(Camera* camera, AccelerationField* accelerationFiel
 				{
 					//時間経過で小さくなる
 					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
-					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, { 0.0f, 0.0f, 0.0f}, t));
+					scaleMatrix = MakeScaleMatrix(Lerp(particleIterator->transform.scale, Vector3{ 0.0f, 0.0f, 0.0f}, t));
 				}
 				else if (particleGroupIterator->second.behavior->isScaleToAppear)
 				{
 					//時間経過で大きくなる
 					float t = ApplyEasing(particleGroupIterator->second.behavior->easingTypeForScale, particleIterator->currentTime / particleIterator->lifeTime);
-					scaleMatrix = MakeScaleMatrix(Lerp({ 0.0f, 0.0f, 0.0f }, particleIterator->transform.scale, t));
+					scaleMatrix = MakeScaleMatrix(Lerp(Vector3{ 0.0f, 0.0f, 0.0f }, particleIterator->transform.scale, t));
 				}
 				else
 				{

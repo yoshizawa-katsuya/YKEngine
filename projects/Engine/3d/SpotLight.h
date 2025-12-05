@@ -4,6 +4,9 @@
 #include <numbers>
 #include <cmath>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// スポットライト。
 /// 使用する場合、modelPtalformへデータをセットすること。
@@ -29,3 +32,4 @@ struct SpotLight
 	float padding;
 };
 
+} // namespace YKEngine

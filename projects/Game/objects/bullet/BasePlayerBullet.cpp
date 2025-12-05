@@ -4,6 +4,8 @@
 #include "Vector3.h"
 #include "manager/EffectManager.h"
 
+using namespace YKEngine;
+
 void BasePlayerBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle) 
 {
 

@@ -3,6 +3,9 @@
 #include "AbstractSceneFactory.h"
 #include <memory>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// シーンの管理クラス。
 /// シーンの更新、描画、切り替えを行う。
@@ -57,3 +60,5 @@ private:
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 
 };
+
+}

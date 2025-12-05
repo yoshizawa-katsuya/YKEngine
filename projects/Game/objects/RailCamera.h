@@ -1,7 +1,11 @@
 #pragma once
 #include "WorldTransform.h"
 #include <memory>
-class Camera;
+
+namespace YKEngine
+{
+	class Camera;
+}
 
 /// <summary>
 /// レールカメラ。
@@ -16,7 +20,7 @@ public:
 	/// </summary>
 	/// <param name="camera">レールカメラとして使用するカメラ。</param>
 	/// <param name="parent">親ワールド変換データ。</param>
-	void Initialize(WorldTransform* parent, WorldTransform* playerWorldTransform);
+	void Initialize(YKEngine::WorldTransform* parent, YKEngine::WorldTransform* playerWorldTransform);
 
 	/// <summary>
 	/// 更新。
@@ -36,9 +40,9 @@ public:
 	/// <summary>
 	/// 方向からtargetRotation_を作成。
 	/// </summary>
-	void CreateTargetRotationFromDirection(const Vector3& direction);
+	void CreateTargetRotationFromDirection(const YKEngine::Vector3& direction);
 
-	Camera* GetCamera() { return camera_.get(); }
+	YKEngine::Camera* GetCamera() { return camera_.get(); }
 
 private:
 
@@ -66,17 +70,17 @@ private:
 	Phase phase_ = Phase::kMain;
 
 	//ワールド変換データ
-	WorldTransform worldTransform_;
+	YKEngine::WorldTransform worldTransform_;
 
 	//目標を注視するためのワールド変換データ
-	WorldTransform targetParentWorldTransform_;
+	YKEngine::WorldTransform targetParentWorldTransform_;
 
 	// 自機を注視する際の係数
 	float t_ = 0.0f;
 
 	// カメラ
-	std::unique_ptr<Camera> camera_;
+	std::unique_ptr<YKEngine::Camera> camera_;
 
-	Vector3 targetRotation_{};
+	YKEngine::Vector3 targetRotation_{};
 
 };

@@ -11,6 +11,8 @@
 #include "ThreadPool.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 BaseModel::BaseModel()
 	: modelPlatform_(ModelPlatform::GetInstance())
 {
@@ -60,7 +62,7 @@ void BaseModel::CreateSkyBox(uint32_t textureHandle)
 {
 }
 
-void BaseModel::Draw(bool usedMaterial) 
+void BaseModel::Draw(bool usedMaterial)
 {
 	
 	DrawCommonProcess(usedMaterial, textureHandle_);

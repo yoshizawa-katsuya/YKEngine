@@ -2,6 +2,8 @@
 #include "ModelPlatform.h"
 #include "CollisionManager.h"
 
+using namespace YKEngine;
+
 void EnemyBulletManager::Initialize()
 {
 	//テクスチャ読み込み

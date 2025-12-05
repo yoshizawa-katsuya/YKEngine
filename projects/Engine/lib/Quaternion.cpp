@@ -1,6 +1,9 @@
 #include "Quaternion.h"
 #include <cmath>
 
+namespace YKEngine
+{
+
 Quaternion Add(const Quaternion& q1, const Quaternion& q2)
 {
 	
@@ -78,3 +81,5 @@ bool operator==(const Quaternion& q1, const Quaternion& q2)
 	}
 	return false;
 }
+
+} // namespace YKEngine

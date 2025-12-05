@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="eventName">イベントの種類</param>
 	/// <param name="objectData">イベントトリガーのデータ</param>
-	void AddEvent(const std::string& eventName, const ObjectData& objectData);
+	void AddEvent(const std::string& eventName, const YKEngine::ObjectData& objectData);
 
 private:
 

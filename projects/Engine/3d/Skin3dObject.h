@@ -1,6 +1,9 @@
 #pragma once
 #include "My3dObject.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// スキンモデルを扱うクラス。
 /// Base3dObjectを継承している。
@@ -109,3 +112,4 @@ private:
 
 };
 
+} // namespace YKEngine

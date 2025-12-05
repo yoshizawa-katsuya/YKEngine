@@ -1,6 +1,9 @@
 #pragma once
 #include "Struct.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// ワールド変換データ。
 /// 親子関係を持つことができる。
@@ -34,3 +37,4 @@ public:
 	Vector3 GetWorldPosition();
 };
 
+} // namespace YKEngine

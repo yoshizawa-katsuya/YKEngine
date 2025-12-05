@@ -1,8 +1,10 @@
 #pragma once
-//#include "Struct.h"
 #include "Lerp.h"
 #include <cmath>
 #include <vector>
+
+namespace YKEngine
+{
 
 /// <summary>
 /// ベジェ曲線の点を計算する。
@@ -61,3 +63,5 @@ std::vector<Vector3> GenerateCatmullRomSplinePoints(std::vector<Vector3>& contro
 /// <param name="numPoints">生成する点の数。</param>
 /// <returns>生成された点群。</returns>
 std::vector<Vector3> GenerateCatmullRomSplinePointsLoop(std::vector<Vector3>& controlPoints, uint32_t numPoints);
+
+} // namespace YKEngine

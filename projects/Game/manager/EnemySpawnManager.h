@@ -27,7 +27,7 @@ public:
 	/// 描画。
 	/// </summary>
 	/// <param name="camera">描画に使用するカメラ</param>
-	void Draw(Camera* camera);
+	void Draw(YKEngine::Camera* camera);
 
     /// <summary>
 	/// 敵の出現データを追加する。
@@ -47,7 +47,7 @@ private:
 
 	EnemyManager* enemyManager_ = nullptr; // 敵管理クラスのポインタ
 
-	std::shared_ptr<BaseModel> model_;
+	std::shared_ptr<YKEngine::BaseModel> model_;
 
 	std::vector<EnemySpawn> spawnDatas_; // 敵の出現データリスト
 	std::vector<std::unique_ptr<EnemySpawnObject>> enemySpawnObjects_; // 敵出現オブジェクトリスト

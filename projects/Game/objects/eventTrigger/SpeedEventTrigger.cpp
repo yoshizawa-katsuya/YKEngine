@@ -1,6 +1,8 @@
 #include "SpeedEventTrigger.h"
 #include "RailMover.h"
 
+using namespace YKEngine;
+
 void SpeedEventTrigger::Initialize(uint32_t waveNumber, const Vector3& position, float radius, float speed)
 {
 	BaseEventTrigger::Initialize(waveNumber, position, radius);

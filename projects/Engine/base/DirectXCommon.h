@@ -13,6 +13,9 @@
 #include "DirectXTex/DirectXTex.h"
 #include "Struct.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// DirectX共通機能。
 /// DirectX初期化、コマンドリスト、スワップチェイン、描画前後処理など。
@@ -283,3 +286,4 @@ private:
 	bool* useOffscreenRender_;
 };
 
+} // namespace YKEngine

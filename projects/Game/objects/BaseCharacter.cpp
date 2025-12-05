@@ -1,5 +1,7 @@
 #include "BaseCharacter.h"
 
+using namespace YKEngine;
+
 void BaseCharacter::Initialize(BaseModel* model)
 {
 	// NULLポインタチェック

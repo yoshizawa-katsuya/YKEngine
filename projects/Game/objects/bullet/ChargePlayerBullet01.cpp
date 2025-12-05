@@ -1,5 +1,7 @@
 #include "ChargePlayerBullet01.h"
 
+using namespace YKEngine;
+
 void ChargePlayerBullet01::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle)
 {
 	BasePlayerBullet::Initialize(model, position, velocity, textureHandle);

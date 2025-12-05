@@ -30,7 +30,7 @@ public:
 	/// 描画。
 	/// </summary>
 	/// <param name="camera">描画に使用するカメラ</param>
-	void Draw(Camera* camera);
+	void Draw(YKEngine::Camera* camera);
 
 	/// <summary>
 	/// 登録されたコライダーリストを空にする。
@@ -60,7 +60,7 @@ private:
 	bool IsCollisionPair(CollisionTypeIdDef typeA, CollisionTypeIdDef typeB);
 
 	//グローバル変数
-	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();
+	YKEngine::GlobalVariables* globalVariables_ = YKEngine::GlobalVariables::GetInstance();
 
 	const std::string kGroupName_ = "Colliders";
 
@@ -71,8 +71,8 @@ private:
 	bool isDrawCollider_ = true;
 
 	//デバッグ表示用モデル
-	std::shared_ptr<BaseModel> model_;
-	std::unique_ptr<InstancingObjects> objects_;
+	std::shared_ptr<YKEngine::BaseModel> model_;
+	std::unique_ptr<YKEngine::InstancingObjects> objects_;
 
 	const std::set<std::pair<CollisionTypeIdDef, CollisionTypeIdDef>> kCollisionPairs_ = {
 		{CollisionTypeIdDef::kPlayer, CollisionTypeIdDef::kEnemyBullet},

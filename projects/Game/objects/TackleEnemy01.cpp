@@ -1,6 +1,8 @@
 #include "TackleEnemy01.h"
 #include "bullet/BaseBullet.h"
 
+using namespace YKEngine;
+
 TackleEnemy01::~TackleEnemy01()
 {
 }

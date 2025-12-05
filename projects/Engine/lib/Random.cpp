@@ -1,5 +1,7 @@
 #include "Random.h"
 
+using namespace YKEngine;
+
 Random* Random::GetInstance()
 {
 	static Random instance;

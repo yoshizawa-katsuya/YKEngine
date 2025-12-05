@@ -1,6 +1,9 @@
 #pragma once
 #include "BaseModel.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 3Dオブジェクトのクラス。
 /// 3Dオブジェクトはモデルを持ち、ワールド変換行列を持つ。
@@ -130,3 +133,4 @@ protected:
 
 };
 
+} // namespace YKEngine

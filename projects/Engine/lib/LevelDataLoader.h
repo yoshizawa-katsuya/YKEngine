@@ -2,6 +2,9 @@
 #include "Struct.h"
 #include "json.hpp"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// オブジェクトの生成データ。
 /// </summary>
@@ -89,3 +92,5 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 /// <param name="transformData">TransformのJSONデータ</param>
 /// <returns>Transformデータ</returns>
 EulerTransform TranformLoad(nlohmann::json& transformData);
+
+}	// namespace YKEngine

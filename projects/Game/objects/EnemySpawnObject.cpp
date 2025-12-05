@@ -3,6 +3,8 @@
 #include "Easing.h"
 #include "manager/EnemyManager.h"
 
+using namespace YKEngine;
+
 void EnemySpawnObject::Initialize(const std::vector<EnemySpawn>& nowSpanwDatas, std::shared_ptr<BaseModel> model)
 {
 	phase_ = Phase::kWaveStart;

@@ -12,6 +12,7 @@
 #pragma comment(lib,"dxcompiler.lib")
 
 using namespace Microsoft::WRL;
+using namespace YKEngine;
 
 DirectXCommon* DirectXCommon::instance_ = nullptr;
 

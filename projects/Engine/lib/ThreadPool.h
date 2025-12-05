@@ -5,6 +5,9 @@
 #include <condition_variable>
 #include <atomic>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 複数のスレッドでタスクを並列に実行するためのクラス。
 /// タスクの追加、完了待機が可能。
@@ -84,3 +87,5 @@ inline void ThreadPool::enqueueTask(F&& f, Args && ...args)
     }
     condition_.notify_one();
 }
+
+} // namespace YKEngine

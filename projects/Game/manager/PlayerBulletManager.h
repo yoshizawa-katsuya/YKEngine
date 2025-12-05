@@ -1,7 +1,7 @@
 #pragma once
 #include "bullet/BasePlayerBullet.h"
 #include "bullet/PlayerBulletType.h"
-class Camera;
+class YKEngine::Camera;
 class CollisionManager;
 
 /// <summary>
@@ -27,7 +27,7 @@ public:
 	/// 描画。
 	/// </summary>
 	/// <param name="camera">描画に使用するカメラ</param>
-	void Draw(Camera* camera);
+	void Draw(YKEngine::Camera* camera);
 
 	/// <summary>
 	/// プレイヤーの弾を追加。
@@ -35,7 +35,7 @@ public:
 	/// <param name="worldPosition">弾のワールド座標</param>
 	/// <param name="velocity">弾の速度ベクトル</param>
 	/// <param name="bulletType">弾の種類</param>
-	void AddPlayerBullet(const Vector3& worldPosition, const Vector3& velocity, PlayerBulletType bulletType);
+	void AddPlayerBullet(const YKEngine::Vector3& worldPosition, const YKEngine::Vector3& velocity, PlayerBulletType bulletType);
 
 	/// <summary>
 	/// 弾をコリジョンマネージャーに登録。
@@ -46,7 +46,7 @@ public:
 private:
 
 	//弾のモデル	
-	std::shared_ptr<BaseModel> modelBullet_;
+	std::shared_ptr<YKEngine::BaseModel> modelBullet_;
 
 	//弾のテクスチャハンドル
 	uint32_t textureHandlePlayerBullet_;

@@ -2,8 +2,13 @@
 #include "WorldTransform.h"
 #include <memory>
 #include "Sprite.h"
-class Input;
-class Camera;
+
+namespace YKEngine
+{
+	class Input;
+	class Camera;
+}
+
 class BaseEnemy;
 
 /// <summary>
@@ -26,7 +31,7 @@ public:
 	/// 更新処理。
 	/// </summary>
 	/// <param name="railCamera">レールカメラへのポインタ。ワールド座標への変換に使用される。</param>
-	void Update(Camera* railCamera);
+	void Update(YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// 描画処理。
@@ -38,7 +43,7 @@ public:
 	/// </summary>
 	/// <param name="enemies">敵キャラクターのリスト</param>
 	/// <param name="railCamera">レールカメラへのポインタ。敵の位置をスクリーン座標に変換するために使用される。</param>
-	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera);
+	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// チャージマックス時の処理。
@@ -52,9 +57,9 @@ public:
 
 	bool IsLockOn() const { return isLockOn_; }
 
-	const Vector3& GetTargetPosition() const { return target_; }
+	const YKEngine::Vector3& GetTargetPosition() const { return target_; }
 
-	Vector3 Get3DReticlePosition() { return worldTransform3DReticle_.GetWorldPosition(); }
+	YKEngine::Vector3 Get3DReticlePosition() { return worldTransform3DReticle_.GetWorldPosition(); }
 
 private:
 
@@ -68,26 +73,26 @@ private:
 	/// </summary>
 	/// <param name="position">ターゲットのスクリーン座標上の位置</param>
 	/// <param name="targetPosition">ターゲットのワールド座標上の位置</param>
-	void LockOn(Vector2 position, const Vector3& targetPosition);
+	void LockOn(YKEngine::Vector2 position, const YKEngine::Vector3& targetPosition);
 
 	//3Dレティクル用ワールドトランスフォーム
-	WorldTransform worldTransform3DReticle_;
+	YKEngine::WorldTransform worldTransform3DReticle_;
 
 	//2Dレティクル用スプライト
-	std::unique_ptr<Sprite> spriteLargeReticle_;
-	std::unique_ptr<Sprite> spriteSmallReticle_;
+	std::unique_ptr<YKEngine::Sprite> spriteLargeReticle_;
+	std::unique_ptr<YKEngine::Sprite> spriteSmallReticle_;
 
 	bool isLockOn_ = false;
 
-	Vector3 target_;
+	YKEngine::Vector3 target_;
 
 	//ビューポート行列
-	Matrix4x4* viewPortMatrix_ = nullptr;
+	YKEngine::Matrix4x4* viewPortMatrix_ = nullptr;
 
-	Input* input_ = nullptr;
+	YKEngine::Input* input_ = nullptr;
 
-	Vector4 defaultColor_ = { 1.0f, 1.0f, 0.1f, 1.0f };
-	Vector4 chargeMaxColor_ = { 0.0f, 0.0f, 1.0f, 1.0f };
+	YKEngine::Vector4 defaultColor_ = { 1.0f, 1.0f, 0.1f, 1.0f };
+	YKEngine::Vector4 chargeMaxColor_ = { 0.0f, 0.0f, 1.0f, 1.0f };
 	bool isChargeMax_ = false;
 	float chargeMaxTimer_ = 0.0f;
 	//チャージマックス時に色に変化し終わるまでの時間

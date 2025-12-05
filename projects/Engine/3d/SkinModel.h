@@ -1,6 +1,9 @@
 #pragma once
 #include "BaseModel.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// スキンメッシュを持つモデル。
 /// スキンクラスターを持つ。
@@ -52,3 +55,4 @@ private:
 
 };
 
+} // namespace YKEngine

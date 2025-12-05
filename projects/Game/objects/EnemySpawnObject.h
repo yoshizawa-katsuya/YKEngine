@@ -18,7 +18,7 @@ public:
 	/// </summary>
 	/// <param name="nowSpanwDatas">今回の敵出現データリスト</param>
 	/// <param name="model">敵出現エフェクトモデル</param>
-	void Initialize(const std::vector<EnemySpawn>& nowSpanwDatas, std::shared_ptr<BaseModel> model);
+	void Initialize(const std::vector<EnemySpawn>& nowSpanwDatas, std::shared_ptr<YKEngine::BaseModel> model);
 
 	/// <summary>
 	/// 更新。
@@ -29,7 +29,7 @@ public:
 	/// 描画。
 	/// </summary>
 	/// <param name="camera"></param>
-	void Draw(Camera* camera);
+	void Draw(YKEngine::Camera* camera);
 
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; } // 敵管理クラスのポインタを設定する
 
@@ -70,7 +70,7 @@ private:
 
 	EnemyManager* enemyManager_ = nullptr; // 敵管理クラスのポインタ
 
-	std::unique_ptr<InstancingObjects> objects_;
+	std::unique_ptr<YKEngine::InstancingObjects> objects_;
 
 	std::vector<EnemySpawn> spawnDatas_; // 敵の出現データリスト
 
@@ -78,7 +78,7 @@ private:
 	const float kPhaseSwitchTime_ = 0.3f; // フェーズ切り替え時間
 	const float kIntervalTime_ = 0.2f; // インターバル時間
 	float timer_ = 0.0f; // タイマー
-	std::vector<WorldTransform> worldTransforms_; // ワールド変換行列のリスト
+	std::vector<YKEngine::WorldTransform> worldTransforms_; // ワールド変換行列のリスト
 
 	bool isCompleted_ = false; // 敵の出現が完了したかどうか
 

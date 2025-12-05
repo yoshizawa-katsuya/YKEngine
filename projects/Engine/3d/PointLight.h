@@ -2,6 +2,9 @@
 #include <Vector3.h>
 #include <Vector4.h>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 点光源。
 /// 使用する場合、modelPtalformへデータをセットすること。
@@ -20,3 +23,5 @@ struct PointLight
 	float decay = 1.0f;	//減衰率
 	float padding[2];
 };
+
+} // namespace YKEngine

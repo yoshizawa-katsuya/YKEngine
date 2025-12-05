@@ -16,7 +16,7 @@ public:
 	/// <param name="position">初期位置</param>
 	/// <param name="velocity">初速度</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	virtual void Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle);
+	virtual void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity, uint32_t textureHandle);
 
 	/// <summary>
 	/// 更新。
@@ -33,7 +33,7 @@ public:
 	/// 描画。
 	/// </summary>
 	/// <param name="camera">描画に使用するカメラ</param>
-	virtual void Draw(Camera* camera);
+	virtual void Draw(YKEngine::Camera* camera);
 
 	virtual int32_t GetAttackPower() { return attackPower_; }
 
@@ -57,7 +57,7 @@ private:
 
 protected:
 	//速度
-	Vector3 velocity_;
+	YKEngine::Vector3 velocity_;
 
 	//攻撃力
 	int32_t attackPower_ = 1;

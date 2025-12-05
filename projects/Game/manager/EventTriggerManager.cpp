@@ -5,6 +5,8 @@
 #include "eventTrigger/RotateResetEventTrigger.h"
 #include "CollisionManager.h"
 
+using namespace YKEngine;
+
 void EventTriggerManager::Update()
 {
 	//デスフラグの立ったイベントを削除

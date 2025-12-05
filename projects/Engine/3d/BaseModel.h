@@ -7,6 +7,9 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
+namespace YKEngine
+{
 class ModelPlatform;
 class Camera;
 class Animation;
@@ -289,3 +292,4 @@ protected:
 
 };
 
+} // namespace YKEngine

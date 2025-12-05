@@ -4,6 +4,8 @@
 #include "Matrix.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 OffscreenRenderer* OffscreenRenderer::instance_ = nullptr;
 
 OffscreenRenderer* OffscreenRenderer::GetInstance()

@@ -1,5 +1,7 @@
 #include "BaseBullet.h"
 
+using namespace YKEngine;
+
 void BaseBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle)
 {
 	BaseCharacter::Initialize(model);

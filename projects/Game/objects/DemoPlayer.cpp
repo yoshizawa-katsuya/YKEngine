@@ -1,6 +1,8 @@
 #include "DemoPlayer.h"
 #include "manager/EffectManager.h"
 
+using namespace YKEngine;
+
 void DemoPlayer::Initialize(BaseModel* model, WorldTransform* parent)
 {
 	// NULLポインタチェック

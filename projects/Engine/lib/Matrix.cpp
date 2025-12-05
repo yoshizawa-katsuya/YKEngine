@@ -1,6 +1,9 @@
 #include "Matrix.h"
 #include <algorithm>
 
+namespace YKEngine
+{
+
 Matrix3x3 MakeTranslateMatrix(Vector2 translate)
 {
 	Matrix3x3 matrix;
@@ -575,3 +578,5 @@ Matrix4x4 operator+(const Matrix4x4& m1, const Matrix4x4& m2) { return Add(m1, m
 Matrix4x4 operator-(const Matrix4x4& m1, const Matrix4x4& m2) { return Subtract(m1, m2); }
 
 Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2) { return Multiply(m1, m2); }
+
+}	// namespace YKEngine

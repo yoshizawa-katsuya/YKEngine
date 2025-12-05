@@ -3,6 +3,9 @@
 #include "WinApp.h"
 #include "DirectXCommon.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// カメラクラス。
 /// 3D空間上の視点を表す。
@@ -91,3 +94,4 @@ private:
 	
 };
 
+} // namespace YKEngine

@@ -1,6 +1,8 @@
 #include "EnemySpawnManager.h"
 #include "ModelPlatform.h"
 
+using namespace YKEngine;
+
 void EnemySpawnManager::Initialize()
 {
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");
