@@ -263,12 +263,11 @@ void Player::UpdateGameOver()
 	//乱数での移動量の設定
 	const float kMoveRange = 0.1f;
 
-	std::uniform_real_distribution<float> distribution(-kMoveRange, kMoveRange);
+	Random* random = Random::GetInstance();
 
-	//乱数生成エンジンへのポインタ
-	std::mt19937* randomEngine = Random::GetInstance()->GetRandomEnginePtr();
-
-	characterWorldTransform_.translation_ = { distribution(*randomEngine), distribution(*randomEngine), distribution(*randomEngine) };
+	characterWorldTransform_.translation_ = {random->GetFloat(-kMoveRange, kMoveRange),
+											 random->GetFloat(-kMoveRange, kMoveRange),
+											 random->GetFloat(-kMoveRange, kMoveRange) };
 
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, characterWorldTransform_.GetWorldPosition(), 2);
 
