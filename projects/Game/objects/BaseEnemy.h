@@ -111,6 +111,16 @@ protected:
 	void MoveAlongRail();
 
 	/// <summary>
+	/// ダメージリアクションの初期化。
+	/// </summary>
+	void DamageReactionInitialize();
+
+	/// <summary>
+	/// ダメージリアクション
+	/// </summary>
+	void DamageReaction();
+
+	/// <summary>
 	/// プレイヤーの弾と衝突したときの処理。
 	/// </summary>
 	/// <param name="bullet">衝突した弾</param>
@@ -121,12 +131,13 @@ protected:
 	//敵の弾マネージャー
 	EnemyBulletManager* enemyBulletManager_ = nullptr;
 
-	// 弾
-	//std::list<EnemyBullet*> enemyBullets_;
 	//発射間隔
 	static const int kFireInterval = 60;
 	//発射タイマー
 	int32_t fireTimer = 0;
+
+	//ダメージリアクションタイマー
+	int32_t damageReactionTimer_ = 0;
 
 	enum class Phase 
 	{
@@ -143,7 +154,7 @@ protected:
 	//ビューポート行列
 	YKEngine::Matrix4x4* viewPortMatrix_ = nullptr;
 
-	int hitPoint_ = 3; // ヒットポイント
+	int hitPoint_ = 5; // ヒットポイント
 
 	YKEngine::Vector3 direction_; // 方向
 

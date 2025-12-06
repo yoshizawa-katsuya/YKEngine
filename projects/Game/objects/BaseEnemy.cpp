@@ -9,6 +9,7 @@
 #include "manager/EffectManager.h"
 #include "Camera.h"
 #include "manager/EnemyBulletManager.h"
+#include "Random.h"
 
 using namespace YKEngine;
 
@@ -123,6 +124,8 @@ void BaseEnemy::UpdateApproach()
 	//回転
 	Rotate();
 
+	//ダメージリアクション処理
+	DamageReaction();
 }
 
 void BaseEnemy::UpdateMain() 
@@ -143,6 +146,9 @@ void BaseEnemy::UpdateMain()
 
 	//回転
 	Rotate();
+
+	//ダメージリアクション処理
+	DamageReaction();
 
 	//レールカメラに映っていなかったら離脱フェーズへ
 	if (!hasRail_ && !IsVisible(railCamera_))
@@ -269,6 +275,31 @@ void BaseEnemy::MoveAlongRail()
 	}
 }
 
+void BaseEnemy::DamageReactionInitialize()
+{
+	const uint32_t kDamageReactionFrame = 12;
+	damageReactionTimer_ = kDamageReactionFrame;
+}
+
+void BaseEnemy::DamageReaction()
+{
+	damageReactionTimer_--;
+
+	if (damageReactionTimer_ <= 0)
+	{
+		return;
+	}
+
+	//乱数での移動量の設定
+	const float kMoveRange = 0.2f;
+
+	Random* random = Random::GetInstance();
+
+	characterWorldTransform_.translation_ = { random->GetFloat(-kMoveRange, kMoveRange),
+											 random->GetFloat(-kMoveRange, kMoveRange),
+											 random->GetFloat(-kMoveRange, kMoveRange) };
+}
+
 void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
 {
 
@@ -277,6 +308,9 @@ void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
 	assert(bullet);
 
 	hitPoint_ -= bullet->GetAttackPower();
+
+	// ダメージリアクション開始
+	DamageReactionInitialize();
 
 	// エフェクト生成
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());

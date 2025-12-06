@@ -32,6 +32,9 @@ void TackleEnemy01::UpdateApproach()
 
 	//回転
 	Rotate();
+
+	//ダメージリアクション
+	DamageReaction();
 }
 
 void TackleEnemy01::UpdateMain()
@@ -48,6 +51,9 @@ void TackleEnemy01::UpdateMain()
 	{
 		phase_ = Phase::kLeave;
 	}
+
+	//ダメージリアクション
+	DamageReaction();
 }
 
 void TackleEnemy01::UpdateLeave()
