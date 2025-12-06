@@ -3,13 +3,13 @@
 #include "PrimitiveDrawer.h"
 #include "Struct.h"
 #include "Camera.h"
-#include <random>
 #include "ParticleTypes.h"
 #include "BaseModel.h"
 #include "Color.h"
 
 namespace YKEngine
 {
+class Random;
 
 /// <summary>
 /// パーティクル管理クラス。
@@ -143,7 +143,7 @@ private:
 	};
 
 	//乱数生成エンジンへのポインタ
-	std::mt19937* randomEngine_;
+	Random* random_ = nullptr;
 
 	std::unordered_map<std::string, ParticleGroup> particleGroups_;
 

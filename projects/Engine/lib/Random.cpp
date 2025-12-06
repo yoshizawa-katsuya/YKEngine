@@ -14,3 +14,22 @@ void Random::Initialize()
 	std::mt19937 randomEngine(seedGenerator_());
 	randomEngine_ = randomEngine;
 }
+
+float YKEngine::Random::GetFloat(float min, float max)
+{
+	if (min > max)
+	{
+		GetFloat(max, min);
+	}
+	std::uniform_real_distribution<float> distribution(min, max);
+	return distribution(randomEngine_);
+}
+
+Vector3 YKEngine::Random::GetVector3(const Vector3& min, const Vector3& max)
+{
+	return Vector3(
+		GetFloat(min.x, max.x),
+		GetFloat(min.y, max.y),
+		GetFloat(min.z, max.z)
+	);
+}
