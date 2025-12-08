@@ -356,11 +356,11 @@ void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
 		return;
 	}
 	// 体力が0以下になったら死亡
-	Die(bullet->GetVelocity());
+	Die(bullet->GetVelocity(), bullet->GetCenterPosition());
 
 }
 
-void BaseEnemy::Die(const YKEngine::Vector3& bulletVelocity)
+void BaseEnemy::Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition)
 {
 	isDead_ = true;
 	phase_ = Phase::kDead;
@@ -368,8 +368,13 @@ void BaseEnemy::Die(const YKEngine::Vector3& bulletVelocity)
 	hasRail_ = false;
 
 	// 死亡時の速度を設定
+	Vector3 directionBullet = Normalize(bulletVelocity);
+	Vector3 directionToEnemy = Normalize(GetWorldPosition() - bulletPosition);
+
 	const float kDeathSpeedMultiplier = 1.5f;
-	velocity_ = Normalize(bulletVelocity) * kDeathSpeedMultiplier;
+	const float kDirectionWeightBullet = 0.8f;
+	const float kDirectionWeightToEnemy = 0.2f;
+	velocity_ = Normalize(directionBullet * kDirectionWeightBullet + directionToEnemy * kDirectionWeightToEnemy) * kDeathSpeedMultiplier;
 
 	// ランダムな回転ベクトルを設定
 	const Vector3 kRotateVectorMin = { -1.0f, -1.0f, -1.0f };

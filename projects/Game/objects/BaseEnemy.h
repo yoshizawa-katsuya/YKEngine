@@ -136,7 +136,9 @@ protected:
 	/// <summary>
 	/// 死亡処理。
 	/// </summary>
-	virtual void Die(const YKEngine::Vector3& bulletVelocity);
+	/// <param name="bulletVelocity">弾の速度</param>
+	/// <param name="bulletPosition">弾の位置</param>
+	virtual void Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition);
 
 	/// <summary>
 	/// 消滅処理。

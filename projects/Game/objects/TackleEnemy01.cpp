@@ -16,7 +16,7 @@ void TackleEnemy01::OnCollision(Collider* other)
 	else if (other->GetTypeID() == CollisionTypeIdDef::kPlayer)
 	{
 		// プレイヤーと衝突したら自滅
-		Die({0.0f, 0.0f, 0.0f});
+		Die({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
 		Disappear();
 	}
 }
@@ -99,9 +99,9 @@ void TackleEnemy01::SetColliderID()
 	Collider::SetTypeID(CollisionTypeIdDef::kTackleEnemy);
 }
 
-void TackleEnemy01::Die(const YKEngine::Vector3& bulletVelocity)
+void TackleEnemy01::Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition)
 {
-	BaseEnemy::Die(bulletVelocity);
+	BaseEnemy::Die(bulletVelocity, bulletPosition);
 	// ホーミング解除
 	isHoming_ = false;
 }

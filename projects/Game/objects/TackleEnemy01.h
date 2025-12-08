@@ -50,7 +50,7 @@ private:
 	/// <summary>
 	/// 死亡時の処理。
 	/// </summary>
-	void Die(const YKEngine::Vector3& bulletVelocity) override;
+	void Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition) override;
 
 	bool isHoming_ = true;
 
