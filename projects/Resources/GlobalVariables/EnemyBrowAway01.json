@@ -1,0 +1,102 @@
+{
+    "EnemyBrowAway01": {
+        "bahaviorEasingTypeForScale": 0,
+        "bahaviorIsSceleToDisappear": false,
+        "behaviorBlendMode": 1,
+        "behaviorDistance": 1.0,
+        "behaviorIsConstantVelocity": false,
+        "behaviorIsDownVelocity": true,
+        "behaviorIsFaceToVelocityDirection": false,
+        "behaviorIsFixedDistance": false,
+        "behaviorIsHeadCenter": false,
+        "behaviorIsScaleToAppear": false,
+        "behaviorIsTimeFadeOut": true,
+        "behaviorIsUseBillboard": false,
+        "behaviorSpeed": 10.0,
+        "color": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "count": 1,
+        "frequency": 0.5,
+        "randomFlagsColor": false,
+        "randomFlagsLifeTime": true,
+        "randomFlagsRotation": false,
+        "randomFlagsRotationVelocity": false,
+        "randomFlagsScale": true,
+        "randomFlagsSpeed": false,
+        "randomFlagsTranslation": true,
+        "randomFlagsVelocity": false,
+        "rangeParamsLifeTimeMax": 0.5,
+        "rangeParamsLifeTimeMin": 0.05000000074505806,
+        "rangeParamsRotateMax": [
+            3.1415927410125732,
+            3.1415927410125732,
+            3.1415927410125732
+        ],
+        "rangeParamsRotateMin": [
+            -3.1415927410125732,
+            -3.1415927410125732,
+            -3.1415927410125732
+        ],
+        "rangeParamsRotationVelocityMax": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+        ],
+        "rangeParamsRotationVelocityMin": [
+            -0.10000000149011612,
+            -0.10000000149011612,
+            -0.10000000149011612
+        ],
+        "rangeParamsScaleMax": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "rangeParamsScaleMin": [
+            -0.05000000074505806,
+            -0.05000000074505806,
+            -0.05000000074505806
+        ],
+        "rangeParamsSpeedMax": 7.0,
+        "rangeParamsSpeedMin": 3.0,
+        "rangeParamsTranslateMax": [
+            0.5,
+            0.5,
+            0.5
+        ],
+        "rangeParamsTranslateMin": [
+            -0.5,
+            -0.5,
+            -0.5
+        ],
+        "rangeParamsVelocityMax": [
+            5.0,
+            5.0,
+            5.0
+        ],
+        "rangeParamsVelocityMin": [
+            -5.0,
+            -5.0,
+            -5.0
+        ],
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+        ],
+        "translation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}

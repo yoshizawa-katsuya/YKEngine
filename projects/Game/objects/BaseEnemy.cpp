@@ -63,6 +63,9 @@ void BaseEnemy::Update() {
 	case Phase::kLeave:
 		UpdateLeave();
 		break;
+	case Phase::kDead:
+		UpdateDead();
+		break;
 	}
 
 	BaseCharacter::Update();
@@ -165,7 +168,7 @@ void BaseEnemy::UpdateLeave()
 	float leaveTime = 1.0f; // 離脱までの時間（秒）
 	if (leaveTimer_ > leaveTime) 
 	{
-		isDead_ = true;
+		Disappear();
 	}
 
 	//画面内に戻ってきたらメインフェーズへ。画面の揺れなどで戻ってきた場合を考慮し、離脱タイマーもリセットする
@@ -181,6 +184,32 @@ void BaseEnemy::UpdateLeave()
 
 	//回転
 	Rotate();
+}
+
+void BaseEnemy::UpdateDead()
+{
+	const float kDeadTime = 0.2f; // 完全に消滅するまでの時間（秒）
+
+	// 1フレームごとにデッドタイマーをカウントアップ
+	deadTimer_ += 1.0f / 60.0f;
+
+	if (deadTimer_ > kDeadTime) 
+	{
+		// デッドタイマーが一定時間を超えたら完全に消滅
+		Disappear();
+	}
+
+	// ダメージリアクション処理
+	DamageReaction();
+
+	// 移動
+	Move();
+
+	// 回転
+	Rotate();
+
+	// エフェクト生成
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyBrowAway01, GetWorldPosition(), 10);
 }
 
 void BaseEnemy::Fire() {
@@ -220,6 +249,12 @@ void BaseEnemy::Move()
 
 void BaseEnemy::Rotate()
 {
+	if (isDead_) 
+	{
+		// 死亡時の回転処理
+		worldTransform_.rotation_ += rotateVector_;
+		return;
+	}
 	// プレイヤーの方向を向く
 	Vector3 toPosition = player_->GetWorldPosition();
 	direction_ = toPosition - GetWorldPosition();
@@ -321,8 +356,41 @@ void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
 		return;
 	}
 	// 体力が0以下になったら死亡
+	Die(bullet->GetVelocity());
+
+}
+
+void BaseEnemy::Die(const YKEngine::Vector3& bulletVelocity)
+{
 	isDead_ = true;
+	phase_ = Phase::kDead;
+	
+	hasRail_ = false;
 
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter04, worldTransform_.GetWorldPosition(), 50);
+	// 死亡時の速度を設定
+	const float kDeathSpeedMultiplier = 1.5f;
+	velocity_ = Normalize(bulletVelocity) * kDeathSpeedMultiplier;
 
+	// ランダムな回転ベクトルを設定
+	const Vector3 kRotateVectorMin = { -1.0f, -1.0f, -1.0f };
+	const Vector3 kRotateVectorMax = { 1.0f, 1.0f, 1.0f };
+
+	const float kRotateSpeedMin = 0.5f;
+	const float kRotateSpeedMax = 2.0f;
+	
+	Random* random = Random::GetInstance();
+	rotateVector_ = Normalize(random->GetVector3(kRotateVectorMin, kRotateVectorMax)) * random->GetFloat(kRotateSpeedMin, kRotateSpeedMax);
+}
+
+void BaseEnemy::Disappear()
+{
+	isDisappear_ = true;
+
+	// 死亡している場合のみエフェクトを生成
+	if (isDead_)
+	{
+		// エフェクト生成
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter04, worldTransform_.GetWorldPosition(), 50);
+	}
+	
 }

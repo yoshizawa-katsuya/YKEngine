@@ -57,6 +57,8 @@ public:
 
 	void SetEnemyBulletManager(EnemyBulletManager* enemyBulletManager) { enemyBulletManager_ = enemyBulletManager; }
 
+	bool IsDisappear() const { return isDisappear_; }
+
 protected:
 	
 	/// <summary>
@@ -83,6 +85,11 @@ protected:
 	/// 離脱更新。
 	/// </summary>
 	virtual void UpdateLeave();
+
+	/// <summary>
+	/// 死亡更新。
+	/// </summary>
+	void UpdateDead();
 
 	/// <summary>
 	/// 弾の発射。
@@ -126,6 +133,16 @@ protected:
 	/// <param name="bullet">衝突した弾</param>
 	virtual void OnCollisionPlayerBullet(Collider* other);
 
+	/// <summary>
+	/// 死亡処理。
+	/// </summary>
+	virtual void Die(const YKEngine::Vector3& bulletVelocity);
+
+	/// <summary>
+	/// 消滅処理。
+	/// </summary>
+	void Disappear();
+
 	//自キャラ
 	Player* player_ = nullptr;
 	//敵の弾マネージャー
@@ -144,6 +161,7 @@ protected:
 		kApproach, // 接近する
 		kMain,	// メイン
 		kLeave,	// 離脱する
+		kDead,	// 死亡
 	};
 	//フェーズ
 	Phase phase_ = Phase::kApproach;
@@ -173,4 +191,13 @@ protected:
 	float speed_ = 0.1f;
 
 	bool hasRail_ = false; // レールがあるかどうか
+
+	//trueなら消滅処理を行う
+	bool isDisappear_ = false;
+
+	//死亡タイマー
+	float deadTimer_ = 0.0f;
+
+	//回転ベクトル
+	YKEngine::Vector3 rotateVector_ = { 0.0f, 0.0f, 0.0f };
 };

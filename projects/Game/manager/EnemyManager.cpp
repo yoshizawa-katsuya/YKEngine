@@ -22,7 +22,7 @@ void EnemyManager::Update()
 {
 	//デスフラグの立った敵を削除
 	enemys_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
-		if (enemy->IsDead()) {
+		if (enemy->IsDisappear()) {
 			return true;
 		}
 		return false;
@@ -72,6 +72,10 @@ void EnemyManager::RegisterToCollisionManager(CollisionManager* collisionManager
 {
 	for (std::unique_ptr<BaseEnemy>& enemy : enemys_) 
 	{
+		if (enemy->IsDead())
+		{
+			continue;
+		}
 		collisionManager->AddCollider(enemy.get());
 	}
 }

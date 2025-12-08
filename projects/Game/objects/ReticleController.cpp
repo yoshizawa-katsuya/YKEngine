@@ -130,9 +130,9 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnem
 
 	for (const std::unique_ptr<BaseEnemy>& enemy : enemies) {
 
-		if (!enemy->IsVisible(railCamera))
+		if (!enemy->IsVisible(railCamera) || enemy->IsDead())
 		{
-			continue; // 敵が見えない場合はスキップ
+			continue; // 敵が見えない、または死んでいる場合はスキップ
 		}
 
 		Vector2 ScreenPosB = enemy->GetScreenPosition(railCamera);

@@ -47,6 +47,11 @@ private:
 	/// </summary>
 	void SetColliderID() override;
 
+	/// <summary>
+	/// 死亡時の処理。
+	/// </summary>
+	void Die(const YKEngine::Vector3& bulletVelocity) override;
+
 	bool isHoming_ = true;
 
 };

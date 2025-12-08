@@ -37,6 +37,8 @@ public:
 
 	virtual int32_t GetAttackPower() { return attackPower_; }
 
+	YKEngine::Vector3 GetVelocity() { return velocity_; }
+
 private:
 
 	/// <summary>

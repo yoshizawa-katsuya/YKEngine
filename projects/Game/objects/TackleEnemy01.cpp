@@ -15,9 +15,9 @@ void TackleEnemy01::OnCollision(Collider* other)
 	}
 	else if (other->GetTypeID() == CollisionTypeIdDef::kPlayer)
 	{
-		// プレイヤーと衝突したら体力を0にする
-		hitPoint_ = 0;
-		isDead_ = true;
+		// プレイヤーと衝突したら自滅
+		Die({0.0f, 0.0f, 0.0f});
+		Disappear();
 	}
 }
 
@@ -63,7 +63,7 @@ void TackleEnemy01::UpdateLeave()
 	float leaveTime = 1.0f; // 離脱までの時間（秒）
 	if (leaveTimer_ > leaveTime)
 	{
-		isDead_ = true;
+		Disappear();
 	}
 
 	//画面内に戻ってきたらメインフェーズへ
@@ -81,13 +81,27 @@ void TackleEnemy01::UpdateLeave()
 void TackleEnemy01::Move()
 {
 	// 移動
-	Vector3 normalDirection = Normalize(direction_);
-	velocity_ = normalDirection * speed_;
-	worldTransform_.translation_ += velocity_;
-
+	// ホーミング移動
+	if (isHoming_)
+	{
+		Vector3 normalDirection = Normalize(direction_);
+		velocity_ = normalDirection * speed_;
+		worldTransform_.translation_ += velocity_;
+	}
+	else
+	{
+		BaseEnemy::Move();
+	}
 }
 
 void TackleEnemy01::SetColliderID()
 {
 	Collider::SetTypeID(CollisionTypeIdDef::kTackleEnemy);
+}
+
+void TackleEnemy01::Die(const YKEngine::Vector3& bulletVelocity)
+{
+	BaseEnemy::Die(bulletVelocity);
+	// ホーミング解除
+	isHoming_ = false;
 }
