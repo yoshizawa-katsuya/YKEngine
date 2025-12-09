@@ -43,7 +43,7 @@ public:
 	/// カメラに映っているかどうか。
 	/// </summary>
 	/// <param name="camera">判定に使用するカメラ</param>
-	/// </returns>映っているならtrue、映っていないならfalse</returns>
+	/// <returns>映っているならtrue、映っていないならfalse</returns>
 	virtual bool IsVisible(YKEngine::Camera* camera);
 
 	/// <summary>

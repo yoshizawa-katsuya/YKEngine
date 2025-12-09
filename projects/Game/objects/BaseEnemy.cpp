@@ -127,8 +127,6 @@ void BaseEnemy::UpdateApproach()
 	//回転
 	Rotate();
 
-	//ダメージリアクション処理
-	DamageReaction();
 }
 
 void BaseEnemy::UpdateMain() 
@@ -193,19 +191,20 @@ void BaseEnemy::UpdateDead()
 	// 1フレームごとにデッドタイマーをカウントアップ
 	deadTimer_ += 1.0f / 60.0f;
 
-	if (deadTimer_ > kDeadTime) 
+	if (deadTimer_ > kDeadTime)
 	{
-		// デッドタイマーが一定時間を超えたら完全に消滅
+		// 完全に消滅
 		Disappear();
 	}
 
-	// ダメージリアクション処理
-	DamageReaction();
-
 	// 移動
 	velocity_ = Normalize(velocity_) * Lerp(blowAwaySpeed_, 0.0f, deadTimer_ / kDeadTime);
-	Move();
-
+	// 画面内にいる間は移動を続ける
+	if (IsVisible(railCamera_))
+	{
+		Move();
+	}
+	
 	// 回転
 	Rotate();
 
@@ -253,7 +252,7 @@ void BaseEnemy::Rotate()
 	if (isDead_) 
 	{
 		// 死亡時の回転処理
-		worldTransform_.rotation_ += rotateVector_;
+		characterWorldTransform_.rotation_ += rotateVector_;
 		return;
 	}
 	// プレイヤーの方向を向く
@@ -321,8 +320,10 @@ void BaseEnemy::DamageReaction()
 {
 	damageReactionTimer_--;
 
-	if (damageReactionTimer_ <= 0)
+	if (damageReactionTimer_ < 0)
 	{
+		// ダメージリアクション終了
+		characterWorldTransform_.translation_ = { 0.0f, 0.0f, 0.0f };
 		return;
 	}
 
