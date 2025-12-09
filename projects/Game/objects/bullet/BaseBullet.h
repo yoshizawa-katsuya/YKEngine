@@ -16,7 +16,7 @@ public:
 	/// <param name="position">初期位置</param>
 	/// <param name="velocity">初速度</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	virtual void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity, uint32_t textureHandle);
+	virtual void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity);
 
 	/// <summary>
 	/// 更新。
@@ -45,11 +45,6 @@ private:
 	/// 移動処理。
 	/// </summary>
 	virtual void Move();
-
-	// テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
-
-	
 
 	//寿命
 	static const int32_t kLifeTime = 60 * 5;

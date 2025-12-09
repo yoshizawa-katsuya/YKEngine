@@ -6,11 +6,8 @@ using namespace YKEngine;
 
 void EnemyBulletManager::Initialize()
 {
-	//テクスチャ読み込み
-	textureHandleEnemyBullet_ = TextureManager::GetInstance()->Load("./Resources/red.png");
-
 	//モデル生成
-	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(textureHandleEnemyBullet_, "EnemyBullet");
+	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(TextureManager::GetInstance()->Load("./Resources/red.png"), "EnemyBullet");
 }
 
 void EnemyBulletManager::Update(Camera* railCamera)
@@ -48,7 +45,7 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 	//弾を生成し、初期化
 	std::unique_ptr<BaseEnemyBullet> bullet;
 	bullet = std::make_unique<BaseEnemyBullet>();
-	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandleEnemyBullet_, target, speed);
+	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, target, speed);
 
 	//リストに登録する
 	enemyBullets_.push_back(std::move(bullet));

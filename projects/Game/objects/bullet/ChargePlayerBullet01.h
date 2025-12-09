@@ -17,6 +17,6 @@ public:
 	/// <param name="position">初期位置</param>
 	/// <param name="velocity">初速度</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity, uint32_t textureHandle) override;
+	void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity) override;
 };
 

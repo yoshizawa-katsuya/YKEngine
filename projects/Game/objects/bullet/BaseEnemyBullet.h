@@ -19,7 +19,7 @@ public:
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	/// <param name="target">ホーミングターゲット</param>
 	/// <param name="speed">速さ</param>
-	void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity, uint32_t textureHandle, Player* target, float speed);
+	void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity, Player* target, float speed);
 
 	/// <summary>
 	/// 更新。

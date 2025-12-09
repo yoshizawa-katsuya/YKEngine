@@ -8,11 +8,9 @@ using namespace YKEngine;
 
 void PlayerBulletManager::Initialize()
 {
-	//テクスチャ読み込み
-	textureHandlePlayerBullet_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 
 	//モデル生成
-	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(textureHandlePlayerBullet_, "PlayerBullet");
+	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(TextureManager::GetInstance()->Load("./Resources/white.png"), "PlayerBullet");
 }
 
 void PlayerBulletManager::Update()
@@ -56,7 +54,7 @@ void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Ve
 
 		break;
 	}
-	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandlePlayerBullet_);
+	bullet->Initialize(modelBullet_.get(), worldPosition, velocity);
 
 	//リストに登録
 	playerBullets_.push_back(std::move(bullet));

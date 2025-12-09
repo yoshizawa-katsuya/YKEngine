@@ -7,11 +7,11 @@
 
 using namespace YKEngine;
 
-void BaseEnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle, Player* target, float speed)
+void BaseEnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, Player* target, float speed)
 {
 	target_ = target;
 	speed_ = speed;
-	BaseBullet::Initialize(model, position, velocity, textureHandle);
+	BaseBullet::Initialize(model, position, velocity);
 	Collider::SetTypeID(CollisionTypeIdDef::kEnemyBullet);
 
 }

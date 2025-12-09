@@ -50,9 +50,6 @@ private:
 	//弾のモデル	
 	std::shared_ptr<YKEngine::BaseModel> modelBullet_;
 
-	//弾のテクスチャハンドル
-	uint32_t textureHandleEnemyBullet_;
-
 	//弾
 	std::list<std::unique_ptr<BaseEnemyBullet>> enemyBullets_;
 

@@ -6,10 +6,10 @@
 
 using namespace YKEngine;
 
-void BasePlayerBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle) 
+void BasePlayerBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity) 
 {
 
-	BaseBullet::Initialize(model, position, velocity, textureHandle);
+	BaseBullet::Initialize(model, position, velocity);
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayerBullet);
 
 }

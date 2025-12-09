@@ -2,12 +2,9 @@
 
 using namespace YKEngine;
 
-void BaseBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle)
+void BaseBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity)
 {
 	BaseCharacter::Initialize(model);
-
-	//テクスチャ読み込み
-	textureHandle_ = textureHandle;
 
 	//引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
@@ -33,7 +30,7 @@ void BaseBullet::Update()
 void BaseBullet::Draw(Camera* camera)
 {
 	object_->CameraUpdate(camera);
-	object_->Draw(textureHandle_);
+	object_->Draw();
 }
 
 void BaseBullet::Move()
