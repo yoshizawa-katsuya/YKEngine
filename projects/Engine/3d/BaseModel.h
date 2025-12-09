@@ -187,6 +187,8 @@ public:
 
 	virtual void SetEnableLighting(bool enableLighting);
 
+	void SetShininess(float shininess);
+
 	virtual void SetEnvironmentCoefficient(float environmentCoefficient);
 
 	Material& GetMaterialDataAddress() { return *materialData_; }

@@ -130,6 +130,12 @@ void BaseModel::SetEnableLighting(bool enableLighting)
 	materialData_->enableLighting = enableLighting;
 }
 
+void YKEngine::BaseModel::SetShininess(float shininess)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	materialData_->shininess = shininess;
+}
+
 void BaseModel::SetEnvironmentCoefficient(float environmentCoefficient)
 {
 	ThreadPool::GetInstance()->waitForCompletion();
