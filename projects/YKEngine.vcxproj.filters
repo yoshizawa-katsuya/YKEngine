@@ -312,7 +312,7 @@
     <ClCompile Include="Game\objects\bullet\BaseBullet.cpp">
       <Filter>ソース ファイル\application\objects\bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\bullet\EnemyBullet.cpp">
+    <ClCompile Include="Game\objects\bullet\BaseEnemyBullet.cpp">
       <Filter>ソース ファイル\application\objects\bullet</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\bullet\PlayerBullet01.cpp">
@@ -676,7 +676,7 @@
     <ClInclude Include="Game\objects\bullet\BasePlayerBullet.h">
       <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\bullet\EnemyBullet.h">
+    <ClInclude Include="Game\objects\bullet\BaseEnemyBullet.h">
       <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\bullet\PlayerBullet01.h">

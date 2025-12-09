@@ -1,4 +1,4 @@
-#include "EnemyBullet.h"
+#include "BaseEnemyBullet.h"
 #include "cassert"
 #include "TextureManager.h"
 #include "Vector3.h"
@@ -7,7 +7,7 @@
 
 using namespace YKEngine;
 
-void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle, Player* target, float speed)
+void BaseEnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity, uint32_t textureHandle, Player* target, float speed)
 {
 	target_ = target;
 	speed_ = speed;
@@ -16,7 +16,7 @@ void EnemyBullet::Initialize(BaseModel* model, const Vector3& position, const Ve
 
 }
 
-void EnemyBullet::Update(Camera* railCamera)
+void BaseEnemyBullet::Update(Camera* railCamera)
 {
 	BaseBullet::Update();
 
@@ -27,7 +27,7 @@ void EnemyBullet::Update(Camera* railCamera)
 	}
 }
 
-void EnemyBullet::OnCollision(Collider* other)
+void BaseEnemyBullet::OnCollision(Collider* other)
 {
 	CollisionTypeIdDef typeID = other->GetTypeID();
 
@@ -37,7 +37,7 @@ void EnemyBullet::OnCollision(Collider* other)
 	}
 }
 
-void EnemyBullet::Move()
+void BaseEnemyBullet::Move()
 {
 	if (isHoming_)
 	{
@@ -48,7 +48,7 @@ void EnemyBullet::Move()
 	worldTransform_.translation_ += velocity_;
 }
 
-void EnemyBullet::Homig()
+void BaseEnemyBullet::Homig()
 {
 	//ターゲットに向かって移動する
 	Vector3 direction = target_->GetWorldPosition() - worldTransform_.GetWorldPosition();

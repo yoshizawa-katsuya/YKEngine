@@ -1,5 +1,5 @@
 #pragma once
-#include "bullet/EnemyBullet.h"
+#include "bullet/BaseEnemyBullet.h"
 class YKEngine::Camera;
 class CollisionManager;
 
@@ -54,7 +54,7 @@ private:
 	uint32_t textureHandleEnemyBullet_;
 
 	//弾
-	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+	std::list<std::unique_ptr<BaseEnemyBullet>> enemyBullets_;
 
 	//ゲームオーバーならtrue
 	bool isGameOver_ = false;

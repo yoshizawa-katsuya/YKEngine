@@ -16,14 +16,14 @@ void EnemyBulletManager::Initialize()
 void EnemyBulletManager::Update(Camera* railCamera)
 {
 	// デスフラグの立った弾を削除
-	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
+	enemyBullets_.remove_if([](std::unique_ptr<BaseEnemyBullet>& bullet) {
 		if (bullet->IsDead()) {
 			return true;
 		}
 		return false;
 		});
 	// 弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_)
+	for (std::unique_ptr<BaseEnemyBullet>& bullet : enemyBullets_)
 	{
 		bullet->Update(railCamera);
 	}
@@ -31,7 +31,7 @@ void EnemyBulletManager::Update(Camera* railCamera)
 
 void EnemyBulletManager::Draw(Camera* camera)
 {
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) 
+	for (std::unique_ptr<BaseEnemyBullet>& bullet : enemyBullets_) 
 	{
 		bullet->Draw(camera);
 	}
@@ -46,8 +46,8 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 	}
 	
 	//弾を生成し、初期化
-	std::unique_ptr<EnemyBullet> bullet;
-	bullet = std::make_unique<EnemyBullet>();
+	std::unique_ptr<BaseEnemyBullet> bullet;
+	bullet = std::make_unique<BaseEnemyBullet>();
 	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, textureHandleEnemyBullet_, target, speed);
 
 	//リストに登録する
@@ -56,7 +56,7 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 
 void EnemyBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)
 {
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) 
+	for (std::unique_ptr<BaseEnemyBullet>& bullet : enemyBullets_) 
 	{
 		collisionManager->AddCollider(bullet.get());
 	}

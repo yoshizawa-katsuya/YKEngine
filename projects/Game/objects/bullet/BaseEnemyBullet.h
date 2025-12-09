@@ -6,7 +6,7 @@ class Player;
 /// 敵弾クラス。
 /// プレイヤーに当たるとダメージを与える。
 /// </summary>
-class EnemyBullet : public BaseBullet
+class BaseEnemyBullet : public BaseBullet
 {
 public:
 
