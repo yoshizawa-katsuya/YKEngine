@@ -187,6 +187,8 @@ public:
 
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
+	void SetDrawMode(DrawMode drawMode);
+
 private:
 
 	/// <summary>
