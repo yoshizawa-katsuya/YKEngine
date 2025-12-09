@@ -325,6 +325,11 @@ void ModelPlatform::SpotLightUpdate(const SpotLight& spotLight)
 	return;
 }
 
+void YKEngine::ModelPlatform::SetDrawMode(DrawMode drawMode)
+{
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), drawMode);
+}
+
 void ModelPlatform::CommonPreDraw(bool isSkin)
 {
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
