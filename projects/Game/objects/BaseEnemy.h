@@ -202,4 +202,7 @@ protected:
 
 	//回転ベクトル
 	YKEngine::Vector3 rotateVector_ = { 0.0f, 0.0f, 0.0f };
+
+	//吹っ飛ぶ速さ
+	float blowAwaySpeed_;
 };

@@ -203,6 +203,7 @@ void BaseEnemy::UpdateDead()
 	DamageReaction();
 
 	// 移動
+	velocity_ = Normalize(velocity_) * Lerp(blowAwaySpeed_, 0.0f, deadTimer_ / kDeadTime);
 	Move();
 
 	// 回転
@@ -371,10 +372,10 @@ void BaseEnemy::Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vec
 	Vector3 directionBullet = Normalize(bulletVelocity);
 	Vector3 directionToEnemy = Normalize(GetWorldPosition() - bulletPosition);
 
-	const float kDeathSpeedMultiplier = 1.5f;
+	blowAwaySpeed_ = 5.5f;
 	const float kDirectionWeightBullet = 0.8f;
 	const float kDirectionWeightToEnemy = 0.2f;
-	velocity_ = Normalize(directionBullet * kDirectionWeightBullet + directionToEnemy * kDirectionWeightToEnemy) * kDeathSpeedMultiplier;
+	velocity_ = Normalize(directionBullet * kDirectionWeightBullet + directionToEnemy * kDirectionWeightToEnemy) * blowAwaySpeed_;
 
 	// ランダムな回転ベクトルを設定
 	const Vector3 kRotateVectorMin = { -1.0f, -1.0f, -1.0f };
