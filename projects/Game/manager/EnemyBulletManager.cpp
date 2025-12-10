@@ -1,6 +1,8 @@
 #include "EnemyBulletManager.h"
 #include "ModelPlatform.h"
 #include "CollisionManager.h"
+#include "bullet/EnemyHomingBullet01.h"
+#include "bullet/TargetEnemyBullet01.h"
 
 using namespace YKEngine;
 
@@ -34,7 +36,7 @@ void EnemyBulletManager::Draw(Camera* camera)
 	}
 }
 
-void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity, Player* target, float speed)
+void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vector3& velocity, Player* target, float speed, EnemyBulletType bulletType)
 {
 	//ゲームオーバー時は弾を生成しない
 	if (isGameOver_)
@@ -44,7 +46,19 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 	
 	//弾を生成し、初期化
 	std::unique_ptr<BaseEnemyBullet> bullet;
-	bullet = std::make_unique<BaseEnemyBullet>();
+
+	switch (bulletType)
+	{
+	case EnemyBulletType::kTarget:
+		bullet = std::make_unique<TargetEnemyBullet01>();
+		break;
+	case EnemyBulletType::kHoming:
+		bullet = std::make_unique<EnemyHomingBullet01>();
+		break;
+	default:
+		break;
+	}
+
 	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, target, speed);
 
 	//リストに登録する

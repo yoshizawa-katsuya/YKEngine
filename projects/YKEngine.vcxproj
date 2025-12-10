@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\bullet\EnemyHomingBullet01.cpp" />
     <ClCompile Include="Game\manager\CameraManager.cpp" />
     <ClCompile Include="Game\objects\DemoPlayer.cpp" />
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
@@ -192,6 +193,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\TackleEnemy01.cpp" />
     <ClCompile Include="Engine\lib\Random.cpp" />
     <ClCompile Include="Engine\lib\MyMath.cpp" />
+    <ClCompile Include="Game\objects\bullet\TargetEnemyBullet01.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -360,6 +362,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\bullet\EnemyBulletType.h" />
+    <ClInclude Include="Game\objects\bullet\EnemyHomingBullet01.h" />
     <ClInclude Include="Game\manager\CameraManager.h" />
     <ClInclude Include="Game\objects\DemoPlayer.h" />
     <ClInclude Include="Engine\lib\Color.h" />
@@ -454,6 +458,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\Random.h" />
     <ClInclude Include="Engine\lib\MyMath.h" />
     <ClInclude Include="Engine\lib\RootParams.h" />
+    <ClInclude Include="Game\objects\bullet\TargetEnemyBullet01.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

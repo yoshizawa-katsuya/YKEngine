@@ -19,13 +19,13 @@ public:
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	/// <param name="target">ホーミングターゲット</param>
 	/// <param name="speed">速さ</param>
-	void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity, Player* target, float speed);
+	virtual void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity, Player* target, float speed);
 
 	/// <summary>
 	/// 更新。
 	/// </summary>
 	/// <param name="railCamera">レールカメラ。画面外に出たかの判定に使用。</param>
-	void Update(YKEngine::Camera* railCamera);
+	virtual void Update(YKEngine::Camera* railCamera);
 
 	/// <summary>
 	/// 衝突時の処理。
@@ -33,19 +33,7 @@ public:
 	/// <param name="other">衝突相手のコライダー</param>
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
-private:
+protected:
 
-	/// <summary>
-	/// 移動処理。
-	/// </summary>
-	void Move() override; 
-
-	/// <summary>
-	/// ターゲットに向かって追尾する。
-	/// </summary>
-	void Homig();
-
-	Player* target_ = nullptr;
 	float speed_ = 0.5f;
-	bool isHoming_ = true; // ホーミング弾かどうか
 };

@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "manager/EnemyBulletManager.h"
 #include "Random.h"
+#include "bullet/EnemyBulletType.h"
 
 using namespace YKEngine;
 
@@ -221,7 +222,7 @@ void BaseEnemy::Fire() {
 	velocity = Multiply(kBulletSpeed, velocity);
 
 	// 弾を生成し、初期化
-	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, kBulletSpeed);
+	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, kBulletSpeed, EnemyBulletType::kTarget);
 
 }
 

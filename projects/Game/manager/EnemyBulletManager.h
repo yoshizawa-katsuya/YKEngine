@@ -1,5 +1,6 @@
 #pragma once
 #include "bullet/BaseEnemyBullet.h"
+#include "bullet/EnemyBulletType.h"
 class YKEngine::Camera;
 class CollisionManager;
 
@@ -35,7 +36,7 @@ public:
 	/// <param name="velocity">弾の速度ベクトル</param>
 	/// <param name="target">弾のターゲットとなるプレイヤー</param>
 	/// <param name="speed">弾の速度</param>
-	void AddEnemyBullet(const YKEngine::Vector3& worldPosition, const YKEngine::Vector3& velocity, Player* target, float speed);
+	void AddEnemyBullet(const YKEngine::Vector3& worldPosition, const YKEngine::Vector3& velocity, Player* target, float speed, EnemyBulletType bulletType);
 
 	/// <summary>
 	/// コライダーを衝突管理クラスに登録する。

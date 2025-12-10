@@ -366,6 +366,12 @@
     <ClCompile Include="Game\manager\CameraManager.cpp">
       <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\bullet\EnemyHomingBullet01.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\bullet\TargetEnemyBullet01.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -735,6 +741,15 @@
     </ClInclude>
     <ClInclude Include="Game\manager\CameraManager.h">
       <Filter>ヘッダー ファイル\application\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\EnemyHomingBullet01.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\EnemyBulletType.h">
+      <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\bullet\TargetEnemyBullet01.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

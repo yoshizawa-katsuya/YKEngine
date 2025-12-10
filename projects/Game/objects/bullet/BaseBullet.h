@@ -41,11 +41,6 @@ public:
 
 private:
 
-	/// <summary>
-	/// 移動処理。
-	/// </summary>
-	virtual void Move();
-
 	//寿命
 	static const int32_t kLifeTime = 60 * 5;
 
@@ -53,6 +48,12 @@ private:
 	int32_t deathTimer_ = kLifeTime;
 
 protected:
+
+	/// <summary>
+	/// 移動処理。
+	/// </summary>
+	virtual void Move();
+
 	//速度
 	YKEngine::Vector3 velocity_;
 
