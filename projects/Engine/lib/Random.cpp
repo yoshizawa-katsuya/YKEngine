@@ -33,3 +33,12 @@ Vector3 YKEngine::Random::GetVector3(const Vector3& min, const Vector3& max)
 		GetFloat(min.z, max.z)
 	);
 }
+
+Vector3 YKEngine::Random::GetVector3(float min, float max)
+{
+	return Vector3(
+		GetFloat(min, max),
+		GetFloat(min, max),
+		GetFloat(min, max)
+	);
+}
