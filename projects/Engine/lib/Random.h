@@ -36,6 +36,14 @@ public:
 	/// <returns>乱数</returns>
 	Vector3 GetVector3(const Vector3& min, const Vector3& max);
 
+	/// <summary>
+	/// Vector3型の乱数を(min, max)の範囲で取得
+	/// </summary>
+	/// <param name="min">最小値</param>
+	/// <param name="max">最大値</param>
+	/// <returns>乱数</returns>
+	Vector3 GetVector3(float min, float max);
+
 private:
 
 	Random() = default;
