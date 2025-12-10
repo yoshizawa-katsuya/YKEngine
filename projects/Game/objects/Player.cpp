@@ -87,6 +87,9 @@ void Player::OnCollision(Collider* other)
 		//ダメージリアクション開始
 		DamageReactionInitialize();
 
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, worldTransform_.GetWorldPosition(), 10);
+
 		if (hitPoint_ > 0)
 		{
 			return;
