@@ -151,12 +151,12 @@ protected:
 	EnemyBulletManager* enemyBulletManager_ = nullptr;
 
 	//発射間隔
-	static const int kFireInterval = 60;
+	const float kFireInterval_ = 1.0f;
 	//発射タイマー
-	int32_t fireTimer = 0;
+	float fireTimer_ = 0.0f;
 
 	//ダメージリアクションタイマー
-	int32_t damageReactionTimer_ = 0;
+	float damageReactionTimer_ = 0.0f;
 
 	enum class Phase 
 	{

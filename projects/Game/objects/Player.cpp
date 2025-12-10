@@ -84,11 +84,15 @@ void Player::OnCollision(Collider* other)
 	if (typeId == CollisionTypeIdDef::kEnemyBullet || typeId == CollisionTypeIdDef::kTackleEnemy)
 	{
 		hitPoint_--;
+		//ダメージリアクション開始
+		DamageReactionInitialize();
 
-		if (hitPoint_ > 0) {
+		if (hitPoint_ > 0)
+		{
 			return;
 		}
 		isDead_ = true;
+
 	}
 }
 
@@ -247,6 +251,9 @@ void Player::UpdateMain(Camera* railCamera)
 	//照準オブジェクトの更新
 	ReticleUpdate(railCamera);
 
+	//ダメージリアクション処理
+	DamageReaction();
+
 	//チャージ処理
 	Charge();
 
@@ -365,4 +372,27 @@ void Player::ChargeReset()
 	isChargeMax_ = false;
 	chargeTime_ = 0.0f;
 	reticleController_->ChargeReset();
+}
+
+void Player::DamageReactionInitialize()
+{
+	const float kDamageReactionFrame = 0.2f;
+	damageReactionTimer_ = kDamageReactionFrame;
+}
+
+void Player::DamageReaction()
+{
+	if (damageReactionTimer_ < 0.0f)
+	{
+		// ダメージリアクション終了
+		characterWorldTransform_.translation_ = { 0.0f, 0.0f, 0.0f };
+		return;
+	}
+
+	damageReactionTimer_ -= 1.0f / 60.0f;
+
+	//乱数での移動量の設定
+	const float kMoveRange = 0.2f;
+
+	characterWorldTransform_.translation_ = Random::GetInstance()->GetVector3(-kMoveRange, kMoveRange);
 }

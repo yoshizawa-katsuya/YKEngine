@@ -108,7 +108,7 @@ void BaseEnemy::SetColliderID()
 void BaseEnemy::MainInitialize() 
 {
 	//発射タイマーを初期化
-	fireTimer = kFireInterval;
+	fireTimer_ = kFireInterval_;
 
 }
 
@@ -134,13 +134,13 @@ void BaseEnemy::UpdateMain()
 {
 
 	//発射タイマーカウントダウン
-	fireTimer--;
+	fireTimer_ -= 1.0f / 60.0f;
 	//指定時間に達した
-	if (fireTimer == 0) {
+	if (fireTimer_ <= 0.0f) {
 		//弾を発射
 		Fire();
 		//発射タイマーを初期化
-		fireTimer = kFireInterval;
+		fireTimer_ = kFireInterval_;
 	}
 
 	// 移動
@@ -313,29 +313,25 @@ void BaseEnemy::MoveAlongRail()
 
 void BaseEnemy::DamageReactionInitialize()
 {
-	const uint32_t kDamageReactionFrame = 12;
+	const float kDamageReactionFrame = 0.2f;
 	damageReactionTimer_ = kDamageReactionFrame;
 }
 
 void BaseEnemy::DamageReaction()
 {
-	damageReactionTimer_--;
-
-	if (damageReactionTimer_ < 0)
+	if (damageReactionTimer_ < 0.0f)
 	{
 		// ダメージリアクション終了
 		characterWorldTransform_.translation_ = { 0.0f, 0.0f, 0.0f };
 		return;
 	}
 
+	damageReactionTimer_ -= 1.0f / 60.0f;
+
 	//乱数での移動量の設定
 	const float kMoveRange = 0.2f;
 
-	Random* random = Random::GetInstance();
-
-	characterWorldTransform_.translation_ = { random->GetFloat(-kMoveRange, kMoveRange),
-											 random->GetFloat(-kMoveRange, kMoveRange),
-											 random->GetFloat(-kMoveRange, kMoveRange) };
+	characterWorldTransform_.translation_ = Random::GetInstance()->GetVector3(-kMoveRange, kMoveRange);
 }
 
 void BaseEnemy::OnCollisionPlayerBullet(Collider* other)

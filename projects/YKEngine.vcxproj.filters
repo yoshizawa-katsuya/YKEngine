@@ -742,14 +742,14 @@
     <ClInclude Include="Game\manager\CameraManager.h">
       <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\bullet\EnemyHomingBullet01.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\bullet\EnemyBulletType.h">
       <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
     </ClInclude>
+    <ClInclude Include="Game\objects\bullet\EnemyHomingBullet01.h">
+      <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
+    </ClInclude>
     <ClInclude Include="Game\objects\bullet\TargetEnemyBullet01.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

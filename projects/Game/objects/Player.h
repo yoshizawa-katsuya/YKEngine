@@ -137,6 +137,16 @@ private:
 	/// </summary>
 	void ChargeReset();
 
+	/// <summary>
+	/// ダメージリアクションの初期化。
+	/// </summary>
+	void DamageReactionInitialize();
+
+	/// <summary>
+	/// ダメージリアクション
+	/// </summary>
+	void DamageReaction();
+
 	//キーボード入力
 	YKEngine::Input* input_ = nullptr;
 
@@ -171,5 +181,8 @@ private:
 	//ゲームオーバー時の時間を計る変数
 	float gameOverTimer_ = 0.0f;
 	bool isGameOverEnd_ = false;	//ゲームオーバー処理が終わっていたらtrue
+
+	//ダメージリアクションタイマー
+	float damageReactionTimer_ = 0.0f;
 };
 
