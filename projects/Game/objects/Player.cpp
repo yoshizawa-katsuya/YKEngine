@@ -88,7 +88,7 @@ void Player::OnCollision(Collider* other)
 		DamageReactionInitialize();
 
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, worldTransform_.GetWorldPosition(), 10);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.GetWorldPosition(), 10);
 
 		if (hitPoint_ > 0)
 		{
@@ -223,14 +223,14 @@ void Player::UpdateStart()
 	
 	EffectManager* effectManager = EffectManager::GetInstance();
 
-	effectManager->SpawnEffect(EffectType::kGather01, GetWorldPosition());
-	effectManager->SpawnEffect(EffectType::kGather02, GetWorldPosition());
+	effectManager->SpawnEffect(EffectType::kPlayerStart01, GetWorldPosition());
+	effectManager->SpawnEffect(EffectType::kPlayerStart02, GetWorldPosition());
 
 	if (startAnime_->GetIsEnd())
 	{
 		phase_ = Phase::kMain;
 		
-		effectManager->SpawnEffect(EffectType::kScatter02, GetWorldPosition(), 100);
+		effectManager->SpawnEffect(EffectType::kPlayerStart03, GetWorldPosition(), 100);
 	}
 }
 
@@ -279,7 +279,7 @@ void Player::UpdateGameOver()
 											 random->GetFloat(-kMoveRange, kMoveRange),
 											 random->GetFloat(-kMoveRange, kMoveRange) };
 
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, characterWorldTransform_.GetWorldPosition(), 2);
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, characterWorldTransform_.GetWorldPosition(), 2);
 
 	gameOverTimer_ += 1.0f / 60.0f;
 
@@ -287,7 +287,7 @@ void Player::UpdateGameOver()
 	{
 		isGameOverEnd_ = true;
 		characterWorldTransform_.scale_ = { 0.0f, 0.0f, 0.0f };
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter03, characterWorldTransform_.GetWorldPosition(), 100);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerEnd01, characterWorldTransform_.GetWorldPosition(), 100);
 	}
 
 	BaseCharacter::Update();

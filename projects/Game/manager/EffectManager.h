@@ -7,12 +7,12 @@ class YKEngine::BaseModel;
 enum class EffectType
 {
 	kHit01,
-	kGather01,	//集まるエフェクト1。カラフルな球
-	kGather02,	//集まるエフェクト2。カラフルな四角
-	kScatter01,	//散らばるエフェクト1。黒い球
-	kScatter02,	//散らばるエフェクト2。高速。黄色い球
-	kScatter03,	//散らばるエフェクト3。高速。黒い球
-	kScatter04,	//散らばるエフェクト4。高速。カラフルな球
+	kHit02,	//黒い球
+	kPlayerStart01,	//カラフルな球
+	kPlayerStart02,	//カラフルな四角
+	kPlayerStart03,	//高速。黄色い球
+	kPlayerEnd01,	//高速。黒い球
+	kEnemyEnd01,	//高速。カラフルな球
 	kPlayerBulletTrac01, //弾丸の軌跡エフェクト
 	kConfetti01,	//紙吹雪エフェクト1。カラフルな四角板
 	kEnemyBrowAway01, //敵が吹き飛ぶエフェクト1。
@@ -88,12 +88,12 @@ private:
 	std::unordered_map<EffectType, EffectData> effectDatas_
 	{
 		{{EffectType::kHit01}, {"HitEffect01", "./Resources/circle2.png", "primitivePlane"}},
-		{{EffectType::kGather01}, {"GatherEffect01", "./Resources/white.png", "primitiveSphere"}},
-		{{EffectType::kGather02}, {"GatherEffect02", "./Resources/white.png", "primitiveCube"}},
-		{{EffectType::kScatter01}, {"ScatterEffect01", "./Resources/white.png", "primitiveSphere"}},
-		{{EffectType::kScatter02}, {"ScatterEffect02", "./Resources/white.png", "primitiveSphere"}},
-		{{EffectType::kScatter03}, {"ScatterEffect03", "./Resources/black.png", "primitiveSphere"}},
-		{{EffectType::kScatter04}, {"ScatterEffect04", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kHit02}, {"HitEffect02", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kPlayerStart01}, {"PlayerStartEffect01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kPlayerStart02}, {"PlayerStartEffect02", "./Resources/white.png", "primitiveCube"}},
+		{{EffectType::kPlayerStart03}, {"PlayerStartEffect03", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kPlayerEnd01}, {"PlayerEndEffect01", "./Resources/black.png", "primitiveSphere"}},
+		{{EffectType::kEnemyEnd01}, {"EnemyEndEffect01", "./Resources/white.png", "primitiveSphere"}},
 		{{EffectType::kPlayerBulletTrac01}, {"PlayerBulletTrac01", "./Resources/white.png", "primitiveSphere"}},
 		{{EffectType::kConfetti01}, {"ConfettiEffect01", "./Resources/white.png", "primitivePlane"}},
 		{{EffectType::kEnemyBrowAway01}, {"EnemyBrowAway01", "./Resources/white.png", "primitiveSphere"}},

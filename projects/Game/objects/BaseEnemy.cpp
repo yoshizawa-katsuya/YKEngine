@@ -348,7 +348,7 @@ void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
 
 	// エフェクト生成
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter01, worldTransform_.GetWorldPosition(), 10);
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.GetWorldPosition(), 10);
 
 	if (hitPoint_ > 0) 
 	{
@@ -394,7 +394,7 @@ void BaseEnemy::Disappear()
 	if (isDead_)
 	{
 		// エフェクト生成
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kScatter04, worldTransform_.GetWorldPosition(), 50);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyEnd01, worldTransform_.GetWorldPosition(), 50);
 	}
 	
 }

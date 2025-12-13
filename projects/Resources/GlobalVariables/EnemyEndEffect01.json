@@ -1,5 +1,5 @@
 {
-    "ScatterEffect02": {
+    "EnemyEndEffect01": {
         "bahaviorEasingTypeForScale": 0,
         "bahaviorIsSceleToDisappear": false,
         "behaviorBlendMode": 0,
@@ -15,13 +15,13 @@
         "behaviorSpeed": 25.0,
         "color": [
             1.0,
-            0.7941177487373352,
-            0.0,
+            1.0,
+            1.0,
             1.0
         ],
         "count": 1,
         "frequency": 0.5,
-        "randomFlagsColor": false,
+        "randomFlagsColor": true,
         "randomFlagsLifeTime": true,
         "randomFlagsRotation": false,
         "randomFlagsRotationVelocity": false,
@@ -89,9 +89,9 @@
             0.0
         ],
         "scale": [
-            0.20000000298023224,
-            0.20000000298023224,
-            0.20000000298023224
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
         ],
         "translation": [
             0.0,
