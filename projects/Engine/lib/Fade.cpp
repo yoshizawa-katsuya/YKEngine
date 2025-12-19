@@ -16,7 +16,7 @@ void Fade::Initialize()
 
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle);
-	sprite_->SetSize(Vector2(1280.0f, 720.0f));
+	sprite_->SetSize(Vector2(WinApp::kClientWidth, WinApp::kClientHeight));
 	sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 
 }
