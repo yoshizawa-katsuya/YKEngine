@@ -2,6 +2,7 @@
 #include "SceneFactory.h"
 #include "OffscreenRenderer.h"
 #include "manager/EffectManager.h"
+#include "SceneChangeStaging.h"
 
 using namespace YKEngine;
 
@@ -13,6 +14,9 @@ void MyGame::Initialize()
 
 	effectManager_ = EffectManager::GetInstance();
 	effectManager_->Initialize();
+
+	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
+	sceneChangeStaging_->Initialize();
 
 	//シーンファクトリを生成し、マネージャにセット
 	sceneFactory_ = std::make_unique<SceneFactory>();
@@ -30,6 +34,8 @@ void MyGame::Initialize()
 void MyGame::Finalize()
 {
 
+	sceneChangeStaging_->Finalize();
+
 	//解放処理
 	YKFramework::Finalize();
 
@@ -38,6 +44,8 @@ void MyGame::Finalize()
 void MyGame::Update()
 {
 	effectManager_->Update();
+
+	sceneChangeStaging_->Update();
 
 	YKFramework::Update();
 

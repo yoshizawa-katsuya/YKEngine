@@ -7,8 +7,7 @@
 #include "DirectionalLight.h"
 #include "DemoPlayer.h"
 #include "manager/CameraManager.h"
-class YKEngine::Input;
-class YKEngine::ModelPlatform;
+class SceneChangeStaging;
 
 /// <summary>
 /// クリア画面を管理するクラス。
@@ -80,7 +79,7 @@ private:
 
 	std::unique_ptr<YKEngine::Sprite> spriteBackGround_;
 
-	std::unique_ptr<YKEngine::AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
+	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
 	std::shared_ptr<YKEngine::BaseModel> modelGround_;
 	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;

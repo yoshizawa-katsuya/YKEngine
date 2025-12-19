@@ -12,6 +12,7 @@
 #include "InstancingObjects.h"
 #include "manager/CameraManager.h"
 #include "StageObjects.h"
+class SceneChangeStaging;
 
 /// <summary>
 /// タイトル画面のクラス。
@@ -83,7 +84,7 @@ private:
 
 	std::unique_ptr<YKEngine::Sprite> spriteTitle_;//タイトルのスプライト
 
-	std::unique_ptr<YKEngine::AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
+	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
 	std::shared_ptr<YKEngine::BaseModel> modelGround_;
 

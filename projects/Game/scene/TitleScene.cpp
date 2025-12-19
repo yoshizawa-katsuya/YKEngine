@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "LevelDataLoader.h"
 #include "RootParams.h"
+#include "SceneChangeStaging.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -33,11 +34,6 @@ void TitleScene::Initialize()
 
 	spriteTitle_ = std::make_unique<Sprite>();
 	spriteTitle_->Initialize(textureHandleTitle);
-	
-	spriteSceneChange_ = std::make_unique<AnimatedSprite>();
-	spriteSceneChange_->Initialize(textureHandleSceneChange, 20, 3);
-	spriteSceneChange_->SetSize({ WinApp::kClientWidth , WinApp::kClientHeight });
-	spriteSceneChange_->SetIsLoop(false);
 
 	//モデルの生成
 	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
@@ -67,6 +63,10 @@ void TitleScene::Initialize()
 	//カメラの生成
 	cameraManager_ = std::make_unique<CameraManager>();
 	cameraManager_->Initialize(railMover_->GetWorldTransform(), nullptr);
+
+	//シーンチェンジ演出の生成
+	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
+	sceneChangeStaging_->BeginSceneStart(StagingType::kFade);
 }
 
 void TitleScene::Update()
@@ -136,7 +136,7 @@ void TitleScene::Draw()
 
 	spriteTitle_->Draw();
 
-	spriteSceneChange_->Draw();
+	sceneChangeStaging_->Draw();
 
 }
 
@@ -147,8 +147,7 @@ void TitleScene::Finalize()
 
 void TitleScene::UpdateStart()
 {
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd())
+	if (sceneChangeStaging_->IsFinished())
 	{
 		phase_ = Phase::kMain;
 	}
@@ -163,16 +162,16 @@ void TitleScene::UpdateMain()
 	//レールカメラの更新
 	cameraManager_->UpdateRailCamera();
 
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) 
+	{
 		phase_ = Phase::kEnd;
-		spriteSceneChange_->ResetReverseAnimation();
+		sceneChangeStaging_->BeginSceneEnd(StagingType::kEye);
 	}
 }
 
 void TitleScene::UpdateEnd()
 {
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd()) 
+	if (sceneChangeStaging_->IsFinished())
 	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GameScene");

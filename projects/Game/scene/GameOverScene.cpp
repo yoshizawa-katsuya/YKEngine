@@ -3,6 +3,7 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "SceneManager.h"
+#include "SceneChangeStaging.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -28,10 +29,9 @@ void GameOverScene::Initialize()
 	spriteBackGround_ = std::make_unique<Sprite>();
 	spriteBackGround_->Initialize(textureHandle);
 
-	spriteSceneChange_ = std::make_unique<AnimatedSprite>();
-	spriteSceneChange_->Initialize(textureHandleSceneChange, 20, 3);
-	spriteSceneChange_->SetSize({ WinApp::kClientWidth , WinApp::kClientHeight });
-	spriteSceneChange_->SetIsLoop(false);
+	//シーンチェンジ演出の生成
+	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
+	sceneChangeStaging_->BeginSceneStart(StagingType::kFade);
 }
 
 void GameOverScene::Update()
@@ -70,8 +70,7 @@ void GameOverScene::Draw()
 
 	spriteBackGround_->Draw();
 
-	spriteSceneChange_->Draw();
-
+	sceneChangeStaging_->Draw();
 }
 
 void GameOverScene::Finalize()
@@ -80,8 +79,7 @@ void GameOverScene::Finalize()
 
 void GameOverScene::UpdateStart()
 {
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd())
+	if (sceneChangeStaging_->IsFinished())
 	{
 		phase_ = Phase::kMain;
 	}
@@ -92,14 +90,13 @@ void GameOverScene::UpdateMain()
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) 
 	{
 		phase_ = Phase::kEnd;
-		spriteSceneChange_->ResetReverseAnimation();
+		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
 	}
 }
 
 void GameOverScene::UpdateEnd()
 {
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd())
+	if (sceneChangeStaging_->IsFinished())
 	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("TitleScene");

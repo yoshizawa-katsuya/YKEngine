@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseScene.h"
 #include "AnimatedSprite.h"
+class SceneChangeStaging;
 
 namespace YKEngine
 {
@@ -67,7 +68,7 @@ private:
 	YKEngine::ModelPlatform* modelPlatform_;
 
 	std::unique_ptr<YKEngine::Sprite> spriteBackGround_;
-	std::unique_ptr<YKEngine::AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
+	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
 	//シーンのフェーズ
 	enum class Phase 

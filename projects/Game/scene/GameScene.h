@@ -24,6 +24,7 @@
 #include "manager/EnemyBulletManager.h"
 #include "manager/CameraManager.h"
 #include "StageObjects.h"
+class SceneChangeStaging;
 
 /// <summary>
 /// ゲームシーン。
@@ -137,8 +138,9 @@ private:
 	uint32_t textureHandle_;
 	uint32_t textureHandleSkyBox_;
 
-	//スプライト
-	std::unique_ptr<YKEngine::AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
+	//シーンチェンジ演出
+	SceneChangeStaging* sceneChangeStaging_ = nullptr;
+	bool isGameOverSceneChangeStagingStart_ = false;
 
 	//衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_;

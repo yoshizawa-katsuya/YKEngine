@@ -366,14 +366,17 @@
     <ClCompile Include="Game\manager\CameraManager.cpp">
       <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\bullet\EnemyHomingBullet01.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\bullet\TargetEnemyBullet01.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Game\objects\StageObjects.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\SceneChangeStaging.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\bullet\EnemyHomingBullet01.cpp">
+      <Filter>ソース ファイル\application\objects\bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\bullet\TargetEnemyBullet01.cpp">
+      <Filter>ソース ファイル\application\objects\bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -755,6 +758,9 @@
       <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\StageObjects.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\SceneChangeStaging.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>

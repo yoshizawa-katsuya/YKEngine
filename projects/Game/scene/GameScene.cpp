@@ -9,6 +9,7 @@
 #include "Vector2.h"
 #include "ShotEnemy01.h"
 #include "RootParams.h"
+#include "SceneChangeStaging.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -32,14 +33,7 @@ void GameScene::Initialize() {
 	
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
-	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
-
-	//スプライトの生成
-	spriteSceneChange_ = std::make_unique<AnimatedSprite>();
-	spriteSceneChange_->Initialize(textureHandleSceneChange, 20, 3);
-	spriteSceneChange_->SetSize({ WinApp::kClientWidth , WinApp::kClientHeight });
-	spriteSceneChange_->SetIsLoop(false);
-
+	
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
 	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
@@ -93,6 +87,10 @@ void GameScene::Initialize() {
 	groundTransform.UpdateMatrix();
 	ground_->WorldTransformUpdate(groundTransform);
 
+	//シーン開始演出の開始
+	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
+	sceneChangeStaging_->BeginSceneStart(StagingType::kFade);
+
 }
 
 void GameScene::Update()
@@ -144,7 +142,7 @@ void GameScene::Update()
 	if (ImGui::Button("TitleScene")) 
 	{
 		phase_ = Phase::kTitleReturn;
-		spriteSceneChange_->ResetReverseAnimation();
+		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
 	}
 	if (ImGui::Button("GameClear")) 
 	{
@@ -219,8 +217,7 @@ void GameScene::Draw()
 
 	player_->DrawUI();
 
-	spriteSceneChange_->Draw();
-
+	sceneChangeStaging_->Draw();
 }
 
 void GameScene::Finalize()
@@ -250,7 +247,6 @@ void GameScene::CheckAllColision()
 
 void GameScene::UpdateStart()
 {
-	spriteSceneChange_->Update();
 	//プレイヤーの更新
 	player_->Update(cameraManager_->GetRailCameraInner());
 	if (player_->StartCompleted())
@@ -301,8 +297,7 @@ void GameScene::UpdateMain()
 
 void GameScene::UpdateGameClear()
 {
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd()) 
+	if (sceneChangeStaging_->IsFinished()) 
 	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("ClearScene");
@@ -333,8 +328,14 @@ void GameScene::UpdateGameOver()
 		return;
 	}
 
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd())
+	//シーン終了演出開始
+	if (isGameOverSceneChangeStagingStart_)
+	{
+		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+		isGameOverSceneChangeStagingStart_ = false;
+	}
+
+	if (sceneChangeStaging_->IsFinished())
 	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GameOverScene");
@@ -343,8 +344,7 @@ void GameScene::UpdateGameOver()
 
 void GameScene::UpdateTitleReturn()
 {
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd())
+	if (sceneChangeStaging_->IsFinished())
 	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("TitleScene");
@@ -372,7 +372,7 @@ void GameScene::CheckGameOver()
 void GameScene::ProcessGameOver()
 {
 	phase_ = Phase::kGameOver;
-	spriteSceneChange_->ResetReverseAnimation();
+	isGameOverSceneChangeStagingStart_ = true;
 	player_->GameOverRotate();
 	player_->SetGameOver();
 	cameraManager_->ProcessGameOver(player_->GetInverseLocalDirection());
@@ -382,7 +382,7 @@ void GameScene::ProcessGameOver()
 void GameScene::ProcessGameClear()
 {
 	phase_ = Phase::kGameClear;
-	spriteSceneChange_->ResetReverseAnimation();
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
 }
 
 void GameScene::CreateLevel()

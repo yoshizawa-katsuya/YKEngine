@@ -7,6 +7,7 @@
 #include "ParticleManager.h"
 #include "RootParams.h"
 #include "manager/EffectManager.h"
+#include "SceneChangeStaging.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -35,11 +36,6 @@ void ClearScene::Initialize()
 
 	spriteBackGround_ = std::make_unique<Sprite>();
 	spriteBackGround_->Initialize(textureHandle);
-
-	spriteSceneChange_ = std::make_unique<AnimatedSprite>();
-	spriteSceneChange_->Initialize(textureHandleSceneChange, 20, 3);
-	spriteSceneChange_->SetSize({ WinApp::kClientWidth , WinApp::kClientHeight });
-	spriteSceneChange_->SetIsLoop(false);
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
@@ -70,6 +66,10 @@ void ClearScene::Initialize()
 	//カメラの生成
 	cameraManager_ = std::make_unique<CameraManager>();
 	cameraManager_->InitializeForClearScene(railMover_->GetWorldTransform(), -railMover_->GetForward());
+
+	//シーンチェンジ演出の生成
+	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
+	sceneChangeStaging_->BeginSceneStart(StagingType::kEye);
 }
 
 void ClearScene::Update()
@@ -152,7 +152,7 @@ void ClearScene::Draw()
 
 	spriteBackGround_->Draw();
 
-	spriteSceneChange_->Draw();
+	sceneChangeStaging_->Draw();
 }
 
 void ClearScene::Finalize()
@@ -162,8 +162,7 @@ void ClearScene::Finalize()
 void ClearScene::UpdateStart()
 {
 	//シーン切り替えアニメーション更新
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd())
+	if (sceneChangeStaging_->IsFinished())
 	{
 		phase_ = Phase::kMain;
 	}
@@ -175,15 +174,14 @@ void ClearScene::UpdateMain()
 	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A))
 	{
 		phase_ = Phase::kEnd;
-		spriteSceneChange_->ResetReverseAnimation();
+		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
 		demoPlayer_->SceneEnd();
 	}
 }
 
 void ClearScene::UpdateEnd()
 {
-	spriteSceneChange_->Update();
-	if (spriteSceneChange_->GetIsEnd())
+	if (sceneChangeStaging_->IsFinished())
 	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("TitleScene");

@@ -1,6 +1,7 @@
 #pragma once
 #include "YKFramework.h"
 class EffectManager;
+class SceneChangeStaging;
 
 /// <summary>
 /// ゲームのメインクラス。
@@ -36,5 +37,6 @@ private:
 	
 	EffectManager* effectManager_ = nullptr;
 
+	SceneChangeStaging* sceneChangeStaging_ = nullptr;
 };
 
