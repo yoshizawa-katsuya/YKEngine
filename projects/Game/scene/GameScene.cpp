@@ -204,12 +204,8 @@ void GameScene::Draw()
 
 	enemySpawnManager_->Draw(mainCamera);
 
-	//オブジェクトの描画
-	for (const auto& [name, instancingObject] : instancingObjects_) 
-	{
-		instancingObject->CameraUpdate(mainCamera);
-		instancingObject->Draw();
-	}
+	//ステージオブジェクトの描画
+	stageObjects_->Draw(mainCamera);
 	
 	//パーティクルの描画
 	ParticleManager::GetInstance()->Draw();
@@ -408,42 +404,8 @@ void GameScene::CreateLevel()
 	player_->Initialize(modelPlayer_.get(), railMover_->GetWorldTransform(), heratTextureHandle, heratFrameTextureHandle);
 	player_->SetPlayerBulletManager(playerBulletManager_.get());
 
-	for (const EnemySpawnData& enemySpawnData : levelData.enemySpawns)
-	{
-		EnemySpawn enemySpawn;
-
-		//敵の種類を取得
-		if (enemySpawnData.type == "EnemySpawn")
-		{
-			enemySpawn.type = EnemyType::kShot01;
-		}
-		else if (enemySpawnData.type == "TackleEnemySpawn")
-		{
-			enemySpawn.type = EnemyType::kTackle01;
-		}
-		else
-		{
-			assert(0 && "不明な敵の種類です");
-		}
-		//敵のウェーブナンバーを取得
-		enemySpawn.waveNumber = enemySpawnData.waveNum.value();
-
-		//敵の発生位置を取得
-		enemySpawn.position = enemySpawnData.transform.translation;
-		//敵の回転を取得
-		enemySpawn.rotation = enemySpawnData.transform.rotation;
-
-		//スプラインの制御点を取得
-		if (enemySpawnData.spline.has_value())
-		{
-			enemySpawn.controlPoints = enemySpawnData.spline->controlPoints;
-		}
-		enemySpawn.speed = enemySpawnData.speed;
-		
-		//レベルエディターで敵のwaveNumを必ず設定するようにする
-		enemySpawnManager_->AddSpawnData(enemySpawn);
-
-	}
+	//エネミースポーンデータの設定
+	enemySpawnManager_->GetSpawnDatas(levelData.enemySpawns);
 	
 	//イベントトリガーマネージャーの生成
 	eventTriggerManager_ = std::make_unique<EventTriggerManager>();
@@ -451,42 +413,15 @@ void GameScene::CreateLevel()
 	//オブジェクトの生成
 	std::string key;
 
-	for (const ObjectData& objectData : levelData.objects)
-	{
+	//イベントトリガーの生成
+	eventTriggerManager_->CreateEventTriggers(levelData.objects);
 
-		key = objectData.fileName;
+	//イベントオブジェクトのデータをレベルデータから削除
+	std::erase_if(levelData.objects, [](const ObjectData& data) {return data.fileName.find("Event") != std::string::npos; });
 
-		if (key.find("Event") != std::string::npos)
-		{
-			//イベントトリガーの生成
-			eventTriggerManager_->AddEvent(key, objectData);
+	//ステージオブジェクトの生成
+	stageObjects_ = std::make_unique<StageObjects>();
+	stageObjects_->Initialize(levelData.objects);
 
-			continue;
-		}
-
-		//インスタンスオブジェクトが存在しない場合は生成
-		if (!instancingObjects_.contains(key))
-		{
-			instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
-			//インスタンスオブジェクトの初期化
-			if (key == "primitiveCube")
-			{
-				instancingObjects_[key]->Initialize(modelPlatform_->CreateCube(textureHandle_).get(), 128);
-			}
-			else if (key == "primitiveSphere")
-			{
-				instancingObjects_[key]->Initialize(modelPlatform_->CreateSphere(textureHandle_).get(), 128);
-			}
-		}
-		//ワールド変換の初期化
-		WorldTransform transform;
-		transform.Initialize();
-		transform.rotation_ = objectData.transform.rotation;
-		transform.translation_ = objectData.transform.translation;
-		transform.scale_ = objectData.transform.scale;
-		transform.UpdateMatrix();
-		//インスタンスオブジェクトにワールド変換を設定
-		instancingObjects_[key]->WorldTransformUpdate(transform);
-	}
-
+	
 }

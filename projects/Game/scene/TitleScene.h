@@ -11,6 +11,7 @@
 #include "RailMover.h"
 #include "InstancingObjects.h"
 #include "manager/CameraManager.h"
+#include "StageObjects.h"
 
 /// <summary>
 /// タイトル画面のクラス。
@@ -99,8 +100,8 @@ private:
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;
 
-	//オブジェクト
-	std::map<std::string, std::unique_ptr<YKEngine::InstancingObjects>> instancingObjects_;
+	//ステージオブジェクト
+	std::unique_ptr<StageObjects> stageObjects_;
 
 	//シーンのフェーズ
 	enum class Phase

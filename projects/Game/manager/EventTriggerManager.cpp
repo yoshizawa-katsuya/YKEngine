@@ -26,6 +26,23 @@ void EventTriggerManager::RegisterToCollisionManager(CollisionManager* collision
 	}
 }
 
+void EventTriggerManager::CreateEventTriggers(const std::vector<ObjectData>& objectDatas)
+{
+	for (const ObjectData& objectData : objectDatas)
+	{
+		std::string fileName = objectData.fileName;
+
+		// "Event" を含むファイル名のみ処理
+		if (fileName.find("Event") == std::string::npos)
+		{
+			continue; // "Event" を含まない場合はスキップ
+		}
+
+		// イベントの生成
+		AddEvent(fileName, objectData);
+	}
+}
+
 void EventTriggerManager::AddEvent(const std::string& eventName, const ObjectData& objectData)
 {
 	if (eventName == "waveEvent")

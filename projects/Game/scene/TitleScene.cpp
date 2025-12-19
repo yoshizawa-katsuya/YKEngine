@@ -125,12 +125,8 @@ void TitleScene::Draw()
 
 	modelPlatform_->InstancingPreDraw();
 
-	//オブジェクトの描画
-	for (const auto& [name, instancingObject] : instancingObjects_) 
-	{
-		instancingObject->CameraUpdate(mainCamera);
-		instancingObject->Draw();
-	}
+	//ステージオブジェクトの描画
+	stageObjects_->Draw(mainCamera);
 
 	modelPlatform_->LinePreDraw();
 
@@ -194,35 +190,7 @@ void TitleScene::CreateLevel()
 	railMover_ = std::make_unique<RailMover>();
 	railMover_->Initialize(levelData.splines[0].controlPoints, nullptr, true);
 
-	//オブジェクトの生成
-	std::string key;
-
-	for (const ObjectData& objectData : levelData.objects)
-	{
-
-		key = objectData.fileName;
-
-		if (!instancingObjects_.contains(key))
-		{
-			instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
-			//インスタンスオブジェクトの初期化
-			if (key == "primitiveCube")
-			{
-				instancingObjects_[key]->Initialize(modelPlatform_->CreateCube(textureHandle_).get(), 128);
-			}
-			else if (key == "primitiveSphere")
-			{
-				instancingObjects_[key]->Initialize(modelPlatform_->CreateSphere(textureHandle_).get(), 128);
-			}
-		}
-		//ワールド変換の初期化
-		WorldTransform transform;
-		transform.Initialize();
-		transform.rotation_ = objectData.transform.rotation;
-		transform.translation_ = objectData.transform.translation;
-		transform.scale_ = objectData.transform.scale;
-		transform.UpdateMatrix();
-		//インスタンスオブジェクトにワールド変換を設定
-		instancingObjects_[key]->WorldTransformUpdate(transform);
-	}
+	//ステージオブジェクトの生成
+	stageObjects_ = std::make_unique<StageObjects>();
+	stageObjects_->Initialize(levelData.objects);
 }

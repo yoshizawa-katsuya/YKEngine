@@ -194,6 +194,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\lib\Random.cpp" />
     <ClCompile Include="Engine\lib\MyMath.cpp" />
     <ClCompile Include="Game\objects\bullet\TargetEnemyBullet01.cpp" />
+    <ClCompile Include="Game\objects\StageObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -459,6 +460,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\MyMath.h" />
     <ClInclude Include="Engine\lib\RootParams.h" />
     <ClInclude Include="Game\objects\bullet\TargetEnemyBullet01.h" />
+    <ClInclude Include="Game\objects\StageObjects.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

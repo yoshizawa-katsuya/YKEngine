@@ -23,6 +23,7 @@
 #include "manager/PlayerBulletManager.h"
 #include "manager/EnemyBulletManager.h"
 #include "manager/CameraManager.h"
+#include "StageObjects.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -162,8 +163,8 @@ private:
 	//地面
 	std::unique_ptr<YKEngine::My3dObject> ground_;
 
-	//オブジェクト
-	std::map<std::string, std::unique_ptr<YKEngine::InstancingObjects>> instancingObjects_;
+	//ステージオブジェクト
+	std::unique_ptr<StageObjects> stageObjects_;
 
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;

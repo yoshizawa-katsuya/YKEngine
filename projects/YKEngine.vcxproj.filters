@@ -372,6 +372,9 @@
     <ClCompile Include="Game\objects\bullet\TargetEnemyBullet01.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\StageObjects.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -750,6 +753,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\bullet\TargetEnemyBullet01.h">
       <Filter>ヘッダー ファイル\application\objects\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\StageObjects.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

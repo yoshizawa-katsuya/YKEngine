@@ -25,13 +25,18 @@ public:
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
 	/// <summary>
+	/// イベントトリガーを作成する。
+	/// </summary>
+	void CreateEventTriggers(const std::vector<YKEngine::ObjectData>& objectDatas);
+
+private:
+
+	/// <summary>
 	/// イベントトリガーを追加する。
 	/// </summary>
 	/// <param name="eventName">イベントの種類</param>
 	/// <param name="objectData">イベントトリガーのデータ</param>
 	void AddEvent(const std::string& eventName, const YKEngine::ObjectData& objectData);
-
-private:
 
 	//イベント
 	std::list<std::unique_ptr<BaseEventTrigger>> events_;

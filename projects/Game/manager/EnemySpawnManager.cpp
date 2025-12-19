@@ -30,9 +30,45 @@ void EnemySpawnManager::Draw(Camera* camera)
 	}
 }
 
-void EnemySpawnManager::AddSpawnData(const EnemySpawn& spawnData)
+void EnemySpawnManager::GetSpawnDatas(const std::vector<EnemySpawnData>& outSpawnDatas)
 {
-	spawnDatas_.push_back(spawnData);
+	for (const EnemySpawnData& enemySpawnData : outSpawnDatas)
+	{
+		EnemySpawn enemySpawn;
+
+		//敵の種類を取得
+		if (enemySpawnData.type == "EnemySpawn")
+		{
+			enemySpawn.type = EnemyType::kShot01;
+		}
+		else if (enemySpawnData.type == "TackleEnemySpawn")
+		{
+			enemySpawn.type = EnemyType::kTackle01;
+		}
+		else
+		{
+			assert(0 && "不明な敵の種類です");
+		}
+		//レベルエディターで敵のwaveNumを必ず設定するようにする
+		//敵のウェーブナンバーを取得
+		enemySpawn.waveNumber = enemySpawnData.waveNum.value();
+
+		//敵の発生位置を取得
+		enemySpawn.position = enemySpawnData.transform.translation;
+		//敵の回転を取得
+		enemySpawn.rotation = enemySpawnData.transform.rotation;
+
+		//スプラインの制御点を取得
+		if (enemySpawnData.spline.has_value())
+		{
+			enemySpawn.controlPoints = enemySpawnData.spline->controlPoints;
+		}
+		enemySpawn.speed = enemySpawnData.speed;
+
+		//敵の出現データを追加
+		spawnDatas_.push_back(enemySpawn);
+
+	}
 }
 
 void EnemySpawnManager::WaveStart(uint32_t waveNum)

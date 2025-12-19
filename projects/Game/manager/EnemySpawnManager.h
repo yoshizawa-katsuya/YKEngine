@@ -3,6 +3,7 @@
 #include "InstancingObjects.h"
 #include "EnemySpawn.h"
 #include "EnemySpawnObject.h"
+#include "LevelDataLoader.h"
 class EnemyManager;
 
 /// <summary>
@@ -29,11 +30,11 @@ public:
 	/// <param name="camera">描画に使用するカメラ</param>
 	void Draw(YKEngine::Camera* camera);
 
-    /// <summary>
-	/// 敵の出現データを追加する。
-    /// </summary>
-	/// <param name="spawnData">追加する敵の出現データ</param>
-    void AddSpawnData(const EnemySpawn& spawnData);
+	/// <summary>
+	/// 敵の出現データを取得する。
+	/// </summary>
+	/// <param name="outSpawnDatas">取得した敵の出現データを格納する配列</param>
+	void GetSpawnDatas(const std::vector<YKEngine::EnemySpawnData>& outSpawnDatas);
 
 	/// <summary>
 	/// 指定したウェーブの敵出現を開始する。
