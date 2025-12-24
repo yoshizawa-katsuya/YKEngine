@@ -162,6 +162,9 @@ private:
 	//自機の弾のマネージャー
 	PlayerBulletManager* playerBulletManager_ = nullptr;
 
+	//弾の発射間隔タイマー
+	float shotIntervalTimer_ = 0.0f;
+
 	std::unique_ptr<ReticleController> reticleController_ = nullptr;
 
 	std::unique_ptr<YKEngine::SRTAnimator> startAnime_;

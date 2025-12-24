@@ -333,7 +333,14 @@ void Player::ReticleUpdate(Camera* railCamera)
 
 void Player::Attack() {
 
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+
+	if (shotIntervalTimer_ > 0.0f)
+	{
+		shotIntervalTimer_ -= 1.0f / 60.0f;
+		return;
+	}
+	//弾発射処理
+	if (input_->PushKey(DIK_SPACE) || input_->PushButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 
 		//弾の速度
@@ -347,12 +354,19 @@ void Player::Attack() {
 			//チャージ最大なら強力な弾を撃つ
 			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::kCharge);
 
+			const float kChargeBulletShotInterval = 0.5f;
+			shotIntervalTimer_ = kChargeBulletShotInterval; //チャージ弾の発射間隔
+
 			//チャージをリセット
 			ChargeReset();
 			return;
 		}
 
 		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::kNormal);
+
+		const float kNormalBulletShotInterval = 0.2f;
+		shotIntervalTimer_ = kNormalBulletShotInterval; //通常弾の発射間隔
+
 		//チャージをリセット
 		ChargeReset();
 
