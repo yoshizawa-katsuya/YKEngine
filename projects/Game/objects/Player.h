@@ -165,6 +165,7 @@ private:
 	std::unique_ptr<ReticleController> reticleController_ = nullptr;
 
 	std::unique_ptr<YKEngine::SRTAnimator> startAnime_;
+	std::unique_ptr<YKEngine::SRTAnimator> startRotateAnime_;
 
 	YKEngine::Vector3 direction_{};	//方向
 

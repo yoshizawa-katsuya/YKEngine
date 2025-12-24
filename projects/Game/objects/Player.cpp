@@ -29,8 +29,13 @@ void Player::Initialize(BaseModel* model, WorldTransform* parent, uint32_t heart
 	BaseCharacter::Update();
 
 	//開始時のアニメーション設定
+	const float kAnimeDuration = 1.5f;
 	startAnime_ = std::make_unique<SRTAnimator>();
-	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 1.5f);
+	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, kAnimeDuration);
+
+	const float kRotateQuantity = std::numbers::pi_v<float> * 4.0f;
+	startRotateAnime_ = std::make_unique<SRTAnimator>();
+	startRotateAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 0.0f, kRotateQuantity, 0.0f }, kAnimeDuration);
 
 	reticleController_ = std::make_unique<ReticleController>();
 	reticleController_->Initialize();
@@ -219,6 +224,7 @@ void Player::HandleMoveInput()
 void Player::UpdateStart()
 {
 	characterWorldTransform_.scale_ = startAnime_->Update();
+	characterWorldTransform_.rotation_ = startRotateAnime_->Update();
 	BaseCharacter::Update();
 	
 	EffectManager* effectManager = EffectManager::GetInstance();
@@ -229,7 +235,9 @@ void Player::UpdateStart()
 	if (startAnime_->GetIsEnd())
 	{
 		phase_ = Phase::kMain;
-		
+		characterWorldTransform_.scale_ = { 1.0f, 1.0f, 1.0f };
+		characterWorldTransform_.rotation_ = { 0.0f, 0.0f, 0.0f };
+
 		effectManager->SpawnEffect(EffectType::kPlayerStart03, GetWorldPosition(), 100);
 	}
 }
