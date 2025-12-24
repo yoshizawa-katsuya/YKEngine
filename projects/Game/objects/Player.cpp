@@ -66,14 +66,17 @@ void Player::Update(Camera* railCamera) {
 
 	switch (phase_)
 	{
-	case Player::Phase::Start:
+	case Phase::Start:
 		UpdateStart();
 		break;
-	case Player::Phase::kMain:
+	case Phase::kMain:
 		UpdateMain(railCamera);
 		break;
-	case Player::Phase::GameOver:
+	case Phase::GameOver:
 		UpdateGameOver();
+		break;
+	case Phase::GameClear:
+		UpdateGameClear();
 		break;
 	default:
 		break;
@@ -283,9 +286,7 @@ void Player::UpdateGameOver()
 
 	Random* random = Random::GetInstance();
 
-	characterWorldTransform_.translation_ = {random->GetFloat(-kMoveRange, kMoveRange),
-											 random->GetFloat(-kMoveRange, kMoveRange),
-											 random->GetFloat(-kMoveRange, kMoveRange) };
+	characterWorldTransform_.translation_ = random->GetVector3(-kMoveRange, kMoveRange);
 
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, characterWorldTransform_.GetWorldPosition(), 2);
 
@@ -299,6 +300,16 @@ void Player::UpdateGameOver()
 	}
 
 	BaseCharacter::Update();
+}
+
+void Player::UpdateGameClear()
+{
+	//前に進む
+	const float kMoveSpeed = 0.3f;
+	characterWorldTransform_.translation_.z += kMoveSpeed;
+
+	BaseCharacter::Update();
+
 }
 
 void Player::Rotate()

@@ -82,6 +82,11 @@ public:
 	/// </summary>
 	void SetGameOver() { phase_ = Phase::GameOver; }
 
+	/// <summary>
+	/// ゲームクリアになったことを伝える。
+	/// </summary>
+	void SetGameClear() { phase_ = Phase::GameClear; }
+
 private:
 
 	/// <summary>
@@ -110,6 +115,11 @@ private:
 	/// ゲームオーバー時の更新
 	/// </summary>
 	void UpdateGameOver();
+
+	/// <summary>
+	/// ゲームクリア時の更新
+	/// </summary>
+	void UpdateGameClear();
 
 	/// <summary>
 	/// 回転処理。レティクルの方向に向く。
@@ -155,6 +165,7 @@ private:
 		Start,	// 開始
 		kMain,	// メイン
 		GameOver, // ゲームオーバー
+		GameClear, // ゲームクリア
 	};
 	//フェーズ
 	Phase phase_ = Phase::Start;

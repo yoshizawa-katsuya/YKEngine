@@ -1,7 +1,6 @@
 #pragma once
 #include "Collider.h"
 #include "SRTAnimator.h"
-class YKEngine::Camera;
 class EnemySpawnManager;
 
 /// <summary>

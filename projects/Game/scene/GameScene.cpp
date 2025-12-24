@@ -297,6 +297,8 @@ void GameScene::UpdateMain()
 
 void GameScene::UpdateGameClear()
 {
+	player_->Update(cameraManager_->GetRailCameraInner());
+
 	if (sceneChangeStaging_->IsFinished()) 
 	{
 		//シーン切り替え依頼
@@ -353,6 +355,7 @@ void GameScene::UpdateTitleReturn()
 
 void GameScene::CheckGameClear()
 {
+	//ゴールに到達したらゲームクリア
 	if (railMover_->IsEnd()) 
 	{
 		//ゲームクリア
@@ -383,6 +386,7 @@ void GameScene::ProcessGameClear()
 {
 	phase_ = Phase::kGameClear;
 	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+	player_->SetGameClear();
 }
 
 void GameScene::CreateLevel()
