@@ -85,7 +85,7 @@ public:
 	/// <summary>
 	/// ゲームクリアになったことを伝える。
 	/// </summary>
-	void SetGameClear() { phase_ = Phase::GameClear; }
+	void SetGameClear();
 
 private:
 

@@ -151,6 +151,12 @@ void Player::GameOverRotate()
 	BaseCharacter::Update();
 }
 
+void Player::SetGameClear()
+{
+	phase_ = Phase::GameClear;
+
+}
+
 void Player::HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
 {
 	heratSprites_.resize(kMaxHitPoint_);
@@ -294,6 +300,11 @@ void Player::UpdateGameOver()
 
 void Player::UpdateGameClear()
 {
+
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, Vector3{ 0.0f, 0.0f, 0.0f }, 0.1f);
+
+	HandleMoveInput();
+
 	//前に進む
 	const float kMoveSpeed = 0.3f;
 	characterWorldTransform_.translation_.z += kMoveSpeed;
