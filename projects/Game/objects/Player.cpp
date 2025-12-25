@@ -143,26 +143,11 @@ Vector3 Player::GetInverseLocalDirection()
 
 void Player::GameOverRotate()
 {
-	Vector3 toPosition;
-	if (reticleController_->IsLockOn())
-	{
-		toPosition = reticleController_->GetTargetPosition();
-	}
-	else
-	{
-		toPosition = reticleController_->Get3DReticlePosition();
-	}
-	direction_ = Subtract(toPosition, GetWorldPosition());
-
-	//親の回転を考慮した方向ベクトルの計算
-	Matrix4x4 parentMat = MakeRotateMatrix(worldTransform_.parent_->rotation_);
-	Matrix4x4 invParentMat = Inverse(parentMat);
-
-	//親の回転を打ち消す
-	Vector3 localDirection = TransformNormal(direction_, invParentMat);
-	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
+	//向く方向の計算
+	Vector3 targetRotation = RotateCommon();
 	
 	worldTransform_.rotation_ = targetRotation;
+
 	BaseCharacter::Update();
 }
 
@@ -214,6 +199,11 @@ void Player::HandleMoveInput()
 		move = Normalize(move); //移動ベクトルの正規化
 
 	}
+
+	//キャラクターの傾きの設定
+	const float rotateQuantity = std::numbers::pi_v<float> / 8.0f; //傾きの大きさ
+	Vector3 targetRotation = { -move.y * rotateQuantity, 0.0f, -move.x * rotateQuantity};
+	characterWorldTransform_.rotation_ = LerpAngle(characterWorldTransform_.rotation_, targetRotation, 0.1f);
 
 	//キャラクターの移動速さ
 	const float kCharacterSpeed = 0.2f;
@@ -315,6 +305,14 @@ void Player::UpdateGameClear()
 void Player::Rotate()
 {
 	//向く方向の計算
+	Vector3 targetRotation = RotateCommon();
+	
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
+}
+
+Vector3 Player::RotateCommon()
+{
+	//向く方向の計算
 	Vector3 toPosition;
 	if (reticleController_->IsLockOn())
 	{
@@ -325,7 +323,7 @@ void Player::Rotate()
 		toPosition = reticleController_->Get3DReticlePosition();
 	}
 	direction_ = Subtract(toPosition, GetWorldPosition());
-	
+
 	//親の回転を考慮した方向ベクトルの計算
 	Matrix4x4 parentMat = MakeRotateMatrix(worldTransform_.parent_->rotation_);
 	Matrix4x4 invParentMat = Inverse(parentMat);
@@ -333,8 +331,8 @@ void Player::Rotate()
 	//親の回転を打ち消す
 	Vector3 localDirection = TransformNormal(direction_, invParentMat);
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
-	
-	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
+
+	return targetRotation;
 }
 
 void Player::ReticleUpdate(Camera* railCamera)

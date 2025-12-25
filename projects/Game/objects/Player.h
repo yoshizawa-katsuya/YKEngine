@@ -126,6 +126,12 @@ private:
 	/// </summary>
 	void Rotate();
 
+	///<summary>
+	/// 回転処理の共通部分。
+	/// </summary>
+	/// <returns>回転</returns>
+	YKEngine::Vector3 RotateCommon();
+
 	/// <summary>
 	/// レティクルの更新。
 	/// </summary>
