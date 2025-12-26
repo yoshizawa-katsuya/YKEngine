@@ -26,6 +26,13 @@ void StageObjects::Initialize(const std::vector<ObjectData>& objectDatas)
 			{
 				instancingObjects_[key]->Initialize(modelPlatform->CreateSphere(textureHandle).get(), 128);
 			}
+			else if (key == "Sun.obj")
+			{
+				BaseModel* model = modelPlatform->CreateRigidModel(objectData.filePath, key).get();
+				//マテリアルの設定
+				model->SetShininess(10.0f);
+				instancingObjects_[key]->Initialize(modelPlatform->CreateRigidModel(objectData.filePath, key).get(), 128);
+			}
 		}
 		//ワールド変換の初期化
 		WorldTransform transform;
