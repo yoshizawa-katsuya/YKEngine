@@ -131,7 +131,6 @@ private:
 	YKEngine::DirectionalLight directionalLight_;
 
 	//3Dモデル
-	std::shared_ptr<YKEngine::BaseModel> modelGround_;
 	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
 
 	//テクスチャハンドル
@@ -158,12 +157,6 @@ private:
 
 	// 敵の弾
 	std::unique_ptr<EnemyBulletManager> enemyBulletManager_;
-
-	//スカイボックス
-	std::unique_ptr<YKEngine::My3dObject> skyBox_;
-
-	//地面
-	std::unique_ptr<YKEngine::My3dObject> ground_;
 
 	//ステージオブジェクト
 	std::unique_ptr<StageObjects> stageObjects_;

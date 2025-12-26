@@ -3,6 +3,11 @@
 #include "InstancingObjects.h"
 #include "LevelDataLoader.h"
 
+namespace YKEngine
+{
+	class My3dObject;
+}
+
 class StageObjects
 {
 public:
@@ -10,14 +15,37 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const std::vector<YKEngine::ObjectData>& objectDatas);
+	/// <param name="textureHandleSkyBox">スカイボックスのテクスチャハンドル</param>
+	void Initialize(uint32_t textureHandleSkyBox);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw(YKEngine::Camera* camera);
 
+	/// <summary>
+	/// スカイボックスの描画
+	/// </summary>
+	void DrawSkyBox(YKEngine::Camera* camera);
+
+	/// <summary>
+	/// インスタンシングオブジェクト取得
+	/// </summary>
+	/// <param name="objectDatas">オブジェクトデータ配列</param>
+	void GetInstancingObject(const std::vector<YKEngine::ObjectData>& objectDatas);
+
+	/// <summary>
+	/// インスタンシングオブジェクトの描画
+	/// </summary>
+	void InstancingDraw(YKEngine::Camera* camera);
+
 private:
+
+	//スカイボックス
+	std::unique_ptr<YKEngine::My3dObject> skyBox_;
+
+	//地面
+	std::unique_ptr<YKEngine::My3dObject> ground_;
 
 	//オブジェクト
 	std::map<std::string, std::unique_ptr<YKEngine::InstancingObjects>> instancingObjects_;

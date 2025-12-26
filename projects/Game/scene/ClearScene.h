@@ -7,6 +7,7 @@
 #include "DirectionalLight.h"
 #include "DemoPlayer.h"
 #include "manager/CameraManager.h"
+#include "StageObjects.h"
 class SceneChangeStaging;
 
 /// <summary>
@@ -81,17 +82,13 @@ private:
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
-	std::shared_ptr<YKEngine::BaseModel> modelGround_;
 	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
 
 	//テクスチャハンドル
 	uint32_t textureHandleSkyBox_;
 
-	//スカイボックス
-	std::unique_ptr<YKEngine::My3dObject> skyBox_;
-
-	//地面
-	std::unique_ptr<YKEngine::My3dObject> ground_;
+	//ステージオブジェクト
+	std::unique_ptr<StageObjects> stageObjects_;
 
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;

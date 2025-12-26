@@ -35,28 +35,9 @@ void TitleScene::Initialize()
 	spriteTitle_ = std::make_unique<Sprite>();
 	spriteTitle_->Initialize(textureHandleTitle);
 
-	//モデルの生成
-	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
-	modelGround_->SetUVTransform({ {160.0f, 160.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
-	modelGround_->SetEnvironmentCoefficient(0.8f);
-
-	//スカイボックスの生成
-	skyBox_ = std::make_unique<My3dObject>();
-	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandleSkyBox_).get());
-	WorldTransform skyBoxTransform;
-	skyBoxTransform.Initialize();
-	skyBoxTransform.scale_ = { 100.0f, 100.0f, 100.0f };
-	skyBoxTransform.UpdateMatrix();
-	skyBox_->WorldTransformUpdate(skyBoxTransform);
-
-	//地面の生成
-	ground_ = std::make_unique<My3dObject>();
-	ground_->Initialize(modelGround_.get());
-	WorldTransform groundTransform;
-	groundTransform.Initialize();
-	groundTransform.scale_ = { 20.0f, 20.0f, 20.0f };
-	groundTransform.UpdateMatrix();
-	ground_->WorldTransformUpdate(groundTransform);
+	//ステージオブジェクトの生成
+	stageObjects_ = std::make_unique<StageObjects>();
+	stageObjects_->Initialize(textureHandleSkyBox_);
 
 	CreateLevel();
 
@@ -111,8 +92,7 @@ void TitleScene::Draw()
 	//背景の描画
 	modelPlatform_->SkyBoxPreDraw();
 
-	skyBox_->CameraUpdate(mainCamera);
-	skyBox_->Draw();
+	stageObjects_->DrawSkyBox(mainCamera);
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
@@ -120,13 +100,12 @@ void TitleScene::Draw()
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
 
 	//地面の描画
-	ground_->CameraUpdate(mainCamera);
-	ground_->Draw();
+	stageObjects_->Draw(mainCamera);
 
 	modelPlatform_->InstancingPreDraw();
 
 	//ステージオブジェクトの描画
-	stageObjects_->Draw(mainCamera);
+	stageObjects_->InstancingDraw(mainCamera);
 
 	modelPlatform_->LinePreDraw();
 
@@ -189,7 +168,6 @@ void TitleScene::CreateLevel()
 	railMover_ = std::make_unique<RailMover>();
 	railMover_->Initialize(levelData.splines[0].controlPoints, nullptr, true);
 
-	//ステージオブジェクトの生成
-	stageObjects_ = std::make_unique<StageObjects>();
-	stageObjects_->Initialize(levelData.objects);
+	// 背景オブジェクトの生成
+	stageObjects_->GetInstancingObject(levelData.objects);
 }

@@ -92,12 +92,6 @@ private:
 	uint32_t textureHandle_;
 	uint32_t textureHandleSkyBox_;
 
-	//スカイボックス
-	std::unique_ptr<YKEngine::My3dObject> skyBox_;
-
-	//地面
-	std::unique_ptr<YKEngine::My3dObject> ground_;
-
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;
 

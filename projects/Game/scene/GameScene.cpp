@@ -31,14 +31,16 @@ void GameScene::Initialize() {
 
 	dxCommon_->ResetDeltaTime();
 	
+	//テクスチャの読み込み
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
-	
+
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
-	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
-	modelGround_->SetUVTransform({ {160.0f, 160.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
-	modelGround_->SetEnvironmentCoefficient(0.8f);
+
+	//ステージオブジェクトの生成
+	stageObjects_ = std::make_unique<StageObjects>();
+	stageObjects_->Initialize(textureHandleSkyBox_);
 
 	//自機の弾マネージャーの生成
 	playerBulletManager_ = std::make_unique<PlayerBulletManager>();
@@ -67,25 +69,6 @@ void GameScene::Initialize() {
 	//衝突マネージャの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
 	collisionManager_->Initialize();
-	
-
-	//スカイボックスの生成
-	skyBox_ = std::make_unique<My3dObject>();
-	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandleSkyBox_).get());
-	WorldTransform skyBoxTransform;
-	skyBoxTransform.Initialize();
-	skyBoxTransform.scale_ = { 100.0f, 100.0f, 100.0f };
-	skyBoxTransform.UpdateMatrix();
-	skyBox_->WorldTransformUpdate(skyBoxTransform);
-
-	//地面の生成
-	ground_ = std::make_unique<My3dObject>();
-	ground_->Initialize(modelGround_.get());
-	WorldTransform groundTransform;
-	groundTransform.Initialize();
-	groundTransform.scale_ = { 20.0f, 20.0f, 20.0f };
-	groundTransform.UpdateMatrix();
-	ground_->WorldTransformUpdate(groundTransform);
 
 	//シーン開始演出の開始
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
@@ -171,17 +154,14 @@ void GameScene::Draw()
 	//背景の描画
 	modelPlatform_->SkyBoxPreDraw();
 
-	skyBox_->CameraUpdate(mainCamera);
-	skyBox_->Draw();
+	stageObjects_->DrawSkyBox(mainCamera);
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
-	
-	//地面の描画
-	ground_->CameraUpdate(mainCamera);
-	ground_->Draw();
+
+	stageObjects_->Draw(mainCamera);
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera);
@@ -203,7 +183,7 @@ void GameScene::Draw()
 	enemySpawnManager_->Draw(mainCamera);
 
 	//ステージオブジェクトの描画
-	stageObjects_->Draw(mainCamera);
+	stageObjects_->InstancingDraw(mainCamera);
 	
 	//パーティクルの描画
 	ParticleManager::GetInstance()->Draw();
@@ -423,9 +403,7 @@ void GameScene::CreateLevel()
 	//イベントオブジェクトのデータをレベルデータから削除
 	std::erase_if(levelData.objects, [](const ObjectData& data) {return data.fileName.find("Event") != std::string::npos; });
 
-	//ステージオブジェクトの生成
-	stageObjects_ = std::make_unique<StageObjects>();
-	stageObjects_->Initialize(levelData.objects);
+	// 背景オブジェクトの生成
+	stageObjects_->GetInstancingObject(levelData.objects);
 
-	
 }

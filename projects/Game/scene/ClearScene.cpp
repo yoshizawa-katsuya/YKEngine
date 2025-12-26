@@ -39,27 +39,10 @@ void ClearScene::Initialize()
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
-	modelGround_ = modelPlatform_->CreateRigidModel("./Resources/ground", "Ground.obj");
-	modelGround_->SetUVTransform({ {160.0f, 160.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
-	modelGround_->SetEnvironmentCoefficient(0.8f);
-
-	//スカイボックスの生成
-	skyBox_ = std::make_unique<My3dObject>();
-	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandleSkyBox_).get());
-	WorldTransform skyBoxTransform;
-	skyBoxTransform.Initialize();
-	skyBoxTransform.scale_ = { 1000.0f, 1000.0f, 1000.0f };
-	skyBoxTransform.UpdateMatrix();
-	skyBox_->WorldTransformUpdate(skyBoxTransform);
-
-	//地面の生成
-	ground_ = std::make_unique<My3dObject>();
-	ground_->Initialize(modelGround_.get());
-	WorldTransform groundTransform;
-	groundTransform.Initialize();
-	groundTransform.scale_ = { 20.0f, 20.0f, 20.0f };
-	groundTransform.UpdateMatrix();
-	ground_->WorldTransformUpdate(groundTransform);
+	
+	//ステージオブジェクトの生成
+	stageObjects_ = std::make_unique<StageObjects>();
+	stageObjects_->Initialize(textureHandleSkyBox_);
 
 	CreateLevel();
 
@@ -125,8 +108,7 @@ void ClearScene::Draw()
 	//背景の描画
 	modelPlatform_->SkyBoxPreDraw();
 
-	skyBox_->CameraUpdate(mainCamera);
-	skyBox_->Draw();
+	stageObjects_->DrawSkyBox(mainCamera);
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
@@ -137,8 +119,7 @@ void ClearScene::Draw()
 	demoPlayer_->Draw(mainCamera);
 
 	//地面の描画
-	ground_->CameraUpdate(mainCamera);
-	ground_->Draw();
+	stageObjects_->Draw(mainCamera);
 
 	modelPlatform_->LinePreDraw();
 
@@ -204,4 +185,6 @@ void ClearScene::CreateLevel()
 	demoPlayer_ = std::make_unique<DemoPlayer>();
 	demoPlayer_->Initialize(modelPlayer_.get(), railMover_->GetWorldTransform());
 
+	// 背景オブジェクトの生成
+	stageObjects_->GetInstancingObject(levelData.objects);
 }
