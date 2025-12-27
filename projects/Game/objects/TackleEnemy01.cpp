@@ -35,25 +35,6 @@ void TackleEnemy01::UpdateApproach()
 
 }
 
-void TackleEnemy01::UpdateMain()
-{
-	
-	//回転
-	Rotate();
-
-	// 移動
-	Move();
-
-	//レールカメラに映っていなかったら離脱フェーズへ
-	if (!hasRail_ && !IsVisible(railCamera_))
-	{
-		phase_ = Phase::kLeave;
-	}
-
-	//ダメージリアクション
-	DamageReaction();
-}
-
 void TackleEnemy01::UpdateLeave()
 {
 	//離脱タイマーをカウント

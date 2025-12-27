@@ -28,11 +28,6 @@ private:
 	void UpdateApproach() override;
 
 	/// <summary>
-	/// メイン時の更新処理。
-	/// </summary>
-	void UpdateMain() override;
-
-	/// <summary>
 	/// 離脱時の更新処理。
 	/// </summary>
 	void UpdateLeave() override;

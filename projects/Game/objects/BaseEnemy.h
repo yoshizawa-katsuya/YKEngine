@@ -69,7 +69,7 @@ protected:
 	/// <summary>
 	/// メイン部の初期化。
 	/// </summary>
-	void MainInitialize();
+	virtual void MainInitialize();
 
 	/// <summary>
 	/// 接近更新。
@@ -90,11 +90,6 @@ protected:
 	/// 死亡更新。
 	/// </summary>
 	void UpdateDead();
-
-	/// <summary>
-	/// 弾の発射。
-	/// </summary>
-	void Fire();
 
 	/// <summary>
 	/// 移動に使うスプライン曲線の作成。
@@ -149,11 +144,6 @@ protected:
 	Player* player_ = nullptr;
 	//敵の弾マネージャー
 	EnemyBulletManager* enemyBulletManager_ = nullptr;
-
-	//発射間隔
-	const float kFireInterval_ = 1.0f;
-	//発射タイマー
-	float fireTimer_ = 0.0f;
 
 	//ダメージリアクションタイマー
 	float damageReactionTimer_ = 0.0f;

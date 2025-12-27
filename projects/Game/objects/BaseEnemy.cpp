@@ -8,9 +8,8 @@
 #include "Curve.h"
 #include "manager/EffectManager.h"
 #include "Camera.h"
-#include "manager/EnemyBulletManager.h"
 #include "Random.h"
-#include "bullet/EnemyBulletType.h"
+#include "bullet/BaseBullet.h"
 
 using namespace YKEngine;
 
@@ -107,9 +106,6 @@ void BaseEnemy::SetColliderID()
 
 void BaseEnemy::MainInitialize() 
 {
-	//発射タイマーを初期化
-	fireTimer_ = kFireInterval_;
-
 }
 
 void BaseEnemy::UpdateApproach()
@@ -132,17 +128,6 @@ void BaseEnemy::UpdateApproach()
 
 void BaseEnemy::UpdateMain() 
 {
-
-	//発射タイマーカウントダウン
-	fireTimer_ -= 1.0f / 60.0f;
-	//指定時間に達した
-	if (fireTimer_ <= 0.0f) {
-		//弾を発射
-		Fire();
-		//発射タイマーを初期化
-		fireTimer_ = kFireInterval_;
-	}
-
 	// 移動
 	Move();
 
@@ -211,19 +196,6 @@ void BaseEnemy::UpdateDead()
 
 	// エフェクト生成
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyBrowAway01, GetWorldPosition(), 10);
-}
-
-void BaseEnemy::Fire() {
-
-	//弾の速さ
-	const float kBulletSpeed = 0.5f;
-
-	Vector3 velocity = Normalize(direction_);
-	velocity = Multiply(kBulletSpeed, velocity);
-
-	// 弾を生成し、初期化
-	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, kBulletSpeed, EnemyBulletType::kTarget);
-
 }
 
 void BaseEnemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)

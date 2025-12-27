@@ -5,6 +5,6 @@
 /// </summary>
 enum class EnemyBulletType
 {
-	kTarget,	// 自機狙い弾	
+	kTarget,	// ゴースト追尾弾
 	kHoming,	// ホーミング弾
 };
