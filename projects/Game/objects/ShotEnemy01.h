@@ -3,7 +3,7 @@
 #include "bullet/EnemyBulletType.h"
 
 /// <summary>
-/// プレイヤーを狙って弾を撃つ敵キャラクター。
+/// 自機狙い弾を撃つ敵キャラクター。
 /// 弾は一定間隔で撃つ。
 /// </summary>
 class ShotEnemy01 : public BaseEnemy
@@ -38,7 +38,7 @@ protected:
 	float fireTimer_ = 0.0f;
 
 	//弾の種類
-	EnemyBulletType bulleyType_ = EnemyBulletType::kTarget;
+	EnemyBulletType bulletType_ = EnemyBulletType::kTarget;
 
 };
 

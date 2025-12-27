@@ -39,6 +39,6 @@ void ShotEnemy01::Fire()
 	velocity = Multiply(kBulletSpeed, velocity);
 
 	// 弾を生成し、初期化
-	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, kBulletSpeed, bulleyType_);
+	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, kBulletSpeed, bulletType_);
 
 }

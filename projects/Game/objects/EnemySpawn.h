@@ -9,8 +9,9 @@
 /// </summary>
 enum class EnemyType
 {
-	kShot01,
-	kTackle01,
+	kShot01,	//自機狙い弾を撃つ敵
+	kShot02,	//追尾弾を撃つ敵
+	kTackle01,	//突進してくる敵
 };
 
 /// <summary>

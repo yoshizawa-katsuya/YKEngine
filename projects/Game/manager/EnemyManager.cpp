@@ -1,6 +1,7 @@
 #include "EnemyManager.h"
 #include "ModelPlatform.h"
 #include "ShotEnemy01.h"
+#include "ShotEnemy02.h"
 #include "TackleEnemy01.h"
 #include "CollisionManager.h"
 
@@ -50,6 +51,10 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 	{
 	case EnemyType::kShot01:
 		enemy = std::make_unique<ShotEnemy01>();
+		break;
+
+	case EnemyType::kShot02:
+		enemy = std::make_unique<ShotEnemy02>();
 		break;
 
 	case EnemyType::kTackle01:
