@@ -17,12 +17,12 @@ BaseEnemy::~BaseEnemy()
 {
 }
 
-void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera* railCamera) 
+void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera* railCamera, Player* player)
 {
 
 	BaseCharacter::Initialize(model);
 	SetColliderID();
-
+	player_ = player;
 	railCamera_ = railCamera;
 
 	//速さをレベルデータから取得

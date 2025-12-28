@@ -35,7 +35,7 @@ void TargetEnemyBullet01::Homig()
 {
 	//ターゲットに向かって移動する
 	Vector3 direction = target_.GetWorldPosition() - worldTransform_.GetWorldPosition();
-	//ある程度近づいたらホーミングをやめる
+	//ゴーストと衝突したらホーミング解除
 	if (Length(direction) < radius_ + targetRadius_)
 	{
 		isHoming_ = false;

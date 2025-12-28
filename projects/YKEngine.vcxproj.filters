@@ -381,6 +381,9 @@
     <ClCompile Include="Game\objects\ShotEnemy02.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\TackleEnemy02.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -767,6 +770,9 @@
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\ShotEnemy02.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\TackleEnemy02.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>

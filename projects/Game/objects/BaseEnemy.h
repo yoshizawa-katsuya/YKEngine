@@ -25,7 +25,7 @@ public:
 	/// <param name="spawnData">出現データ</param>
 	/// <param name="viewPortMatrix">ビューポート行列</param>
 	/// <param name="railCamera">レールカメラ。画面内に入っているか判定するために使用。</param>
-	virtual void Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera);
+	virtual void Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player);
 
 	/// <summary>
 	/// 更新。
@@ -37,8 +37,6 @@ public:
 	/// </summary>
 	/// <param name="other">衝突相手のコライダー</param>
 	virtual void OnCollision([[maybe_unused]] Collider* other) override;
-
-	void SetPlayer(Player* player) { player_ = player; }
 
 	/// <summary>
 	/// ワールド座標を取得。
@@ -105,7 +103,7 @@ protected:
 	/// <summary>
 	/// 回転。プレイヤーの方向を向く。
 	/// </summary>
-	void Rotate();
+	virtual void Rotate();
 
 	/// <summary>
 	/// レールに沿って移動。

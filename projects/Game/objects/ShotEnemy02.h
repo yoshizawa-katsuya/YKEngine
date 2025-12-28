@@ -16,6 +16,6 @@ public:
 	/// <param name="spawnData">出現データ</param>
 	/// <param name="viewPortMatrix">ビューポート行列</param>
 	/// <param name="railCamera">レールカメラ。画面内に入っているか判定するために使用。</param>
-	void Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera) override;
+	void Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player) override;
 };
 

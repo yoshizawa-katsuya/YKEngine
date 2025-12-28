@@ -66,8 +66,7 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 		break;
 	}
 	// 敵の初期化
-	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), spawnData, railCamera_);
-	enemy->SetPlayer(player_);
+	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), spawnData, railCamera_, player_);
 	enemy->SetEnemyBulletManager(enemyBulletManager_);
 
 	// 敵リストに追加
