@@ -15,6 +15,7 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletMan
 
 	// 敵モデルの読み込み
 	modelEnemyMap_[EnemyType::kShot01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
+	modelEnemyMap_[EnemyType::kShot02] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy02.obj");
 	modelEnemyMap_[EnemyType::kTackle01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
 
 }

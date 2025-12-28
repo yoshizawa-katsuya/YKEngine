@@ -104,7 +104,8 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 			//TODO: コライダーのパラメータ読み込み
 		}
 		//敵発生ポイント
-		else if (type.find("EnemySpawn") != std::string::npos) {
+		else if (type.find("Enemy") != std::string::npos && type.find("Spawn") != std::string::npos) 
+		{
 			//要素追加
 			EnemySpawnData& enemySpawnData = levelData.enemySpawns.emplace_back();
 			//トランスフォームのパラメータ読み込み

@@ -30,6 +30,7 @@ from .spawn import MYADDON_OT_spawn_import_symbol
 from .spawn import MYADDON_OT_spawn_create_symbol
 from .spawn import MYADDON_OT_spawn_create_player_symbol
 from .spawn import MYADDON_OT_spawn_create_enemy_symbol
+from .spawn import MYADDON_OT_spawn_create_enemy02_symbol
 from .spawn import MYADDON_OT_spawn_create_tackle_enemy_symbol
 from .params import MYADDON_OT_add_wait_time
 from .params import OBJECT_PT_params
@@ -52,6 +53,7 @@ classes = (
     MYADDON_OT_spawn_create_symbol,
     MYADDON_OT_spawn_create_player_symbol,
     MYADDON_OT_spawn_create_enemy_symbol,
+    MYADDON_OT_spawn_create_enemy02_symbol,
     MYADDON_OT_spawn_create_tackle_enemy_symbol,
     MYADDON_OT_add_wait_time,
     OBJECT_PT_params,

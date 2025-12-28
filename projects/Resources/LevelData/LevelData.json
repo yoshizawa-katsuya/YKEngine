@@ -660,6 +660,29 @@
             },
             "file_path": "./resources/sun",
             "file_name": "Sun.obj"
+        },
+        {
+            "type": "Enemy02Spawn",
+            "name": "Enemy02Spawn",
+            "transform": {
+                "translation": [
+                    -75.81050872802734,
+                    14.926643371582031,
+                    17.352067947387695
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "speed": 0.0,
+            "wave_num": 1
         }
     ]
 }

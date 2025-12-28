@@ -1,6 +1,6 @@
 # Blender 4.1.1
 # www.blender.org
-mtllib Enemy.mtl
+mtllib Enemy02.mtl
 o 立方体
 v -0.347658 0.407093 -0.267520
 v -0.347658 0.287891 -0.386722

@@ -41,6 +41,10 @@ void EnemySpawnManager::GetSpawnDatas(const std::vector<EnemySpawnData>& outSpaw
 		{
 			enemySpawn.type = EnemyType::kShot01;
 		}
+		else if (enemySpawnData.type == "Enemy02Spawn")
+		{
+			enemySpawn.type = EnemyType::kShot02;
+		}
 		else if (enemySpawnData.type == "TackleEnemySpawn")
 		{
 			enemySpawn.type = EnemyType::kTackle01;
