@@ -3,6 +3,7 @@
 #include "ShotEnemy01.h"
 #include "ShotEnemy02.h"
 #include "TackleEnemy01.h"
+#include "TackleEnemy02.h"
 #include "CollisionManager.h"
 
 using namespace YKEngine;

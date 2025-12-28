@@ -1,20 +1,58 @@
 #pragma once
-#include "TackleEnemy01.h"
+#include "BaseEnemy.h"
 
 /// <summary>
 /// プレイヤーに向かって突進する敵キャラ。
 /// 突進中はプレイヤーを追尾する。
 /// </summary>
-class TackleEnemy02 : public TackleEnemy01
+class TackleEnemy02 : public BaseEnemy
 {
 public:
 
+	/// <summary>
+	/// デストラクタ。
+	/// </summary>
+	~TackleEnemy02() override;
+
+	/// <summary>
+	/// 衝突時の処理。
+	/// </summary>
+	/// <param name="other">衝突したコライダー</param>
+	void OnCollision([[maybe_unused]] Collider* other) override;
+
 private:
+
+	/// <summary>
+	/// 接近時の更新処理。
+	/// </summary>
+	void UpdateApproach() override;
+
+	/// <summary>
+	/// メイン時の更新処理。
+	/// </summary>
+	void UpdateMain() override;
+
+	/// <summary>
+	/// 離脱時の更新処理。
+	/// </summary>
+	void UpdateLeave() override;
 
 	/// <summary>
 	/// 移動処理。
 	/// </summary>
 	void Move() override;
+
+	/// <summary>
+	/// コライダーIDの設定。
+	/// </summary>
+	void SetColliderID() override;
+
+	/// <summary>
+	/// 死亡時の処理。
+	/// </summary>
+	void Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition) override;
+
+	bool isHoming_ = true;
 
 };
 
