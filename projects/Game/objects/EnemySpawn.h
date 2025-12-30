@@ -11,7 +11,8 @@ enum class EnemyType
 {
 	kShot01,	//自機狙い弾を撃つ敵
 	kShot02,	//追尾弾を撃つ敵
-	kTackle01,	//突進してくる敵
+	kTackle01,	//自機に向かって突進してくる敵。追尾はしない
+	kTackle02,	//自機を追尾して突進してくる敵
 };
 
 /// <summary>

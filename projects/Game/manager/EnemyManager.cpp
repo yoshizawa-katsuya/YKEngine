@@ -18,6 +18,7 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletMan
 	modelEnemyMap_[EnemyType::kShot01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
 	modelEnemyMap_[EnemyType::kShot02] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy02.obj");
 	modelEnemyMap_[EnemyType::kTackle01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
+	modelEnemyMap_[EnemyType::kTackle02] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy02.obj");
 
 }
 
@@ -61,6 +62,10 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 
 	case EnemyType::kTackle01:
 		enemy = std::make_unique<TackleEnemy01>();
+		break;
+
+	case EnemyType::kTackle02:
+		enemy = std::make_unique<TackleEnemy02>();
 		break;
 
 	default:

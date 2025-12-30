@@ -49,6 +49,10 @@ void EnemySpawnManager::GetSpawnDatas(const std::vector<EnemySpawnData>& outSpaw
 		{
 			enemySpawn.type = EnemyType::kTackle01;
 		}
+		else if (enemySpawnData.type == "TackleEnemy02Spawn")
+		{
+			enemySpawn.type = EnemyType::kTackle02;
+		}
 		else
 		{
 			assert(0 && "不明な敵の種類です");

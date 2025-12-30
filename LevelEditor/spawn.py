@@ -15,6 +15,7 @@ class SpawnNames():
     names["Enemy"] = ("PrototypeEnemySpawn", "EnemySpawn", "enemy/Enemy.obj")
     names["Enemy02"] = ("PrototypeEnemy02Spawn", "Enemy02Spawn", "enemy/Enemy02.obj")
     names["TackleEnemy"] = ("PrototypeTackleEnemySpawn", "TackleEnemySpawn", "tackleEnemy/TackleEnemy.obj")
+    names["TackleEnemy02"] = ("PrototypeTackleEnemy02Spawn", "TackleEnemy02Spawn", "tackleEnemy/TackleEnemy02.obj")
 
 
 #オペレータ 出現ポイントのシンボルを読み込む
@@ -65,6 +66,8 @@ class MYADDON_OT_spawn_import_symbol(bpy.types.Operator):
         self.load_obj("Enemy02")
         #TackleEnemyオブジェクト読み込み
         self.load_obj("TackleEnemy")
+        #TackleEnemy02オブジェクト読み込み
+        self.load_obj("TackleEnemy02")
 
         return {'FINISHED'}
     
@@ -149,5 +152,17 @@ class MYADDON_OT_spawn_create_tackle_enemy_symbol(bpy.types.Operator):
     def execute(self, context):
 
         bpy.ops.myaddon.myaddon_ot_spawn_create_symbol('EXEC_DEFAULT', spawn_type = "TackleEnemy")
+
+        return {'FINISHED'}
+    
+class MYADDON_OT_spawn_create_tackle_enemy02_symbol(bpy.types.Operator):
+
+    bl_idname = "myaddon.myaddon_ot_spawn_create_tackle_enemy02_symbol"
+    bl_label = "タックル型の敵02出現ポイントシンボルの作成"
+    bl_description = "タックル型の敵02出現ポイントのシンボルを作成します"
+
+    def execute(self, context):
+
+        bpy.ops.myaddon.myaddon_ot_spawn_create_symbol('EXEC_DEFAULT', spawn_type = "TackleEnemy02")
 
         return {'FINISHED'}

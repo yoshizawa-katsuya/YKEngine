@@ -14,6 +14,8 @@ void TackleEnemy01::Initialize(YKEngine::BaseModel* model, const EnemySpawn& spa
 	target_.parent_ = targetTransform->parent_;
 	target_.translation_ = targetTransform->translation_;
 	targetRadius_ = player->GetRadius();
+
+	speed_ = 0.5f;
 }
 
 void TackleEnemy01::Update()
