@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Random.h"
 #include "bullet/BaseBullet.h"
+#include <algorithm>
 
 using namespace YKEngine;
 
@@ -217,6 +218,8 @@ void BaseEnemy::Move()
 	else
 	{
 		worldTransform_.translation_ += velocity_;
+		// 地面より下に行かないようにする
+		worldTransform_.translation_.y = (std::max)(worldTransform_.translation_.y, 0.0f);
 	}
 }
 
