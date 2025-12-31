@@ -17,6 +17,7 @@ void BasePlayerBullet::Initialize(BaseModel* model, const Vector3& position, con
 void BasePlayerBullet::Update()
 {
 	// 回転
+	BaseBullet::Rotate();
 	const float kRotationSpeed = 0.3f;
 	characterWorldTransform_.rotation_.z += kRotationSpeed;
 

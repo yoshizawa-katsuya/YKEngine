@@ -15,6 +15,10 @@ void BaseEnemyBullet::Initialize(BaseModel* model, const Vector3& position, cons
 
 void BaseEnemyBullet::Update(Camera* railCamera)
 {
+	//弾の回転
+	const float kRotationSpeed = 0.1f;
+	characterWorldTransform_.rotation_.z += kRotationSpeed;
+
 	BaseBullet::Update();
 
 	//画面外に出たら消す

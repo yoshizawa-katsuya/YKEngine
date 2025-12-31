@@ -12,6 +12,9 @@ void BaseBullet::Initialize(BaseModel* model, const Vector3& position, const Vec
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
 
+	//移動方向に向ける
+	Rotate();
+
 	SetRadius(0.5f);
 }
 
@@ -25,9 +28,6 @@ void BaseBullet::Update()
 
 	//移動処理
 	Move();
-
-	//回転処理
-	Rotate();
 
 	BaseCharacter::Update();
 }

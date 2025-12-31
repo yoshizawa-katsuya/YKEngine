@@ -18,6 +18,8 @@ void EnemyHomingBullet01::Move()
 		Homig();
 	}
 
+	//通常の移動処理
+	BaseBullet::Rotate();
 	BaseBullet::Move();
 }
 

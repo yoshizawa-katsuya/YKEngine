@@ -48,8 +48,8 @@ public:
 
 private:
 
-	//弾のモデル	
-	std::shared_ptr<YKEngine::BaseModel> modelBullet_;
+	//敵のモデル
+	std::map<EnemyBulletType, std::shared_ptr<YKEngine::BaseModel>> modelEnemyBulletMap_;
 
 	//弾
 	std::list<std::unique_ptr<BaseEnemyBullet>> enemyBullets_;

@@ -8,8 +8,10 @@ using namespace YKEngine;
 
 void EnemyBulletManager::Initialize()
 {
+	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
 	//モデル生成
-	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(TextureManager::GetInstance()->Load("./Resources/red.png"), "EnemyBullet");
+	modelEnemyBulletMap_[EnemyBulletType::kTarget] = modelPlatform->CreateRigidModel("./Resources/enemyBullet", "TargetEnemyBullet.obj");
+	modelEnemyBulletMap_[EnemyBulletType::kHoming] = modelPlatform->CreateRigidModel("./Resources/enemyBullet", "HomingEnemyBullet.obj");
 }
 
 void EnemyBulletManager::Update(Camera* railCamera)
@@ -59,7 +61,7 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 		break;
 	}
 
-	bullet->Initialize(modelBullet_.get(), worldPosition, velocity, target, speed);
+	bullet->Initialize(modelEnemyBulletMap_[bulletType].get(), worldPosition, velocity, target, speed);
 
 	//リストに登録する
 	enemyBullets_.push_back(std::move(bullet));

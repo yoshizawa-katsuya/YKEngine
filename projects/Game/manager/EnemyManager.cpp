@@ -15,10 +15,11 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletMan
 	enemyBulletManager_ = enemyBulletManager;
 
 	// 敵モデルの読み込み
-	modelEnemyMap_[EnemyType::kShot01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy.obj");
-	modelEnemyMap_[EnemyType::kShot02] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/enemy", "Enemy02.obj");
-	modelEnemyMap_[EnemyType::kTackle01] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
-	modelEnemyMap_[EnemyType::kTackle02] = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy02.obj");
+	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
+	modelEnemyMap_[EnemyType::kShot01] = modelPlatform->CreateRigidModel("./Resources/enemy", "Enemy.obj");
+	modelEnemyMap_[EnemyType::kShot02] = modelPlatform->CreateRigidModel("./Resources/enemy", "Enemy02.obj");
+	modelEnemyMap_[EnemyType::kTackle01] = modelPlatform->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
+	modelEnemyMap_[EnemyType::kTackle02] = modelPlatform->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy02.obj");
 
 }
 
