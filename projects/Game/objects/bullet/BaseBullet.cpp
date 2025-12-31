@@ -1,4 +1,5 @@
 #include "BaseBullet.h"
+#include "TransformHelpers.h"
 
 using namespace YKEngine;
 
@@ -17,12 +18,16 @@ void BaseBullet::Initialize(BaseModel* model, const Vector3& position, const Vec
 void BaseBullet::Update()
 {
 	//時間経過でデス
-	if (--deathTimer_ <= 0) {
+	if (--deathTimer_ <= 0) 
+	{
 		isDead_ = true;
 	}
 
 	//移動処理
 	Move();
+
+	//回転処理
+	Rotate();
 
 	BaseCharacter::Update();
 }
@@ -37,4 +42,10 @@ void BaseBullet::Move()
 {
 	//座標を移動させる
 	worldTransform_.translation_ += velocity_;
+}
+
+void BaseBullet::Rotate()
+{
+	//移動方向に向ける
+	worldTransform_.rotation_ = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, velocity_);
 }

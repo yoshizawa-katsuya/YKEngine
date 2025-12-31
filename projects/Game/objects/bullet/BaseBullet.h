@@ -54,6 +54,11 @@ protected:
 	/// </summary>
 	virtual void Move();
 
+	/// <summary>
+	/// 回転処理。
+	/// </summary>
+	void Rotate();
+
 	//速度
 	YKEngine::Vector3 velocity_;
 

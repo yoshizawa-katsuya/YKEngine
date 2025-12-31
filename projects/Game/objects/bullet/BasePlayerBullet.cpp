@@ -16,6 +16,10 @@ void BasePlayerBullet::Initialize(BaseModel* model, const Vector3& position, con
 
 void BasePlayerBullet::Update()
 {
+	// 回転
+	const float kRotationSpeed = 0.3f;
+	characterWorldTransform_.rotation_.z += kRotationSpeed;
+
 	BaseBullet::Update();
 
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerBulletTrac01, worldTransform_.GetWorldPosition());

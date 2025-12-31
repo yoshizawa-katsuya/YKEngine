@@ -10,7 +10,7 @@ void PlayerBulletManager::Initialize()
 {
 
 	//モデル生成
-	modelBullet_ = ModelPlatform::GetInstance()->CreateSphere(TextureManager::GetInstance()->Load("./Resources/white.png"), "PlayerBullet");
+	modelBullet_ = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/playerBullet", "PlayerBullet.obj");
 }
 
 void PlayerBulletManager::Update()
