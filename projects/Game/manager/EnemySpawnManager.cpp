@@ -66,6 +66,12 @@ void EnemySpawnManager::GetSpawnDatas(const std::vector<EnemySpawnData>& outSpaw
 		//敵の回転を取得
 		enemySpawn.rotation = enemySpawnData.transform.rotation;
 
+		//敵の待機時間を取得
+		if (enemySpawnData.waitTime.has_value())
+		{
+			enemySpawn.waitTime = enemySpawnData.waitTime.value();
+		}
+
 		//スプラインの制御点を取得
 		if (enemySpawnData.spline.has_value())
 		{

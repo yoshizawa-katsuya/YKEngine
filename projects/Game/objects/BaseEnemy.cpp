@@ -49,6 +49,7 @@ void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera
 
 	viewPortMatrix_ = &DirectXCommon::GetInstance()->GetViewPortMatrix();
 
+	waitTime_ = spawnData.waitTime;
 	worldTransform_.rotation_ = spawnData.rotation;
 }
 

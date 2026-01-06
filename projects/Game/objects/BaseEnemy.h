@@ -193,4 +193,6 @@ protected:
 
 	//吹っ飛ぶ速さ
 	float blowAwaySpeed_;
+
+	float waitTime_ = 0.0f; // 待機時間
 };

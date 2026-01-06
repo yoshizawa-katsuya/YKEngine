@@ -10,7 +10,7 @@ ShotEnemy01::~ShotEnemy01()
 void ShotEnemy01::MainInitialize()
 {
 	//発射タイマーを初期化
-	fireTimer_ = kFireInterval_;
+	fireTimer_ = kFireInterval_ + waitTime_;
 
 }
 
