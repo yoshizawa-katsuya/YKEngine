@@ -203,5 +203,6 @@ void RailMover::UpdateRotate()
 	}
 	forward_ = Subtract(target_, worldTransform_.translation_);
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
+	targetRotation.z = 0.0f; // Z軸回転を0に固定
 	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
 }

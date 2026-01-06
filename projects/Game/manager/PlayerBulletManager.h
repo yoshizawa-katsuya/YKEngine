@@ -3,6 +3,7 @@
 #include "bullet/PlayerBulletType.h"
 class YKEngine::Camera;
 class CollisionManager;
+class BaseEnemy;
 
 /// <summary>
 /// プレイヤーの弾を管理するクラス。
@@ -33,9 +34,10 @@ public:
 	/// プレイヤーの弾を追加。
 	/// </summary>
 	/// <param name="worldPosition">弾のワールド座標</param>
-	/// <param name="velocity">弾の速度ベクトル</param>
+	/// <param name="direction">方向</param>
 	/// <param name="bulletType">弾の種類</param>
-	void AddPlayerBullet(const YKEngine::Vector3& worldPosition, const YKEngine::Vector3& velocity, PlayerBulletType bulletType);
+	/// <param name="speed">弾の速度</param>
+	void AddPlayerBullet(const YKEngine::Vector3& worldPosition, const YKEngine::Vector3& direction, PlayerBulletType bulletType, BaseEnemy* targetEnemy);
 
 	/// <summary>
 	/// 弾をコリジョンマネージャーに登録。

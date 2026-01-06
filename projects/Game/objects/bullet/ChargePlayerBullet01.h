@@ -15,8 +15,8 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="position">初期位置</param>
-	/// <param name="velocity">初速度</param>
-	/// <param name="textureHandle">テクスチャハンドル</param>
-	void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity) override;
+	/// <param name="direction">方向</param>
+	/// <param name="targetEnemy">ターゲットの敵</param>
+	void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& direction, BaseEnemy* targetEnemy) override;
 };
 

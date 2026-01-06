@@ -2,9 +2,9 @@
 
 using namespace YKEngine;
 
-void ChargePlayerBullet01::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity)
+void ChargePlayerBullet01::Initialize(BaseModel* model, const Vector3& position, const Vector3& direction, BaseEnemy* targetEnemy)
 {
-	BasePlayerBullet::Initialize(model, position, velocity);
+	BasePlayerBullet::Initialize(model, position, direction, targetEnemy);
 
 	attackPower_ = 3;
 

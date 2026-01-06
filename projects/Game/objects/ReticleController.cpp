@@ -122,13 +122,16 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnem
 	Vector2 ScreenPosA = spriteLargeReticle_->GetPosition();
 	Vector2 SizeA = spriteLargeReticle_->GetSize();
 
+	//ロックオン状態初期化
 	isLockOn_ = false;
+	targetEnemy_ = nullptr;
 	//一番近い敵を探すため、最大値で初期化
 	float closestDistance = (std::numeric_limits<float>::max)();
 	Vector2 targetScreenPosition = { 0.0f, 0.0f };
 	Vector3 targetWorldPosition = { 0.0f, 0.0f , 0.0f};
 
-	for (const std::unique_ptr<BaseEnemy>& enemy : enemies) {
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemies)
+	{
 
 		if (!enemy->IsVisible(railCamera) || enemy->IsDead())
 		{
@@ -149,6 +152,7 @@ void ReticleController::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnem
 			closestDistance = distance;
 			targetScreenPosition = ScreenPosB;
 			targetWorldPosition = enemy->GetWorldPosition();
+			targetEnemy_ = enemy.get();
 			isLockOn_ = true;
 		}
 

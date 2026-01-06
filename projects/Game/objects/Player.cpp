@@ -362,17 +362,16 @@ void Player::Attack() {
 	//弾発射処理
 	if (input_->PushKey(DIK_SPACE) || input_->PushButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
-
-		//弾の速度
-		const float kBulletSpeed = 2.0f;
-
-		Vector3 velocity = Multiply(kBulletSpeed, Normalize(direction_));
+		//弾の方向
+		Vector3 bulletDirection = Normalize(direction_);
 		
+		BaseEnemy* lockOnTarget = reticleController_->GetTargetEnemy();
+
 		//弾を生成し、初期化
 		if (isChargeMax_)
 		{
 			//チャージ最大なら強力な弾を撃つ
-			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::kCharge);
+			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), bulletDirection, PlayerBulletType::kCharge, lockOnTarget);
 
 			const float kChargeBulletShotInterval = 0.5f;
 			shotIntervalTimer_ = kChargeBulletShotInterval; //チャージ弾の発射間隔
@@ -382,7 +381,7 @@ void Player::Attack() {
 			return;
 		}
 
-		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), velocity, PlayerBulletType::kNormal);
+		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), bulletDirection, PlayerBulletType::kNormal, lockOnTarget);
 
 		const float kNormalBulletShotInterval = 0.2f;
 		shotIntervalTimer_ = kNormalBulletShotInterval; //通常弾の発射間隔

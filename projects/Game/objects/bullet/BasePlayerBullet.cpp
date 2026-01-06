@@ -3,14 +3,21 @@
 #include "TextureManager.h"
 #include "Vector3.h"
 #include "manager/EffectManager.h"
+#include "BaseEnemy.h"
 
 using namespace YKEngine;
 
-void BasePlayerBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& velocity) 
+void BasePlayerBullet::Initialize(BaseModel* model, const Vector3& position, const Vector3& direction, BaseEnemy* targetEnemy)
 {
+	targetEnemy_ = targetEnemy;
+
+	// 速度計算
+	Vector3 velocity = direction * speed_;
 
 	BaseBullet::Initialize(model, position, velocity);
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayerBullet);
+
+	worldTransform_.UpdateMatrix();
 
 }
 
@@ -20,6 +27,13 @@ void BasePlayerBullet::Update()
 	BaseBullet::Rotate();
 	const float kRotationSpeed = 0.3f;
 	characterWorldTransform_.rotation_.z += kRotationSpeed;
+
+	// 目標追尾
+	if (targetEnemy_)
+	{
+		Vector3 direction = Normalize(targetEnemy_->GetWorldPosition() - worldTransform_.GetWorldPosition());
+		velocity_ = direction * speed_;
+	}
 
 	BaseBullet::Update();
 

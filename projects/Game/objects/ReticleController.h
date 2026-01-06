@@ -61,6 +61,8 @@ public:
 
 	YKEngine::Vector3 Get3DReticlePosition() { return worldTransform3DReticle_.GetWorldPosition(); }
 
+	BaseEnemy* GetTargetEnemy() const { return targetEnemy_; }
+
 private:
 
 	/// <summary>
@@ -97,5 +99,8 @@ private:
 	float chargeMaxTimer_ = 0.0f;
 	//チャージマックス時に色に変化し終わるまでの時間
 	const float kChargeMaxColorChangeTime_ = 0.1f;
+
+	//ロックオン対象
+	BaseEnemy* targetEnemy_ = nullptr;
 };
 

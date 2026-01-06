@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseBullet.h"
 
+class BaseEnemy;
+
 /// <summary>
 /// プレイヤー弾の基底クラス。
 /// プレイヤー弾の種類ごとにクラスを作成し、BasePlayerBulletを継承して実装する。
@@ -14,9 +16,10 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="position">初期位置</param>
-	/// <param name="velocity">初速度</param>
-	/// <param name="textureHandle">テクスチャハンドル</param>
-	virtual void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity) override;
+	/// <param name="direction">方向</param>
+	/// <param name="targetEnemy">目標の敵オブジェクト</param>
+	/// <param name="speed">速度</param>
+	virtual void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& direction, BaseEnemy* targetEnemy);
 
 	/// <summary>
 	/// 更新。
@@ -29,4 +32,9 @@ public:
 	/// <param name="other">衝突相手のコライダー</param>
 	void OnCollision([[maybe_unused]] Collider* other) override;
 
+private:
+	
+	BaseEnemy* targetEnemy_ = nullptr; // 目標の敵オブジェクト。
+
+	float speed_ = 2.0f;	// 速度。
 };

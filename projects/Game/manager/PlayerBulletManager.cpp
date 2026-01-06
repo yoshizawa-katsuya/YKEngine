@@ -38,7 +38,7 @@ void PlayerBulletManager::Draw(Camera* camera)
 	}
 }
 
-void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Vector3& velocity, PlayerBulletType bulletType)
+void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Vector3& direction, PlayerBulletType bulletType, BaseEnemy* targetEnemy)
 {
 	//リストに登録する
 	//弾を生成し、初期化
@@ -54,7 +54,7 @@ void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Ve
 
 		break;
 	}
-	bullet->Initialize(modelBullet_.get(), worldPosition, velocity);
+	bullet->Initialize(modelBullet_.get(), worldPosition, direction, targetEnemy);
 
 	//リストに登録
 	playerBullets_.push_back(std::move(bullet));
