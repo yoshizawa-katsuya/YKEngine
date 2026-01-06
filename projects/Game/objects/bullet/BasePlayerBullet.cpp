@@ -33,6 +33,11 @@ void BasePlayerBullet::Update()
 	{
 		Vector3 direction = Normalize(targetEnemy_->GetWorldPosition() - worldTransform_.GetWorldPosition());
 		velocity_ = direction * speed_;
+		// 目標が死んでいたらターゲット解除
+		if (targetEnemy_->IsDead())
+		{
+			targetEnemy_ = nullptr;
+		}
 	}
 
 	BaseBullet::Update();
