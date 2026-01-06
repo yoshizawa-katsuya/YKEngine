@@ -65,6 +65,9 @@ void TackleEnemy01::UpdateMain()
 	// 移動
 	Move();
 
+	//回転
+	Rotate();
+
 	//ダメージリアクション処理
 	DamageReaction();
 
@@ -77,20 +80,18 @@ void TackleEnemy01::UpdateMain()
 
 void TackleEnemy01::UpdateLeave()
 {
+	// 移動
+	Move();
+
+	//ダメージリアクション処理
+	DamageReaction();
+
 	//離脱タイマーをカウント
 	leaveTimer_ += 1.0f / 60.0f;
 	float leaveTime = 1.0f; // 離脱までの時間（秒）
 	if (leaveTimer_ > leaveTime)
 	{
 		Disappear();
-	}
-
-	//画面内に戻ってきたらメインフェーズへ
-	if (IsVisible(railCamera_))
-	{
-		phase_ = Phase::kMain;
-		leaveTimer_ = 0.0f;
-		MainInitialize();
 	}
 
 }
@@ -107,6 +108,7 @@ void TackleEnemy01::Move()
 		if (Length(direction) < radius_ + targetRadius_)
 		{
 			isHoming_ = false;
+			phase_ = Phase::kLeave;
 			return;
 		}
 		direction = Normalize(direction);
