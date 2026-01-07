@@ -122,7 +122,6 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> TransformationResource_;
 	//データを書き込む
 	TransformationMatrix* TransformationData_;
-	//Matrix4x4* WVPData_ = nullptr;
 
 	//マテリアル用のリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
