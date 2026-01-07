@@ -8,9 +8,8 @@ namespace YKEngine
 /// ワールド変換データ。
 /// 親子関係を持つことができる。
 /// </summary>
-class WorldTransform
+struct WorldTransform
 {
-public:
 
 	// ローカルスケール
 	Vector3 scale_ = { 1, 1, 1 };
