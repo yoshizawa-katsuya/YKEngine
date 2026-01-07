@@ -192,8 +192,6 @@ void Audio::SoundUnload(SoundData* soundData)
 	//バッファのメモリを解放
 	delete[] soundData->buffer.data();
 
-	/*soundData->buffer = 0;
-	soundData->bufferSize = 0;*/
 	soundData->wfex = {};
 
 }
