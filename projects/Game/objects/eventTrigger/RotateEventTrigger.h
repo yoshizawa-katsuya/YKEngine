@@ -12,10 +12,8 @@ public:
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	/// <param name="waveNumber">イベント番号。昇順でイベントが発生する。</param>
-	/// <param name="position">イベントの位置</param>
-	/// <param name="radius">イベントの半径</param>
-	void Initialize(uint32_t waveNumber, const YKEngine::Vector3& position, const YKEngine::Vector3& rotate, float radius);
+	/// <param name="objectData">オブジェクトデータ</param>
+	void Initialize(const YKEngine::ObjectData& objectData) override;
 
 	/// <summary>
 	/// 衝突時の処理。

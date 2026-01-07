@@ -3,13 +3,12 @@
 
 using namespace YKEngine;
 
-void RotateEventTrigger::Initialize(uint32_t waveNumber, const Vector3& position, const Vector3& rotate, float radius)
+void RotateEventTrigger::Initialize(const YKEngine::ObjectData& objectData)
 {
-	BaseEventTrigger::Initialize(waveNumber, position, radius);
+	BaseEventTrigger::Initialize(objectData);
 
-	worldTransform_.rotation_ = rotate;
+	worldTransform_.rotation_ = objectData.transform.rotation;
 	worldTransform_.UpdateMatrix();
-
 }
 
 void RotateEventTrigger::OnCollision(Collider* other)

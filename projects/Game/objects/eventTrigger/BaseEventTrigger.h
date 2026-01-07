@@ -1,5 +1,6 @@
 #pragma once
 #include "Collider.h"
+#include "LevelDataLoader.h"
 
 /// <summary>
 /// イベントトリガーの基底クラス。
@@ -12,10 +13,8 @@ public:
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	/// <param name="waveNumber">イベントの番号。昇順で発生する。</param>
-	/// <param name="position">イベントトリガーの位置</param>
-	/// <param name="radius">イベントトリガーの半径</param>
-	virtual void Initialize(uint32_t waveNumber, const YKEngine::Vector3& position, float radius);
+	/// <param name="objectData">オブジェクトデータ</param>
+	virtual void Initialize(const YKEngine::ObjectData& objectData);
 
 	bool IsDead() { return isDead_; }
 

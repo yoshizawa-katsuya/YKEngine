@@ -45,45 +45,32 @@ void EventTriggerManager::CreateEventTriggers(const std::vector<ObjectData>& obj
 
 void EventTriggerManager::AddEvent(const std::string& eventName, const ObjectData& objectData)
 {
+
+	std::unique_ptr<BaseEventTrigger> eventTrigger;
+
 	if (eventName == "waveEvent")
 	{
-		//波イベントの生成
-		std::unique_ptr<BaseEventTrigger> waveEvent = std::make_unique<EnemySpawnEventTrigger>();
-		waveEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
-
-		// リストに追加
-		events_.push_back(std::move(waveEvent));
+		//敵出現イベントの生成
+		eventTrigger = std::make_unique<EnemySpawnEventTrigger>();
 	}
 	else if (eventName == "speedEvent")
 	{
 		//スピードイベントの生成
-		std::unique_ptr<SpeedEventTrigger> speedEvent = std::make_unique<SpeedEventTrigger>();
-
-		// 派生クラス側のInitializeを呼ぶ
-		speedEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x, objectData.speed.value());
-
-		// BaseEventTrigger 側としてリストに追加
-		events_.push_back(std::move(speedEvent));
+		eventTrigger = std::make_unique<SpeedEventTrigger>();
 	}
 	else if (eventName == "rotateEvent")
 	{
 		// 回転イベントの生成
-		std::unique_ptr<RotateEventTrigger> rotateEvent = std::make_unique<RotateEventTrigger>();
-
-		// 派生クラス側のInitializeを呼ぶ
-		rotateEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.rotation, objectData.transform.scale.x);
-
-		// BaseEventTrigger 側としてリストに追加
-		events_.push_back(std::move(rotateEvent));
-
+		eventTrigger = std::make_unique<RotateEventTrigger>();
 	}
 	else if (eventName == "rotateResetEvent")
 	{
 		//回転リセットイベントの生成
-		std::unique_ptr<BaseEventTrigger> rotateResetEvent = std::make_unique<RotateResetEventTrigger>();
-		rotateResetEvent->Initialize(objectData.waveNum.value(), objectData.transform.translation, objectData.transform.scale.x);
-
-		// リストに追加
-		events_.push_back(std::move(rotateResetEvent));
+		eventTrigger = std::make_unique<RotateResetEventTrigger>();
 	}
+
+	// 初期化
+	eventTrigger->Initialize(objectData);
+	// リストに追加
+	events_.push_back(std::move(eventTrigger));
 }

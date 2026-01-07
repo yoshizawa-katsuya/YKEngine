@@ -3,11 +3,11 @@
 
 using namespace YKEngine;
 
-void SpeedEventTrigger::Initialize(uint32_t waveNumber, const Vector3& position, float radius, float speed)
+void SpeedEventTrigger::Initialize(const YKEngine::ObjectData& objectData)
 {
-	BaseEventTrigger::Initialize(waveNumber, position, radius);
+	BaseEventTrigger::Initialize(objectData);
 
-	speed_ = speed;
+	speed_ = objectData.speed.value();
 }
 
 void SpeedEventTrigger::OnCollision(Collider* other)
