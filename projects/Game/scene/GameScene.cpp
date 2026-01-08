@@ -35,6 +35,10 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
+	//スプライトの生成
+	operationGuideSprite_ = std::make_unique<Sprite>();
+	operationGuideSprite_->Initialize(TextureManager::GetInstance()->Load("./Resources/operationHUD.png"));
+
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
 
@@ -196,6 +200,8 @@ void GameScene::Draw()
 	spritePlatform_->PreDraw();
 
 	player_->DrawUI();
+
+	operationGuideSprite_->Draw();
 
 	sceneChangeStaging_->Draw();
 }

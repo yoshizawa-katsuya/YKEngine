@@ -166,12 +166,12 @@ void Player::HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTextu
 	{
 		heratSprites_[i] = std::make_unique<Sprite>();
 		heratSprites_[i]->Initialize(heartTextureHandle);
-		heratSprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 50.0f)); //位置を設定
+		heratSprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 30.0f)); //位置を設定
 		heratSprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
 
 		heratEmptySprites_[i] = std::make_unique<Sprite>();
 		heratEmptySprites_[i]->Initialize(heartEmptyTexturehandle);
-		heratEmptySprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 50.0f)); //位置を設定
+		heratEmptySprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 30.0f)); //位置を設定
 		heratEmptySprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
 	}
 }
