@@ -37,6 +37,9 @@ void ClearScene::Initialize()
 	spriteBackGround_ = std::make_unique<Sprite>();
 	spriteBackGround_->Initialize(textureHandle);
 
+	spriteClearKeyboard_ = std::make_unique<Sprite>();
+	spriteClearKeyboard_->Initialize(TextureManager::GetInstance()->Load("./Resources/clearKeyboard.png"));
+
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
 	
@@ -131,7 +134,16 @@ void ClearScene::Draw()
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
-	spriteBackGround_->Draw();
+	if (input_->IsConnected())
+	{
+		//コントローラー接続時
+		spriteBackGround_->Draw();
+	}
+	else
+	{
+		//キーボード操作時
+		spriteClearKeyboard_->Draw();
+	}
 
 	sceneChangeStaging_->Draw();
 }

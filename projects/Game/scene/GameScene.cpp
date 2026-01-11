@@ -39,6 +39,9 @@ void GameScene::Initialize() {
 	operationGuideSprite_ = std::make_unique<Sprite>();
 	operationGuideSprite_->Initialize(TextureManager::GetInstance()->Load("./Resources/operationHUD.png"));
 
+	operationGuideSpriteKeyboard_ = std::make_unique<Sprite>();
+	operationGuideSpriteKeyboard_->Initialize(TextureManager::GetInstance()->Load("./Resources/operationHUDKeyboard.png"));
+
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
 
@@ -201,7 +204,17 @@ void GameScene::Draw()
 
 	player_->DrawUI();
 
-	operationGuideSprite_->Draw();
+	//操作説明HUDの描画
+	if (input_->IsConnected())
+	{
+		// コントローラー接続時
+		operationGuideSprite_->Draw();
+	}
+	else
+	{
+		// キーボード操作時
+		operationGuideSpriteKeyboard_->Draw();
+	}
 
 	sceneChangeStaging_->Draw();
 }

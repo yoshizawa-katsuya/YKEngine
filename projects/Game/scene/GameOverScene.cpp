@@ -29,6 +29,9 @@ void GameOverScene::Initialize()
 	spriteBackGround_ = std::make_unique<Sprite>();
 	spriteBackGround_->Initialize(textureHandle);
 
+	spriteGameOverKeyBoard_ = std::make_unique<Sprite>();
+	spriteGameOverKeyBoard_->Initialize(TextureManager::GetInstance()->Load("./Resources/gameoverKeyboard.png"));
+
 	//シーンチェンジ演出の生成
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
 	sceneChangeStaging_->BeginSceneStart(StagingType::kFade);
@@ -68,7 +71,17 @@ void GameOverScene::Draw()
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
-	spriteBackGround_->Draw();
+	if (input_->IsConnected())
+	{
+		//コントローラー接続時
+		spriteBackGround_->Draw();
+	}
+	else
+	{
+		//キーボード操作時
+		spriteGameOverKeyBoard_->Draw();
+	}
+	
 
 	sceneChangeStaging_->Draw();
 }

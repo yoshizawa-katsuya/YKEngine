@@ -137,7 +137,9 @@ private:
 	uint32_t textureHandle_;
 	uint32_t textureHandleSkyBox_;
 
+	//操作説明スプライト
 	std::unique_ptr<YKEngine::Sprite> operationGuideSprite_;
+	std::unique_ptr<YKEngine::Sprite> operationGuideSpriteKeyboard_;
 
 	//シーンチェンジ演出
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;

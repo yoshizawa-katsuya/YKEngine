@@ -83,6 +83,7 @@ private:
 	std::unique_ptr<CameraManager> cameraManager_;
 
 	std::unique_ptr<YKEngine::Sprite> spriteTitle_;//タイトルのスプライト
+	std::unique_ptr<YKEngine::Sprite> spriteTitleKeyboard_;//キーボード操作説明のスプライト
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 

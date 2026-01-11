@@ -79,6 +79,7 @@ private:
 	std::unique_ptr<CameraManager> cameraManager_;
 
 	std::unique_ptr<YKEngine::Sprite> spriteBackGround_;
+	std::unique_ptr<YKEngine::Sprite> spriteClearKeyboard_;
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
