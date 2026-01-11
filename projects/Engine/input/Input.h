@@ -196,6 +196,12 @@ public:
 	/// <returns>右スティックのY方向の入力値。</returns>
 	float GetRightStickY();
 
+	/// <summary>
+	/// ゲームパッドが接続されているかどうか。
+	/// </summary>
+	/// <returns>接続されていればtrue。そうでなければfalse。</returns>
+	bool IsConnected() { return isConnected_; }
+
 private:
 
 	/*
@@ -245,6 +251,9 @@ private:
 	const int32_t kDeadZone_ = 8000;
 	XINPUT_STATE gamePadState_;
 	XINPUT_STATE preGamePadState_;
+
+	// ゲームパッドが接続されているかどうか
+	bool isConnected_ = false;
 
 };
 
