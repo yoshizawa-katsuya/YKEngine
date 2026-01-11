@@ -62,7 +62,7 @@ void Input::Update()
 	mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState_);
 
 	//ゲームパッドの更新
-	GamePadUpdate();
+	isConnected_ = GamePadUpdate();
 
 }
 
