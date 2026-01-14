@@ -13,9 +13,8 @@ public:
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	/// <param name="model">モデル</param>
 	/// <param name="parent">親のワールド変換</param>
-	void Initialize(YKEngine::BaseModel* model, YKEngine::WorldTransform* parent);
+	void Initialize(YKEngine::WorldTransform* parent);
 
 	/// <summary>
 	/// 更新

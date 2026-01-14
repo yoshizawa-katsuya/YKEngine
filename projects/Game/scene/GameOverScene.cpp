@@ -22,12 +22,9 @@ void GameOverScene::Initialize()
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
-	//texture読み込み
-	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/gameOver.png");
-	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
-
+	//スプライトの生成
 	spriteBackGround_ = std::make_unique<Sprite>();
-	spriteBackGround_->Initialize(textureHandle);
+	spriteBackGround_->Initialize(TextureManager::GetInstance()->Load("./Resources/gameOver.png"));
 
 	spriteGameOverKeyBoard_ = std::make_unique<Sprite>();
 	spriteGameOverKeyBoard_->Initialize(TextureManager::GetInstance()->Load("./Resources/gameoverKeyboard.png"));

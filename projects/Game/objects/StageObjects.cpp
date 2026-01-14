@@ -4,13 +4,16 @@
 
 using namespace YKEngine;
 
-void StageObjects::Initialize(uint32_t textureHandleSkyBox)
+void StageObjects::Initialize()
 {
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
 
+	//テクスチャの読み込み
+	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
+
 	//スカイボックスの生成
 	skyBox_ = std::make_unique<My3dObject>();
-	skyBox_->Initialize(modelPlatform->CreateSkyBox(textureHandleSkyBox).get());
+	skyBox_->Initialize(modelPlatform->CreateSkyBox(textureHandleSkyBox_).get());
 	WorldTransform skyBoxTransform;
 	skyBoxTransform.Initialize();
 	const float kSkyBoxScale = 1000.0f;

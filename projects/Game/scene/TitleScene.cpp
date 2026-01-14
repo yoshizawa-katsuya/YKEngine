@@ -29,8 +29,6 @@ void TitleScene::Initialize()
 	//テクスチャの読み込み
 	uint32_t textureHandleTitle = TextureManager::GetInstance()->Load("./Resources/title.png");
 	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
-	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
-	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
 	spriteTitle_ = std::make_unique<Sprite>();
 	spriteTitle_->Initialize(textureHandleTitle);
@@ -40,7 +38,7 @@ void TitleScene::Initialize()
 
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
-	stageObjects_->Initialize(textureHandleSkyBox_);
+	stageObjects_->Initialize();
 
 	CreateLevel();
 
@@ -100,7 +98,7 @@ void TitleScene::Draw()
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
-	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
+	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), stageObjects_->GetTextureHandleSkyBox());
 
 	//地面の描画
 	stageObjects_->Draw(mainCamera);

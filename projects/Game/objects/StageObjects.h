@@ -15,8 +15,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="textureHandleSkyBox">スカイボックスのテクスチャハンドル</param>
-	void Initialize(uint32_t textureHandleSkyBox);
+	void Initialize();
 
 	/// <summary>
 	/// 描画
@@ -39,7 +38,16 @@ public:
 	/// </summary>
 	void InstancingDraw(YKEngine::Camera* camera);
 
+	/// <summary>
+	/// スカイボックスのテクスチャハンドル取得
+	/// </summary>
+	/// <returns>テクスチャハンドル</returns>
+	uint32_t GetTextureHandleSkyBox() const { return textureHandleSkyBox_; }
+
 private:
+
+	//テクスチャハンドル
+	uint32_t textureHandleSkyBox_;
 
 	//スカイボックス
 	std::unique_ptr<YKEngine::My3dObject> skyBox_;

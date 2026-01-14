@@ -29,23 +29,15 @@ void ClearScene::Initialize()
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
-	//texture読み込み
-	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/clear.png");
-	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
-	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
-
 	spriteBackGround_ = std::make_unique<Sprite>();
-	spriteBackGround_->Initialize(textureHandle);
+	spriteBackGround_->Initialize(TextureManager::GetInstance()->Load("./Resources/clear.png"));
 
 	spriteClearKeyboard_ = std::make_unique<Sprite>();
 	spriteClearKeyboard_->Initialize(TextureManager::GetInstance()->Load("./Resources/clearKeyboard.png"));
-
-	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
 	
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
-	stageObjects_->Initialize(textureHandleSkyBox_);
+	stageObjects_->Initialize();
 
 	CreateLevel();
 
@@ -116,7 +108,7 @@ void ClearScene::Draw()
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
-	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
+	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), stageObjects_->GetTextureHandleSkyBox());
 	
 	//デモ用プレイヤーの描画
 	demoPlayer_->Draw(mainCamera);
@@ -195,7 +187,7 @@ void ClearScene::CreateLevel()
 
 	//デモ用プレイヤーの生成
 	demoPlayer_ = std::make_unique<DemoPlayer>();
-	demoPlayer_->Initialize(modelPlayer_.get(), railMover_->GetWorldTransform());
+	demoPlayer_->Initialize(railMover_->GetWorldTransform());
 
 	// 背景オブジェクトの生成
 	stageObjects_->GetInstancingObject(levelData.objects);

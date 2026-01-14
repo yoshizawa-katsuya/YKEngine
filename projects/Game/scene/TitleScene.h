@@ -89,10 +89,6 @@ private:
 
 	std::shared_ptr<YKEngine::BaseModel> modelGround_;
 
-	//テクスチャハンドル
-	uint32_t textureHandle_;
-	uint32_t textureHandleSkyBox_;
-
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;
 

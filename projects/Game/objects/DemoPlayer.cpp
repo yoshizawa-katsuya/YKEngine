@@ -1,15 +1,13 @@
 #include "DemoPlayer.h"
 #include "manager/EffectManager.h"
+#include "ModelPlatform.h"
 
 using namespace YKEngine;
 
-void DemoPlayer::Initialize(BaseModel* model, WorldTransform* parent)
+void DemoPlayer::Initialize(WorldTransform* parent)
 {
-	// NULLポインタチェック
-	assert(model);
-
 	object_ = std::make_unique<My3dObject>();
-	object_->Initialize(model);
+	object_->Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
 
 	worldTransform_.Initialize();
 	worldTransform_.parent_ = parent;

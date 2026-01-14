@@ -21,12 +21,8 @@ public:
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	/// <param name="model">モデル</param>
-	/// <param name="viewPortMatrix">ビューポート行列。レティクルをワールド座標に変換するために使用。</param>
 	/// <param name="parent">親のワールド変換</param>
-	/// <param name="heartTextureHandle">ハートテクスチャのハンドル</param>
-	/// <param name="heartEmptyTexturehandle">空のハートテクスチャのハンドル</param>
-	void Initialize(YKEngine::BaseModel* model, YKEngine::WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
+	void Initialize(YKEngine::WorldTransform* parent);
 
 	/// <summary>
 	/// 更新。
@@ -92,9 +88,7 @@ private:
 	/// <summary>
 	/// HUDの初期化。
 	/// </summary>
-	/// <param name="heartTextureHandle">ハートテクスチャのハンドル</param>
-	/// <param name="heartEmptyTexturehandle">空のハートテクスチャのハンドル</param>
-	void HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle);
+	void HUDInitialize();
 
 	/// <summary>
 	/// 移動入力の処理
@@ -192,8 +186,8 @@ private:
 	const int kMaxHitPoint_ = 5; // 最大ヒットポイント
 	int hitPoint_ = kMaxHitPoint_; // プレイヤーのヒットポイント
 
-	std::vector<std::unique_ptr<YKEngine::Sprite>> heratSprites_; // ヒットポイントのスプライト
-	std::vector<std::unique_ptr<YKEngine::Sprite>> heratEmptySprites_; // ヒットポイントがないときのスプライト
+	std::vector<std::unique_ptr<YKEngine::Sprite>> heartSprites_; // ヒットポイントのスプライト
+	std::vector<std::unique_ptr<YKEngine::Sprite>> heartEmptySprites_; // ヒットポイントがないときのスプライト
 
 	float chargeTime_ = 0.0f; // チャージ時間
 	const float kMaxChargeTime_ = 1.0f; // 最大チャージ時間

@@ -130,13 +130,6 @@ private:
 	//平行光源
 	YKEngine::DirectionalLight directionalLight_;
 
-	//3Dモデル
-	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
-
-	//テクスチャハンドル
-	uint32_t textureHandle_;
-	uint32_t textureHandleSkyBox_;
-
 	//操作説明スプライト
 	std::unique_ptr<YKEngine::Sprite> operationGuideSprite_;
 	std::unique_ptr<YKEngine::Sprite> operationGuideSpriteKeyboard_;

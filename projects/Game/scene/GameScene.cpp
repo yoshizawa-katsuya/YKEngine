@@ -30,10 +30,6 @@ void GameScene::Initialize() {
 	modelPlatform_ = ModelPlatform::GetInstance();
 
 	dxCommon_->ResetDeltaTime();
-	
-	//テクスチャの読み込み
-	textureHandle_ = TextureManager::GetInstance()->Load("./Resources/white.png");
-	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
 	//スプライトの生成
 	operationGuideSprite_ = std::make_unique<Sprite>();
@@ -42,12 +38,9 @@ void GameScene::Initialize() {
 	operationGuideSpriteKeyboard_ = std::make_unique<Sprite>();
 	operationGuideSpriteKeyboard_->Initialize(TextureManager::GetInstance()->Load("./Resources/operationHUDKeyboard.png"));
 
-	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./Resources/player", "Player.obj");
-
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
-	stageObjects_->Initialize(textureHandleSkyBox_);
+	stageObjects_->Initialize();
 
 	//自機の弾マネージャーの生成
 	playerBulletManager_ = std::make_unique<PlayerBulletManager>();
@@ -166,7 +159,7 @@ void GameScene::Draw()
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
-	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
+	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), stageObjects_->GetTextureHandleSkyBox());
 
 	stageObjects_->Draw(mainCamera);
 
@@ -313,6 +306,9 @@ void GameScene::UpdateGameOver()
 	//プレイヤーの更新
 	player_->Update(railCamera);
 
+	//自機の弾の更新
+	playerBulletManager_->Update();
+
 	//レールカメラの更新
 	cameraManager_->UpdateRailCamera();
 
@@ -399,12 +395,9 @@ void GameScene::CreateLevel()
 	railMover_ = std::make_unique<RailMover>();
 	railMover_->Initialize(levelData.splines[0].controlPoints, enemySpawnManager_.get(), false);
 
-	uint32_t heratTextureHandle = TextureManager::GetInstance()->Load("./Resources/heart.png");
-	uint32_t heratFrameTextureHandle = TextureManager::GetInstance()->Load("./Resources/heartFrame.png");
-
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get(), railMover_->GetWorldTransform(), heratTextureHandle, heratFrameTextureHandle);
+	player_->Initialize(railMover_->GetWorldTransform());
 	player_->SetPlayerBulletManager(playerBulletManager_.get());
 
 	//エネミースポーンデータの設定
@@ -412,9 +405,6 @@ void GameScene::CreateLevel()
 	
 	//イベントトリガーマネージャーの生成
 	eventTriggerManager_ = std::make_unique<EventTriggerManager>();
-
-	//オブジェクトの生成
-	std::string key;
 
 	//イベントトリガーの生成
 	eventTriggerManager_->CreateEventTriggers(levelData.objects);

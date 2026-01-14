@@ -9,6 +9,7 @@
 #include "Matrix.h"
 #include "manager/EffectManager.h"
 #include "Random.h"
+#include "ModelPlatform.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -16,10 +17,9 @@
 
 using namespace YKEngine;
 
-void Player::Initialize(BaseModel* model, WorldTransform* parent, uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
+void Player::Initialize(WorldTransform* parent)
 {
-
-	BaseCharacter::Initialize(model);
+	BaseCharacter::Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
 
 	input_ = Input::GetInstance();
@@ -40,7 +40,7 @@ void Player::Initialize(BaseModel* model, WorldTransform* parent, uint32_t heart
 	reticleController_ = std::make_unique<ReticleController>();
 	reticleController_->Initialize();
 
-	HUDInitialize(heartTextureHandle, heartEmptyTexturehandle);
+	HUDInitialize();
 
 }
 
@@ -116,11 +116,11 @@ void Player::DrawUI()
 	{
 		if (i < hitPoint_)
 		{
-			heratSprites_[i]->Draw();
+			heartSprites_[i]->Draw();
 		}
 		else
 		{
-			heratEmptySprites_[i]->Draw();
+			heartEmptySprites_[i]->Draw();
 		}
 	}
 }
@@ -157,22 +157,26 @@ void Player::SetGameClear()
 
 }
 
-void Player::HUDInitialize(uint32_t heartTextureHandle, uint32_t heartEmptyTexturehandle)
+void Player::HUDInitialize()
 {
-	heratSprites_.resize(kMaxHitPoint_);
-	heratEmptySprites_.resize(kMaxHitPoint_);
+	//ハートのテクスチャ読み込み
+	uint32_t heartTextureHandle = TextureManager::GetInstance()->Load("./Resources/heart.png");
+	uint32_t heartEmptyTexturehandle = TextureManager::GetInstance()->Load("./Resources/heartFrame.png");
+
+	heartSprites_.resize(kMaxHitPoint_);
+	heartEmptySprites_.resize(kMaxHitPoint_);
 
 	for (int i = 0; i < kMaxHitPoint_; i++)
 	{
-		heratSprites_[i] = std::make_unique<Sprite>();
-		heratSprites_[i]->Initialize(heartTextureHandle);
-		heratSprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 30.0f)); //位置を設定
-		heratSprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
+		heartSprites_[i] = std::make_unique<Sprite>();
+		heartSprites_[i]->Initialize(heartTextureHandle);
+		heartSprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 30.0f)); //位置を設定
+		heartSprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
 
-		heratEmptySprites_[i] = std::make_unique<Sprite>();
-		heratEmptySprites_[i]->Initialize(heartEmptyTexturehandle);
-		heratEmptySprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 30.0f)); //位置を設定
-		heratEmptySprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
+		heartEmptySprites_[i] = std::make_unique<Sprite>();
+		heartEmptySprites_[i]->Initialize(heartEmptyTexturehandle);
+		heartEmptySprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 30.0f)); //位置を設定
+		heartEmptySprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
 	}
 }
 

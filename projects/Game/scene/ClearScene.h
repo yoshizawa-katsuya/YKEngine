@@ -83,11 +83,6 @@ private:
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
-	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
-
-	//テクスチャハンドル
-	uint32_t textureHandleSkyBox_;
-
 	//ステージオブジェクト
 	std::unique_ptr<StageObjects> stageObjects_;
 
