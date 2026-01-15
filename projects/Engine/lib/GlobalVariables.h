@@ -89,7 +89,7 @@ public:
 	/// <param name="groupName">グループ名</param>
 	/// <param name="key">キー名</param>
 	/// <param name="value">値</param>
-	void AddItem(const std::string& groupName, const std::string& key, int32_t value);
+	void AddItem(const std::string& groupName, const std::string& key, int32_t value = 0);
 	
 	/// <summary>
 	/// 項目の追加(float)
@@ -97,7 +97,7 @@ public:
 	/// <param name="groupName">グループ名</param>
 	/// <param name="key">キー名</param>
 	/// <param name="value">値</param>
-	void AddItem(const std::string& groupName, const std::string& key, float value);
+	void AddItem(const std::string& groupName, const std::string& key, float value = 0.0f);
 	
 	/// <summary>
 	/// 項目の追加(Vector3)
@@ -105,7 +105,7 @@ public:
 	/// <param name="groupName">グループ名</param>
 	/// <param name="key">キー名</param>
 	/// <param name="value">値</param>
-	void AddItem(const std::string& groupName, const std::string& key, const Vector3& value);
+	void AddItem(const std::string& groupName, const std::string& key, const Vector3& value = { 0.0f, 0.0f, 0.0f });
 	
 	/// <summary>
 	/// 項目の追加(Vector4)
@@ -113,7 +113,7 @@ public:
 	/// <param name="groupName">グループ名</param>
 	/// <param name="key">キー名</param>
 	/// <param name="value">値</param>
-	void AddItem(const std::string& groupName, const std::string& key, const Vector4& value);
+	void AddItem(const std::string& groupName, const std::string& key, const Vector4& value = { 0.0f, 0.0f, 0.0f, 0.0f });
 	
 	/// <summary>
 	/// 項目の追加(Color)
@@ -121,7 +121,7 @@ public:
 	/// <param name="groupName">グループ名</param>
 	/// <param name="key">キー名</param>
 	/// <param name="value">値</param>
-	void AddItem(const std::string& groupName, const std::string& key, const Color& value);
+	void AddItem(const std::string& groupName, const std::string& key, const Color& value = { 0.0f, 0.0f, 0.0f, 0.0f });
 	
 	/// <summary>
 	/// 項目の追加(bool)
@@ -129,7 +129,7 @@ public:
 	/// <param name="groupName">グループ名</param>
 	/// <param name="key">キー名</param>
 	/// <param name="value">値</param>
-	void AddItem(const std::string& groupName, const std::string& key, bool value);
+	void AddItem(const std::string& groupName, const std::string& key, bool value = false);
 
 	///<summary>
 	///ファイルに書き出し
