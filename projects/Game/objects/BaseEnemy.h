@@ -3,7 +3,6 @@
 #include "EnemySpawn.h"
 class Player;
 class EnemyBulletManager;
-class YKEngine::Camera;
 
 /// <summary>
 /// 敵の基底クラス。

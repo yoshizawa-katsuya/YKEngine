@@ -1,0 +1,6 @@
+{
+    "EnemyShot01": {
+        "BulletSpeed": 0.5,
+        "FireInterval": 1.0
+    }
+}

@@ -3,6 +3,8 @@
 #include "CollisionManager.h"
 #include "bullet/EnemyHomingBullet01.h"
 #include "bullet/TargetEnemyBullet01.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -12,6 +14,11 @@ void EnemyBulletManager::Initialize()
 	//モデル生成
 	modelEnemyBulletMap_[EnemyBulletType::kTarget] = modelPlatform->CreateRigidModel("./Resources/enemyBullet", "TargetEnemyBullet.obj");
 	modelEnemyBulletMap_[EnemyBulletType::kHoming] = modelPlatform->CreateRigidModel("./Resources/enemyBullet", "HomingEnemyBullet.obj");
+
+	//調整項目をjsonに登録
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	globalVariables->CreateGroup(JsonKey::Bullet::Enemy::kGroupName);
+	globalVariables->AddItem(JsonKey::Bullet::Enemy::kGroupName, JsonKey::Bullet::kRotateSpeed, 0.0f);
 }
 
 void EnemyBulletManager::Update(Camera* railCamera)

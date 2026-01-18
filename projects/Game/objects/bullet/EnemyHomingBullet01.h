@@ -29,7 +29,7 @@ private:
 	/// <summary>
 	/// ターゲットに向かって追尾する。
 	/// </summary>
-	void Homig();
+	void Homing();
 
 	Player* target_ = nullptr;
 	bool isHoming_ = true; // ホーミング弾かどうか

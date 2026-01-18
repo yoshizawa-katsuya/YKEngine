@@ -35,7 +35,7 @@ private:
 	/// <summary>
 	/// ターゲットに向かって追尾する。
 	/// </summary>
-	void Homig();
+	void Homing();
 
 	YKEngine::WorldTransform target_;
 	bool isHoming_ = true; // ホーミング弾かどうか

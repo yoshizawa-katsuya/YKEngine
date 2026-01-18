@@ -10,7 +10,7 @@ ShotEnemy01::~ShotEnemy01()
 void ShotEnemy01::MainInitialize()
 {
 	//発射タイマーを初期化
-	fireTimer_ = kFireInterval_ + waitTime_;
+	fireTimer_ = params_.fireInterval + waitTime_;
 
 }
 
@@ -23,7 +23,7 @@ void ShotEnemy01::UpdateMain()
 		//弾を発射
 		Fire();
 		//発射タイマーを初期化
-		fireTimer_ = kFireInterval_;
+		fireTimer_ = params_.fireInterval;
 	}
 
 	BaseEnemy::UpdateMain();
@@ -31,14 +31,11 @@ void ShotEnemy01::UpdateMain()
 
 void ShotEnemy01::Fire() 
 {
-
-	//弾の速さ
-	const float kBulletSpeed = 0.5f;
-
+	//弾の速度を計算
 	Vector3 velocity = Normalize(direction_);
-	velocity = Multiply(kBulletSpeed, velocity);
+	velocity = Multiply(params_.bulletSpeed, velocity);
 
 	// 弾を生成し、初期化
-	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, kBulletSpeed, bulletType_);
+	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, params_.bulletSpeed, params_.bulletType);
 
 }

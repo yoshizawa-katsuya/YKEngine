@@ -15,7 +15,7 @@ void BaseBullet::Initialize(BaseModel* model, const Vector3& position, const Vec
 	//移動方向に向ける
 	Rotate();
 
-	SetRadius(0.5f);
+	radius_ = 0.5f; //仮の当たり判定半径
 }
 
 void BaseBullet::Update()

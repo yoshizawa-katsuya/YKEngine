@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseEnemy.h"
 #include "bullet/EnemyBulletType.h"
+#include "EnemyParams.h"
 
 /// <summary>
 /// 自機狙い弾を撃つ敵キャラクター。
@@ -30,15 +31,19 @@ public:
 	/// </summary>
 	void Fire();
 
+	/// <summary>
+	/// パラメータの設定。
+	/// </summary>
+	/// <param name="params">パラメータ。</param>
+	void SetParams(ShotEnemyParams params) { params_ = params; }
+
 protected:
 
-	//発射間隔
-	const float kFireInterval_ = 1.0f;
+	// パラメータ
+	ShotEnemyParams params_;
+
 	//発射タイマー
 	float fireTimer_ = 0.0f;
-
-	//弾の種類
-	EnemyBulletType bulletType_ = EnemyBulletType::kTarget;
 
 };
 

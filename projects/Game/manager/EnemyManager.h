@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseEnemy.h"
 #include "EnemySpawn.h"
-class YKEngine::Camera;
+#include "EnemyParams.h"
 class Player;
 class EnemyBulletManager;
 class CollisionManager;
@@ -46,15 +46,22 @@ public:
 	/// <param name="collisionManager">コリジョンマネージャーのポインタ</param>
 	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
-	const std::list<std::unique_ptr<BaseEnemy>>& GetEnemies() { return enemys_; }
+	const std::list<std::unique_ptr<BaseEnemy>>& GetEnemies() { return enemies_; }
 
 private:
+
+	/// <summary>
+	/// パラメータのセットアップ。
+	/// </summary>
+	void ParamsSetup();
 
 	//敵のモデル
 	std::map<EnemyType, std::shared_ptr<YKEngine::BaseModel>> modelEnemyMap_;
 
+	std::map<EnemyType, ShotEnemyParams> shotEnemyParamsMap_;
+
 	//敵のリスト
-	std::list<std::unique_ptr<BaseEnemy>> enemys_;
+	std::list<std::unique_ptr<BaseEnemy>> enemies_;
 
 	//プレイヤーのポインタ
 	Player* player_ = nullptr;

@@ -1,7 +1,6 @@
 #pragma once
 #include "bullet/BasePlayerBullet.h"
 #include "bullet/PlayerBulletType.h"
-class YKEngine::Camera;
 class CollisionManager;
 class BaseEnemy;
 

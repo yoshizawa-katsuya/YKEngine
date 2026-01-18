@@ -25,13 +25,13 @@ void TargetEnemyBullet01::Move()
 {
 	if (isHoming_)
 	{
-		Homig();
+		Homing();
 	}
 
 	BaseBullet::Move();
 }
 
-void TargetEnemyBullet01::Homig()
+void TargetEnemyBullet01::Homing()
 {
 	//ターゲットに向かって移動する
 	Vector3 direction = target_.GetWorldPosition() - worldTransform_.GetWorldPosition();

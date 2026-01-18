@@ -378,9 +378,6 @@
     <ClCompile Include="Game\objects\bullet\TargetEnemyBullet01.cpp">
       <Filter>ソース ファイル\application\objects\bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\ShotEnemy02.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\objects\TackleEnemy02.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
@@ -769,11 +766,14 @@
     <ClInclude Include="Game\objects\SceneChangeStaging.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\ShotEnemy02.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\TackleEnemy02.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\JsonKeys.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\EnemyParams.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

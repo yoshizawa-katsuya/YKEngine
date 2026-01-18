@@ -2,6 +2,8 @@
 #include "cassert"
 #include "TextureManager.h"
 #include "Vector3.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -16,8 +18,8 @@ void BaseEnemyBullet::Initialize(BaseModel* model, const Vector3& position, cons
 void BaseEnemyBullet::Update(Camera* railCamera)
 {
 	//弾の回転
-	const float kRotationSpeed = 0.1f;
-	characterWorldTransform_.rotation_.z += kRotationSpeed;
+	const float kRotateSpeed = GlobalVariables::GetInstance()->GetFloatValue(JsonKey::Bullet::Enemy::kGroupName, JsonKey::Bullet::kRotateSpeed);
+	characterWorldTransform_.rotation_.z += kRotateSpeed;
 
 	BaseBullet::Update();
 
