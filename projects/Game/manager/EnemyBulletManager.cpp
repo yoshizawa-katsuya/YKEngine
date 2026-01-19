@@ -17,8 +17,11 @@ void EnemyBulletManager::Initialize()
 
 	//調整項目をjsonに登録
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-	globalVariables->CreateGroup(JsonKey::Bullet::Enemy::kGroupName);
-	globalVariables->AddItem(JsonKey::Bullet::Enemy::kGroupName, JsonKey::Bullet::kRotateSpeed, 0.0f);
+	const std::string& enemyBulletGroupName = JsonKey::Bullet::Enemy::kGroupName;
+	globalVariables->CreateGroup(enemyBulletGroupName);
+	globalVariables->AddItem(enemyBulletGroupName, JsonKey::Bullet::kRotateSpeed, 0.0f);
+	globalVariables->AddItem(enemyBulletGroupName, JsonKey::Bullet::kStopDistance, 5.0f);
+	globalVariables->AddItem(enemyBulletGroupName, JsonKey::Bullet::kHomingLerpFactor, 0.13f);
 }
 
 void EnemyBulletManager::Update(Camera* railCamera)

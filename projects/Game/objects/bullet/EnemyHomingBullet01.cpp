@@ -1,6 +1,8 @@
 #include "EnemyHomingBullet01.h"
 #include "Player.h"
 #include "Lerp.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -25,16 +27,20 @@ void EnemyHomingBullet01::Move()
 
 void EnemyHomingBullet01::Homing()
 {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Bullet::Enemy::kGroupName;
+
 	//ターゲットに向かって移動する
 	Vector3 direction = target_->GetWorldPosition() - worldTransform_.GetWorldPosition();
 	//ある程度近づいたらホーミングをやめる
-	if (Length(direction) < 5.0f)
+	if (Length(direction) < globalVariables->GetFloatValue(groupName, JsonKey::Bullet::kStopDistance))
 	{
 		isHoming_ = false;
 		return;
 	}
 	direction = Normalize(direction);
 	Vector3 homing = direction * speed_;
+
 	//補間を使ってなめらかにする
-	velocity_ = Lerp(velocity_, homing, 0.13f);
+	velocity_ = Lerp(velocity_, homing, globalVariables->GetFloatValue(groupName, JsonKey::Bullet::kHomingLerpFactor));
 }

@@ -8,5 +8,5 @@ void ChargePlayerBullet01::Initialize(BaseModel* model, const Vector3& position,
 
 	attackPower_ = 3;
 
-	SetRadius(1.0f);
+	radius_ = 1.0f;
 }

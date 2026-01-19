@@ -4,6 +4,8 @@
 #include "Vector3.h"
 #include "manager/EffectManager.h"
 #include "BaseEnemy.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -25,7 +27,7 @@ void BasePlayerBullet::Update()
 {
 	// 回転
 	BaseBullet::Rotate();
-	const float kRotationSpeed = 0.3f;
+	const float kRotationSpeed = GlobalVariables::GetInstance()->GetFloatValue(JsonKey::Bullet::Player::kGroupName, JsonKey::Bullet::kRotateSpeed);
 	characterWorldTransform_.rotation_.z += kRotationSpeed;
 
 	// 目標追尾

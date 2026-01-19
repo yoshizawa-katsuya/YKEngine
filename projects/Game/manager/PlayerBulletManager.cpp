@@ -3,6 +3,8 @@
 #include "CollisionManager.h"
 #include "bullet/PlayerBullet01.h"
 #include "bullet/ChargePlayerBullet01.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -11,6 +13,11 @@ void PlayerBulletManager::Initialize()
 
 	//モデル生成
 	modelBullet_ = ModelPlatform::GetInstance()->CreateRigidModel("./Resources/playerBullet", "PlayerBullet.obj");
+
+	//調整項目をjsonに登録
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	globalVariables->CreateGroup(JsonKey::Bullet::Player::kGroupName);
+	globalVariables->AddItem(JsonKey::Bullet::Player::kGroupName, JsonKey::Bullet::kRotateSpeed, 0.3f);
 }
 
 void PlayerBulletManager::Update()
