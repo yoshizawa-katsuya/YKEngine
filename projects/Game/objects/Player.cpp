@@ -10,6 +10,8 @@
 #include "manager/EffectManager.h"
 #include "Random.h"
 #include "ModelPlatform.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -19,6 +21,10 @@ using namespace YKEngine;
 
 void Player::Initialize(WorldTransform* parent)
 {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Player::kGroupName;
+	globalVariables->CreateGroup(groupName);
+
 	BaseCharacter::Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
 
@@ -159,6 +165,13 @@ void Player::SetGameClear()
 
 void Player::HUDInitialize()
 {
+	//ハートの表示位置、サイズ、間隔をグローバル変数に登録
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Player::kGroupName;
+	globalVariables->AddItem(groupName, JsonKey::Player::kHeartPosition, Vector2(50.0f, 30.0f));
+	globalVariables->AddItem(groupName, JsonKey::Player::kHeartSize, Vector2(50.0f, 50.0f));
+	globalVariables->AddItem(groupName, JsonKey::Player::kHeartSpacing, 50.0f);
+
 	//ハートのテクスチャ読み込み
 	uint32_t heartTextureHandle = TextureManager::GetInstance()->Load("./Resources/heart.png");
 	uint32_t heartEmptyTexturehandle = TextureManager::GetInstance()->Load("./Resources/heartFrame.png");
@@ -166,17 +179,21 @@ void Player::HUDInitialize()
 	heartSprites_.resize(kMaxHitPoint_);
 	heartEmptySprites_.resize(kMaxHitPoint_);
 
+	Vector2 heartPosition = globalVariables->GetVector2Value(groupName, JsonKey::Player::kHeartPosition);
+	Vector2 heartSize = globalVariables->GetVector2Value(groupName, JsonKey::Player::kHeartSize);
+	float heartSpacing = globalVariables->GetFloatValue(groupName, JsonKey::Player::kHeartSpacing);
+
 	for (int i = 0; i < kMaxHitPoint_; i++)
 	{
 		heartSprites_[i] = std::make_unique<Sprite>();
 		heartSprites_[i]->Initialize(heartTextureHandle);
-		heartSprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 30.0f)); //位置を設定
-		heartSprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
+		heartSprites_[i]->SetPosition(Vector2(heartPosition.x + i * heartSpacing, heartPosition.y)); //位置を設定
+		heartSprites_[i]->SetSize(heartSize); //サイズを設定
 
 		heartEmptySprites_[i] = std::make_unique<Sprite>();
 		heartEmptySprites_[i]->Initialize(heartEmptyTexturehandle);
-		heartEmptySprites_[i]->SetPosition(Vector2(50.0f + i * 50.0f, 30.0f)); //位置を設定
-		heartEmptySprites_[i]->SetSize(Vector2(50.0f, 50.0f)); //サイズを設定
+		heartEmptySprites_[i]->SetPosition(Vector2(heartPosition.x + i * heartSpacing, heartPosition.y)); //位置を設定
+		heartEmptySprites_[i]->SetSize(heartSize); //サイズを設定
 	}
 }
 

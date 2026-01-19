@@ -36,4 +36,12 @@ namespace JsonKey
 			const std::string kGroupName = "EnemyShot02";
 		}
 	}
+
+	namespace Player
+	{
+		const std::string kGroupName = "Player";
+		const std::string kHeartPosition = "HeartPosition";
+		const std::string kHeartSize = "HeartSize";
+		const std::string kHeartSpacing = "HeartSpacing";
+	}
 }
