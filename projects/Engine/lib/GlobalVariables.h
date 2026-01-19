@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <Vector3.h>
+#include "Vector2.h"
 #include <json.hpp>
 #include "Vector4.h"
 #include "Color.h"
@@ -59,6 +60,14 @@ public:
 	void SetValue(const std::string& groupName, const std::string& key, const Vector3& value);
 
 	/// <summary>
+	/// 値のセット(Vector2)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
+	void SetValue(const std::string& groupName, const std::string& key, const Vector2& value);
+
+	/// <summary>
 	/// 値のセット(Vector4)
 	/// </summary>
 	/// <param name="groupName">グループ名</param>
@@ -107,6 +116,14 @@ public:
 	/// <param name="value">値</param>
 	void AddItem(const std::string& groupName, const std::string& key, const Vector3& value = { 0.0f, 0.0f, 0.0f });
 	
+	/// <summary>
+	/// 項目の追加(Vector2)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <param name="value">値</param>
+	void AddItem(const std::string& groupName, const std::string& key, const Vector2& value = { 0.0f, 0.0f });
+
 	/// <summary>
 	/// 項目の追加(Vector4)
 	/// </summary>
@@ -173,6 +190,14 @@ public:
 	Vector3 GetVector3Value(const std::string& groupName, const std::string& key) const;
 
 	/// <summary>
+	/// 値の取得(Vector2)
+	/// </summary>
+	/// <param name="groupName">グループ名</param>
+	/// <param name="key">キー名</param>
+	/// <returns>値</returns>
+	Vector2 GetVector2Value(const std::string& groupName, const std::string& key) const;
+
+	/// <summary>
 	/// 値の取得(Vector4)
 	/// </summary>
 	/// <param name="groupName">グループ名</param>
@@ -207,7 +232,7 @@ private:
 
 	//TODO: jsonの項目にtypeを追加して型安全にする
 	//項目
-	using Item = std::variant<int32_t, float, Vector3, Vector4, Color, bool>;
+	using Item = std::variant<int32_t, float, Vector2, Vector3, Vector4, Color, bool>;
 
 	//グループ
 	using Group = std::map<std::string, Item>;
@@ -231,7 +256,7 @@ private:
 	void GetValueInternal(const std::string& groupName, const std::string& key, Item& outValue) const;
 
 	//全データ
-	std::map<std::string, Group> datas_;
+	std::map<std::string, Group> dates_;
 
 	//グローバル変数の保存先ファイルパス
 	const std::string kDirectoryPath = "Resources/GlobalVariables/";
