@@ -60,6 +60,13 @@ void GlobalVariables::Update() {
 				ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
 			}
 
+			//Vector2型の値を保持していれば
+			else if (std::holds_alternative<Vector2>(item))
+			{
+				Vector2* ptr = std::get_if<Vector2>(&item);
+				ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
+			}
+
 			//Vector3型の値を保持していれば
 			else if (std::holds_alternative<Vector3>(item)) 
 			{
@@ -131,7 +138,7 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	SetValueInternal(groupName, key, value);
 }
 
-void YKEngine::GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector2& value)
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector2& value)
 {
 	SetValueInternal(groupName, key, value);
 }
@@ -166,7 +173,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 	AddItemInternal(groupName, key, value);
 }
 
-void YKEngine::GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector2& value)
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector2& value)
 {
 	AddItemInternal(groupName, key, value);
 }
@@ -420,7 +427,7 @@ Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std
 	return std::get<Vector3>(outValue);
 }
 
-Vector2 YKEngine::GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key) const
+Vector2 GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key) const
 {
 	Item outValue;
 	GetValueInternal(groupName, key, outValue);
