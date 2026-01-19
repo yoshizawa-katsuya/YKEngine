@@ -24,8 +24,8 @@ void GlobalVariables::Update() {
 	}
 	
 
-	for (std::map<std::string, Group>::iterator itGroup = datas_.begin();
-		itGroup != datas_.end(); ++itGroup) {
+	for (std::map<std::string, Group>::iterator itGroup = dates_.begin();
+		itGroup != dates_.end(); ++itGroup) {
 
 		//グループ名を取得
 		const std::string& groupName = itGroup->first;
@@ -112,7 +112,7 @@ void GlobalVariables::CreateGroup(const std::string& groupName)
 {
 
 	//指定名のオブジェクトがなければ追加する
-	datas_[groupName];
+	dates_[groupName];
 
 }
 
@@ -127,6 +127,11 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 }
 
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector3& value) 
+{
+	SetValueInternal(groupName, key, value);
+}
+
+void YKEngine::GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector2& value)
 {
 	SetValueInternal(groupName, key, value);
 }
@@ -161,6 +166,11 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 	AddItemInternal(groupName, key, value);
 }
 
+void YKEngine::GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector2& value)
+{
+	AddItemInternal(groupName, key, value);
+}
+
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector4& value)
 {
 	AddItemInternal(groupName, key, value);
@@ -180,10 +190,10 @@ void GlobalVariables::SaveFile(const std::string& groupName)
 {
 
 	//グループを検索
-	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+	std::map<std::string, Group>::iterator itGroup = dates_.find(groupName);
 
 	//未登録チェック
-	assert(itGroup != datas_.end());
+	assert(itGroup != dates_.end());
 
 	json root;
 
@@ -410,6 +420,13 @@ Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std
 	return std::get<Vector3>(outValue);
 }
 
+Vector2 YKEngine::GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key) const
+{
+	Item outValue;
+	GetValueInternal(groupName, key, outValue);
+	return std::get<Vector2>(outValue);
+}
+
 Vector4 GlobalVariables::GetVector4Value(const std::string& groupName, const std::string& key) const
 {
 	Item outValue;
@@ -434,7 +451,7 @@ bool GlobalVariables::GetBoolValue(const std::string& groupName, const std::stri
 void GlobalVariables::SetValueInternal(const std::string& groupName, const std::string& key, const Item& value)
 {
 	// グループの参照を取得
-	Group& group = datas_[groupName];
+	Group& group = dates_[groupName];
 	// 設定した項目をstd::mapに追加
 	group[key] = value;
 
@@ -443,7 +460,7 @@ void GlobalVariables::SetValueInternal(const std::string& groupName, const std::
 void GlobalVariables::AddItemInternal(const std::string& groupName, const std::string& key, const Item& value)
 {
 	// 項目が未登録の場合のみ追加
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end())
+	if (dates_.find(groupName)->second.find(key) == dates_.find(groupName)->second.end())
 	{
 		SetValueInternal(groupName, key, value);
 	}
@@ -451,9 +468,9 @@ void GlobalVariables::AddItemInternal(const std::string& groupName, const std::s
 
 void GlobalVariables::GetValueInternal(const std::string& groupName, const std::string& key, Item& outValue) const
 {
-	assert(datas_.find(groupName) != datas_.end());
+	assert(dates_.find(groupName) != dates_.end());
 	// グループの参照を取得
-	const Group& group = datas_.at(groupName);
+	const Group& group = dates_.at(groupName);
 
 	assert(group.find(key) != group.end());
 
