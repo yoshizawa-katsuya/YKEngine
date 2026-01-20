@@ -8,6 +8,8 @@
 #include "eventTrigger/SpeedEventTrigger.h"
 #include "eventTrigger/RotateEventTrigger.h"
 #include "eventTrigger/RotateResetEventTrigger.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -17,6 +19,12 @@ using namespace YKEngine;
 
 void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawnManager* enemySpawnManager, bool isLoop)
 {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::RailMover::kGroupName;
+	globalVariables->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, JsonKey::RailMover::kLerpAngleFactor, 0.1f);
+	globalVariables->AddItem(groupName, JsonKey::RailMover::kRotateDuration, 0.5f);
+
 	Collider::Initialize();
 	typeID_ = CollisionTypeIdDef::kRailMover;
 
@@ -139,7 +147,8 @@ void RailMover::OnCollision(Collider* other)
 		{
 			return;
 		}
-		srtAnimator_->SetAnimation(worldTransform_.rotation_, rotateEvent->GetRotate(), 0.5f);
+		const float rotateDuration = GlobalVariables::GetInstance()->GetFloatValue(JsonKey::RailMover::kGroupName, JsonKey::RailMover::kRotateDuration);
+		srtAnimator_->SetAnimation(worldTransform_.rotation_, rotateEvent->GetRotate(), rotateDuration);
 		isInRotateEvent_ = true;
 		nextRotateEventNumber_++;
 	}
@@ -204,5 +213,6 @@ void RailMover::UpdateRotate()
 	forward_ = Subtract(target_, worldTransform_.translation_);
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, forward_);
 	targetRotation.z = 0.0f; // Z軸回転を0に固定
-	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
+	const float lerpAngleFactor = GlobalVariables::GetInstance()->GetFloatValue(JsonKey::RailMover::kGroupName, JsonKey::RailMover::kLerpAngleFactor);
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, lerpAngleFactor);
 }

@@ -44,4 +44,20 @@ namespace JsonKey
 		const std::string kHeartSize = "HeartSize";
 		const std::string kHeartSpacing = "HeartSpacing";
 	}
+
+	namespace RailCamera
+	{
+		const std::string kGroupName = "RailCamera";
+		const std::string kClearLerpFactor = "ClearLerpFactor";
+		const std::string kClearLerpTranslateFactor = "ClearLerpTranslateFactor";
+		const std::string kClearLerpRotateFactor = "ClearLerpRotateFactor";
+		const std::string kGameOverIncrease = "GameOverIncrease";
+	}
+
+	namespace RailMover
+	{
+		const std::string kGroupName = "RailMover";
+		const std::string kRotateDuration = "RotateDuration";
+		const std::string kLerpAngleFactor = "LerpAngleFactor";
+	}
 }

@@ -50,7 +50,8 @@ void Player::Initialize(WorldTransform* parent)
 
 }
 
-void Player::Update(Camera* railCamera) {
+void Player::Update(Camera* railCamera)
+{
 
 
 #ifdef USE_IMGUI
@@ -69,6 +70,8 @@ void Player::Update(Camera* railCamera) {
 
 
 #endif // USE_IMGUI
+
+	HeartUpdate();
 
 	switch (phase_)
 	{
@@ -365,6 +368,28 @@ Vector3 Player::RotateCommon()
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
 
 	return targetRotation;
+}
+
+void Player::HeartUpdate()
+{
+#ifdef _DEBUG
+
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Player::kGroupName;
+	Vector2 heartPosition = globalVariables->GetVector2Value(groupName, JsonKey::Player::kHeartPosition);
+	Vector2 heartSize = globalVariables->GetVector2Value(groupName, JsonKey::Player::kHeartSize);
+	float heartSpacing = globalVariables->GetFloatValue(groupName, JsonKey::Player::kHeartSpacing);
+
+	for (int i = 0; i < kMaxHitPoint_; i++)
+	{
+		heartSprites_[i]->SetPosition(Vector2(heartPosition.x + i * heartSpacing, heartPosition.y)); //位置を設定
+		heartSprites_[i]->SetSize(heartSize); //サイズを設定
+
+		heartEmptySprites_[i]->SetPosition(Vector2(heartPosition.x + i * heartSpacing, heartPosition.y)); //位置を設定
+		heartEmptySprites_[i]->SetSize(heartSize); //サイズを設定
+	}
+#endif // _DEBUG
+
 }
 
 void Player::ReticleUpdate(Camera* railCamera)

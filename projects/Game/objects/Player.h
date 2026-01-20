@@ -127,6 +127,11 @@ private:
 	YKEngine::Vector3 RotateCommon();
 
 	/// <summary>
+	/// ハートの更新。
+	/// </summary>
+	void HeartUpdate();
+
+	/// <summary>
 	/// レティクルの更新。
 	/// </summary>
 	/// <param name="railCamera">レールカメラ。レティクルをワールド座標に変換するために使用。</param>
