@@ -371,6 +371,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\bullet\EnemyHomingBullet01.h" />
     <ClInclude Include="Game\manager\CameraManager.h" />
     <ClInclude Include="Game\objects\DemoPlayer.h" />
+    <ClInclude Include="Engine\lib\BaseState.hpp" />
     <ClInclude Include="Engine\lib\Color.h" />
     <ClInclude Include="Engine\2d\AnimatedSprite.h" />
     <ClInclude Include="Game\objects\EnemySpawnObject.h" />
@@ -468,6 +469,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\SceneChangeStaging.h" />
     <ClInclude Include="Game\objects\TackleEnemy02.h" />
     <ClInclude Include="Game\objects\JsonKeys.h" />
+    <ClInclude Include="Engine\lib\StateMachine.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
