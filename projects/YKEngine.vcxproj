@@ -331,6 +331,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\lib\BaseState.hpp" />
     <ClInclude Include="Engine\lib\Color.h" />
     <ClInclude Include="Engine\2d\AnimatedSprite.h" />
     <ClInclude Include="Engine\3d\My3dObject.h" />
@@ -392,6 +393,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\Random.h" />
     <ClInclude Include="Engine\lib\MyMath.h" />
     <ClInclude Include="Engine\lib\RootParams.h" />
+    <ClInclude Include="Engine\lib\StateMachine.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

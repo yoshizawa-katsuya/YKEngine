@@ -529,6 +529,12 @@
     <ClInclude Include="Engine\lib\RootParams.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\lib\BaseState.hpp">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\StateMachine.hpp">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
