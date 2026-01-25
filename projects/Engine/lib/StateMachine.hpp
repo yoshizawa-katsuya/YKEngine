@@ -40,7 +40,7 @@ private:
 
 	std::unique_ptr<BaseState<OwnerType>> currentState_ = nullptr; //!< 現在の状態
 
-	std::function<void()> changeStateFunc_ = nullptr; //!< 状態変更関数
+	std::function<void()> changeStateFunc_; //!< 状態変更関数
 
 };
 
@@ -48,14 +48,14 @@ template<typename OwnerType>
 inline void StateMachine<OwnerType>::Start(OwnerType* owner)
 {
 	owner_ = owner;
-	changeStateFunc_ = nullptr;
+	changeStateFunc_ = [](){};
 }
 
 template<typename OwnerType>
 inline void StateMachine<OwnerType>::Update()
 {
 	changeStateFunc_(); // 状態変更命令を実行
-	changeStateFunc_ = nullptr; // 状態変更命令をクリア
+	changeStateFunc_ = [](){}; // 状態変更命令をクリア
 
 	if (currentState_ != nullptr)
 	{
