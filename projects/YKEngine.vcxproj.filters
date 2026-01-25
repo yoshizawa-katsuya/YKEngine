@@ -124,6 +124,18 @@
     <Filter Include="ヘッダー ファイル\application\objects\player\state">
       <UniqueIdentifier>{02337f1c-223c-4699-8e4b-59eb756dd7f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\objects\demoPlayer">
+      <UniqueIdentifier>{14e00ab8-8fcf-49ab-ae11-f6ccb7c7f117}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\demoPlayer">
+      <UniqueIdentifier>{abd783d2-73f8-4bd4-bc65-6b8032bd574c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\objects\demoPlayer\state">
+      <UniqueIdentifier>{c20a2762-0f04-4182-9bc4-ff55ba7e5b8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\demoPlayer\state">
+      <UniqueIdentifier>{4a551c76-98ca-490c-8255-a54d6b3e4f99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -369,9 +381,6 @@
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\DemoPlayer.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\manager\CameraManager.cpp">
       <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
@@ -407,6 +416,21 @@
     </ClCompile>
     <ClCompile Include="Game\objects\player\state\PlayerGameOverState.cpp">
       <Filter>ソース ファイル\application\objects\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\demoPlayer\DemoPlayer.cpp">
+      <Filter>ソース ファイル\application\objects\demoPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\demoPlayer\state\DemoPlayerStateContext.cpp">
+      <Filter>ソース ファイル\application\objects\demoPlayer\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\demoPlayer\state\DemoPlayerStartState.cpp">
+      <Filter>ソース ファイル\application\objects\demoPlayer\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\demoPlayer\state\DemoPlayerMainState.cpp">
+      <Filter>ソース ファイル\application\objects\demoPlayer\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\demoPlayer\state\DemoPlayerEndState.cpp">
+      <Filter>ソース ファイル\application\objects\demoPlayer\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -766,9 +790,6 @@
     <ClInclude Include="Engine\lib\Color.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\DemoPlayer.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\lib\RootParams.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
@@ -822,6 +843,21 @@
     </ClInclude>
     <ClInclude Include="Game\objects\player\state\PlayerGameOverState.h">
       <Filter>ヘッダー ファイル\application\objects\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\demoPlayer\DemoPlayer.h">
+      <Filter>ヘッダー ファイル\application\objects\demoPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\demoPlayer\state\DemoPlayerStateContext.h">
+      <Filter>ヘッダー ファイル\application\objects\demoPlayer\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\demoPlayer\state\DemoPlayerStartState.h">
+      <Filter>ヘッダー ファイル\application\objects\demoPlayer\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\demoPlayer\state\DemoPlayerMainState.h">
+      <Filter>ヘッダー ファイル\application\objects\demoPlayer\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\demoPlayer\state\DemoPlayerEndState.h">
+      <Filter>ヘッダー ファイル\application\objects\demoPlayer\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

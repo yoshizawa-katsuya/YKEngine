@@ -160,7 +160,7 @@ void ClearScene::UpdateMain()
 	{
 		phase_ = Phase::kEnd;
 		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
-		demoPlayer_->SceneEnd();
+		demoPlayer_->SetIsSceneEnd(true);
 	}
 }
 
