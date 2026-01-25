@@ -68,7 +68,7 @@ private:
 	/// <param name="owner">状態を持つオーナー</param>
 	void CallExit(OwnerType* owner);
 
-private:
+protected:
 
 	// この状態を管理するステートマシンへのポインタ
 	StateMachine<OwnerType>* stateMachine_ = nullptr;

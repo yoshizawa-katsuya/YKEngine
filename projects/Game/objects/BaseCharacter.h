@@ -12,6 +12,11 @@ class BaseCharacter : public Collider
 public:
 
 	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~BaseCharacter() = default;
+
+	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="model">モデル</param>

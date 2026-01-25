@@ -60,6 +60,7 @@ void GameScene::Initialize() {
 	//カメラの生成
 	cameraManager_ = std::make_unique<CameraManager>();
 	cameraManager_->Initialize(railMover_->GetWorldTransform(), player_->GetWorldTransform());
+	player_->SetRailCamera(cameraManager_->GetRailCameraInner());
 
 	//敵マネージャーの生成
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -240,7 +241,7 @@ void GameScene::CheckAllColision()
 void GameScene::UpdateStart()
 {
 	//プレイヤーの更新
-	player_->Update(cameraManager_->GetRailCameraInner());
+	player_->Update();
 	if (player_->StartCompleted())
 	{
 		phase_ = Phase::kMain;
@@ -266,7 +267,7 @@ void GameScene::UpdateMain()
 	cameraManager_->UpdateRailCamera();
 
 	//プレイヤーの更新
-	player_->Update(railCamera);
+	player_->Update();
 
 	//自機の弾の更新
 	playerBulletManager_->Update();
@@ -279,7 +280,7 @@ void GameScene::UpdateMain()
 
 	CheckAllColision();
 
-	player_->SetLockOnTarget(enemyManager_->GetEnemies(), railCamera);
+	player_->SetLockOnTarget(enemyManager_->GetEnemies());
 
 	CheckGameClear();
 
@@ -289,7 +290,7 @@ void GameScene::UpdateMain()
 
 void GameScene::UpdateGameClear()
 {
-	player_->Update(cameraManager_->GetRailCameraInner());
+	player_->Update();
 
 	if (sceneChangeStaging_->IsFinished()) 
 	{
@@ -304,7 +305,7 @@ void GameScene::UpdateGameOver()
 	Camera* railCamera = cameraManager_->GetRailCameraInner();
 
 	//プレイヤーの更新
-	player_->Update(railCamera);
+	player_->Update();
 
 	//自機の弾の更新
 	playerBulletManager_->Update();
@@ -371,8 +372,7 @@ void GameScene::ProcessGameOver()
 {
 	phase_ = Phase::kGameOver;
 	isGameOverSceneChangeStagingStart_ = true;
-	player_->GameOverRotate();
-	player_->SetGameOver();
+	player_->SetIsDead(true);
 	cameraManager_->ProcessGameOver(player_->GetInverseLocalDirection());
 	enemyBulletManager_->SetIsGameOver(true);
 }

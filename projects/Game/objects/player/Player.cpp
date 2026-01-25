@@ -12,6 +12,7 @@
 #include "ModelPlatform.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "PlayerStartState.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -48,9 +49,13 @@ void Player::Initialize(WorldTransform* parent)
 
 	HUDInitialize();
 
+	stateMachine_ = std::make_unique<StateMachine<PlayerStateContext>>();
+	stateMachine_->Start(this);
+	stateMachine_->ChangeState<PlayerStartState>();
+
 }
 
-void Player::Update(Camera* railCamera)
+void Player::Update()
 {
 
 
@@ -73,24 +78,8 @@ void Player::Update(Camera* railCamera)
 
 	HeartUpdate();
 
-	switch (phase_)
-	{
-	case Phase::Start:
-		UpdateStart();
-		break;
-	case Phase::kMain:
-		UpdateMain(railCamera);
-		break;
-	case Phase::GameOver:
-		UpdateGameOver();
-		break;
-	case Phase::GameClear:
-		UpdateGameClear();
-		break;
-	default:
-		break;
-	}
-	
+	//状態遷移と更新
+	stateMachine_->Update();
 	
 }
 
@@ -134,9 +123,9 @@ void Player::DrawUI()
 	}
 }
 
-void Player::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, Camera* railCamera)
+void Player::SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies)
 {
-	reticleController_->SetLockOnTarget(enemies, railCamera);
+	reticleController_->SetLockOnTarget(enemies, railCamera_);
 }
 
 Vector3 Player::GetWorldPosition() {
@@ -158,12 +147,6 @@ void Player::GameOverRotate()
 	worldTransform_.rotation_ = targetRotation;
 
 	BaseCharacter::Update();
-}
-
-void Player::SetGameClear()
-{
-	phase_ = Phase::GameClear;
-
 }
 
 void Player::HUDInitialize()
@@ -255,17 +238,9 @@ void Player::UpdateStart()
 	effectManager->SpawnEffect(EffectType::kPlayerStart01, GetWorldPosition());
 	effectManager->SpawnEffect(EffectType::kPlayerStart02, GetWorldPosition());
 
-	if (startAnime_->GetIsEnd())
-	{
-		phase_ = Phase::kMain;
-		characterWorldTransform_.scale_ = { 1.0f, 1.0f, 1.0f };
-		characterWorldTransform_.rotation_ = { 0.0f, 0.0f, 0.0f };
-
-		effectManager->SpawnEffect(EffectType::kPlayerStart03, GetWorldPosition(), 100);
-	}
 }
 
-void Player::UpdateMain(Camera* railCamera)
+void Player::UpdateMain()
 {
 	HandleMoveInput();
 
@@ -283,7 +258,7 @@ void Player::UpdateMain(Camera* railCamera)
 	BaseCharacter::Update();
 
 	//照準オブジェクトの更新
-	ReticleUpdate(railCamera);
+	ReticleUpdate();
 
 	//ダメージリアクション処理
 	DamageReaction();
@@ -335,6 +310,15 @@ void Player::UpdateGameClear()
 
 	BaseCharacter::Update();
 
+}
+
+void Player::AfterStartComplete()
+{
+	characterWorldTransform_.scale_ = { 1.0f, 1.0f, 1.0f };
+	characterWorldTransform_.rotation_ = { 0.0f, 0.0f, 0.0f };
+
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerStart03, GetWorldPosition(), 100);
+	
 }
 
 void Player::Rotate()
@@ -392,9 +376,9 @@ void Player::HeartUpdate()
 
 }
 
-void Player::ReticleUpdate(Camera* railCamera)
+void Player::ReticleUpdate()
 {
-	reticleController_->Update(railCamera);
+	reticleController_->Update(railCamera_);
 }
 
 void Player::Attack() {

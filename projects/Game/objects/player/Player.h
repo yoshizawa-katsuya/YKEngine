@@ -5,6 +5,8 @@
 #include "Sprite.h"
 #include "BaseCharacter.h"
 #include "ReticleController.h"
+#include "StateMachine.hpp"
+#include "PlayerStateContext.h"
 class BaseEnemy;
 class PlayerBulletManager;
 
@@ -14,7 +16,7 @@ class PlayerBulletManager;
 /// BaseCharacterを継承。
 /// 位置はRailMoverを親に持つWorldTransformで管理。
 /// </summary>
-class Player : public BaseCharacter
+class Player : public BaseCharacter, private PlayerStateContext
 {
 public:
 
@@ -27,8 +29,7 @@ public:
 	/// <summary>
 	/// 更新。
 	/// </summary>
-	/// <param name="railCamera">レールカメラ。レティクルをワールド座標に変換するために使用。</param>
-	void Update(YKEngine::Camera* railCamera);
+	void Update();
 
 	/// <summary>
 	/// 衝突時の処理。
@@ -45,8 +46,7 @@ public:
 	/// ロックオンターゲットの設定。
 	/// </summary>
 	/// <param name="enemies">敵のリスト</param>
-	/// <param name="railCamera">レールカメラ。敵の位置をスクリーン座標に変換するために使用。</param>
-	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies, YKEngine::Camera* railCamera);
+	void SetLockOnTarget(const std::list<std::unique_ptr<BaseEnemy>>& enemies);
 
 	/// <summary>
 	/// ワールド座標の取得。
@@ -59,29 +59,33 @@ public:
 	/// </summary>
 	YKEngine::Vector3 GetInverseLocalDirection();
 
-	/// <summary>
-	/// ゲームオーバーになった瞬間の回転。
-	/// </summary>
-	void GameOverRotate();
-
 	YKEngine::WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
 	bool GetIsGameOverEnd() { return isGameOverEnd_; }
 
 	void SetPlayerBulletManager(PlayerBulletManager* playerBulletManager) { playerBulletManager_ = playerBulletManager; }
 
-	//スタート処理が終わっていたらtrue
-	bool StartCompleted() { return phase_ != Phase::Start; }
+	void SetRailCamera(YKEngine::Camera* railCamera) { railCamera_ = railCamera; }
 
-	/// <summary>
-	/// ゲームオーバーになったことを伝える。
-	/// </summary>
-	void SetGameOver() { phase_ = Phase::GameOver; }
+	//スタート処理が終わっていたらtrue
+	bool StartCompleted() override { return startAnime_->GetIsEnd(); }
 
 	/// <summary>
 	/// ゲームクリアになったことを伝える。
 	/// </summary>
-	void SetGameClear();
+	void SetGameClear() { isGameClear_ = true; }
+
+	/// <summary>
+	/// 死亡しているかどうか。
+	/// </summary>
+	/// <returns>死亡していたらtrue</returns>
+	bool IsDead() override { return isDead_; }
+
+	/// <summary>
+	/// 死亡状態の設定。デバッグ用。
+	/// </summary>
+	/// <param name="isDead">死亡していたらtrue</param>
+	void SetIsDead(bool isDead) { isDead_ = isDead; }
 
 private:
 
@@ -98,22 +102,32 @@ private:
 	/// <summary>
 	/// 開始部の更新
 	/// </summary>
-	void UpdateStart();
+	void UpdateStart() override;
 
 	/// <summary>
 	/// メインの更新
 	/// </summary>
-	void UpdateMain(YKEngine::Camera* railCamera);
+	void UpdateMain() override;
 
 	/// <summary>
 	/// ゲームオーバー時の更新
 	/// </summary>
-	void UpdateGameOver();
+	void UpdateGameOver() override;
 
 	/// <summary>
 	/// ゲームクリア時の更新
 	/// </summary>
-	void UpdateGameClear();
+	void UpdateGameClear() override;
+
+	/// <summary>
+	/// 開始処理が終わった後の処理。
+	/// </summary>
+	void AfterStartComplete() override;
+
+	/// <summary>
+	/// ゲームオーバーになった瞬間の回転。
+	/// </summary>
+	void GameOverRotate() override;
 
 	/// <summary>
 	/// 回転処理。レティクルの方向に向く。
@@ -134,8 +148,7 @@ private:
 	/// <summary>
 	/// レティクルの更新。
 	/// </summary>
-	/// <param name="railCamera">レールカメラ。レティクルをワールド座標に変換するために使用。</param>
-	void ReticleUpdate(YKEngine::Camera* railCamera);
+	void ReticleUpdate();
 
 	/// <summary>
 	/// 攻撃処理。
@@ -162,21 +175,19 @@ private:
 	/// </summary>
 	void DamageReaction();
 
+	bool GetIsGameClear() override { return isGameClear_; }
+
 	//キーボード入力
 	YKEngine::Input* input_ = nullptr;
 
-	enum class Phase 
-	{
-		Start,	// 開始
-		kMain,	// メイン
-		GameOver, // ゲームオーバー
-		GameClear, // ゲームクリア
-	};
-	//フェーズ
-	Phase phase_ = Phase::Start;
+	//ステートマシン
+	std::unique_ptr<YKEngine::StateMachine<PlayerStateContext>> stateMachine_;
 
 	//自機の弾のマネージャー
 	PlayerBulletManager* playerBulletManager_ = nullptr;
+
+	//レールカメラ
+	YKEngine::Camera* railCamera_ = nullptr;
 
 	//弾の発射間隔タイマー
 	float shotIntervalTimer_ = 0.0f;
@@ -204,5 +215,8 @@ private:
 
 	//ダメージリアクションタイマー
 	float damageReactionTimer_ = 0.0f;
+
+	//ゲームクリアしていたらtrue
+	bool isGameClear_ = false;
 };
 

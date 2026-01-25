@@ -112,6 +112,18 @@
     <Filter Include="ヘッダー ファイル\application\manager">
       <UniqueIdentifier>{76dcb174-40e6-43a7-8403-673a98fffff4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\objects\player">
+      <UniqueIdentifier>{ac06f807-b131-4859-ade3-0c305b5fe317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\player">
+      <UniqueIdentifier>{963bc377-19ed-4560-a94e-8f652fcdb7dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\objects\player\state">
+      <UniqueIdentifier>{bbc67ba3-283c-4b39-999e-aff164d696a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\player\state">
+      <UniqueIdentifier>{02337f1c-223c-4699-8e4b-59eb756dd7f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -140,9 +152,6 @@
     </ClCompile>
     <ClCompile Include="Game\scene\GameScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\Player.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\Input.cpp">
       <Filter>ソース ファイル\engine\input</Filter>
@@ -381,6 +390,24 @@
     <ClCompile Include="Game\objects\TackleEnemy02.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\player\Player.cpp">
+      <Filter>ソース ファイル\application\objects\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\player\state\PlayerStartState.cpp">
+      <Filter>ソース ファイル\application\objects\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\player\state\PlayerStateContext.cpp">
+      <Filter>ソース ファイル\application\objects\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\player\state\PlayerMainState.cpp">
+      <Filter>ソース ファイル\application\objects\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\player\state\PlayerClearState.cpp">
+      <Filter>ソース ファイル\application\objects\player\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\player\state\PlayerGameOverState.cpp">
+      <Filter>ソース ファイル\application\objects\player\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -495,9 +522,6 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\Vector3.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\Player.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\scene\GameScene.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
@@ -772,14 +796,32 @@
     <ClInclude Include="Game\objects\JsonKeys.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\EnemyParams.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\lib\BaseState.hpp">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
     <ClInclude Include="Engine\lib\StateMachine.hpp">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\player\Player.h">
+      <Filter>ヘッダー ファイル\application\objects\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\EnemyParams.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\player\state\PlayerStartState.h">
+      <Filter>ヘッダー ファイル\application\objects\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\player\state\PlayerStateContext.h">
+      <Filter>ヘッダー ファイル\application\objects\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\player\state\PlayerMainState.h">
+      <Filter>ヘッダー ファイル\application\objects\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\player\state\PlayerClearState.h">
+      <Filter>ヘッダー ファイル\application\objects\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\player\state\PlayerGameOverState.h">
+      <Filter>ヘッダー ファイル\application\objects\player\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
