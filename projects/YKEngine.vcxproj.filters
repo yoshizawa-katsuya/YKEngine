@@ -136,6 +136,18 @@
     <Filter Include="ヘッダー ファイル\application\objects\demoPlayer\state">
       <UniqueIdentifier>{4a551c76-98ca-490c-8255-a54d6b3e4f99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\scene\gameScene">
+      <UniqueIdentifier>{2d7ffcd1-b938-4d19-ba14-102b99b21cd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\scene\gameScene\state">
+      <UniqueIdentifier>{f987a18b-fb84-4a47-93d2-f243eb9b6d16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene\gameScene">
+      <UniqueIdentifier>{efe1f9ec-4309-4ef7-8c96-55961f73f9cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene\gameScene\state">
+      <UniqueIdentifier>{0ad9c753-59cf-47bc-90ac-040caa6455f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -161,9 +173,6 @@
     </ClCompile>
     <ClCompile Include="Engine\2d\Sprite.cpp">
       <Filter>ソース ファイル\engine\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\scene\GameScene.cpp">
-      <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\Input.cpp">
       <Filter>ソース ファイル\engine\input</Filter>
@@ -432,6 +441,27 @@
     <ClCompile Include="Game\objects\demoPlayer\state\DemoPlayerEndState.cpp">
       <Filter>ソース ファイル\application\objects\demoPlayer\state</Filter>
     </ClCompile>
+    <ClCompile Include="Game\scene\gameScene\GameScene.cpp">
+      <Filter>ソース ファイル\application\scene\gameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneTitleReturnState.cpp">
+      <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneStateContext.cpp">
+      <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneClearState.cpp">
+      <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneGameOverState.cpp">
+      <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneMainState.cpp">
+      <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneStartState.cpp">
+      <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -546,9 +576,6 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\Vector3.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\scene\GameScene.h">
-      <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\input\Input.h">
       <Filter>ヘッダー ファイル\engine\input</Filter>
@@ -858,6 +885,27 @@
     </ClInclude>
     <ClInclude Include="Game\objects\demoPlayer\state\DemoPlayerEndState.h">
       <Filter>ヘッダー ファイル\application\objects\demoPlayer\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameScene\GameScene.h">
+      <Filter>ヘッダー ファイル\application\scene\gameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneClearState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneGameOverState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneMainState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneStartState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneStateContext.h">
+      <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneTitleReturnState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

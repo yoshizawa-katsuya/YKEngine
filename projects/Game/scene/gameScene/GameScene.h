@@ -24,13 +24,15 @@
 #include "manager/EnemyBulletManager.h"
 #include "manager/CameraManager.h"
 #include "StageObjects.h"
+#include "StateMachine.hpp"
+#include "GameSceneStateContext.h"
 class SceneChangeStaging;
 
 /// <summary>
 /// ゲームシーン。
 /// ゲームのメイン処理を行う。 
 /// </summary>
-class GameScene : public YKEngine::BaseScene
+class GameScene : public YKEngine::BaseScene, private GameSceneStateContext
 {
 public:
 
@@ -64,47 +66,59 @@ private:
 	/// <summary>
 	/// 開始部の更新。
 	/// </summary>
-	void UpdateStart();
+	void UpdateStart() override;
 
 	/// <summary>
 	/// メイン部の更新。
 	/// </summary>
-	void UpdateMain();
+	void UpdateMain() override;
 
 	/// <summary>
 	/// クリア部の更新。
 	/// </summary>
-	void UpdateGameClear();
+	void UpdateGameClear() override;
 
 	/// <summary>
 	/// ゲームオーバー部の更新。
 	/// </summary>
-	void UpdateGameOver();
+	void UpdateGameOver() override;
 
 	/// <summary>
 	/// タイトルへ戻る部の更新。
 	/// </summary>
-	void UpdateTitleReturn();
+	void UpdateTitleReturn() override;
+
+	bool StartCompleted() override { return player_->StartCompleted(); }
 
 	/// <summary>
 	/// ゲームクリアかどうかを判定する。
 	/// </summary>
-	void CheckGameClear();
+	bool CheckGameClear() override { return railMover_->IsEnd() || isClear_; }
 
 	/// <summary>
 	/// ゲームオーバーかどうかを判定する。
 	/// </summary>
-	void CheckGameOver();
+	bool CheckGameOver() override { return player_->IsDead(); }
+
+	/// <summary>
+	/// タイトルへ戻るときにtrueを返す。
+	/// </summary>
+	bool IsReturnToTitle() override { return isReturnToTitleScene_; }
 
 	/// <summary>
 	/// ゲームオーバーに移行する際の処理。
 	/// </summary>
-	void ProcessGameOver();
+	void ProcessGameOver() override;
 
 	/// <summary>
 	/// クリアに移行する際の処理。
 	/// </summary>
-	void ProcessGameClear();
+	void ProcessGameClear() override;
+
+	/// <summary>
+	/// シーン終了演出の開始。
+	/// </summary>
+	void StartSceneEndStaging() override;
 
 	/// <summary>
 	/// 全ての衝突判定を行う。
@@ -164,17 +178,13 @@ private:
 	//イベントトリガーマネージャー
 	std::unique_ptr<EventTriggerManager> eventTriggerManager_;
 
-	//シーンのフェーズ
-	enum class Phase 
-	{
-		kStart,	//開始部
-		kMain,	//メイン部
-		kGameClear,	//クリア部
-		kGameOver,	//ゲームオーバー部
-		kTitleReturn, //タイトルへ戻る
-	};
+	//ステートマシン
+	std::unique_ptr<YKEngine::StateMachine<GameSceneStateContext>> stateMachine_;
 
-	//現在のフェーズ
-	Phase phase_ = Phase::kStart;
+	//タイトルへ戻るときはtrue
+	bool isReturnToTitleScene_ = false;
+
+	//クリアしていたらtrue。デバッグ用。
+	bool isClear_ = false;
 
 };

@@ -10,6 +10,7 @@
 #include "ShotEnemy01.h"
 #include "RootParams.h"
 #include "SceneChangeStaging.h"
+#include "GameSceneStartState.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -75,6 +76,9 @@ void GameScene::Initialize() {
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
 	sceneChangeStaging_->BeginSceneStart(StagingType::kFade);
 
+	stateMachine_ = std::make_unique<StateMachine<GameSceneStateContext>>();
+	stateMachine_->Start(this);
+	stateMachine_->ChangeState<GameSceneStartState>();
 }
 
 void GameScene::Update()
@@ -83,26 +87,7 @@ void GameScene::Update()
 	//カメラマネージャーの更新
 	cameraManager_->Update();
 
-	switch (phase_)
-	{
-	case Phase::kStart:
-		UpdateStart();
-		break;
-	case Phase::kMain:
-		UpdateMain();
-		break;
-	case Phase::kGameClear:
-		UpdateGameClear();
-		break;
-	case Phase::kGameOver:
-		UpdateGameOver();
-		break;
-	case Phase::kTitleReturn:
-		UpdateTitleReturn();
-		break;
-	default:
-		break;
-	}
+	stateMachine_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -125,16 +110,15 @@ void GameScene::Update()
 	
 	if (ImGui::Button("TitleScene")) 
 	{
-		phase_ = Phase::kTitleReturn;
-		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+		isReturnToTitleScene_ = true;
 	}
 	if (ImGui::Button("GameClear")) 
 	{
-		ProcessGameClear();
+		isClear_ = true;
 	}
 	if (ImGui::Button("GameOver")) 
 	{
-		ProcessGameOver();
+		player_->SetIsDead(true);
 	}
 
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
@@ -242,10 +226,6 @@ void GameScene::UpdateStart()
 {
 	//プレイヤーの更新
 	player_->Update();
-	if (player_->StartCompleted())
-	{
-		phase_ = Phase::kMain;
-	}
 	
 }
 
@@ -329,7 +309,7 @@ void GameScene::UpdateGameOver()
 	//シーン終了演出開始
 	if (isGameOverSceneChangeStagingStart_)
 	{
-		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+		StartSceneEndStaging();
 		isGameOverSceneChangeStagingStart_ = false;
 	}
 
@@ -349,28 +329,8 @@ void GameScene::UpdateTitleReturn()
 	}
 }
 
-void GameScene::CheckGameClear()
-{
-	//ゴールに到達したらゲームクリア
-	if (railMover_->IsEnd()) 
-	{
-		//ゲームクリア
-		ProcessGameClear();
-	}
-}
-
-void GameScene::CheckGameOver()
-{
-	//プレイヤーが死んだらゲームオーバー
-	if (player_->IsDead())
-	{
-		ProcessGameOver();
-	}
-}
-
 void GameScene::ProcessGameOver()
 {
-	phase_ = Phase::kGameOver;
 	isGameOverSceneChangeStagingStart_ = true;
 	player_->SetIsDead(true);
 	cameraManager_->ProcessGameOver(player_->GetInverseLocalDirection());
@@ -379,9 +339,13 @@ void GameScene::ProcessGameOver()
 
 void GameScene::ProcessGameClear()
 {
-	phase_ = Phase::kGameClear;
-	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+	StartSceneEndStaging();
 	player_->SetGameClear();
+}
+
+void GameScene::StartSceneEndStaging()
+{
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
 }
 
 void GameScene::CreateLevel()

@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,7 +92,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -109,6 +109,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneClearState.cpp" />
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneGameOverState.cpp" />
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneMainState.cpp" />
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneStartState.cpp" />
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneStateContext.cpp" />
+    <ClCompile Include="Game\scene\gameScene\state\GameSceneTitleReturnState.cpp" />
     <ClCompile Include="Game\objects\demoPlayer\state\DemoPlayerEndState.cpp" />
     <ClCompile Include="Game\objects\demoPlayer\state\DemoPlayerMainState.cpp" />
     <ClCompile Include="Game\objects\demoPlayer\state\DemoPlayerStartState.cpp" />
@@ -151,7 +157,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\bullet\BaseEnemyBullet.cpp" />
     <ClCompile Include="Game\objects\bullet\BasePlayerBullet.cpp" />
     <ClCompile Include="Game\objects\RailCamera.cpp" />
-    <ClCompile Include="Game\scene\GameScene.cpp" />
+    <ClCompile Include="Game\scene\gameScene\GameScene.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
     <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
@@ -375,6 +381,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneClearState.h" />
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneGameOverState.h" />
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneMainState.h" />
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneStartState.h" />
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneStateContext.h" />
+    <ClInclude Include="Game\scene\gameScene\state\GameSceneTitleReturnState.h" />
     <ClInclude Include="Game\objects\demoPlayer\state\DemoPlayerEndState.h" />
     <ClInclude Include="Game\objects\demoPlayer\state\DemoPlayerMainState.h" />
     <ClInclude Include="Game\objects\demoPlayer\state\DemoPlayerStartState.h" />
@@ -433,7 +445,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\bullet\BaseEnemyBullet.h" />
     <ClInclude Include="Game\objects\bullet\BasePlayerBullet.h" />
     <ClInclude Include="Game\objects\RailCamera.h" />
-    <ClInclude Include="Game\scene\GameScene.h" />
+    <ClInclude Include="Game\scene\gameScene\GameScene.h" />
     <ClInclude Include="Game\objects\player\Player.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\3d\ModelPlatform.h" />
