@@ -60,4 +60,13 @@ namespace JsonKey
 		const std::string kRotateDuration = "RotateDuration";
 		const std::string kLerpAngleFactor = "LerpAngleFactor";
 	}
+
+	namespace Pouse
+	{
+		const std::string kGroupName = "Pouse";
+
+		const std::string kReturnTitlePosition = "ReturnTitlePosition";
+		const std::string kContinuePosition = "ContinuePosition";
+		const std::string kCursorOffset = "CousorOffset";
+	}
 }

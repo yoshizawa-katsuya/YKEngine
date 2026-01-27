@@ -68,7 +68,6 @@ private:
 	YKEngine::ModelPlatform* modelPlatform_;
 
 	std::unique_ptr<YKEngine::Sprite> spriteBackGround_;
-	std::unique_ptr<YKEngine::Sprite> spriteGameOverKeyBoard_;
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 

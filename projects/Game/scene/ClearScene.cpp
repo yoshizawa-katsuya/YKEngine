@@ -32,9 +32,6 @@ void ClearScene::Initialize()
 	spriteBackGround_ = std::make_unique<Sprite>();
 	spriteBackGround_->Initialize(TextureManager::GetInstance()->Load("./Resources/clear.png"));
 
-	spriteClearKeyboard_ = std::make_unique<Sprite>();
-	spriteClearKeyboard_->Initialize(TextureManager::GetInstance()->Load("./Resources/clearKeyboard.png"));
-	
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
 	stageObjects_->Initialize();
@@ -126,16 +123,7 @@ void ClearScene::Draw()
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
-	if (input_->IsConnected())
-	{
-		//コントローラー接続時
-		spriteBackGround_->Draw();
-	}
-	else
-	{
-		//キーボード操作時
-		spriteClearKeyboard_->Draw();
-	}
+	spriteBackGround_->Draw();
 
 	sceneChangeStaging_->Draw();
 }

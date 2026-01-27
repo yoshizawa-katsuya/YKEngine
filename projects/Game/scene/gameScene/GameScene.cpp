@@ -36,9 +36,6 @@ void GameScene::Initialize() {
 	operationGuideSprite_ = std::make_unique<Sprite>();
 	operationGuideSprite_->Initialize(TextureManager::GetInstance()->Load("./Resources/operationHUD.png"));
 
-	operationGuideSpriteKeyboard_ = std::make_unique<Sprite>();
-	operationGuideSpriteKeyboard_->Initialize(TextureManager::GetInstance()->Load("./Resources/operationHUDKeyboard.png"));
-
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
 	stageObjects_->Initialize();
@@ -76,6 +73,11 @@ void GameScene::Initialize() {
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
 	sceneChangeStaging_->BeginSceneStart(StagingType::kFade);
 
+	//ポーズ画面の生成
+	pause_ = std::make_unique<Pause>();
+	pause_->Initialize();
+
+	//ステートマシンの生成と開始
 	stateMachine_ = std::make_unique<StateMachine<GameSceneStateContext>>();
 	stateMachine_->Start(this);
 	stateMachine_->ChangeState<GameSceneStartState>();
@@ -93,8 +95,6 @@ void GameScene::Update()
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 	
-	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
-
 #ifdef USE_IMGUI
 
 	ImGui::Begin("GameScene");
@@ -183,16 +183,10 @@ void GameScene::Draw()
 	player_->DrawUI();
 
 	//操作説明HUDの描画
-	if (input_->IsConnected())
-	{
-		// コントローラー接続時
-		operationGuideSprite_->Draw();
-	}
-	else
-	{
-		// キーボード操作時
-		operationGuideSpriteKeyboard_->Draw();
-	}
+	operationGuideSprite_->Draw();
+
+	//ポーズ画面の描画
+	pause_->Draw();
 
 	sceneChangeStaging_->Draw();
 }
@@ -224,6 +218,8 @@ void GameScene::CheckAllColision()
 
 void GameScene::UpdateStart()
 {
+	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
+
 	//プレイヤーの更新
 	player_->Update();
 	
@@ -231,6 +227,8 @@ void GameScene::UpdateStart()
 
 void GameScene::UpdateMain()
 {
+	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
+
 	//レールカメラの取得
 	Camera* railCamera = cameraManager_->GetRailCameraInner();
 
@@ -270,6 +268,8 @@ void GameScene::UpdateMain()
 
 void GameScene::UpdateGameClear()
 {
+	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
+
 	player_->Update();
 
 	if (sceneChangeStaging_->IsFinished()) 
@@ -281,6 +281,8 @@ void GameScene::UpdateGameClear()
 
 void GameScene::UpdateGameOver()
 {
+	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
+
 	//レールカメラの取得
 	Camera* railCamera = cameraManager_->GetRailCameraInner();
 
@@ -322,11 +324,17 @@ void GameScene::UpdateGameOver()
 
 void GameScene::UpdateTitleReturn()
 {
+
 	if (sceneChangeStaging_->IsFinished())
 	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("TitleScene");
 	}
+}
+
+void GameScene::UpdatePause()
+{
+	pause_->Update();
 }
 
 void GameScene::ProcessGameOver()
@@ -341,6 +349,11 @@ void GameScene::ProcessGameClear()
 {
 	StartSceneEndStaging();
 	player_->SetGameClear();
+}
+
+void GameScene::ProcessPause()
+{
+	pause_->SetIsPause(true);
 }
 
 void GameScene::StartSceneEndStaging()

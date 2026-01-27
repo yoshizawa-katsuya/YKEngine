@@ -232,6 +232,14 @@ void GlobalVariables::SaveFile(const std::string& groupName)
 			root[groupName][itemName] = std::get<float>(item);
 		}
 
+		// Vector2型の値を保持していれば
+		else if (std::holds_alternative<Vector2>(item))
+		{
+			//float型のjson配列登録
+			Vector2 value = std::get<Vector2>(item);
+			root[groupName][itemName] = json::array({ value.x, value.y });
+		}
+
 		// Vector3型の値を保持していれば
 		else if (std::holds_alternative<Vector3>(item))
 		{
@@ -377,6 +385,14 @@ void GlobalVariables::LoadFile(const std::string& groupName)
 			// float型の値を登録
 			double value = itItem->get<double>();
 			SetValue(groupName, itemName, static_cast<float>(value));
+		}
+
+		// 要素数2の配列であれば
+		else if (itItem->is_array() && itItem->size() == 2)
+		{
+			// float型のjson配列登録
+			Vector2 value = { itItem->at(0), itItem->at(1) };
+			SetValue(groupName, itemName, value);
 		}
 
 		// 要素数3の配列であれば

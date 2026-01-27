@@ -109,6 +109,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\scene\gameScene\state\GameScenePauseState.cpp" />
     <ClCompile Include="Game\scene\gameScene\state\GameSceneClearState.cpp" />
     <ClCompile Include="Game\scene\gameScene\state\GameSceneGameOverState.cpp" />
     <ClCompile Include="Game\scene\gameScene\state\GameSceneMainState.cpp" />
@@ -213,6 +214,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\objects\player\state\PlayerMainState.cpp" />
     <ClCompile Include="Game\objects\player\state\PlayerClearState.cpp" />
     <ClCompile Include="Game\objects\player\state\PlayerGameOverState.cpp" />
+    <ClCompile Include="Game\objects\Pause.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -381,6 +383,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\scene\gameScene\state\GameScenePauseState.h" />
     <ClInclude Include="Game\scene\gameScene\state\GameSceneClearState.h" />
     <ClInclude Include="Game\scene\gameScene\state\GameSceneGameOverState.h" />
     <ClInclude Include="Game\scene\gameScene\state\GameSceneMainState.h" />
@@ -500,6 +503,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\objects\player\state\PlayerMainState.h" />
     <ClInclude Include="Game\objects\player\state\PlayerClearState.h" />
     <ClInclude Include="Game\objects\player\state\PlayerGameOverState.h" />
+    <ClInclude Include="Game\objects\Pause.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

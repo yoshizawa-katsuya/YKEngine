@@ -1,4 +1,5 @@
 #pragma once
+class Pause;
 
 /// <summary>
 /// StateからGameSceneにアクセスするためのコンテキスト
@@ -38,6 +39,17 @@ public:
 	virtual void UpdateTitleReturn() = 0;
 
 	/// <summary>
+	/// ポーズ画面の更新。
+	/// </summary>
+	virtual void UpdatePause() = 0;
+
+	/// <summary>
+	/// ポーズ画面を取得する。
+	/// </summary>
+	/// <returns> ポーズ画面 </returns>
+	virtual Pause* GetPause() = 0;
+
+	/// <summary>
 	/// スタート処理が終わったらtrue
 	/// </summary>
 	/// <returns> スタート処理が終わったらtrue </returns>
@@ -67,6 +79,11 @@ public:
 	/// クリアに移行する際の処理。
 	/// </summary>
 	virtual void ProcessGameClear() = 0;
+
+	/// <summary>
+	/// ポーズ画面に移行する際の処理。
+	/// </summary>
+	virtual void ProcessPause() = 0;
 
 	/// <summary>
 	/// シーン終了演出の開始。

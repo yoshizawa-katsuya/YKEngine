@@ -33,9 +33,6 @@ void TitleScene::Initialize()
 	spriteTitle_ = std::make_unique<Sprite>();
 	spriteTitle_->Initialize(textureHandleTitle);
 
-	spriteTitleKeyboard_ = std::make_unique<Sprite>();
-	spriteTitleKeyboard_->Initialize(TextureManager::GetInstance()->Load("./Resources/titleKeyboard.png"));
-
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
 	stageObjects_->Initialize();
@@ -115,17 +112,8 @@ void TitleScene::Draw()
 	spritePlatform_->PreDraw();
 
 	//タイトルロゴの描画
-	if (input_->IsConnected())
-	{
-		//コントローラー接続時
-		spriteTitle_->Draw();
-	}
-	else
-	{
-		//キーボード接続時
-		spriteTitleKeyboard_->Draw();
-	}
-
+	spriteTitle_->Draw();
+	
 	sceneChangeStaging_->Draw();
 
 }

@@ -462,6 +462,12 @@
     <ClCompile Include="Game\scene\gameScene\state\GameSceneStartState.cpp">
       <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\Pause.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameScene\state\GameScenePauseState.cpp">
+      <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -905,6 +911,12 @@
       <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
     </ClInclude>
     <ClInclude Include="Game\scene\gameScene\state\GameSceneTitleReturnState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\Pause.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameScene\state\GameScenePauseState.h">
       <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
     </ClInclude>
   </ItemGroup>

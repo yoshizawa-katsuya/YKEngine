@@ -26,6 +26,7 @@
 #include "StageObjects.h"
 #include "StateMachine.hpp"
 #include "GameSceneStateContext.h"
+#include "Pause.h"
 class SceneChangeStaging;
 
 /// <summary>
@@ -88,6 +89,17 @@ private:
 	/// </summary>
 	void UpdateTitleReturn() override;
 
+	/// <summary>
+	/// ポーズ画面の更新。
+	/// </summary>
+	void UpdatePause() override;
+
+	/// <summary>
+	/// ポーズ画面を取得する。
+	/// </summary>
+	/// <returns> ポーズ画面 </returns>
+	Pause* GetPause() override { return pause_.get(); }
+
 	bool StartCompleted() override { return player_->StartCompleted(); }
 
 	/// <summary>
@@ -114,6 +126,11 @@ private:
 	/// クリアに移行する際の処理。
 	/// </summary>
 	void ProcessGameClear() override;
+
+	/// <summary>
+	/// ポーズ画面に移行する際の処理。
+	/// </summary>
+	void ProcessPause() override;
 
 	/// <summary>
 	/// シーン終了演出の開始。
@@ -146,7 +163,6 @@ private:
 
 	//操作説明スプライト
 	std::unique_ptr<YKEngine::Sprite> operationGuideSprite_;
-	std::unique_ptr<YKEngine::Sprite> operationGuideSpriteKeyboard_;
 
 	//シーンチェンジ演出
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;
@@ -186,5 +202,8 @@ private:
 
 	//クリアしていたらtrue。デバッグ用。
 	bool isClear_ = false;
+
+	//ポーズ画面
+	std::unique_ptr<Pause> pause_;
 
 };
