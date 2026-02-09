@@ -41,7 +41,7 @@ void GameScene::Initialize() {
 	//modelPlatform_->SetSpotLight(spotLight_.get());
 
 	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
+	textureHandle_ = TextureManager::GetInstance()->Load("./resources/cursor.dds");
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
 	//モデルの生成
@@ -50,11 +50,11 @@ void GameScene::Initialize() {
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
 	
-	/*
+	
 	//スプライトの生成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(textureHandle_, spritePlatform_);
-	*/
+	sprite_ = std::make_unique<Sprite>(); 
+	sprite_->Initialize(textureHandle_);
+	
 
 	//パーティクルエミッターの生成
 	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
@@ -196,9 +196,9 @@ void GameScene::Update() {
 void GameScene::Draw() {
 
 	//Spriteの背景描画前処理
-	//spritePlatform_->PreBackGroundDraw();
+	spritePlatform_->PreBackGroundDraw();
 
-	//sprite_->Draw();
+	sprite_->Draw();
 
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();

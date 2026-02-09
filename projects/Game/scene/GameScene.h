@@ -88,7 +88,7 @@ private:
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;
-	//std::unique_ptr<Sprite> sprite_;
+	std::unique_ptr<YKEngine::Sprite> sprite_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
