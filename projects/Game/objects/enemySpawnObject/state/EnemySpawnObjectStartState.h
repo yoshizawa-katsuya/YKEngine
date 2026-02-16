@@ -4,6 +4,8 @@ class EnemySpawnObjectStateContext;
 
 class EnemySpawnObjectStartState : public YKEngine::BaseState<EnemySpawnObjectStateContext>
 {
+private:
+
 	/// <summary>
 	/// 更新処理
 	/// </summary>

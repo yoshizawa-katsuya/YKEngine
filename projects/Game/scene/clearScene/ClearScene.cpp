@@ -8,6 +8,7 @@
 #include "RootParams.h"
 #include "manager/EffectManager.h"
 #include "SceneChangeStaging.h"
+#include "ClearSceneStartState.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -22,7 +23,6 @@ ClearScene::~ClearScene()
 void ClearScene::Initialize()
 {
 	dxCommon_ = DirectXCommon::GetInstance();
-	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
 
@@ -45,6 +45,11 @@ void ClearScene::Initialize()
 	//シーンチェンジ演出の生成
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
 	sceneChangeStaging_->BeginSceneStart(StagingType::kEye);
+
+	//ステートマシンの生成
+	stateMachine_ = std::make_unique<StateMachine<ClearSceneStateContext>>();
+	stateMachine_->Start(this);
+	stateMachine_->ChangeState<ClearSceneStartState>();
 }
 
 void ClearScene::Update()
@@ -71,23 +76,8 @@ void ClearScene::Update()
 	//レールカメラの更新
 	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
 
-	switch (phase_)
-	{
-	case Phase::kStart:
-
-		UpdateStart();
-		break;
-	case Phase::kMain:
-
-		UpdateMain();
-		break;
-	case Phase::kEnd:
-
-		UpdateEnd();
-		break;
-	default:
-		break;
-	}
+	//ステートマシンの更新
+	stateMachine_->Update();
 
 	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
 
@@ -132,26 +122,6 @@ void ClearScene::Finalize()
 {
 }
 
-void ClearScene::UpdateStart()
-{
-	//シーン切り替えアニメーション更新
-	if (sceneChangeStaging_->IsFinished())
-	{
-		phase_ = Phase::kMain;
-	}
-}
-
-void ClearScene::UpdateMain()
-{
-	//スペースキーまたはAボタンで終了
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A))
-	{
-		phase_ = Phase::kEnd;
-		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
-		demoPlayer_->SetIsSceneEnd(true);
-	}
-}
-
 void ClearScene::UpdateEnd()
 {
 	if (sceneChangeStaging_->IsFinished())
@@ -179,4 +149,15 @@ void ClearScene::CreateLevel()
 
 	// 背景オブジェクトの生成
 	stageObjects_->GetInstancingObject(levelData.objects);
+}
+
+bool ClearScene::IsEndSceneChangeStaging() const
+{
+	return sceneChangeStaging_->IsFinished();
+}
+
+void ClearScene::EnterEnd()
+{
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+	demoPlayer_->SetIsSceneEnd(true);
 }

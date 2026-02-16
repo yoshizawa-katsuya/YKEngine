@@ -4,6 +4,8 @@ class EnemySpawnObjectStateContext;
 
 class EnemySpawnObjectIntervalState : public YKEngine::BaseState<EnemySpawnObjectStateContext>
 {
+private:
+
 	/// <summary>
 	/// 更新処理
 	/// </summary>

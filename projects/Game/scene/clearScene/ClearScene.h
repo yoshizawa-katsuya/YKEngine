@@ -8,13 +8,15 @@
 #include "DemoPlayer.h"
 #include "manager/CameraManager.h"
 #include "StageObjects.h"
+#include "StateMachine.hpp"
+#include "ClearSceneStateContext.h"
 class SceneChangeStaging;
 
 /// <summary>
 /// クリア画面を管理するクラス。
 /// シーンの開始、更新、描画、終了を行う。
 /// </summary>
-class ClearScene : public YKEngine::BaseScene
+class ClearScene : public YKEngine::BaseScene, private ClearSceneStateContext
 {
 public:
 
@@ -46,29 +48,27 @@ public:
 private:
 
 	/// <summary>
-	/// 開始部の更新。
-	/// </summary>
-	void UpdateStart();
-
-	/// <summary>
-	/// メイン部の更新。
-	/// </summary>
-	void UpdateMain();
-
-	/// <summary>
 	/// 終了部の更新。
 	/// </summary>
-	void UpdateEnd();
+	void UpdateEnd() override;
 
 	/// <summary>
 	/// レベルの生成。
 	/// </summary>
 	void CreateLevel();
 
+	/// <summary>
+	/// シーン遷移演出が終わっていたらtrueを返す。
+	/// </summary>
+	bool IsEndSceneChangeStaging() const override;
+
+	/// <summary>
+	/// 終了部が開始する際に行う処理。
+	/// </summary>
+	void EnterEnd() override;
+
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
-
-	YKEngine::Input* input_;
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
@@ -91,16 +91,8 @@ private:
 	//デモプレイヤー
 	std::unique_ptr<DemoPlayer> demoPlayer_;
 
-	//シーンのフェーズ
-	enum class Phase 
-	{
-		kStart,	//開始部
-		kMain,	//メイン部
-		kEnd,	//終了部
-	};
-
-	//現在のフェーズ
-	Phase phase_ = Phase::kStart;
+	//ステートマシン
+	std::unique_ptr<YKEngine::StateMachine<ClearSceneStateContext>> stateMachine_;
 
 };
 

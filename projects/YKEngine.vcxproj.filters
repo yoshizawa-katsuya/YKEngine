@@ -172,6 +172,18 @@
     <Filter Include="ヘッダー ファイル\application\objects\railCamera\state">
       <UniqueIdentifier>{c3afce9c-7c4a-407b-89d8-0a4ff10ca515}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene\clearScene">
+      <UniqueIdentifier>{fc24b95d-23f5-44de-9251-7b5ad2aae555}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\scene\clearScene">
+      <UniqueIdentifier>{ade84396-2fbd-4ab9-a63c-f7f53b9d0124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\scene\clearScene\state">
+      <UniqueIdentifier>{9d751543-11db-4c1f-a7a6-a9b7bcc4c8f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene\clearScene\state">
+      <UniqueIdentifier>{878168e9-7826-4c2e-8576-3ba169dcfc66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -390,9 +402,6 @@
     <ClCompile Include="Game\objects\eventTrigger\SpeedEventTrigger.cpp">
       <Filter>ソース ファイル\application\objects\eventTriger</Filter>
     </ClCompile>
-    <ClCompile Include="Game\scene\ClearScene.cpp">
-      <Filter>ソース ファイル\application\scene</Filter>
-    </ClCompile>
     <ClCompile Include="Game\scene\GameOverScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
@@ -515,6 +524,21 @@
     </ClCompile>
     <ClCompile Include="Game\objects\railCamera\state\RailCameraStateContext.cpp">
       <Filter>ソース ファイル\application\objects\railCamera\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\clearScene\ClearScene.cpp">
+      <Filter>ソース ファイル\application\scene\clearScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\clearScene\state\ClearSceneEndState.cpp">
+      <Filter>ソース ファイル\application\scene\clearScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\clearScene\state\ClearSceneMainState.cpp">
+      <Filter>ソース ファイル\application\scene\clearScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\clearScene\state\ClearSceneStartState.cpp">
+      <Filter>ソース ファイル\application\scene\clearScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\clearScene\state\ClearSceneStateContext.cpp">
+      <Filter>ソース ファイル\application\scene\clearScene\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -841,9 +865,6 @@
     <ClInclude Include="Game\objects\eventTrigger\SpeedEventTrigger.h">
       <Filter>ヘッダー ファイル\application\objects\eventTriger</Filter>
     </ClInclude>
-    <ClInclude Include="Game\scene\ClearScene.h">
-      <Filter>ヘッダー ファイル\application\scene</Filter>
-    </ClInclude>
     <ClInclude Include="Game\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
@@ -990,6 +1011,21 @@
     </ClInclude>
     <ClInclude Include="Game\objects\railCamera\state\RailCameraStateContext.h">
       <Filter>ヘッダー ファイル\application\objects\railCamera\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\clearScene\ClearScene.h">
+      <Filter>ヘッダー ファイル\application\scene\clearScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\clearScene\state\ClearSceneEndState.h">
+      <Filter>ヘッダー ファイル\application\scene\clearScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\clearScene\state\ClearSceneMainState.h">
+      <Filter>ヘッダー ファイル\application\scene\clearScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\clearScene\state\ClearSceneStartState.h">
+      <Filter>ヘッダー ファイル\application\scene\clearScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\clearScene\state\ClearSceneStateContext.h">
+      <Filter>ヘッダー ファイル\application\scene\clearScene\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

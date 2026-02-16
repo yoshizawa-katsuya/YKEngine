@@ -1,9 +1,11 @@
 #pragma once
 #include "BaseState.hpp"
-#include "RailCameraStateContext.h"
+class RailCameraStateContext;
 
 class RailCameraClearSceneState : public YKEngine::BaseState<RailCameraStateContext>
 {
+private:
+
 	/// <summary>
 	/// 開始時の処理
 	/// </summary>

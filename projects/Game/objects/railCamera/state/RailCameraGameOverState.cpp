@@ -1,4 +1,5 @@
 #include "RailCameraGameOverState.h"
+#include "RailCameraStateContext.h"
 
 void RailCameraGameOverState::OnEnter(RailCameraStateContext* railCamera)
 {

@@ -1,4 +1,5 @@
 #include "RailCameraClearSceneState.h"
+#include "RailCameraStateContext.h"
 
 void RailCameraClearSceneState::OnEnter(RailCameraStateContext* railCamera)
 {
