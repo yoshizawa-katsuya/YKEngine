@@ -148,6 +148,18 @@
     <Filter Include="ヘッダー ファイル\application\scene\gameScene\state">
       <UniqueIdentifier>{0ad9c753-59cf-47bc-90ac-040caa6455f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\objects\enemySpawnObject">
+      <UniqueIdentifier>{6faf734d-40cf-4992-a721-fa6d4760c5bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\enemySpawnObject">
+      <UniqueIdentifier>{e53caef8-86e8-4f6a-bc4e-01b8c2bca673}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\enemySpawnObject\state">
+      <UniqueIdentifier>{9a322c68-34dc-41d9-8bd7-3d4a8113c36b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\objects\enemySpawnObject\state">
+      <UniqueIdentifier>{9ef638b8-36bd-431d-89d2-b4ad62e27513}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -381,9 +393,6 @@
     <ClCompile Include="Game\objects\TackleEnemy01.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\EnemySpawnObject.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\lib\Random.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
@@ -467,6 +476,21 @@
     </ClCompile>
     <ClCompile Include="Game\scene\gameScene\state\GameScenePauseState.cpp">
       <Filter>ソース ファイル\application\scene\gameScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemySpawnObject\EnemySpawnObject.cpp">
+      <Filter>ソース ファイル\application\objects\enemySpawnObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStateContext.cpp">
+      <Filter>ソース ファイル\application\objects\enemySpawnObject\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectEndState.cpp">
+      <Filter>ソース ファイル\application\objects\enemySpawnObject\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStartState.cpp">
+      <Filter>ソース ファイル\application\objects\enemySpawnObject\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectIntervalState.cpp">
+      <Filter>ソース ファイル\application\objects\enemySpawnObject\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -817,9 +841,6 @@
     <ClInclude Include="Game\objects\TackleEnemy01.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\EnemySpawnObject.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\lib\Color.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
@@ -918,6 +939,21 @@
     </ClInclude>
     <ClInclude Include="Game\scene\gameScene\state\GameScenePauseState.h">
       <Filter>ヘッダー ファイル\application\scene\gameScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemySpawnObject\EnemySpawnObject.h">
+      <Filter>ヘッダー ファイル\application\objects\enemySpawnObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStateContext.h">
+      <Filter>ヘッダー ファイル\application\objects\enemySpawnObject\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectEndState.h">
+      <Filter>ヘッダー ファイル\application\objects\enemySpawnObject\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectIntervalState.h">
+      <Filter>ヘッダー ファイル\application\objects\enemySpawnObject\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStartState.h">
+      <Filter>ヘッダー ファイル\application\objects\enemySpawnObject\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

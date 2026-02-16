@@ -2,6 +2,8 @@
 #include <memory>
 #include "InstancingObjects.h"
 #include "EnemySpawn.h"
+#include "StateMachine.hpp"
+#include "EnemySpawnObjectStateContext.h"
 class EnemyManager;
 
 /// <summary>
@@ -9,7 +11,7 @@ class EnemyManager;
 /// 出現時のエフェクトも管理する。
 /// 敵の出現そのものはEnemyManagerに任せる。
 /// </summary>
-class EnemySpawnObject
+class EnemySpawnObject : private EnemySpawnObjectStateContext
 {
 public:
 	
@@ -40,33 +42,45 @@ private:
 	/// <summary>
 	/// ウェーブ開始更新処理。
 	/// </summary>
-	void UpdateWaveStart();
+	void UpdateWaveStart() override;
 
 	/// <summary>
 	/// ウェーブ中間更新処理。
 	/// </summary>
-	void UpdateWaveInterval();
+	void UpdateWaveInterval() override;
 
 	/// <summary>
 	/// ウェーブ終了更新処理。
 	/// </summary>
-	void UpdateWaveEnd();
+	void UpdateWaveEnd() override;
+
+	/// <summary>
+	/// 開始処理が完了していればtrueを返す。
+	/// </summary>
+	bool IsWaveStartEnd() const override { return timer_ >= kPhaseSwitchTime_; }
+
+	/// <summary>
+	/// 中間処理が完了していればtrueを返す。
+	/// </summary>
+	bool IsWaveIntervalEnd() const override { return timer_ >= kIntervalTime_; }
+
+	/// <summary>
+	/// タイマーをリセットする。
+	/// </summary>
+	void ResetTimer() override { timer_ = 0.0f; }
+
+	/// <summary>
+	/// タイマーを切り替え時間に初期化する。
+	/// </summary>
+	void SetTimerToSwitchTime() override { timer_ = kPhaseSwitchTime_; }
 
 	/// <summary>
 	/// 敵出現処理。
 	/// </summary>
-	void SpawnEnemies();
+	void SpawnEnemies() override;
 
-	//フェーズ
-	enum class Phase 
-	{
-		kWaveStart,	//ウェーブ開始部
-		kWaveInterval, //ウェーブ中間部
-		kWaveEnd,	//ウェーブ終了部
-	};
-
-	//現在のフェーズ
-	Phase phase_ = Phase::kWaveStart;
+	// ステートマシン
+	std::unique_ptr<YKEngine::StateMachine<EnemySpawnObjectStateContext>> stateMachine_; // 状態遷移管理クラスのインスタンス
 
 	EnemyManager* enemyManager_ = nullptr; // 敵管理クラスのポインタ
 

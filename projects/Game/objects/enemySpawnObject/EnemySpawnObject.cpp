@@ -2,12 +2,12 @@
 #include "Lerp.h"
 #include "Easing.h"
 #include "manager/EnemyManager.h"
+#include "EnemySpawnObjectStartState.h"
 
 using namespace YKEngine;
 
 void EnemySpawnObject::Initialize(const std::vector<EnemySpawn>& nowSpanwDatas, std::shared_ptr<BaseModel> model)
 {
-	phase_ = Phase::kWaveStart;
 
 	spawnDatas_ = nowSpanwDatas;
 	uint32_t enemyCount = static_cast<uint32_t>(spawnDatas_.size());
@@ -27,24 +27,15 @@ void EnemySpawnObject::Initialize(const std::vector<EnemySpawn>& nowSpanwDatas, 
 		i++;
 	}
 
+	stateMachine_ = std::make_unique<StateMachine<EnemySpawnObjectStateContext>>();
+	stateMachine_->Start(this);
+	stateMachine_->ChangeState<EnemySpawnObjectStartState>();
+
 }
 
 void EnemySpawnObject::Update()
 {
-	switch (phase_)
-	{
-	case Phase::kWaveStart:
-		UpdateWaveStart();
-		break;
-	case Phase::kWaveInterval:
-		UpdateWaveInterval();
-		break;
-	case Phase::kWaveEnd:
-		UpdateWaveEnd();
-		break;
-	default:
-		break;
-	}
+	stateMachine_->Update();
 }
 
 void EnemySpawnObject::Draw(Camera* camera)
@@ -73,24 +64,13 @@ void EnemySpawnObject::UpdateWaveStart()
 		objects_->WorldTransformUpdate(worldTransform);
 	}
 
-	if (timer_ >= kPhaseSwitchTime_)
-	{
-		timer_ = 0.0f;
-		phase_ = Phase::kWaveInterval;
-	}
 }
 
 void EnemySpawnObject::UpdateWaveInterval()
 {
 	//時間経過で敵を出現させる
 	timer_ += kDeltaTime_;
-	if (timer_ >= kIntervalTime_)
-	{
-		timer_ = kPhaseSwitchTime_;
-		phase_ = Phase::kWaveEnd;
-		SpawnEnemies();
-
-	}
+	
 }
 
 void EnemySpawnObject::UpdateWaveEnd()

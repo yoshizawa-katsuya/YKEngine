@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,7 +92,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -109,6 +109,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectEndState.cpp" />
+    <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectIntervalState.cpp" />
+    <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStartState.cpp" />
+    <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStateContext.cpp" />
     <ClCompile Include="Game\scene\gameScene\state\GameScenePauseState.cpp" />
     <ClCompile Include="Game\scene\gameScene\state\GameSceneClearState.cpp" />
     <ClCompile Include="Game\scene\gameScene\state\GameSceneGameOverState.cpp" />
@@ -124,7 +128,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\manager\CameraManager.cpp" />
     <ClCompile Include="Game\objects\demoPlayer\DemoPlayer.cpp" />
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
-    <ClCompile Include="Game\objects\EnemySpawnObject.cpp" />
+    <ClCompile Include="Game\objects\enemySpawnObject\EnemySpawnObject.cpp" />
     <ClCompile Include="Game\objects\bullet\ChargePlayerBullet01.cpp" />
     <ClCompile Include="Game\manager\EnemyManager.cpp" />
     <ClCompile Include="Game\manager\EventTriggerManager.cpp" />
@@ -383,6 +387,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectEndState.h" />
+    <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectIntervalState.h" />
+    <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStartState.h" />
+    <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStateContext.h" />
     <ClInclude Include="Game\scene\gameScene\state\GameScenePauseState.h" />
     <ClInclude Include="Game\scene\gameScene\state\GameSceneClearState.h" />
     <ClInclude Include="Game\scene\gameScene\state\GameSceneGameOverState.h" />
@@ -402,7 +410,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\lib\BaseState.hpp" />
     <ClInclude Include="Engine\lib\Color.h" />
     <ClInclude Include="Engine\2d\AnimatedSprite.h" />
-    <ClInclude Include="Game\objects\EnemySpawnObject.h" />
+    <ClInclude Include="Game\objects\enemySpawnObject\EnemySpawnObject.h" />
     <ClInclude Include="Game\objects\EnemySpawn.h" />
     <ClInclude Include="Game\objects\bullet\ChargePlayerBullet01.h" />
     <ClInclude Include="Game\manager\EnemyManager.h" />
