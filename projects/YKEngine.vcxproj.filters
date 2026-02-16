@@ -160,6 +160,18 @@
     <Filter Include="ソース ファイル\application\objects\enemySpawnObject\state">
       <UniqueIdentifier>{9ef638b8-36bd-431d-89d2-b4ad62e27513}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\objects\railCamera">
+      <UniqueIdentifier>{2d99ffa3-3b82-4d14-aaa1-977dac1ba74a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\objects\railCamera\state">
+      <UniqueIdentifier>{6af9c5a4-53df-45e1-bcf9-3ffb57cd672a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\railCamera">
+      <UniqueIdentifier>{d894ad0c-d044-4e6c-a438-bb13eb9940e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\railCamera\state">
+      <UniqueIdentifier>{c3afce9c-7c4a-407b-89d8-0a4ff10ca515}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -339,9 +351,6 @@
     <ClCompile Include="Game\objects\Collider.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\RailCamera.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\objects\RailMover.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
@@ -491,6 +500,21 @@
     </ClCompile>
     <ClCompile Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectIntervalState.cpp">
       <Filter>ソース ファイル\application\objects\enemySpawnObject\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\railCamera\RailCamera.cpp">
+      <Filter>ソース ファイル\application\objects\railCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\railCamera\state\RailCameraClearSceneState.cpp">
+      <Filter>ソース ファイル\application\objects\railCamera\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\railCamera\state\RailCameraGameOverState.cpp">
+      <Filter>ソース ファイル\application\objects\railCamera\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\railCamera\state\RailCameraMainState.cpp">
+      <Filter>ソース ファイル\application\objects\railCamera\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\railCamera\state\RailCameraStateContext.cpp">
+      <Filter>ソース ファイル\application\objects\railCamera\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -778,12 +802,6 @@
     <ClInclude Include="Game\objects\EnemySpawn.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\RailCamera.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\RailMover.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\ReticleController.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
@@ -954,6 +972,24 @@
     </ClInclude>
     <ClInclude Include="Game\objects\enemySpawnObject\state\EnemySpawnObjectStartState.h">
       <Filter>ヘッダー ファイル\application\objects\enemySpawnObject\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\RailMover.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\railCamera\RailCamera.h">
+      <Filter>ヘッダー ファイル\application\objects\railCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\railCamera\state\RailCameraClearSceneState.h">
+      <Filter>ヘッダー ファイル\application\objects\railCamera\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\railCamera\state\RailCameraGameOverState.h">
+      <Filter>ヘッダー ファイル\application\objects\railCamera\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\railCamera\state\RailCameraMainState.h">
+      <Filter>ヘッダー ファイル\application\objects\railCamera\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\railCamera\state\RailCameraStateContext.h">
+      <Filter>ヘッダー ファイル\application\objects\railCamera\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

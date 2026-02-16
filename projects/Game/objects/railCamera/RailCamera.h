@@ -1,6 +1,8 @@
 #pragma once
 #include "WorldTransform.h"
 #include <memory>
+#include "StateMachine.hpp"
+#include "RailCameraStateContext.h"
 
 namespace YKEngine
 {
@@ -12,7 +14,8 @@ namespace YKEngine
 /// RailMoverを追従するカメラ。
 /// カメラの位置はRailMoverに依存する。
 /// </summary>
-class RailCamera {
+class RailCamera : private RailCameraStateContext
+{
 public:
 
 	/// <summary>
@@ -30,7 +33,7 @@ public:
 	/// <summary>
 	/// ゲームオーバーしたことを通知。
 	/// </summary>
-	void SetGameOver();
+	void SetGameOver() { isGameOver_ = true; }
 
 	/// <summary>
 	/// クリアシーンに移行したことを通知。
@@ -49,25 +52,35 @@ private:
 	/// <summary>
 	/// メインフェーズの更新。
 	/// </summary>
-	void UpdateMain();
+	void UpdateMain() override;
 
 	/// <summary>
 	/// ゲームオーバーフェーズの更新。
 	/// </summary>
-	void UpdateGameOver();
+	void UpdateGameOver() override;
 
 	/// <summary>
 	/// クリアシーンフェーズの更新。
 	/// </summary>
-	void UpdateClearScene();
+	void UpdateClearScene() override;
 
-	enum class Phase
-	{
-		kMain,	// メイン
-		kGameOver,	// ゲームオーバー
-		kClearScene,	// クリアシーン
-	};
-	Phase phase_ = Phase::kMain;
+	/// <summary>
+	/// クリアシーンステートに入る際の処理
+	/// </summary>
+	void EnterClearScene() override;
+
+	/// <summary>
+	/// ゲームオーバーならtrue
+	/// </summary>
+	bool IsGameOver() const override { return isGameOver_; }
+
+	/// <summary>
+	/// 補完係数t_をリセット
+	/// </summary>
+	void ReaetT() { t_ = 0.0f; }
+
+	// ステートマシン
+	std::unique_ptr<YKEngine::StateMachine<RailCameraStateContext>> stateMachine_;
 
 	//ワールド変換データ
 	YKEngine::WorldTransform worldTransform_;
@@ -83,4 +96,6 @@ private:
 
 	YKEngine::Vector3 targetRotation_{};
 
+	//ゲームオーバーならtrue
+	bool isGameOver_ = false;
 };

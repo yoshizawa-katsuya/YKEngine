@@ -7,6 +7,8 @@
 #include "Camera.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "RailCameraMainState.h"
+#include "RailCameraClearSceneState.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -41,26 +43,17 @@ void RailCamera::Initialize(WorldTransform* parent, WorldTransform* playerWorldT
 	camera_->SetTranslate(worldTransform_.GetWorldPosition());
 	camera_->SetRotate(worldTransform_.parent_->rotation_);
 	camera_->Update();
+
+	stateMachine_ = std::make_unique<StateMachine<RailCameraStateContext>>();
+	stateMachine_->Start(this);
+	stateMachine_->ChangeState<RailCameraMainState>();
 }
 
 void RailCamera::Update() {
 
 	worldTransform_.UpdateMatrix();
 
-	switch (phase_)
-	{
-	case RailCamera::Phase::kMain:
-		UpdateMain();
-		break;
-	case RailCamera::Phase::kGameOver:
-		UpdateGameOver();
-		break;
-	case RailCamera::Phase::kClearScene:
-		UpdateClearScene();
-		break;
-	default:
-		break;
-	}
+	stateMachine_->Update();
 
 #ifdef USE_IMGUI
 
@@ -73,25 +66,9 @@ void RailCamera::Update() {
 #endif // USE_IMGUI	
 }
 
-void RailCamera::SetGameOver()
-{
-	phase_ = Phase::kGameOver;
-	t_ = 0.0f;
-}
-
 void RailCamera::SetClearScene()
 {
-	phase_ = Phase::kClearScene;
-
-	targetParentWorldTransform_.UpdateMatrix();
-
-	const float lerpFactor = GlobalVariables::GetInstance()->GetFloatValue(JsonKey::RailCamera::kGroupName, JsonKey::RailCamera::kClearLerpFactor);
-
-	//カメラの更新
-	camera_->SetTranslate(SlerpTranslateByCenterAxis(targetParentWorldTransform_.parent_->GetWorldPosition(), Vector3{ 0.0f, 1.0f, 0.0f }, worldTransform_.GetWorldPosition(), targetParentWorldTransform_.GetWorldPosition(), -1.0f, lerpFactor));
-	// プレイヤーの正面を向くようにカメラの回転を調整する
-	camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, targetRotation_, lerpFactor));
-	camera_->Update();
+	stateMachine_->ChangeState<RailCameraClearSceneState>();
 }
 
 void RailCamera::CreateTargetRotationFromDirection(const Vector3& direction)
@@ -148,5 +125,18 @@ void RailCamera::UpdateClearScene()
 	// プレイヤーの正面を向くようにカメラの回転を調整する
 	targetRotation_ = LerpAngle(worldTransform_.parent_->rotation_, targetRotation_, lerpFactor);
 	camera_->SetRotate(LerpAngle(camera_->GetRotate(), targetRotation_, lerpRotateFactor));
+	camera_->Update();
+}
+
+void RailCamera::EnterClearScene()
+{
+	targetParentWorldTransform_.UpdateMatrix();
+
+	const float lerpFactor = GlobalVariables::GetInstance()->GetFloatValue(JsonKey::RailCamera::kGroupName, JsonKey::RailCamera::kClearLerpFactor);
+
+	//カメラの更新
+	camera_->SetTranslate(SlerpTranslateByCenterAxis(targetParentWorldTransform_.parent_->GetWorldPosition(), Vector3{ 0.0f, 1.0f, 0.0f }, worldTransform_.GetWorldPosition(), targetParentWorldTransform_.GetWorldPosition(), -1.0f, lerpFactor));
+	// プレイヤーの正面を向くようにカメラの回転を調整する
+	camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, targetRotation_, lerpFactor));
 	camera_->Update();
 }

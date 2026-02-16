@@ -80,7 +80,7 @@ private:
 	void SpawnEnemies() override;
 
 	// ステートマシン
-	std::unique_ptr<YKEngine::StateMachine<EnemySpawnObjectStateContext>> stateMachine_; // 状態遷移管理クラスのインスタンス
+	std::unique_ptr<YKEngine::StateMachine<EnemySpawnObjectStateContext>> stateMachine_;
 
 	EnemyManager* enemyManager_ = nullptr; // 敵管理クラスのポインタ
 
