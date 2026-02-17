@@ -12,12 +12,14 @@
 #include "InstancingObjects.h"
 #include "manager/CameraManager.h"
 #include "StageObjects.h"
+#include "StateMachine.hpp"
+#include "TitleSceneStateContext.h"
 class SceneChangeStaging;
 
 /// <summary>
 /// タイトル画面のクラス。
 /// </summary>
-class TitleScene : public YKEngine::BaseScene
+class TitleScene : public YKEngine::BaseScene, private TitleSceneStateContext
 {
 public:
 
@@ -49,19 +51,19 @@ public:
 private:
 
 	/// <summary>
-	/// 開始部の更新。
-	/// </summary>
-	void UpdateStart();
-
-	/// <summary>
-	/// メイン部の更新。
-	/// </summary>
-	void UpdateMain();
-
-	/// <summary>
 	/// 終了部の更新。
 	/// </summary>
-	void UpdateEnd();
+	void UpdateEnd() override;
+
+	/// <summary>
+	/// シーン遷移演出が終了していたらtrueを返す。
+	/// </summary>
+	bool IsSceneStagingEnd() const override;
+
+	/// <summary>
+	/// シーンが終了するときの遷移演出の開始。
+	/// </summary>
+	void BeginSceneEndStaging() override;
 
 	/// <summary>
 	/// レベルの生成。
@@ -94,16 +96,8 @@ private:
 	//ステージオブジェクト
 	std::unique_ptr<StageObjects> stageObjects_;
 
-	//シーンのフェーズ
-	enum class Phase
-	{
-		kStart,	//開始部
-		kMain,	//メイン部
-		kEnd,	//終了部
-	};
-
-	//現在のフェーズ
-	Phase phase_ = Phase::kStart;
+	//ステートマシン
+	std::unique_ptr<YKEngine::StateMachine<TitleSceneStateContext>> stateMachine_;
 
 };
 

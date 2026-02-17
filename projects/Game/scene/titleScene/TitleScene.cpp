@@ -3,6 +3,7 @@
 #include "LevelDataLoader.h"
 #include "RootParams.h"
 #include "SceneChangeStaging.h"
+#include "TitleSceneStartState.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -46,6 +47,11 @@ void TitleScene::Initialize()
 	//シーンチェンジ演出の生成
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
 	sceneChangeStaging_->BeginSceneStart(StagingType::kFade);
+
+	//ステートマシンの生成と開始
+	stateMachine_ = std::make_unique<StateMachine<TitleSceneStateContext>>();
+	stateMachine_->Start(this);
+	stateMachine_->ChangeState<TitleSceneStartState>();
 }
 
 void TitleScene::Update()
@@ -63,24 +69,14 @@ void TitleScene::Update()
 	//カメラの更新
 	cameraManager_->Update();
 
-	switch (phase_)
-	{
-	case Phase::kStart:
+	//レールムーバーの更新
+	railMover_->Update();
 
-		UpdateStart();
-		break;
-	case Phase::kMain:
+	//レールカメラの更新
+	cameraManager_->UpdateRailCamera();
 
-		UpdateMain();
-		break;
-	case Phase::kEnd:
-
-		UpdateEnd();
-		break;
-	default:
-		break;
-	}
-
+	//ステートマシンの更新
+	stateMachine_->Update();
 }
 
 void TitleScene::Draw()
@@ -123,30 +119,6 @@ void TitleScene::Finalize()
 
 }
 
-void TitleScene::UpdateStart()
-{
-	if (sceneChangeStaging_->IsFinished())
-	{
-		phase_ = Phase::kMain;
-	}
-}
-
-void TitleScene::UpdateMain()
-{
-
-	//レールムーバーの更新
-	railMover_->Update();
-
-	//レールカメラの更新
-	cameraManager_->UpdateRailCamera();
-
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) 
-	{
-		phase_ = Phase::kEnd;
-		sceneChangeStaging_->BeginSceneEnd(StagingType::kEye);
-	}
-}
-
 void TitleScene::UpdateEnd()
 {
 	if (sceneChangeStaging_->IsFinished())
@@ -154,6 +126,16 @@ void TitleScene::UpdateEnd()
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("GameScene");
 	}
+}
+
+bool TitleScene::IsSceneStagingEnd() const
+{
+	return sceneChangeStaging_->IsFinished();
+}
+
+void TitleScene::BeginSceneEndStaging()
+{
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kEye);
 }
 
 void TitleScene::CreateLevel()

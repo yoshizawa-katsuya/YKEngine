@@ -196,6 +196,18 @@
     <Filter Include="ヘッダー ファイル\application\scene\gameOverScene\state">
       <UniqueIdentifier>{331602fb-4808-40ca-bc2e-0f84c63eae24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene\titleScene">
+      <UniqueIdentifier>{06b3e4d4-58dd-4c73-b22a-e7d70a7631f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene\titleScene\state">
+      <UniqueIdentifier>{52961062-499e-497d-bdb3-4330f325d14a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\scene\titleScene">
+      <UniqueIdentifier>{cb05b893-171f-493e-8976-0885f61ff005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\scene\titleScene\state">
+      <UniqueIdentifier>{1c8d3623-2dc3-4450-9f41-23b3f40ba9ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -263,9 +275,6 @@
     </ClCompile>
     <ClCompile Include="Engine\base\YKFramework.cpp">
       <Filter>ソース ファイル\engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\scene\TitleScene.cpp">
-      <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
     <ClCompile Include="Game\scene\SceneFactory.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
@@ -564,6 +573,21 @@
     <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneStateContext.cpp">
       <Filter>ソース ファイル\application\scene\gameOverScene\state</Filter>
     </ClCompile>
+    <ClCompile Include="Game\scene\titleScene\TitleScene.cpp">
+      <Filter>ソース ファイル\application\scene\titleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\titleScene\state\TitleSceneEndState.cpp">
+      <Filter>ソース ファイル\application\scene\titleScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\titleScene\state\TitleSceneMainState.cpp">
+      <Filter>ソース ファイル\application\scene\titleScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\titleScene\state\TitleSceneStartState.cpp">
+      <Filter>ソース ファイル\application\scene\titleScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\titleScene\state\TitleSceneStateContext.cpp">
+      <Filter>ソース ファイル\application\scene\titleScene\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -723,9 +747,6 @@
     </ClInclude>
     <ClInclude Include="Engine\base\YKFramework.h">
       <Filter>ヘッダー ファイル\engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\scene\TitleScene.h">
-      <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\scene\SceneFactory.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
@@ -1062,6 +1083,21 @@
     </ClInclude>
     <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneStateContext.h">
       <Filter>ヘッダー ファイル\application\scene\gameOverScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\titleScene\TitleScene.h">
+      <Filter>ヘッダー ファイル\application\scene\titleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\titleScene\state\TitleSceneEndState.h">
+      <Filter>ヘッダー ファイル\application\scene\titleScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\titleScene\state\TitleSceneMainState.h">
+      <Filter>ヘッダー ファイル\application\scene\titleScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\titleScene\state\TitleSceneStartState.h">
+      <Filter>ヘッダー ファイル\application\scene\titleScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\titleScene\state\TitleSceneStateContext.h">
+      <Filter>ヘッダー ファイル\application\scene\titleScene\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
