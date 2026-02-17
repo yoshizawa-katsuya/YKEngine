@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseScene.h"
 #include "AnimatedSprite.h"
+#include "GameOverSceneStateContext.h"
+#include "StateMachine.hpp"
 class SceneChangeStaging;
 
 namespace YKEngine
@@ -13,7 +15,7 @@ namespace YKEngine
 /// ゲームオーバー画面を管理するクラス。
 /// ゲームオーバー画面の初期化、更新、描画、終了処理を行う。
 /// </summary>
-class GameOverScene : public YKEngine::BaseScene
+class GameOverScene : public YKEngine::BaseScene, private GameOverSceneStateContext
 {
 public:
 
@@ -45,19 +47,19 @@ public:
 private:
 
 	/// <summary>
-	/// 開始部の更新。
-	/// </summary>
-	void UpdateStart();
-
-	/// <summary>
-	/// メイン部の更新。
-	/// </summary>
-	void UpdateMain();
-
-	/// <summary>
 	/// 終了部の更新。
 	/// </summary>
-	void UpdateEnd();
+	void UpdateEnd() override;
+
+	/// <summary>
+	/// シーン遷移演出が終了していたらtrueを返す。
+	/// </summary>
+	bool IsSceneStagingEnd() const override;
+
+	/// <summary>
+	/// シーンが終了するときの遷移演出の開始。
+	/// </summary>
+	void BeginSceneEndStaging() override;
 
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
@@ -71,16 +73,8 @@ private:
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
-	//シーンのフェーズ
-	enum class Phase 
-	{
-		kStart,	//開始部
-		kMain,	//メイン部
-		kEnd,	//終了部
-	};
-
-	//現在のフェーズ
-	Phase phase_ = Phase::kStart;
+	//ステートマシン
+	std::unique_ptr<YKEngine::StateMachine<GameOverSceneStateContext>> stateMachine_;
 
 };
 

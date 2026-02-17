@@ -184,6 +184,18 @@
     <Filter Include="ヘッダー ファイル\application\scene\clearScene\state">
       <UniqueIdentifier>{878168e9-7826-4c2e-8576-3ba169dcfc66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\scene\gameOverScene">
+      <UniqueIdentifier>{4a3bdc1d-e3b7-42ef-ac8a-a7009c377a91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\scene\gameOverScene\state">
+      <UniqueIdentifier>{eb46e4fa-e824-4bd1-9770-cf0a23dfb1c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene\gameOverScene">
+      <UniqueIdentifier>{eac1304a-0206-4621-b7c9-05816d458cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\scene\gameOverScene\state">
+      <UniqueIdentifier>{331602fb-4808-40ca-bc2e-0f84c63eae24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -402,9 +414,6 @@
     <ClCompile Include="Game\objects\eventTrigger\SpeedEventTrigger.cpp">
       <Filter>ソース ファイル\application\objects\eventTriger</Filter>
     </ClCompile>
-    <ClCompile Include="Game\scene\GameOverScene.cpp">
-      <Filter>ソース ファイル\application\scene</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\lib\GlobalVariables.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
@@ -539,6 +548,21 @@
     </ClCompile>
     <ClCompile Include="Game\scene\clearScene\state\ClearSceneStateContext.cpp">
       <Filter>ソース ファイル\application\scene\clearScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameOverScene\GameOverScene.cpp">
+      <Filter>ソース ファイル\application\scene\gameOverScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneEndState.cpp">
+      <Filter>ソース ファイル\application\scene\gameOverScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneMainState.cpp">
+      <Filter>ソース ファイル\application\scene\gameOverScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneStartState.cpp">
+      <Filter>ソース ファイル\application\scene\gameOverScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneStateContext.cpp">
+      <Filter>ソース ファイル\application\scene\gameOverScene\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -865,9 +889,6 @@
     <ClInclude Include="Game\objects\eventTrigger\SpeedEventTrigger.h">
       <Filter>ヘッダー ファイル\application\objects\eventTriger</Filter>
     </ClInclude>
-    <ClInclude Include="Game\scene\GameOverScene.h">
-      <Filter>ヘッダー ファイル\application\scene</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\lib\GlobalVariables.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
@@ -1026,6 +1047,21 @@
     </ClInclude>
     <ClInclude Include="Game\scene\clearScene\state\ClearSceneStateContext.h">
       <Filter>ヘッダー ファイル\application\scene\clearScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameOverScene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\application\scene\gameOverScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneEndState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameOverScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneMainState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameOverScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneStartState.h">
+      <Filter>ヘッダー ファイル\application\scene\gameOverScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneStateContext.h">
+      <Filter>ヘッダー ファイル\application\scene\gameOverScene\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

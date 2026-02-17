@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state;$(ProjectDir)Game\objects\railCamera;$(ProjectDir)Game\objects\railCamera\state;$(ProjectDir)Game\scene\clearScene;$(ProjectDir)Game\scene\clearScene\state</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state;$(ProjectDir)Game\objects\railCamera;$(ProjectDir)Game\objects\railCamera\state;$(ProjectDir)Game\scene\clearScene;$(ProjectDir)Game\scene\clearScene\state;$(ProjectDir)Game\scene\gameOverScene;$(ProjectDir)Game\scene\gameOverScene\state</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,7 +92,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state;$(ProjectDir)Game\objects\railCamera;$(ProjectDir)Game\objects\railCamera\state;$(ProjectDir)Game\scene\clearScene;$(ProjectDir)Game\scene\clearScene\state</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state;$(ProjectDir)Game\objects\railCamera;$(ProjectDir)Game\objects\railCamera\state;$(ProjectDir)Game\scene\clearScene;$(ProjectDir)Game\scene\clearScene\state;$(ProjectDir)Game\scene\gameOverScene;$(ProjectDir)Game\scene\gameOverScene\state</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -109,6 +109,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneEndState.cpp" />
+    <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneMainState.cpp" />
+    <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneStartState.cpp" />
+    <ClCompile Include="Game\scene\gameOverScene\state\GameOverSceneStateContext.cpp" />
     <ClCompile Include="Game\scene\clearScene\state\ClearSceneEndState.cpp" />
     <ClCompile Include="Game\scene\clearScene\state\ClearSceneMainState.cpp" />
     <ClCompile Include="Game\scene\clearScene\state\ClearSceneStartState.cpp" />
@@ -140,7 +144,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\manager\EffectManager.cpp" />
     <ClCompile Include="Game\objects\eventTrigger\BaseEventTrigger.cpp" />
     <ClCompile Include="Game\scene\clearScene\ClearScene.cpp" />
-    <ClCompile Include="Game\scene\GameOverScene.cpp" />
+    <ClCompile Include="Game\scene\gameOverScene\GameOverScene.cpp" />
     <ClCompile Include="Game\manager\EnemySpawnManager.cpp" />
     <ClCompile Include="Game\objects\bullet\BaseBullet.cpp" />
     <ClCompile Include="Engine\lib\GlobalVariables.cpp" />
@@ -395,6 +399,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneEndState.h" />
+    <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneMainState.h" />
+    <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneStartState.h" />
+    <ClInclude Include="Game\scene\gameOverScene\state\GameOverSceneStateContext.h" />
     <ClInclude Include="Game\scene\clearScene\state\ClearSceneEndState.h" />
     <ClInclude Include="Game\scene\clearScene\state\ClearSceneMainState.h" />
     <ClInclude Include="Game\scene\clearScene\state\ClearSceneStartState.h" />
@@ -431,7 +439,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\manager\EffectManager.h" />
     <ClInclude Include="Game\objects\eventTrigger\BaseEventTrigger.h" />
     <ClInclude Include="Game\scene\clearScene\ClearScene.h" />
-    <ClInclude Include="Game\scene\GameOverScene.h" />
+    <ClInclude Include="Game\scene\gameOverScene\GameOverScene.h" />
     <ClInclude Include="Game\manager\EnemySpawnManager.h" />
     <ClInclude Include="Game\objects\bullet\BaseBullet.h" />
     <ClInclude Include="Engine\lib\GlobalVariables.h" />

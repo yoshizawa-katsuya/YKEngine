@@ -4,6 +4,7 @@
 #include "SpritePlatform.h"
 #include "SceneManager.h"
 #include "SceneChangeStaging.h"
+#include "GameOverSceneStartState.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -29,6 +30,11 @@ void GameOverScene::Initialize()
 	//シーンチェンジ演出の生成
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
 	sceneChangeStaging_->BeginSceneStart(StagingType::kFade);
+
+	//ステートマシンの生成と開始
+	stateMachine_ = std::make_unique<StateMachine<GameOverSceneStateContext>>();
+	stateMachine_->Start(this);
+	stateMachine_->ChangeState<GameOverSceneStartState>();
 }
 
 void GameOverScene::Update()
@@ -41,23 +47,7 @@ void GameOverScene::Update()
 
 #endif // USE_IMGUI
 
-	switch (phase_)
-	{
-	case Phase::kStart:
-
-		UpdateStart();
-		break;
-	case Phase::kMain:
-
-		UpdateMain();
-		break;
-	case Phase::kEnd:
-
-		UpdateEnd();
-		break;
-	default:
-		break;
-	}
+	stateMachine_->Update();
 }
 
 void GameOverScene::Draw()
@@ -74,23 +64,6 @@ void GameOverScene::Finalize()
 {
 }
 
-void GameOverScene::UpdateStart()
-{
-	if (sceneChangeStaging_->IsFinished())
-	{
-		phase_ = Phase::kMain;
-	}
-}
-
-void GameOverScene::UpdateMain()
-{
-	if (input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) 
-	{
-		phase_ = Phase::kEnd;
-		sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
-	}
-}
-
 void GameOverScene::UpdateEnd()
 {
 	if (sceneChangeStaging_->IsFinished())
@@ -98,4 +71,14 @@ void GameOverScene::UpdateEnd()
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("TitleScene");
 	}
+}
+
+bool GameOverScene::IsSceneStagingEnd() const
+{
+	return sceneChangeStaging_->IsFinished();
+}
+
+void GameOverScene::BeginSceneEndStaging()
+{
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
 }
