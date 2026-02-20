@@ -16,42 +16,18 @@ void TackleEnemy02::OnCollision(Collider* other)
 	else if (other->GetTypeID() == CollisionTypeIdDef::kPlayer)
 	{
 		// プレイヤーと衝突したら自滅
-		Die({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
+		isDead_ = true;
+		hasRail_ = false;
 		Disappear();
 	}
 }
 
 void TackleEnemy02::UpdateApproach()
 {
-	//レールカメラに映っていたらメインフェーズへ
-	if (IsVisible(railCamera_))
-	{
-		phase_ = Phase::kMain;
-		MainInitialize();
-	}
 
 	//回転
 	Rotate();
 
-}
-
-void TackleEnemy02::UpdateMain()
-{
-
-	//回転
-	Rotate();
-
-	// 移動
-	Move();
-
-	//レールカメラに映っていなかったら離脱フェーズへ
-	if (!hasRail_ && !IsVisible(railCamera_))
-	{
-		phase_ = Phase::kLeave;
-	}
-
-	//ダメージリアクション
-	DamageReaction();
 }
 
 void TackleEnemy02::UpdateLeave()
@@ -62,14 +38,6 @@ void TackleEnemy02::UpdateLeave()
 	if (leaveTimer_ > leaveTime)
 	{
 		Disappear();
-	}
-
-	//画面内に戻ってきたらメインフェーズへ
-	if (IsVisible(railCamera_))
-	{
-		phase_ = Phase::kMain;
-		leaveTimer_ = 0.0f;
-		MainInitialize();
 	}
 
 	//回転
@@ -97,9 +65,10 @@ void TackleEnemy02::SetColliderID()
 	Collider::SetTypeID(CollisionTypeIdDef::kTackleEnemy);
 }
 
-void TackleEnemy02::Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition)
+void TackleEnemy02::DeadInitialize()
 {
-	BaseEnemy::Die(bulletVelocity, bulletPosition);
 	// ホーミング解除
 	isHoming_ = false;
+
+	BaseEnemy::DeadInitialize();
 }

@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseCharacter.h"
 #include "EnemySpawn.h"
+#include "EnemyStateContext.h"
+#include "StateMachine.hpp"
+#include <optional>
+
 class Player;
 class EnemyBulletManager;
 
@@ -8,7 +12,7 @@ class EnemyBulletManager;
 /// 敵の基底クラス。
 /// 継承して使用する。
 /// </summary>
-class BaseEnemy : public BaseCharacter
+class BaseEnemy : public BaseCharacter, protected EnemyStateContext
 {
 public:
 
@@ -66,27 +70,62 @@ protected:
 	/// <summary>
 	/// メイン部の初期化。
 	/// </summary>
-	virtual void MainInitialize();
+	virtual void MainInitialize() override;
+
+	/// <summary>
+	/// 離脱部の初期化。
+	/// </summary>
+	void LeaveInitialize() override;
+
+	/// <summary>
+	/// 死亡部の初期化。
+	/// </summary>
+	virtual void DeadInitialize() override;
 
 	/// <summary>
 	/// 接近更新。
 	/// </summary>
-	virtual void UpdateApproach();
+	virtual void UpdateApproach() override;
 
 	/// <summary>
 	/// メイン更新。
 	/// </summary>
-	virtual void UpdateMain();
+	virtual void UpdateMain() override;
 
 	/// <summary>
 	/// 離脱更新。
 	/// </summary>
-	virtual void UpdateLeave();
+	virtual void UpdateLeave() override;
 
 	/// <summary>
 	/// 死亡更新。
 	/// </summary>
-	void UpdateDead();
+	void UpdateDead() override;
+
+	/// <summary>
+	/// 離脱ステートに移行するならtrue
+	/// </summary>
+	virtual bool IsLeave() override;
+
+	/// <summary>
+	/// 離脱ステートからメインステートに移行するならtrue
+	/// </summary>
+	virtual bool IsMain() override;
+
+	/// <summary>
+	/// レールカメラに映っていればtrue
+	/// </summary>
+	bool IsInRailCamera() override;
+
+	/// <summary>
+	/// 死亡部の情報を返す。
+	/// </summary>
+	DieInfo GetDieInfo() override { return dieInfo_.value(); }
+
+	/// <summary>
+	/// 死亡していればtrueを返す。
+	/// </summary>
+	bool IsDeadStatus() override { return hitPoint_ <= 0; }
 
 	/// <summary>
 	/// 移動に使うスプライン曲線の作成。
@@ -126,13 +165,6 @@ protected:
 	virtual void OnCollisionPlayerBullet(Collider* other);
 
 	/// <summary>
-	/// 死亡処理。
-	/// </summary>
-	/// <param name="bulletVelocity">弾の速度</param>
-	/// <param name="bulletPosition">弾の位置</param>
-	virtual void Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition);
-
-	/// <summary>
 	/// 消滅処理。
 	/// </summary>
 	void Disappear();
@@ -145,15 +177,8 @@ protected:
 	//ダメージリアクションタイマー
 	float damageReactionTimer_ = 0.0f;
 
-	enum class Phase 
-	{
-		kApproach, // 接近する
-		kMain,	// メイン
-		kLeave,	// 離脱する
-		kDead,	// 死亡
-	};
-	//フェーズ
-	Phase phase_ = Phase::kApproach;
+	//ステートマシン
+	std::unique_ptr<YKEngine::StateMachine<EnemyStateContext>> stateMachine_;
 
 	// キャラクターの移動速さ
 	YKEngine::Vector3 velocity_ = {0.0f, 0.0f, 1.0f};
@@ -194,4 +219,7 @@ protected:
 	float blowAwaySpeed_;
 
 	float waitTime_ = 0.0f; // 待機時間
+
+	// 死亡部の情報
+	std::optional<DieInfo> dieInfo_; 
 };

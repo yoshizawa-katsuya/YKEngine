@@ -11,6 +11,7 @@
 #include "Random.h"
 #include "bullet/BaseBullet.h"
 #include <algorithm>
+#include "EnemyApproachState.h"
 
 using namespace YKEngine;
 
@@ -51,24 +52,17 @@ void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera
 
 	waitTime_ = spawnData.waitTime;
 	worldTransform_.rotation_ = spawnData.rotation;
+
+	//ステートマシンの初期化と開始、最初のステートは接近ステートにする
+	stateMachine_ = std::make_unique<StateMachine<EnemyStateContext>>();
+	stateMachine_->Start(this);
+	stateMachine_->ChangeState<EnemyApproachState>();
+
 }
 
 void BaseEnemy::Update() {
 
-	switch (phase_) {
-	case Phase::kApproach:
-		UpdateApproach();
-		break;
-	case Phase::kMain:
-		UpdateMain();
-		break;
-	case Phase::kLeave:
-		UpdateLeave();
-		break;
-	case Phase::kDead:
-		UpdateDead();
-		break;
-	}
+	stateMachine_->Update();
 
 	BaseCharacter::Update();
 }
@@ -110,18 +104,41 @@ void BaseEnemy::MainInitialize()
 {
 }
 
+void BaseEnemy::LeaveInitialize()
+{
+	leaveTimer_ = 0.0f;
+}
+
+void BaseEnemy::DeadInitialize()
+{
+	isDead_ = true;
+	hasRail_ = false;
+
+	// 死亡時の速度を設定
+	Vector3 directionBullet = Normalize(dieInfo_->bulletVelocity);
+	Vector3 directionToEnemy = Normalize(GetWorldPosition() - dieInfo_->bulletPosition);
+
+	blowAwaySpeed_ = 5.5f;
+	const float kDirectionWeightBullet = 0.8f;
+	const float kDirectionWeightToEnemy = 0.2f;
+	velocity_ = Normalize(directionBullet * kDirectionWeightBullet + directionToEnemy * kDirectionWeightToEnemy) * blowAwaySpeed_;
+
+	// ランダムな回転ベクトルを設定
+	const Vector3 kRotateVectorMin = { -1.0f, -1.0f, -1.0f };
+	const Vector3 kRotateVectorMax = { 1.0f, 1.0f, 1.0f };
+
+	const float kRotateSpeedMin = 0.5f;
+	const float kRotateSpeedMax = 2.0f;
+
+	Random* random = Random::GetInstance();
+	rotateVector_ = Normalize(random->GetVector3(kRotateVectorMin, kRotateVectorMax)) * random->GetFloat(kRotateSpeedMin, kRotateSpeedMax);
+}
+
 void BaseEnemy::UpdateApproach()
 {
 
 	// 移動
 	Move();
-
-	//レールカメラに映っていたらメインフェーズへ
-	if (IsVisible(railCamera_))
-	{
-		phase_ = Phase::kMain;
-		MainInitialize();
-	}
 
 	//回転
 	Rotate();
@@ -139,12 +156,6 @@ void BaseEnemy::UpdateMain()
 	//ダメージリアクション処理
 	DamageReaction();
 
-	//レールカメラに映っていなかったら離脱フェーズへ
-	if (!hasRail_ && !IsVisible(railCamera_))
-	{
-		phase_ = Phase::kLeave;
-	}
-
 }
 
 void BaseEnemy::UpdateLeave()
@@ -155,14 +166,6 @@ void BaseEnemy::UpdateLeave()
 	if (leaveTimer_ > leaveTime) 
 	{
 		Disappear();
-	}
-
-	//画面内に戻ってきたらメインフェーズへ。画面の揺れなどで戻ってきた場合を考慮し、離脱タイマーもリセットする
-	if (IsVisible(railCamera_))
-	{
-		phase_ = Phase::kMain;
-		leaveTimer_ = 0.0f;
-		MainInitialize();
 	}
 
 	// 移動
@@ -198,6 +201,21 @@ void BaseEnemy::UpdateDead()
 
 	// エフェクト生成
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyBrowAway01, GetWorldPosition(), 10);
+}
+
+bool BaseEnemy::IsLeave()
+{
+	return !IsVisible(railCamera_) && !hasRail_;
+}
+
+bool BaseEnemy::IsMain()
+{
+	return IsVisible(railCamera_);
+}
+
+bool BaseEnemy::IsInRailCamera()
+{
+	return IsVisible(railCamera_);
 }
 
 void BaseEnemy::CreateSplineCurve(const std::vector<Vector3>& controlPoints)
@@ -331,35 +349,8 @@ void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
 		return;
 	}
 	// 体力が0以下になったら死亡
-	Die(bullet->GetVelocity(), bullet->GetCenterPosition());
+ 	dieInfo_ = { bullet->GetVelocity(), bullet->GetCenterPosition() };
 
-}
-
-void BaseEnemy::Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition)
-{
-	isDead_ = true;
-	phase_ = Phase::kDead;
-	
-	hasRail_ = false;
-
-	// 死亡時の速度を設定
-	Vector3 directionBullet = Normalize(bulletVelocity);
-	Vector3 directionToEnemy = Normalize(GetWorldPosition() - bulletPosition);
-
-	blowAwaySpeed_ = 5.5f;
-	const float kDirectionWeightBullet = 0.8f;
-	const float kDirectionWeightToEnemy = 0.2f;
-	velocity_ = Normalize(directionBullet * kDirectionWeightBullet + directionToEnemy * kDirectionWeightToEnemy) * blowAwaySpeed_;
-
-	// ランダムな回転ベクトルを設定
-	const Vector3 kRotateVectorMin = { -1.0f, -1.0f, -1.0f };
-	const Vector3 kRotateVectorMax = { 1.0f, 1.0f, 1.0f };
-
-	const float kRotateSpeedMin = 0.5f;
-	const float kRotateSpeedMax = 2.0f;
-	
-	Random* random = Random::GetInstance();
-	rotateVector_ = Normalize(random->GetVector3(kRotateVectorMin, kRotateVectorMax)) * random->GetFloat(kRotateSpeedMin, kRotateSpeedMax);
 }
 
 void BaseEnemy::Disappear()

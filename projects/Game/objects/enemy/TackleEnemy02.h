@@ -28,11 +28,6 @@ private:
 	void UpdateApproach() override;
 
 	/// <summary>
-	/// メイン時の更新処理。
-	/// </summary>
-	void UpdateMain() override;
-
-	/// <summary>
 	/// 離脱時の更新処理。
 	/// </summary>
 	void UpdateLeave() override;
@@ -48,9 +43,9 @@ private:
 	void SetColliderID() override;
 
 	/// <summary>
-	/// 死亡時の処理。
+	/// 死亡部の初期化。
 	/// </summary>
-	void Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition) override;
+	void DeadInitialize() override;
 
 	bool isHoming_ = true;
 

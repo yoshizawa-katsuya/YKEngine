@@ -27,17 +27,17 @@ public:
 	void UpdateMain() override;
 
 	/// <summary>
-	/// 弾の発射。
-	/// </summary>
-	void Fire();
-
-	/// <summary>
 	/// パラメータの設定。
 	/// </summary>
 	/// <param name="params">パラメータ。</param>
 	void SetParams(ShotEnemyParams params) { params_ = params; }
 
-protected:
+private:
+
+	/// <summary>
+	/// 弾の発射。
+	/// </summary>
+	void Fire();
 
 	// パラメータ
 	ShotEnemyParams params_;

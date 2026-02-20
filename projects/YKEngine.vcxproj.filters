@@ -208,6 +208,18 @@
     <Filter Include="ソース ファイル\application\scene\titleScene\state">
       <UniqueIdentifier>{1c8d3623-2dc3-4450-9f41-23b3f40ba9ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\objects\enemy">
+      <UniqueIdentifier>{d83132f4-3951-4e0d-946b-2ff37b2b3579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\enemy">
+      <UniqueIdentifier>{b282048a-3383-4368-bc33-8be422cc8272}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\objects\enemy\state">
+      <UniqueIdentifier>{ae4bec81-19a6-4194-bea8-adcbef61e6dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\enemy\state">
+      <UniqueIdentifier>{9535e63c-7592-4e77-8674-f1f0e78e3c9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -378,9 +390,6 @@
     <ClCompile Include="Game\objects\BaseCharacter.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\BaseEnemy.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game\objects\Collider.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
@@ -388,9 +397,6 @@
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\ReticleController.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\ShotEnemy01.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\bullet\BaseBullet.cpp">
@@ -426,9 +432,6 @@
     <ClCompile Include="Engine\lib\GlobalVariables.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\TackleEnemy01.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\lib\Random.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
@@ -449,9 +452,6 @@
     </ClCompile>
     <ClCompile Include="Game\objects\bullet\TargetEnemyBullet01.cpp">
       <Filter>ソース ファイル\application\objects\bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\TackleEnemy02.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\player\Player.cpp">
       <Filter>ソース ファイル\application\objects\player</Filter>
@@ -587,6 +587,33 @@
     </ClCompile>
     <ClCompile Include="Game\scene\titleScene\state\TitleSceneStateContext.cpp">
       <Filter>ソース ファイル\application\scene\titleScene\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\BaseEnemy.cpp">
+      <Filter>ソース ファイル\application\objects\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\ShotEnemy01.cpp">
+      <Filter>ソース ファイル\application\objects\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\TackleEnemy01.cpp">
+      <Filter>ソース ファイル\application\objects\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\TackleEnemy02.cpp">
+      <Filter>ソース ファイル\application\objects\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\state\EnemyApproachState.cpp">
+      <Filter>ソース ファイル\application\objects\enemy\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\state\EnemyDeadState.cpp">
+      <Filter>ソース ファイル\application\objects\enemy\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\state\EnemyLeaveState.cpp">
+      <Filter>ソース ファイル\application\objects\enemy\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\state\EnemyMainState.cpp">
+      <Filter>ソース ファイル\application\objects\enemy\state</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\enemy\state\EnemyStateContext.cpp">
+      <Filter>ソース ファイル\application\objects\enemy\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -859,9 +886,6 @@
     <ClInclude Include="Game\objects\BaseCharacter.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\BaseEnemy.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\Collider.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
@@ -872,9 +896,6 @@
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\ReticleController.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\ShotEnemy01.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\bullet\BaseBullet.h">
@@ -919,9 +940,6 @@
     <ClInclude Include="Engine\lib\MyMath.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\TackleEnemy01.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\lib\Color.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
@@ -944,9 +962,6 @@
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\SceneChangeStaging.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\TackleEnemy02.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\JsonKeys.h">
@@ -1098,6 +1113,33 @@
     </ClInclude>
     <ClInclude Include="Game\scene\titleScene\state\TitleSceneStateContext.h">
       <Filter>ヘッダー ファイル\application\scene\titleScene\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\BaseEnemy.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\ShotEnemy01.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\TackleEnemy01.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\TackleEnemy02.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\state\EnemyApproachState.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\state\EnemyDeadState.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\state\EnemyLeaveState.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\state\EnemyMainState.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\enemy\state\EnemyStateContext.h">
+      <Filter>ヘッダー ファイル\application\objects\enemy\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

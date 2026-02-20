@@ -47,11 +47,6 @@ protected:
 	void UpdateApproach() override;
 
 	/// <summary>
-	/// メイン更新。
-	/// </summary>
-	void UpdateMain() override;
-
-	/// <summary>
 	/// 離脱時の更新処理。
 	/// </summary>
 	void UpdateLeave() override;
@@ -59,7 +54,7 @@ protected:
 	/// <summary>
 	/// 移動処理。
 	/// </summary>
-	virtual void Move() override;
+	void Move() override;
 
 	/// <summary>
 	/// コライダーIDの設定。
@@ -67,9 +62,19 @@ protected:
 	void SetColliderID() override;
 
 	/// <summary>
-	/// 死亡時の処理。
+	/// 離脱ステートに移行するならtrue
 	/// </summary>
-	void Die(const YKEngine::Vector3& bulletVelocity, const YKEngine::Vector3& bulletPosition) override;
+	bool IsLeave() override;
+
+	/// <summary>
+	/// 離脱ステートからメインステートに移行するならtrue
+	/// </summary>
+	bool IsMain() override;
+
+	/// <summary>
+	/// 死亡部の初期化。
+	/// </summary>
+	void DeadInitialize() override;
 
 	bool isHoming_ = true;
 
@@ -82,6 +87,9 @@ private:
 
 	YKEngine::WorldTransform target_;
 	float targetRadius_; // ターゲットの半径
+
+	//離脱するときはtrue
+	bool isLeave_ = false;
 
 };
 
