@@ -78,7 +78,7 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 				BaseModel* model = modelPlatform->CreateRigidModel(objectData.filePath, key).get();
 				//マテリアルの設定
 				model->SetShininess(10.0f);
-				instancingObjects_[key]->Initialize(modelPlatform->CreateRigidModel(objectData.filePath, key).get(), 128);
+				instancingObjects_[key]->Initialize(model, 128);
 			}
 		}
 		//ワールド変換の初期化

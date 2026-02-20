@@ -79,7 +79,7 @@ private:
 	YKEngine::Vector3 target_;
 	YKEngine::Vector3 forward_;
 
-	float speed_ = 0.1f;
+	float speed_ = 0.2f;
 
 	uint32_t difference_ = 5;
 	uint32_t moveCount_ = 0;
