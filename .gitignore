@@ -322,3 +322,6 @@ MigrationBackup/
 
 #imgui.iniを除外
 imgui.ini
+
+#FireAlpacaのファイルを除外
+*.mdp
