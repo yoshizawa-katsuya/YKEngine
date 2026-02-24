@@ -1,6 +1,7 @@
 #include "StageObjects.h"
 #include "ModelPlatform.h"
 #include "My3dObject.h"
+#include "RootParams.h"
 
 using namespace YKEngine;
 
@@ -64,14 +65,20 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 		if (!instancingObjects_.contains(key))
 		{
 			instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
+			const std::string modelName = "decoreation";
+
 			//インスタンスオブジェクトの初期化
 			if (key == "primitiveCube")
 			{
-				instancingObjects_[key]->Initialize(modelPlatform->CreateCube(textureHandle).get(), 128);
+				BaseModel* model = modelPlatform->CreateCube(textureHandle, modelName).get();
+				model->SetEnvironmentCoefficient(0.5f);
+				instancingObjects_[key]->Initialize(model, 128);
 			}
 			else if (key == "primitiveSphere")
 			{
-				instancingObjects_[key]->Initialize(modelPlatform->CreateSphere(textureHandle).get(), 128);
+				BaseModel* model = modelPlatform->CreateSphere(textureHandle, modelName).get();
+				model->SetEnvironmentCoefficient(0.5f);
+				instancingObjects_[key]->Initialize(model, 128);
 			}
 			else if (key == "Sun.obj")
 			{
@@ -95,6 +102,8 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 
 void StageObjects::InstancingDraw(YKEngine::Camera* camera)
 {
+	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
+
 	for (const auto& [name, instancingObject] : instancingObjects_)
 	{
 		instancingObject->CameraUpdate(camera);
