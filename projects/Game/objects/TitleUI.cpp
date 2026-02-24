@@ -2,6 +2,8 @@
 #include "Sprite.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "Lerp.h"
+#include "Easing.h"
 
 using namespace YKEngine;
 
@@ -32,6 +34,32 @@ void TitleUI::Update()
 	SetUIPosition();
 
 #endif // _DEBUG
+
+	t_ += 1.0f / 60.0f; // 60FPSで更新されることを想定
+
+	//t_が1を超えないようにする
+	if (t_ > 1.0f)
+	{
+		t_ = 1.0f;
+	}
+
+	//Aの表示/非表示を切り替える
+	if (isPressAVisible_)
+	{
+		spritePressA_->SetColor({ 1.0f, 1.0f, 1.0f, Lerp(0.0f, 1.0f, EaseOutSine(t_)) });
+	}
+	else
+	{
+		spritePressA_->SetColor({ 1.0f, 1.0f, 1.0f, Lerp(1.0f, 0.0f, EaseInSine(t_)) });
+	}
+
+	//t_が1を超えたら、Aの表示/非表示を切り替える
+	if (t_ >= 1.0f)
+	{
+		t_ = 0.0f;
+		isPressAVisible_ = !isPressAVisible_;
+	}
+
 }
 
 void TitleUI::Draw()

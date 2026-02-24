@@ -35,5 +35,10 @@ private:
 	std::unique_ptr<YKEngine::Sprite> spriteLogo_;//タイトルロゴ
 	std::unique_ptr<YKEngine::Sprite> spritePressA_;//Aボタンを押してくださいのスプライト
 
+	float t_ = 0.0f; //点滅の時間計測用変数
+
+	// PressAのスプライトが現れていくときはtrue、消えていくときはfalse
+	bool isPressAVisible_ = true;
+
 };
 
