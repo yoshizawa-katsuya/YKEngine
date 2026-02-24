@@ -23,7 +23,7 @@ void StageObjects::Initialize()
 
 	//地面モデルの生成
 	std::shared_ptr<BaseModel> modelGround = modelPlatform->CreateRigidModel("./Resources/ground", "Ground.obj");
-	const float kGroundUVScale = 160.0f;
+	const float kGroundUVScale = 800.0f;
 	modelGround->SetUVTransform({ {kGroundUVScale, kGroundUVScale, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
 	modelGround->SetEnvironmentCoefficient(0.8f);
 
@@ -32,7 +32,7 @@ void StageObjects::Initialize()
 	ground_->Initialize(modelGround.get());
 	WorldTransform groundTransform;
 	groundTransform.Initialize();
-	groundTransform.scale_ = { 20.0f, 20.0f, 20.0f };
+	groundTransform.scale_ = { 100.0f, 1.0f, 100.0f };
 	groundTransform.UpdateMatrix();
 	ground_->WorldTransformUpdate(groundTransform);
 }
