@@ -615,6 +615,9 @@
     <ClCompile Include="Game\objects\enemy\state\EnemyStateContext.cpp">
       <Filter>ソース ファイル\application\objects\enemy\state</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\TitleUI.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -1140,6 +1143,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\enemy\state\EnemyStateContext.h">
       <Filter>ヘッダー ファイル\application\objects\enemy\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\TitleUI.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -27,12 +27,9 @@ void TitleScene::Initialize()
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
-	//テクスチャの読み込み
-	uint32_t textureHandleTitle = TextureManager::GetInstance()->Load("./Resources/title.png");
-	uint32_t textureHandleSceneChange = TextureManager::GetInstance()->Load("./Resources/SceneChange01_sheet.png");
-
-	spriteTitle_ = std::make_unique<Sprite>();
-	spriteTitle_->Initialize(textureHandleTitle);
+	//UIの生成
+	titleUI_ = std::make_unique<TitleUI>();
+	titleUI_->Initialize();
 
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
@@ -77,6 +74,10 @@ void TitleScene::Update()
 
 	//ステートマシンの更新
 	stateMachine_->Update();
+
+	//UIの更新
+	titleUI_->Update();
+
 }
 
 void TitleScene::Draw()
@@ -107,8 +108,8 @@ void TitleScene::Draw()
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
-	//タイトルロゴの描画
-	spriteTitle_->Draw();
+	// UIの描画
+	titleUI_->Draw();
 	
 	sceneChangeStaging_->Draw();
 

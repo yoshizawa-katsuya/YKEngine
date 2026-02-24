@@ -69,4 +69,15 @@ namespace JsonKey
 		const std::string kContinuePosition = "ContinuePosition";
 		const std::string kCursorOffset = "CousorOffset";
 	}
+
+	namespace Title
+	{
+		namespace UI
+		{
+			const std::string kGroupName = "TitleUI";
+
+			const std::string kLogoPosition = "LogoPosition";
+			const std::string kPressAPosition = "PressAPosition";
+		}
+	}
 }

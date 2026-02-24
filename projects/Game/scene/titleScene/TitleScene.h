@@ -14,6 +14,7 @@
 #include "StageObjects.h"
 #include "StateMachine.hpp"
 #include "TitleSceneStateContext.h"
+#include "TitleUI.h"
 class SceneChangeStaging;
 
 /// <summary>
@@ -84,7 +85,7 @@ private:
 
 	std::unique_ptr<CameraManager> cameraManager_;
 
-	std::unique_ptr<YKEngine::Sprite> spriteTitle_;//タイトルのスプライト
+	std::unique_ptr<TitleUI> titleUI_;
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
