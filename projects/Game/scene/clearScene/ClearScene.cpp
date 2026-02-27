@@ -161,6 +161,6 @@ bool ClearScene::IsEndSceneChangeStaging() const
 
 void ClearScene::EnterEnd()
 {
-	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade, {1.0f, 1.0f, 1.0f, 1.0f});
 	demoPlayer_->SetIsSceneEnd(true);
 }

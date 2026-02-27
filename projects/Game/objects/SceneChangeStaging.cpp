@@ -31,15 +31,19 @@ void SceneChangeStaging::Initialize()
 	spriteSceneChange_->Initialize(textureHandleSceneChange, 20, 3);
 	spriteSceneChange_->SetSize({ WinApp::kClientWidth , WinApp::kClientHeight });
 	spriteSceneChange_->SetIsLoop(false);
+	spriteSceneChange_->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
 
 	//フェードの初期化
 	fade_ = std::make_unique<Fade>();
 	fade_->Initialize();
+
+	fadeGray_ = std::make_unique<Fade>();
+	fadeGray_->Initialize({ 0.2f, 0.2f, 0.2f, 1.0f });
 }
 
 void SceneChangeStaging::Update()
 {
-	if (status_ == Status::kNone)
+	if (!isStaging_)
 	{
 		return;
 	}
@@ -48,6 +52,10 @@ void SceneChangeStaging::Update()
 	{
 	case StagingType::kFade:
 		fade_->Update();
+		break;
+	case StagingType::kMixFade:
+		fade_->Update();
+		fadeGray_->Update();
 		break;
 	case StagingType::kEye:
 		spriteSceneChange_->Update();
@@ -62,6 +70,10 @@ void SceneChangeStaging::Draw()
 	switch (stagingType_)
 	{
 	case StagingType::kFade:
+		fade_->Draw();
+		break;
+	case StagingType::kMixFade:
+		fadeGray_->Draw();
 		fade_->Draw();
 		break;
 	case StagingType::kEye:
@@ -82,13 +94,19 @@ void SceneChangeStaging::BeginSceneStart(StagingType stagingType)
 		fade_->Start(Fade::Status::kFadeIn, fadeDuration_);
 		fade_->Update();  // 即座に更新して真っ黒にする
 		break;
+	case StagingType::kMixFade:
+		fade_->Start(Fade::Status::kFadeIn, fadeDuration_);
+		fade_->Update();  // 即座に更新して真っ黒にする
+		fadeGray_->Start(Fade::Status::kFadeIn, fadeDuration_ / 2);
+		fadeGray_->Update();  // 即座に更新して真っ黒にする
+		break;
 	case StagingType::kEye:
 		spriteSceneChange_->Reset();
 		break;
 	default:
 		break;
 	}
-	status_ = Status::kStart;
+	isStaging_ = true;
 }
 
 void SceneChangeStaging::BeginSceneEnd(StagingType stagingType)
@@ -101,6 +119,12 @@ void SceneChangeStaging::BeginSceneEnd(StagingType stagingType)
 		fade_->Start(Fade::Status::kFadeOut, fadeDuration_);
 		fade_->Update();  // 即座に更新してフェードが見えないようにする
 		break;
+	case StagingType::kMixFade:
+		fade_->Start(Fade::Status::kFadeOut, fadeDuration_);
+		fade_->Update();  // 即座に更新してフェードが見えないようにする
+		fadeGray_->Start(Fade::Status::kFadeOut, fadeDuration_ / 2);
+		fadeGray_->Update();  // 即座に更新してフェードが見えないようにする
+		break;
 	case StagingType::kEye:
 		spriteSceneChange_->ResetReverseAnimation();
 		break;
@@ -108,7 +132,15 @@ void SceneChangeStaging::BeginSceneEnd(StagingType stagingType)
 		break;
 	}
 
-	status_ = Status::kEnd;
+	isStaging_ = true;
+}
+
+void SceneChangeStaging::BeginSceneEnd(StagingType stagingType, const Vector4& color)
+{
+	fade_->SetColor(color);
+	spriteSceneChange_->SetColor(color);
+
+	BeginSceneEnd(stagingType);
 }
 
 bool SceneChangeStaging::IsFinished()
@@ -117,6 +149,9 @@ bool SceneChangeStaging::IsFinished()
 	{
 	case StagingType::kFade:
 		return fade_->IsFinished();
+		break;
+	case StagingType::kMixFade:
+		return fade_->IsFinished() && fadeGray_->IsFinished();
 		break;
 	case StagingType::kEye:
 		return spriteSceneChange_->GetIsEnd();

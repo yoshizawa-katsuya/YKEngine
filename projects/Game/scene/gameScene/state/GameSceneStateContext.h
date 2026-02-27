@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector4.h"
 class Pause;
 
 /// <summary>
@@ -88,6 +89,6 @@ public:
 	/// <summary>
 	/// シーン終了演出の開始。
 	/// </summary>
-	virtual void StartSceneEndStaging() = 0;
+	virtual void StartSceneEndStaging(const YKEngine::Vector4& color) = 0;
 };
 

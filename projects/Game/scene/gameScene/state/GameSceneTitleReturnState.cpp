@@ -3,7 +3,7 @@
 
 void GameSceneTitleReturnState::OnEnter(GameSceneStateContext* gameScene)
 {
-	gameScene->StartSceneEndStaging();
+	gameScene->StartSceneEndStaging({0.0f, 0.0f, 0.0f, 1.0f});
 }
 
 void GameSceneTitleReturnState::OnUpdate(GameSceneStateContext* gameScene)

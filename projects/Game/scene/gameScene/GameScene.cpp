@@ -315,7 +315,8 @@ void GameScene::UpdateGameOver()
 	//シーン終了演出開始
 	if (isGameOverSceneChangeStagingStart_)
 	{
-		StartSceneEndStaging();
+		//黒でフェードアウト
+		StartSceneEndStaging({0.0f, 0.0f, 0.0f, 1.0f});
 		isGameOverSceneChangeStagingStart_ = false;
 	}
 
@@ -351,7 +352,8 @@ void GameScene::ProcessGameOver()
 
 void GameScene::ProcessGameClear()
 {
-	StartSceneEndStaging();
+	//白でフェードアウト
+	StartSceneEndStaging({1.0f, 1.0f, 1.0f, 1.0f});
 	player_->SetGameClear();
 }
 
@@ -360,9 +362,9 @@ void GameScene::ProcessPause()
 	pause_->SetIsPause(true);
 }
 
-void GameScene::StartSceneEndStaging()
+void GameScene::StartSceneEndStaging(const YKEngine::Vector4& color)
 {
-	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade, color);
 }
 
 void GameScene::CreateLevel()

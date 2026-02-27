@@ -135,7 +135,7 @@ private:
 	/// <summary>
 	/// シーン終了演出の開始。
 	/// </summary>
-	void StartSceneEndStaging() override;
+	void StartSceneEndStaging(const YKEngine::Vector4& color) override;
 
 	/// <summary>
 	/// 全ての衝突判定を行う。

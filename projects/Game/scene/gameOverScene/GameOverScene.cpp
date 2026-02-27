@@ -80,5 +80,5 @@ bool GameOverScene::IsSceneStagingEnd() const
 
 void GameOverScene::BeginSceneEndStaging()
 {
-	sceneChangeStaging_->BeginSceneEnd(StagingType::kFade);
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kMixFade, {0.0f, 0.0f, 0.0f, 1.0f});
 }

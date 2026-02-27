@@ -9,6 +9,7 @@ namespace YKEngine
 enum class StagingType
 {
 	kFade,		//フェード
+	kMixFade,	//ミックスフェード
 	kEye,		//目開閉
 };
 
@@ -53,6 +54,11 @@ public:
 	void BeginSceneEnd(StagingType stagingType);
 
 	/// <summary>
+	/// シーンの終わり開始
+	/// </summary>
+	void BeginSceneEnd(StagingType stagingType, const YKEngine::Vector4& color);
+
+	/// <summary>
 	/// 演出が終了したか
 	/// </summary>
 	bool IsFinished();
@@ -67,15 +73,8 @@ private:
 	SceneChangeStaging(SceneChangeStaging&) = delete;
 	const SceneChangeStaging& operator=(SceneChangeStaging&) = delete;
 
-	//シーンの状態
-	enum class Status
-	{
-		kStart,		//開始
-		kNone,		//通常
-		kEnd,		//終了
-	};
-
-	Status status_ = Status::kNone;	//現在のシーン状態
+	//演出中ならtrue
+	bool isStaging_ = false;
 
 	StagingType stagingType_ = StagingType::kEye;//演出タイプ
 
@@ -83,5 +82,6 @@ private:
 	std::unique_ptr<YKEngine::AnimatedSprite> spriteSceneChange_;//シーンチェンジのスプライト
 
 	std::unique_ptr<YKEngine::Fade> fade_;//フェード
+	std::unique_ptr<YKEngine::Fade> fadeGray_;//灰色フェード
 	const float fadeDuration_ = 1.0f;//フェード時間
 };

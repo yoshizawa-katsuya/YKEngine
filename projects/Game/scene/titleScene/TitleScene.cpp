@@ -139,7 +139,7 @@ bool TitleScene::IsSceneStagingEnd() const
 
 void TitleScene::BeginSceneEndStaging()
 {
-	sceneChangeStaging_->BeginSceneEnd(StagingType::kEye);
+	sceneChangeStaging_->BeginSceneEnd(StagingType::kEye, {0.0f, 0.0f, 0.0f, 1.0f});
 }
 
 void TitleScene::CreateLevel()
