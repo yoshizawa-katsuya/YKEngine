@@ -9,16 +9,14 @@ Fade::~Fade()
 {
 }
 
-void Fade::Initialize() 
+void YKEngine::Fade::Initialize(const Vector4& color)
 {
-
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle);
 	sprite_->SetSize(Vector2(WinApp::kClientWidth, WinApp::kClientHeight));
-	sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
-
+	sprite_->SetColor(color);
 }
 
 void Fade::Update() 

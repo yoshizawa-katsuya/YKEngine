@@ -27,7 +27,7 @@ public:
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	void Initialize();
+	void Initialize(const Vector4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
 
 	/// <summary>
 	/// 更新。
@@ -56,6 +56,12 @@ public:
 	/// </summary>
 	/// <returns>終了していればtrue、そうでなければfalse。</returns>
 	bool IsFinished();
+
+	/// <summary>
+	/// 色の設定
+	/// </summary>
+	/// <param name="color">色</param>
+	void SetColor(const Vector4& color) { sprite_->SetColor(color); }
 
 private:
 
