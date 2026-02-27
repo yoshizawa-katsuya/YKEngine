@@ -36,7 +36,7 @@ void Fade::Update()
 			counter_ = duration_;
 		}
 		// 0.0fから1.0fの間で、経過時間がフェード持続時間に近づくほどアルファ値を小さくする
-		sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, std::clamp(1.0f - (counter_ / duration_), 0.0f, 1.0f)));
+		sprite_->SetAlpha(std::clamp(1.0f - (counter_ / duration_), 0.0f, 1.0f));
 
 
 		break;
@@ -49,7 +49,7 @@ void Fade::Update()
 			counter_ = duration_;
 		}
 		//0.0fから1.0fの間で、経過時間がフェード持続時間に近づくほどアルファ値を大きくする
-		sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, std::clamp(counter_ / duration_, 0.0f, 1.0f)));
+		sprite_->SetAlpha(std::clamp(counter_ / duration_, 0.0f, 1.0f));
 
 		break;
 	default:

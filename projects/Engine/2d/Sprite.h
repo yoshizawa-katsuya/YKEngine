@@ -71,6 +71,8 @@ public:
 
 	void SetColor(const Vector4& color) { materialData_->color = color; }
 
+	void SetAlpha(float alpha) { materialData_->color.w = alpha; }
+
 	void SetAnchorPoint(Vector2 anchorPoint) { anchorPoint_ = anchorPoint; }
 
 	void SetIsFlipX(bool IsFlipX) { isFlipX_ = IsFlipX; }
