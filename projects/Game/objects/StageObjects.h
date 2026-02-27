@@ -18,6 +18,11 @@ public:
 	void Initialize();
 
 	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+
+	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw(YKEngine::Camera* camera);
@@ -45,6 +50,11 @@ public:
 	uint32_t GetTextureHandleSkyBox() const { return textureHandleSkyBox_; }
 
 private:
+
+	///<summary>
+	///jsonから値を読み込む
+	///</summary>
+	void LoadFromJson();
 
 	//テクスチャハンドル
 	uint32_t textureHandleSkyBox_;

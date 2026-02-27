@@ -76,6 +76,9 @@ void ClearScene::Update()
 	//レールカメラの更新
 	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
 
+	//ステージオブジェクトの更新
+	stageObjects_->Update();
+
 	//ステートマシンの更新
 	stateMachine_->Update();
 

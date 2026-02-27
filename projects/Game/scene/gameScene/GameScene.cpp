@@ -89,6 +89,10 @@ void GameScene::Update()
 	//カメラマネージャーの更新
 	cameraManager_->Update();
 
+	//ステージオブジェクトの更新
+	stageObjects_->Update();
+
+	//ステートマシンの更新
 	stateMachine_->Update();
 
 	modelPlatform_->LightPreUpdate();

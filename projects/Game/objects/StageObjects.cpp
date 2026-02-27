@@ -2,6 +2,8 @@
 #include "ModelPlatform.h"
 #include "My3dObject.h"
 #include "RootParams.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -12,9 +14,19 @@ void StageObjects::Initialize()
 	//テクスチャの読み込み
 	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
 
+	//グローバル変数に登録
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::StageObjects::kGroupName;
+	globalVariables->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kSkyBoxColor, Color(0.5f, 0.5f, 0.5f, 1.0f));
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient, 0.5f);
+
 	//スカイボックスの生成
 	skyBox_ = std::make_unique<My3dObject>();
-	skyBox_->Initialize(modelPlatform->CreateSkyBox(textureHandleSkyBox_).get());
+	BaseModel* skyBoxModel = modelPlatform->CreateSkyBox(textureHandleSkyBox_).get();
+	//skyBoxModel->SetColor({ 0.5f, 0.5f, 0.5f, 1.0f });
+
+	skyBox_->Initialize(skyBoxModel);
 	WorldTransform skyBoxTransform;
 	skyBoxTransform.Initialize();
 	const float kSkyBoxScale = 1000.0f;
@@ -26,7 +38,7 @@ void StageObjects::Initialize()
 	std::shared_ptr<BaseModel> modelGround = modelPlatform->CreateRigidModel("./Resources/ground", "Ground.obj");
 	const float kGroundUVScale = 800.0f;
 	modelGround->SetUVTransform({ {kGroundUVScale, kGroundUVScale, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
-	modelGround->SetEnvironmentCoefficient(0.8f);
+	//modelGround->SetEnvironmentCoefficient(0.5f);
 
 	//地面の生成
 	ground_ = std::make_unique<My3dObject>();
@@ -36,6 +48,21 @@ void StageObjects::Initialize()
 	groundTransform.scale_ = { 100.0f, 1.0f, 100.0f };
 	groundTransform.UpdateMatrix();
 	ground_->WorldTransformUpdate(groundTransform);
+
+	//jsonからステージオブジェクトの情報を読み込み
+	LoadFromJson();
+
+}
+
+void StageObjects::Update()
+{
+#ifdef _DEBUG
+
+	//jsonからステージオブジェクトの情報を読み込み
+	LoadFromJson();
+
+#endif // _DEBUG
+
 }
 
 void StageObjects::Draw(YKEngine::Camera* camera)
@@ -109,4 +136,17 @@ void StageObjects::InstancingDraw(YKEngine::Camera* camera)
 		instancingObject->CameraUpdate(camera);
 		instancingObject->Draw();
 	}
+}
+
+void StageObjects::LoadFromJson()
+{
+	// グローバル変数からステージオブジェクトの情報を取得
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::StageObjects::kGroupName;
+
+	Color color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kSkyBoxColor);
+	Vector4 colorVec4 = Vector4(color.r, color.g, color.b, color.a);
+	skyBox_->GetModel().SetColor(colorVec4);
+
+	ground_->GetModel().SetEnvironmentCoefficient(globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient));
 }

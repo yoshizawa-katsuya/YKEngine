@@ -80,4 +80,13 @@ namespace JsonKey
 			const std::string kPressAPosition = "PressAPosition";
 		}
 	}
+
+	namespace StageObjects
+	{
+		const std::string kGroupName = "StageObjects";
+		
+		const std::string kSkyBoxColor = "SkyBoxColor";
+		const std::string kGroundEnvironmentCoefficient = "GroundEnvironmentCoefficient";
+
+	}
 }
