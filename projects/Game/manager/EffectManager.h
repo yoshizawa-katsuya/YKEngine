@@ -14,6 +14,7 @@ enum class EffectType
 	kPlayerEnd01,	//高速。黒い球
 	kEnemyEnd01,	//高速。カラフルな球
 	kPlayerBulletTrac01, //弾丸の軌跡エフェクト
+	kPlayerBulletTrac02, //弾丸の軌跡エフェクト
 	kConfetti01,	//紙吹雪エフェクト1。カラフルな四角板
 	kEnemyBrowAway01, //敵が吹き飛ぶエフェクト1。
 };
@@ -88,15 +89,16 @@ private:
 	std::unordered_map<EffectType, EffectData> effectDatas_
 	{
 		{{EffectType::kHit01}, {"HitEffect01", "./Resources/circle2.png", "primitivePlane"}},
-		{{EffectType::kHit02}, {"HitEffect02", "./Resources/white.png", "primitiveSphere"}},
-		{{EffectType::kPlayerStart01}, {"PlayerStartEffect01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kHit02}, {"HitEffect02", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kPlayerStart01}, {"PlayerStartEffect01", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kPlayerStart02}, {"PlayerStartEffect02", "./Resources/white.png", "primitiveCube"}},
-		{{EffectType::kPlayerStart03}, {"PlayerStartEffect03", "./Resources/white.png", "primitiveSphere"}},
-		{{EffectType::kPlayerEnd01}, {"PlayerEndEffect01", "./Resources/black.png", "primitiveSphere"}},
-		{{EffectType::kEnemyEnd01}, {"EnemyEndEffect01", "./Resources/white.png", "primitiveSphere"}},
-		{{EffectType::kPlayerBulletTrac01}, {"PlayerBulletTrac01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kPlayerStart03}, {"PlayerStartEffect03", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kPlayerEnd01}, {"PlayerEndEffect01", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kEnemyEnd01}, {"EnemyEndEffect01", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kPlayerBulletTrac01}, {"PlayerBulletTrac01", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kPlayerBulletTrac02}, {"PlayerBulletTrac02", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kConfetti01}, {"ConfettiEffect01", "./Resources/white.png", "primitivePlane"}},
-		{{EffectType::kEnemyBrowAway01}, {"EnemyBrowAway01", "./Resources/white.png", "primitiveSphere"}},
+		{{EffectType::kEnemyBrowAway01}, {"EnemyBrowAway01", "./Resources/circle2.png", "primitivePlane"}},
 	};
 
 	//パーティクル

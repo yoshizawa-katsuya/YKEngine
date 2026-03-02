@@ -11,7 +11,7 @@
         "behaviorIsHeadCenter": false,
         "behaviorIsScaleToAppear": false,
         "behaviorIsTimeFadeOut": true,
-        "behaviorIsUseBillboard": false,
+        "behaviorIsUseBillboard": true,
         "behaviorSpeed": 25.0,
         "color": [
             1.0,
@@ -89,9 +89,9 @@
             0.0
         ],
         "scale": [
-            0.20000000298023224,
-            0.20000000298023224,
-            0.20000000298023224
+            0.4000000059604645,
+            0.4000000059604645,
+            1.0
         ],
         "translation": [
             0.0,

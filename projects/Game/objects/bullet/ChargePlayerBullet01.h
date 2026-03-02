@@ -18,5 +18,11 @@ public:
 	/// <param name="direction">方向</param>
 	/// <param name="targetEnemy">ターゲットの敵</param>
 	void Initialize(YKEngine::BaseModel* model, const YKEngine::Vector3& position, const YKEngine::Vector3& direction, BaseEnemy* targetEnemy) override;
+
+	/// <summary>
+	/// 更新。
+	/// </summary>
+	void Update() override;
+
 };
 
