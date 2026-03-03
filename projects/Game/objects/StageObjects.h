@@ -15,7 +15,8 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	/// <param name="isDayTime">昼ならtrue</param>
+	void Initialize(bool isDayTime = false);
 
 	/// <summary>
 	/// 更新
@@ -67,6 +68,9 @@ private:
 
 	//オブジェクト
 	std::map<std::string, std::unique_ptr<YKEngine::InstancingObjects>> instancingObjects_;
+
+	//昼ならtrue
+	bool isDayTime_;
 
 };
 

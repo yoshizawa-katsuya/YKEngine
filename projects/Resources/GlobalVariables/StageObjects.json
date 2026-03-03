@@ -1,7 +1,7 @@
 {
     "StageObjects": {
         "GroundEnvironmentCoefficient": 0.12999999523162842,
-        "SkyBoxColor": [
+        "NightSkyBoxColor": [
             0.15753555297851563,
             0.16266649961471558,
             0.21568626165390015,

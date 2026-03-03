@@ -85,7 +85,8 @@ namespace JsonKey
 	{
 		const std::string kGroupName = "StageObjects";
 		
-		const std::string kSkyBoxColor = "SkyBoxColor";
+		const std::string kNightSkyBoxColor = "NightSkyBoxColor";
+		const std::string kDayTimeSkyBoxColor = "DayTimeSkyBoxColor";
 		const std::string kGroundEnvironmentCoefficient = "GroundEnvironmentCoefficient";
 
 	}

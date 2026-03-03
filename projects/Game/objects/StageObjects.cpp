@@ -7,25 +7,38 @@
 
 using namespace YKEngine;
 
-void StageObjects::Initialize()
+void StageObjects::Initialize(bool isDayTime)
 {
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
 
-	//テクスチャの読み込み
-	textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox.dds");
+	isDayTime_ = isDayTime;
 
 	//グローバル変数に登録
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::StageObjects::kGroupName;
 	globalVariables->CreateGroup(groupName);
-	globalVariables->AddItem(groupName, JsonKey::StageObjects::kSkyBoxColor, Color(0.5f, 0.5f, 0.5f, 1.0f));
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kNightSkyBoxColor, Color(0.5f, 0.5f, 0.5f, 1.0f));
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kDayTimeSkyBoxColor, Color(1.0f, 1.0f, 1.0f, 1.0f));
 	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient, 0.5f);
+
+
+	//モデルの読み込み
+	BaseModel* skyBoxModel;
+
+	//テクスチャの読み込み
+	if (isDayTime_)
+	{
+		textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/daytime.dds");
+		skyBoxModel = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "DayTime").get();
+	}
+	else
+	{
+		textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/night.dds");
+		skyBoxModel = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "Night").get();
+	}	
 
 	//スカイボックスの生成
 	skyBox_ = std::make_unique<My3dObject>();
-	BaseModel* skyBoxModel = modelPlatform->CreateSkyBox(textureHandleSkyBox_).get();
-	//skyBoxModel->SetColor({ 0.5f, 0.5f, 0.5f, 1.0f });
-
 	skyBox_->Initialize(skyBoxModel);
 	WorldTransform skyBoxTransform;
 	skyBoxTransform.Initialize();
@@ -38,7 +51,6 @@ void StageObjects::Initialize()
 	std::shared_ptr<BaseModel> modelGround = modelPlatform->CreateRigidModel("./Resources/ground", "Ground.obj");
 	const float kGroundUVScale = 800.0f;
 	modelGround->SetUVTransform({ {kGroundUVScale, kGroundUVScale, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
-	//modelGround->SetEnvironmentCoefficient(0.5f);
 
 	//地面の生成
 	ground_ = std::make_unique<My3dObject>();
@@ -144,7 +156,15 @@ void StageObjects::LoadFromJson()
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::StageObjects::kGroupName;
 
-	Color color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kSkyBoxColor);
+	Color color;
+	if (isDayTime_)
+	{
+		color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kDayTimeSkyBoxColor);
+	}
+	else
+	{
+		color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kNightSkyBoxColor);
+	}
 	Vector4 colorVec4 = Vector4(color.r, color.g, color.b, color.a);
 	skyBox_->GetModel().SetColor(colorVec4);
 
