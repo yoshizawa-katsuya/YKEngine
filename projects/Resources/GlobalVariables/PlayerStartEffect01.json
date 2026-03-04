@@ -21,7 +21,7 @@
         ],
         "count": 2,
         "frequency": 0.5,
-        "randomFlagsColor": true,
+        "randomFlagsColor": false,
         "randomFlagsLifeTime": true,
         "randomFlagsRotation": false,
         "randomFlagsRotationVelocity": false,
