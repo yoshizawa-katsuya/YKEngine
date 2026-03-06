@@ -57,7 +57,7 @@ void GameScene::Initialize() {
 
 	//カメラの生成
 	cameraManager_ = std::make_unique<CameraManager>();
-	cameraManager_->Initialize(railMover_->GetWorldTransform(), player_->GetWorldTransform());
+	cameraManager_->InitializeBeforeGameStart(railMover_->GetWorldTransform(), player_->GetWorldTransform());
 	player_->SetRailCamera(cameraManager_->GetRailCameraInner());
 
 	//敵マネージャーの生成
@@ -223,6 +223,9 @@ void GameScene::CheckAllColision()
 void GameScene::UpdateStart()
 {
 	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
+
+	//レールカメラの更新
+	cameraManager_->UpdateRailCamera();
 
 	//プレイヤーの更新
 	player_->Update();

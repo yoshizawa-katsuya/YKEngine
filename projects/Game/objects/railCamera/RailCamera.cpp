@@ -8,7 +8,9 @@
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
 #include "RailCameraMainState.h"
+#include "RailCameraStartState.h"
 #include "RailCameraClearSceneState.h"
+#include "Easing.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -26,6 +28,8 @@ void RailCamera::Initialize(WorldTransform* parent, WorldTransform* playerWorldT
 	globalVariables->AddItem(groupName, JsonKey::RailCamera::kClearLerpTranslateFactor, 0.1f);
 	globalVariables->AddItem(groupName, JsonKey::RailCamera::kClearLerpRotateFactor, 0.03f);
 	globalVariables->AddItem(groupName, JsonKey::RailCamera::kGameOverIncrease, 0.03f);
+	globalVariables->AddItem(groupName, JsonKey::RailCamera::kStartTIncrease, 1.0f / 60.0f);
+	globalVariables->AddItem(groupName, JsonKey::RailCamera::kStartOfset, Vector3{ 0.0f, 100.0f, 0.0f });
 
 	//ワールドトランスフォームの初期設定
 	worldTransform_.Initialize();
@@ -71,9 +75,40 @@ void RailCamera::SetClearScene()
 	stateMachine_->ChangeState<RailCameraClearSceneState>();
 }
 
+void RailCamera::SetStart()
+{
+	stateMachine_->ChangeState<RailCameraStartState>();
+}
+
 void RailCamera::CreateTargetRotationFromDirection(const Vector3& direction)
 {
 	targetRotation_ = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction);
+}
+
+void RailCamera::UpdateStart()
+{
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	t_ += globalVariables->GetFloatValue(JsonKey::RailCamera::kGroupName, JsonKey::RailCamera::kStartTIncrease);
+	if (t_ > 1.0f)
+	{
+		t_ = 1.0f;
+	}
+
+	// 親の位置から上にオフセットした位置をスタート位置とする
+	Vector3 ofset = globalVariables->GetVector3Value(JsonKey::RailCamera::kGroupName, JsonKey::RailCamera::kStartOfset);
+	ofset = TransformNormal(ofset, worldTransform_.parent_->worldMatrix_); // オフセットを親の回転に合わせて変換
+
+	Vector3 startPosition = worldTransform_.GetWorldPosition() + ofset;
+
+	//カメラの更新
+	camera_->SetTranslate(Lerp(startPosition, worldTransform_.GetWorldPosition(), EaseOutCubic(t_)));
+
+	Vector3 direction = worldTransform_.parent_->GetWorldPosition() - camera_->GetTranslate(); // カメラから親の位置へのベクトルを計算
+	Vector3 targetRotate = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction); // カメラの回転をベクトルの方向に向ける
+
+	camera_->SetRotate(targetRotate);
+	camera_->Update();
 }
 
 void RailCamera::UpdateMain()

@@ -36,6 +36,13 @@ void CameraManager::InitializeForClearScene(WorldTransform* railMoverWorldTransf
 	railCamera_->SetClearScene();
 }
 
+void CameraManager::InitializeBeforeGameStart(YKEngine::WorldTransform* railMoverWorldTransform, YKEngine::WorldTransform* playerWorldTransform)
+{
+	Initialize(railMoverWorldTransform, playerWorldTransform);
+
+	railCamera_->SetStart();
+}
+
 void CameraManager::Update()
 {
 

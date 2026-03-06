@@ -12,6 +12,11 @@ public:
 	/// <summary>
 	/// メインの更新。
 	/// </summary>
+	virtual void UpdateStart() = 0;
+
+	/// <summary>
+	/// メインの更新。
+	/// </summary>
 	virtual void UpdateMain() = 0;
 
 	/// <summary>
@@ -38,4 +43,9 @@ public:
 	/// クリアシーンステートに入る際の処理
 	/// </summary>
 	virtual void EnterClearScene() = 0;
+
+	/// <summary>
+	/// 補完係数t_を取得
+	/// </summary>
+	virtual float GetT() const = 0;
 };

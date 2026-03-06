@@ -52,6 +52,8 @@ namespace JsonKey
 		const std::string kClearLerpTranslateFactor = "ClearLerpTranslateFactor";
 		const std::string kClearLerpRotateFactor = "ClearLerpRotateFactor";
 		const std::string kGameOverIncrease = "GameOverIncrease";
+		const std::string kStartTIncrease = "StartTIncrease";
+		const std::string kStartOfset = "StartOffset";
 	}
 
 	namespace RailMover

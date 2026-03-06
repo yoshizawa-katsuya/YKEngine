@@ -41,6 +41,11 @@ public:
 	void SetClearScene();
 
 	/// <summary>
+	/// スタート演出に移行したことを通知。
+	/// </summary>
+	void SetStart();
+
+	/// <summary>
 	/// 方向からtargetRotation_を作成。
 	/// </summary>
 	void CreateTargetRotationFromDirection(const YKEngine::Vector3& direction);
@@ -48,6 +53,11 @@ public:
 	YKEngine::Camera* GetCamera() { return camera_.get(); }
 
 private:
+
+	/// <summary>
+	/// メインの更新。
+	/// </summary>
+	void UpdateStart() override;
 
 	/// <summary>
 	/// メインフェーズの更新。
@@ -77,7 +87,12 @@ private:
 	/// <summary>
 	/// 補完係数t_をリセット
 	/// </summary>
-	void ReaetT() { t_ = 0.0f; }
+	void ReaetT() override { t_ = 0.0f; }
+
+	/// <summary>
+	/// 補完係数t_を取得
+	/// </summary>
+	float GetT() const override { return t_; }
 
 	// ステートマシン
 	std::unique_ptr<YKEngine::StateMachine<RailCameraStateContext>> stateMachine_;

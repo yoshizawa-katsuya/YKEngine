@@ -28,6 +28,13 @@ public:
 	void InitializeForClearScene(YKEngine::WorldTransform* railMoverWorldTransform, const YKEngine::Vector3& targetDirection);
 
 	/// <summary>
+	/// ゲーム開始前の初期化
+	/// </summary>
+	/// <param name="railMoverWorldTransform">レールムーバーのワールド変換</param>
+	/// <param name="targetDirection">注視点への方向ベクトル</param>
+	void InitializeBeforeGameStart(YKEngine::WorldTransform* railMoverWorldTransform, YKEngine::WorldTransform* playerWorldTransform);
+
+	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update();

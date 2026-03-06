@@ -618,6 +618,9 @@
     <ClCompile Include="Game\objects\TitleUI.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\railCamera\state\RailCameraStartState.cpp">
+      <Filter>ソース ファイル\application\objects\railCamera\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -1146,6 +1149,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\TitleUI.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\railCamera\state\RailCameraStartState.h">
+      <Filter>ソース ファイル\application\objects\railCamera\state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
