@@ -25,7 +25,7 @@ public:
 	/// </summary>
 	/// <param name="railMoverWorldTransform">レールムーバーのワールド変換</param>
 	/// <param name="targetDirection">注視点への方向ベクトル</param>
-	void InitializeForClearScene(YKEngine::WorldTransform* railMoverWorldTransform, const YKEngine::Vector3& targetDirection);
+	void InitializeForClearScene(YKEngine::WorldTransform* railMoverWorldTransform);
 
 	/// <summary>
 	/// ゲーム開始前の初期化
@@ -45,16 +45,9 @@ public:
 	void UpdateRailCamera();
 
 	/// <summary>
-	/// デバッグカメラの更新
-	/// </summary>
-	/// <param name="targetDirection">注視点への方向ベクトル</param>	
-	void UpdateRailCamera(const YKEngine::Vector3& targetDirection);
-
-	/// <summary>
 	/// ゲームオーバー時の処理
 	/// </summary>
-	/// <param name="targetDirection">注視点への方向ベクトル</param>
-	void ProcessGameOver(const YKEngine::Vector3& targetDirection);
+	void ProcessGameOver();
 
 	RailCamera* GetRailCamera() { return railCamera_.get(); }
 	

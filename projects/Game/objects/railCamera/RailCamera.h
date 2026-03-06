@@ -45,11 +45,6 @@ public:
 	/// </summary>
 	void SetStart();
 
-	/// <summary>
-	/// 方向からtargetRotation_を作成。
-	/// </summary>
-	void CreateTargetRotationFromDirection(const YKEngine::Vector3& direction);
-
 	YKEngine::Camera* GetCamera() { return camera_.get(); }
 
 private:
@@ -78,6 +73,11 @@ private:
 	/// クリアシーンステートに入る際の処理
 	/// </summary>
 	void EnterClearScene() override;
+
+	/// <summary>
+	/// RailMoverを注視する際の処理
+	/// </summary>
+	void LookAtRailMover();
 
 	/// <summary>
 	/// ゲームオーバーならtrue

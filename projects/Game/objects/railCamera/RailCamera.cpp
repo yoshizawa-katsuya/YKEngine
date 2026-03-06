@@ -80,11 +80,6 @@ void RailCamera::SetStart()
 	stateMachine_->ChangeState<RailCameraStartState>();
 }
 
-void RailCamera::CreateTargetRotationFromDirection(const Vector3& direction)
-{
-	targetRotation_ = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction);
-}
-
 void RailCamera::UpdateStart()
 {
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -104,10 +99,7 @@ void RailCamera::UpdateStart()
 	//カメラの更新
 	camera_->SetTranslate(Lerp(startPosition, worldTransform_.GetWorldPosition(), EaseOutCubic(t_)));
 
-	Vector3 direction = worldTransform_.parent_->GetWorldPosition() - camera_->GetTranslate(); // カメラから親の位置へのベクトルを計算
-	Vector3 targetRotate = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction); // カメラの回転をベクトルの方向に向ける
-
-	camera_->SetRotate(targetRotate);
+	LookAtRailMover();
 	camera_->Update();
 }
 
@@ -139,7 +131,10 @@ void RailCamera::UpdateGameOver()
 	// カメラの位置をプレイヤーの位置に徐々に近づける
 	camera_->SetTranslate(SlerpTranslateByCenterAxis(targetParentWorldTransform_.parent_->GetWorldPosition(), Vector3{ 0.0f, 1.0f, 0.0f }, worldTransform_.GetWorldPosition(), targetParentWorldTransform_.GetWorldPosition(), t_));
 	// プレイヤーの正面を向くようにカメラの回転を調整する
-	camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, targetRotation_, t_));
+	Vector3 direction = targetParentWorldTransform_.parent_->GetWorldPosition() - camera_->GetTranslate(); // カメラから親の位置へのベクトルを計算
+	Vector3 targetRotate = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction); // カメラの回転をベクトルの方向に向ける
+
+	camera_->SetRotate(LerpAngle(camera_->GetRotate(), targetRotate, EaseOutCubic(t_)));
 	camera_->Update();
 
 }
@@ -157,9 +152,8 @@ void RailCamera::UpdateClearScene()
 	//カメラの更新
 	Vector3 targetTranslate = SlerpTranslateByCenterAxis(targetParentWorldTransform_.parent_->GetWorldPosition(), Vector3{ 0.0f, 1.0f, 0.0f }, worldTransform_.GetWorldPosition(), targetParentWorldTransform_.GetWorldPosition(), -1.0f, lerpFactor);
 	camera_->SetTranslate(Lerp(camera_->GetTranslate(), targetTranslate, lerpTranslateFactor));
-	// プレイヤーの正面を向くようにカメラの回転を調整する
-	targetRotation_ = LerpAngle(worldTransform_.parent_->rotation_, targetRotation_, lerpFactor);
-	camera_->SetRotate(LerpAngle(camera_->GetRotate(), targetRotation_, lerpRotateFactor));
+	LookAtRailMover();
+
 	camera_->Update();
 }
 
@@ -171,7 +165,16 @@ void RailCamera::EnterClearScene()
 
 	//カメラの更新
 	camera_->SetTranslate(SlerpTranslateByCenterAxis(targetParentWorldTransform_.parent_->GetWorldPosition(), Vector3{ 0.0f, 1.0f, 0.0f }, worldTransform_.GetWorldPosition(), targetParentWorldTransform_.GetWorldPosition(), -1.0f, lerpFactor));
-	// プレイヤーの正面を向くようにカメラの回転を調整する
-	camera_->SetRotate(LerpAngle(worldTransform_.parent_->rotation_, targetRotation_, lerpFactor));
+	LookAtRailMover();
+
 	camera_->Update();
+}
+
+void RailCamera::LookAtRailMover()
+{
+	// RailMoverの位置を向くようにカメラの回転を調整する
+	Vector3 direction = worldTransform_.parent_->GetWorldPosition() - camera_->GetTranslate(); // カメラから親の位置へのベクトルを計算
+	Vector3 targetRotate = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction); // カメラの回転をベクトルの方向に向ける
+
+	camera_->SetRotate(targetRotate);
 }

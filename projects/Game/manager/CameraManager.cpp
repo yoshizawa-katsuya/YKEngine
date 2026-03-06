@@ -28,11 +28,10 @@ void CameraManager::Initialize(WorldTransform* railMoverWorldTransform, WorldTra
 
 }
 
-void CameraManager::InitializeForClearScene(WorldTransform* railMoverWorldTransform, const Vector3& targetDirection)
+void CameraManager::InitializeForClearScene(WorldTransform* railMoverWorldTransform)
 {
 	Initialize(railMoverWorldTransform, railMoverWorldTransform);
 
-	railCamera_->CreateTargetRotationFromDirection(targetDirection);
 	railCamera_->SetClearScene();
 }
 
@@ -90,14 +89,7 @@ void CameraManager::UpdateRailCamera()
 	railCamera_->Update();
 }
 
-void CameraManager::UpdateRailCamera(const Vector3& targetDirection)
-{
-	railCamera_->CreateTargetRotationFromDirection(targetDirection);
-	railCamera_->Update();
-}
-
-void CameraManager::ProcessGameOver(const Vector3& targetDirection)
+void CameraManager::ProcessGameOver()
 {
 	railCamera_->SetGameOver();
-	railCamera_->CreateTargetRotationFromDirection(targetDirection);
 }

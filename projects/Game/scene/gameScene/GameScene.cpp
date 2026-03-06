@@ -349,7 +349,7 @@ void GameScene::ProcessGameOver()
 {
 	isGameOverSceneChangeStagingStart_ = true;
 	player_->SetIsDead(true);
-	cameraManager_->ProcessGameOver(player_->GetInverseLocalDirection());
+	cameraManager_->ProcessGameOver();
 	enemyBulletManager_->SetIsGameOver(true);
 }
 

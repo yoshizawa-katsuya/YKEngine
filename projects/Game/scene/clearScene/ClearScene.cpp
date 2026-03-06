@@ -40,7 +40,7 @@ void ClearScene::Initialize()
 
 	//カメラの生成
 	cameraManager_ = std::make_unique<CameraManager>();
-	cameraManager_->InitializeForClearScene(railMover_->GetWorldTransform(), -railMover_->GetForward());
+	cameraManager_->InitializeForClearScene(railMover_->GetWorldTransform());
 
 	//シーンチェンジ演出の生成
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
@@ -74,7 +74,7 @@ void ClearScene::Update()
 	demoPlayer_->Update();
 
 	//レールカメラの更新
-	cameraManager_->UpdateRailCamera(-railMover_->GetForward());
+	cameraManager_->UpdateRailCamera();
 
 	//ステージオブジェクトの更新
 	stageObjects_->Update();
