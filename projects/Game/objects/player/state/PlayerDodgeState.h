@@ -1,13 +1,9 @@
 #pragma once
 #include <BaseState.hpp>
+#include <numbers>
 class PlayerStateContext;
 
-namespace YKEngine
-{
-	class Input;
-}
-
-class PlayerMainState : public YKEngine::BaseState<PlayerStateContext>
+class PlayerDodgeState : public YKEngine::BaseState<PlayerStateContext>
 {
 private:
 
@@ -23,7 +19,7 @@ private:
 	/// <param name="player">プレイヤー</param>
 	void OnUpdate(PlayerStateContext* player) override;
 
-	YKEngine::Input* input_ = nullptr;
-
+	// 回転速度
+	float rotateSpeed_ = std::numbers::pi_v<float> / 16.0f;
 };
 

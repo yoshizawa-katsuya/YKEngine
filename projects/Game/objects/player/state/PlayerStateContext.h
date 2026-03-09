@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector3.h"
 
 /// <summary>
 /// StateからPlayerへ干渉するためのコンテキスト
@@ -21,6 +22,11 @@ public:
 	/// メインの更新
 	/// </summary>
 	virtual void UpdateMain() = 0;
+
+	/// <summary>
+	/// 回避の更新
+	/// </summary>
+	virtual void UpdateDodge() = 0;
 
 	/// <summary>
 	/// ゲームオーバー時の更新
@@ -56,5 +62,25 @@ public:
 	/// ゲームオーバーになった瞬間の回転。
 	/// </summary>
 	virtual void GameOverRotate() = 0;
+
+	/// <summary>
+	/// 移動量が0でないときにtrueを返す
+	/// </summary>
+	virtual bool IsMoving() = 0;
+
+	/// <summary>
+	/// 補完係数のリセット
+	/// </summary>
+	virtual void ResetT() = 0;
+
+	/// <summary>
+	/// 移動量の取得
+	/// </summary>
+	virtual const YKEngine::Vector3& GetMove() = 0;
+
+	/// <summary>
+	/// 回避時の回転
+	/// </summary>
+	virtual void DodgeRotate(float rotateSpeed) = 0;
 };
 

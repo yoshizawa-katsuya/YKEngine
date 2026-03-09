@@ -186,45 +186,78 @@ void Player::HUDInitialize()
 void Player::HandleMoveInput()
 {
 	//キャラクターの移動ベクトル
-	Vector3 move = { 0, 0, 0 };
+	move_ = { 0.0f, 0.0f, 0.0f };
 
-	move.x = input_->GetLeftStickX();
-	move.y = input_->GetLeftStickY();
+	move_.x = input_->GetLeftStickX();
+	move_.y = input_->GetLeftStickY();
 
-	if (move.x == 0 && move.y == 0) {
+	if (move_.x == 0 && move_.y == 0) {
 		//左スティックがニュートラルなら、キーボード入力を確認
 		//押した方向で移動ベクトルを変更(左右)
 		if (input_->PushKey(DIK_A)) {
-			move.x = -1.0f;
+			move_.x = -1.0f;
 		}
 		else if (input_->PushKey(DIK_D)) {
-			move.x = 1.0f;
+			move_.x = 1.0f;
 		}
 
 		// 押した方向で移動ベクトルを変更(上下)
 		if (input_->PushKey(DIK_S)) {
-			move.y = -1.0f;
+			move_.y = -1.0f;
 		}
 		else if (input_->PushKey(DIK_W)) {
-			move.y = 1.0f;
+			move_.y = 1.0f;
 		}
 
-		move = Normalize(move); //移動ベクトルの正規化
+		move_ = Normalize(move_); //移動ベクトルの正規化
 
 	}
+}
 
+void Player::UpdateTilt()
+{
 	//キャラクターの傾きの設定
 	const float rotateQuantity = std::numbers::pi_v<float> / 8.0f; //傾きの大きさ
-	Vector3 targetRotation = { -move.y * rotateQuantity, 0.0f, -move.x * rotateQuantity};
+	Vector3 targetRotation = { -move_.y * rotateQuantity, 0.0f, -move_.x * rotateQuantity };
 	characterWorldTransform_.rotation_ = LerpAngle(characterWorldTransform_.rotation_, targetRotation, 0.1f);
+}
 
+void Player::Move()
+{
 	//キャラクターの移動速さ
 	const float kCharacterSpeed = 0.2f;
 	//移動ベクトルの速さの適用
-	move *= kCharacterSpeed;
+	move_ *= kCharacterSpeed;
 
 	//座標移動(ベクトルの加算)
-	worldTransform_.translation_ += move;
+	worldTransform_.translation_ += move_;
+}
+
+void Player::DodgeMove()
+{
+	const float kDodgeSpeed = 0.6f;
+	t_ += 1.0f / 20.0f; //ドッジの時間経過
+
+	if (t_ > 1.0f)
+	{
+		t_ = 1.0f; //ドッジの時間が最大を超えないようにする
+	}
+
+	move_ = Normalize(move_) * Lerp(kDodgeSpeed, 0.0f, EaseInCubic(t_)); //ドッジの移動量を時間で減衰させる
+
+	//座標移動(ベクトルの加算)
+	worldTransform_.translation_ += move_;
+}
+
+void Player::ClampMove()
+{
+	//移動限界座標
+	const float kMoveLimitX = 8.9f;
+	const float kMoveLimitY = 4.8f;
+
+	//範囲を超えない処理
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
 }
 
 void Player::UpdateStart()
@@ -242,15 +275,17 @@ void Player::UpdateStart()
 
 void Player::UpdateMain()
 {
+	//移動入力の処理
 	HandleMoveInput();
 
-	//移動限界座標
-	const float kMoveLimitX = 8.9f;
-	const float kMoveLimitY = 4.8f;
+	//キャラクターの傾きの更新
+	UpdateTilt();
 
-	//範囲を超えない処理
-	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
-	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
+	//キャラクターの移動処理
+	Move();
+
+	//移動限界の座標を超えないようにする処理
+	ClampMove();
 
 	//回転
 	Rotate();
@@ -268,6 +303,30 @@ void Player::UpdateMain()
 
 	//キャラクター攻撃処理
 	Attack();
+}
+
+void Player::UpdateDodge()
+{
+	//キャラクターの移動処理
+	DodgeMove();
+	
+	//移動限界の座標を超えないようにする処理
+	ClampMove();
+
+	//回転
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, Vector3{ 0.0f, 0.0f, 0.0f }, 0.3f);
+
+	BaseCharacter::Update();
+
+	//照準オブジェクトの更新
+	ReticleUpdate();
+
+	//ダメージリアクション処理
+	DamageReaction();
+
+	//チャージ処理
+	Charge();
+
 }
 
 void Player::UpdateGameOver()
@@ -302,7 +361,14 @@ void Player::UpdateGameClear()
 
 	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, Vector3{ 0.0f, 0.0f, 0.0f }, 0.1f);
 
+	//移動入力の処理
 	HandleMoveInput();
+
+	//キャラクターの傾きの更新
+	UpdateTilt();
+
+	//キャラクターの移動処理
+	Move();
 
 	//前に進む
 	const float kMoveSpeed = 0.3f;
@@ -352,6 +418,11 @@ Vector3 Player::RotateCommon()
 	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, localDirection);
 
 	return targetRotation;
+}
+
+void Player::DodgeRotate(float rotateSpeed)
+{
+	characterWorldTransform_.rotation_.z += rotateSpeed; //回転量
 }
 
 void Player::HeartUpdate()

@@ -100,6 +100,26 @@ private:
 	void HandleMoveInput();
 
 	/// <summary>
+	/// 移動による自機の傾きの更新。
+	/// </summary>
+	void UpdateTilt();
+
+	/// <summary>
+	/// 移動の更新。
+	/// </summary>
+	void Move();
+
+	/// <summary>
+	/// 回避時の移動の更新。
+	/// </summary>
+	void DodgeMove();
+
+	/// <summary>
+	/// 移動の限界を超えないようにする。
+	/// </summary>
+	void ClampMove();
+
+	/// <summary>
 	/// 開始部の更新
 	/// </summary>
 	void UpdateStart() override;
@@ -108,6 +128,11 @@ private:
 	/// メインの更新
 	/// </summary>
 	void UpdateMain() override;
+
+	/// <summary>
+	/// 回避の更新
+	/// </summary>
+	void UpdateDodge() override;
 
 	/// <summary>
 	/// ゲームオーバー時の更新
@@ -139,6 +164,11 @@ private:
 	/// </summary>
 	/// <returns>回転</returns>
 	YKEngine::Vector3 RotateCommon();
+
+	/// <summary>
+	/// 回避時の回転
+	/// </summary>
+	void DodgeRotate(float rotateSpeed) override;
 
 	/// <summary>
 	/// ハートの更新。
@@ -175,7 +205,22 @@ private:
 	/// </summary>
 	void DamageReaction();
 
+	/// <summary>
+	/// 移動量が0でないときにtrueを返す
+	/// </summary>
+	bool IsMoving() { return Length(move_) > 0.0f; }
+
 	bool GetIsGameClear() override { return isGameClear_; }
+
+	/// <summary>
+	/// 補完係数のリセット
+	/// </summary>
+	void ResetT() { t_ = 0.0f; }
+
+	/// <summary>
+	/// 移動量の取得
+	/// </summary>
+	const YKEngine::Vector3& GetMove() { return move_; }
 
 	//キーボード入力
 	YKEngine::Input* input_ = nullptr;
@@ -197,6 +242,7 @@ private:
 	std::unique_ptr<YKEngine::SRTAnimator> startAnime_;
 	std::unique_ptr<YKEngine::SRTAnimator> startRotateAnime_;
 
+	YKEngine::Vector3 move_{};		//移動量
 	YKEngine::Vector3 direction_{};	//方向
 
 	const int kMaxHitPoint_ = 5; // 最大ヒットポイント
@@ -218,5 +264,8 @@ private:
 
 	//ゲームクリアしていたらtrue
 	bool isGameClear_ = false;
+
+	//補完係数
+	float t_ = 0.0f;
 };
 

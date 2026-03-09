@@ -242,6 +242,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\scene\titleScene\state\TitleSceneStateContext.cpp" />
     <ClCompile Include="Game\objects\TitleUI.cpp" />
     <ClCompile Include="Game\objects\railCamera\state\RailCameraStartState.cpp" />
+    <ClCompile Include="Game\objects\player\state\PlayerDodgeState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -558,6 +559,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\scene\titleScene\state\TitleSceneStateContext.h" />
     <ClInclude Include="Game\objects\TitleUI.h" />
     <ClInclude Include="Game\objects\railCamera\state\RailCameraStartState.h" />
+    <ClInclude Include="Game\objects\player\state\PlayerDodgeState.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
