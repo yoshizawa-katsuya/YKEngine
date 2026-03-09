@@ -11,3 +11,8 @@ void GameSceneStartState::OnUpdate(GameSceneStateContext* gameScene)
 		stateMachine_->ChangeState<GameSceneMainState>();
 	}
 }
+
+void GameSceneStartState::OnExit(GameSceneStateContext* gameScene)
+{
+	gameScene->ExitStart();
+}

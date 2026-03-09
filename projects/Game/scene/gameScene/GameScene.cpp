@@ -35,6 +35,7 @@ void GameScene::Initialize() {
 	//スプライトの生成
 	operationGuideSprite_ = std::make_unique<Sprite>();
 	operationGuideSprite_->Initialize(TextureManager::GetInstance()->Load("./Resources/operationHUD.png"));
+	operationGuideSprite_->SetAlpha(0.0f);
 
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
@@ -363,6 +364,11 @@ void GameScene::ProcessGameClear()
 void GameScene::ProcessPause()
 {
 	pause_->SetIsPause(true);
+}
+
+void GameScene::ExitStart()
+{
+	operationGuideSprite_->SetAlpha(1.0f);
 }
 
 void GameScene::StartSceneEndStaging(const YKEngine::Vector4& color)

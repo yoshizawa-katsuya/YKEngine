@@ -175,11 +175,13 @@ void Player::HUDInitialize()
 		heartSprites_[i]->Initialize(heartTextureHandle);
 		heartSprites_[i]->SetPosition(Vector2(heartPosition.x + i * heartSpacing, heartPosition.y)); //位置を設定
 		heartSprites_[i]->SetSize(heartSize); //サイズを設定
+		heartSprites_[i]->SetAlpha(0.0f); //最初は透明にする
 
 		heartEmptySprites_[i] = std::make_unique<Sprite>();
 		heartEmptySprites_[i]->Initialize(heartEmptyTexturehandle);
 		heartEmptySprites_[i]->SetPosition(Vector2(heartPosition.x + i * heartSpacing, heartPosition.y)); //位置を設定
 		heartEmptySprites_[i]->SetSize(heartSize); //サイズを設定
+		heartEmptySprites_[i]->SetAlpha(0.0f); //最初は透明にする
 	}
 }
 
@@ -385,6 +387,15 @@ void Player::AfterStartComplete()
 
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerStart03, GetWorldPosition(), 100);
 	
+	for (int i = 0; i < kMaxHitPoint_; i++)
+	{
+		heartSprites_[i]->SetAlpha(1.0f); //表示する
+
+		heartEmptySprites_[i]->SetAlpha(1.0f); //表示する
+	}
+
+	//レティクルを表示する
+	reticleController_->OnStartCinematicEnd();
 }
 
 void Player::Rotate()

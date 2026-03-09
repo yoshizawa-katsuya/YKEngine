@@ -55,6 +55,11 @@ public:
 	/// </summary>
 	void ChargeReset();
 
+	/// <summary>
+	/// 開始演出が終了したときの処理。レティクルの表示を開始するために呼び出される。
+	/// </summary>
+	void OnStartCinematicEnd();
+
 	bool IsLockOn() const { return isLockOn_; }
 
 	const YKEngine::Vector3& GetTargetPosition() const { return target_; }

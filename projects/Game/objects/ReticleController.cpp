@@ -24,12 +24,14 @@ void ReticleController::Initialize()
 	spriteLargeReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
 	spriteLargeReticle_->SetAnchorPoint({ 0.5f, 0.5f });
 	spriteLargeReticle_->SetColor(defaultColor_);
+	spriteLargeReticle_->SetAlpha(0.0f); //最初は透明にしておく
 
 	spriteSmallReticle_ = std::make_unique<Sprite>();
 	spriteSmallReticle_->Initialize(textureSmallReticle);
 	spriteSmallReticle_->SetPosition({ static_cast<float>(WinApp::kClientWidth) / 2.0f , static_cast<float>(WinApp::kClientHeight) / 2.0f });
 	spriteSmallReticle_->SetAnchorPoint({ 0.5f, 0.5f });
 	spriteSmallReticle_->SetColor(defaultColor_);
+	spriteSmallReticle_->SetAlpha(0.0f); //最初は透明にしておく
 
 	viewPortMatrix_ = &DirectXCommon::GetInstance()->GetViewPortMatrix();
 
@@ -174,6 +176,12 @@ void ReticleController::ChargeReset()
 	spriteLargeReticle_->SetColor(defaultColor_);
 	chargeMaxTimer_ = 0.0f;
 	isChargeMax_ = false;
+}
+
+void ReticleController::OnStartCinematicEnd()
+{
+	spriteLargeReticle_->SetAlpha(1.0f); //演出終了後にレティクルを表示する
+	spriteSmallReticle_->SetAlpha(1.0f); 
 }
 
 void ReticleController::ChargeUpdate()

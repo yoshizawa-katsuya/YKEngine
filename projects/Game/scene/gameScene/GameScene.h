@@ -133,6 +133,11 @@ private:
 	void ProcessPause() override;
 
 	/// <summary>
+	/// スタートからメインに移行する際の処理。
+	/// </summary>
+	void ExitStart() override;
+
+	/// <summary>
 	/// シーン終了演出の開始。
 	/// </summary>
 	void StartSceneEndStaging(const YKEngine::Vector4& color) override;

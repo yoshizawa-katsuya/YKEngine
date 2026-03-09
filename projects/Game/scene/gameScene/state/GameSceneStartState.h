@@ -11,5 +11,12 @@ private:
 	/// </summary>
 	/// <param name="gameScene">ゲームシーン</param>
 	void OnUpdate(GameSceneStateContext* gameScene) override;
+
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	/// <param name="gameScene">ゲームシーン</param>
+	void OnExit(GameSceneStateContext* gameScene) override;
+	
 };
 

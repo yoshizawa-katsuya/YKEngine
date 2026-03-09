@@ -90,5 +90,10 @@ public:
 	/// シーン終了演出の開始。
 	/// </summary>
 	virtual void StartSceneEndStaging(const YKEngine::Vector4& color) = 0;
+
+	/// <summary>
+	/// スタートからメインに移行する際の処理。
+	/// </summary>
+	virtual void ExitStart() = 0;
 };
 
