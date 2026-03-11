@@ -1,5 +1,15 @@
 {
     "Player": {
+        "DodgeLerpFactor": 0.05000000074505806,
+        "DodgeSpeed": 1.0,
+        "HeartPosition": [
+            50.0,
+            30.0
+        ],
+        "HeartSize": [
+            50.0,
+            50.0
+        ],
         "HeartSpacing": 50.0
     }
 }

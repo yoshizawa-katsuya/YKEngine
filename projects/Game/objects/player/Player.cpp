@@ -25,6 +25,8 @@ void Player::Initialize(WorldTransform* parent)
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::Player::kGroupName;
 	globalVariables->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, JsonKey::Player::kDodgeSpeed, 0.6f);
+	globalVariables->AddItem(groupName, JsonKey::Player::kDodgeLerpFactor, 1.0f / 20.0f);
 
 	BaseCharacter::Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
@@ -237,15 +239,18 @@ void Player::Move()
 
 void Player::DodgeMove()
 {
-	const float kDodgeSpeed = 0.6f;
-	t_ += 1.0f / 20.0f; //ドッジの時間経過
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	std::string groupName = JsonKey::Player::kGroupName;
+
+	const float kDodgeSpeed = globalVariables->GetFloatValue(groupName, JsonKey::Player::kDodgeSpeed);
+	t_ += globalVariables->GetFloatValue(groupName, JsonKey::Player::kDodgeLerpFactor);	//ドッジの時間経過
 
 	if (t_ > 1.0f)
 	{
 		t_ = 1.0f; //ドッジの時間が最大を超えないようにする
 	}
 
-	move_ = Normalize(move_) * Lerp(kDodgeSpeed, 0.0f, EaseInCubic(t_)); //ドッジの移動量を時間で減衰させる
+	move_ = Normalize(move_) * Lerp(kDodgeSpeed, 0.0f, EaseOutCubic(t_)); //ドッジの移動量を時間で減衰させる
 
 	//座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move_;

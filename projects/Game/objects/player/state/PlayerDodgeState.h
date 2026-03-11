@@ -20,6 +20,8 @@ private:
 	void OnUpdate(PlayerStateContext* player) override;
 
 	// 回転速度
-	float rotateSpeed_ = std::numbers::pi_v<float> / 16.0f;
+	float rotateSpeed_ = std::numbers::pi_v<float> / 8.0f;
+
+	float t_ = 0.0f; // 経過時間
 };
 
