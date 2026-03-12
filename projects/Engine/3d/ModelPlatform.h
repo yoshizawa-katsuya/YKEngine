@@ -1,6 +1,6 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
@@ -38,7 +38,7 @@ public:
 	/// <param name="dxCommon">DirectX共通クラス</param>
 	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
 	/// <param name="srvHeapManager">SRVヒープマネージャー</param>
-	void Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
+	void Initialize(DirectXCommon* dxCommon, PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager);
 
 	/// <summary>
 	/// フレーム終了処理。
@@ -232,7 +232,7 @@ private:
 
 	SrvHeapManager* srvHeapManager_;
 
-	PrimitiveDrawer* primitiveDrawer_;
+	PipelineManager* primitiveDrawer_;
 
 	std::unordered_map<std::string, std::shared_ptr<BaseModel>> models_;
 

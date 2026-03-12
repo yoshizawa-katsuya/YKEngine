@@ -138,7 +138,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\base\TextureManager.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
-    <ClCompile Include="Engine\3d\PrimitiveDrawer.cpp" />
+    <ClCompile Include="Engine\3d\PipelineManager.cpp" />
     <ClCompile Include="Game\objects\Player.cpp" />
     <ClCompile Include="Engine\3d\ModelPlatform.cpp" />
     <ClCompile Include="Engine\2d\SpritePlatform.cpp" />
@@ -359,7 +359,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
-    <ClInclude Include="Engine\3d\PrimitiveDrawer.h" />
+    <ClInclude Include="Engine\3d\PipelineManager.h" />
     <ClInclude Include="Game\scene\GameScene.h" />
     <ClInclude Include="Game\objects\Player.h" />
     <ClInclude Include="Engine\input\Input.h" />

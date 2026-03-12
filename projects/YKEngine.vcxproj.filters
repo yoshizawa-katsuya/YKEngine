@@ -114,7 +114,7 @@
     <ClCompile Include="Engine\3d\BaseModel.cpp">
       <Filter>ソース ファイル\engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\PrimitiveDrawer.cpp">
+    <ClCompile Include="Engine\3d\PipelineManager.cpp">
       <Filter>ソース ファイル\engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\TextureManager.cpp">
@@ -358,7 +358,7 @@
     <ClInclude Include="Engine\3d\BaseModel.h">
       <Filter>ヘッダー ファイル\engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\PrimitiveDrawer.h">
+    <ClInclude Include="Engine\3d\PipelineManager.h">
       <Filter>ヘッダー ファイル\engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\2d\Sprite.h">

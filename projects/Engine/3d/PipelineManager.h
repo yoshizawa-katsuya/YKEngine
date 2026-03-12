@@ -62,12 +62,10 @@ enum class DrawMode
 	kCount,	//利用してはいけない
 };
 
-//TODO:クラス名を変更する
 /// <summary>
-/// プリミティブ描画クラス。
 /// パイプラインステートを管理する。
 /// </summary>
-class PrimitiveDrawer
+class PipelineManager
 {
 public:
 

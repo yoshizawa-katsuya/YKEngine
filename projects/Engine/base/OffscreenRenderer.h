@@ -11,7 +11,7 @@ namespace YKEngine
 {
 
 class SrvHeapManager;
-class PrimitiveDrawer;
+class PipelineManager;
 class DirectXCommon;
 enum class DrawMode;
 
@@ -70,7 +70,7 @@ public:
 	/// </summary>
 	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
 	/// <param name="srvHeapManager">SRVヒープマネージャー</param>
-	void PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
+	void PostDrawRenderTexture(PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager);
 
 	/// <summary>
 	/// アウトラインマテリアルデータの更新。

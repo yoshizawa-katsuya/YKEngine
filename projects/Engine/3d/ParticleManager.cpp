@@ -31,7 +31,7 @@ void ParticleManager::Finalize()
 	instance_ = nullptr;
 }
 
-void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer)
+void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PipelineManager* primitiveDrawer)
 {
 
 	dxCommon_ = dxCommon;

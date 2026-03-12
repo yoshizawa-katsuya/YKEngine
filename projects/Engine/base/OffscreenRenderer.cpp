@@ -1,6 +1,6 @@
 #include "OffscreenRenderer.h"
 #include "SrvHeapManager.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include "Matrix.h"
 #include "RootParams.h"
 
@@ -86,7 +86,7 @@ void OffscreenRenderer::PreDrawRenderTexture()
 	commandList_->RSSetScissorRects(1, scissorRect_);	//Scirssorを設定
 }
 
-void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
+void OffscreenRenderer::PostDrawRenderTexture(PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
 	if (!useOffscreenRender_) 
 	{

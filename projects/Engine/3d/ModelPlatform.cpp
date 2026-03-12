@@ -25,7 +25,7 @@ void ModelPlatform::Finalize()
 	instance_ = nullptr;
 }
 
-void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
+void ModelPlatform::Initialize(DirectXCommon* dxCommon, PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
 
 	//引数で受け取ってメンバ変数に記録する

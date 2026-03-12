@@ -1,5 +1,5 @@
 #include "dx12.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include <cassert>
 #include <format>
 #include "DirectXCommon.h"
@@ -7,7 +7,7 @@
 
 using namespace YKEngine;
 
-void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon)
+void PipelineManager::Initialize(DirectXCommon* dxCommon)
 {
 	//DrawMode分のパイプラインを作成
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kBlendModeNone)) = CreateGraphicsPipeline(DrawMode::kBlendModeNone, dxCommon);
@@ -67,7 +67,7 @@ void PrimitiveDrawer::Initialize(DirectXCommon* dxCommon)
 	pipelineSets_.at(static_cast<uint16_t>(DrawMode::kRandomRendering)) = CreateGraphicsPipeline(DrawMode::kRandomRendering, dxCommon);
 }
 
-std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon) {
+std::unique_ptr<PipelineManager::PipelineSet> PipelineManager::CreateGraphicsPipeline(DrawMode blendMode, DirectXCommon* dxCommon) {
 
 	std::unique_ptr<PipelineSet> pipelineSet = std::make_unique<PipelineSet>();
 
@@ -1030,7 +1030,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 		break;
 
 	}
-	//どのように画面に色を打ち込むかの設定（気にしなくて良い）
+	//どのように画面に色を打ち込むかの設定
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	//実際に生成
@@ -1041,7 +1041,7 @@ std::unique_ptr<PrimitiveDrawer::PipelineSet> PrimitiveDrawer::CreateGraphicsPip
 	return pipelineSet;
 }
 
-D3D12_DESCRIPTOR_RANGE YKEngine::PrimitiveDrawer::CreateDescriptorRange(uint32_t BaseShaderRegister)
+D3D12_DESCRIPTOR_RANGE YKEngine::PipelineManager::CreateDescriptorRange(uint32_t BaseShaderRegister)
 {
 	D3D12_DESCRIPTOR_RANGE descriptorRange{};
 	descriptorRange.BaseShaderRegister = BaseShaderRegister;	//シェーダーレジスタ番号 t0など
@@ -1052,7 +1052,7 @@ D3D12_DESCRIPTOR_RANGE YKEngine::PrimitiveDrawer::CreateDescriptorRange(uint32_t
 	return descriptorRange;
 }
 
-void PrimitiveDrawer::SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode)
+void PipelineManager::SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode)
 {
 
 	commandList->SetGraphicsRootSignature(pipelineSets_.at(static_cast<uint16_t>(blendMode))->rootSignature.Get());
