@@ -26,7 +26,7 @@ void Player::Initialize(WorldTransform* parent)
 	const std::string& groupName = JsonKey::Player::kGroupName;
 	globalVariables->CreateGroup(groupName);
 	globalVariables->AddItem(groupName, JsonKey::Player::kDodgeSpeed, 0.6f);
-	globalVariables->AddItem(groupName, JsonKey::Player::kDodgeLerpFactor, 1.0f / 20.0f);
+	globalVariables->AddItem(groupName, JsonKey::Player::kDodgeTime, 20.0f);
 
 	BaseCharacter::Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
@@ -42,7 +42,7 @@ void Player::Initialize(WorldTransform* parent)
 	startAnime_ = std::make_unique<SRTAnimator>();
 	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, kAnimeDuration);
 
-	const float kRotateQuantity = std::numbers::pi_v<float> * 4.0f;
+	const float kRotateQuantity = std::numbers::pi_v<float> * 4.0f;	//回転の大きさ(2回転)
 	startRotateAnime_ = std::make_unique<SRTAnimator>();
 	startRotateAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 0.0f, kRotateQuantity, 0.0f }, kAnimeDuration);
 
@@ -243,7 +243,7 @@ void Player::DodgeMove()
 	std::string groupName = JsonKey::Player::kGroupName;
 
 	const float kDodgeSpeed = globalVariables->GetFloatValue(groupName, JsonKey::Player::kDodgeSpeed);
-	t_ += globalVariables->GetFloatValue(groupName, JsonKey::Player::kDodgeLerpFactor);	//ドッジの時間経過
+	t_ += 1.0f / globalVariables->GetFloatValue(groupName, JsonKey::Player::kDodgeTime);	//ドッジの時間経過
 
 	if (t_ > 1.0f)
 	{
@@ -436,9 +436,9 @@ Vector3 Player::RotateCommon()
 	return targetRotation;
 }
 
-void Player::DodgeRotate(float rotateSpeed)
+void Player::DodgeRotate(SRTAnimator* rotateAnime)
 {
-	characterWorldTransform_.rotation_.z += rotateSpeed; //回転量
+	characterWorldTransform_.rotation_ = rotateAnime->Update();
 }
 
 void Player::HeartUpdate()

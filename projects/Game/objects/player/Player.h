@@ -168,7 +168,7 @@ private:
 	/// <summary>
 	/// 回避時の回転
 	/// </summary>
-	void DodgeRotate(float rotateSpeed) override;
+	void DodgeRotate(YKEngine::SRTAnimator* rotateAnime) override;
 
 	/// <summary>
 	/// ハートの更新。

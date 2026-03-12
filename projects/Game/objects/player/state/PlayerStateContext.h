@@ -1,6 +1,11 @@
 #pragma once
 #include "Vector3.h"
 
+namespace YKEngine
+{
+	class SRTAnimator;
+}
+
 /// <summary>
 /// StateからPlayerへ干渉するためのコンテキスト
 /// </summary>
@@ -81,6 +86,6 @@ public:
 	/// <summary>
 	/// 回避時の回転
 	/// </summary>
-	virtual void DodgeRotate(float rotateSpeed) = 0;
+	virtual void DodgeRotate(YKEngine::SRTAnimator* rotateAnime) = 0;
 };
 

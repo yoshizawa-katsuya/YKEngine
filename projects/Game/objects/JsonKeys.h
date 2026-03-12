@@ -44,8 +44,8 @@ namespace JsonKey
 		const std::string kHeartSize = "HeartSize";
 		const std::string kHeartSpacing = "HeartSpacing";
 		const std::string kDodgeSpeed = "DodgeSpeed";
-		//回避時の補完係数に加算する値
-		const std::string kDodgeLerpFactor = "DodgeLerpFactor";
+		//回避の所要時間（フレーム数）
+		const std::string kDodgeTime = "DodgeTime";
 	}
 
 	namespace RailCamera

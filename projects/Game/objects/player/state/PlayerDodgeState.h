@@ -1,6 +1,7 @@
 #pragma once
 #include <BaseState.hpp>
 #include <numbers>
+#include "SRTAnimator.h"
 class PlayerStateContext;
 
 class PlayerDodgeState : public YKEngine::BaseState<PlayerStateContext>
@@ -19,9 +20,9 @@ private:
 	/// <param name="player">プレイヤー</param>
 	void OnUpdate(PlayerStateContext* player) override;
 
-	// 回転速度
-	float rotateSpeed_ = std::numbers::pi_v<float> / 8.0f;
+	// 回転量（ラジアン）
+	float rotateQuantity_ = std::numbers::pi_v<float> * 4.0f;
 
-	float t_ = 0.0f; // 経過時間
+	std::unique_ptr<YKEngine::SRTAnimator> rotateAnime_;
 };
 
