@@ -1,6 +1,7 @@
 {
     "Player": {
         "DodgeSpeed": 1.0,
+        "DodgeTime": 20.0,
         "HeartPosition": [
             50.0,
             30.0
