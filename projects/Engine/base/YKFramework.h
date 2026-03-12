@@ -9,7 +9,7 @@
 #include "SpritePlatform.h"
 #include "BaseModel.h"
 #include "ModelPlatform.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include "ParticleManager.h"
 #include "Input.h"
 #include "dx12.h"
@@ -87,7 +87,7 @@ protected:
 	Audio* audio_ = nullptr;
 	std::unique_ptr<SrvHeapManager> srvHeapManager_;
 	Input* input_ = nullptr;
-	std::unique_ptr<PrimitiveDrawer> primitiveDrawer_;
+	std::unique_ptr<PipelineManager> primitiveDrawer_;
 	SpritePlatform* spritePlatform_ = nullptr;
 	ModelPlatform* modelPlatform_ = nullptr;
 	OffscreenRenderer* offscreenRenderer_ = nullptr;

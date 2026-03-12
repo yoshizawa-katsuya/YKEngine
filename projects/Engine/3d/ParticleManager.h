@@ -1,6 +1,6 @@
 #pragma once
 #include "SrvHeapManager.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include "Struct.h"
 #include "Camera.h"
 #include "ParticleTypes.h"
@@ -39,7 +39,7 @@ public:
 	/// <param name="dxCommon">DirectX共通クラス</param>
 	/// <param name="srvHeapManager">SRVヒープマネージャー</param>
 	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
-	void Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer);
+	void Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PipelineManager* primitiveDrawer);
 
 	/// <summary>
 	/// パーティクルの更新。
@@ -130,7 +130,7 @@ private:
 
 	DirectXCommon* dxCommon_;
 	SrvHeapManager* srvHeapManager_;
-	PrimitiveDrawer* primitiveDrawer_;
+	PipelineManager* primitiveDrawer_;
 
 	const float kDeltaTime_ = 1.0f / 60.0f;
 

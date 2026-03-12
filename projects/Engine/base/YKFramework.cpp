@@ -45,7 +45,7 @@ void YKFramework::Initialize()
 	TextureManager::GetInstance()->Initialize(dxCommon_, srvHeapManager_.get());
 
 	//PSOの設定
-	primitiveDrawer_ = std::make_unique<PrimitiveDrawer>();
+	primitiveDrawer_ = std::make_unique<PipelineManager>();
 	primitiveDrawer_->Initialize(dxCommon_);
 
 	//スプライト共通部の初期化
