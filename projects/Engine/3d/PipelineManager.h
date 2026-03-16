@@ -1,11 +1,7 @@
 #pragma once
-#include <Windows.h>
 #include <d3d12.h>
-#include <dxgi1_6.h>
-#include <dxcapi.h>
 #include <wrl.h>
 #include <string>
-#include <cstdlib>
 #include <array>
 #include <memory>
 #include <unordered_map>
@@ -122,6 +118,16 @@ private:
 		SkinModel		//スキンモデル用の入力レイアウト
 	};
 
+	/// <summary>
+	/// 入力レイアウトの設定。
+	/// </summary>
+	/// <param name="inputElementDescs">入力レイアウトの要素の説明</param>
+	/// <param name="numElements">入力レイアウトの要素数</param>
+	struct InputLayoutConfig
+	{
+		std::vector<D3D12_INPUT_ELEMENT_DESC> inputElementDescs;
+	};
+
 	//ブレンドモードの種類。描画モードごとに異なるブレンドモードを使用するため。
 	enum class BlendType
 	{
@@ -133,10 +139,34 @@ private:
 		Screen
 	};
 
+	/// <summary>
+	/// ブレンド設定。
+	/// </summary>
+	/// <param name="enable">ブレンドを有効にするかどうか</param>
+	/// <param name="srcBlend">ソースブレンド</param>
+	/// <param name="destBlend">デスティネーションブレンド</param>
+	/// <param name="blendOp">ブレンドオペレーション</param>
+	struct BlendConfig
+	{
+		BOOL enable;
+		D3D12_BLEND srcBlend;
+		D3D12_BLEND destBlend;
+		D3D12_BLEND_OP blendOp;
+	};
+
 	enum class RasterizerType
 	{
 		CullBack,	//背面を表示しない
 		CullNone	//すべて表示する
+	};
+
+	/// <summary>
+	/// ラスタライザ設定。
+	/// </summary>
+	/// <param name="cullMode">カリングモード</param>
+	struct RasterizerConfig
+	{
+		D3D12_CULL_MODE cullMode;
 	};
 
 	//深度ステンシルの種類。描画モードごとに異なる深度ステンシルを使用するため。
@@ -145,8 +175,18 @@ private:
 		EnableWrite,	//深度テストと深度書き込みを有効にする
 		EnableNoWrite,	//深度テストを有効にするが、深度書き込みは行わない
 		NoEnableWrite,	//深度テストを行わないが、深度書き込みは行う
-		NoStencil,		//深度テスト、深度書き込みも行わず、ステンシルも使用しない
 		Disable			//深度テストと深度書き込みを無効にする
+	};
+
+	/// <summary>
+	/// 深度設定。
+	/// </summary>
+	/// <param name="depthEnable">深度テストを有効にするかどうか</param>
+	/// <param name="depthWriteMask">深度書き込みのマスク</param>
+	struct DepthConfig
+	{
+		BOOL depthEnable;
+		D3D12_DEPTH_WRITE_MASK depthWriteMask;
 	};
 
 	//パイプラインの設定。描画モードごとに異なるパイプラインを使用するため。
@@ -221,6 +261,18 @@ private:
 
 	//パイプライン。ブレンドモードの数だけ用意する
 	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCount> pipelineSets_;
+
+	//ブレンドモードとブレンド設定の対応表。
+	static const std::unordered_map<BlendType, BlendConfig> blendTable_;
+
+	//深度ステンシルの種類と深度設定の対応表。
+	static const std::unordered_map<DepthType, DepthConfig> depthTable_;
+
+	//ラスタライザの種類とラスタライザ設定の対応表。
+	static const std::unordered_map<RasterizerType, RasterizerConfig> rasterizerTable_;
+
+	//入力レイアウトの種類と入力レイアウトの設定の対応表。
+	static const std::unordered_map<InputLayoutType, InputLayoutConfig> inputLayoutTable_;
 
 	//描画モードとパイプラインの設定の対応表。
 	static const std::unordered_map<DrawMode, PipelineConfig> pipelineTable_;
