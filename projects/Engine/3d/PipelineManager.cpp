@@ -1,12 +1,179 @@
 #include "dx12.h"
 #include "PipelineManager.h"
 #include <cassert>
-#include <format>
 #include "DirectXCommon.h"
 #include "RootParams.h"
 
 using namespace YKEngine;
 using namespace Microsoft::WRL;
+
+const std::unordered_map<PipelineManager::BlendType, PipelineManager::BlendConfig> PipelineManager::blendTable_ =
+{
+	{
+		PipelineManager::BlendType::None,
+		{
+			FALSE,
+			D3D12_BLEND_ONE,
+			D3D12_BLEND_ZERO,
+			D3D12_BLEND_OP_ADD,
+		}
+	},
+	{
+		PipelineManager::BlendType::Normal,
+		{
+			TRUE,
+			D3D12_BLEND_SRC_ALPHA,
+			D3D12_BLEND_INV_SRC_ALPHA,
+			D3D12_BLEND_OP_ADD,
+		}
+	},
+	{
+		PipelineManager::BlendType::Add,
+		{
+			TRUE,
+			D3D12_BLEND_SRC_ALPHA,
+			D3D12_BLEND_ONE,
+			D3D12_BLEND_OP_ADD,
+		}
+	},
+	{
+		PipelineManager::BlendType::Subtract,
+		{
+			TRUE,
+			D3D12_BLEND_SRC_ALPHA,
+			D3D12_BLEND_ONE,
+			D3D12_BLEND_OP_REV_SUBTRACT,
+		}
+	},
+	{	
+		PipelineManager::BlendType::Multiply,
+		{
+			TRUE,
+			D3D12_BLEND_ZERO,
+			D3D12_BLEND_SRC_COLOR,
+			D3D12_BLEND_OP_ADD,
+		}
+	
+	},
+	{
+		PipelineManager::BlendType::Screen,
+		{
+			TRUE,
+			D3D12_BLEND_INV_DEST_COLOR,
+			D3D12_BLEND_ONE,
+			D3D12_BLEND_OP_ADD,
+		}
+	},
+};
+
+const std::unordered_map<PipelineManager::DepthType, PipelineManager::DepthConfig> PipelineManager::depthTable_ =
+{
+	{
+		PipelineManager::DepthType::EnableWrite,
+		{
+			TRUE,
+			D3D12_DEPTH_WRITE_MASK_ALL,
+		}
+	},
+	{
+		PipelineManager::DepthType::EnableNoWrite,
+		{
+			TRUE,
+			D3D12_DEPTH_WRITE_MASK_ZERO,
+		}
+	},
+	{
+		PipelineManager::DepthType::NoEnableWrite,
+		{
+			FALSE,
+			D3D12_DEPTH_WRITE_MASK_ALL,
+		}
+	},
+	{
+		PipelineManager::DepthType::Disable,
+		{
+			FALSE,
+			D3D12_DEPTH_WRITE_MASK_ZERO,
+		}
+	},
+};
+
+const std::unordered_map<PipelineManager::RasterizerType, PipelineManager::RasterizerConfig> PipelineManager::rasterizerTable_ =
+{
+	{
+		PipelineManager::RasterizerType::CullBack,
+		{
+			D3D12_CULL_MODE_BACK,
+		}
+	},
+	{
+		PipelineManager::RasterizerType::CullNone,
+		{
+			D3D12_CULL_MODE_NONE,
+		}
+	},
+};
+
+const std::unordered_map<PipelineManager::InputLayoutType, PipelineManager::InputLayoutConfig> PipelineManager::inputLayoutTable_ =
+{
+	{
+		InputLayoutType::None,
+		{
+			{
+				//入力レイアウトなし
+			},
+		}
+	},
+
+	{
+		InputLayoutType::Default,
+		{
+			{
+				{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0,
+				 D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12,
+				  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
+				{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24,
+				  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+				
+			},
+		}
+	},
+
+	{
+		InputLayoutType::GeometryShader,
+		{
+			{
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0,
+				  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+			},
+		}
+	},
+
+	{
+		InputLayoutType::SkinModel,
+		{
+			{
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0,
+				  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12,
+				  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
+				{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24,
+				  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
+				{ "WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32,
+				  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
+				{ "INDEX", 0, DXGI_FORMAT_R32G32B32A32_SINT, 1, 48,
+				  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+			},
+		}
+	}
+};
 
 const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineManager::pipelineTable_ =
 {
@@ -140,7 +307,7 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			InputLayoutType::Default,
 			BlendType::None,
 			RasterizerType::CullNone,
-			DepthType::NoStencil,
+			DepthType::Disable,
 			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE
 		}
 	},
@@ -425,7 +592,6 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 void PipelineManager::Initialize(DirectXCommon* dxCommon)
 {
 	//DrawMode分のパイプラインを作成
-
 	for (const auto& [drawMode, pipelineConfig] : pipelineTable_)
 	{
 		pipelineSets_.at(static_cast<uint16_t>(drawMode)) = CreateGraphicsPipeline(pipelineConfig, dxCommon);
@@ -963,7 +1129,7 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 		staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
-		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapｗｐ使う
+		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapを使う
 		staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う s0
 		staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 
@@ -984,7 +1150,7 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 		staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
-		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapｗｐ使う
+		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapを使う
 		staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う s0
 		staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 
@@ -993,7 +1159,7 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 		staticSamplers[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		staticSamplers[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 		staticSamplers[1].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
-		staticSamplers[1].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapｗｐ使う
+		staticSamplers[1].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapを使う
 		staticSamplers[1].ShaderRegister = 1;	//レジスタ番号1を使う s1
 		staticSamplers[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 
@@ -1037,52 +1203,13 @@ D3D12_BLEND_DESC PipelineManager::CreateBlendDesc(BlendType type)
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
-	switch (type)
-	{
-	case PipelineManager::BlendType::None:
-		break;
+	BlendConfig config = blendTable_.at(type);
 
-	case PipelineManager::BlendType::Normal:
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-
-		break;
-
-	case PipelineManager::BlendType::Add:
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-
-		break;
-
-	case PipelineManager::BlendType::Subtract:
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
-		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-
-		break;
-
-	case PipelineManager::BlendType::Multiply:
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ZERO;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_SRC_COLOR;
-
-		break;
-	case PipelineManager::BlendType::Screen:
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-
-		break;
-	default:
-		break;
-	}
+	blendDesc.RenderTarget[0].BlendEnable = config.enable;
+	blendDesc.RenderTarget[0].SrcBlend = config.srcBlend;
+	blendDesc.RenderTarget[0].DestBlend = config.destBlend;
+	blendDesc.RenderTarget[0].BlendOp = config.blendOp;
+	
 
 	return blendDesc;
 }
@@ -1092,52 +1219,10 @@ D3D12_DEPTH_STENCIL_DESC PipelineManager::CreateDepthDesc(DepthType type)
 	//DepthStencilStateの設定
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
 
+	DepthConfig config = depthTable_.at(type);
 
-	switch (type)
-	{
-	case PipelineManager::DepthType::EnableWrite:
-		//Depthの機能を有効化する
-		depthStencilDesc.DepthEnable = true;
-		//書き込みします
-		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-
-		break;
-
-	case PipelineManager::DepthType::EnableNoWrite:
-		//Depthの機能を有効化する
-		depthStencilDesc.DepthEnable = true;
-		//書き込みしない
-		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-
-		break;
-
-	case PipelineManager::DepthType::NoEnableWrite:
-		//Depthの機能を無効化する
-		depthStencilDesc.DepthEnable = false;
-		//書き込みします
-		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-
-		break;
-
-	case PipelineManager::DepthType::NoStencil:
-		//Depthの機能を無効化する
-		depthStencilDesc.DepthEnable = false;
-		//書き込みしない
-		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-		depthStencilDesc.StencilEnable = false;	//ステンシルテスト無効化
-
-		break;
-
-	case PipelineManager::DepthType::Disable:
-		//Depthの機能を無効化する
-		depthStencilDesc.DepthEnable = false;
-		//書き込みしない
-		depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
-
-		break;
-	default:
-		break;
-	}
+	depthStencilDesc.DepthEnable = config.depthEnable;
+	depthStencilDesc.DepthWriteMask = config.depthWriteMask;
 
 	//比較関数はLessEqual。つまり、近ければ描画される
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
@@ -1150,76 +1235,14 @@ D3D12_INPUT_LAYOUT_DESC PipelineManager::CreateInputLayout(InputLayoutType type,
 	//InputLayout
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 
-	switch (type)
-	{
-	case PipelineManager::InputLayoutType::None:
+	inputElementDescs = inputLayoutTable_.at(type).inputElementDescs;
 
+	if (inputElementDescs.empty())
+	{
 		//InputLayoutは使わない
 		inputLayoutDesc.pInputElementDescs = nullptr;
 		inputLayoutDesc.NumElements = 0;
-
-		//InputLayoutを使わないので、ここで返す
 		return inputLayoutDesc;
-
-		break;
-	case PipelineManager::InputLayoutType::Default:
-		inputElementDescs.resize(3);
-
-		inputElementDescs[0].SemanticName = "POSITION";
-		inputElementDescs[0].SemanticIndex = 0;
-		inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-		inputElementDescs[1].SemanticName = "TEXCOORD";
-		inputElementDescs[1].SemanticIndex = 0;
-		inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-		inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-		inputElementDescs[2].SemanticName = "NORMAL";
-		inputElementDescs[2].SemanticIndex = 0;
-		inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-		break;
-
-	case PipelineManager::InputLayoutType::GeometryShader:
-		inputElementDescs.resize(1);
-
-		inputElementDescs[0].SemanticName = "POSITION";
-		inputElementDescs[0].SemanticIndex = 0;
-		inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-		break;
-
-	case PipelineManager::InputLayoutType::SkinModel:
-		inputElementDescs.resize(5);
-
-		inputElementDescs[0].SemanticName = "POSITION";
-		inputElementDescs[0].SemanticIndex = 0;
-		inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-		inputElementDescs[1].SemanticName = "TEXCOORD";
-		inputElementDescs[1].SemanticIndex = 0;
-		inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-		inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-		inputElementDescs[2].SemanticName = "NORMAL";
-		inputElementDescs[2].SemanticIndex = 0;
-		inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-		inputElementDescs[3].SemanticName = "WEIGHT";
-		inputElementDescs[3].SemanticIndex = 0;
-		inputElementDescs[3].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;	//float32_t4
-		inputElementDescs[3].InputSlot = 1;	//1番目のslotのVBVのことだと伝える
-		inputElementDescs[3].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-		inputElementDescs[4].SemanticName = "INDEX";
-		inputElementDescs[4].SemanticIndex = 0;
-		inputElementDescs[4].Format = DXGI_FORMAT_R32G32B32A32_SINT;	//int32_t4
-		inputElementDescs[4].InputSlot = 1;	//1番目のslotのVBVのことだと伝える
-		inputElementDescs[4].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-		break;
-
-	default:
-		break;
 	}
 
 	inputLayoutDesc.pInputElementDescs = inputElementDescs.data();
@@ -1230,26 +1253,12 @@ D3D12_INPUT_LAYOUT_DESC PipelineManager::CreateInputLayout(InputLayoutType type,
 
 D3D12_RASTERIZER_DESC PipelineManager::CreateRasterizerDesc(RasterizerType type)
 {
-	//ResiterizerStateの設定
+	//RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 
-	switch (type)
-	{
-	case PipelineManager::RasterizerType::CullBack:
-		//裏面（時計回り）を表示しない
-		rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	RasterizerConfig config = rasterizerTable_.at(type);
 
-		break;
-
-	case PipelineManager::RasterizerType::CullNone:
-		//裏面（時計回り）を表示する
-		rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;
-
-		break;
-
-	default:
-		break;
-	}
+	rasterizerDesc.CullMode = config.cullMode;
 
 	//三角形の中を塗りつぶす
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
