@@ -259,6 +259,107 @@ private:
 	/// </summary>
 	D3D12_DESCRIPTOR_RANGE CreateDescriptorRange(uint32_t BaseShaderRegister);
 
+	/// <summary>
+	/// モデル用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildModelRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// スプライト用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildSpriteRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// パーティクル用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildParticleRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// インスタンシングモデル用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildInstancingModelRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// ポストエフェクト用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildPostEffectRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// 線用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildLineRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// 球用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildSphereRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// スキンモデル用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildSkinModelRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// スカイボックス用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildSkyboxRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// ランダム用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildRandomRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// アウトライン用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildOutlineRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// ディゾルブ用のルートパラメータの生成。
+	/// </summary>
+	/// <param name="rootParameters">ルートパラメータ</param>
+	void BuildDissolveRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters);
+
+	/// <summary>
+	/// ルートパラメータのビルド関数のマップを取得する。
+	/// </summary>
+	/// <returns>ルートパラメータのビルド関数のマップ</returns>
+	const std::unordered_map<RootSignatureType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)>& GetRootParameterBuilders() const;
+
+	//デスクリプタレンジ。ルートシグネチャのビルド関数で使用するため、クラスのメンバ変数として保持する。
+	D3D12_DESCRIPTOR_RANGE descriptorRange_;
+
+	//平行光源用のデスクリプタレンジ。モデル用のルートシグネチャで使用するため、クラスのメンバ変数として保持する。
+	D3D12_DESCRIPTOR_RANGE descriptorRangeDirectionalLight_;
+
+	//点光源用のデスクリプタレンジ。モデル用のルートシグネチャで使用するため、クラスのメンバ変数として保持する。
+	D3D12_DESCRIPTOR_RANGE descriptorRangePointLight_;
+
+	//スポットライト用のデスクリプタレンジ。モデル用のルートシグネチャで使用するため、クラスのメンバ変数として保持する。
+	D3D12_DESCRIPTOR_RANGE descriptorRangeSpotLight_;
+
+	//環境マップ用のデスクリプタレンジ。モデル用とスカイボックス用のルートシグネチャで使用するため、クラスのメンバ変数として保持する。
+	D3D12_DESCRIPTOR_RANGE descriptorRangeEnvironmentTexture_;
+
+	//深度テクスチャ用のデスクリプタレンジ。アウトライン用のルートシグネチャで使用するため、クラスのメンバ変数として保持する。
+	D3D12_DESCRIPTOR_RANGE descriptorRangeDepthTexture_;
+
+	//マスクテクスチャ用のデスクリプタレンジ。ディゾルブ用のルートシグネチャで使用するため、クラスのメンバ変数として保持する。
+	D3D12_DESCRIPTOR_RANGE descriptorMaskTexture_;
+
+	void CreateDescriptorRanges();
+
 	//パイプライン。ブレンドモードの数だけ用意する
 	std::array<std::unique_ptr<PipelineSet>, (uint16_t)DrawMode::kCount> pipelineSets_;
 
