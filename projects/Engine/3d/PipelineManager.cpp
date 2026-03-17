@@ -591,6 +591,9 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 
 void PipelineManager::Initialize(DirectXCommon* dxCommon)
 {
+	//DescriptorRangeの生成
+	CreateDescriptorRanges();
+
 	//DrawMode分のパイプラインを作成
 	for (const auto& [drawMode, pipelineConfig] : pipelineTable_)
 	{
@@ -673,437 +676,22 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 	descriptionRootSignature.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
-	//DescriptorRange
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	descriptorRange[0] = CreateDescriptorRange(0);	//t0
-
-	D3D12_DESCRIPTOR_RANGE descriptorRangeDirectionalLight[1] = {};
-	descriptorRangeDirectionalLight[0] = CreateDescriptorRange(1);	//t1
-
-	D3D12_DESCRIPTOR_RANGE descriptorRangePointLight[1] = {};
-	descriptorRangePointLight[0] = CreateDescriptorRange(2);	//t2
-
-	D3D12_DESCRIPTOR_RANGE descriptorRangeSpotLight[1] = {};
-	descriptorRangeSpotLight[0] = CreateDescriptorRange(3);	//t3
-
-	D3D12_DESCRIPTOR_RANGE descriptorRangeEnvironmentTexture[1] = {};
-	descriptorRangeEnvironmentTexture[0] = CreateDescriptorRange(4);	//t4
-
-	//RootParameter作成。複数設定できるので配列。
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters = {};
+	
+	
+	// テーブル取得
+	const auto& table = GetRootParameterBuilders();
 
-	switch (type)
+	//検索	
+	auto it = table.find(type);
+	if (it == table.end())
 	{
-	case PipelineManager::RootSignatureType::Model:
-	{
-
-		rootParameters.resize(static_cast<size_t>(ModelRootParam::kCount));
-
-		//マテリアル
-		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(ModelRootParam::kMaterial)];
-		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
-
-		//TransformationMatrix
-		D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(ModelRootParam::kTransformationMatrix)];
-		transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(ModelRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		//平行光源
-		D3D12_ROOT_PARAMETER& directionalLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kDirectionalLight)];
-		directionalLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		directionalLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		directionalLightParam.DescriptorTable.pDescriptorRanges = descriptorRangeDirectionalLight;	//Tableの中身の配列を指定
-		directionalLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDirectionalLight);	//Tableで利用する数
-
-		//カメラ
-		D3D12_ROOT_PARAMETER& cameraParam = rootParameters[static_cast<size_t>(ModelRootParam::kCamera)];
-		cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		cameraParam.Descriptor.ShaderRegister = 1;
-
-		//点光源
-		D3D12_ROOT_PARAMETER& pointLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kPointLight)];
-		pointLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		pointLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		pointLightParam.DescriptorTable.pDescriptorRanges = descriptorRangePointLight;	//Tableの中身の配列を指定
-		pointLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangePointLight);	//Tableで利用する数
-
-		//スポットライト
-		D3D12_ROOT_PARAMETER& spotLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kSpotLight)];
-		spotLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		spotLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		spotLightParam.DescriptorTable.pDescriptorRanges = descriptorRangeSpotLight;	//Tableの中身の配列を指定
-		spotLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSpotLight);	//Tableで利用する数
-
-		//ライトカウント
-		D3D12_ROOT_PARAMETER& lightCountParam = rootParameters[static_cast<size_t>(ModelRootParam::kLightCount)];
-		lightCountParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		lightCountParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		lightCountParam.Descriptor.ShaderRegister = 2;
-
-		//環境マップ
-		D3D12_ROOT_PARAMETER& environmentMapParam = rootParameters[static_cast<size_t>(ModelRootParam::kEnvironmentMap)];
-		environmentMapParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		environmentMapParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		environmentMapParam.DescriptorTable.pDescriptorRanges = descriptorRangeEnvironmentTexture;	//Tableの中身の配列を指定
-		environmentMapParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeEnvironmentTexture);	//Tableで利用する数
-
-		break;
+		assert(false);
 	}
 
-	case PipelineManager::RootSignatureType::Sprite:
-	{
-
-		rootParameters.resize(static_cast<size_t>(SpriteRootParam::kCount));
-		//マテリアル
-		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(SpriteRootParam::kMaterial)];
-		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
-		//TransformationMatrix
-		D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(SpriteRootParam::kTransformationMatrix)];
-		transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(SpriteRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::Particle:
-	{
-
-		rootParameters.resize(static_cast<size_t>(ParticleRootParam::kCount));
-
-		//マテリアル
-		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(ParticleRootParam::kMaterial)];
-		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
-
-		//ParticleForGPU
-		D3D12_ROOT_PARAMETER& particleParam = rootParameters[static_cast<size_t>(ParticleRootParam::kParticleForGPU)];
-		particleParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		particleParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		particleParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		particleParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(ParticleRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::InstancingModel:
-	{
-
-		rootParameters.resize(static_cast<size_t>(ModelRootParam::kCount));
-
-		//マテリアル
-		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(ModelRootParam::kMaterial)];
-		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
-
-		//TransformationMatrix
-		D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(ModelRootParam::kTransformationMatrix)];
-		transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		transformParam.DescriptorTable.pDescriptorRanges = descriptorRange;
-		transformParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(ModelRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		//平行光源
-		D3D12_ROOT_PARAMETER& directionalLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kDirectionalLight)];
-		directionalLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		directionalLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		directionalLightParam.DescriptorTable.pDescriptorRanges = descriptorRangeDirectionalLight;	//Tableの中身の配列を指定
-		directionalLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDirectionalLight);	//Tableで利用する数
-
-		//カメラ
-		D3D12_ROOT_PARAMETER& cameraParam = rootParameters[static_cast<size_t>(ModelRootParam::kCamera)];
-		cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		cameraParam.Descriptor.ShaderRegister = 1;
-
-		//点光源
-		D3D12_ROOT_PARAMETER& pointLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kPointLight)];
-		pointLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		pointLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		pointLightParam.DescriptorTable.pDescriptorRanges = descriptorRangePointLight;	//Tableの中身の配列を指定
-		pointLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangePointLight);	//Tableで利用する数
-
-		//スポットライト
-		D3D12_ROOT_PARAMETER& spotLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kSpotLight)];
-		spotLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		spotLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		spotLightParam.DescriptorTable.pDescriptorRanges = descriptorRangeSpotLight;	//Tableの中身の配列を指定
-		spotLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSpotLight);	//Tableで利用する数
-
-		//ライトカウント
-		D3D12_ROOT_PARAMETER& lightCountParam = rootParameters[static_cast<size_t>(ModelRootParam::kLightCount)];
-		lightCountParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		lightCountParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		lightCountParam.Descriptor.ShaderRegister = 2;
-
-		//環境マップ
-		D3D12_ROOT_PARAMETER& environmentMapParam = rootParameters[static_cast<size_t>(ModelRootParam::kEnvironmentMap)];
-		environmentMapParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		environmentMapParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		environmentMapParam.DescriptorTable.pDescriptorRanges = descriptorRangeEnvironmentTexture;	//Tableの中身の配列を指定
-		environmentMapParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeEnvironmentTexture);	//Tableで利用する数
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::PostEffect:
-	{
-
-		rootParameters.resize(static_cast<size_t>(PostEffectRootParam::kCount));
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(PostEffectRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::Line:
-	{
-
-		rootParameters.resize(static_cast<size_t>(DebudLineRootParam::kCount));
-
-		//WVP
-		D3D12_ROOT_PARAMETER& wvpParam = rootParameters[static_cast<size_t>(DebudLineRootParam::kWVP)];
-		wvpParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		wvpParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	//VSとGSで使う
-		wvpParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::Sphere:
-	{
-
-		rootParameters.resize(static_cast<size_t>(DebugSphereRootParam::kCount));
-
-		//WVP
-		D3D12_ROOT_PARAMETER& wvpParam = rootParameters[static_cast<size_t>(DebugSphereRootParam::kWVP)];
-		wvpParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		wvpParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	//VSとGSで使う
-		wvpParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::SkinModel:
-	{
-
-		rootParameters.resize(static_cast<size_t>(SkinModelRootParam::kCount));
-
-		//マテリアル
-		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kMaterial)];
-		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
-
-		//TransformationMatrix
-		D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kTransformationMatrix)];
-		transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		//平行光源
-		D3D12_ROOT_PARAMETER& directionalLightParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kDirectionalLight)];
-		directionalLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		directionalLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		directionalLightParam.DescriptorTable.pDescriptorRanges = descriptorRangeDirectionalLight;	//Tableの中身の配列を指定
-		directionalLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDirectionalLight);	//Tableで利用する数
-
-		//カメラ
-		D3D12_ROOT_PARAMETER& cameraParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kCamera)];
-		cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		cameraParam.Descriptor.ShaderRegister = 1;
-
-		//点光源
-		D3D12_ROOT_PARAMETER& pointLightParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kPointLight)];
-		pointLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		pointLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		pointLightParam.DescriptorTable.pDescriptorRanges = descriptorRangePointLight;	//Tableの中身の配列を指定
-		pointLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangePointLight);	//Tableで利用する数
-
-		//スポットライト
-		D3D12_ROOT_PARAMETER& spotLightParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kSpotLight)];
-		spotLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		spotLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		spotLightParam.DescriptorTable.pDescriptorRanges = descriptorRangeSpotLight;	//Tableの中身の配列を指定
-		spotLightParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeSpotLight);	//Tableで利用する数
-
-		//ライトカウント
-		D3D12_ROOT_PARAMETER& lightCountParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kLightCount)];
-		lightCountParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		lightCountParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		lightCountParam.Descriptor.ShaderRegister = 2;
-
-		//環境マップ
-		D3D12_ROOT_PARAMETER& environmentMapParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kEnvironmentMap)];
-		environmentMapParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		environmentMapParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		environmentMapParam.DescriptorTable.pDescriptorRanges = descriptorRangeEnvironmentTexture;	//Tableの中身の配列を指定
-		environmentMapParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeEnvironmentTexture);	//Tableで利用する数
-
-		//Well
-		D3D12_ROOT_PARAMETER& wellParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kWell)];
-		wellParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		wellParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		wellParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		wellParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		break;
-	}
-	case PipelineManager::RootSignatureType::Skybox:
-	{
-
-		rootParameters.resize(static_cast<size_t>(SkyBoxRootParam::kCount));
-
-		//マテリアル
-		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(SkyBoxRootParam::kMaterial)];
-		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
-
-		//TransformationMatrix
-		D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(SkyBoxRootParam::kTransformationMatrix)];
-		transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
-		transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(SkyBoxRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::Random:
-	{
-
-		rootParameters.resize(static_cast<size_t>(RandomRootParam::kCount));
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(RandomRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		//マテリアル
-		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(RandomRootParam::kMaterial)];
-		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::Outline:
-	{
-
-		D3D12_DESCRIPTOR_RANGE descriptorRangeDepthTexture[1] = {};
-		descriptorRangeDepthTexture[0] = CreateDescriptorRange(1);	//t1
-
-		rootParameters.resize(static_cast<size_t>(DepthOutlineRootParam::kCount));
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(DepthOutlineRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		//DepthTexture
-		D3D12_ROOT_PARAMETER& depthTextureParam = rootParameters[static_cast<size_t>(DepthOutlineRootParam::kDepthTexture)];
-		depthTextureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		depthTextureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		depthTextureParam.DescriptorTable.pDescriptorRanges = descriptorRangeDepthTexture;	//Tableの中身の配列を指定
-		depthTextureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDepthTexture);	//Tableで利用する数
-
-		//マテリアル
-		D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(DepthOutlineRootParam::kMaterial)];
-		materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
-		materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
-
-		break;
-	}
-
-	case PipelineManager::RootSignatureType::Dissolve:
-	{
-
-		D3D12_DESCRIPTOR_RANGE descriptorMaskTexture[1] = {};
-		descriptorMaskTexture[0] = CreateDescriptorRange(1);	//t1
-
-		rootParameters.resize(static_cast<size_t>(DissolveRootParam::kCount));
-
-		//テクスチャ
-		D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(DissolveRootParam::kTexture)];
-		textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		textureParam.DescriptorTable.pDescriptorRanges = descriptorRange;	//Tableの中身の配列を指定
-		textureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);	//Tableで利用する数
-
-		//MaskTexture
-		D3D12_ROOT_PARAMETER& maskTextureParam = rootParameters[static_cast<size_t>(DissolveRootParam::kMaskTexture)];
-		maskTextureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
-		maskTextureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-		maskTextureParam.DescriptorTable.pDescriptorRanges = descriptorMaskTexture;	//Tableの中身の配列を指定
-		maskTextureParam.DescriptorTable.NumDescriptorRanges = _countof(descriptorMaskTexture);	//Tableで利用する数
-
-		break;
-	}
-	default:
-		break;
-	}
-
+	//ルートパラメータ生成
+	(this->*(it->second))(rootParameters);
+	
 	descriptionRootSignature.pParameters = rootParameters.data();	//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = static_cast<UINT>(rootParameters.size());	//配列の長さ
 
@@ -1275,6 +863,464 @@ D3D12_DESCRIPTOR_RANGE PipelineManager::CreateDescriptorRange(uint32_t BaseShade
 	descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;	//Offsetを自動計算
 
 	return descriptorRange;
+}
+
+void PipelineManager::BuildModelRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+
+	
+
+	rootParameters.resize(static_cast<size_t>(ModelRootParam::kCount));
+
+	//マテリアル
+	D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(ModelRootParam::kMaterial)];
+	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+	//TransformationMatrix
+	D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(ModelRootParam::kTransformationMatrix)];
+	transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+	transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(ModelRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//平行光源
+	D3D12_ROOT_PARAMETER& directionalLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kDirectionalLight)];
+	directionalLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	directionalLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	directionalLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangeDirectionalLight_;	//Tableの中身の配列を指定
+	directionalLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//カメラ
+	D3D12_ROOT_PARAMETER& cameraParam = rootParameters[static_cast<size_t>(ModelRootParam::kCamera)];
+	cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	cameraParam.Descriptor.ShaderRegister = 1;
+
+	//点光源
+	D3D12_ROOT_PARAMETER& pointLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kPointLight)];
+	pointLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	pointLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	pointLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangePointLight_;	//Tableの中身の配列を指定
+	pointLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//スポットライト
+	D3D12_ROOT_PARAMETER& spotLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kSpotLight)];
+	spotLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	spotLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	spotLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangeSpotLight_;	//Tableの中身の配列を指定
+	spotLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//ライトカウント
+	D3D12_ROOT_PARAMETER& lightCountParam = rootParameters[static_cast<size_t>(ModelRootParam::kLightCount)];
+	lightCountParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	lightCountParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	lightCountParam.Descriptor.ShaderRegister = 2;
+
+	//環境マップ
+	D3D12_ROOT_PARAMETER& environmentMapParam = rootParameters[static_cast<size_t>(ModelRootParam::kEnvironmentMap)];
+	environmentMapParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	environmentMapParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	environmentMapParam.DescriptorTable.pDescriptorRanges = &descriptorRangeEnvironmentTexture_;	//Tableの中身の配列を指定
+	environmentMapParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+}
+
+void PipelineManager::BuildSpriteRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(SpriteRootParam::kCount));
+	//マテリアル
+	D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(SpriteRootParam::kMaterial)];
+	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+	//TransformationMatrix
+	D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(SpriteRootParam::kTransformationMatrix)];
+	transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+	transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(SpriteRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+}
+
+void PipelineManager::BuildParticleRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(ParticleRootParam::kCount));
+
+	//マテリアル
+	D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(ParticleRootParam::kMaterial)];
+	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+	//ParticleForGPU
+	D3D12_ROOT_PARAMETER& particleParam = rootParameters[static_cast<size_t>(ParticleRootParam::kParticleForGPU)];
+	particleParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	particleParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+	particleParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	particleParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(ParticleRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+}
+
+void PipelineManager::BuildInstancingModelRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(ModelRootParam::kCount));
+
+	//マテリアル
+	D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(ModelRootParam::kMaterial)];
+	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+	//TransformationMatrix
+	D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(ModelRootParam::kTransformationMatrix)];
+	transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+	transformParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;
+	transformParam.DescriptorTable.NumDescriptorRanges = 1;
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(ModelRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//平行光源
+	D3D12_ROOT_PARAMETER& directionalLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kDirectionalLight)];
+	directionalLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	directionalLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	directionalLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangeDirectionalLight_;	//Tableの中身の配列を指定
+	directionalLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//カメラ
+	D3D12_ROOT_PARAMETER& cameraParam = rootParameters[static_cast<size_t>(ModelRootParam::kCamera)];
+	cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	cameraParam.Descriptor.ShaderRegister = 1;
+
+	//点光源
+	D3D12_ROOT_PARAMETER& pointLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kPointLight)];
+	pointLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	pointLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	pointLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangePointLight_;	//Tableの中身の配列を指定
+	pointLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//スポットライト
+	D3D12_ROOT_PARAMETER& spotLightParam = rootParameters[static_cast<size_t>(ModelRootParam::kSpotLight)];
+	spotLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	spotLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	spotLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangeSpotLight_;	//Tableの中身の配列を指定
+	spotLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//ライトカウント
+	D3D12_ROOT_PARAMETER& lightCountParam = rootParameters[static_cast<size_t>(ModelRootParam::kLightCount)];
+	lightCountParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	lightCountParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	lightCountParam.Descriptor.ShaderRegister = 2;
+
+	//環境マップ
+	D3D12_ROOT_PARAMETER& environmentMapParam = rootParameters[static_cast<size_t>(ModelRootParam::kEnvironmentMap)];
+	environmentMapParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	environmentMapParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	environmentMapParam.DescriptorTable.pDescriptorRanges = &descriptorRangeEnvironmentTexture_;	//Tableの中身の配列を指定
+	environmentMapParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+}
+
+void PipelineManager::BuildPostEffectRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(PostEffectRootParam::kCount));
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(PostEffectRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+}
+
+void PipelineManager::BuildLineRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	rootParameters.resize(static_cast<size_t>(DebudLineRootParam::kCount));
+
+	//WVP
+	D3D12_ROOT_PARAMETER& wvpParam = rootParameters[static_cast<size_t>(DebudLineRootParam::kWVP)];
+	wvpParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	wvpParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	//VSとGSで使う
+	wvpParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+
+}
+
+void PipelineManager::BuildSphereRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	rootParameters.resize(static_cast<size_t>(DebugSphereRootParam::kCount));
+
+	//WVP
+	D3D12_ROOT_PARAMETER& wvpParam = rootParameters[static_cast<size_t>(DebugSphereRootParam::kWVP)];
+	wvpParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	wvpParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	//VSとGSで使う
+	wvpParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+}
+
+void PipelineManager::BuildSkinModelRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(SkinModelRootParam::kCount));
+
+	//マテリアル
+	D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kMaterial)];
+	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+	//TransformationMatrix
+	D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kTransformationMatrix)];
+	transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+	transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//平行光源
+	D3D12_ROOT_PARAMETER& directionalLightParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kDirectionalLight)];
+	directionalLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	directionalLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	directionalLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangeDirectionalLight_;	//Tableの中身の配列を指定
+	directionalLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//カメラ
+	D3D12_ROOT_PARAMETER& cameraParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kCamera)];
+	cameraParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	cameraParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	cameraParam.Descriptor.ShaderRegister = 1;
+
+	//点光源
+	D3D12_ROOT_PARAMETER& pointLightParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kPointLight)];
+	pointLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	pointLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	pointLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangePointLight_;	//Tableの中身の配列を指定
+	pointLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//スポットライト
+	D3D12_ROOT_PARAMETER& spotLightParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kSpotLight)];
+	spotLightParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	spotLightParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	spotLightParam.DescriptorTable.pDescriptorRanges = &descriptorRangeSpotLight_;	//Tableの中身の配列を指定
+	spotLightParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//ライトカウント
+	D3D12_ROOT_PARAMETER& lightCountParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kLightCount)];
+	lightCountParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	lightCountParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	lightCountParam.Descriptor.ShaderRegister = 2;
+
+	//環境マップ
+	D3D12_ROOT_PARAMETER& environmentMapParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kEnvironmentMap)];
+	environmentMapParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	environmentMapParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	environmentMapParam.DescriptorTable.pDescriptorRanges = &descriptorRangeEnvironmentTexture_;	//Tableの中身の配列を指定
+	environmentMapParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//Well
+	D3D12_ROOT_PARAMETER& wellParam = rootParameters[static_cast<size_t>(SkinModelRootParam::kWell)];
+	wellParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	wellParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+	wellParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	wellParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+}
+
+void PipelineManager::BuildSkyboxRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(SkyBoxRootParam::kCount));
+
+	//マテリアル
+	D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(SkyBoxRootParam::kMaterial)];
+	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+
+	//TransformationMatrix
+	D3D12_ROOT_PARAMETER& transformParam = rootParameters[static_cast<size_t>(SkyBoxRootParam::kTransformationMatrix)];
+	transformParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	transformParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;	//VertexShaderで使う
+	transformParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(SkyBoxRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+}
+
+void PipelineManager::BuildRandomRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(RandomRootParam::kCount));
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(RandomRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//マテリアル
+	D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(RandomRootParam::kMaterial)];
+	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+}
+
+void PipelineManager::BuildOutlineRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(DepthOutlineRootParam::kCount));
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(DepthOutlineRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//DepthTexture
+	D3D12_ROOT_PARAMETER& depthTextureParam = rootParameters[static_cast<size_t>(DepthOutlineRootParam::kDepthTexture)];
+	depthTextureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	depthTextureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	depthTextureParam.DescriptorTable.pDescriptorRanges = &descriptorRangeDepthTexture_;	//Tableの中身の配列を指定
+	depthTextureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//マテリアル
+	D3D12_ROOT_PARAMETER& materialParam = rootParameters[static_cast<size_t>(DepthOutlineRootParam::kMaterial)];
+	materialParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
+	materialParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	materialParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0とバインド
+}
+
+void PipelineManager::BuildDissolveRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
+{
+	
+
+	rootParameters.resize(static_cast<size_t>(DissolveRootParam::kCount));
+
+	//テクスチャ
+	D3D12_ROOT_PARAMETER& textureParam = rootParameters[static_cast<size_t>(DissolveRootParam::kTexture)];
+	textureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
+	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//MaskTexture
+	D3D12_ROOT_PARAMETER& maskTextureParam = rootParameters[static_cast<size_t>(DissolveRootParam::kMaskTexture)];
+	maskTextureParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	//DescriptorTableを使う
+	maskTextureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+	maskTextureParam.DescriptorTable.pDescriptorRanges = &descriptorMaskTexture_;	//Tableの中身の配列を指定
+	maskTextureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+}
+
+const std::unordered_map<PipelineManager::RootSignatureType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)>& PipelineManager::GetRootParameterBuilders() const
+{
+	static const std::unordered_map<RootSignatureType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)> rootParameterBuilders =
+	{
+		{
+			RootSignatureType::Model,
+			&PipelineManager::BuildModelRootParameters,
+		},
+		{
+			RootSignatureType::Sprite,
+			&PipelineManager::BuildSpriteRootParameters,
+
+		},
+		{
+			RootSignatureType::Particle,
+			&PipelineManager::BuildParticleRootParameters,
+		},
+		{
+			RootSignatureType::InstancingModel,
+			&PipelineManager::BuildInstancingModelRootParameters,
+		},
+		{
+			RootSignatureType::PostEffect,
+			&PipelineManager::BuildPostEffectRootParameters,
+		},
+		{
+			RootSignatureType::Line,
+			&PipelineManager::BuildLineRootParameters,
+		},
+		{
+			RootSignatureType::Sphere,
+			&PipelineManager::BuildSphereRootParameters,
+		},
+		{
+			RootSignatureType::SkinModel,
+			&PipelineManager::BuildSkinModelRootParameters,
+		},
+		{
+			RootSignatureType::Skybox,
+			&PipelineManager::BuildSkyboxRootParameters,
+		},
+		{
+			RootSignatureType::Random,
+			&PipelineManager::BuildRandomRootParameters,
+		},
+		{
+			RootSignatureType::Outline,
+			&PipelineManager::BuildOutlineRootParameters,
+		},
+		{
+			RootSignatureType::Dissolve,
+			&PipelineManager::BuildDissolveRootParameters,
+		}
+	};
+
+	return rootParameterBuilders;
+}
+
+void PipelineManager::CreateDescriptorRanges()
+{
+	descriptorRange_ = CreateDescriptorRange(0);	//t0
+	descriptorRangeDirectionalLight_ = CreateDescriptorRange(1);	//t1
+	descriptorRangePointLight_ = CreateDescriptorRange(2);	//t2
+	descriptorRangeSpotLight_ = CreateDescriptorRange(3);	//t3
+	descriptorRangeEnvironmentTexture_ = CreateDescriptorRange(4);	//t4
+	descriptorRangeDepthTexture_ = CreateDescriptorRange(1);	//t1
+	descriptorMaskTexture_ = CreateDescriptorRange(1);	//t1
 }
 
 void PipelineManager::SetPipelineSet(ID3D12GraphicsCommandList* commandList, DrawMode blendMode)
