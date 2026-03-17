@@ -183,7 +183,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Object3d.VS.hlsl",
 			L"resources/shader/Object3d.PS.hlsl",
 			L"",
-			RootSignatureType::Model,
+			RootParameterType::Model,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -198,7 +199,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Object3d.VS.hlsl",
 			L"resources/shader/Object3d.PS.hlsl",
 			L"",
-			RootSignatureType::Model,
+			RootParameterType::Model,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Normal,
 			RasterizerType::CullBack,
@@ -213,7 +215,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Object3d.VS.hlsl",
 			L"resources/shader/Object3d.PS.hlsl",
 			L"",
-			RootSignatureType::Model,
+			RootParameterType::Model,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Add,
 			RasterizerType::CullBack,
@@ -228,7 +231,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Object3d.VS.hlsl",
 			L"resources/shader/Object3d.PS.hlsl",
 			L"",
-			RootSignatureType::Model,
+			RootParameterType::Model,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Subtract,
 			RasterizerType::CullBack,
@@ -243,7 +247,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Object3d.VS.hlsl",
 			L"resources/shader/Object3d.PS.hlsl",
 			L"",
-			RootSignatureType::Model,
+			RootParameterType::Model,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Multiply,
 			RasterizerType::CullBack,
@@ -258,7 +263,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Object3d.VS.hlsl",
 			L"resources/shader/Object3d.PS.hlsl",
 			L"",
-			RootSignatureType::Model,
+			RootParameterType::Model,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Screen,
 			RasterizerType::CullBack,
@@ -273,7 +279,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Sprite.VS.hlsl",
 			L"resources/shader/Sprite.PS.hlsl",
 			L"",
-			RootSignatureType::Sprite,
+			RootParameterType::Sprite,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::None,
 			RasterizerType::CullNone,
@@ -288,7 +295,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Sprite.VS.hlsl",
 			L"resources/shader/Sprite.PS.hlsl",
 			L"",
-			RootSignatureType::Sprite,
+			RootParameterType::Sprite,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Normal,
 			RasterizerType::CullNone,
@@ -303,7 +311,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Sprite.VS.hlsl",
 			L"resources/shader/Sprite.PS.hlsl",
 			L"",
-			RootSignatureType::Sprite,
+			RootParameterType::Sprite,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::None,
 			RasterizerType::CullNone,
@@ -318,7 +327,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Particle.VS.hlsl",
 			L"resources/shader/Particle.PS.hlsl",
 			L"",
-			RootSignatureType::Particle,
+			RootParameterType::Particle,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Add,
 			RasterizerType::CullBack,
@@ -333,7 +343,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Particle.VS.hlsl",
 			L"resources/shader/Particle.PS.hlsl",
 			L"",
-			RootSignatureType::Particle,
+			RootParameterType::Particle,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Normal,
 			RasterizerType::CullBack,
@@ -347,7 +358,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Particle.VS.hlsl",
 			L"resources/shader/Particle.PS.hlsl",
 			L"",
-			RootSignatureType::Particle,
+			RootParameterType::Particle,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Add,
 			RasterizerType::CullNone,
@@ -362,7 +374,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Particle.VS.hlsl",
 			L"resources/shader/Particle.PS.hlsl",
 			L"",
-			RootSignatureType::Particle,
+			RootParameterType::Particle,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Normal,
 			RasterizerType::CullNone,
@@ -377,7 +390,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Line3D.VS.hlsl",
 			L"resources/shader/Line3D.PS.hlsl",
 			L"resources/shader/Line3D.GS.hlsl",
-			RootSignatureType::Line,
+			RootParameterType::Line,
+			StaticSamplerType::GeometryShader,
 			InputLayoutType::GeometryShader,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -392,7 +406,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Sphere3D.VS.hlsl",
 			L"resources/shader/Sphere3D.PS.hlsl",
 			L"resources/shader/Sphere3D.GS.hlsl",
-			RootSignatureType::Sphere,
+			RootParameterType::Sphere,
+			StaticSamplerType::GeometryShader,
 			InputLayoutType::GeometryShader,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -407,7 +422,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/SkinningObject3d.VS.hlsl",
 			L"resources/shader/Object3d.PS.hlsl",
 			L"",
-			RootSignatureType::SkinModel,
+			RootParameterType::SkinModel,
+			StaticSamplerType::Default,
 			InputLayoutType::SkinModel,
 			BlendType::Normal,
 			RasterizerType::CullBack,
@@ -422,7 +438,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/InstancingObject3d.VS.hlsl",
 			L"resources/shader/Object3d.PS.hlsl",
 			L"",
-			RootSignatureType::InstancingModel,
+			RootParameterType::InstancingModel,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::Normal,
 			RasterizerType::CullBack,
@@ -436,7 +453,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/Skybox.VS.hlsl",
 			L"resources/shader/Skybox.PS.hlsl",
 			L"",
-			RootSignatureType::Skybox,
+			RootParameterType::Skybox,
+			StaticSamplerType::Default,
 			InputLayoutType::Default,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -451,7 +469,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/CopyImage.PS.hlsl",
 			L"",
-			RootSignatureType::PostEffect,
+			RootParameterType::PostEffect,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -466,7 +485,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/GrayScale.PS.hlsl",
 			L"",
-			RootSignatureType::PostEffect,
+			RootParameterType::PostEffect,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -481,7 +501,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/Vignette.PS.hlsl",
 			L"",
-			RootSignatureType::PostEffect,
+			RootParameterType::PostEffect,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -495,7 +516,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/5x5BoxFilter.PS.hlsl",
 			L"",
-			RootSignatureType::PostEffect,
+			RootParameterType::PostEffect,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -509,7 +531,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/GaussianFilter.PS.hlsl",
 			L"",
-			RootSignatureType::PostEffect,
+			RootParameterType::PostEffect,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -523,7 +546,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/LuminanceBasedOutline.PS.hlsl",
 			L"",
-			RootSignatureType::PostEffect,
+			RootParameterType::PostEffect,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -537,7 +561,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/Outline.PS.hlsl",
 			L"",
-			RootSignatureType::Outline,
+			RootParameterType::Outline,
+			StaticSamplerType::Outline,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -551,7 +576,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/RadialBlur.PS.hlsl",
 			L"",
-			RootSignatureType::PostEffect,
+			RootParameterType::PostEffect,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -565,7 +591,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/Dissolve.PS.hlsl",
 			L"",
-			RootSignatureType::Dissolve,
+			RootParameterType::Dissolve,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -579,7 +606,8 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			L"resources/shader/FullScreen.VS.hlsl",
 			L"resources/shader/Random.PS.hlsl",
 			L"",
-			RootSignatureType::Random,
+			RootParameterType::Random,
+			StaticSamplerType::Default,
 			InputLayoutType::None,
 			BlendType::None,
 			RasterizerType::CullBack,
@@ -607,7 +635,7 @@ std::unique_ptr<PipelineManager::PipelineSet> PipelineManager::CreateGraphicsPip
 	
 	ID3D12Device* device = dxCommon->GetDevice();
 
-	ComPtr<ID3D12RootSignature> rootSig = CreateRootSignature(device, pipelineConfig.rootSignature);
+	ComPtr<ID3D12RootSignature> rootSig = CreateRootSignature(device, pipelineConfig.rootParameter, pipelineConfig.staticSampler);
 
 	D3D12_BLEND_DESC blend = CreateBlendDesc(pipelineConfig.blend);
 
@@ -668,7 +696,7 @@ std::unique_ptr<PipelineManager::PipelineSet> PipelineManager::CreateGraphicsPip
 
 }
 
-ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* device, RootSignatureType type)
+ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* device, RootParameterType paramType, StaticSamplerType staticSamplerType)
 {
 
 	//RootSignature作成
@@ -683,7 +711,7 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 	const auto& table = GetRootParameterBuilders();
 
 	//検索	
-	auto it = table.find(type);
+	auto it = table.find(paramType);
 	if (it == table.end())
 	{
 		assert(false);
@@ -698,18 +726,9 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 	//Samplerの設定
 	std::vector<D3D12_STATIC_SAMPLER_DESC> staticSamplers = {};
 
-	switch (type)
+	switch (staticSamplerType)
 	{
-	case PipelineManager::RootSignatureType::Model:
-	case PipelineManager::RootSignatureType::Sprite:
-	case PipelineManager::RootSignatureType::Particle:
-	case PipelineManager::RootSignatureType::InstancingModel:
-	case PipelineManager::RootSignatureType::PostEffect:
-	case PipelineManager::RootSignatureType::SkinModel:
-	case PipelineManager::RootSignatureType::Skybox:
-	case PipelineManager::RootSignatureType::Random:
-	case PipelineManager::RootSignatureType::Dissolve:
-
+	case PipelineManager::StaticSamplerType::Default:
 		staticSamplers.resize(1);
 
 		staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;	//バイリニアフィルタ
@@ -723,14 +742,7 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 
 		break;
 
-	case PipelineManager::RootSignatureType::Line:
-	case PipelineManager::RootSignatureType::Sphere:
-
-		break;
-	
-	
-	case PipelineManager::RootSignatureType::Outline:
-
+	case PipelineManager::StaticSamplerType::Outline:
 		staticSamplers.resize(2);
 
 		staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;	//バイリニアフィルタ
@@ -752,7 +764,8 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 		staticSamplers[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 
 		break;
-
+	case PipelineManager::StaticSamplerType::GeometryShader:
+		break;
 	default:
 		break;
 	}
@@ -1254,57 +1267,57 @@ void PipelineManager::BuildDissolveRootParameters(std::vector<D3D12_ROOT_PARAMET
 	maskTextureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
 }
 
-const std::unordered_map<PipelineManager::RootSignatureType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)>& PipelineManager::GetRootParameterBuilders() const
+const std::unordered_map<PipelineManager::RootParameterType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)>& PipelineManager::GetRootParameterBuilders() const
 {
-	static const std::unordered_map<RootSignatureType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)> rootParameterBuilders =
+	static const std::unordered_map<RootParameterType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)> rootParameterBuilders =
 	{
 		{
-			RootSignatureType::Model,
+			RootParameterType::Model,
 			&PipelineManager::BuildModelRootParameters,
 		},
 		{
-			RootSignatureType::Sprite,
+			RootParameterType::Sprite,
 			&PipelineManager::BuildSpriteRootParameters,
 
 		},
 		{
-			RootSignatureType::Particle,
+			RootParameterType::Particle,
 			&PipelineManager::BuildParticleRootParameters,
 		},
 		{
-			RootSignatureType::InstancingModel,
+			RootParameterType::InstancingModel,
 			&PipelineManager::BuildInstancingModelRootParameters,
 		},
 		{
-			RootSignatureType::PostEffect,
+			RootParameterType::PostEffect,
 			&PipelineManager::BuildPostEffectRootParameters,
 		},
 		{
-			RootSignatureType::Line,
+			RootParameterType::Line,
 			&PipelineManager::BuildLineRootParameters,
 		},
 		{
-			RootSignatureType::Sphere,
+			RootParameterType::Sphere,
 			&PipelineManager::BuildSphereRootParameters,
 		},
 		{
-			RootSignatureType::SkinModel,
+			RootParameterType::SkinModel,
 			&PipelineManager::BuildSkinModelRootParameters,
 		},
 		{
-			RootSignatureType::Skybox,
+			RootParameterType::Skybox,
 			&PipelineManager::BuildSkyboxRootParameters,
 		},
 		{
-			RootSignatureType::Random,
+			RootParameterType::Random,
 			&PipelineManager::BuildRandomRootParameters,
 		},
 		{
-			RootSignatureType::Outline,
+			RootParameterType::Outline,
 			&PipelineManager::BuildOutlineRootParameters,
 		},
 		{
-			RootSignatureType::Dissolve,
+			RootParameterType::Dissolve,
 			&PipelineManager::BuildDissolveRootParameters,
 		}
 	};

@@ -93,7 +93,7 @@ public:
 private:
 
 	//ルートパラメータの種類。描画モードごとに異なるルートパラメータを使用するため。
-	enum class RootSignatureType
+	enum class RootParameterType
 	{
 		Model,
 		Sprite,
@@ -107,6 +107,13 @@ private:
 		Random,
 		Outline,
 		Dissolve
+	};
+
+	enum class StaticSamplerType
+	{
+		Default,	//通常のサンプラー
+		Outline,	//アウトライン用のサンプラー
+		GeometryShader,	//GS用のサンプラー
 	};
 
 	//入力レイアウトの種類。描画モードごとに異なる入力レイアウトを使用するため。
@@ -196,7 +203,8 @@ private:
 		const std::wstring psFilePath;
 		const std::wstring gsFilePath;
 
-		RootSignatureType rootSignature;
+		RootParameterType rootParameter;
+		StaticSamplerType staticSampler;
 
 		InputLayoutType inputLayout;
 
@@ -223,7 +231,7 @@ private:
 	/// <param name="device">D3D12デバイス</param>
 	/// <param name="type">ルートシグネチャの種類</param>
 	/// <returns>ルートシグネチャ</returns>
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateRootSignature(ID3D12Device* device, RootSignatureType type);
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> CreateRootSignature(ID3D12Device* device, RootParameterType paramType, StaticSamplerType staticSamplerType);
 
 	/// <summary>
 	/// ブレンド設定の生成。
@@ -335,7 +343,7 @@ private:
 	/// ルートパラメータのビルド関数のマップを取得する。
 	/// </summary>
 	/// <returns>ルートパラメータのビルド関数のマップ</returns>
-	const std::unordered_map<RootSignatureType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)>& GetRootParameterBuilders() const;
+	const std::unordered_map<RootParameterType, void(PipelineManager::*)(std::vector<D3D12_ROOT_PARAMETER>&)>& GetRootParameterBuilders() const;
 
 	//デスクリプタレンジ。ルートシグネチャのビルド関数で使用するため、クラスのメンバ変数として保持する。
 	D3D12_DESCRIPTOR_RANGE descriptorRange_;
