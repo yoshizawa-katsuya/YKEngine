@@ -7,6 +7,29 @@
 using namespace YKEngine;
 using namespace Microsoft::WRL;
 
+const std::unordered_map<PipelineManager::StaticSamplerType, std::vector<PipelineManager::StaticSamplerConfig>> PipelineManager::staticSamplerTable_ =
+{
+	{
+		PipelineManager::StaticSamplerType::Default,
+		{
+			{ D3D12_FILTER_MIN_MAG_MIP_LINEAR, 0 },
+		}
+	},
+	{
+		PipelineManager::StaticSamplerType::Outline,
+		{
+			{ D3D12_FILTER_MIN_MAG_MIP_LINEAR, 0 },
+			{ D3D12_FILTER_MIN_MAG_MIP_POINT, 1 }
+		}
+	},
+	{
+		PipelineManager::StaticSamplerType::GeometryShader,
+		{
+			//使用しないため、空のベクター
+		}
+	},
+};
+
 const std::unordered_map<PipelineManager::BlendType, PipelineManager::BlendConfig> PipelineManager::blendTable_ =
 {
 	{
@@ -726,48 +749,13 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 	//Samplerの設定
 	std::vector<D3D12_STATIC_SAMPLER_DESC> staticSamplers = {};
 
-	switch (staticSamplerType)
+	auto samplerIt = staticSamplerTable_.find(staticSamplerType);
+	if (samplerIt != staticSamplerTable_.end())
 	{
-	case PipelineManager::StaticSamplerType::Default:
-		staticSamplers.resize(1);
-
-		staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;	//バイリニアフィルタ
-		staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//0～1の範囲外をリピート
-		staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
-		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapを使う
-		staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う s0
-		staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-
-		break;
-
-	case PipelineManager::StaticSamplerType::Outline:
-		staticSamplers.resize(2);
-
-		staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;	//バイリニアフィルタ
-		staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//0～1の範囲外をリピート
-		staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
-		staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapを使う
-		staticSamplers[0].ShaderRegister = 0;	//レジスタ番号0を使う s0
-		staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-
-		staticSamplers[1].Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;	//ポイントフィルタ
-		staticSamplers[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//0～1の範囲外をリピート
-		staticSamplers[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers[1].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
-		staticSamplers[1].MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapを使う
-		staticSamplers[1].ShaderRegister = 1;	//レジスタ番号1を使う s1
-		staticSamplers[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
-
-		break;
-	case PipelineManager::StaticSamplerType::GeometryShader:
-		break;
-	default:
-		break;
+		for (const StaticSamplerConfig& config : samplerIt->second)
+		{
+			staticSamplers.push_back(CreateStaticSamplerDesc(config));
+		}
 	}
 
 	descriptionRootSignature.pStaticSamplers = staticSamplers.data();
@@ -792,6 +780,24 @@ ComPtr<ID3D12RootSignature> PipelineManager::CreateRootSignature(ID3D12Device* d
 	assert(SUCCEEDED(hr));
 
 	return rootSignature;
+}
+
+D3D12_STATIC_SAMPLER_DESC YKEngine::PipelineManager::CreateStaticSamplerDesc(StaticSamplerConfig config)
+{
+
+	D3D12_STATIC_SAMPLER_DESC samplerDesc{};
+
+	samplerDesc.Filter = config.filter;
+	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;	//0～1の範囲外をリピート
+	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;	//比較しない
+	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;	//ありったけのMipmapを使う
+	samplerDesc.ShaderRegister = config.reg;	//レジスタ番号の指定 s0など
+	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
+
+	
+	return samplerDesc;
 }
 
 D3D12_BLEND_DESC PipelineManager::CreateBlendDesc(BlendType type)
