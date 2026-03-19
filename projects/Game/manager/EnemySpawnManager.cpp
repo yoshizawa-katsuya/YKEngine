@@ -37,26 +37,10 @@ void EnemySpawnManager::GetSpawnDatas(const std::vector<EnemySpawnData>& outSpaw
 		EnemySpawn enemySpawn;
 
 		//敵の種類を取得
-		if (enemySpawnData.type == "EnemySpawn")
-		{
-			enemySpawn.type = EnemyType::kShot01;
-		}
-		else if (enemySpawnData.type == "Enemy02Spawn")
-		{
-			enemySpawn.type = EnemyType::kShot02;
-		}
-		else if (enemySpawnData.type == "TackleEnemySpawn")
-		{
-			enemySpawn.type = EnemyType::kTackle01;
-		}
-		else if (enemySpawnData.type == "TackleEnemy02Spawn")
-		{
-			enemySpawn.type = EnemyType::kTackle02;
-		}
-		else
-		{
-			assert(0 && "不明な敵の種類です");
-		}
+		const std::unordered_map<std::string, EnemyType>& enemyTypeMap = GetEnemyTypeMap();
+		enemySpawn.type = enemyTypeMap.at(enemySpawnData.type);
+
+		
 		//レベルエディターで敵のwaveNumを必ず設定するようにする
 		//敵のウェーブナンバーを取得
 		enemySpawn.waveNumber = enemySpawnData.waveNum.value();
@@ -107,6 +91,18 @@ void EnemySpawnManager::WaveStart(uint32_t waveNum)
 	spawnObject = std::make_unique<EnemySpawnObject>();
 	spawnObject->Initialize(nowWaveDatas, model_);
 	spawnObject->SetEnemyManager(enemyManager_);
+}
+
+const std::unordered_map<std::string, EnemyType>& EnemySpawnManager::GetEnemyTypeMap() const
+{
+	static const std::unordered_map<std::string, EnemyType> enemyTypeMap =
+	{
+		{"EnemySpawn", EnemyType::kShot01},
+		{"Enemy02Spawn", EnemyType::kShot02},
+		{"TackleEnemySpawn", EnemyType::kTackle01},
+		{"TackleEnemy02Spawn", EnemyType::kTackle02},
+	};
+	return enemyTypeMap;
 }
 
 

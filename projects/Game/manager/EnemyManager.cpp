@@ -72,29 +72,17 @@ void EnemyManager::Draw(Camera* camera)
 
 void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 {
-	std::unique_ptr<BaseEnemy> enemy;
+	const std::unordered_map<EnemyType, EnemyFactory>& enemyFactoryMap = GetEnemyFactoryMap();
 
-	switch (spawnData.type)
+	auto it = enemyFactoryMap.find(spawnData.type);
+	if (it == enemyFactoryMap.end())
 	{
-	case EnemyType::kShot01:
-	case EnemyType::kShot02:
-		enemy = std::make_unique<ShotEnemy01>();
-		// 敵のパラメータ設定
-		dynamic_cast<ShotEnemy01*>(enemy.get())->SetParams(shotEnemyParamsMap_[spawnData.type]);
-		break;
-
-	
-	case EnemyType::kTackle01:
-		enemy = std::make_unique<TackleEnemy01>();
-		break;
-
-	case EnemyType::kTackle02:
-		enemy = std::make_unique<TackleEnemy02>();
-		break;
-
-	default:
-		break;
+		assert(false && "Unknown EnemyType"); // 敵の種類が見つからない場合はエラー
+		return;
 	}
+
+	std::unique_ptr<BaseEnemy> enemy = it->second(this, spawnData);
+
 	// 敵の初期化
 	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), spawnData, railCamera_, player_);
 	enemy->SetEnemyBulletManager(enemyBulletManager_);
@@ -141,4 +129,38 @@ void EnemyManager::ParamsSetup()
 		shot02GroupName,
 		JsonKey::Enemy::kBulletSpeed
 	);
+}
+
+const std::unordered_map<EnemyType, EnemyManager::EnemyFactory>& EnemyManager::GetEnemyFactoryMap() const
+{
+	static const std::unordered_map<EnemyType, EnemyFactory> enemyFactoryMap =
+	{
+		{
+			EnemyType::kShot01, [](EnemyManager* mgr, const EnemySpawn& spawnData) {
+				std::unique_ptr<BaseEnemy> enemy = std::make_unique<ShotEnemy01>();
+				// 敵のパラメータ設定
+				dynamic_cast<ShotEnemy01*>(enemy.get())->SetParams(mgr->shotEnemyParamsMap_[spawnData.type]);
+				return enemy;
+			}
+		},
+		{
+			EnemyType::kShot02, [](EnemyManager* mgr, const EnemySpawn& spawnData) {
+				std::unique_ptr<BaseEnemy> enemy = std::make_unique<ShotEnemy01>();
+				// 敵のパラメータ設定
+				dynamic_cast<ShotEnemy01*>(enemy.get())->SetParams(mgr->shotEnemyParamsMap_[spawnData.type]);
+				return enemy;
+			}
+		},
+		{
+			EnemyType::kTackle01, [](EnemyManager* mgr, const EnemySpawn& spawnData) {
+				return std::make_unique<TackleEnemy01>();
+			}
+		},
+		{
+			EnemyType::kTackle02, [](EnemyManager* mgr, const EnemySpawn& spawnData) {
+				return std::make_unique<TackleEnemy02>();
+			}
+		}
+	};
+	return enemyFactoryMap;
 }

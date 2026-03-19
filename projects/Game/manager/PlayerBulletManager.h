@@ -51,5 +51,14 @@ private:
 
 	//弾
 	std::list<std::unique_ptr<BasePlayerBullet>> playerBullets_;
+
+	using PlayerBulletFactory = std::function<std::unique_ptr<BasePlayerBullet>()>;
+
+	/// <summary>
+	/// プレイヤーの弾の種類とプレイヤーの弾生成関数の対応表を取得する。
+	/// </summary>
+	/// <returns>プレイヤーの弾の種類とプレイヤーの弾生成関数の対応表</returns>
+	const std::unordered_map<PlayerBulletType, PlayerBulletFactory>& GetPlayerBulletFactoryMap() const;
+
 };
 

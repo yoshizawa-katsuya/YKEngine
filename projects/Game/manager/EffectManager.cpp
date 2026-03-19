@@ -73,24 +73,28 @@ void EffectManager::ClearAllEffects()
 
 std::shared_ptr<BaseModel> EffectManager::LoadEffectModel(const std::string& modelName, uint32_t textureHnadle)
 {
+	//モデル生成関数の対応表からモデル生成関数を取得して呼び出す
+	const std::unordered_map<std::string, EffectModelFactory> effectModelFactoryMap = GetEffectModelFactoryMap();
+
+	auto it = effectModelFactoryMap.find(modelName);
 	std::string tag = "Effect";
-	if (modelName == "primitivePlane")
+	if (it != effectModelFactoryMap.end())
 	{
-		return modelPlatform_->CreatePlane(textureHnadle, tag);
-	}
-	else if (modelName == "primitiveSphere")
-	{
-		return modelPlatform_->CreateSphere(textureHnadle, tag);
-	}
-	else if (modelName == "primitiveCube")
-	{
-		return modelPlatform_->CreateCube(textureHnadle, tag);
-	}
-	else if (modelName == "primitivePlane")
-	{
-		return modelPlatform_->CreatePlane(textureHnadle, tag);
+		
+		return it->second(textureHnadle, tag);
 	}
 
 	assert(false);
 	return modelPlatform_->CreatePlane(textureHnadle, tag);
+}
+
+const std::unordered_map<std::string, EffectManager::EffectModelFactory>& EffectManager::GetEffectModelFactoryMap() const
+{
+	static const std::unordered_map<std::string, EffectModelFactory> effectModelFactoryMap
+	{
+		{"primitivePlane", [this](uint32_t textureHandle, const std::string& tag) { return modelPlatform_->CreatePlane(textureHandle, tag); }},
+		{"primitiveSphere", [this](uint32_t textureHandle, const std::string& tag) { return modelPlatform_->CreateSphere(textureHandle, tag); }},
+		{"primitiveCube", [this](uint32_t textureHandle, const std::string& tag) { return modelPlatform_->CreateCube(textureHandle, tag); }},
+	};
+	return effectModelFactoryMap;
 }

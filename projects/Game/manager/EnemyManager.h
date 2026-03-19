@@ -71,5 +71,10 @@ private:
 
 	//敵弾マネージャーのポインタ
 	EnemyBulletManager* enemyBulletManager_ = nullptr;
+
+	using EnemyFactory = std::function<std::unique_ptr<BaseEnemy>(EnemyManager*, const EnemySpawn&)>;
+
+	const std::unordered_map<EnemyType, EnemyFactory>& GetEnemyFactoryMap() const;
+
 };
 

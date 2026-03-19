@@ -45,32 +45,31 @@ void EventTriggerManager::CreateEventTriggers(const std::vector<ObjectData>& obj
 
 void EventTriggerManager::AddEvent(const std::string& eventName, const ObjectData& objectData)
 {
+	const std::unordered_map<std::string, EventTriggerManager::EventFactory>& eventFactoryMap = GetEventFactoryMap();
 
-	std::unique_ptr<BaseEventTrigger> eventTrigger;
+	auto it = eventFactoryMap.find(eventName);
+	if (it == eventFactoryMap.end())
+	{
+		assert(false); // イベントの種類が見つからない場合はエラー
+		return;
+	}
 
-	if (eventName == "waveEvent")
-	{
-		//敵出現イベントの生成
-		eventTrigger = std::make_unique<EnemySpawnEventTrigger>();
-	}
-	else if (eventName == "speedEvent")
-	{
-		//スピードイベントの生成
-		eventTrigger = std::make_unique<SpeedEventTrigger>();
-	}
-	else if (eventName == "rotateEvent")
-	{
-		// 回転イベントの生成
-		eventTrigger = std::make_unique<RotateEventTrigger>();
-	}
-	else if (eventName == "rotateResetEvent")
-	{
-		//回転リセットイベントの生成
-		eventTrigger = std::make_unique<RotateResetEventTrigger>();
-	}
+	std::unique_ptr<BaseEventTrigger> eventTrigger = it->second();
 
 	// 初期化
 	eventTrigger->Initialize(objectData);
 	// リストに追加
 	events_.push_back(std::move(eventTrigger));
+}
+
+const std::unordered_map<std::string, EventTriggerManager::EventFactory>& EventTriggerManager::GetEventFactoryMap() const
+{
+	static const std::unordered_map<std::string, EventFactory> eventFactoryMap =
+	{
+		{"waveEvent", []() { return std::make_unique<EnemySpawnEventTrigger>(); }},
+		{"speedEvent", []() { return std::make_unique<SpeedEventTrigger>(); }},
+		{"rotateEvent", []() { return std::make_unique<RotateEventTrigger>(); }},
+		{"rotateResetEvent", []() { return std::make_unique<RotateResetEventTrigger>(); }}
+	};
+	return eventFactoryMap;
 }

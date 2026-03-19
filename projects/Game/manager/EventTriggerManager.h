@@ -40,5 +40,11 @@ private:
 
 	//イベント
 	std::list<std::unique_ptr<BaseEventTrigger>> events_;
+
+	using EventFactory = std::function<std::unique_ptr<BaseEventTrigger>()>;
+
+	//イベントの種類とイベント生成関数の対応表を取得する。	
+	const std::unordered_map<std::string, EventFactory>& GetEventFactoryMap() const;
+
 };
 

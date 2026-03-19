@@ -105,5 +105,14 @@ private:
 	std::unordered_map<EffectType, std::unique_ptr<YKEngine::ParticleEmitter>> effectEmitters_;
 
 	YKEngine::ModelPlatform* modelPlatform_ = nullptr;
+
+	using EffectModelFactory = std::function<std::shared_ptr<YKEngine::BaseModel>(uint32_t, const std::string&)>;
+
+	/// <summary>
+	/// エフェクトのモデル生成関数の対応表を取得する。
+	/// </summary>
+	/// <returns>エフェクトのモデル生成関数の対応表</returns>
+	const std::unordered_map<std::string, EffectModelFactory>& GetEffectModelFactoryMap() const;
+
 };
 

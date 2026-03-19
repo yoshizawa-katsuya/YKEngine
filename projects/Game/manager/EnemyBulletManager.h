@@ -55,5 +55,10 @@ private:
 
 	//ゲームオーバーならtrue
 	bool isGameOver_ = false;
+
+	using EnemyBulletFactory = std::function<std::unique_ptr<BaseEnemyBullet>()>;
+
+	const std::unordered_map<EnemyBulletType, EnemyBulletFactory>& GetEnemyBulletFactoryMap() const;
+
 };
 

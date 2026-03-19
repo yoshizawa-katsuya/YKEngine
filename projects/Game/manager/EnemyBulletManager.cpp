@@ -55,21 +55,19 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 	{
 		return;
 	}
-	
-	//弾を生成し、初期化
-	std::unique_ptr<BaseEnemyBullet> bullet;
+	//bulletTypeに対応する弾の生成関数を取得
+	const std::unordered_map<EnemyBulletType, EnemyBulletFactory>& enemyBulletFactoryMap = GetEnemyBulletFactoryMap();
 
-	switch (bulletType)
+	//検索
+	auto it = enemyBulletFactoryMap.find(bulletType);
+	if (it == enemyBulletFactoryMap.end())
 	{
-	case EnemyBulletType::kTarget:
-		bullet = std::make_unique<TargetEnemyBullet01>();
-		break;
-	case EnemyBulletType::kHoming:
-		bullet = std::make_unique<EnemyHomingBullet01>();
-		break;
-	default:
-		break;
+		assert(false && "Unknown EnemyBulletType"); // 弾の種類が見つからない場合はエラー
+		return;
 	}
+
+	//弾を生成し、初期化
+	std::unique_ptr<BaseEnemyBullet> bullet = it->second();
 
 	bullet->Initialize(modelEnemyBulletMap_[bulletType].get(), worldPosition, velocity, target, speed);
 
@@ -83,4 +81,14 @@ void EnemyBulletManager::RegisterToCollisionManager(CollisionManager* collisionM
 	{
 		collisionManager->AddCollider(bullet.get());
 	}
+}
+
+const std::unordered_map<EnemyBulletType, EnemyBulletManager::EnemyBulletFactory>& EnemyBulletManager::GetEnemyBulletFactoryMap() const
+{
+	static const std::unordered_map<EnemyBulletType, EnemyBulletFactory> enemyBulletFactoryMap =
+	{
+		{EnemyBulletType::kTarget, []() { return std::make_unique<TargetEnemyBullet01>(); }},
+		{EnemyBulletType::kHoming, []() { return std::make_unique<EnemyHomingBullet01>(); }},
+	};
+	return enemyBulletFactoryMap;
 }

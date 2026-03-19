@@ -47,20 +47,18 @@ void PlayerBulletManager::Draw(Camera* camera)
 
 void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Vector3& direction, PlayerBulletType bulletType, BaseEnemy* targetEnemy)
 {
-	//リストに登録する
 	//弾を生成し、初期化
-	std::unique_ptr<BasePlayerBullet> bullet;
-	switch (bulletType)
+	//bulletTypeに対応する弾の生成関数を取得
+	const std::unordered_map<PlayerBulletType, PlayerBulletFactory>& playerBulletFactoryMap = GetPlayerBulletFactoryMap();
+	auto it = playerBulletFactoryMap.find(bulletType);
+	if (it == playerBulletFactoryMap.end())
 	{
-	case PlayerBulletType::kNormal:
-		bullet = std::make_unique<PlayerBullet01>();
-
-		break;
-	case PlayerBulletType::kCharge:
-		bullet = std::make_unique<ChargePlayerBullet01>();
-
-		break;
+		assert(false); // 弾の種類が見つからない場合はエラー
+		return;
 	}
+
+	std::unique_ptr<BasePlayerBullet> bullet = it->second();
+	
 	bullet->Initialize(modelBullet_.get(), worldPosition, direction, targetEnemy);
 
 	//リストに登録
@@ -73,4 +71,14 @@ void PlayerBulletManager::RegisterToCollisionManager(CollisionManager* collision
 	{
 		collisionManager->AddCollider(bullet.get());
 	}
+}
+
+const std::unordered_map<PlayerBulletType, PlayerBulletManager::PlayerBulletFactory>& PlayerBulletManager::GetPlayerBulletFactoryMap() const
+{
+	static const std::unordered_map<PlayerBulletType, PlayerBulletFactory> playerBulletFactoryMap =
+	{
+		{PlayerBulletType::kNormal, []() { return std::make_unique<PlayerBullet01>(); }},
+		{PlayerBulletType::kCharge, []() { return std::make_unique<ChargePlayerBullet01>(); }},
+	};
+	return playerBulletFactoryMap;
 }
