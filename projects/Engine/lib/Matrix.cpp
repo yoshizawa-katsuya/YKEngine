@@ -93,7 +93,7 @@ Matrix3x3 Multiply(const Matrix3x3& matrix1, const Matrix3x3& matrix2)
 	return matrix;
 }
 
-Vector2 Transform(Vector2 vector, Matrix3x3 matrix) 
+Vector2 Transform(Vector2 vector, const Matrix3x3& matrix)
 {
 	Vector2 result;
 	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + 1.0f * matrix.m[2][0];
