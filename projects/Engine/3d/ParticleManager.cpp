@@ -169,7 +169,7 @@ void ParticleManager::Draw()
 }
 
 
-void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior)
+void ParticleManager::CreateParticleGroup(const std::string& name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior)
 {
 	//名前とテクスチャが同じ場合パーティクルを使いまわす
 	if (particleGroups_.contains(name))
@@ -205,7 +205,7 @@ void ParticleManager::CreateParticleGroup(const std::string name, uint32_t textu
 
 }
 
-void ParticleManager::Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
+void ParticleManager::Emit(const std::string& name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
 	const Color& color, const EmitterRangeParams& rangeParams)
 {
 	assert(particleGroups_.contains(name));
@@ -216,7 +216,7 @@ void ParticleManager::Emit(const std::string name, const EulerTransform& transfo
 	}
 }
 
-void ParticleManager::ClearParticles(const std::string name)
+void ParticleManager::ClearParticles(const std::string& name)
 {
 	assert(particleGroups_.contains(name));
 	ParticleGroup& particleGroup = particleGroups_[name];

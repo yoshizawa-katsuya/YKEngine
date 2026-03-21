@@ -60,7 +60,7 @@ public:
 	/// <param name="textureHandle">パーティクルのテクスチャハンドル</param>
 	/// <param name="model">パーティクルのモデル</param>
 	/// <param name="behavior">パーティクルの挙動</param>
-	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
+	void CreateParticleGroup(const std::string& name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
 
 	/// <summary>
 	/// パーティクルの発生。
@@ -71,14 +71,14 @@ public:
 	/// <param name="randomFlags">ランダム化フラグ</param>
 	/// <param name="color">パーティクルの色</param>
 	/// <param name="rangeParams">エミッター範囲パラメータ</param>
-	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
+	void Emit(const std::string& name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
 		const Color& color, const EmitterRangeParams& rangeParams);
 
 	/// <summary>
 	/// パーティクルを削除。
 	/// </summary>
 	/// <param name="name">パーティクルグループの名前</param>
-	void ClearParticles(const std::string name);
+	void ClearParticles(const std::string& name);
 
 	/// <summary>
 	/// 全てのパーティクルを削除。
