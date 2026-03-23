@@ -57,7 +57,7 @@ Vector3 CatmullRom(const Vector3& p0, const Vector3& p1, const Vector3& p2, cons
 
 }
 
-std::vector<Vector3> GenerateCatmullRomSplinePoints(std::vector<Vector3>& controlPoints, uint32_t numPoints) 
+std::vector<Vector3> GenerateCatmullRomSplinePoints(const std::vector<Vector3>& controlPoints, uint32_t numPoints)
 {
 	std::vector<Vector3> splinePoints;
 
@@ -107,7 +107,7 @@ std::vector<Vector3> GenerateCatmullRomSplinePoints(std::vector<Vector3>& contro
 	return splinePoints;
 }
 
-std::vector<Vector3> GenerateCatmullRomSplinePointsLoop(std::vector<Vector3>& controlPoints, uint32_t numPoints)
+std::vector<Vector3> GenerateCatmullRomSplinePointsLoop(const std::vector<Vector3>& controlPoints, uint32_t numPoints)
 {
 	std::vector<Vector3> splinePoints;
 
