@@ -184,7 +184,7 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 
 }
 
-EulerTransform TranformLoad(nlohmann::json& transformData)
+EulerTransform TranformLoad(const nlohmann::json& transformData)
 {
 	EulerTransform transform;
 	//平行移動
