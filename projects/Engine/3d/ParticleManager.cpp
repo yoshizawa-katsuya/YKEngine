@@ -13,22 +13,21 @@
 
 using namespace YKEngine;
 
-ParticleManager* ParticleManager::instance_ = nullptr;
+std::unique_ptr<ParticleManager> ParticleManager::instance_ = nullptr;
 
 ParticleManager* ParticleManager::GetInstance()
 {
 	if (instance_ == nullptr)
 	{
-		instance_ = new ParticleManager();
+		instance_ = std::make_unique<ParticleManager>(ConstructorKey());
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void ParticleManager::Finalize()
 {
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
 }
 
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PipelineManager* primitiveDrawer)

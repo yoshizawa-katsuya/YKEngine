@@ -189,9 +189,6 @@ void Audio::SoundStopWave(const LoopSoundData& loopSoundData)
 void Audio::SoundUnload(SoundData* soundData)
 {
 
-	//バッファのメモリを解放
-	delete[] soundData->buffer.data();
-
 	soundData->wfex = {};
 
 }

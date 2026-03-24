@@ -189,6 +189,16 @@ public:
 
 	void SetDrawMode(DrawMode drawMode);
 
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class ModelPlatform;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit ModelPlatform(ConstructorKey key) {}
+
 private:
 
 	/// <summary>
@@ -220,13 +230,13 @@ private:
 	std::shared_ptr<BaseModel> CreateModelCommon(const std::string& name, F createFunc);
 	
 
-	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
-	static ModelPlatform* instance_;
+	// シングルトンインスタンス
+	static std::unique_ptr<ModelPlatform> instance_;
+	friend struct std::default_delete<ModelPlatform>;
 
-	ModelPlatform() = default;
 	~ModelPlatform() = default;
-	ModelPlatform(ModelPlatform&) = default;
-	ModelPlatform& operator=(ModelPlatform&) = default;
+	ModelPlatform(ModelPlatform&) = delete;
+	ModelPlatform& operator=(ModelPlatform&) = delete;
 
 	DirectXCommon* dxCommon_;
 

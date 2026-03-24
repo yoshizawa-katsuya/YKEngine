@@ -144,11 +144,21 @@ public:
 
 	ID3D12Resource* GetDepthStencilResource() const { return depthStencilResource_.Get(); }
 
-private:
-	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
-	static DirectXCommon* instance_;
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class DirectXCommon;
+	};
 
-	DirectXCommon() = default;
+	//PassKeyを受け取るコンストラクタ
+	explicit DirectXCommon(ConstructorKey key) {}
+
+private:
+	// シングルトンインスタンス
+	static std::unique_ptr<DirectXCommon> instance_;
+	friend struct std::default_delete<DirectXCommon>;
+
 	~DirectXCommon() = default;
 	DirectXCommon(DirectXCommon&) = delete;
 	const DirectXCommon& operator=(DirectXCommon&) = delete;
