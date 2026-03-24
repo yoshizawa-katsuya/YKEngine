@@ -1,25 +1,23 @@
 #include "SceneChangeStaging.h"
 #include "TextureManager.h"
-#include "Fade.h"
 
 using namespace YKEngine;
 
-SceneChangeStaging* SceneChangeStaging::instance_ = nullptr;
+std::unique_ptr<SceneChangeStaging> SceneChangeStaging::instance_ = nullptr;
 
 SceneChangeStaging* SceneChangeStaging::GetInstance()
 {
 	if (instance_ == nullptr)
 	{
-		instance_ = new SceneChangeStaging();
+		instance_ = std::make_unique<SceneChangeStaging>(ConstructorKey());
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void SceneChangeStaging::Finalize()
 {
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
 }
 
 void SceneChangeStaging::Initialize()

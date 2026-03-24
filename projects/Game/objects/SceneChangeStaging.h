@@ -1,10 +1,6 @@
 #pragma once
 #include "AnimatedSprite.h"
-
-namespace YKEngine
-{
-	class Fade;
-}
+#include "Fade.h"
 
 enum class StagingType
 {
@@ -63,12 +59,22 @@ public:
 	/// </summary>
 	bool IsFinished();
 
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class SceneChangeStaging;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit SceneChangeStaging(ConstructorKey key) {}
+
 private:
 
-	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
-	static SceneChangeStaging* instance_;
+	// シングルトンインスタンス
+	static std::unique_ptr<SceneChangeStaging> instance_;
+	friend struct std::default_delete<SceneChangeStaging>;
 
-	SceneChangeStaging() = default;
 	~SceneChangeStaging() = default;
 	SceneChangeStaging(SceneChangeStaging&) = delete;
 	const SceneChangeStaging& operator=(SceneChangeStaging&) = delete;
