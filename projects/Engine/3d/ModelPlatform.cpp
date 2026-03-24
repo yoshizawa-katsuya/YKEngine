@@ -7,22 +7,21 @@
 
 using namespace YKEngine;
 
-ModelPlatform* ModelPlatform::instance_ = nullptr;
+std::unique_ptr<ModelPlatform> ModelPlatform::instance_ = nullptr;
 
 ModelPlatform* ModelPlatform::GetInstance()
 {
 	if (instance_ == nullptr)
 	{
-		instance_ = new ModelPlatform();
+		instance_ = std::make_unique<ModelPlatform>(ConstructorKey());
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void ModelPlatform::Finalize()
 {
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
 }
 
 void ModelPlatform::Initialize(DirectXCommon* dxCommon, PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager)

@@ -14,15 +14,15 @@
 using namespace Microsoft::WRL;
 using namespace YKEngine;
 
-DirectXCommon* DirectXCommon::instance_ = nullptr;
+std::unique_ptr<DirectXCommon> DirectXCommon::instance_ = nullptr;
 
 DirectXCommon* DirectXCommon::GetInstance()
 {
 	if (instance_ == nullptr) 
 	{
-		instance_ = new DirectXCommon();
+		instance_ = std::make_unique<DirectXCommon>(ConstructorKey());
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void DirectXCommon::Finalize()
@@ -30,9 +30,8 @@ void DirectXCommon::Finalize()
 	//Fence用のイベントを閉じる
 	CloseHandle(fenceEvent_);
 
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
 }
 
 void DirectXCommon::Initialize(WinApp* winApp)

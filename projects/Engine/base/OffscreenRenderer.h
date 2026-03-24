@@ -1,11 +1,11 @@
 #pragma once
-#include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
 #include <cstdint>
 #include "Vector4.h"
 #include <vector>
 #include "Struct.h"
+#include <memory>
 
 namespace YKEngine
 {
@@ -93,12 +93,22 @@ public:
 	//レンダーテクスチャの種類を設定
 	void SetRenderTextureType(RenderTextureType type) { renderTextureType_ = type; }
 
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class OffscreenRenderer;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit OffscreenRenderer(ConstructorKey key) {}
+
 private:
 
-	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
-	static OffscreenRenderer* instance_;
+	// シングルトンインスタンス
+	static std::unique_ptr<OffscreenRenderer> instance_;
+	friend struct std::default_delete<OffscreenRenderer>;
 
-	OffscreenRenderer() = default;
 	~OffscreenRenderer() = default;
 	OffscreenRenderer(OffscreenRenderer&) = delete;
 	const OffscreenRenderer& operator=(OffscreenRenderer&) = delete;

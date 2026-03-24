@@ -90,15 +90,25 @@ public:
 	bool& GetUseAccelerationField() { return useAccelerationField_; }
 	bool GetUseAccelerationField() const { return useAccelerationField_; }
 
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class ParticleManager;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit ParticleManager(ConstructorKey key) {}
+
 private:
 
 	// シングルトンインスタンス
-	static ParticleManager* instance_;
+	static std::unique_ptr<ParticleManager> instance_;
+	friend struct std::default_delete<ParticleManager>;
 
-	ParticleManager() = default;
 	~ParticleManager() = default;
-	ParticleManager(ParticleManager&) = default;
-	ParticleManager& operator=(ParticleManager&) = default;
+	ParticleManager(ParticleManager&) = delete;
+	ParticleManager& operator=(ParticleManager&) = delete;
 
 	Particle MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
 		const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
