@@ -22,7 +22,6 @@ void Audio::Finalize()
 {
 	//MFの終了
 	MFShutdown();
-
 }
 
 void Audio::Initialize()
@@ -195,8 +194,10 @@ void Audio::SoundUnload(SoundData* soundData)
 
 void Audio::SoundUnload(LoopSoundData* loopSoundData)
 {
-
-	delete loopSoundData->pSourceVoice;
+	loopSoundData->pSourceVoice->Stop(0);
+	loopSoundData->pSourceVoice->FlushSourceBuffers();
+	loopSoundData->pSourceVoice->DestroyVoice();
+	loopSoundData->pSourceVoice = nullptr;
 
 	SoundUnload(&loopSoundData->soundData);
 
