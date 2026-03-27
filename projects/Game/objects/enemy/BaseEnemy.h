@@ -5,6 +5,11 @@
 #include "StateMachine.hpp"
 #include <optional>
 
+namespace YKEngine
+{
+	class GlobalVariables;
+}
+
 class Player;
 class EnemyBulletManager;
 
@@ -173,6 +178,8 @@ protected:
 	Player* player_ = nullptr;
 	//敵の弾マネージャー
 	EnemyBulletManager* enemyBulletManager_ = nullptr;
+
+	YKEngine::GlobalVariables* globalVariables_ = nullptr;
 
 	//ダメージリアクションタイマー
 	float damageReactionTimer_ = 0.0f;

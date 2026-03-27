@@ -11,6 +11,7 @@
 #include "RootParams.h"
 #include "SceneChangeStaging.h"
 #include "GameSceneStartState.h"
+#include "JsonKeys.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -40,6 +41,12 @@ void GameScene::Initialize() {
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
 	stageObjects_->Initialize();
+
+	//グローバル変数の登録
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Bullet::kGroupName;
+	globalVariables->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, JsonKey::Bullet::kRadius, 0.5f);
 
 	//自機の弾マネージャーの生成
 	playerBulletManager_ = std::make_unique<PlayerBulletManager>();

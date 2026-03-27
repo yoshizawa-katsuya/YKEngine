@@ -22,11 +22,28 @@ using namespace YKEngine;
 
 void Player::Initialize(WorldTransform* parent)
 {
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	//グローバル変数の登録
+	globalVariables_ = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::Player::kGroupName;
-	globalVariables->CreateGroup(groupName);
-	globalVariables->AddItem(groupName, JsonKey::Player::kDodgeSpeed, 0.6f);
-	globalVariables->AddItem(groupName, JsonKey::Player::kDodgeTime, 20.0f);
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kDodgeSpeed, 0.6f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kDodgeTime, 20.0f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kSpeed, 0.2f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kTiltQuantity, std::numbers::pi_v<float> / 8.0f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kStartAnimeDuration, 1.5f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kStartRotateAnimeQuantity, std::numbers::pi_v<float> * 4.0f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kMoveLimitX, 8.9f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kMoveLimitY, 4.8f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kGameOverRandomMoveRange, 0.1f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kGameOverDuration, 1.5f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kDamageReactionDuration, 0.2f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kDamageReactionMoveRange, 0.2f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kTiltLerpFactor, 0.1f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kDodgeRotateLerpFactor, 0.3f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kGameClearRotateLerpFactor, 0.1f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kRotateLerpFactor, 0.1f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kNormalBulletShotInterval, 0.2f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kChargeBulletShotInterval, 0.5f);
 
 	BaseCharacter::Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
 	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
@@ -38,11 +55,11 @@ void Player::Initialize(WorldTransform* parent)
 	BaseCharacter::Update();
 
 	//開始時のアニメーション設定
-	const float kAnimeDuration = 1.5f;
+	const float kAnimeDuration = globalVariables_->GetFloatValue(groupName, JsonKey::Player::kStartAnimeDuration);
 	startAnime_ = std::make_unique<SRTAnimator>();
 	startAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, kAnimeDuration);
 
-	const float kRotateQuantity = std::numbers::pi_v<float> * 4.0f;	//回転の大きさ(2回転)
+	const float kRotateQuantity = globalVariables_->GetFloatValue(groupName, JsonKey::Player::kStartRotateAnimeQuantity);
 	startRotateAnime_ = std::make_unique<SRTAnimator>();
 	startRotateAnime_->SetAnimation({ 0.0f, 0.0f, 0.0f }, { 0.0f, kRotateQuantity, 0.0f }, kAnimeDuration);
 
@@ -154,11 +171,10 @@ void Player::GameOverRotate()
 void Player::HUDInitialize()
 {
 	//ハートの表示位置、サイズ、間隔をグローバル変数に登録
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::Player::kGroupName;
-	globalVariables->AddItem(groupName, JsonKey::Player::kHeartPosition, Vector2(50.0f, 30.0f));
-	globalVariables->AddItem(groupName, JsonKey::Player::kHeartSize, Vector2(50.0f, 50.0f));
-	globalVariables->AddItem(groupName, JsonKey::Player::kHeartSpacing, 50.0f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kHeartPosition, Vector2(50.0f, 30.0f));
+	globalVariables_->AddItem(groupName, JsonKey::Player::kHeartSize, Vector2(50.0f, 50.0f));
+	globalVariables_->AddItem(groupName, JsonKey::Player::kHeartSpacing, 50.0f);
 
 	//ハートのテクスチャ読み込み
 	uint32_t heartTextureHandle = TextureManager::GetInstance()->Load("./Resources/heart.png");
@@ -167,9 +183,9 @@ void Player::HUDInitialize()
 	heartSprites_.resize(kMaxHitPoint_);
 	heartEmptySprites_.resize(kMaxHitPoint_);
 
-	Vector2 heartPosition = globalVariables->GetVector2Value(groupName, JsonKey::Player::kHeartPosition);
-	Vector2 heartSize = globalVariables->GetVector2Value(groupName, JsonKey::Player::kHeartSize);
-	float heartSpacing = globalVariables->GetFloatValue(groupName, JsonKey::Player::kHeartSpacing);
+	Vector2 heartPosition = globalVariables_->GetVector2Value(groupName, JsonKey::Player::kHeartPosition);
+	Vector2 heartSize = globalVariables_->GetVector2Value(groupName, JsonKey::Player::kHeartSize);
+	float heartSpacing = globalVariables_->GetFloatValue(groupName, JsonKey::Player::kHeartSpacing);
 
 	for (int i = 0; i < kMaxHitPoint_; i++)
 	{
@@ -221,17 +237,15 @@ void Player::HandleMoveInput()
 void Player::UpdateTilt()
 {
 	//キャラクターの傾きの設定
-	const float rotateQuantity = std::numbers::pi_v<float> / 8.0f; //傾きの大きさ
+	const float rotateQuantity = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kTiltQuantity);
 	Vector3 targetRotation = { -move_.y * rotateQuantity, 0.0f, -move_.x * rotateQuantity };
-	characterWorldTransform_.rotation_ = LerpAngle(characterWorldTransform_.rotation_, targetRotation, 0.1f);
+	characterWorldTransform_.rotation_ = LerpAngle(characterWorldTransform_.rotation_, targetRotation, globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kTiltLerpFactor));
 }
 
 void Player::Move()
 {
-	//キャラクターの移動速さ
-	const float kCharacterSpeed = 0.2f;
 	//移動ベクトルの速さの適用
-	move_ *= kCharacterSpeed;
+	move_ *= globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kSpeed);
 
 	//座標移動(ベクトルの加算)
 	worldTransform_.translation_ += move_;
@@ -239,11 +253,10 @@ void Player::Move()
 
 void Player::DodgeMove()
 {
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	std::string groupName = JsonKey::Player::kGroupName;
 
-	const float kDodgeSpeed = globalVariables->GetFloatValue(groupName, JsonKey::Player::kDodgeSpeed);
-	t_ += 1.0f / globalVariables->GetFloatValue(groupName, JsonKey::Player::kDodgeTime);	//ドッジの時間経過
+	const float kDodgeSpeed = globalVariables_->GetFloatValue(groupName, JsonKey::Player::kDodgeSpeed);
+	t_ += 1.0f / globalVariables_->GetFloatValue(groupName, JsonKey::Player::kDodgeTime);	//ドッジの時間経過
 
 	if (t_ > 1.0f)
 	{
@@ -259,8 +272,8 @@ void Player::DodgeMove()
 void Player::ClampMove()
 {
 	//移動限界座標
-	const float kMoveLimitX = 8.9f;
-	const float kMoveLimitY = 4.8f;
+	const float kMoveLimitX = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kMoveLimitX);
+	const float kMoveLimitY = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kMoveLimitY);
 
 	//範囲を超えない処理
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
@@ -321,7 +334,7 @@ void Player::UpdateDodge()
 	ClampMove();
 
 	//回転
-	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, Vector3{ 0.0f, 0.0f, 0.0f }, 0.3f);
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, Vector3{ 0.0f, 0.0f, 0.0f }, globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kDodgeRotateLerpFactor));
 
 	BaseCharacter::Update();
 
@@ -343,7 +356,7 @@ void Player::UpdateGameOver()
 		return;
 	}
 	//乱数での移動量の設定
-	const float kMoveRange = 0.1f;
+	const float kMoveRange = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kGameOverRandomMoveRange);
 
 	Random* random = Random::GetInstance();
 
@@ -351,9 +364,9 @@ void Player::UpdateGameOver()
 
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, characterWorldTransform_.GetWorldPosition(), 2);
 
-	gameOverTimer_ += 1.0f / 60.0f;
+	gameOverTimer_ += DeltaTime_;
 
-	if (gameOverTimer_ >= 1.5f)
+	if (gameOverTimer_ >= globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kGameOverDuration))
 	{
 		isGameOverEnd_ = true;
 		characterWorldTransform_.scale_ = { 0.0f, 0.0f, 0.0f };
@@ -366,7 +379,7 @@ void Player::UpdateGameOver()
 void Player::UpdateGameClear()
 {
 
-	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, Vector3{ 0.0f, 0.0f, 0.0f }, 0.1f);
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, Vector3{ 0.0f, 0.0f, 0.0f }, globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kGameClearRotateLerpFactor));
 
 	//移動入力の処理
 	HandleMoveInput();
@@ -378,8 +391,7 @@ void Player::UpdateGameClear()
 	Move();
 
 	//前に進む
-	const float kMoveSpeed = 0.3f;
-	characterWorldTransform_.translation_.z += kMoveSpeed;
+	characterWorldTransform_.translation_.z += globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kSpeed);
 
 	BaseCharacter::Update();
 
@@ -408,7 +420,7 @@ void Player::Rotate()
 	//向く方向の計算
 	Vector3 targetRotation = RotateCommon();
 	
-	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, 0.1f);
+	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, targetRotation, globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kRotateLerpFactor));
 }
 
 Vector3 Player::RotateCommon()
@@ -445,11 +457,10 @@ void Player::HeartUpdate()
 {
 #ifdef _DEBUG
 
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::Player::kGroupName;
-	Vector2 heartPosition = globalVariables->GetVector2Value(groupName, JsonKey::Player::kHeartPosition);
-	Vector2 heartSize = globalVariables->GetVector2Value(groupName, JsonKey::Player::kHeartSize);
-	float heartSpacing = globalVariables->GetFloatValue(groupName, JsonKey::Player::kHeartSpacing);
+	Vector2 heartPosition = globalVariables_->GetVector2Value(groupName, JsonKey::Player::kHeartPosition);
+	Vector2 heartSize = globalVariables_->GetVector2Value(groupName, JsonKey::Player::kHeartSize);
+	float heartSpacing = globalVariables_->GetFloatValue(groupName, JsonKey::Player::kHeartSpacing);
 
 	for (int i = 0; i < kMaxHitPoint_; i++)
 	{
@@ -473,7 +484,7 @@ void Player::Attack() {
 
 	if (shotIntervalTimer_ > 0.0f)
 	{
-		shotIntervalTimer_ -= 1.0f / 60.0f;
+		shotIntervalTimer_ -= DeltaTime_;
 		return;
 	}
 	//弾発射処理
@@ -489,9 +500,9 @@ void Player::Attack() {
 		{
 			//チャージ最大なら強力な弾を撃つ
 			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), bulletDirection, PlayerBulletType::kCharge, lockOnTarget);
-
-			const float kChargeBulletShotInterval = 0.5f;
-			shotIntervalTimer_ = kChargeBulletShotInterval; //チャージ弾の発射間隔
+			
+			//チャージ弾の発射間隔
+			shotIntervalTimer_ = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kChargeBulletShotInterval);
 
 			//チャージをリセット
 			ChargeReset();
@@ -500,8 +511,8 @@ void Player::Attack() {
 
 		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), bulletDirection, PlayerBulletType::kNormal, lockOnTarget);
 
-		const float kNormalBulletShotInterval = 0.2f;
-		shotIntervalTimer_ = kNormalBulletShotInterval; //通常弾の発射間隔
+		//通常弾の発射間隔
+		shotIntervalTimer_ = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kNormalBulletShotInterval);
 
 		//チャージをリセット
 		ChargeReset();
@@ -519,7 +530,7 @@ void Player::Charge()
 	}
 
 	//チャージ
-	chargeTime_ += 1.0f / 60.0f;
+	chargeTime_ += DeltaTime_;
 	if (chargeTime_ >= kMaxChargeTime_) 
 	{
 		chargeTime_ = kMaxChargeTime_;
@@ -537,8 +548,7 @@ void Player::ChargeReset()
 
 void Player::DamageReactionInitialize()
 {
-	const float kDamageReactionFrame = 0.2f;
-	damageReactionTimer_ = kDamageReactionFrame;
+	damageReactionTimer_ = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kDamageReactionDuration);
 }
 
 void Player::DamageReaction()
@@ -550,10 +560,10 @@ void Player::DamageReaction()
 		return;
 	}
 
-	damageReactionTimer_ -= 1.0f / 60.0f;
+	damageReactionTimer_ -= DeltaTime_;
 
 	//乱数での移動量の設定
-	const float kMoveRange = 0.2f;
+	const float kMoveRange = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kDamageReactionMoveRange);
 
 	characterWorldTransform_.translation_ = Random::GetInstance()->GetVector3(-kMoveRange, kMoveRange);
 }

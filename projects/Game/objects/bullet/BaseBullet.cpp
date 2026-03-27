@@ -1,5 +1,7 @@
 #include "BaseBullet.h"
 #include "TransformHelpers.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -15,7 +17,7 @@ void BaseBullet::Initialize(BaseModel* model, const Vector3& position, const Vec
 	//移動方向に向ける
 	Rotate();
 
-	radius_ = 0.5f; //仮の当たり判定半径
+	SetRadius(GlobalVariables::GetInstance()->GetFloatValue(JsonKey::Bullet::kGroupName, JsonKey::Bullet::kRadius));	//コライダーの半径をグローバル変数から取得してセット
 }
 
 void BaseBullet::Update()

@@ -18,6 +18,10 @@ void PlayerBulletManager::Initialize()
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	globalVariables->CreateGroup(JsonKey::Bullet::Player::kGroupName);
 	globalVariables->AddItem(JsonKey::Bullet::Player::kGroupName, JsonKey::Bullet::kRotateSpeed, 0.3f);
+
+	globalVariables->CreateGroup(JsonKey::Bullet::Player::Charge01::kGroupName);
+	globalVariables->AddItem(JsonKey::Bullet::Player::Charge01::kGroupName, JsonKey::Bullet::kRadius, 1.0f);
+	globalVariables->AddItem(JsonKey::Bullet::Player::Charge01::kGroupName, JsonKey::Bullet::kAttackPower, 3);
 }
 
 void PlayerBulletManager::Update()

@@ -24,6 +24,10 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletMan
 
 	//調整項目をjsonに登録
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& enemyGroupName = JsonKey::Enemy::kGroupName;
+	globalVariables->CreateGroup(enemyGroupName);
+	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kBrowAwaySpeed, 5.5f);
+
 	const std::string& shot01GroupName = JsonKey::Enemy::Shot01::kGroupName;
 	const std::string& shot02GroupName = JsonKey::Enemy::Shot02::kGroupName;
 

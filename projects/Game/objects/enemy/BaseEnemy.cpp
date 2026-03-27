@@ -12,6 +12,8 @@
 #include "bullet/BaseBullet.h"
 #include <algorithm>
 #include "EnemyApproachState.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -26,6 +28,8 @@ void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera
 	SetColliderID();
 	player_ = player;
 	railCamera_ = railCamera;
+
+	globalVariables_ = GlobalVariables::GetInstance();
 
 	//速さをレベルデータから取得
 	if (spawnData.speed.has_value())
@@ -118,9 +122,11 @@ void BaseEnemy::DeadInitialize()
 	Vector3 directionBullet = Normalize(dieInfo_->bulletVelocity);
 	Vector3 directionToEnemy = Normalize(GetWorldPosition() - dieInfo_->bulletPosition);
 
-	blowAwaySpeed_ = 5.5f;
-	const float kDirectionWeightBullet = 0.8f;
-	const float kDirectionWeightToEnemy = 0.2f;
+	const std::string& groupName = JsonKey::Enemy::kGroupName;
+
+	blowAwaySpeed_ = globalVariables_->GetFloatValue(groupName, JsonKey::Enemy::kBrowAwaySpeed);
+	const float kDirectionWeightBullet = globalVariables_->GetFloatValue(groupName, JsonKey::Enemy::kDirectionWeightBullet);
+	const float kDirectionWeightToEnemy = 1.0f - kDirectionWeightBullet;
 	velocity_ = Normalize(directionBullet * kDirectionWeightBullet + directionToEnemy * kDirectionWeightToEnemy) * blowAwaySpeed_;
 
 	// ランダムな回転ベクトルを設定

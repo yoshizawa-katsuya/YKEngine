@@ -5,6 +5,11 @@
 #include "StateMachine.hpp"
 #include "DemoPlayerStateContext.h"
 
+namespace YKEngine
+{
+	class GlobalVariables;
+}
+
 /// <summary>
 /// GameScene以外でのデモ用プレイヤークラス
 /// </summary>
@@ -82,4 +87,6 @@ private:
 
 	// シーンが終了していたらtrue
 	bool isSceneEnd_ = false;
+
+	YKEngine::GlobalVariables* globalVariables_ = nullptr;
 };

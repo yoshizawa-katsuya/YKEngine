@@ -10,6 +10,11 @@
 class BaseEnemy;
 class PlayerBulletManager;
 
+namespace YKEngine
+{
+	class GlobalVariables;
+}
+
 /// <summary>
 /// プレイヤークラス。
 /// プレイヤーの移動、攻撃、チャージ、UI描画などを行う。
@@ -222,6 +227,8 @@ private:
 	/// </summary>
 	const YKEngine::Vector3& GetMove() { return move_; }
 
+	static constexpr float DeltaTime_ = 1.0f / 60.0f; // デルタタイム（60FPS想定）
+
 	//キーボード入力
 	YKEngine::Input* input_ = nullptr;
 
@@ -267,5 +274,7 @@ private:
 
 	//補完係数
 	float t_ = 0.0f;
+
+	YKEngine::GlobalVariables* globalVariables_ = nullptr;
 };
 
