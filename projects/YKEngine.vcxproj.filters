@@ -535,6 +535,9 @@
     <ClInclude Include="Engine\lib\StateMachine.hpp">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\lib\JsonKeys.h">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

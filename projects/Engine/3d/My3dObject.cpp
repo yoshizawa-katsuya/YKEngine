@@ -3,6 +3,8 @@
 #include "Camera.h"
 #include "Animation.h"
 #include "RootParams.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 

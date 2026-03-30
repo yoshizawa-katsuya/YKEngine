@@ -10,6 +10,8 @@
 #include "Struct.h"
 #include "ThreadPool.h"
 #include "RootParams.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -175,6 +177,8 @@ void BaseModel::CreateIndexData()
 
 void BaseModel::CreateMaterialData(const Vector4& color)
 {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Model::kGroupName;
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(Material));
@@ -183,9 +187,9 @@ void BaseModel::CreateMaterialData(const Vector4& color)
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//白を書き込む
 	materialData_->color = color;
-	materialData_->enableLighting = true;
-	materialData_->shininess = 40.0f;
-	materialData_->enviromentCoefficient = 0.0f;	//環境光の係数は0.0fにしておく
+	materialData_->enableLighting = globalVariables->GetBoolValue(groupName, JsonKey::Model::kEnableLighting);
+	materialData_->shininess = globalVariables->GetFloatValue(groupName, JsonKey::Model::kShininess);
+	materialData_->enviromentCoefficient = globalVariables->GetFloatValue(groupName, JsonKey::Model::kEnviromentCoefficient);
 	materialData_->uvTransform = MakeIdentity4x4();
 	
 }
