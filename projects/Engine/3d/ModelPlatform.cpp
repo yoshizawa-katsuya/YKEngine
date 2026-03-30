@@ -4,6 +4,8 @@
 #include "RigidModel.h"
 #include "SkinModel.h"
 #include "RootParams.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
@@ -26,6 +28,21 @@ void ModelPlatform::Finalize()
 
 void ModelPlatform::Initialize(DirectXCommon* dxCommon, PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
+	// jsonに登録
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	//カメラの初期値を登録
+	const std::string& cameraGroupName = JsonKey::Camera::kGroupName;
+	globalVariables->CreateGroup(cameraGroupName);
+	globalVariables->AddItem(cameraGroupName, JsonKey::Camera::kFovY, 45.0f * 3.141592654f / 180.0f);
+	globalVariables->AddItem(cameraGroupName, JsonKey::Camera::kNearClip, 0.1f);
+	globalVariables->AddItem(cameraGroupName, JsonKey::Camera::kFarClip, 500.0f);
+
+	//モデルの初期値を登録
+	const std::string& modelGroupName = JsonKey::Model::kGroupName;
+	globalVariables->CreateGroup(modelGroupName);
+	globalVariables->AddItem(modelGroupName, JsonKey::Model::kEnableLighting, true);
+	globalVariables->AddItem(modelGroupName, JsonKey::Model::kShininess, 40.0f);
+	globalVariables->AddItem(modelGroupName, JsonKey::Model::kEnviromentCoefficient, 0.0f);
 
 	//引数で受け取ってメンバ変数に記録する
 	dxCommon_ = dxCommon;

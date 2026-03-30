@@ -1,0 +1,7 @@
+{
+    "Model": {
+        "EnableLighting": true,
+        "EnvironmentCoefficient": 0.0,
+        "Shininess": 40.0
+    }
+}

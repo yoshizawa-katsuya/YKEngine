@@ -973,9 +973,6 @@
     <ClInclude Include="Game\objects\SceneChangeStaging.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\JsonKeys.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\lib\BaseState.hpp">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
@@ -1158,6 +1155,12 @@
     </ClInclude>
     <ClInclude Include="Game\objects\player\state\PlayerDodgeState.h">
       <Filter>ヘッダー ファイル\application\objects\player\state</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\JsonKeys.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\PrimitiveDrawer.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

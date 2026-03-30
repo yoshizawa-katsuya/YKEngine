@@ -459,7 +459,6 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Game\scene\gameOverScene\GameOverScene.h" />
     <ClInclude Include="Game\manager\EnemySpawnManager.h" />
     <ClInclude Include="Game\objects\bullet\BaseBullet.h" />
-    <ClInclude Include="Engine\lib\GlobalVariables.h" />
     <ClInclude Include="Game\manager\CollisionManager.h" />
     <ClInclude Include="Game\objects\BaseCharacter.h" />
     <ClInclude Include="Game\objects\Collider.h" />
@@ -469,6 +468,8 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\lib\Curve.h" />
     <ClInclude Include="Engine\lib\Easing.h" />
     <ClInclude Include="Engine\lib\Fade.h" />
+    <ClInclude Include="Engine\lib\GlobalVariables.h" />
+    <ClInclude Include="Engine\lib\JsonKeys.h" />
     <ClInclude Include="Engine\lib\Lerp.h" />
     <ClInclude Include="Engine\lib\Slerp.h" />
     <ClInclude Include="Engine\scene\AbstractSceneFactory.h" />
@@ -542,7 +543,6 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Game\objects\StageObjects.h" />
     <ClInclude Include="Game\objects\SceneChangeStaging.h" />
     <ClInclude Include="Game\objects\enemy\TackleEnemy02.h" />
-    <ClInclude Include="Game\objects\JsonKeys.h" />
     <ClInclude Include="Engine\lib\StateMachine.hpp" />
     <ClInclude Include="Game\objects\player\state\PlayerStartState.h" />
     <ClInclude Include="Game\objects\player\state\PlayerStateContext.h" />

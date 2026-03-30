@@ -1,24 +1,30 @@
 #include "Camera.h"
 #include "Matrix.h"
 #include <numbers>
-#include "RootParams.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
 Camera::Camera()
 	: transform_({ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} })
-	, fovY_(45.0f * 3.141592654f / 180.0f)
 	, aspectRatio_(static_cast<float>(WinApp::kClientWidth) / static_cast<float>(WinApp::kClientHeight))
-	, nearClip_(0.1f)
-	, farClip_(500.0f)
 	, worldMatrix_(MakeAffineMatrix(transform_.scale, transform_.rotation, transform_.translation))
 	, viewMatrix_(Inverse(worldMatrix_))
-	, projectionMatrix_(MakePerspectiveFovMatrix(fovY_, aspectRatio_, nearClip_, farClip_))
-	, viewProjectionMatrix_(Multiply(viewMatrix_, projectionMatrix_))
 	, backToFrontMatrix_(MakeRotateYMatrix(std::numbers::pi_v<float>))
 	, dxCommon_(DirectXCommon::GetInstance())
 	, cameraResource_(dxCommon_->CreateBufferResource(sizeof(CameraForGPU)))
 {
+	//jsonから値を取得してメンバ変数に記録する
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Camera::kGroupName;
+	fovY_ = globalVariables->GetFloatValue(groupName, JsonKey::Camera::kFovY);
+	nearClip_ = globalVariables->GetFloatValue(groupName, JsonKey::Camera::kNearClip);
+	farClip_ = globalVariables->GetFloatValue(groupName, JsonKey::Camera::kFarClip);
+
+	projectionMatrix_ = MakePerspectiveFovMatrix(fovY_, aspectRatio_, nearClip_, farClip_);
+	viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);
+
 	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPUData_));
 	cameraForGPUData_->worldPosition = transform_.translation;
 }
