@@ -27,6 +27,13 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletMan
 	const std::string& enemyGroupName = JsonKey::Enemy::kGroupName;
 	globalVariables->CreateGroup(enemyGroupName);
 	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kBrowAwaySpeed, 5.5f);
+	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kDirectionWeightBullet, 0.8f);
+	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kDeadRotateSpeedMax, 2.0f);
+	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kDeadRotateSpeedMin, 0.5f);
+	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kLeaveTime, 1.0f);
+	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kDeadTime, 0.2f);
+	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kDamageReactionTime, 0.2f);
+	globalVariables->AddItem(enemyGroupName, JsonKey::Enemy::kDamageReactionMoveRange, 0.2f);
 
 	const std::string& shot01GroupName = JsonKey::Enemy::Shot01::kGroupName;
 	const std::string& shot02GroupName = JsonKey::Enemy::Shot02::kGroupName;

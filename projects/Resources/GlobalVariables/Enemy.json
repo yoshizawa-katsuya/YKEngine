@@ -1,5 +1,12 @@
 {
     "Enemy": {
-        "BrowAwaySpeed": 5.5
+        "BrowAwaySpeed": 5.5,
+        "DamageReactionMoveRange": 0.20000000298023224,
+        "DamageReactionTime": 0.20000000298023224,
+        "DeadRotateSpeedMax": 2.0,
+        "DeadRotateSpeedMin": 0.5,
+        "DeadTime": 0.20000000298023224,
+        "DirectionWeightBullet": 0.800000011920929,
+        "LeaveTime": 1.0
     }
 }

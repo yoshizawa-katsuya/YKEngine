@@ -34,6 +34,12 @@ namespace JsonKey
 		const std::string kGroupName = "Enemy";
 		const std::string kBrowAwaySpeed = "BrowAwaySpeed";	//吹き飛びの速さ
 		const std::string kDirectionWeightBullet = "DirectionWeightBullet";	//吹き飛ぶ方向を決めるときの弾の移動方向の割合
+		const std::string kDeadRotateSpeedMin = "DeadRotateSpeedMin";	//死亡時の回転の速さの最小値
+		const std::string kDeadRotateSpeedMax = "DeadRotateSpeedMax";	//死亡時の回転の速さの最大値
+		const std::string kLeaveTime = "LeaveTime";	//離脱までの時間
+		const std::string kDeadTime = "DeadTime";	//完全に消滅するまでの時間
+		const std::string kDamageReactionTime = "DamageReactionTime";	//ダメージリアクションの時間
+		const std::string kDamageReactionMoveRange = "DamageReactionMoveRange";	//ダメージリアクションのランダム移動の範囲
 		const std::string kFireInterval = "FireInterval";
 		const std::string kBulletSpeed = "BulletSpeed";
 

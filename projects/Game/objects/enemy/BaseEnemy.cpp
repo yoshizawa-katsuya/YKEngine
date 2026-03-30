@@ -133,8 +133,8 @@ void BaseEnemy::DeadInitialize()
 	const Vector3 kRotateVectorMin = { -1.0f, -1.0f, -1.0f };
 	const Vector3 kRotateVectorMax = { 1.0f, 1.0f, 1.0f };
 
-	const float kRotateSpeedMin = 0.5f;
-	const float kRotateSpeedMax = 2.0f;
+	const float kRotateSpeedMin = globalVariables_->GetFloatValue(groupName, JsonKey::Enemy::kDeadRotateSpeedMin);
+	const float kRotateSpeedMax = globalVariables_->GetFloatValue(groupName, JsonKey::Enemy::kDeadRotateSpeedMax);
 
 	Random* random = Random::GetInstance();
 	rotateVector_ = Normalize(random->GetVector3(kRotateVectorMin, kRotateVectorMax)) * random->GetFloat(kRotateSpeedMin, kRotateSpeedMax);
@@ -168,7 +168,7 @@ void BaseEnemy::UpdateLeave()
 {
 	//離脱タイマーをカウント
 	leaveTimer_ += 1.0f / 60.0f;
-	float leaveTime = 1.0f; // 離脱までの時間（秒）
+	const float leaveTime = globalVariables_->GetFloatValue(JsonKey::Enemy::kGroupName, JsonKey::Enemy::kLeaveTime);
 	if (leaveTimer_ > leaveTime) 
 	{
 		Disappear();
@@ -183,7 +183,7 @@ void BaseEnemy::UpdateLeave()
 
 void BaseEnemy::UpdateDead()
 {
-	const float kDeadTime = 0.2f; // 完全に消滅するまでの時間（秒）
+	const float kDeadTime = globalVariables_->GetFloatValue(JsonKey::Enemy::kGroupName, JsonKey::Enemy::kDeadTime);	// 死亡してから完全に消滅するまでの時間
 
 	// 1フレームごとにデッドタイマーをカウントアップ
 	deadTimer_ += 1.0f / 60.0f;
@@ -313,8 +313,8 @@ void BaseEnemy::MoveAlongRail()
 
 void BaseEnemy::DamageReactionInitialize()
 {
-	const float kDamageReactionFrame = 0.2f;
-	damageReactionTimer_ = kDamageReactionFrame;
+	// ダメージリアクションの時間を取得
+	damageReactionTimer_ = globalVariables_->GetFloatValue(JsonKey::Enemy::kGroupName, JsonKey::Enemy::kDamageReactionTime);
 }
 
 void BaseEnemy::DamageReaction()
@@ -329,7 +329,7 @@ void BaseEnemy::DamageReaction()
 	damageReactionTimer_ -= 1.0f / 60.0f;
 
 	//乱数での移動量の設定
-	const float kMoveRange = 0.2f;
+	const float kMoveRange = globalVariables_->GetFloatValue(JsonKey::Enemy::kGroupName, JsonKey::Enemy::kDamageReactionMoveRange);
 
 	characterWorldTransform_.translation_ = Random::GetInstance()->GetVector3(-kMoveRange, kMoveRange);
 }
