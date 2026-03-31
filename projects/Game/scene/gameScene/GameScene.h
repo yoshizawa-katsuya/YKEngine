@@ -27,6 +27,7 @@
 #include "StateMachine.hpp"
 #include "GameSceneStateContext.h"
 #include "Pause.h"
+#include "OperationGuide.h"
 class SceneChangeStaging;
 
 /// <summary>
@@ -166,8 +167,7 @@ private:
 	//平行光源
 	YKEngine::DirectionalLight directionalLight_;
 
-	//操作説明スプライト
-	std::unique_ptr<YKEngine::Sprite> operationGuideSprite_;
+	std::unique_ptr<OperationGuide> operationGuide_;
 
 	//シーンチェンジ演出
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;

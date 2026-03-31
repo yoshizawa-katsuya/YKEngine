@@ -624,6 +624,9 @@
     <ClCompile Include="Game\objects\player\state\PlayerDodgeState.cpp">
       <Filter>ソース ファイル\application\objects\player\state</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\OperationGuide.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -1159,8 +1162,8 @@
     <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\PrimitiveDrawer.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Game\objects\OperationGuide.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

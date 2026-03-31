@@ -154,4 +154,17 @@ namespace JsonKey
 		const std::string kGroundEnvironmentCoefficient = "GroundEnvironmentCoefficient";
 
 	}
+
+	namespace OperationGuide
+	{
+		const std::string kGroupName = "OperationGuide";
+		const std::string kRTriggerPosition = "RTriggerPosition";
+		const std::string kLTriggerPosition = "LTriggerPosition";
+		const std::string kRStickPosition = "RStickPosition";
+		const std::string kLStickPosition = "LStickPosition";
+		const std::string kPlayerIconPosition = "PlayerIconPosition";
+		const std::string kDodgeIconPosition = "DodgeIconPosition";
+		const std::string kShotIconPosition = "ShotIconPosition";
+		const std::string kReticleIconPosition = "ReticleIconPosition";
+	}
 }

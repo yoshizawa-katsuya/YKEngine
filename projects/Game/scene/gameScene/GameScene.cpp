@@ -33,10 +33,8 @@ void GameScene::Initialize() {
 
 	dxCommon_->ResetDeltaTime();
 
-	//スプライトの生成
-	operationGuideSprite_ = std::make_unique<Sprite>();
-	operationGuideSprite_->Initialize(TextureManager::GetInstance()->Load("./Resources/operationHUD.png"));
-	operationGuideSprite_->SetAlpha(0.0f);
+	operationGuide_ = std::make_unique<OperationGuide>();
+	operationGuide_->Initialize();
 
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
@@ -102,6 +100,9 @@ void GameScene::Update()
 
 	//ステートマシンの更新
 	stateMachine_->Update();
+
+	//操作説明の更新
+	operationGuide_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -194,8 +195,8 @@ void GameScene::Draw()
 
 	player_->DrawUI();
 
-	//操作説明HUDの描画
-	operationGuideSprite_->Draw();
+	//操作説明の描画
+	operationGuide_->Draw();
 
 	//ポーズ画面の描画
 	pause_->Draw();
@@ -375,7 +376,7 @@ void GameScene::ProcessPause()
 
 void GameScene::ExitStart()
 {
-	operationGuideSprite_->SetAlpha(1.0f);
+	operationGuide_->ExitStart();
 }
 
 void GameScene::StartSceneEndStaging(const YKEngine::Vector4& color)

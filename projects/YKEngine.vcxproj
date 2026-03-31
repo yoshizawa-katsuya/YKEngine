@@ -243,6 +243,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Game\objects\TitleUI.cpp" />
     <ClCompile Include="Game\objects\railCamera\state\RailCameraStartState.cpp" />
     <ClCompile Include="Game\objects\player\state\PlayerDodgeState.cpp" />
+    <ClCompile Include="Game\objects\OperationGuide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -489,7 +490,6 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3d\PipelineManager.h" />
-    <ClInclude Include="Engine\3d\PrimitiveDrawer.h" />
     <ClInclude Include="Game\objects\CollisionTypeIdDef.h" />
     <ClInclude Include="Game\objects\enemy\BaseEnemy.h" />
     <ClInclude Include="Game\objects\bullet\BaseEnemyBullet.h" />
@@ -561,6 +561,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Game\objects\TitleUI.h" />
     <ClInclude Include="Game\objects\railCamera\state\RailCameraStartState.h" />
     <ClInclude Include="Game\objects\player\state\PlayerDodgeState.h" />
+    <ClInclude Include="Game\objects\OperationGuide.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
