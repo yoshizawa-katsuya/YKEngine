@@ -158,13 +158,14 @@ namespace JsonKey
 	namespace OperationGuide
 	{
 		const std::string kGroupName = "OperationGuide";
-		const std::string kRTriggerPosition = "RTriggerPosition";
-		const std::string kLTriggerPosition = "LTriggerPosition";
-		const std::string kRStickPosition = "RStickPosition";
-		const std::string kLStickPosition = "LStickPosition";
-		const std::string kPlayerIconPosition = "PlayerIconPosition";
-		const std::string kDodgeIconPosition = "DodgeIconPosition";
-		const std::string kShotIconPosition = "ShotIconPosition";
-		const std::string kReticleIconPosition = "ReticleIconPosition";
+		const std::string kRTriggerPosition = "RTriggerPosition";	//右トリガーの位置
+		const std::string kLTriggerPosition = "LTriggerPosition";	//左トリガーの位置
+		const std::string kRStickPosition = "RStickPosition";	//右スティックの位置
+		const std::string kLStickPosition = "LStickPosition";	//左スティックの位置
+		const std::string kPlayerIconPosition = "PlayerIconPosition";	//プレイヤーアイコンの位置
+		const std::string kDodgeIconPosition = "DodgeIconPosition";	//回避アイコンの位置
+		const std::string kShotIconPosition = "ShotIconPosition";	//ショットアイコンの位置
+		const std::string kReticleIconPosition = "ReticleIconPosition";	//照準アイコンの位置
+		const std::string kStickMoveValue = "StickMoveValue";	//スティックの移動量
 	}
 }

@@ -31,6 +31,7 @@
         "ShotIconPosition": [
             273.0,
             83.33999633789063
-        ]
+        ],
+        "StickMoveValue": 10.0
     }
 }

@@ -4,6 +4,8 @@
 namespace YKEngine
 {
 	class Sprite;
+	class Input;
+	class GlobalVariables;
 }
 
 class OperationGuide
@@ -37,7 +39,15 @@ private:
 	/// </summary>
 	void SetUIPositions();
 
+	/// <summary>
+	/// スティックのアイコンを移動させる
+	/// </summary>
+	void MoveStickIcon();
+
 	bool isDraw_;	//描画するかどうか
+
+	YKEngine::GlobalVariables* globalVariables_;	//グローバル変数のポインタ
+	YKEngine::Input* input_;
 
 	std::unique_ptr<YKEngine::Sprite> RTriggerSprite_;	//右トリガーのスプライト
 	std::unique_ptr<YKEngine::Sprite> LTriggerSprite_;	//左トリガーのスプライト

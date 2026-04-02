@@ -3,23 +3,27 @@
 #include "TextureManager.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "Input.h"
 
 using namespace YKEngine;
 
 void OperationGuide::Initialize()
 {
+	input_ = Input::GetInstance();
+
 	//グローバル変数に登録
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	globalVariables_ = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::OperationGuide::kGroupName;
-	globalVariables->CreateGroup(groupName);
-	globalVariables->AddItem(groupName, JsonKey::OperationGuide::kRTriggerPosition, Vector2(1000.0f, 500.0f));
-	globalVariables->AddItem(groupName, JsonKey::OperationGuide::kLTriggerPosition, Vector2(200.0f, 500.0f));
-	globalVariables->AddItem(groupName, JsonKey::OperationGuide::kRStickPosition, Vector2(1000.0f, 300.0f));
-	globalVariables->AddItem(groupName, JsonKey::OperationGuide::kLStickPosition, Vector2(200.0f, 300.0f));
-	globalVariables->AddItem(groupName, JsonKey::OperationGuide::kPlayerIconPosition, Vector2(600.0f, 500.0f));
-	globalVariables->AddItem(groupName, JsonKey::OperationGuide::kDodgeIconPosition, Vector2(600.0f, 300.0f));
-	globalVariables->AddItem(groupName, JsonKey::OperationGuide::kShotIconPosition, Vector2(600.0f, 400.0f));
-	globalVariables->AddItem(groupName, JsonKey::OperationGuide::kReticleIconPosition, Vector2(600.0f, 200.0f));
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kRTriggerPosition, Vector2(1000.0f, 500.0f));
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kLTriggerPosition, Vector2(200.0f, 500.0f));
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kRStickPosition, Vector2(1000.0f, 300.0f));
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kLStickPosition, Vector2(200.0f, 300.0f));
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kPlayerIconPosition, Vector2(600.0f, 500.0f));
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kDodgeIconPosition, Vector2(600.0f, 300.0f));
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kShotIconPosition, Vector2(600.0f, 400.0f));
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kReticleIconPosition, Vector2(600.0f, 200.0f));
+	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kStickMoveValue, 10.0f);
 
 	isDraw_ = false;
 	TextureManager* textureManager = TextureManager::GetInstance();
@@ -59,6 +63,10 @@ void OperationGuide::Update()
 	SetUIPositions();
 
 #endif // DEBUG
+	
+	//操作に応じてスティックのアイコンを移動させる
+	MoveStickIcon();
+	
 }
 
 void OperationGuide::Draw()
@@ -90,15 +98,84 @@ void OperationGuide::ExitStart()
 void OperationGuide::SetUIPositions()
 {
 	//グローバル変数に登録
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	globalVariables_ = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::OperationGuide::kGroupName;
-	RTriggerSprite_->SetPosition(globalVariables->GetVector2Value(groupName, JsonKey::OperationGuide::kRTriggerPosition));
-	LTriggerSprite_->SetPosition(globalVariables->GetVector2Value(groupName, JsonKey::OperationGuide::kLTriggerPosition));
-	RStickSprite_->SetPosition(globalVariables->GetVector2Value(groupName, JsonKey::OperationGuide::kRStickPosition));
-	LStickSprite_->SetPosition(globalVariables->GetVector2Value(groupName, JsonKey::OperationGuide::kLStickPosition));
+	RTriggerSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kRTriggerPosition));
+	LTriggerSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kLTriggerPosition));
+	RStickSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kRStickPosition));
+	LStickSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kLStickPosition));
 
-	playerIconSprite_->SetPosition(globalVariables->GetVector2Value(groupName, JsonKey::OperationGuide::kPlayerIconPosition));
-	dodgeIconSprite_->SetPosition(globalVariables->GetVector2Value(groupName, JsonKey::OperationGuide::kDodgeIconPosition));
-	shotIconSprite_->SetPosition(globalVariables->GetVector2Value(groupName, JsonKey::OperationGuide::kShotIconPosition));
-	reticleIconSprite_->SetPosition(globalVariables->GetVector2Value(groupName, JsonKey::OperationGuide::kReticleIconPosition));
+	playerIconSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kPlayerIconPosition));
+	dodgeIconSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kDodgeIconPosition));
+	shotIconSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kShotIconPosition));
+	reticleIconSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kReticleIconPosition));
+}
+
+void OperationGuide::MoveStickIcon()
+{
+	//キャラクターの移動ベクトル
+	Vector2 move = { 0.0f, 0.0f };
+
+	//自機の移動ベクトルを取得
+	move.x = input_->GetLeftStickX();
+	move.y = -input_->GetLeftStickY();	//上方向はy軸の負の方向とする
+
+	if (move.x == 0 && move.y == 0)
+	{
+		//左スティックがニュートラルなら、キーボード入力を確認
+		//押した方向で移動ベクトルを変更(左右)
+		if (input_->PushKey(DIK_A)) {
+			move.x = -1.0f;
+		}
+		else if (input_->PushKey(DIK_D)) {
+			move.x = 1.0f;
+		}
+
+		// 押した方向で移動ベクトルを変更(上下)
+		if (input_->PushKey(DIK_S)) {
+			move.y = 1.0f;
+		}
+		else if (input_->PushKey(DIK_W)) {
+			move.y = -1.0f;		//上方向はy軸の負の方向とする
+		}
+
+		move = Normalize(move); //移動ベクトルの正規化
+
+	}
+
+	const std::string& groupName = JsonKey::OperationGuide::kGroupName;
+	const float stickMoveValue = globalVariables_->GetFloatValue(groupName, JsonKey::OperationGuide::kStickMoveValue);
+
+	const Vector2 LStickPosition = globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kLStickPosition);
+	LStickSprite_->SetPosition(LStickPosition + move * stickMoveValue); //スティックの位置を移動ベクトルに応じて変化させる
+
+	//照準の移動ベクトルを取得
+	move.x = input_->GetRightStickX();
+	move.y = -input_->GetRightStickY();	//上方向はy軸の負の方向とする
+
+	if (move.x == 0 && move.y == 0)
+	{
+		//左スティックがニュートラルなら、キーボード入力を確認
+		//押した方向で移動ベクトルを変更(左右)
+		if (input_->PushKey(DIK_LEFT)) {
+			move.x = -1.0f;
+		}
+		else if (input_->PushKey(DIK_RIGHT)) {
+			move.x = 1.0f;
+		}
+
+		// 押した方向で移動ベクトルを変更(上下)
+		if (input_->PushKey(DIK_DOWN)) {
+			move.y = 1.0f;
+		}
+		else if (input_->PushKey(DIK_UP)) {
+			move.y = -1.0f;		//上方向はy軸の負の方向とする
+		}
+
+		move = Normalize(move); //移動ベクトルの正規化
+
+	}
+
+	const Vector2 RStickPosition = globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kRStickPosition);
+	RStickSprite_->SetPosition(RStickPosition + move * stickMoveValue); //スティックの位置を移動ベクトルに応じて変化させる
 }
