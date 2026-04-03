@@ -51,6 +51,7 @@ void StageObjects::Initialize(bool isDayTime)
 	std::shared_ptr<BaseModel> modelGround = modelPlatform->CreateRigidModel("./Resources/ground", "Ground.obj");
 	const float kGroundUVScale = 800.0f;
 	modelGround->SetUVTransform({ {kGroundUVScale, kGroundUVScale, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
+	modelGround->SetAlpha(0.5f);
 
 	//地面の生成
 	ground_ = std::make_unique<My3dObject>();
