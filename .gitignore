@@ -325,3 +325,6 @@ imgui.ini
 
 #FireAlpacaのファイルを除外
 *.mdp
+
+#Asepriteのファイルを除外
+*.aseprite
