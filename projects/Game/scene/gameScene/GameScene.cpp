@@ -154,12 +154,20 @@ void GameScene::Draw()
 
 	stageObjects_->DrawSkyBox(mainCamera);
 
+	modelPlatform_->InstancingPreDraw();
+
+	//衝突マネージャの描画
+	collisionManager_->Draw(mainCamera);
+
+	enemySpawnManager_->Draw(mainCamera);
+
+	//ステージオブジェクトの描画
+	stageObjects_->InstancingDraw(mainCamera);
+
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), stageObjects_->GetTextureHandleSkyBox());
-
-	stageObjects_->Draw(mainCamera);
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera);
@@ -173,16 +181,8 @@ void GameScene::Draw()
 	// 弾描画
 	enemyBulletManager_->Draw(mainCamera);
 
-	modelPlatform_->InstancingPreDraw();
+	stageObjects_->Draw(mainCamera);
 
-	//衝突マネージャの描画
-	collisionManager_->Draw(mainCamera);
-
-	enemySpawnManager_->Draw(mainCamera);
-
-	//ステージオブジェクトの描画
-	stageObjects_->InstancingDraw(mainCamera);
-	
 	//パーティクルの描画
 	ParticleManager::GetInstance()->Draw();
 
