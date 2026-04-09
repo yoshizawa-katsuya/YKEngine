@@ -168,4 +168,11 @@ namespace JsonKey
 		const std::string kReticleIconPosition = "ReticleIconPosition";	//照準アイコンの位置
 		const std::string kStickMoveValue = "StickMoveValue";	//スティックの移動量
 	}
+
+	namespace ReticleController
+	{
+		const std::string kGroupName = "ReticleController";
+		const std::string kSpeed = "Speed";	//レティクルの移動速度
+		const std::string kLockOnLerpFactor = "LockOnLerpFactor";	//ロックオンの補完係数
+	}
 }

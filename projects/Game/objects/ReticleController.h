@@ -7,6 +7,7 @@ namespace YKEngine
 {
 	class Input;
 	class Camera;
+	class GlobalVariables;
 }
 
 class BaseEnemy;
@@ -81,6 +82,9 @@ private:
 	/// <param name="position">ターゲットのスクリーン座標上の位置</param>
 	/// <param name="targetPosition">ターゲットのワールド座標上の位置</param>
 	void LockOn(YKEngine::Vector2 position, const YKEngine::Vector3& targetPosition);
+
+	//グローバル変数管理クラスへのポインタ
+	YKEngine::GlobalVariables* globalVariables_ = nullptr;
 
 	//3Dレティクル用ワールドトランスフォーム
 	YKEngine::WorldTransform worldTransform3DReticle_;

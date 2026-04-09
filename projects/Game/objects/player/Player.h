@@ -274,7 +274,8 @@ private:
 
 	//補完係数
 	float t_ = 0.0f;
-
+	
+	//グローバル変数管理クラスのインスタンスへのポインタ
 	YKEngine::GlobalVariables* globalVariables_ = nullptr;
 };
 

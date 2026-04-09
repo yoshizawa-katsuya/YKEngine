@@ -6,11 +6,20 @@
 #include "BaseEnemy.h"
 #include "Collision.h"
 #include "Lerp.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
 void ReticleController::Initialize()
 {
+	//グローバル変数の登録
+	globalVariables_ = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::ReticleController::kGroupName;
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, JsonKey::ReticleController::kSpeed, 12.0f);
+	globalVariables_->AddItem(groupName, JsonKey::ReticleController::kLockOnLerpFactor, 0.5f);
+
 	//3Dレティクルのワールドトランスフォーム初期化
 	worldTransform3DReticle_.Initialize();
 
@@ -75,10 +84,8 @@ void ReticleController::Update(Camera* railCamera)
 
 	}
 	
-
-	const float kReticleSpeed = 12.0f;
 	//移動ベクトルの速さの適用
-	move *= kReticleSpeed;
+	move *= globalVariables_->GetFloatValue(JsonKey::ReticleController::kGroupName, JsonKey::ReticleController::kSpeed);
 
 	spritePosition += move;
 
@@ -88,7 +95,10 @@ void ReticleController::Update(Camera* railCamera)
 
 	//スプライトの座標変更を反映
 	spriteLargeReticle_->SetPosition(spritePosition);
-	spriteSmallReticle_->SetPosition(spritePosition);
+	if (!isLockOn_)	//ロックオンしていないときは小さいレティクルも移動させる
+	{
+		spriteSmallReticle_->SetPosition(spritePosition);
+	}
 
 	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
 	Matrix4x4 matViewProjectionViewport = Multiply(railCamera->GetViewProjection(), *viewPortMatrix_);
@@ -203,7 +213,9 @@ void ReticleController::ChargeUpdate()
 
 void ReticleController::LockOn(Vector2 position, const Vector3& targetPosition)
 {
-	spriteSmallReticle_->SetPosition(position);
+	const float lerpFactor = globalVariables_->GetFloatValue(JsonKey::ReticleController::kGroupName, JsonKey::ReticleController::kLockOnLerpFactor);
+	spriteSmallReticle_->SetPosition(Lerp(spriteSmallReticle_->GetPosition(), position, lerpFactor));	//線形補間で小さいレティクルを移動させる
+
 	spriteSmallReticle_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
 
 	target_ = targetPosition;
