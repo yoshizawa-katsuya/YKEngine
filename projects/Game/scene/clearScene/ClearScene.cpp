@@ -95,6 +95,11 @@ void ClearScene::Draw()
 
 	stageObjects_->DrawSkyBox(mainCamera);
 
+	modelPlatform_->InstancingPreDraw();
+
+	//ステージオブジェクトの描画
+	stageObjects_->InstancingDraw(mainCamera);
+
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
