@@ -17,9 +17,9 @@ void Random::Initialize()
 
 float YKEngine::Random::GetFloat(float min, float max)
 {
-	if (min > max)
+	if (min > max)	//minとmaxが逆なら入れ替える
 	{
-		GetFloat(max, min);
+		return GetFloat(max, min);
 	}
 	std::uniform_real_distribution<float> distribution(min, max);
 	return distribution(randomEngine_);
