@@ -173,6 +173,6 @@ namespace JsonKey
 	{
 		const std::string kGroupName = "ReticleController";
 		const std::string kSpeed = "Speed";	//レティクルの移動速度
-		const std::string kLockOnLerpFactor = "LockOnLerpFactor";	//ロックオンの補完係数
+		const std::string kLerpFactor = "LerpFactor";	//ロックオンの補完係数
 	}
 }

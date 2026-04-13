@@ -1,6 +1,6 @@
 {
     "ReticleController": {
-        "LockOnLerpFactor": 0.5,
+        "LerpFactor": 0.5,
         "Speed": 12.0
     }
 }

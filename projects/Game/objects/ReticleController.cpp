@@ -18,7 +18,7 @@ void ReticleController::Initialize()
 	const std::string& groupName = JsonKey::ReticleController::kGroupName;
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, JsonKey::ReticleController::kSpeed, 12.0f);
-	globalVariables_->AddItem(groupName, JsonKey::ReticleController::kLockOnLerpFactor, 0.5f);
+	globalVariables_->AddItem(groupName, JsonKey::ReticleController::kLerpFactor, 0.5f);
 
 	//3Dレティクルのワールドトランスフォーム初期化
 	worldTransform3DReticle_.Initialize();
@@ -85,7 +85,8 @@ void ReticleController::Update(Camera* railCamera)
 	}
 	
 	//移動ベクトルの速さの適用
-	move *= globalVariables_->GetFloatValue(JsonKey::ReticleController::kGroupName, JsonKey::ReticleController::kSpeed);
+	const float speed = globalVariables_->GetFloatValue(JsonKey::ReticleController::kGroupName, JsonKey::ReticleController::kSpeed);
+	move *= speed;
 
 	spritePosition += move;
 
@@ -97,7 +98,14 @@ void ReticleController::Update(Camera* railCamera)
 	spriteLargeReticle_->SetPosition(spritePosition);
 	if (!isLockOn_)	//ロックオンしていないときは小さいレティクルも移動させる
 	{
-		spriteSmallReticle_->SetPosition(spritePosition);
+		const float lerpFactor = globalVariables_->GetFloatValue(JsonKey::ReticleController::kGroupName, JsonKey::ReticleController::kLerpFactor);
+		Vector2 smallReticlePosition = Lerp(spriteSmallReticle_->GetPosition(), spritePosition, lerpFactor);
+		const float kSnapDistance = speed / 2.0f;	//スナップする距離。移動速度の半分に設定
+		if (Length(Subtract(smallReticlePosition, spritePosition)) <= kSnapDistance)
+		{
+			smallReticlePosition = spritePosition; //十分近い場合は直接位置を合わせる
+		}
+		spriteSmallReticle_->SetPosition(smallReticlePosition);	//線形補間で小さいレティクルを移動させる
 	}
 
 	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
@@ -213,7 +221,7 @@ void ReticleController::ChargeUpdate()
 
 void ReticleController::LockOn(Vector2 position, const Vector3& targetPosition)
 {
-	const float lerpFactor = globalVariables_->GetFloatValue(JsonKey::ReticleController::kGroupName, JsonKey::ReticleController::kLockOnLerpFactor);
+	const float lerpFactor = globalVariables_->GetFloatValue(JsonKey::ReticleController::kGroupName, JsonKey::ReticleController::kLerpFactor);
 	spriteSmallReticle_->SetPosition(Lerp(spriteSmallReticle_->GetPosition(), position, lerpFactor));	//線形補間で小さいレティクルを移動させる
 
 	spriteSmallReticle_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
