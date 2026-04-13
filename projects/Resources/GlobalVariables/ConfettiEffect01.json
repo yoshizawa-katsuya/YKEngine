@@ -10,8 +10,8 @@
         "behaviorIsFixedDistance": false,
         "behaviorIsHeadCenter": false,
         "behaviorIsScaleToAppear": false,
-        "behaviorIsTimeFadeOut": true,
-        "behaviorIsUseBillboard": true,
+        "behaviorIsTimeFadeOut": false,
+        "behaviorIsUseBillboard": false,
         "behaviorSpeed": 1.0,
         "color": [
             1.0,
@@ -19,18 +19,18 @@
             1.0,
             1.0
         ],
-        "count": 1,
+        "count": 2,
         "frequency": 0.10000000149011612,
         "randomFlagsColor": true,
-        "randomFlagsLifeTime": false,
-        "randomFlagsRotation": false,
+        "randomFlagsLifeTime": true,
+        "randomFlagsRotation": true,
         "randomFlagsRotationVelocity": true,
         "randomFlagsScale": true,
         "randomFlagsSpeed": false,
         "randomFlagsTranslation": true,
         "randomFlagsVelocity": true,
         "rangeParamsLifeTimeMax": 3.0,
-        "rangeParamsLifeTimeMin": 1.0,
+        "rangeParamsLifeTimeMin": 3.0,
         "rangeParamsRotateMax": [
             3.1415927410125732,
             3.1415927410125732,
@@ -42,19 +42,19 @@
             -3.1415927410125732
         ],
         "rangeParamsRotationVelocityMax": [
-            0.10000000149011612,
-            0.10000000149011612,
-            0.10000000149011612
+            0.05000000074505806,
+            0.05000000074505806,
+            0.05000000074505806
         ],
         "rangeParamsRotationVelocityMin": [
-            -0.10000000149011612,
-            -0.10000000149011612,
-            -0.10000000149011612
+            -0.05000000074505806,
+            -0.05000000074505806,
+            -0.05000000074505806
         ],
         "rangeParamsScaleMax": [
-            1.0,
-            1.0,
-            1.0
+            0.0,
+            0.0,
+            0.0
         ],
         "rangeParamsScaleMin": [
             -1.0,
@@ -65,22 +65,22 @@
         "rangeParamsSpeedMin": 0.5,
         "rangeParamsTranslateMax": [
             5.0,
-            5.0,
+            4.0,
             5.0
         ],
         "rangeParamsTranslateMin": [
             -5.0,
-            5.0,
+            4.0,
             -5.0
         ],
         "rangeParamsVelocityMax": [
             5.0,
-            -5.0,
+            -1.5,
             5.0
         ],
         "rangeParamsVelocityMin": [
             -5.0,
-            -10.0,
+            -5.0,
             -5.0
         ],
         "rotation": [
