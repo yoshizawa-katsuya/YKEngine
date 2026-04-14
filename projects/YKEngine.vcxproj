@@ -109,6 +109,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\ClearUI.cpp" />
     <ClCompile Include="Game\objects\enemy\state\EnemyApproachState.cpp" />
     <ClCompile Include="Game\objects\enemy\state\EnemyDeadState.cpp" />
     <ClCompile Include="Game\objects\enemy\state\EnemyLeaveState.cpp" />
@@ -412,6 +413,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\ClearUI.h" />
     <ClInclude Include="Game\objects\enemy\state\EnemyApproachState.h" />
     <ClInclude Include="Game\objects\enemy\state\EnemyDeadState.h" />
     <ClInclude Include="Game\objects\enemy\state\EnemyLeaveState.h" />

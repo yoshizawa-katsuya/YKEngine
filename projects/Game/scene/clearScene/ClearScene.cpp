@@ -29,8 +29,8 @@ void ClearScene::Initialize()
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
-	spriteBackGround_ = std::make_unique<Sprite>();
-	spriteBackGround_->Initialize(TextureManager::GetInstance()->Load("./Resources/clear.png"));
+	clearUI_ = std::make_unique<ClearUI>();
+	clearUI_->Initialize();
 
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
@@ -62,6 +62,8 @@ void ClearScene::Update()
 	ImGui::End();
 
 #endif // USE_IMGUI
+
+	clearUI_->Update();
 
 	cameraManager_->Update();
 
@@ -121,7 +123,7 @@ void ClearScene::Draw()
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
 
-	spriteBackGround_->Draw();
+	clearUI_->Draw();
 
 	sceneChangeStaging_->Draw();
 }

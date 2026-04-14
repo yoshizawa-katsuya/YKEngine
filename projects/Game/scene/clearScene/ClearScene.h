@@ -1,15 +1,14 @@
 #pragma once
 #include "BaseScene.h"
 #include "AnimatedSprite.h"
-#include "My3dObject.h"
 #include "RailMover.h"
-#include "InstancingObjects.h"
 #include "DirectionalLight.h"
 #include "DemoPlayer.h"
 #include "manager/CameraManager.h"
 #include "StageObjects.h"
 #include "StateMachine.hpp"
 #include "ClearSceneStateContext.h"
+#include "ClearUI.h"
 class SceneChangeStaging;
 
 /// <summary>
@@ -78,7 +77,8 @@ private:
 
 	std::unique_ptr<CameraManager> cameraManager_;
 
-	std::unique_ptr<YKEngine::Sprite> spriteBackGround_;
+	//クリア画面のUI
+	std::unique_ptr<ClearUI> clearUI_;
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 

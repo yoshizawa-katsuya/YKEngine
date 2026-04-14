@@ -145,6 +145,16 @@ namespace JsonKey
 		}
 	}
 
+	namespace Clear
+	{
+		namespace UI
+		{
+			const std::string kGroupName = "ClearUI";
+			const std::string kClearPosition = "ClearPosition";
+			const std::string kPressAPosition = "PressAPosition";
+		}
+	}
+
 	namespace StageObjects
 	{
 		const std::string kGroupName = "StageObjects";
