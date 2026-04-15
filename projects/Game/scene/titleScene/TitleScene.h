@@ -89,8 +89,6 @@ private:
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
 
-	std::shared_ptr<YKEngine::BaseModel> modelGround_;
-
 	//レールムーバー
 	std::unique_ptr<RailMover> railMover_;
 
