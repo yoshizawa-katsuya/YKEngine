@@ -627,8 +627,11 @@
     <ClCompile Include="Game\objects\OperationGuide.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\PressA.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
     <ClCompile Include="Game\objects\ClearUI.cpp">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
+      <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1169,6 +1172,9 @@
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\ClearUI.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\PressA.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
