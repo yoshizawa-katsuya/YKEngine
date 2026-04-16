@@ -14,9 +14,9 @@
         "behaviorIsUseBillboard": true,
         "behaviorSpeed": 10.0,
         "color": [
-            0.0,
-            0.0,
-            0.0,
+            0.633650541305542,
+            0.6225490570068359,
+            1.0,
             1.0
         ],
         "count": 1,
@@ -64,14 +64,14 @@
         "rangeParamsSpeedMax": 7.0,
         "rangeParamsSpeedMin": 3.0,
         "rangeParamsTranslateMax": [
-            0.5,
-            0.5,
-            0.5
+            1.0,
+            1.0,
+            1.0
         ],
         "rangeParamsTranslateMin": [
-            -0.5,
-            -0.5,
-            -0.5
+            -1.0,
+            -1.0,
+            -1.0
         ],
         "rangeParamsVelocityMax": [
             5.0,
@@ -89,8 +89,8 @@
             0.0
         ],
         "scale": [
-            0.20000000298023224,
-            0.20000000298023224,
+            0.5,
+            0.5,
             1.0
         ],
         "translation": [
