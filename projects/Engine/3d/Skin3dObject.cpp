@@ -143,7 +143,7 @@ void Skin3dObject::CreateSkinCluster()
 {
 
 	ModelPlatform* modelPlatform = model_->GetModelPlatform();
-	ModelData& modelData = model_->GetModelData();
+	const ModelData& modelData = model_->GetModelData();
 	uint32_t verticesNum = model_->GetVerticesNum();
 
 	//palette用のResourceを確保

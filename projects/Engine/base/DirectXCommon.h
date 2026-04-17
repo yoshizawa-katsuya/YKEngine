@@ -138,7 +138,7 @@ public:
 
 	D3D12_VIEWPORT* GetViewport() { return &viewport_; }
 
-	Matrix4x4& GetViewPortMatrix() { return viewPortMatrix_; }
+	const Matrix4x4& GetViewPortMatrix() const { return viewPortMatrix_; }
 
 	D3D12_RECT* GetScissorRect() { return &scissorRect_; }
 

@@ -191,12 +191,11 @@ public:
 
 	virtual void SetEnvironmentCoefficient(float environmentCoefficient);
 
-	Material& GetMaterialDataAddress() { return *materialData_; }
+	const Material& GetMaterialData() const { return *materialData_; }
 
 	const Node& GetRootNode() const { return modelData_->rootNode; }
 
 	const ModelData& GetModelData() const { return *modelData_; }
-	ModelData& GetModelData() { return *modelData_; }
 
 	uint32_t GetVerticesNum() { return verticesNum_; }
 

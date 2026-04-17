@@ -96,7 +96,6 @@ public:
 	void SetEnviromentCoefficient(float coefficient);
 
 	const BaseModel& GetModel() const { return *model_; }
-	BaseModel& GetModel() { return *model_; }
 
 protected:
 

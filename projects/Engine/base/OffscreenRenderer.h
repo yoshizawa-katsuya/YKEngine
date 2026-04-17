@@ -81,7 +81,7 @@ public:
 	void SetMaskTexture(uint32_t texturehandle) { maskTextureHandle_ = texturehandle; }
 
 	bool* GetUseOffscreenRenderPtr() { return &useOffscreenRender_; }
-	bool GetUseOffscreenRender() { return useOffscreenRender_; }
+	bool GetUseOffscreenRender() const { return useOffscreenRender_; }
 
 	/// <summary>
 	/// オフスクリーンレンダリングを使用するかどうかを設定。

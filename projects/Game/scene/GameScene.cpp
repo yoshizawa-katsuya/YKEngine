@@ -125,8 +125,13 @@ void GameScene::Update() {
 
 	ImGui::Begin("Window");
 	if (ImGui::TreeNode("camera")) {
-		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
-		ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
+		Vector3 translate = camera_->GetTranslate();
+		ImGui::DragFloat3("translate", &translate.x, 0.01f);
+		camera_->SetTranslate(translate);
+
+		Vector3 rotate = camera_->GetRotate();
+		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+		camera_->SetRotate(rotate);
 		//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
 
 		ImGui::TreePop();
