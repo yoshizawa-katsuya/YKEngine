@@ -43,6 +43,8 @@ void Player::Update() {
 	ChangePose();
 	ChangeDirection();
 
+	UpdateColorForDebug();
+
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
 
@@ -101,4 +103,18 @@ void Player::ChangeDirection()
 	{
 		worldTransform_.rotation_.y = targetRot;
 	}
+}
+
+void Player::UpdateColorForDebug()
+{
+	static const Vector4 kPoseColors[] =
+	{
+		{1,1,1,1}, // Base
+		{1,0,0,1}, // A
+		{0,1,0,1}, // B
+		{0,0,1,1}, // C
+		{1,1,0,1}, // D
+	};
+
+	object_->SetColor(kPoseColors[static_cast<int>(pose_)]);
 }

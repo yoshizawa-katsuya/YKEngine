@@ -36,6 +36,9 @@ private:
 	void ChangePose();
 
 	void ChangeDirection();
+
+	void UpdateColorForDebug();
+
 private:
 
 	//Transform変数を作る
