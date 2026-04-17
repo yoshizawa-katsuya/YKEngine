@@ -3,8 +3,21 @@
 #include "WorldTransform.h"
 #include "SRTAnimator.h"
 #include "Animation.h"
+#include "Input.h"
 class YKEngine::Camera;
 
+enum class PlayerPose{
+	PoseBase,
+	PoseA,
+	PoseB,
+	PoseC,
+	PoseD
+};
+enum class PlayerDirection{
+	Left = 0,
+	Front = 1,
+	Right = 2
+};
 /// <summary>
 /// プレイヤークラス
 /// </summary>
@@ -20,10 +33,21 @@ public:
 
 private:
 
+	void ChangePose();
+
+	void ChangeDirection();
+private:
+
 	//Transform変数を作る
 	YKEngine::WorldTransform worldTransform_;
 
 	std::unique_ptr<YKEngine::My3dObject> object_;
 
+	YKEngine::Input* input_ = nullptr;
+
+	PlayerPose pose_;
+	PlayerDirection direction_;
+
+	const float kAngle45 = 3.141592f / 4.0f;
 };
 
