@@ -41,6 +41,23 @@ public:
 	void Finalize() override;
 
 private:
+	// タイトル画面のステート
+	enum class State {
+		START,
+		OPTIONS,
+		EXIT
+	};
+	State state_ = State::START; // デフォルトはSTART
+
+	// 難易度のenum
+	enum class Difficulty {
+		EASY,
+		NORMAL,
+		HARD
+	};
+	Difficulty difficulty_ = Difficulty::EASY; // デフォルトはEASY
+
+private:
 
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
@@ -50,6 +67,7 @@ private:
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
+	
 	
 };
 

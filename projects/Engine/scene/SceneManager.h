@@ -42,6 +42,19 @@ public:
 	/// <param name="sceneName">変更先シーン名</param>
 	void ChengeScene(const std::string& sceneName);
 
+	/// <summary>
+	/// セッター
+	/// </summary>
+	// 難易度の設定
+	void SetDifficulty(uint32_t difficulty) { difficulty_ = difficulty; }
+
+
+	/// <summary>
+	/// ゲッター
+	/// </summary>
+	// 難易度の取得
+	uint32_t GetDifficulty() const { return difficulty_; }
+
 private:
 
 
@@ -59,6 +72,7 @@ private:
 	//シーンファクトリー(借りてくる)
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 
+	uint32_t difficulty_ = 0; // 難易度の変数
 };
 
 }

@@ -84,6 +84,8 @@ void GameScene::Initialize() {
 	worldTransform2_.UpdateMatrix();
 	*/
 
+	// 難易度の設定
+	difficulty_ = sceneManager_->GetDifficulty();
 }
 
 void GameScene::Update() {
@@ -184,7 +186,7 @@ void GameScene::Update() {
 	}
 		
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
-
+	ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
 	/*
 	if (ImGui::Button("BGMstop")) {
 		audio_->SoundStopWave(bgm1_);
