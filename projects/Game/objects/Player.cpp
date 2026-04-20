@@ -1,8 +1,8 @@
 #include "Player.h"
-
+#include "Input.h"
+#include <numbers>
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
-#include "Input.h"
 #endif // USE_IMGUI
 
 using namespace YKEngine;
@@ -19,6 +19,7 @@ void Player::Initialize(BaseModel* model) {
 	pose_ = PlayerPose::PoseBase;
 	direction_ = PlayerDirection::Front;
 
+	kAngle_=std::numbers::pi_v<float>/4.0f;
 }
 
 void Player::Update() {
@@ -31,7 +32,9 @@ void Player::Update() {
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
 		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
-		ImGui::DragInt("pose", reinterpret_cast<int*>(&pose_), 1.0f, 0, 4);
+		int poseInt = static_cast<int>(pose_);
+		ImGui::DragInt("pose", &poseInt, 1.0f, 0, 5);
+		pose_ = static_cast<PlayerPose>(poseInt);
 
 		ImGui::TreePop();
 	}
@@ -64,16 +67,26 @@ void Player::ChangePose()
 	pose_ = PlayerPose::PoseBase;
 
 	// 押されたらポーズ変更
-	if (input_->PushKey(DIK_1))
-		pose_ = PlayerPose::PoseA;
-	if (input_->PushKey(DIK_2))
-		pose_ = PlayerPose::PoseB;
-	if (input_->PushKey(DIK_3))
-		pose_ = PlayerPose::PoseC;
-	if (input_->PushKey(DIK_4))
-		pose_ = PlayerPose::PoseD;
 	if (input_->PushKey(DIK_DOWNARROW))
+	{
 		pose_ = PlayerPose::PoseSquat;
+	}
+	else if (input_->PushKey(DIK_1))
+	{
+		pose_ = PlayerPose::PoseA;
+	}
+	else if (input_->PushKey(DIK_2))
+	{
+		pose_ = PlayerPose::PoseB;
+	}
+	else if (input_->PushKey(DIK_3))
+	{
+		pose_ = PlayerPose::PoseC;
+	}
+	else if (input_->PushKey(DIK_4))
+	{
+		pose_ = PlayerPose::PoseD;
+	}
 }
 
 void Player::ChangeDirection()
@@ -93,14 +106,16 @@ void Player::ChangeDirection()
 	int offset = dir - 1;
 
 	// 目標角度
-	float targetRot = offset * kAngle45;
+	float targetRot = offset * kAngle_;
 
 	// 現在角度
 	float currentRot = worldTransform_.rotation_.y;
 
 	// スムーズ回転
-	float t = 0.2f;
-	worldTransform_.rotation_.y = currentRot + (targetRot - currentRot) * t;
+	float speed = 20.0f;
+	float deltaTime = 1.0f / 60.0f; // 仮
+
+	worldTransform_.rotation_.y += (targetRot - currentRot) * speed * deltaTime;
 	if (fabs(targetRot - worldTransform_.rotation_.y) < 0.001f)
 	{
 		worldTransform_.rotation_.y = targetRot;

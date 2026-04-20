@@ -56,6 +56,6 @@ private:
 	PlayerPose pose_;
 	PlayerDirection direction_;
 
-	const float kAngle45 = 3.141592f / 4.0f;
+	float kAngle_;
 };
 
