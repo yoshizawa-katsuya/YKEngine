@@ -26,6 +26,12 @@ class Player
 {
 public:
 
+	struct PoseDir 
+	{
+		PlayerPose pose;
+		PlayerDirection dir;
+	};
+
 	void Initialize(YKEngine::BaseModel* model);
 
 	void Update();
@@ -35,6 +41,8 @@ public:
 	PlayerPose GetPose()const { return pose_; }
 
 	PlayerDirection GetDirection()const { return direction_; }
+
+	PoseDir GetState()const { return { pose_,direction_ }; }
 
 private:
 
