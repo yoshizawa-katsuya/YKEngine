@@ -54,6 +54,11 @@ public:
 
 private:
 
+	/// <summary>
+	/// レベルの生成。
+	/// </summary>
+	void CreateLevel();
+
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
 
@@ -92,6 +97,8 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	std::vector<std::unique_ptr<YKEngine::My3dObject>> walls_;
 
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;

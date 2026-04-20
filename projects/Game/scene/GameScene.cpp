@@ -3,6 +3,7 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "LevelDataLoader.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -11,7 +12,6 @@
 using namespace YKEngine;
 
 GameScene::~GameScene() {
-	//Finalize();
 }
 
 void GameScene::Initialize() {
@@ -35,12 +35,8 @@ void GameScene::Initialize() {
 	mainCamera_ = camera_.get();
 
 	//モデルを描画する際カメラの設定は必須
-	//modelPlatform_->SetDirectionalLight(directionalLight_.get());
-	//modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
-	//modelPlatform_->SetSpotLight(spotLight_.get());
 
-	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
@@ -83,6 +79,8 @@ void GameScene::Initialize() {
 	worldTransform2_.translation_.x = 1.0f;
 	worldTransform2_.UpdateMatrix();
 	*/
+
+	CreateLevel();
 
 }
 
@@ -215,6 +213,13 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	//壁の描画
+	for (const std::unique_ptr<My3dObject>& wall : walls_)
+	{
+		wall->CameraUpdate(mainCamera_);
+		wall->Draw();
+	}
+
 	/*modelPlatform_->SkyBoxPreDraw();
 
 	skyBox_->CameraUpdate(mainCamera_);
@@ -236,4 +241,22 @@ void GameScene::Draw() {
 void GameScene::Finalize()
 {
 
+}
+
+void GameScene::CreateLevel()
+{
+	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");
+
+	std::shared_ptr<BaseModel> modelWall = modelPlatform_->CreateRigidModel("./resources/wall", "wall.obj");
+
+	for (const WallData& wallData : levelData.walls) {
+		std::unique_ptr<My3dObject> wall = std::make_unique<My3dObject>();
+		wall->Initialize(modelWall.get());
+		WorldTransform worldTransform;
+		worldTransform.Initialize();
+		worldTransform.translation_ = wallData.Translate;
+		worldTransform.UpdateMatrix();
+		wall->WorldTransformUpdate(worldTransform);
+		walls_.push_back(std::move(wall));
+	}
 }
