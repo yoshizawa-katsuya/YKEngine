@@ -16,7 +16,7 @@ void Player::Initialize(BaseModel* model) {
 
 	worldTransform_.Initialize();
 
-	pose_ = PlayerPose::PoseBase;
+	pose_ = PlayerPose::Base;
 	direction_ = PlayerDirection::Front;
 
 	kAngle_=std::numbers::pi_v<float>/4.0f;
@@ -64,28 +64,28 @@ void Player::ChangePose()
 {
 	// ポーズ切り替え
     // デフォルト
-	pose_ = PlayerPose::PoseBase;
+	pose_ = PlayerPose::Base;
 
 	// 押されたらポーズ変更
 	if (input_->PushKey(DIK_DOWNARROW))
 	{
-		pose_ = PlayerPose::PoseSquat;
+		pose_ = PlayerPose::Squat;
 	}
 	else if (input_->PushKey(DIK_1))
 	{
-		pose_ = PlayerPose::PoseA;
+		pose_ = PlayerPose::A;
 	}
 	else if (input_->PushKey(DIK_2))
 	{
-		pose_ = PlayerPose::PoseB;
+		pose_ = PlayerPose::B;
 	}
 	else if (input_->PushKey(DIK_3))
 	{
-		pose_ = PlayerPose::PoseC;
+		pose_ = PlayerPose::C;
 	}
 	else if (input_->PushKey(DIK_4))
 	{
-		pose_ = PlayerPose::PoseD;
+		pose_ = PlayerPose::D;
 	}
 }
 

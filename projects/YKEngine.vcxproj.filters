@@ -94,6 +94,9 @@
     <Filter Include="ヘッダー ファイル\application\scene">
       <UniqueIdentifier>{134ac728-9100-4706-ba82-1c2652abb654}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\application\common">
+      <UniqueIdentifier>{90c99dee-3314-43f6-a258-4e11def31d55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -537,6 +540,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="GameType.h">
+      <Filter>ヘッダー ファイル\application\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

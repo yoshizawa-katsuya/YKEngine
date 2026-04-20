@@ -4,33 +4,14 @@
 #include "SRTAnimator.h"
 #include "Animation.h"
 #include "Input.h"
+#include "GameType.h"
 class YKEngine::Camera;
-
-enum class PlayerPose{
-	PoseBase,
-	PoseSquat,
-	PoseA,
-	PoseB,
-	PoseC,
-	PoseD
-};
-enum class PlayerDirection{
-	Left = 0,
-	Front = 1,
-	Right = 2
-};
 /// <summary>
 /// プレイヤークラス
 /// </summary>
 class Player
 {
 public:
-
-	struct PoseDir 
-	{
-		PlayerPose pose;
-		PlayerDirection dir;
-	};
 
 	void Initialize(YKEngine::BaseModel* model);
 
