@@ -72,6 +72,8 @@ void Player::ChangePose()
 		pose_ = PlayerPose::PoseC;
 	if (input_->PushKey(DIK_4))
 		pose_ = PlayerPose::PoseD;
+	if (input_->PushKey(DIK_DOWNARROW))
+		pose_ = PlayerPose::PoseSquat;
 }
 
 void Player::ChangeDirection()
@@ -110,6 +112,7 @@ void Player::UpdateColorForDebug()
 	static const Vector4 kPoseColors[] =
 	{
 		{1,1,1,1}, // Base
+		{0,0,0,1}, // Squat
 		{1,0,0,1}, // A
 		{0,1,0,1}, // B
 		{0,0,1,1}, // C

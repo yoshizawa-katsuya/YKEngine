@@ -8,6 +8,7 @@ class YKEngine::Camera;
 
 enum class PlayerPose{
 	PoseBase,
+	PoseSquat,
 	PoseA,
 	PoseB,
 	PoseC,
@@ -30,6 +31,10 @@ public:
 	void Update();
 
 	void Draw(YKEngine::Camera* camera);
+
+	PlayerPose GetPose()const { return pose_; }
+
+	PlayerDirection GetDirection()const { return direction_; }
 
 private:
 
