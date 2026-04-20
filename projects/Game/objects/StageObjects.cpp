@@ -22,24 +22,21 @@ void StageObjects::Initialize(bool isDayTime)
 	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient, 0.5f);
 
 
-	//モデルの読み込み
-	BaseModel* skyBoxModel;
-
-	//テクスチャの読み込み
+	//テクスチャの読み込み、スカイボックスモデルの生成
 	if (isDayTime_)
 	{
 		textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/daytime.dds");
-		skyBoxModel = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "DayTime").get();
+		skyBoxModel_ = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "DayTime");
 	}
 	else
 	{
 		textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/night.dds");
-		skyBoxModel = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "Night").get();
+		skyBoxModel_ = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "Night");
 	}	
 
 	//スカイボックスの生成
 	skyBox_ = std::make_unique<My3dObject>();
-	skyBox_->Initialize(skyBoxModel);
+	skyBox_->Initialize(skyBoxModel_.get());
 	WorldTransform skyBoxTransform;
 	skyBoxTransform.Initialize();
 	const float kSkyBoxScale = 1000.0f;
@@ -48,14 +45,12 @@ void StageObjects::Initialize(bool isDayTime)
 	skyBox_->WorldTransformUpdate(skyBoxTransform);
 
 	//地面モデルの生成
-	std::shared_ptr<BaseModel> modelGround = modelPlatform->CreateRigidModel("./Resources/ground", "Ground.obj");
-	const float kGroundUVScale = 800.0f;
-	modelGround->SetUVTransform({ {kGroundUVScale, kGroundUVScale, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} });
-	modelGround->SetAlpha(0.5f);
+	groundModel_ = modelPlatform->CreateRigidModel("./Resources/ground", "Ground.obj");
+	groundModel_->SetAlpha(0.5f);
 
 	//地面の生成
 	ground_ = std::make_unique<My3dObject>();
-	ground_->Initialize(modelGround.get());
+	ground_->Initialize(groundModel_.get());
 	WorldTransform groundTransform;
 	groundTransform.Initialize();
 	groundTransform.scale_ = { 100.0f, 1.0f, 100.0f };
@@ -167,7 +162,7 @@ void StageObjects::LoadFromJson()
 		color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kNightSkyBoxColor);
 	}
 	Vector4 colorVec4 = Vector4(color.r, color.g, color.b, color.a);
-	skyBox_->GetModel().SetColor(colorVec4);
+	skyBoxModel_->SetColor(colorVec4);
 
-	ground_->GetModel().SetEnvironmentCoefficient(globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient));
+	groundModel_->SetEnvironmentCoefficient(globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient));
 }

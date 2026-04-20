@@ -191,7 +191,7 @@ protected:
 	YKEngine::Vector3 velocity_ = {0.0f, 0.0f, 1.0f};
 
 	//ビューポート行列
-	YKEngine::Matrix4x4* viewPortMatrix_ = nullptr;
+	const YKEngine::Matrix4x4* viewPortMatrix_ = nullptr;
 
 	int hitPoint_ = 3; // ヒットポイント
 

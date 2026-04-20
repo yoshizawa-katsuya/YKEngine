@@ -98,7 +98,7 @@ private:
 	YKEngine::Vector3 target_;
 
 	//ビューポート行列
-	YKEngine::Matrix4x4* viewPortMatrix_ = nullptr;
+	const YKEngine::Matrix4x4* viewPortMatrix_ = nullptr;
 
 	YKEngine::Input* input_ = nullptr;
 

@@ -82,7 +82,6 @@ void Player::Update()
 
 	ImGui::Begin("Player");
 	if (ImGui::TreeNode("Object")) {
-		ImGui::ColorEdit4("color", &object_->GetModel().GetMaterialDataAddress().color.x);
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
 		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);

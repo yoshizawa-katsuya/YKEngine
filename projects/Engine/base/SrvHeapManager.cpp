@@ -142,14 +142,14 @@ void SrvHeapManager::CreateSRVforDepthTexture(uint32_t srvIndex, ID3D12Resource*
 	dxCommon_->GetDevice()->CreateShaderResourceView(pResource, &depthTextureSrvDesc, GetCPUDescriptorHandle(srvIndex));
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE SrvHeapManager::GetCPUDescriptorHandle(uint32_t index)
+D3D12_CPU_DESCRIPTOR_HANDLE SrvHeapManager::GetCPUDescriptorHandle(uint32_t index) const
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize_ * index);
 	return handleCPU;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE SrvHeapManager::GetGPUDescriptorHandle(uint32_t index)
+D3D12_GPU_DESCRIPTOR_HANDLE SrvHeapManager::GetGPUDescriptorHandle(uint32_t index) const
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap_->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize_ * index);

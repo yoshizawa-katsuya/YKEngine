@@ -111,49 +111,34 @@ public:
 	/// <param name="frequency">発生頻度</param>
 	void SetFrequency(float frequency);
 
-	Vector3& GetTranslate() { return transform_.translation; }
 	const Vector3& GetTranslate() const { return transform_.translation; }
 
-	Vector3& GetScele() { return transform_.scale; }
 	const Vector3& GetScele() const { return transform_.scale; }
 
-	Vector3& GetRandTranslateMin(){ return rangeParams_.translate.min; }
 	const Vector3& GetRandTranslateMin() const { return rangeParams_.translate.min; }
 
-	Vector3& GetRandTranslateMax() { return rangeParams_.translate.max; }
 	const Vector3& GetRandTranslateMax() const { return rangeParams_.translate.max; }
 
-	Vector3& GetRandRotateMin() { return rangeParams_.rotate.min; }
 	const Vector3& GetRandRotateMin() const { return rangeParams_.rotate.min; }
 
-	Vector3& GetRandRotateMax() { return rangeParams_.rotate.max; }
 	const Vector3& GetRandRotateMax() const { return rangeParams_.rotate.max; }
 
-	Vector3& GetRandScaleMin() { return rangeParams_.scale.min; }
 	const Vector3& GetRandScaleMin() const { return rangeParams_.scale.min; }
 
-	Vector3& GetRandScaleMax() { return rangeParams_.scale.max; }
 	const Vector3& GetRandScaleMax() const { return rangeParams_.scale.max; }
 
-	float& GetFrequency() { return frequency_; }
 	float GetFrequency() const { return frequency_; }
 
-	uint32_t& GetCount() { return count_; }
 	uint32_t GetCount() const { return count_; }
 
-	bool& GetIsRandomColor() { return randomFlags_.color; }
 	bool GetIsRandomColor() const { return randomFlags_.color; }
 
-	bool& GetIsRandomTranslate() { return randomFlags_.translate; }
 	bool GetIsRandomTranslate() const { return randomFlags_.translate; }
 
-	bool& GetIsRandomVelocity() { return randomFlags_.velocity; }
 	bool GetIsRandomVelocity() const { return randomFlags_.velocity; }
 
-	bool& GetIsRandomRotate() { return randomFlags_.rotate; }
 	bool GetIsRandomRotate() const { return randomFlags_.rotate; }
 
-	bool& GetIsRandomScele() { return randomFlags_.scale; }
 	bool GetIsRandomScele() const { return randomFlags_.scale; }
 
 private:

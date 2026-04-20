@@ -30,38 +30,29 @@ public:
 	/// </summary>
 	void Draw();
 
-	const Vector2& GetSize() const { return size_; }
-	Vector2& GetSize() { return size_; }
+	Vector2 GetSize() const { return size_; }
 
-	Vector2& GetPosition() { return position_; }
-	const Vector2& GetPosition() const { return position_; }
+	Vector2 GetPosition() const { return position_; }
 
-	float& GetRotation() { return rotation_; }
 	float GetRotation() const { return rotation_; }
 
-	Vector4& GetColor() { return materialData_->color; }
 	const Vector4& GetColor() const { return materialData_->color; }
 
-	Vector2& GetAnchorPoint() { return anchorPoint_; }
-	const Vector2& GetAnchorPoint() const { return anchorPoint_; }
+	Vector2 GetAnchorPoint() const { return anchorPoint_; }
 
-	bool& GetIsFlipX() { return isFlipX_; }
 	bool GetIsFlipX() const { return isFlipX_; }
 
-	bool& GetIsFlipY() { return isFlipY_; }
 	bool GetIsFlipY() const { return isFlipY_; }
 
-	Vector2& GetTextureLeftTop() { return textureLeftTop_; }
-	const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
+	Vector2 GetTextureLeftTop() const { return textureLeftTop_; }
 
-	Vector2& GetTextureSize() { return textureSize_; }
-	const Vector2& GetTextureSize() const { return textureSize_; }
+	Vector2 GetTextureSize() const { return textureSize_; }
 
-	EulerTransform& GetTransform() { return transform_; }
 	const EulerTransform& GetTransform() const { return transform_; }
 
-	EulerTransform& GetUVTransform() { return uvTransform_; }
 	const EulerTransform& GetUVTransform() const { return uvTransform_; }
+
+	uint32_t GetTeture() { return textureHandle_; }
 
 	void SetSize(Vector2 size) { size_ = size; }
 
@@ -88,8 +79,6 @@ public:
 	void SetUVTransform(const EulerTransform& uvTransform) { uvTransform_ = uvTransform; }
 
 	void SetUVTranslate(const Vector3& translate) { uvTransform_.translation = translate; }
-
-	uint32_t GetTeture() { return textureHandle_; }
 
 protected:
 

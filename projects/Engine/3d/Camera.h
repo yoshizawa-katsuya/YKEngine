@@ -43,10 +43,8 @@ public:
 	const Matrix4x4& GetViewProjection() const { return viewProjectionMatrix_; }
 
 	const Vector3& GetRotate() const { return transform_.rotation; }
-	Vector3& GetRotate() { return transform_.rotation; }
 
 	const Vector3& GetTranslate() const { return transform_.translation; }
-	Vector3& GetTranslate() { return transform_.translation; }
 
 	//setter
 	void SetRotate(const Vector3& rotate) { transform_.rotation = rotate; }

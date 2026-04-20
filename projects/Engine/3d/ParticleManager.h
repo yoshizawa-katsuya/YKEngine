@@ -87,7 +87,6 @@ public:
 
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 
-	bool& GetUseAccelerationField() { return useAccelerationField_; }
 	bool GetUseAccelerationField() const { return useAccelerationField_; }
 
 	//コンストラクタに渡すための鍵

@@ -60,6 +60,10 @@ private:
 	//テクスチャハンドル
 	uint32_t textureHandleSkyBox_;
 
+	//モデル
+	std::shared_ptr<YKEngine::BaseModel> skyBoxModel_;
+	std::shared_ptr<YKEngine::BaseModel> groundModel_;
+
 	//スカイボックス
 	std::unique_ptr<YKEngine::My3dObject> skyBox_;
 

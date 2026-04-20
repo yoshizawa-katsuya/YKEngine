@@ -50,8 +50,15 @@ void CameraManager::Update()
 	ImGui::Begin("CameraManager");
 	if (ImGui::TreeNode("camera"))
 	{
-		ImGui::DragFloat3("translate", &GetRailCameraInner()->GetTranslate().x, 0.01f);
-		ImGui::DragFloat3("rotate", &GetRailCameraInner()->GetRotate().x, 0.01f);
+		Camera* camera = GetRailCameraInner();
+
+		Vector3 translate = camera->GetTranslate();
+		ImGui::DragFloat3("translate", &translate.x, 0.01f);
+		camera->SetTranslate(translate);
+
+		Vector3 rotate = camera->GetRotate();
+		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+		camera->SetRotate(rotate);
 
 		ImGui::TreePop();
 	}
