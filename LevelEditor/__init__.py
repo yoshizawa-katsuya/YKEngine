@@ -30,10 +30,14 @@ from .spawn import MYADDON_OT_spawn_import_symbol
 from .spawn import MYADDON_OT_spawn_create_symbol
 from .spawn import MYADDON_OT_spawn_create_player_symbol
 from .spawn import MYADDON_OT_spawn_create_enemy_symbol
-from .waittime import MYADDON_OT_add_wait_time
-from .waittime import OBJECT_PT_wait_time
-from .wave_num import MYADDON_OT_add_wave_num
-from .wave_num import OBJECT_PT_wave_num
+from .spawn import MYADDON_OT_spawn_create_enemy02_symbol
+from .spawn import MYADDON_OT_spawn_create_tackle_enemy_symbol
+from .spawn import MYADDON_OT_spawn_create_tackle_enemy02_symbol
+from .spawn import MYADDON_OT_spawn_create_wall_symbol
+from .params import MYADDON_OT_add_wait_time
+from .params import OBJECT_PT_params
+from .params import MYADDON_OT_add_wave_num
+from .params import MYADDON_OT_add_speed
 
 #Blenderに登録するクラスリスト
 classes = (
@@ -51,10 +55,14 @@ classes = (
     MYADDON_OT_spawn_create_symbol,
     MYADDON_OT_spawn_create_player_symbol,
     MYADDON_OT_spawn_create_enemy_symbol,
+    MYADDON_OT_spawn_create_enemy02_symbol,
+    MYADDON_OT_spawn_create_tackle_enemy_symbol,
+    MYADDON_OT_spawn_create_tackle_enemy02_symbol,
+    MYADDON_OT_spawn_create_wall_symbol,
     MYADDON_OT_add_wait_time,
-    OBJECT_PT_wait_time,
+    OBJECT_PT_params,
     MYADDON_OT_add_wave_num,
-    OBJECT_PT_wave_num,
+    MYADDON_OT_add_speed,
 )
 
 #メニュー項目描画
