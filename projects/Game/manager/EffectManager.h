@@ -89,7 +89,7 @@ private:
 	std::unordered_map<EffectType, EffectData> effectDatas_
 	{
 		{{EffectType::kHit01}, {"HitEffect01", "./Resources/circle2.png", "primitivePlane"}},
-		{{EffectType::kHit02}, {"HitEffect02", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kHit02}, {"HitEffect02", "./Resources/white.png", "primitiveCube"}},
 		{{EffectType::kPlayerStart01}, {"PlayerStartEffect01", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kPlayerStart02}, {"PlayerStartEffect02", "./Resources/white.png", "primitiveCube"}},
 		{{EffectType::kPlayerStart03}, {"PlayerStartEffect03", "./Resources/circle2.png", "primitivePlane"}},

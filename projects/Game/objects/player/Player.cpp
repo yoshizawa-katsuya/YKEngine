@@ -369,7 +369,7 @@ void Player::UpdateGameOver()
 	{
 		isGameOverEnd_ = true;
 		characterWorldTransform_.scale_ = { 0.0f, 0.0f, 0.0f };
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerEnd01, characterWorldTransform_.GetWorldPosition(), 100);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, characterWorldTransform_.GetWorldPosition(), 100);
 	}
 
 	BaseCharacter::Update();
