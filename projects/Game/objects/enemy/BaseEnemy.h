@@ -193,7 +193,7 @@ protected:
 	//ビューポート行列
 	const YKEngine::Matrix4x4* viewPortMatrix_ = nullptr;
 
-	int hitPoint_ = 3; // ヒットポイント
+	int hitPoint_ = 10; // ヒットポイント
 
 	YKEngine::Vector3 direction_; // 方向
 

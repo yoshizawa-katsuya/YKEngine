@@ -1,6 +1,6 @@
 {
     "Player": {
-        "ChargeBulletShotInterval": 0.5,
+        "ChargeBulletShotInterval": 0.20000000298023224,
         "DamageReactionDuration": 0.20000000298023224,
         "DamageReactionMoveRange": 0.20000000298023224,
         "DodgeRotateLerpFactor": 0.30000001192092896,
@@ -20,7 +20,7 @@
         "HeartSpacing": 50.0,
         "MoveLimitX": 8.899999618530273,
         "MoveLimitY": 4.800000190734863,
-        "NormalBulletShotInterval": 0.20000000298023224,
+        "NormalBulletShotInterval": 0.10000000149011612,
         "RotateLerpFactor": 0.10000000149011612,
         "Speed": 0.20000000298023224,
         "StartAnimeDuration": 1.5,

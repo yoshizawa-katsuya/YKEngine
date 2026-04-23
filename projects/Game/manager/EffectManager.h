@@ -60,6 +60,15 @@ public:
 	void SpawnEffect(EffectType effectType, const YKEngine::Vector3& position, uint32_t count);
 
 	/// <summary>
+	/// エフェクトの生成。
+	/// </summary>
+	/// <param name="effectType">エフェクトの種類</param>
+	/// <param name="position">生成位置</param>
+	/// <param name="velocity">パーティクルの初速</param>
+	/// <param name="count">生成数</param>
+	void SpawnEffect(EffectType effectType, const YKEngine::Vector3& position, const YKEngine::Vector3& velocity, uint32_t count = 1);
+
+	/// <summary>
 	/// エフェクトの削除。
 	/// </summary>
 	/// <param name="effectType">エフェクトの種類</param>
@@ -95,7 +104,7 @@ private:
 		{{EffectType::kPlayerStart03}, {"PlayerStartEffect03", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kPlayerEnd01}, {"PlayerEndEffect01", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kEnemyEnd01}, {"EnemyEndEffect01", "./Resources/circle2.png", "primitivePlane"}},
-		{{EffectType::kPlayerBulletTrac01}, {"PlayerBulletTrac01", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kPlayerBulletTrac01}, {"PlayerBulletTrac01", "./Resources/white.png", "primitiveCube"}},
 		{{EffectType::kPlayerBulletTrac02}, {"PlayerBulletTrac02", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kConfetti01}, {"ConfettiEffect01", "./Resources/white.png", "primitivePlane"}},
 		{{EffectType::kEnemyBrowAway01}, {"EnemyBrowAway01", "./Resources/circle2.png", "primitivePlane"}},

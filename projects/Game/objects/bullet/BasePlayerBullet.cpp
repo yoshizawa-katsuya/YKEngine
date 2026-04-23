@@ -44,7 +44,8 @@ void BasePlayerBullet::Update()
 
 	BaseBullet::Update();
 
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerBulletTrac01, worldTransform_.GetWorldPosition());
+	Vector3 particleVelocity = velocity_ * 0.1f; // パーティクルの速度は弾の速度の半分に設定
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerBulletTrac01, worldTransform_.GetWorldPosition(), particleVelocity);
 }
 
 void BasePlayerBullet::OnCollision(Collider* other)

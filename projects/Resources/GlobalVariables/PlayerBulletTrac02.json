@@ -1,7 +1,7 @@
 {
     "PlayerBulletTrac02": {
         "bahaviorEasingTypeForScale": 0,
-        "bahaviorIsSceleToDisappear": false,
+        "bahaviorIsSceleToDisappear": true,
         "behaviorBlendMode": 0,
         "behaviorDistance": 1.0,
         "behaviorIsConstantVelocity": false,

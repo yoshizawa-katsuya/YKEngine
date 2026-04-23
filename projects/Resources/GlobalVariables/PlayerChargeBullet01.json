@@ -1,6 +1,6 @@
 {
     "PlayerChargeBullet01": {
-        "AttackPower": 3,
+        "AttackPower": 10,
         "Radius": 1.0
     }
 }

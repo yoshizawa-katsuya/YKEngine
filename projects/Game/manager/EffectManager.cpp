@@ -58,6 +58,20 @@ void EffectManager::SpawnEffect(EffectType effectType, const Vector3& position, 
 	}
 }
 
+void EffectManager::SpawnEffect(EffectType effectType, const Vector3& position, const Vector3& velocity, uint32_t count)
+{
+	std::unique_ptr<ParticleEmitter>& emitter = effectEmitters_[effectType];
+	emitter->SetTranslation(position); // パーティクルの位置を設定
+	Vector3 particleVelocity = velocity;
+	particleVelocity *= 60.0f; // 1秒あたりのフレーム数である60を掛けて、フレームごとの速度に変換
+	emitter->SetRandVelocityMin(particleVelocity); // パーティクルの初速の最小値を設定
+	emitter->SetRandVelocityMax(particleVelocity); // パーティクルの初速の最大値を設定
+	for (uint32_t i = 0; i < count; i++)
+	{
+		emitter->Emit(); // パーティクルを発生させる
+	}
+}
+
 void EffectManager::ClearEffects(EffectType effectType)
 {
 	ParticleManager::GetInstance()->ClearParticles(effectDatas_[effectType].name);
