@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "ParticleManager.h"
 #include <cassert>
+#include <imgui.h>
 
 using namespace YKEngine;
 
@@ -24,6 +25,7 @@ void SceneManager::Update()
 	//実行中シーンを更新する
 	scene_->Update();
 
+	DrawImGui();
 }
 
 void SceneManager::Draw()
@@ -31,6 +33,31 @@ void SceneManager::Draw()
 
 	scene_->Draw();
 
+}
+
+void YKEngine::SceneManager::DrawImGui()
+{
+
+#ifdef USE_IMGUI
+
+	ImGui::Begin("SceneManager");
+	// シーン切り替え
+	
+	// 各シーンへの遷移ボタン
+	if (ImGui::Button("TITLE")) {
+		ChengeScene("TitleScene");
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("GAMEPLAY")) {
+		ChengeScene("GameScene");
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("GAMEOVER")) {
+		ChengeScene("GameOverScene");
+	}
+
+	ImGui::End();
+#endif
 }
 
 void SceneManager::ChengeScene(const std::string& sceneName)
