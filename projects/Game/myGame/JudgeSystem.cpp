@@ -50,4 +50,5 @@ JudgeResult JudgeSystem::Judge(
     }
 
     return JudgeResult::Miss;
+
 }
