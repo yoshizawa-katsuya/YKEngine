@@ -18,6 +18,8 @@
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
+#include "DummyWall.h"
+
 
 #include "Ui.h"
 
@@ -53,6 +55,8 @@ public:
 	/// 終了。
 	/// </summary>
 	void Finalize() override;
+
+	void CheckCollision();
 
 private:
 
@@ -95,6 +99,13 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	//ダミーのカベ
+	std::unique_ptr<DummyWall> dummyWall_;
+
+	//判定
+	bool isJudged_ = false;
+	float prevWallZ_ = 0.0f;
+
 	//UI
 	std::unique_ptr<Ui>ui_;
 
@@ -115,5 +126,11 @@ private:
 
 	// 難易度
 	uint32_t difficulty_ = 0;
+	
+
+	//デバッグ用
+	YKEngine::Vector4 debugPlayerColor[2] = { {1.0f,0.0f,1.0f,1.0f},{0.0f,1.0f,1.0f,1.0f} };
+	int32_t debugScore_ = 0;
+	int32_t debugMiss_ = 0;
 	
 };
