@@ -1,6 +1,7 @@
 #include "Ui.h"
 #include "TextureManager.h"
 #include "Input.h"
+#include <algorithm>
 
 // 初期化
 void Ui::Initialize() {
@@ -28,10 +29,18 @@ void Ui::Initialize() {
 
       //  lifeSprites_[i]->SetPosition({ 50.0f + i * 40.0f, 100.0f });
     }
-	//ポーズスプライト生成
+	//ポーズUIスプライト生成
+    pauseUiSprite_ = std::make_unique<YKEngine::Sprite>();
+    pauseUiSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pause.png"));
+	pauseUiSprite_->SetPosition({ 1130.0f, 55.0f });
+	pauseUiSprite_->SetSize({ 400.0f, 70.0f });
+    pauseUiSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+    //ポーズ画面スプライト生成
     pauseSprite_ = std::make_unique<YKEngine::Sprite>();
-    pauseSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pause.png"));
-	pauseSprite_->SetPosition({ 400.0f, 300.0f });
+	pauseSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/white.png"));
+    pauseSprite_->SetPosition({ 640.0f, 360.0f });
+    pauseSprite_->SetSize({ 0.0f, 0.0f });
+	pauseSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 }
 //更新
 void Ui::Update() {
@@ -47,6 +56,66 @@ void Ui::Update() {
     UpdateLifeUI();
 	//ポーズメニュー更新
     UpdatePauseMenu();
+	//デバック
+    Debug();
+}
+//描画
+void Ui::Draw() {
+    //スコア描画
+    for (int i = 0; i < kMaxDigits; i++) {
+        scoreSprites_[i]->Draw();
+    }
+    /*
+    //ライフ描画
+    for (int i = 0; i < kMaxLife; i++) {
+        lifeSprites_[i]->Draw();
+    }
+    */
+
+    //ポーズUI描画
+    pauseUiSprite_->Draw();
+
+    //ポーズ画面描画
+    if (pauseScale_ > 0.01f) {
+        pauseSprite_->Draw();
+    }
+}
+//デバック
+void Ui::Debug() {
+    //ポーズUI
+    if (pauseUiSprite_) {
+        ImGui::Begin("Pause UI Sprite");
+        ImVec2 pos = { pauseUiSprite_->GetPosition().x, pauseUiSprite_->GetPosition().y };
+        if (ImGui::DragFloat2("Position", (float*)&pos, 1.0f)) {
+            pauseUiSprite_->SetPosition({ pos.x, pos.y });
+        }
+        ImVec2 scale = { pauseUiSprite_->GetSize().x , pauseUiSprite_->GetSize().y};
+        if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f,10000.0)) {
+            pauseUiSprite_->SetSize({ scale.x, scale.y });
+        }
+        float rotation = pauseUiSprite_->GetRotation();
+        if (ImGui::DragFloat("Rotation", &rotation, 1.0f, -360.0f, 360.0f)) {
+            pauseUiSprite_->SetRotation(rotation);
+        }
+        ImGui::End();
+    }
+	//ポーズ画面
+    if (pauseSprite_) {
+        ImGui::Begin("Pause Sprite");
+        ImVec2 pos = { pauseSprite_->GetPosition().x, pauseSprite_->GetPosition().y };
+        if (ImGui::DragFloat2("Position", (float*)&pos, 1.0f)) {
+            pauseSprite_->SetPosition({ pos.x, pos.y });
+        }
+        ImVec2 scale = { pauseSprite_->GetSize().x, pauseSprite_->GetSize().y };
+        if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 1000.0f)) {
+            pauseSprite_->SetSize({ scale.x, scale.y });
+        }
+        float rotation = pauseSprite_->GetRotation();
+        if (ImGui::DragFloat("Rotation", &rotation, 1.0f, -360.0f, 360.0f)) {
+            pauseSprite_->SetRotation(rotation);
+        }
+        ImGui::End();
+    }
 }
 
 //入力処理
@@ -56,7 +125,7 @@ void Ui::HandleInput() {
         AddScore(100);
     }
     //ポーズ画面表示仮
-    if (YKEngine::Input::GetInstance()->TriggerKey(DIK_P)) {
+    if (YKEngine::Input::GetInstance()->TriggerKey(DIK_Q)) {
         isShowPause_ = !isShowPause_;
     }
 }
@@ -107,20 +176,6 @@ void Ui::UpdateDigits() {
         scoreSprites_[i]->SetTexture(numberTextures_[digits_[i]]);
     }
 }
-
-//描画
-void Ui::Draw() {
-	//スコア描画
-    for (int i = 0; i < kMaxDigits; i++) {
-        scoreSprites_[i]->Draw();
-    }
-    /*
-    //ライフ描画
-    for (int i = 0; i < kMaxLife; i++) {
-        lifeSprites_[i]->Draw();
-    }
-    */
-}
 //ライフ減少(仮実装)
 void Ui::HandleLifeInput() {
     if (YKEngine::Input::GetInstance()->TriggerKey(DIK_Q)) {
@@ -148,4 +203,20 @@ void Ui::UpdateLifeUI() {
 //ポーズメニュー更新
 void Ui::UpdatePauseMenu() {
 
+    const float speed = 0.1f;
+
+    if (isShowPause_) {
+        pauseScale_ += speed;
+    } else {
+        pauseScale_ -= speed;
+    }
+
+    pauseScale_ = std::clamp(pauseScale_, 0.0f, 1.0f);
+
+    float eased = pauseScale_ * pauseScale_;
+
+    float baseW = 640.0f; 
+    float baseH = 360.0f;
+
+    pauseSprite_->SetSize({ baseW * eased, baseH * eased });
 }

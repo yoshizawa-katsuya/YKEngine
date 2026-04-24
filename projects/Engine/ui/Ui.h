@@ -1,5 +1,6 @@
 #pragma once
 #include "Sprite.h"
+#include "imgui.h"
 #include <array>
 #include <memory>
 
@@ -12,6 +13,8 @@ public:
     void Update();
     //描画
     void Draw();
+    //デバック
+    void Debug();
 
 private:
 	//スコア加算処理(仮実装)
@@ -42,7 +45,9 @@ private:
     std::array<std::unique_ptr<YKEngine::Sprite>, kMaxDigits> scoreSprites_;
 	//ライフスプライト
 	std::array<std::unique_ptr<YKEngine::Sprite>, kMaxLife> lifeSprites_;
-    //ポーズスプライト
+    //ポーズUIスプライト
+	std::unique_ptr<YKEngine::Sprite> pauseUiSprite_;
+    //ポーズ画面スプライト
 	std::unique_ptr<YKEngine::Sprite> pauseSprite_;
     //スコアテクスチャ
     std::array<uint32_t, 10> numberTextures_;
