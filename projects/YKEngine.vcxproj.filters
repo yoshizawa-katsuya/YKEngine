@@ -96,6 +96,11 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\application\common">
       <UniqueIdentifier>{90c99dee-3314-43f6-a258-4e11def31d55}</UniqueIdentifier>
+    <Filter Include="ヘッダー ファイル\application\ui">
+      <UniqueIdentifier>{3920ec7a-501c-4bf8-a340-4c0ff67e662e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\ui">
+      <UniqueIdentifier>{7600deb0-f294-4a3b-949d-91772587a9ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -261,8 +266,13 @@
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
+
+    <ClCompile Include="Engine\ui\Ui.cpp">
+      <Filter>ソース ファイル\application\ui</Filter>
+
     <ClCompile Include="Game\scene\GameOverScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
+
     </ClCompile>
     <ClCompile Include="Game\objects\DummyWall.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
@@ -550,8 +560,13 @@
     <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
+
+    <ClInclude Include="Engine\ui\Ui.h">
+      <Filter>ヘッダー ファイル\application\ui</Filter>
+
     <ClInclude Include="Game\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
+
     </ClInclude>
     <ClInclude Include="Game\objects\DummyWall.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>

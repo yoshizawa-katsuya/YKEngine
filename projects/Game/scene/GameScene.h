@@ -21,6 +21,8 @@
 #include "DummyWall.h"
 
 
+#include "Ui.h"
+
 /// <summary>
 /// ゲームシーン。
 /// ゲームのメイン処理を行う。
@@ -103,6 +105,9 @@ private:
 	//判定
 	bool isJudged_ = false;
 	float prevWallZ_ = 0.0f;
+
+	//UI
+	std::unique_ptr<Ui>ui_;
 
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;
