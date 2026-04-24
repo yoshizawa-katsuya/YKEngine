@@ -109,7 +109,6 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DummyWall.cpp" />
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
     <ClCompile Include="Engine\3d\My3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
@@ -127,13 +126,14 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\lib\dx12.cpp" />
+    <ClCompile Include="Game\myGame\JudgeSystem.cpp" />
+    <ClCompile Include="Game\objects\DummyWall.cpp" />
     <ClCompile Include="Game\scene\GameOverScene.cpp" />
     <ClCompile Include="Game\scene\GameScene.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
     <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
     <ClCompile Include="Engine\3d\InstancingObjects.cpp" />
-    <ClCompile Include="JudgeSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
     <ClCompile Include="Engine\lib\Vector3.cpp" />
@@ -334,7 +334,6 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DummyWall.h" />
     <ClInclude Include="Engine\lib\BaseState.hpp" />
     <ClInclude Include="Engine\lib\Color.h" />
     <ClInclude Include="Engine\2d\AnimatedSprite.h" />
@@ -365,8 +364,10 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3d\PipelineManager.h" />
+    <ClInclude Include="Game\myGame\GameType.h" />
+    <ClInclude Include="Game\myGame\JudgeSystem.h" />
+    <ClInclude Include="Game\objects\DummyWall.h" />
     <ClInclude Include="Game\scene\GameOverScene.h" />
-    <ClInclude Include="GameType.h" />
     <ClInclude Include="Game\scene\GameScene.h" />
     <ClInclude Include="Game\objects\Player.h" />
     <ClInclude Include="Engine\input\Input.h" />
@@ -401,7 +402,6 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\lib\MyMath.h" />
     <ClInclude Include="Engine\lib\RootParams.h" />
     <ClInclude Include="Engine\lib\StateMachine.hpp" />
-    <ClInclude Include="JudgeSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

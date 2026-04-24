@@ -264,11 +264,11 @@
     <ClCompile Include="Game\scene\GameOverScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="DummyWall.cpp">
+    <ClCompile Include="Game\objects\DummyWall.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
-    <ClCompile Include="JudgeSystem.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Game\myGame\JudgeSystem.cpp">
+      <Filter>ソース ファイル\application\myGame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -553,14 +553,14 @@
     <ClInclude Include="Game\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
-    <ClInclude Include="GameType.h">
-      <Filter>ヘッダー ファイル\application\common</Filter>
-    </ClInclude>
-    <ClInclude Include="DummyWall.h">
+    <ClInclude Include="Game\objects\DummyWall.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="JudgeSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Game\myGame\GameType.h">
+      <Filter>ヘッダー ファイル\application\myGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\myGame\JudgeSystem.h">
+      <Filter>ヘッダー ファイル\application\myGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
