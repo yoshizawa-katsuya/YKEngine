@@ -11,6 +11,7 @@ void DummyWall::Initialize(YKEngine::BaseModel* model) {
 
 	worldTransform_.Initialize();
 
+    worldTransform_.translation_.y = 1.5f;
 	worldTransform_.translation_.z = 10.0f;
 
 	state_ = { PlayerPose::A,PlayerDirection::Front };
