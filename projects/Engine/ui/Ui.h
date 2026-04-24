@@ -7,6 +7,12 @@
 class Ui
 {
 public:
+    enum class PauseMenu {
+        None,
+        Retry,
+        ToTitle
+    };
+
     //初期化
     void Initialize();
     //更新
@@ -15,7 +21,9 @@ public:
     void Draw();
     //デバック
     void Debug();
+    
 
+    PauseMenu GetPauseMenu()const;
 private:
 	//スコア加算処理(仮実装)
     void HandleInput();
@@ -35,6 +43,8 @@ private:
 	void UpdatePauseMenu();
 
 private:
+
+    PauseMenu pauseMenu_ = PauseMenu::None;
 	//最大桁数
     static const int kMaxDigits = 6;
     //最大スコア
