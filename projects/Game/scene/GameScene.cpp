@@ -107,6 +107,16 @@ void GameScene::Update() {
 	//UIの更新
 	ui_->Update();
 
+	switch (ui_->GetPauseMenu()) {
+		case Ui::PauseMenu::Retry:
+		sceneManager_->ChengeScene("GameScene");
+		break;
+
+		case Ui::PauseMenu::ToTitle:
+			sceneManager_->ChengeScene("TitleScene");
+			break;
+	}
+
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 	/*modelPlatform_->PointLightUpdate(pointLight_);

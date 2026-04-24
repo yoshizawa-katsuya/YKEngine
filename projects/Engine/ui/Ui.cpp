@@ -118,10 +118,14 @@ void Ui::Debug() {
     }
 }
 
+Ui::PauseMenu Ui::GetPauseMenu() const {
+    return pauseMenu_;
+}
+
 //入力処理
 void Ui::HandleInput() {
     
-    if (YKEngine::Input::GetInstance()->TriggerKey(DIK_R)) {
+    if (YKEngine::Input::GetInstance()->TriggerKey(DIK_S)) {
         AddScore(100);
     }
     //ポーズ画面表示仮
@@ -207,6 +211,14 @@ void Ui::UpdatePauseMenu() {
 
     if (isShowPause_) {
         pauseScale_ += speed;
+
+        if (YKEngine::Input::GetInstance()->TriggerKey(DIK_R)) {
+			pauseMenu_ = PauseMenu::Retry;
+        }
+        if (YKEngine::Input::GetInstance()->TriggerKey(DIK_T)) {
+			pauseMenu_ = PauseMenu::ToTitle;
+        }
+
     } else {
         pauseScale_ -= speed;
     }
