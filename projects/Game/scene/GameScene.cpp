@@ -186,7 +186,7 @@ void GameScene::Update() {
 	}
 		
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
-	ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
+	ImGui::Text("Difficulty: %s", difficulty_ == 0 ? "EASY" : difficulty_ == 1 ? "NORMAL" : "HARD");
 	/*
 	if (ImGui::Button("BGMstop")) {
 		audio_->SoundStopWave(bgm1_);

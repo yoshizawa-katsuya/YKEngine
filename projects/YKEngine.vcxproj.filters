@@ -258,6 +258,9 @@
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Game\scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -537,6 +540,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

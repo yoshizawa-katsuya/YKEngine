@@ -30,6 +30,11 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// ImGuiの描画処理。
+	/// </summary>
+	void DrawImGui();
+
 	//次シーン予約
 	//void SetNextScene(BaseScene* nextScene) { nextScene_ = nextScene; }
 
