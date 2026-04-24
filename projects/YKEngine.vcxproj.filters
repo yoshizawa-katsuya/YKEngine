@@ -261,6 +261,9 @@
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Game\scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
     <ClCompile Include="DummyWall.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
@@ -546,6 +549,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
     <ClInclude Include="GameType.h">
       <Filter>ヘッダー ファイル\application\common</Filter>

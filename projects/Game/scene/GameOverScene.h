@@ -9,65 +9,42 @@
 #include "Sprite.h"
 
 /// <summary>
-/// タイトル画面のクラス。
+/// ゲームオーバーシーンのクラス
 /// </summary>
-class TitleScene : public YKEngine::BaseScene
+class GameOverScene : public YKEngine::BaseScene
 {
-public:
-
+	public:
 	/// <summary>
 	/// デストラクタ。
 	/// </summary>
-	~TitleScene() override;
-
+	~GameOverScene() override;
 	/// <summary>
 	/// 初期化。
 	/// </summary>
 	void Initialize() override;
-
 	/// <summary>
 	/// 更新。
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// 描画。
 	/// </summary>
 	void Draw() override;
-
 	/// <summary>
 	/// 終了。
 	/// </summary>
 	void Finalize() override;
 
 private:
-	// タイトル画面のステート
-	enum class State {
-		START,
-		OPTIONS,
-		EXIT
-	};
-	State state_ = State::START; // デフォルトはSTART
-
-	// 難易度のenum
-	enum class Difficulty {
-		EASY,
-		NORMAL,
-		HARD
-	};
-	Difficulty difficulty_ = Difficulty::EASY; // デフォルトはEASY
-
-private:
-
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
-
 	YKEngine::Audio* audio_;
 	YKEngine::Input* input_;
-
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
-	
-	
+	//テクスチャハンドル
+	uint32_t textureHandle_;
+	//スプライト
+	std::unique_ptr<YKEngine::Sprite> sprite_;
 };
 

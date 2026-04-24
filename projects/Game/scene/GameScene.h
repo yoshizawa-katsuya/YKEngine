@@ -119,6 +119,10 @@ private:
 	//std::unique_ptr<AccelerationField> field_;
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 
+	// 難易度
+	uint32_t difficulty_ = 0;
+	
+
 	//デバッグ用
 	YKEngine::Vector4 debugPlayerColor[2] = { {1.0f,0.0f,1.0f,1.0f},{0.0f,1.0f,1.0f,1.0f} };
 	int32_t debugScore_ = 0;
