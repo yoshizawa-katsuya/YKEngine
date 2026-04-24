@@ -94,6 +94,12 @@
     <Filter Include="ヘッダー ファイル\application\scene">
       <UniqueIdentifier>{134ac728-9100-4706-ba82-1c2652abb654}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\application\ui">
+      <UniqueIdentifier>{3920ec7a-501c-4bf8-a340-4c0ff67e662e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\ui">
+      <UniqueIdentifier>{7600deb0-f294-4a3b-949d-91772587a9ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -257,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ui\Ui.cpp">
+      <Filter>ソース ファイル\application\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -537,6 +546,9 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ui\Ui.h">
+      <Filter>ヘッダー ファイル\application\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
