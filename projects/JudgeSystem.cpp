@@ -25,18 +25,25 @@ JudgeResult JudgeSystem::Judge(
     const WorldTransform& playerTrans,
     const WorldTransform& wallTrans)
 {
-    // 当たってない
+    // 当たってない 
     if (!IsHit(playerTrans, wallTrans))
         return JudgeResult::None;
 
-    // しゃがみは特殊ルール
+    // ===== しゃがみ判定 =====
     if (playerState.pose == PlayerPose::Squat)
     {
-        // 当たった時点でミス
-        return JudgeResult::Miss;
+        // 壁もしゃがみなら成功（方向無視）
+        if (wallState.pose == PlayerPose::Squat)
+        {
+            return JudgeResult::SuccessSquat;
+        }
+        else
+        {
+            return JudgeResult::Miss;
+        }
     }
 
-    // 一致判定
+    // ===== 通常判定 =====
     if (IsMatch(playerState, wallState))
     {
         return JudgeResult::Hit;

@@ -4,8 +4,9 @@
 
 enum class JudgeResult {
 	None,
-	Hit,   // 成功
-	Miss// ミス
+	Hit,          // 成功
+	SuccessSquat, // しゃがみ成功
+	Miss          // ミス
 };
 
 class JudgeSystem

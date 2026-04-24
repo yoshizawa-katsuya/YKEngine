@@ -287,6 +287,9 @@ void GameScene::CheckCollision()
 		player_->SetColorForDebug(debugPlayerColor[0]);
 		debugScore_++;
 	}
+	else if (result == JudgeResult::SuccessSquat) {
+		// しゃがみ成功（デバッグ用に何か追加しても可）
+	}
 	else if (result == JudgeResult::Miss) {
 		// ミス時の処理
 		player_->SetColorForDebug(debugPlayerColor[1]);
