@@ -19,6 +19,8 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 
+#include "Ui.h"
+
 /// <summary>
 /// ゲームシーン。
 /// ゲームのメイン処理を行う。
@@ -92,6 +94,9 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	//UI
+	std::unique_ptr<Ui>ui_;
 
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;

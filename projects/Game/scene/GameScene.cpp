@@ -64,6 +64,10 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+	//UIの初期化
+	ui_ = std::make_unique<Ui>();
+	ui_->Initialize();
+
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
 	skyBoxWorldTransform_.Initialize();
@@ -99,6 +103,9 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//UIの更新
+	ui_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -203,7 +210,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 
 	//Spriteの背景描画前処理
-	//spritePlatform_->PreBackGroundDraw();
+	spritePlatform_->PreBackGroundDraw();
 
 	//sprite_->Draw();
 
@@ -229,7 +236,10 @@ void GameScene::Draw() {
 	objects_->Draw();
 	*/
 	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
+	spritePlatform_->PreDraw();
+
+	//UIの描画
+	ui_->Draw();
 
 	//ParticleManager::GetInstance()->Draw();
 
