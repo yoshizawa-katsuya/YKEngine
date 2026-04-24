@@ -18,6 +18,8 @@
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
+#include "DummyWall.h"
+
 
 /// <summary>
 /// ゲームシーン。
@@ -51,6 +53,8 @@ public:
 	/// 終了。
 	/// </summary>
 	void Finalize() override;
+
+	void CheckCollision();
 
 private:
 
@@ -93,6 +97,13 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	//ダミーのカベ
+	std::unique_ptr<DummyWall> dummyWall_;
+
+	//判定
+	bool isJudged_ = false;
+	float prevWallZ_ = 0.0f;
+
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;
 
@@ -107,5 +118,10 @@ private:
 	//std::unique_ptr<ParticleEmitter> emitter_;
 	//std::unique_ptr<AccelerationField> field_;
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
+
+	//デバッグ用
+	YKEngine::Vector4 debugPlayerColor[2] = { {1.0f,0.0f,1.0f,1.0f},{0.0f,1.0f,1.0f,1.0f} };
+	int32_t debugScore_ = 0;
+	int32_t debugMiss_ = 0;
 	
 };

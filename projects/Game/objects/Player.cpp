@@ -60,6 +60,11 @@ void Player::Draw(Camera* camera) {
 
 }
 
+void Player::SetColorForDebug(Vector4& color) const
+{
+	object_->SetColor(color);
+}
+
 void Player::ChangePose()
 {
 	// ポーズ切り替え

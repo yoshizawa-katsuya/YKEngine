@@ -261,6 +261,12 @@
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
+    <ClCompile Include="DummyWall.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="JudgeSystem.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -543,6 +549,12 @@
     </ClInclude>
     <ClInclude Include="GameType.h">
       <Filter>ヘッダー ファイル\application\common</Filter>
+    </ClInclude>
+    <ClInclude Include="DummyWall.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="JudgeSystem.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

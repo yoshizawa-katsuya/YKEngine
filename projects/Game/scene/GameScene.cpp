@@ -3,6 +3,7 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "JudgeSystem.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -64,6 +65,10 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+	//ダミーの壁の初期化
+	dummyWall_=std::make_unique<DummyWall>();
+	dummyWall_->Initialize(modelPlayer_.get());
+
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
 	skyBoxWorldTransform_.Initialize();
@@ -87,6 +92,7 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	
 
 	//カメラの更新
 	camera_->Update();
@@ -97,6 +103,12 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//ダミーの壁の更新
+	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
+	dummyWall_->Update();
+
+    CheckCollision();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -167,6 +179,14 @@ void GameScene::Update() {
 
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("Debug")) {
+		ImGui::Text("Score : %d", debugScore_);
+		ImGui::Text("Miss  : %d", debugMiss_);
+
+		ImGui::TreePop();
+	}
+
 	//メインカメラの切り替え
 	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
 		isActiveDebugCamera_ = false;
@@ -215,6 +235,9 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	//ダミーの壁の描画
+	dummyWall_->Draw(mainCamera_);
+
 	/*modelPlatform_->SkyBoxPreDraw();
 
 	skyBox_->CameraUpdate(mainCamera_);
@@ -236,4 +259,35 @@ void GameScene::Draw() {
 void GameScene::Finalize()
 {
 
+}
+
+void GameScene::CheckCollision()
+{	
+	float currentZ = dummyWall_->GetWorldTransform().translation_.z;
+
+	//判定ライン（例：z=0）
+	float judgeLine = 0.0f;
+
+	//ラインをまたいだ瞬間だけ判定
+	bool crossed = (prevWallZ_ > judgeLine && currentZ <= judgeLine);
+
+	if (!crossed) return;
+
+	auto result = JudgeSystem::Judge(
+		player_->GetState(), 
+		dummyWall_->GetState(), 
+		player_->GetWorldTransform(), 
+		dummyWall_->GetWorldTransform()
+	);
+
+	if(result==JudgeResult::Hit){
+		// 成功時の処理
+		player_->SetColorForDebug(debugPlayerColor[0]);
+		debugScore_++;
+	}
+	else if (result == JudgeResult::Miss) {
+		// ミス時の処理
+		player_->SetColorForDebug(debugPlayerColor[1]);
+		debugMiss_++;
+	}
 }

@@ -19,11 +19,15 @@ public:
 
 	void Draw(YKEngine::Camera* camera);
 
+	const YKEngine::WorldTransform& GetWorldTransform()const { return worldTransform_; }
+
 	PlayerPose GetPose()const { return pose_; }
 
 	PlayerDirection GetDirection()const { return direction_; }
 
 	PoseDir GetState()const { return { pose_,direction_ }; }
+
+	void SetColorForDebug(YKEngine::Vector4& color)const;
 
 private:
 
