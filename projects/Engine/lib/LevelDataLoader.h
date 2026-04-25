@@ -78,19 +78,36 @@ struct LevelData
 };
 
 /// <summary>
-/// レベルデータのロード。
+/// レベルデータのロードクラス。
 /// </summary>
-/// <param name="kDefaultBaseDirectory">デフォルトのベースディレクトリ</param>
-/// <param name="fileName">レベルデータファイル名</param>
-/// <param name="kExtension">レベルデータファイル拡張子</param>
-/// <returns>レベルデータ</returns>
-LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
+class LevelDataLoader
+{
+public:
 
-/// <summary>
-/// Transformのロード。
-/// </summary>
-/// <param name="transformData">TransformのJSONデータ</param>
-/// <returns>Transformデータ</returns>
-EulerTransform TranformLoad(const nlohmann::json& transformData);
+	/// <summary>
+	/// レベルデータのロード。
+	/// </summary>
+	/// <param name="kDefaultBaseDirectory">デフォルトのベースディレクトリ</param>
+	/// <param name="fileName">レベルデータファイル名</param>
+	/// <param name="kExtension">レベルデータファイル拡張子</param>
+	/// <returns>レベルデータ</returns>
+	void LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
+
+	const LevelData& GetLevelData() const { return levelData_; }
+
+private:
+	
+	/// <summary>
+	/// Transformのロード。
+	/// </summary>
+	/// <param name="transformData">TransformのJSONデータ</param>
+	/// <returns>Transformデータ</returns>
+	EulerTransform TranformLoad(const nlohmann::json& transformData);
+
+	//レベルデータ
+	LevelData levelData_;
+
+};
+
 
 }	// namespace YKEngine

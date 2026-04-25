@@ -3,12 +3,11 @@
 #include "cassert"
 #include <numbers>
 
-namespace YKEngine
+using namespace YKEngine;
+
+void LevelDataLoader::LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension)
 {
 
-LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension)
-{
-	
 	//連結してフルパスを得る
 	const std::string fullpath = kDefaultBaseDirectory + fileName + kExtension;
 
@@ -38,9 +37,6 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 	//正しいレベルデータファイルかチェック
 	assert(name.compare("scene") == 0);
 
-	//レベルデータ格納用インスタンスを生成
-	LevelData levelData;
-
 	//"objects"の全オブジェクトを走査
 	for (nlohmann::json& object : deserialized["objects"]) {
 		assert(object.contains("type"));
@@ -61,9 +57,9 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 		//MESH
 		if (type.compare("MESH") == 0) {
 			//要素追加
-			ObjectData& objectData = levelData.objects.emplace_back();
+			ObjectData& objectData = levelData_.objects.emplace_back();
 
-			if (object.contains("file_name")) 
+			if (object.contains("file_name"))
 			{
 				//ファイル名
 				objectData.fileName = object["file_name"];
@@ -94,7 +90,7 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 		//自キャラ発生ポイント
 		else if (type.compare("PlayerSpawn") == 0) {
 			//要素追加
-			PlayerSpawnData& playerSpawnData = levelData.playerSpawns.emplace_back();
+			PlayerSpawnData& playerSpawnData = levelData_.playerSpawns.emplace_back();
 
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
@@ -104,10 +100,10 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 			//TODO: コライダーのパラメータ読み込み
 		}
 		//敵発生ポイント
-		else if (type.find("Enemy") != std::string::npos && type.find("Spawn") != std::string::npos) 
+		else if (type.find("Enemy") != std::string::npos && type.find("Spawn") != std::string::npos)
 		{
 			//要素追加
-			EnemySpawnData& enemySpawnData = levelData.enemySpawns.emplace_back();
+			EnemySpawnData& enemySpawnData = levelData_.enemySpawns.emplace_back();
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 
@@ -132,9 +128,9 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 				enemySpawnData.speed = object["speed"].get<float>();
 			}
 
-			if (object.contains("children")) 
+			if (object.contains("children"))
 			{
-				for (nlohmann::json& child : object["children"]) 
+				for (nlohmann::json& child : object["children"])
 				{
 					std::string type = child["type"].get<std::string>();
 					if (type.compare("CURVE") == 0)
@@ -160,8 +156,8 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 		else if (type.compare("CURVE") == 0)
 		{
 			//要素追加
-			SplineData& splineData = levelData.splines.emplace_back();
-			
+			SplineData& splineData = levelData_.splines.emplace_back();
+
 			for (nlohmann::json& point : object["control_point"])
 			{
 				Vector3 pointData;
@@ -180,11 +176,9 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 
 	}
 
-	return levelData;
-
 }
 
-EulerTransform TranformLoad(const nlohmann::json& transformData)
+EulerTransform LevelDataLoader::TranformLoad(const nlohmann::json& transformData)
 {
 	EulerTransform transform;
 	//平行移動
@@ -202,5 +196,3 @@ EulerTransform TranformLoad(const nlohmann::json& transformData)
 
 	return transform;
 }
-
-} // namespace YKEngine

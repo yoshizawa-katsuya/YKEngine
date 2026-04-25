@@ -145,8 +145,9 @@ void TitleScene::BeginSceneEndStaging()
 
 void TitleScene::CreateLevel()
 {
-	LevelData levelData;
-	levelData = LevelDataLoad("./resources/LevelData/", "TitleScene", ".json");
+	std::unique_ptr<LevelDataLoader> levelDataLoader = std::make_unique<LevelDataLoader>();
+	levelDataLoader->LevelDataLoad("./resources/LevelData/", "TitleScene", ".json");
+	const LevelData& levelData = levelDataLoader->GetLevelData();
 
 	assert(!levelData.splines.empty());
 

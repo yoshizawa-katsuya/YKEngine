@@ -386,8 +386,9 @@ void GameScene::StartSceneEndStaging(const YKEngine::Vector4& color)
 
 void GameScene::CreateLevel()
 {
-	LevelData levelData;
-	levelData = LevelDataLoad("./resources/LevelData/", "levelData", ".json");
+	std::unique_ptr<LevelDataLoader> levelDataLoader = std::make_unique<LevelDataLoader>();
+	levelDataLoader->LevelDataLoad("./resources/LevelData/", "levelData", ".json");
+	LevelData levelData = levelDataLoader->GetLevelData();
 
 	assert(!levelData.splines.empty());
 

@@ -143,8 +143,9 @@ void ClearScene::UpdateEnd()
 
 void ClearScene::CreateLevel()
 {
-	LevelData levelData;
-	levelData = LevelDataLoad("./resources/LevelData/", "ClearScene", ".json");
+	std::unique_ptr<LevelDataLoader> levelDataLoader = std::make_unique<LevelDataLoader>();
+	levelDataLoader->LevelDataLoad("./resources/LevelData/", "ClearScene", ".json");
+	const LevelData& levelData = levelDataLoader->GetLevelData();
 
 	assert(!levelData.splines.empty());
 
