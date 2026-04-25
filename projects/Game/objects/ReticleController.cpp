@@ -100,7 +100,7 @@ void ReticleController::Update(Camera* railCamera)
 	{
 		const float lerpFactor = globalVariables_->GetFloatValue(JsonKey::ReticleController::kGroupName, JsonKey::ReticleController::kLerpFactor);
 		Vector2 smallReticlePosition = Lerp(spriteSmallReticle_->GetPosition(), spritePosition, lerpFactor);
-		const float kSnapDistance = speed / 2.0f;	//スナップする距離。移動速度の半分に設定
+		const float kSnapDistance = speed; //スナップ距離。レティクルの移動速度と同じ距離に設定することで、レティクルが十分近づいたら位置を合わせるようにする
 		if (Length(Subtract(smallReticlePosition, spritePosition)) <= kSnapDistance)
 		{
 			smallReticlePosition = spritePosition; //十分近い場合は直接位置を合わせる
