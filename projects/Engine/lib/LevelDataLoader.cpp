@@ -65,10 +65,10 @@ void LevelDataLoader::LevelDataLoad(const std::string& kDefaultBaseDirectory, co
 			PlayerSpawnDataLoad(object);
 		}
 		//敵発生ポイント
-		else if (type.find("Enemy") != std::string::npos && type.find("Spawn") != std::string::npos)
+		/*else if (type.find("Enemy") != std::string::npos && type.find("Spawn") != std::string::npos)
 		{
 			EnemySpawnDataLoad(object, type);
-		}
+		}*/
 
 		//曲線
 		else if (type.compare("CURVE") == 0)
@@ -97,11 +97,7 @@ void LevelDataLoader::ObjectDateLoad(const nlohmann::json& object)
 		//ファイルパス
 		objectData.filePath = object["file_path"];
 	}
-	if (object.contains("wave_num"))
-	{
-		//ウェーブ数
-		objectData.waveNum = object["wave_num"].get<uint32_t>();
-	}
+	
 	if (object.contains("speed"))
 	{
 		//移動速度
@@ -109,6 +105,24 @@ void LevelDataLoader::ObjectDateLoad(const nlohmann::json& object)
 	}
 
 	objectData.transform = TranformLoad(object["transform"]);
+
+	if (objectData.fileName.compare("waveEvent") == 0)
+	{
+		objectData.waveNum = enemySpawnEvenNum_; //敵出現イベントのウェーブ番号を設定
+		enemySpawnEvenNum_++; //敵出現イベントの番号をインクリメント
+
+		if (object.contains("children"))
+		{
+			for (const nlohmann::json& child : object["children"])
+			{
+				std::string type = child["type"].get<std::string>();
+				if (type.find("Enemy") != std::string::npos && type.find("Spawn") != std::string::npos)
+				{
+					EnemySpawnDataLoad(child, type, objectData.waveNum.value());
+				}
+			}
+		}
+	}
 
 	//TODO: コライダーのパラメータ読み込み
 }
@@ -123,7 +137,7 @@ void YKEngine::LevelDataLoader::PlayerSpawnDataLoad(const nlohmann::json& player
 	//TODO: コライダーのパラメータ読み込み
 }
 
-void YKEngine::LevelDataLoader::EnemySpawnDataLoad(const nlohmann::json& enemySpawn, const std::string& type)
+void YKEngine::LevelDataLoader::EnemySpawnDataLoad(const nlohmann::json& enemySpawn, const std::string& type, uint32_t waveNum)
 {
 	//要素追加
 	EnemySpawnData& enemySpawnData = levelData_.enemySpawns.emplace_back();
@@ -131,16 +145,12 @@ void YKEngine::LevelDataLoader::EnemySpawnDataLoad(const nlohmann::json& enemySp
 	enemySpawnData.transform = TranformLoad(enemySpawn["transform"]);
 	enemySpawnData.type = type; //EnemySpawnXXのまま格納
 
+	enemySpawnData.waveNum = waveNum;	//敵出現イベントのウェーブ番号を設定
+
 	if (enemySpawn.contains("wait_time"))
 	{
 		//待機時間
 		enemySpawnData.waitTime = enemySpawn["wait_time"].get<float>();
-	}
-
-	if (enemySpawn.contains("wave_num"))
-	{
-		//ウェーブ数
-		enemySpawnData.waveNum = enemySpawn["wave_num"].get<uint32_t>();
 	}
 
 	if (enemySpawn.contains("speed"))

@@ -121,45 +121,24 @@ void RailMover::DrawRail(Camera* camera)
 
 void RailMover::OnCollision(Collider* other)
 {
-	// WaveEventとの衝突時の処理
-	if (EnemySpawnEventTrigger* waveEvent = dynamic_cast<EnemySpawnEventTrigger*>(other))
+	// EnemySpawnEventTrigger、SpeedEventTrigger、RotateEventTrigger、RotateResetEventTriggerのいずれかと衝突した場合の処理
+	if (EnemySpawnEventTrigger* enemySpawnEvent = dynamic_cast<EnemySpawnEventTrigger*>(other))
 	{
-		if (nextEnemySpawnEventNumber_ != waveEvent->GetWaveNumber())
-		{
-			return;
-		}
-		enemySpawnManager_->WaveStart(nextEnemySpawnEventNumber_);
-		nextEnemySpawnEventNumber_++;
-		
+		enemySpawnManager_->WaveStart(enemySpawnEvent->GetWaveNumber());
 	}
 	else if (SpeedEventTrigger* speedEvent = dynamic_cast<SpeedEventTrigger*>(other))
 	{
-		if (nextSpeedEventNumber_ != speedEvent->GetWaveNumber())
-		{
-			return;
-		}
 		speed_ = speedEvent->GetSpeed();
-		nextSpeedEventNumber_++;
 	}
 	else if (RotateEventTrigger* rotateEvent = dynamic_cast<RotateEventTrigger*>(other))
 	{
-		if (nextRotateEventNumber_ != rotateEvent->GetWaveNumber())
-		{
-			return;
-		}
 		const float rotateDuration = GlobalVariables::GetInstance()->GetFloatValue(JsonKey::RailMover::kGroupName, JsonKey::RailMover::kRotateDuration);
 		srtAnimator_->SetAnimation(worldTransform_.rotation_, rotateEvent->GetRotate(), rotateDuration);
 		isInRotateEvent_ = true;
-		nextRotateEventNumber_++;
 	}
 	else if (RotateResetEventTrigger* rotateResetEvent = dynamic_cast<RotateResetEventTrigger*>(other))
 	{
-		if (nextRotateResetEventNumber_ != rotateResetEvent->GetWaveNumber())
-		{
-			return;
-		}
 		isInRotateEvent_ = false;
-		nextRotateResetEventNumber_++;
 	}
 	
 }

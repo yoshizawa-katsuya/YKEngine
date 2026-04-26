@@ -114,7 +114,7 @@ private:
 	/// </summary>
 	/// <param name="enemySpawn">敵の生成データのJSONデータ</param>
 	/// <param name="type">敵の種類</param>
-	void EnemySpawnDataLoad(const nlohmann::json& enemySpawn, const std::string& type);
+	void EnemySpawnDataLoad(const nlohmann::json& enemySpawn, const std::string& type, uint32_t waveNum);
 
 	/// <summary>
 	/// スプライン曲線のロード。
@@ -131,6 +131,8 @@ private:
 
 	//レベルデータ
 	LevelData levelData_;
+
+	uint32_t enemySpawnEvenNum_ = 0; // 敵出現イベントの番号
 
 };
 

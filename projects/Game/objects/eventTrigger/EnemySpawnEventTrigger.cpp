@@ -1,17 +1,10 @@
 #include "EnemySpawnEventTrigger.h"
-#include "RailMover.h"
 
 using namespace YKEngine;
 
-void EnemySpawnEventTrigger::OnCollision(Collider* other)
+void EnemySpawnEventTrigger::Initialize(const YKEngine::ObjectData& objectData)
 {
-	if (RailMover* railMover = dynamic_cast<RailMover*>(other))
-	{
-		if (railMover->GetNextEnemyWaveNumber() > waveNumber_)
-		{
-			isDead_ = true;
-		}
-		return;
-	}
-	
+	BaseEventTrigger::Initialize(objectData);
+
+	waveNumber_ = objectData.waveNum.value();
 }

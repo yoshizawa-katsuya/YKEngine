@@ -10,12 +10,16 @@ class EnemySpawnEventTrigger : public BaseEventTrigger
 public:
 
 	/// <summary>
-	/// 衝突時処理。
+	/// 初期化。
 	/// </summary>
-	/// <param name="other">衝突相手のコライダー</param>
-	void OnCollision([[maybe_unused]] Collider* other) override;
+	/// <param name="objectData">オブジェクトデータ</param>
+	void Initialize(const YKEngine::ObjectData& objectData) override;
+
+	uint32_t GetWaveNumber() const { return waveNumber_; }
 
 private:
+
+	uint32_t waveNumber_ = 0; // ウェーブ番号
 
 };
 

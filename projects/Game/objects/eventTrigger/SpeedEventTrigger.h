@@ -15,12 +15,6 @@ public:
 	/// <param name="objectData">オブジェクトデータ</param>
 	void Initialize(const YKEngine::ObjectData& objectData) override;
 
-	/// <summary>
-	/// 衝突時の処理。
-	/// </summary>
-	/// <param name="other">衝突相手のコライダー</param>
-	void OnCollision([[maybe_unused]] Collider* other) override;
-
 	float GetSpeed() const { return speed_; }
 
 private:

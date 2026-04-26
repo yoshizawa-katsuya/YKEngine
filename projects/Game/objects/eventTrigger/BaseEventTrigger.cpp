@@ -1,4 +1,5 @@
 #include "BaseEventTrigger.h"
+#include "RailMover.h"
 
 using namespace YKEngine;
 
@@ -13,5 +14,13 @@ void BaseEventTrigger::Initialize(const YKEngine::ObjectData& objectData)
 
 	typeID_ = CollisionTypeIdDef::kEvent;
 
-	waveNumber_ = objectData.waveNum.value();
+}
+
+void BaseEventTrigger::OnCollision(Collider* other)
+{
+	if (RailMover* railMover = dynamic_cast<RailMover*>(other))
+	{
+		isDead_ = true;
+		return;
+	}
 }

@@ -18,11 +18,13 @@ public:
 
 	bool IsDead() { return isDead_; }
 
-	uint32_t GetWaveNumber() const { return waveNumber_; }
+	/// <summary>
+	/// 衝突時の処理。
+	/// </summary>
+	/// <param name="other">衝突相手のコライダー</param>
+	void OnCollision([[maybe_unused]] Collider* other) override;
 
 protected:
-
-	uint32_t waveNumber_ = 0;
 
 	bool isDead_ = false;
 };

@@ -61,7 +61,7 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         #Todo: その他情報をパック
         #オブジェクトのローカルトランスフォームから
         #平行移動、回転、スケールを抽出
-        trans, rot, scale = object.matrix_local.decompose()
+        trans, rot, scale = object.matrix_world.decompose()
         #回転を Quaternion から Euler (3軸での回転角)に変換
         rot = rot.to_euler()
         #ラジアンから度数法に変換

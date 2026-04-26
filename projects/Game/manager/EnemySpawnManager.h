@@ -53,8 +53,6 @@ private:
 	std::vector<EnemySpawn> spawnDatas_; // 敵の出現データリスト
 	std::vector<std::unique_ptr<EnemySpawnObject>> enemySpawnObjects_; // 敵出現オブジェクトリスト
 
-	uint32_t waveNumber_ = 0; // 現在のウェーブインデックス
-
 	const std::unordered_map<std::string, EnemyType>& GetEnemyTypeMap() const; // 敵の種類と敵の種類の対応表を取得する
 
 };

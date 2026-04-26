@@ -71,12 +71,11 @@ void EnemySpawnManager::GetSpawnDatas(const std::vector<EnemySpawnData>& outSpaw
 
 void EnemySpawnManager::WaveStart(uint32_t waveNum)
 {
-	waveNumber_ = waveNum;
 
 	std::vector<EnemySpawn> nowWaveDatas;	//今回のウェーブで出現する敵データを格納する配列
 	for (std::vector<EnemySpawn>::iterator spawnData = spawnDatas_.begin(); spawnData != spawnDatas_.end();)
 	{
-		if (spawnData->waveNumber <= waveNumber_)
+		if (spawnData->waveNumber == waveNum)
 		{
 			nowWaveDatas.push_back(*spawnData);	//今回のウェーブで出現する敵データを追加
 			spawnData = spawnDatas_.erase(spawnData);	//出現させる敵のデータを削除
