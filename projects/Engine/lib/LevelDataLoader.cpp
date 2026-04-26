@@ -55,127 +55,137 @@ void LevelDataLoader::LevelDataLoad(const std::string& kDefaultBaseDirectory, co
 		std::string type = object["type"].get<std::string>();
 
 		//MESH
-		if (type.compare("MESH") == 0) {
-			//要素追加
-			ObjectData& objectData = levelData_.objects.emplace_back();
-
-			if (object.contains("file_name"))
-			{
-				//ファイル名
-				objectData.fileName = object["file_name"];
-			}
-			if (object.contains("file_path"))
-			{
-				//ファイルパス
-				objectData.filePath = object["file_path"];
-			}
-			if (object.contains("wave_num"))
-			{
-				//ウェーブ数
-				objectData.waveNum = object["wave_num"].get<uint32_t>();
-			}
-			if (object.contains("speed"))
-			{
-				//移動速度
-				objectData.speed = object["speed"].get<float>();
-			}
-
-			//トランスフォームのパラメータ読み込み
-			nlohmann::json& transform = object["transform"];
-
-			objectData.transform = TranformLoad(transform);
-
-			//TODO: コライダーのパラメータ読み込み
+		if (type.compare("MESH") == 0) 
+		{
+			ObjectDateLoad(object);
 		}
 		//自キャラ発生ポイント
-		else if (type.compare("PlayerSpawn") == 0) {
-			//要素追加
-			PlayerSpawnData& playerSpawnData = levelData_.playerSpawns.emplace_back();
-
-			//トランスフォームのパラメータ読み込み
-			nlohmann::json& transform = object["transform"];
-
-			playerSpawnData.transform = TranformLoad(transform);
-
-			//TODO: コライダーのパラメータ読み込み
+		else if (type.compare("PlayerSpawn") == 0) 
+		{
+			PlayerSpawnDataLoad(object);
 		}
 		//敵発生ポイント
 		else if (type.find("Enemy") != std::string::npos && type.find("Spawn") != std::string::npos)
 		{
-			//要素追加
-			EnemySpawnData& enemySpawnData = levelData_.enemySpawns.emplace_back();
-			//トランスフォームのパラメータ読み込み
-			nlohmann::json& transform = object["transform"];
-
-			enemySpawnData.transform = TranformLoad(transform);
-			enemySpawnData.type = type; //EnemySpawnXXのまま格納
-
-			if (object.contains("wait_time"))
-			{
-				//待機時間
-				enemySpawnData.waitTime = object["wait_time"].get<float>();
-			}
-
-			if (object.contains("wave_num"))
-			{
-				//ウェーブ数
-				enemySpawnData.waveNum = object["wave_num"].get<uint32_t>();
-			}
-
-			if (object.contains("speed"))
-			{
-				//移動速度
-				enemySpawnData.speed = object["speed"].get<float>();
-			}
-
-			if (object.contains("children"))
-			{
-				for (nlohmann::json& child : object["children"])
-				{
-					std::string type = child["type"].get<std::string>();
-					if (type.compare("CURVE") == 0)
-					{
-						enemySpawnData.spline.emplace();
-						for (nlohmann::json& point : child["control_point"])
-						{
-							Vector3 pointData;
-							pointData.x = -static_cast<float>(point[0]);
-							pointData.y = static_cast<float>(point[2]);
-							pointData.z = -static_cast<float>(point[1]);
-							enemySpawnData.spline->controlPoints.push_back(pointData);
-						}
-						//曲線要素が見つかったら抜ける
-						break;
-					}
-				}
-			}
-			//TODO: コライダーのパラメータ読み込み
+			EnemySpawnDataLoad(object, type);
 		}
 
 		//曲線
 		else if (type.compare("CURVE") == 0)
 		{
-			//要素追加
-			SplineData& splineData = levelData_.splines.emplace_back();
-
-			for (nlohmann::json& point : object["control_point"])
-			{
-				Vector3 pointData;
-				pointData.x = -static_cast<float>(point[0]);
-				pointData.y = static_cast<float>(point[2]);
-				pointData.z = -static_cast<float>(point[1]);
-				splineData.controlPoints.push_back(pointData);
-			}
+			SplineDataLoad(object);
 		}
-
 
 		//TODO: オブジェクト走査を再帰関数にまとめ、再帰関数で枝を走査する
-		if (object.contains("children")) {
-
-		}
 
 	}
 
+}
+
+void LevelDataLoader::ObjectDateLoad(const nlohmann::json& object)
+{
+	//要素追加
+	ObjectData& objectData = levelData_.objects.emplace_back();
+
+	if (object.contains("file_name"))
+	{
+		//ファイル名
+		objectData.fileName = object["file_name"];
+	}
+	if (object.contains("file_path"))
+	{
+		//ファイルパス
+		objectData.filePath = object["file_path"];
+	}
+	if (object.contains("wave_num"))
+	{
+		//ウェーブ数
+		objectData.waveNum = object["wave_num"].get<uint32_t>();
+	}
+	if (object.contains("speed"))
+	{
+		//移動速度
+		objectData.speed = object["speed"].get<float>();
+	}
+
+	objectData.transform = TranformLoad(object["transform"]);
+
+	//TODO: コライダーのパラメータ読み込み
+}
+
+void YKEngine::LevelDataLoader::PlayerSpawnDataLoad(const nlohmann::json& playerSpawn)
+{
+	//要素追加
+	PlayerSpawnData& playerSpawnData = levelData_.playerSpawns.emplace_back();
+
+	playerSpawnData.transform = TranformLoad(playerSpawn["transform"]);
+
+	//TODO: コライダーのパラメータ読み込み
+}
+
+void YKEngine::LevelDataLoader::EnemySpawnDataLoad(const nlohmann::json& enemySpawn, const std::string& type)
+{
+	//要素追加
+	EnemySpawnData& enemySpawnData = levelData_.enemySpawns.emplace_back();
+
+	enemySpawnData.transform = TranformLoad(enemySpawn["transform"]);
+	enemySpawnData.type = type; //EnemySpawnXXのまま格納
+
+	if (enemySpawn.contains("wait_time"))
+	{
+		//待機時間
+		enemySpawnData.waitTime = enemySpawn["wait_time"].get<float>();
+	}
+
+	if (enemySpawn.contains("wave_num"))
+	{
+		//ウェーブ数
+		enemySpawnData.waveNum = enemySpawn["wave_num"].get<uint32_t>();
+	}
+
+	if (enemySpawn.contains("speed"))
+	{
+		//移動速度
+		enemySpawnData.speed = enemySpawn["speed"].get<float>();
+	}
+
+	if (enemySpawn.contains("children"))
+	{
+		for (const nlohmann::json& child : enemySpawn["children"])
+		{
+			std::string type = child["type"].get<std::string>();
+			if (type.compare("CURVE") == 0)
+			{
+				enemySpawnData.spline.emplace();
+				for (const nlohmann::json& point : child["control_point"])
+				{
+					Vector3 pointData;
+					pointData.x = -static_cast<float>(point[0]);
+					pointData.y = static_cast<float>(point[2]);
+					pointData.z = -static_cast<float>(point[1]);
+					enemySpawnData.spline->controlPoints.push_back(pointData);
+				}
+				//曲線要素が見つかったら抜ける
+				break;
+			}
+		}
+	}
+	//TODO: コライダーのパラメータ読み込み
+}
+
+void YKEngine::LevelDataLoader::SplineDataLoad(const nlohmann::json& spline)
+{
+	//要素追加
+	SplineData& splineData = levelData_.splines.emplace_back();
+
+	for (const nlohmann::json& point : spline["control_point"])
+	{
+		Vector3 pointData;
+		pointData.x = -static_cast<float>(point[0]);
+		pointData.y = static_cast<float>(point[2]);
+		pointData.z = -static_cast<float>(point[1]);
+		splineData.controlPoints.push_back(pointData);
+	}
 }
 
 EulerTransform LevelDataLoader::TranformLoad(const nlohmann::json& transformData)

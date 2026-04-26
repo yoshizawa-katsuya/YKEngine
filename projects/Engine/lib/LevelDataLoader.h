@@ -98,6 +98,31 @@ public:
 private:
 	
 	/// <summary>
+	/// オブジェクトデータのロード。
+	/// </summary>
+	/// <param name="object">オブジェクトのJSONデータ</param>
+	void ObjectDateLoad(const nlohmann::json& object);
+
+	/// <summary>
+	/// 自機の生成データのロード。
+	/// </summary>
+	/// <param name="playerSpawn">自機の生成データのJSONデータ</param>
+	void PlayerSpawnDataLoad(const nlohmann::json& playerSpawn);
+
+	/// <summary>
+	/// 敵の生成データのロード。
+	/// </summary>
+	/// <param name="enemySpawn">敵の生成データのJSONデータ</param>
+	/// <param name="type">敵の種類</param>
+	void EnemySpawnDataLoad(const nlohmann::json& enemySpawn, const std::string& type);
+
+	/// <summary>
+	/// スプライン曲線のロード。
+	/// </summary>
+	/// <param name="spline">スプライン曲線のJSONデータ</param>
+	void SplineDataLoad(const nlohmann::json& spline);
+
+	/// <summary>
 	/// Transformのロード。
 	/// </summary>
 	/// <param name="transformData">TransformのJSONデータ</param>
