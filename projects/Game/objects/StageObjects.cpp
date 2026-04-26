@@ -107,7 +107,7 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 			{
 				BaseModel* model = modelPlatform->CreateCube(textureHandle, modelName).get();
 				model->SetEnvironmentCoefficient(0.5f);
-				instancingObjects_[key]->Initialize(model, 128);
+				instancingObjects_[key]->Initialize(model, 256);
 			}
 			else if (key == "primitiveSphere")
 			{
