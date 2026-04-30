@@ -56,6 +56,7 @@ namespace JsonKey
 		const std::string kDamageReactionMoveRange = "DamageReactionMoveRange";	//ダメージリアクションのランダム移動の範囲
 		const std::string kFireInterval = "FireInterval";
 		const std::string kBulletSpeed = "BulletSpeed";
+		const std::string kDefaultSpeed = "DefaultSpeed";	//デフォルトの速さ
 
 		namespace Shot01
 		{
@@ -64,6 +65,14 @@ namespace JsonKey
 		namespace Shot02
 		{
 			const std::string kGroupName = "EnemyShot02";
+		}
+		namespace Tackle01
+		{
+			const std::string kGroupName = "EnemyTackle01";
+		}
+		namespace Tackle02
+		{
+			const std::string kGroupName = "EnemyTackle02";
 		}
 	}
 

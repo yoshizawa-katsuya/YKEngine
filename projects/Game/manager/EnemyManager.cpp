@@ -46,6 +46,15 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletMan
 	globalVariables->AddItem(shot02GroupName, JsonKey::Enemy::kFireInterval, 2.0f);
 	globalVariables->AddItem(shot02GroupName, JsonKey::Enemy::kBulletSpeed, 0.3f);
 
+	const std::string& tackle01GroupName = JsonKey::Enemy::Tackle01::kGroupName;
+	const std::string& tackle02GroupName = JsonKey::Enemy::Tackle02::kGroupName;
+
+	globalVariables->CreateGroup(tackle01GroupName);
+	globalVariables->AddItem(tackle01GroupName, JsonKey::Enemy::kDefaultSpeed, 0.5f);
+
+	globalVariables->CreateGroup(tackle02GroupName);
+	globalVariables->AddItem(tackle02GroupName, JsonKey::Enemy::kDefaultSpeed, 0.3f);
+
 	// 敵のパラメータ設定
 	ParamsSetup();
 }

@@ -133,6 +133,7 @@ void RailMover::OnCollision(Collider* other)
 	else if (RotateEventTrigger* rotateEvent = dynamic_cast<RotateEventTrigger*>(other))
 	{
 		const float rotateDuration = GlobalVariables::GetInstance()->GetFloatValue(JsonKey::RailMover::kGroupName, JsonKey::RailMover::kRotateDuration);
+		worldTransform_.rotation_ = TransformHelpers::NormalizeAngle(worldTransform_.rotation_);	// 現在の回転角を正規化
 		srtAnimator_->SetAnimation(worldTransform_.rotation_, rotateEvent->GetRotate(), rotateDuration);
 		isInRotateEvent_ = true;
 	}

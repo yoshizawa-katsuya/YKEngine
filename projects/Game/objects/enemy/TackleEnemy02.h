@@ -15,6 +15,15 @@ public:
 	~TackleEnemy02() override;
 
 	/// <summary>
+	/// 初期化。
+	/// </summary>
+	/// <param name="model">モデル</param>
+	/// <param name="spawnData">出現データ</param>
+	/// <param name="viewPortMatrix">ビューポート行列</param>
+	/// <param name="railCamera">レールカメラ。画面内に入っているか判定するために使用。</param>
+	void Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player) override;
+
+	/// <summary>
 	/// 衝突時の処理。
 	/// </summary>
 	/// <param name="other">衝突したコライダー</param>

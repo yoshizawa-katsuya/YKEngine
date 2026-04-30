@@ -1,10 +1,24 @@
 #include "TackleEnemy02.h"
-#include "bullet/BaseBullet.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
 TackleEnemy02::~TackleEnemy02()
 {
+}
+
+void TackleEnemy02::Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player)
+{
+	BaseEnemy::Initialize(model, spawnData, railCamera, player);
+
+	if (!spawnData.speed.has_value())
+	{
+		speed_ = globalVariables_->GetFloatValue(JsonKey::Enemy::Tackle02::kGroupName, JsonKey::Enemy::kDefaultSpeed);
+	}
+
+	hitPoint_ = 3; // ヒットポイントを設定。TODO:jsonから取得するようにする
+
 }
 
 void TackleEnemy02::OnCollision(Collider* other)

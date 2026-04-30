@@ -1,13 +1,22 @@
 #include "TackleEnemy01.h"
-#include "bullet/BaseBullet.h"
 #include "Player.h"
 #include "TransformHelpers.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
 void TackleEnemy01::Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player)
 {
 	BaseEnemy::Initialize(model, spawnData, railCamera, player);
+
+	if (!spawnData.speed.has_value())
+	{
+		speed_ = globalVariables_->GetFloatValue(JsonKey::Enemy::Tackle01::kGroupName, JsonKey::Enemy::kDefaultSpeed);
+	}
+
+	hitPoint_ = 3; // ヒットポイントを設定。TODO:jsonから取得するようにする
+
 	// ターゲットの初期化
 	target_.Initialize();
 	WorldTransform* targetTransform = player->GetWorldTransform();
