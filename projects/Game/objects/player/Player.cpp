@@ -46,7 +46,7 @@ void Player::Initialize(WorldTransform* parent)
 	globalVariables_->AddItem(groupName, JsonKey::Player::kChargeBulletShotInterval, 0.5f);
 
 	BaseCharacter::Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
-	Collider::SetTypeID(CollisionTypeIdDef::kPlayer);
+	BaseCollider::SetTypeID(CollisionTypeIdDef::kPlayer);
 
 	input_ = Input::GetInstance();
 
@@ -101,7 +101,7 @@ void Player::Update()
 	
 }
 
-void Player::OnCollision(Collider* other)
+void Player::OnCollision(BaseCollider* other)
 {
 	CollisionTypeIdDef typeId = other->GetTypeID();
 

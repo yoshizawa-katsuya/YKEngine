@@ -71,7 +71,7 @@ void BaseEnemy::Update() {
 	BaseCharacter::Update();
 }
 
-void BaseEnemy::OnCollision(Collider* other)
+void BaseEnemy::OnCollision(BaseCollider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet) 
 	{
@@ -101,7 +101,7 @@ Vector2 BaseEnemy::GetScreenPosition(Camera* camera) {
 
 void BaseEnemy::SetColliderID()
 {
-	Collider::SetTypeID(CollisionTypeIdDef::kEnemy);
+	BaseCollider::SetTypeID(CollisionTypeIdDef::kEnemy);
 }
 
 void BaseEnemy::MainInitialize() 
@@ -334,7 +334,7 @@ void BaseEnemy::DamageReaction()
 	characterWorldTransform_.translation_ = Random::GetInstance()->GetVector3(-kMoveRange, kMoveRange);
 }
 
-void BaseEnemy::OnCollisionPlayerBullet(Collider* other)
+void BaseEnemy::OnCollisionPlayerBullet(BaseCollider* other)
 {
 
 	// 弾と衝突したら体力を減らす

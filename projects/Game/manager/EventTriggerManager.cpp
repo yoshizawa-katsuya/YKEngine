@@ -22,7 +22,7 @@ void EventTriggerManager::RegisterToCollisionManager(CollisionManager* collision
 {
 	for (std::unique_ptr<BaseEventTrigger>& event : events_) 
 	{
-		collisionManager->AddCollider(event.get());
+		collisionManager->AddSphereCollider(event.get());
 	}
 }
 

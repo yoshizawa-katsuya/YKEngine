@@ -5,7 +5,7 @@ using namespace YKEngine;
 
 void BaseEventTrigger::Initialize(const YKEngine::ObjectData& objectData)
 {
-	Collider::Initialize();
+	SphereCollider::Initialize();
 	// 半径を設定
 	SetRadius(objectData.transform.scale.x);
 	// 位置を設定
@@ -16,7 +16,7 @@ void BaseEventTrigger::Initialize(const YKEngine::ObjectData& objectData)
 
 }
 
-void BaseEventTrigger::OnCollision(Collider* other)
+void BaseEventTrigger::OnCollision(BaseCollider* other)
 {
 	if (RailMover* railMover = dynamic_cast<RailMover*>(other))
 	{

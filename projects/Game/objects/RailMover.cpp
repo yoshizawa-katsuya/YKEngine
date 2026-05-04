@@ -25,7 +25,7 @@ void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawn
 	globalVariables->AddItem(groupName, JsonKey::RailMover::kLerpAngleFactor, 0.1f);
 	globalVariables->AddItem(groupName, JsonKey::RailMover::kRotateDuration, 0.5f);
 
-	Collider::Initialize();
+	SphereCollider::Initialize();
 	typeID_ = CollisionTypeIdDef::kRailMover;
 
 	enemySpawnManager_ = enemySpawnManager;
@@ -119,7 +119,7 @@ void RailMover::DrawRail(Camera* camera)
 	
 }
 
-void RailMover::OnCollision(Collider* other)
+void RailMover::OnCollision(BaseCollider* other)
 {
 	// EnemySpawnEventTrigger、SpeedEventTrigger、RotateEventTrigger、RotateResetEventTriggerのいずれかと衝突した場合の処理
 	if (EnemySpawnEventTrigger* enemySpawnEvent = dynamic_cast<EnemySpawnEventTrigger*>(other))

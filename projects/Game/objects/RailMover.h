@@ -1,5 +1,5 @@
 #pragma once
-#include "Collider.h"
+#include "SphereCollider.h"
 #include "SRTAnimator.h"
 class EnemySpawnManager;
 
@@ -7,7 +7,7 @@ class EnemySpawnManager;
 /// レールに沿って移動するオブジェクト。
 /// プレイヤーとレールカメラのWorldTransformの親に設定して使用する。 
 /// </summary>
-class RailMover : public Collider
+class RailMover : public SphereCollider
 {
 public:
 
@@ -34,7 +34,7 @@ public:
 	/// 衝突時の処理。
 	/// </summary>
 	/// <param name="other">衝突した相手のコライダー</param>
-	void OnCollision([[maybe_unused]] Collider* other) override;
+	void OnCollision([[maybe_unused]] BaseCollider* other) override;
 
 	YKEngine::WorldTransform* GetWorldTransform() { return &worldTransform_; }
 

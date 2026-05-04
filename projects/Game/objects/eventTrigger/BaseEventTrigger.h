@@ -1,12 +1,12 @@
 #pragma once
-#include "Collider.h"
+#include "SphereCollider.h"
 #include "LevelDataLoader.h"
 
 /// <summary>
 /// イベントトリガーの基底クラス。
 /// RailMoverが通過したときにイベントを発生させる。
 /// </summary>
-class BaseEventTrigger : public Collider
+class BaseEventTrigger : public SphereCollider
 {
 public:
 
@@ -22,7 +22,7 @@ public:
 	/// 衝突時の処理。
 	/// </summary>
 	/// <param name="other">衝突相手のコライダー</param>
-	void OnCollision([[maybe_unused]] Collider* other) override;
+	void OnCollision([[maybe_unused]] BaseCollider* other) override;
 
 protected:
 

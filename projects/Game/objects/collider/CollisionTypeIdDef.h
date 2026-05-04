@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
 /// <summary>
 /// コライダーの種類ID。
 /// </summary>

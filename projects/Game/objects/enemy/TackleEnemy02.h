@@ -27,7 +27,7 @@ public:
 	/// 衝突時の処理。
 	/// </summary>
 	/// <param name="other">衝突したコライダー</param>
-	void OnCollision([[maybe_unused]] Collider* other) override;
+	void OnCollision([[maybe_unused]] BaseCollider* other) override;
 
 private:
 

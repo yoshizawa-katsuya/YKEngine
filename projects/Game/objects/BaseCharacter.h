@@ -1,5 +1,5 @@
 #pragma once
-#include "Collider.h"
+#include "SphereCollider.h"
 #include "My3dObject.h"
 
 /// <summary>
@@ -7,7 +7,7 @@
 /// 継承して使用する。
 /// キャラクターはコライダーを持つためColliderクラスを継承する。
 /// </summary>
-class BaseCharacter : public Collider
+class BaseCharacter : public SphereCollider
 {
 public:
 

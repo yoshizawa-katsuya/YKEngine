@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state;$(ProjectDir)Game\objects\railCamera;$(ProjectDir)Game\objects\railCamera\state;$(ProjectDir)Game\scene\clearScene;$(ProjectDir)Game\scene\clearScene\state;$(ProjectDir)Game\scene\gameOverScene;$(ProjectDir)Game\scene\gameOverScene\state;$(ProjectDir)Game\scene\titleScene;$(ProjectDir)Game\scene\titleScene\state;$(ProjectDir)Game\objects\enemy;$(ProjectDir)Game\objects\enemy\state</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state;$(ProjectDir)Game\objects\railCamera;$(ProjectDir)Game\objects\railCamera\state;$(ProjectDir)Game\scene\clearScene;$(ProjectDir)Game\scene\clearScene\state;$(ProjectDir)Game\scene\gameOverScene;$(ProjectDir)Game\scene\gameOverScene\state;$(ProjectDir)Game\scene\titleScene;$(ProjectDir)Game\scene\titleScene\state;$(ProjectDir)Game\objects\enemy;$(ProjectDir)Game\objects\enemy\state;$(ProjectDir)Game\objects\collider</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,7 +92,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state;$(ProjectDir)Game\objects\railCamera;$(ProjectDir)Game\objects\railCamera\state;$(ProjectDir)Game\scene\clearScene;$(ProjectDir)Game\scene\clearScene\state;$(ProjectDir)Game\scene\gameOverScene;$(ProjectDir)Game\scene\gameOverScene\state;$(ProjectDir)Game\scene\titleScene;$(ProjectDir)Game\scene\titleScene\state;$(ProjectDir)Game\objects\enemy;$(ProjectDir)Game\objects\enemy\state</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine;$(ProjectDir)Game;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\externals\;$(ProjectDir)Engine\input;$(ProjectDir)Engine\lib;$(ProjectDir)Game\scene;$(ProjectDir)Game\objects;$(ProjectDir)Engine\audio;$(ProjectDir)Game\myGame;$(ProjectDir)Engine\scene;$(ProjectDir)Engine\externals\nlohmann;$(ProjectDir)Engine\externals\assimp\include;$(ProjectDir)Game\mapChip;$(ProjectDir)Game\objects\player;$(ProjectDir)Game\objects\player\state;$(ProjectDir)Game\objects\demoPlayer;$(ProjectDir)Game\objects\demoPlayer\state;$(ProjectDir)Game\scene\gameScene;$(ProjectDir)Game\scene\gameScene\state;$(ProjectDir)Game\objects\enemySpawnObject;$(ProjectDir)Game\objects\enemySpawnObject\state;$(ProjectDir)Game\objects\railCamera;$(ProjectDir)Game\objects\railCamera\state;$(ProjectDir)Game\scene\clearScene;$(ProjectDir)Game\scene\clearScene\state;$(ProjectDir)Game\scene\gameOverScene;$(ProjectDir)Game\scene\gameOverScene\state;$(ProjectDir)Game\scene\titleScene;$(ProjectDir)Game\scene\titleScene\state;$(ProjectDir)Game\objects\enemy;$(ProjectDir)Game\objects\enemy\state;$(ProjectDir)Game\objects\collider</AdditionalIncludeDirectories>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
@@ -156,7 +156,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Engine\lib\GlobalVariables.cpp" />
     <ClCompile Include="Game\manager\CollisionManager.cpp" />
     <ClCompile Include="Game\objects\BaseCharacter.cpp" />
-    <ClCompile Include="Game\objects\Collider.cpp" />
+    <ClCompile Include="Game\objects\collider\BaseCollider.cpp" />
     <ClCompile Include="Engine\3d\My3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
     <ClCompile Include="Engine\lib\Collision.cpp" />
@@ -246,6 +246,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Game\objects\player\state\PlayerDodgeState.cpp" />
     <ClCompile Include="Game\objects\OperationGuide.cpp" />
     <ClCompile Include="Game\objects\PressA.cpp" />
+    <ClCompile Include="Game\objects\collider\SphereCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -414,6 +415,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\collider\ColliderShapeType.h" />
     <ClInclude Include="Game\objects\ClearUI.h" />
     <ClInclude Include="Game\objects\enemy\state\EnemyApproachState.h" />
     <ClInclude Include="Game\objects\enemy\state\EnemyDeadState.h" />
@@ -465,7 +467,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Game\objects\bullet\BaseBullet.h" />
     <ClInclude Include="Game\manager\CollisionManager.h" />
     <ClInclude Include="Game\objects\BaseCharacter.h" />
-    <ClInclude Include="Game\objects\Collider.h" />
+    <ClInclude Include="Game\objects\collider\BaseCollider.h" />
     <ClInclude Include="Engine\3d\My3dObject.h" />
     <ClInclude Include="Engine\3d\Animation.h" />
     <ClInclude Include="Engine\lib\Collision.h" />
@@ -493,7 +495,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3d\PipelineManager.h" />
-    <ClInclude Include="Game\objects\CollisionTypeIdDef.h" />
+    <ClInclude Include="Game\objects\collider\CollisionTypeIdDef.h" />
     <ClInclude Include="Game\objects\enemy\BaseEnemy.h" />
     <ClInclude Include="Game\objects\bullet\BaseEnemyBullet.h" />
     <ClInclude Include="Game\objects\bullet\BasePlayerBullet.h" />
@@ -566,6 +568,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Game\objects\player\state\PlayerDodgeState.h" />
     <ClInclude Include="Game\objects\OperationGuide.h" />
     <ClInclude Include="Game\objects\PressA.h" />
+    <ClInclude Include="Game\objects\collider\SphereCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

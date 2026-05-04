@@ -1,5 +1,5 @@
 #pragma once
-#include "Collider.h"
+#include "SphereCollider.h"
 #include "BaseModel.h"
 #include "InstancingObjects.h"
 #include "GlobalVariables.h"
@@ -46,7 +46,7 @@ public:
 	/// コライダーを登録する。
 	/// </summary>
 	/// <param name="collider">登録するコライダー</param>
-	void AddCollider(Collider* collider);
+	void AddSphereCollider(SphereCollider* collider);
 
 private:
 
@@ -55,7 +55,7 @@ private:
 	/// </summary>
 	/// <param name="player">コライダーA</param>
 	/// <param name="colliderB">コライダーB</param>
-	void CheckColliderPair(Collider* colliderA, Collider* colliderB);
+	void CheckSphereColliderPair(SphereCollider* colliderA, SphereCollider* colliderB);
 
 	bool IsCollisionPair(CollisionTypeIdDef typeA, CollisionTypeIdDef typeB);
 
@@ -64,8 +64,8 @@ private:
 
 	const std::string kGroupName_ = "Colliders";
 
-	//コライダー
-	std::list<Collider*> colliders_;
+	//衝突判定を行う球コライダーのリスト
+	std::list<SphereCollider*> sphereColliders_;
 
 	//コライダー表示フラグ
 	bool isDrawCollider_ = true;

@@ -1,6 +1,7 @@
 #pragma once
 #include "WorldTransform.h"
 #include "CollisionTypeIdDef.h"
+#include "ColliderShapeType.h"
 
 namespace YKEngine
 {
@@ -12,21 +13,21 @@ namespace YKEngine
 /// 継承して使用する。
 /// 衝突判定は球同士の当たり判定で行う。
 /// 衝突時にはOnCollision関数が呼ばれる。
-/// 衝突判定を行うオブジェクトはColliderManagerに登録すること。
+/// 衝突判定を行うオブジェクトはCollisionManagerに登録すること。
 /// </summary>
-class Collider
+class BaseCollider
 {
 public:
 
 	/// <summary>
-	/// デストラクタ。純粋仮想関数。
+	/// デストラクタ。
 	/// </summary>
-	virtual ~Collider() = default;
+	virtual ~BaseCollider() = default;
 
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	void Initialize();
+	virtual void Initialize();
 
 	/// <summary>
 	/// 更新。
@@ -37,7 +38,7 @@ public:
 	/// 衝突時の処理。
 	/// </summary>
 	/// <param name="other">衝突相手のCollider</param>
-	virtual void OnCollision([[maybe_unused]] Collider* other) {}
+	virtual void OnCollision([[maybe_unused]] BaseCollider* other) {}
 
 	/// <summary>
 	/// カメラに映っているかどうか。
@@ -51,11 +52,6 @@ public:
 	/// </summary>
 	/// <returns>中心座標</returns>
 	virtual YKEngine::Vector3 GetCenterPosition();
-
-	//半径を取得
-	float GetRadius() { return radius_; }
-
-	void SetRadius(float radius);
 
 	//種別IDを取得
 	CollisionTypeIdDef GetTypeID() const { return typeID_; }
@@ -77,10 +73,10 @@ protected:
 	//Transform変数を作る
 	YKEngine::WorldTransform worldTransform_;
 
-	//衝突半径
-	float radius_ = 1.0f;
-
 	//種別ID
 	CollisionTypeIdDef typeID_ = CollisionTypeIdDef::kDefault;
+
+	//コライダーの形状タイプ
+	ColliderShapeType shapeType_;
 };
 

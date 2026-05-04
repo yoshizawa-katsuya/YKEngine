@@ -216,8 +216,8 @@ void GameScene::CheckAllColision()
 	collisionManager_->Reset();
 
 	//コライダーをリストに登録
-	collisionManager_->AddCollider(railMover_.get());
-	collisionManager_->AddCollider(player_.get());
+	collisionManager_->AddSphereCollider(railMover_.get());
+	collisionManager_->AddSphereCollider(player_.get());
 	playerBulletManager_->RegisterToCollisionManager(collisionManager_.get());
 	enemyManager_->RegisterToCollisionManager(collisionManager_.get());
 	enemyBulletManager_->RegisterToCollisionManager(collisionManager_.get());

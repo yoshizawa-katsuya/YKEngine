@@ -17,7 +17,7 @@ void BasePlayerBullet::Initialize(BaseModel* model, const Vector3& position, con
 	Vector3 velocity = direction * speed_;
 
 	BaseBullet::Initialize(model, position, velocity);
-	Collider::SetTypeID(CollisionTypeIdDef::kPlayerBullet);
+	BaseCollider::SetTypeID(CollisionTypeIdDef::kPlayerBullet);
 
 	worldTransform_.UpdateMatrix();
 
@@ -48,7 +48,7 @@ void BasePlayerBullet::Update()
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerBulletTrac01, worldTransform_.GetWorldPosition(), particleVelocity);
 }
 
-void BasePlayerBullet::OnCollision(Collider* other)
+void BasePlayerBullet::OnCollision(BaseCollider* other)
 {
 	CollisionTypeIdDef typeID = other->GetTypeID();
 

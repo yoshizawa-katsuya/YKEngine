@@ -44,7 +44,7 @@ public:
 	/// 衝突時の処理。
 	/// </summary>
 	/// <param name="other">衝突相手のコライダー</param>
-	virtual void OnCollision([[maybe_unused]] Collider* other) override;
+	virtual void OnCollision([[maybe_unused]] BaseCollider* other) override;
 
 	/// <summary>
 	/// ワールド座標を取得。
@@ -167,7 +167,7 @@ protected:
 	/// プレイヤーの弾と衝突したときの処理。
 	/// </summary>
 	/// <param name="bullet">衝突した弾</param>
-	virtual void OnCollisionPlayerBullet(Collider* other);
+	virtual void OnCollisionPlayerBullet(BaseCollider* other);
 
 	/// <summary>
 	/// 消滅処理。

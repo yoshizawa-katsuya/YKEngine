@@ -37,7 +37,7 @@ void CollisionManager::Draw(Camera* camera)
 	}
 
 	objects_->PreUpdate();
-	for (Collider* collider : colliders_) 
+	for (BaseCollider* collider : sphereColliders_) 
 	{
 		// コライダーのワールドトランスフォームを取得
 		WorldTransform worldTransform = collider->GetWorldTransform();
@@ -52,37 +52,37 @@ void CollisionManager::Draw(Camera* camera)
 void CollisionManager::Reset()
 {
 	//リストを空っぽにする
-	colliders_.clear();
+	sphereColliders_.clear();
 }
 
 void CollisionManager::CheckAllCollisions()
 {
 	//リスト内のペアを総当たり
-	std::list<Collider*>::iterator itrA = colliders_.begin();
-	for (; itrA != colliders_.end(); ++itrA) 
+	std::list<SphereCollider*>::iterator itrA = sphereColliders_.begin();
+	for (; itrA != sphereColliders_.end(); ++itrA) 
 	{
-		Collider* colliderA = *itrA;
+		SphereCollider* colliderA = *itrA;
 
 		//イテレータBはイテレータAの次の要素から回す(重複判定を回避)
-		std::list<Collider*>::iterator itrB = itrA;
+		std::list<SphereCollider*>::iterator itrB = itrA;
 		itrB++;
 
-		for (; itrB != colliders_.end(); ++itrB)
+		for (; itrB != sphereColliders_.end(); ++itrB)
 		{
-			Collider* colliderB = *itrB;
+			SphereCollider* colliderB = *itrB;
 
 			//ペアの当たり判定
-			CheckColliderPair(colliderA, colliderB);
+			CheckSphereColliderPair(colliderA, colliderB);
 		}
 	}
 }
 
-void CollisionManager::AddCollider(Collider* collider)
+void CollisionManager::AddSphereCollider(SphereCollider* collider)
 {
-	colliders_.push_back(collider);
+	sphereColliders_.push_back(collider);
 }
 
-void CollisionManager::CheckColliderPair(Collider* colliderA, Collider* colliderB)
+void CollisionManager::CheckSphereColliderPair(SphereCollider* colliderA, SphereCollider* colliderB)
 {
 	//衝突ペアでなければ抜ける
 	if (!IsCollisionPair(colliderA->GetTypeID(), colliderB->GetTypeID()))

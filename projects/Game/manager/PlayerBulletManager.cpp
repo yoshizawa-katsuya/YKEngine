@@ -73,7 +73,7 @@ void PlayerBulletManager::RegisterToCollisionManager(CollisionManager* collision
 {
 	for (std::unique_ptr<BasePlayerBullet>& bullet : playerBullets_) 
 	{
-		collisionManager->AddCollider(bullet.get());
+		collisionManager->AddSphereCollider(bullet.get());
 	}
 }
 

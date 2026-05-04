@@ -37,7 +37,7 @@ TackleEnemy01::~TackleEnemy01()
 {
 }
 
-void TackleEnemy01::OnCollision(Collider* other)
+void TackleEnemy01::OnCollision(BaseCollider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet)
 	{
@@ -107,7 +107,7 @@ void TackleEnemy01::Move()
 
 void TackleEnemy01::SetColliderID()
 {
-	Collider::SetTypeID(CollisionTypeIdDef::kTackleEnemy);
+	BaseCollider::SetTypeID(CollisionTypeIdDef::kTackleEnemy);
 }
 
 bool TackleEnemy01::IsLeave()

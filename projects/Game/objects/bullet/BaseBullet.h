@@ -27,7 +27,7 @@ public:
 	/// 衝突時の処理。純粋仮想関数。
 	/// </summary>
 	/// <param name="other">衝突相手のコライダー</param>
-	virtual void OnCollision([[maybe_unused]] Collider* other) override = 0;
+	virtual void OnCollision([[maybe_unused]] BaseCollider* other) override = 0;
 
 	/// <summary>
 	/// 描画。

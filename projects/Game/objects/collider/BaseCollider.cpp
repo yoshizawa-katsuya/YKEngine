@@ -1,20 +1,19 @@
-#include "Collider.h"
-#include "Matrix.h"
+#include "BaseCollider.h"
 #include "Camera.h"
 
 using namespace YKEngine;
 
-void Collider::Initialize()
+void BaseCollider::Initialize()
 {
 	worldTransform_.Initialize();
 }
 
-void Collider::Update()
+void BaseCollider::Update()
 {
 	worldTransform_.UpdateMatrix();
 }
 
-bool Collider::IsVisible(Camera* camera)
+bool BaseCollider::IsVisible(Camera* camera)
 {
 	Vector4 clipPosition = ClipPosition(camera);
 
@@ -40,7 +39,7 @@ bool Collider::IsVisible(Camera* camera)
 	return true; // 範囲内
 }
 
-Vector4 Collider::ClipPosition(Camera* camera)
+Vector4 BaseCollider::ClipPosition(Camera* camera)
 {
 	Vector3 vector = worldTransform_.GetWorldPosition();
 	Matrix4x4 matrix = camera->GetViewProjection();
@@ -54,14 +53,7 @@ Vector4 Collider::ClipPosition(Camera* camera)
 	return clipPosition;
 }
 
-Vector3 Collider::GetCenterPosition()
+Vector3 BaseCollider::GetCenterPosition()
 {
 	return worldTransform_.GetWorldPosition();
-}
-
-void Collider::SetRadius(float radius)
-{
-	radius_ = radius;
-
-	worldTransform_.scale_ = { radius_, radius_, radius_ };
 }

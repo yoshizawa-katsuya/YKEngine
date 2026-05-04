@@ -21,7 +21,7 @@ void TackleEnemy02::Initialize(YKEngine::BaseModel* model, const EnemySpawn& spa
 
 }
 
-void TackleEnemy02::OnCollision(Collider* other)
+void TackleEnemy02::OnCollision(BaseCollider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kPlayerBullet)
 	{
@@ -76,7 +76,7 @@ void TackleEnemy02::Move()
 
 void TackleEnemy02::SetColliderID()
 {
-	Collider::SetTypeID(CollisionTypeIdDef::kTackleEnemy);
+	BaseCollider::SetTypeID(CollisionTypeIdDef::kTackleEnemy);
 }
 
 void TackleEnemy02::DeadInitialize()

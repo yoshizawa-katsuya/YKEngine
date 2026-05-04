@@ -79,7 +79,7 @@ void EnemyBulletManager::RegisterToCollisionManager(CollisionManager* collisionM
 {
 	for (std::unique_ptr<BaseEnemyBullet>& bullet : enemyBullets_) 
 	{
-		collisionManager->AddCollider(bullet.get());
+		collisionManager->AddSphereCollider(bullet.get());
 	}
 }
 

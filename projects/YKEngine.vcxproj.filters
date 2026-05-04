@@ -220,6 +220,12 @@
     <Filter Include="ヘッダー ファイル\application\objects\enemy\state">
       <UniqueIdentifier>{9535e63c-7592-4e77-8674-f1f0e78e3c9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\collider">
+      <UniqueIdentifier>{c352b608-594f-4f0b-bae6-55ed87c57547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\application\objects\collider">
+      <UniqueIdentifier>{bb76d1a5-7cb2-4c6e-896d-91bc1318d096}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp">
@@ -388,9 +394,6 @@
       <Filter>ソース ファイル\application\manager</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\BaseCharacter.cpp">
-      <Filter>ソース ファイル\application\objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\objects\Collider.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\RailMover.cpp">
@@ -632,6 +635,12 @@
     </ClCompile>
     <ClCompile Include="Game\objects\ClearUI.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\collider\BaseCollider.cpp">
+      <Filter>ソース ファイル\application\objects\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\collider\SphereCollider.cpp">
+      <Filter>ソース ファイル\application\objects\collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -904,12 +913,6 @@
     <ClInclude Include="Game\objects\BaseCharacter.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\Collider.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\objects\CollisionTypeIdDef.h">
-      <Filter>ヘッダー ファイル\application\objects</Filter>
-    </ClInclude>
     <ClInclude Include="Game\objects\EnemySpawn.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
@@ -1176,6 +1179,18 @@
     </ClInclude>
     <ClInclude Include="Game\objects\PressA.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\BaseCollider.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\SphereCollider.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\ColliderShapeType.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\CollisionTypeIdDef.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

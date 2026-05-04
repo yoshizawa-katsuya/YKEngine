@@ -119,7 +119,7 @@ void EnemyManager::RegisterToCollisionManager(CollisionManager* collisionManager
 		{
 			continue;
 		}
-		collisionManager->AddCollider(enemy.get());
+		collisionManager->AddSphereCollider(enemy.get());
 	}
 }
 

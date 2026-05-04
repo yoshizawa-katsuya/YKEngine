@@ -11,7 +11,7 @@ void BaseEnemyBullet::Initialize(BaseModel* model, const Vector3& position, cons
 {
 	speed_ = speed;
 	BaseBullet::Initialize(model, position, velocity);
-	Collider::SetTypeID(CollisionTypeIdDef::kEnemyBullet);
+	BaseCollider::SetTypeID(CollisionTypeIdDef::kEnemyBullet);
 
 }
 
@@ -30,7 +30,7 @@ void BaseEnemyBullet::Update(Camera* railCamera)
 	}
 }
 
-void BaseEnemyBullet::OnCollision(Collider* other)
+void BaseEnemyBullet::OnCollision(BaseCollider* other)
 {
 	CollisionTypeIdDef typeID = other->GetTypeID();
 

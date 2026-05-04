@@ -7,7 +7,7 @@ void BaseCharacter::Initialize(BaseModel* model)
 	// NULLポインタチェック
 	assert(model);
 
-	Collider::Initialize();
+	SphereCollider::Initialize();
 
 	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(model);
@@ -18,7 +18,7 @@ void BaseCharacter::Initialize(BaseModel* model)
 
 void BaseCharacter::Update()
 {
-	Collider::Update();
+	BaseCollider::Update();
 
 	characterWorldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(characterWorldTransform_);
