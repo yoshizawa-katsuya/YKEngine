@@ -1,7 +1,6 @@
 #pragma once
 #include "bullet/BasePlayerBullet.h"
 #include "bullet/PlayerBulletType.h"
-class CollisionManager;
 class BaseEnemy;
 
 /// <summary>
@@ -37,12 +36,6 @@ public:
 	/// <param name="bulletType">弾の種類</param>
 	/// <param name="speed">弾の速度</param>
 	void AddPlayerBullet(const YKEngine::Vector3& worldPosition, const YKEngine::Vector3& direction, PlayerBulletType bulletType, BaseEnemy* targetEnemy);
-
-	/// <summary>
-	/// 弾をコリジョンマネージャーに登録。
-	/// </summary>
-	/// <param name="collisionManager">コリジョンマネージャー</param>
-	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
 private:
 

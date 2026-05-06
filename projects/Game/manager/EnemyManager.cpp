@@ -70,7 +70,9 @@ void EnemyManager::Update()
 
 	//デスフラグの立った敵を削除
 	enemies_.remove_if([](std::unique_ptr<BaseEnemy>& enemy) {
-		if (enemy->IsDisappear()) {
+		if (enemy->IsDisappear())
+		{
+			CollisionManager::GetInstance()->RemoveSphereCollider(enemy.get());
 			return true;
 		}
 		return false;
@@ -109,18 +111,9 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 
 	// 敵リストに追加
 	enemies_.push_back(std::move(enemy));
-}
 
-void EnemyManager::RegisterToCollisionManager(CollisionManager* collisionManager)
-{
-	for (std::unique_ptr<BaseEnemy>& enemy : enemies_) 
-	{
-		if (enemy->IsDead())
-		{
-			continue;
-		}
-		collisionManager->AddSphereCollider(enemy.get());
-	}
+	//衝突マネージャーに敵のコライダーを登録
+	CollisionManager::GetInstance()->AddSphereCollider(enemies_.back().get());
 }
 
 void EnemyManager::ParamsSetup()

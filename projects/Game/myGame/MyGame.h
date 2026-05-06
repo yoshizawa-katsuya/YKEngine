@@ -2,6 +2,7 @@
 #include "YKFramework.h"
 class EffectManager;
 class SceneChangeStaging;
+class CollisionManager;
 
 /// <summary>
 /// ゲームのメインクラス。
@@ -38,5 +39,7 @@ private:
 	EffectManager* effectManager_ = nullptr;
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;
+
+	CollisionManager* collisionManager_ = nullptr;
 };
 

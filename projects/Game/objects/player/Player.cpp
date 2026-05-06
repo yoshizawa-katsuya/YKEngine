@@ -1,6 +1,4 @@
 #include "Player.h"
-#include "WinApp.h"
-#include "Camera.h"
 #include "Lerp.h"
 #include "manager/PlayerBulletManager.h"
 #include "ReticleController.h"
@@ -13,6 +11,7 @@
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
 #include "PlayerStartState.h"
+#include "manager/CollisionManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -45,6 +44,7 @@ void Player::Initialize(WorldTransform* parent)
 	globalVariables_->AddItem(groupName, JsonKey::Player::kNormalBulletShotInterval, 0.2f);
 	globalVariables_->AddItem(groupName, JsonKey::Player::kChargeBulletShotInterval, 0.5f);
 
+	//モデルとコライダーの初期化
 	BaseCharacter::Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
 	BaseCollider::SetTypeID(CollisionTypeIdDef::kPlayer);
 
@@ -72,6 +72,8 @@ void Player::Initialize(WorldTransform* parent)
 	stateMachine_->Start(this);
 	stateMachine_->ChangeState<PlayerStartState>();
 
+	//衝突マネージャーに登録
+	CollisionManager::GetInstance()->AddSphereCollider(this);
 }
 
 void Player::Update()

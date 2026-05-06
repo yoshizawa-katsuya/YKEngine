@@ -4,7 +4,6 @@
 #include "EnemyParams.h"
 class Player;
 class EnemyBulletManager;
-class CollisionManager;
 
 /// <summary>
 /// 敵を管理するクラス。
@@ -39,12 +38,6 @@ public:
 	/// </summary>
 	/// <param name="spawnData">生成データ</param>
 	void PopEnemy(const EnemySpawn& spawnData);
-
-	/// <summary>
-	/// 敵をコリジョンマネージャーに登録。
-	/// </summary>
-	/// <param name="collisionManager">コリジョンマネージャーのポインタ</param>
-	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
 	const std::list<std::unique_ptr<BaseEnemy>>& GetEnemies() { return enemies_; }
 

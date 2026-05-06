@@ -3,6 +3,7 @@
 #include "OffscreenRenderer.h"
 #include "manager/EffectManager.h"
 #include "SceneChangeStaging.h"
+#include "manager/CollisionManager.h"
 
 using namespace YKEngine;
 
@@ -12,11 +13,17 @@ void MyGame::Initialize()
 	//基底クラスの初期化処理
 	YKFramework::Initialize();
 
+	//エフェクト管理クラスの生成
 	effectManager_ = EffectManager::GetInstance();
 	effectManager_->Initialize();
 
+	//シーンチェンジ演出クラスの生成
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
 	sceneChangeStaging_->Initialize();
+
+	//衝突管理クラスの生成
+	collisionManager_ = CollisionManager::GetInstance();
+	collisionManager_->Initialize();
 
 	//シーンファクトリを生成し、マネージャにセット
 	sceneFactory_ = std::make_unique<SceneFactory>();
@@ -33,19 +40,22 @@ void MyGame::Initialize()
 
 void MyGame::Finalize()
 {
-
+	//終了処理
 	sceneChangeStaging_->Finalize();
+	collisionManager_->Finalize();
 
-	//解放処理
 	YKFramework::Finalize();
 
 }
 
 void MyGame::Update()
 {
+	//更新処理
 	effectManager_->Update();
 
 	sceneChangeStaging_->Update();
+
+	collisionManager_->Update();
 
 	YKFramework::Update();
 

@@ -144,11 +144,6 @@ private:
 	void StartSceneEndStaging(const YKEngine::Vector4& color) override;
 
 	/// <summary>
-	/// 全ての衝突判定を行う。
-	/// </summary>
-	void CheckAllColision();
-
-	/// <summary>
 	/// レベルを作成する。
 	/// </summary>
 	void CreateLevel();
@@ -174,7 +169,7 @@ private:
 	bool isGameOverSceneChangeStagingStart_ = false;
 
 	//衝突マネージャー
-	std::unique_ptr<CollisionManager> collisionManager_;
+	CollisionManager* collisionManager_;
 
 	std::unique_ptr<EnemySpawnManager> enemySpawnManager_;
 

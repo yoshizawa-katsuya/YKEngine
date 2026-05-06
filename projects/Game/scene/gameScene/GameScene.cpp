@@ -21,6 +21,8 @@ using namespace YKEngine;
 
 GameScene::~GameScene() 
 {
+	//衝突マネージャに登録されたコライダーを全て削除
+	collisionManager_->Reset();
 }
 
 void GameScene::Initialize() {
@@ -71,9 +73,8 @@ void GameScene::Initialize() {
 	enemyManager_->Initialize(player_.get(), cameraManager_->GetRailCameraInner(), enemyBulletManager_.get());
 	enemySpawnManager_->SetEnemyManager(enemyManager_.get());
 
-	//衝突マネージャの生成
-	collisionManager_ = std::make_unique<CollisionManager>();
-	collisionManager_->Initialize();
+	//衝突マネージャの取得
+	collisionManager_ = CollisionManager::GetInstance();
 
 	//シーン開始演出の開始
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();
@@ -209,26 +210,6 @@ void GameScene::Finalize()
 
 }
 
-void GameScene::CheckAllColision()
-{
-
-	//衝突マネージャのリセット
-	collisionManager_->Reset();
-
-	//コライダーをリストに登録
-	collisionManager_->AddSphereCollider(railMover_.get());
-	collisionManager_->AddSphereCollider(player_.get());
-	playerBulletManager_->RegisterToCollisionManager(collisionManager_.get());
-	enemyManager_->RegisterToCollisionManager(collisionManager_.get());
-	enemyBulletManager_->RegisterToCollisionManager(collisionManager_.get());
-	eventTriggerManager_->RegisterToCollisionManager(collisionManager_.get());
-	
-
-	collisionManager_->Update();
-	collisionManager_->CheckAllCollisions();
-
-}
-
 void GameScene::UpdateStart()
 {
 	ParticleManager::GetInstance()->Update(cameraManager_->GetMainCamera());
@@ -272,7 +253,7 @@ void GameScene::UpdateMain()
 	//敵の弾の更新
 	enemyBulletManager_->Update(railCamera);
 
-	CheckAllColision();
+	collisionManager_->CheckAllCollisions();
 
 	player_->SetLockOnTarget(enemyManager_->GetEnemies());
 
@@ -317,7 +298,7 @@ void GameScene::UpdateGameOver()
 	//敵の弾の更新
 	enemyBulletManager_->Update(railCamera);
 
-	CheckAllColision();
+	collisionManager_->CheckAllCollisions();
 
 	if (!player_->GetIsGameOverEnd())
 	{

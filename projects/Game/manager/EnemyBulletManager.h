@@ -1,7 +1,6 @@
 #pragma once
 #include "bullet/BaseEnemyBullet.h"
 #include "bullet/EnemyBulletType.h"
-class CollisionManager;
 
 /// <summary>
 /// 敵の弾を管理するクラス。
@@ -36,12 +35,6 @@ public:
 	/// <param name="target">弾のターゲットとなるプレイヤー</param>
 	/// <param name="speed">弾の速度</param>
 	void AddEnemyBullet(const YKEngine::Vector3& worldPosition, const YKEngine::Vector3& velocity, Player* target, float speed, EnemyBulletType bulletType);
-
-	/// <summary>
-	/// コライダーを衝突管理クラスに登録する。
-	/// </summary>
-	/// <param name="collisionManager">衝突管理クラス</param>
-	void RegisterToCollisionManager(CollisionManager* collisionManager);
 
 	void SetIsGameOver(bool isGameOver) { isGameOver_ = isGameOver; }
 

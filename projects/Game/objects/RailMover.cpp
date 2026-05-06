@@ -10,6 +10,7 @@
 #include "eventTrigger/RotateResetEventTrigger.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "manager/CollisionManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -41,6 +42,9 @@ void RailMover::Initialize(const std::vector<Vector3>& controlPoints, EnemySpawn
 	worldTransform_.UpdateMatrix();
 
 	srtAnimator_ = std::make_unique<SRTAnimator>();
+
+	CollisionManager::GetInstance()->AddSphereCollider(this);
+
 }
 
 void RailMover::Update()

@@ -4,6 +4,23 @@
 
 using namespace YKEngine;
 
+std::unique_ptr<CollisionManager> CollisionManager::instance_ = nullptr;
+
+CollisionManager* CollisionManager::GetInstance()
+{
+	if (instance_ == nullptr)
+	{
+		instance_ = std::make_unique<CollisionManager>(ConstructorKey());
+	}
+	return instance_.get();
+}
+
+void CollisionManager::Finalize()
+{
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
+}
+
 void CollisionManager::Initialize()
 {
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");
@@ -58,13 +75,13 @@ void CollisionManager::Reset()
 void CollisionManager::CheckAllCollisions()
 {
 	//リスト内のペアを総当たり
-	std::list<SphereCollider*>::iterator itrA = sphereColliders_.begin();
+	std::vector<SphereCollider*>::iterator itrA = sphereColliders_.begin();
 	for (; itrA != sphereColliders_.end(); ++itrA) 
 	{
 		SphereCollider* colliderA = *itrA;
 
 		//イテレータBはイテレータAの次の要素から回す(重複判定を回避)
-		std::list<SphereCollider*>::iterator itrB = itrA;
+		std::vector<SphereCollider*>::iterator itrB = itrA;
 		itrB++;
 
 		for (; itrB != sphereColliders_.end(); ++itrB)
@@ -80,6 +97,12 @@ void CollisionManager::CheckAllCollisions()
 void CollisionManager::AddSphereCollider(SphereCollider* collider)
 {
 	sphereColliders_.push_back(collider);
+}
+
+void CollisionManager::RemoveSphereCollider(SphereCollider* collider)
+{
+	//リストから削除
+	sphereColliders_.erase(std::remove(sphereColliders_.begin(), sphereColliders_.end(), collider), sphereColliders_.end());
 }
 
 void CollisionManager::CheckSphereColliderPair(SphereCollider* colliderA, SphereCollider* colliderB)

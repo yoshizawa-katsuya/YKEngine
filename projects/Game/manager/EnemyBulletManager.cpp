@@ -10,6 +10,7 @@ using namespace YKEngine;
 
 void EnemyBulletManager::Initialize()
 {
+	//モデル生成に使用するModelPlatformクラスのインスタンスを取得
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
 	//モデル生成
 	modelEnemyBulletMap_[EnemyBulletType::kTarget] = modelPlatform->CreateRigidModel("./Resources/enemyBullet", "TargetEnemyBullet.obj");
@@ -28,7 +29,9 @@ void EnemyBulletManager::Update(Camera* railCamera)
 {
 	// デスフラグの立った弾を削除
 	enemyBullets_.remove_if([](std::unique_ptr<BaseEnemyBullet>& bullet) {
-		if (bullet->IsDead()) {
+		if (bullet->IsDead()) 
+		{
+			CollisionManager::GetInstance()->RemoveSphereCollider(bullet.get());
 			return true;
 		}
 		return false;
@@ -73,14 +76,9 @@ void EnemyBulletManager::AddEnemyBullet(const Vector3& worldPosition, const Vect
 
 	//リストに登録する
 	enemyBullets_.push_back(std::move(bullet));
-}
 
-void EnemyBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)
-{
-	for (std::unique_ptr<BaseEnemyBullet>& bullet : enemyBullets_) 
-	{
-		collisionManager->AddSphereCollider(bullet.get());
-	}
+	//生成した弾のコライダーを衝突管理クラスに登録する
+	CollisionManager::GetInstance()->AddSphereCollider(enemyBullets_.back().get());
 }
 
 const std::unordered_map<EnemyBulletType, EnemyBulletManager::EnemyBulletFactory>& EnemyBulletManager::GetEnemyBulletFactoryMap() const

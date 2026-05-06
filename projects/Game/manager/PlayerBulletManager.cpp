@@ -29,6 +29,7 @@ void PlayerBulletManager::Update()
 	// デスフラグの立った弾を削除
 	playerBullets_.remove_if([](std::unique_ptr<BasePlayerBullet>& bullet) {
 		if (bullet->IsDead()) {
+			CollisionManager::GetInstance()->RemoveSphereCollider(bullet.get());
 			return true;
 		}
 		return false;
@@ -67,14 +68,8 @@ void PlayerBulletManager::AddPlayerBullet(const Vector3& worldPosition, const Ve
 
 	//リストに登録
 	playerBullets_.push_back(std::move(bullet));
-}
 
-void PlayerBulletManager::RegisterToCollisionManager(CollisionManager* collisionManager)
-{
-	for (std::unique_ptr<BasePlayerBullet>& bullet : playerBullets_) 
-	{
-		collisionManager->AddSphereCollider(bullet.get());
-	}
+	CollisionManager::GetInstance()->AddSphereCollider(playerBullets_.back().get());
 }
 
 const std::unordered_map<PlayerBulletType, PlayerBulletManager::PlayerBulletFactory>& PlayerBulletManager::GetPlayerBulletFactoryMap() const

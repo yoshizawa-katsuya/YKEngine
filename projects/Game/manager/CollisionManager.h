@@ -17,6 +17,17 @@ class CollisionManager
 public:
 
 	/// <summary>
+	/// シングルトンインスタンスの取得。
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
+	static CollisionManager* GetInstance();
+
+	/// <summary>
+	/// 終了処理。
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
 	/// 初期化。
 	/// </summary>
 	void Initialize();
@@ -48,7 +59,31 @@ public:
 	/// <param name="collider">登録するコライダー</param>
 	void AddSphereCollider(SphereCollider* collider);
 
+	/// <summary>
+	/// 球コライダーを削除する。
+	/// </summary>
+	/// <param name="collider">削除するコライダー</param>
+	void RemoveSphereCollider(SphereCollider* collider);
+
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class CollisionManager;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit CollisionManager(ConstructorKey key) {}
+
 private:
+
+	// シングルトンインスタンス
+	static std::unique_ptr<CollisionManager> instance_;
+	friend struct std::default_delete<CollisionManager>;
+
+	~CollisionManager() = default;
+	CollisionManager(CollisionManager&) = delete;
+	CollisionManager& operator=(CollisionManager&) = delete;
 
 	/// <summary>
 	/// コライダー2つの衝突判定と応答
@@ -65,7 +100,7 @@ private:
 	const std::string kGroupName_ = "Colliders";
 
 	//衝突判定を行う球コライダーのリスト
-	std::list<SphereCollider*> sphereColliders_;
+	std::vector<SphereCollider*> sphereColliders_;
 
 	//コライダー表示フラグ
 	bool isDrawCollider_ = true;

@@ -12,18 +12,11 @@ void EventTriggerManager::Update()
 	//デスフラグの立ったイベントを削除
 	events_.remove_if([](std::unique_ptr<BaseEventTrigger>& event) {
 		if (event->IsDead()) {
+			CollisionManager::GetInstance()->RemoveSphereCollider(event.get());
 			return true;
 		}
 		return false;
 		});
-}
-
-void EventTriggerManager::RegisterToCollisionManager(CollisionManager* collisionManager)
-{
-	for (std::unique_ptr<BaseEventTrigger>& event : events_) 
-	{
-		collisionManager->AddSphereCollider(event.get());
-	}
 }
 
 void EventTriggerManager::CreateEventTriggers(const std::vector<ObjectData>& objectDatas)
@@ -60,6 +53,8 @@ void EventTriggerManager::AddEvent(const std::string& eventName, const ObjectDat
 	eventTrigger->Initialize(objectData);
 	// リストに追加
 	events_.push_back(std::move(eventTrigger));
+
+	CollisionManager::GetInstance()->AddSphereCollider(events_.back().get());
 }
 
 const std::unordered_map<std::string, EventTriggerManager::EventFactory>& EventTriggerManager::GetEventFactoryMap() const
