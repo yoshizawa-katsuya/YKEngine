@@ -29,11 +29,18 @@ public:
 	/// <param name="camera">カメラ</param>
 	void Draw(YKEngine::Camera* camera);
 
+	//自機との判定ラインに到達していればtrue、まだならfalse
+	bool GetIsLineJudged() const { return worldTransform_.translation_.z <= 0.0f; }
+
 	const YKEngine::WorldTransform& GetWorldTransform()const { return worldTransform_; }
 
 	PoseDir GetState() const { return state_; }
 
+	bool GetIsCollision() const { return isCollision_; }
+
 	void SetIsStart(bool isStart) { isStart_ = isStart; }
+
+	void SetIsCollision(bool isCollision) { isCollision_ = isCollision; }
 
 private:
 	void UpdateColorForDebug();
@@ -46,5 +53,8 @@ private:
 	PoseDir state_;
 
 	bool isStart_ = false;
+
+	//自機との衝突判定をとっていればtrue、これからならfalse
+	bool isCollision_ = false;
 };
 

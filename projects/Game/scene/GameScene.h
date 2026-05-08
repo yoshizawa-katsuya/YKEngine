@@ -56,9 +56,17 @@ public:
 	/// </summary>
 	void Finalize() override;
 
+private:
+
+	/// <summary>
+	/// 衝突判定。
+	/// </summary>
 	void CheckCollision();
 
-private:
+	/// <summary>
+	/// 壁との衝突判定。
+	/// </summary>
+	void CheckWallCollision();
 
 	/// <summary>
 	/// レベルの生成。

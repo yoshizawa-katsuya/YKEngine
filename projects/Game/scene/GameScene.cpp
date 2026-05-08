@@ -117,6 +117,9 @@ void GameScene::Update() {
 	//レーンの更新
 	lane_->Update();
 
+	//衝突判定
+	CheckWallCollision();
+
     CheckCollision();
 
 	//UIの更新
@@ -320,6 +323,44 @@ void GameScene::CheckCollision()
 		// ミス時の処理
 		player_->SetColorForDebug(debugPlayerColor[1]);
 		debugMiss_++;
+	}
+}
+
+void GameScene::CheckWallCollision()
+{
+	const std::vector<std::unique_ptr<Wall>>& walls = lane_->GetWalls();
+
+	for (const std::unique_ptr<Wall>& wall : walls) 
+	{
+		//壁が衝突済みか、判定ラインに到達していない場合はスキップ
+		if (wall->GetIsCollision() || !wall->GetIsLineJudged())
+		{
+			continue;
+		}
+
+		auto result = JudgeSystem::Judge(
+			player_->GetState(),
+			wall->GetState(),
+			player_->GetWorldTransform(),
+			wall->GetWorldTransform()
+		);
+
+		if (result == JudgeResult::Hit) {
+			// 成功時の処理
+			player_->SetColorForDebug(debugPlayerColor[0]);
+			debugScore_++;
+		}
+		else if (result == JudgeResult::SuccessSquat) {
+			// しゃがみ成功（デバッグ用に何か追加しても可）
+		}
+		else if (result == JudgeResult::Miss) {
+			// ミス時の処理
+			player_->SetColorForDebug(debugPlayerColor[1]);
+			debugMiss_++;
+		}
+
+		wall->SetIsCollision(true); // 衝突済みに設定
+
 	}
 }
 

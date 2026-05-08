@@ -27,6 +27,9 @@ public:
 	/// <param name="camera">カメラ</param>
 	void Draw(YKEngine::Camera* camera);
 
+	// 壁を取得する
+	const std::vector<std::unique_ptr<Wall>>& GetWalls() const { return walls_; }
+
 private:
 
 	//壁
