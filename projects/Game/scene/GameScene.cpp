@@ -114,6 +114,11 @@ void GameScene::Update() {
 	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
 	dummyWall_->Update();
 
+	for (const std::unique_ptr<Wall>& wall : walls_)
+	{
+		wall->Update();
+	}
+
     CheckCollision();
 
 	//UIの更新
@@ -255,10 +260,9 @@ void GameScene::Draw() {
 	player_->Draw(mainCamera_);
 
 	//壁の描画
-	for (const std::unique_ptr<My3dObject>& wall : walls_)
+	for (const std::unique_ptr<Wall>& wall : walls_)
 	{
-		wall->CameraUpdate(mainCamera_);
-		wall->Draw();
+		wall->Draw(mainCamera_);
 	}
 
 	//ダミーの壁の描画
@@ -329,16 +333,11 @@ void GameScene::CreateLevel()
 {
 	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");
 
-	std::shared_ptr<BaseModel> modelWall = modelPlatform_->CreateRigidModel("./resources/wall", "wall.obj");
-
 	for (const WallData& wallData : levelData.walls) {
-		std::unique_ptr<My3dObject> wall = std::make_unique<My3dObject>();
-		wall->Initialize(modelWall.get());
-		WorldTransform worldTransform;
-		worldTransform.Initialize();
-		worldTransform.translation_ = wallData.Translate;
-		worldTransform.UpdateMatrix();
-		wall->WorldTransformUpdate(worldTransform);
+		//===== 壁の生成 =====
+		std::unique_ptr<Wall> wall = std::make_unique<Wall>();
+		wall->Initialize(wallData.Translate);
+		
 		walls_.push_back(std::move(wall));
 	}
 }

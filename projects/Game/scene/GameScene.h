@@ -19,7 +19,7 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 #include "DummyWall.h"
-
+#include "Wall.h"
 
 #include "Ui.h"
 
@@ -107,14 +107,15 @@ private:
 	//ダミーのカベ
 	std::unique_ptr<DummyWall> dummyWall_;
 
+	//壁
+	std::vector<std::unique_ptr<Wall>> walls_;
+
 	//判定
 	bool isJudged_ = false;
 	float prevWallZ_ = 0.0f;
 
 	//UI
 	std::unique_ptr<Ui>ui_;
-
-	std::vector<std::unique_ptr<YKEngine::My3dObject>> walls_;
 
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;

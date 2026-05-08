@@ -267,19 +267,20 @@
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
-
     <ClCompile Include="Engine\ui\Ui.cpp">
       <Filter>ソース ファイル\application\ui</Filter>
     </ClCompile>
     <ClCompile Include="Game\scene\GameOverScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
-
     </ClCompile>
     <ClCompile Include="Game\objects\DummyWall.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\myGame\JudgeSystem.cpp">
       <Filter>ソース ファイル\application\myGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\Wall.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -561,13 +562,11 @@
     <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
-
     <ClInclude Include="Engine\ui\Ui.h">
       <Filter>ヘッダー ファイル\application\ui</Filter>
     </ClInclude>
     <ClInclude Include="Game\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
-
     </ClInclude>
     <ClInclude Include="Game\objects\DummyWall.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
@@ -577,6 +576,9 @@
     </ClInclude>
     <ClInclude Include="Game\myGame\JudgeSystem.h">
       <Filter>ヘッダー ファイル\application\myGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\Wall.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
