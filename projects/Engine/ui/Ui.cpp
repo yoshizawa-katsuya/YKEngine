@@ -18,17 +18,17 @@ void Ui::Initialize() {
         scoreSprites_[i]->Initialize(numberTextures_[0]);
         scoreSprites_[i]->SetPosition({ 50.0f + i * 32.0f, 50.0f });
     }
-    // ハートテクスチャ（仮パス）
-   // lifeFullTex_ = YKEngine::TextureManager::GetInstance()->Load("Resources/ui/heart_full.png");
-   // lifeEmptyTex_ = YKEngine::TextureManager::GetInstance()->Load("Resources/ui/heart_empty.png");
+ 
+    //ライフ生成
+    uint32_t lifeTexture = YKEngine::TextureManager::GetInstance()->Load("Resources/ui/life.png");
 
-    // スプライト生成
     for (int i = 0; i < kMaxLife; i++) {
-        lifeSprites_[i] = std::make_unique<YKEngine::Sprite>();
-   //     lifeSprites_[i]->Initialize(lifeFullTex_);
-
-      //  lifeSprites_[i]->SetPosition({ 50.0f + i * 40.0f, 100.0f });
+		lifeSprites_[i] = std::make_unique<YKEngine::Sprite>();
+        lifeSprites_[i]->Initialize(lifeTexture);
+		lifeSprites_[i]->SetPosition({ 60.0f + i * 50.0f, 120.0f });
+		lifeSprites_[i]->SetSize({ 40.0f, 40.0f });
     }
+
 	//ポーズUIスプライト生成
     pauseUiSprite_ = std::make_unique<YKEngine::Sprite>();
     pauseUiSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pause.png"));
@@ -52,8 +52,6 @@ void Ui::Update() {
     UpdateDigits();
 	//ライフ減少処理
     HandleLifeInput();
-	//ライフ減少
-    UpdateLifeUI();
 	//ポーズメニュー更新
     UpdatePauseMenu();
 	//デバック
@@ -65,12 +63,11 @@ void Ui::Draw() {
     for (int i = 0; i < kMaxDigits; i++) {
         scoreSprites_[i]->Draw();
     }
-    /*
+
     //ライフ描画
-    for (int i = 0; i < kMaxLife; i++) {
+    for (int i = 0; i < life_; i++) {
         lifeSprites_[i]->Draw();
     }
-    */
 
     //ポーズUI描画
     pauseUiSprite_->Draw();
@@ -99,7 +96,26 @@ void Ui::Debug() {
         }
         ImGui::End();
     }
-	//ポーズ画面
+    // ライフUI
+    ImGui::Begin("Life UI");
+    static ImVec2 lifePos = { 50.0f, 120.0f };
+    static ImVec2 lifeSize = { 40.0f, 40.0f };
+    bool changed = false;
+    if (ImGui::DragFloat2("Life Position", (float*)&lifePos, 1.0f)) {
+        changed = true;
+    }
+    if (ImGui::DragFloat2("Life Size", (float*)&lifeSize, 1.0f, 0.0f, 1000.0f)) {
+        changed = true;
+    }
+    if (changed) {
+        for (int i = 0; i < kMaxLife; i++) {
+            lifeSprites_[i]->SetPosition({ lifePos.x + i * (lifeSize.x + 10.0f), lifePos.y });
+            lifeSprites_[i]->SetSize({ lifeSize.x, lifeSize.y });
+        }
+    }
+    ImGui::End();
+
+    //ポーズ画面
     if (pauseSprite_) {
         ImGui::Begin("Pause Sprite");
         ImVec2 pos = { pauseSprite_->GetPosition().x, pauseSprite_->GetPosition().y };
@@ -182,7 +198,7 @@ void Ui::UpdateDigits() {
 }
 //ライフ減少(仮実装)
 void Ui::HandleLifeInput() {
-    if (YKEngine::Input::GetInstance()->TriggerKey(DIK_Q)) {
+    if (YKEngine::Input::GetInstance()->TriggerKey(DIK_L)) {
         DecreaseLife();
     }
 }
@@ -190,18 +206,6 @@ void Ui::HandleLifeInput() {
 void Ui::DecreaseLife() {
     if (life_ > 0) {
         life_--;
-    }
-}
-//ライフUI更新
-void Ui::UpdateLifeUI() {
-
-    for (int i = 0; i < kMaxLife; i++) {
-
-        if (i < life_) {
-            lifeSprites_[i]->SetTexture(lifeFullTex_);
-        } else {
-            lifeSprites_[i]->SetTexture(lifeEmptyTex_);
-        }
     }
 }
 //ポーズメニュー更新
