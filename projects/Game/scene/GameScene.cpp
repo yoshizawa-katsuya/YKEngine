@@ -356,6 +356,8 @@ void GameScene::CheckWallCollision()
 			// 成功時の処理
 			player_->SetColorForDebug(debugPlayerColor[0]);
 			debugScore_++;
+			debugCombo_++;
+			debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
 		}
 		else if (result == JudgeResult::SuccessSquat) {
 			// しゃがみ成功（デバッグ用に何か追加しても可）
@@ -364,6 +366,7 @@ void GameScene::CheckWallCollision()
 			// ミス時の処理
 			player_->SetColorForDebug(debugPlayerColor[1]);
 			debugMiss_++;
+			debugCombo_ = 0;
 		}
 
 		wall->SetIsCollision(true); // 衝突済みに設定
