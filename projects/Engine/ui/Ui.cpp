@@ -79,6 +79,9 @@ void Ui::Draw() {
 }
 //デバック
 void Ui::Debug() {
+
+#ifdef USE_IMGUI
+
     //ポーズUI
     if (pauseUiSprite_) {
         ImGui::Begin("Pause UI Sprite");
@@ -132,6 +135,7 @@ void Ui::Debug() {
         }
         ImGui::End();
     }
+#endif // USE_IMGUI
 }
 
 Ui::PauseMenu Ui::GetPauseMenu() const {
