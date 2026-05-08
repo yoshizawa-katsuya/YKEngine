@@ -1,9 +1,11 @@
+#define NOMINMAX
 #include "GameScene.h"
 #include "dx12.h"
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
 #include "JudgeSystem.h"
+#include <algorithm>
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -204,6 +206,8 @@ void GameScene::Update() {
 	if (ImGui::TreeNode("Debug")) {
 		ImGui::Text("Score : %d", debugScore_);
 		ImGui::Text("Miss  : %d", debugMiss_);
+		ImGui::Text("Combo  : %d", debugCombo_);
+		ImGui::Text("MaxCombo  : %d", debugMaxCombo_);
 
 		ImGui::TreePop();
 	}
@@ -308,6 +312,8 @@ void GameScene::CheckCollision()
 		// 成功時の処理
 		player_->SetColorForDebug(debugPlayerColor[0]);
 		debugScore_++;
+		debugCombo_++;
+		debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
 	}
 	else if (result == JudgeResult::SuccessSquat) {
 		// しゃがみ成功（デバッグ用に何か追加しても可）
@@ -316,5 +322,6 @@ void GameScene::CheckCollision()
 		// ミス時の処理
 		player_->SetColorForDebug(debugPlayerColor[1]);
 		debugMiss_++;
+		debugCombo_ = 0;
 	}
 }
