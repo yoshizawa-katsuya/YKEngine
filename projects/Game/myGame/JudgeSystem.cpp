@@ -6,10 +6,16 @@ using namespace YKEngine;
 bool JudgeSystem::IsHit(const WorldTransform& player,
     const WorldTransform& wall)
 {
-    // Z距離で判定（レーンゲーム前提）
+    // 距離差
+    float dx = fabs(player.translation_.x - wall.translation_.x);
     float dz = fabs(player.translation_.z - wall.translation_.z);
 
-    return dz < 0.5f; // 調整ポイント
+    // 判定幅
+    const float kHitRabgeX = 0.5f;
+    const float kHitRabgeZ = 0.5f;
+
+    // 両方範囲内なら当たり
+    return(dx < kHitRabgeX && dz < kHitRabgeZ);
 }
 
 bool JudgeSystem::IsMatch(const PoseDir& p,

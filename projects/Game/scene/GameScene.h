@@ -1,3 +1,4 @@
+
 #pragma once
 #include <cstdlib>
 #include <memory>
@@ -132,5 +133,7 @@ private:
 	YKEngine::Vector4 debugPlayerColor[2] = { {1.0f,0.0f,1.0f,1.0f},{0.0f,1.0f,1.0f,1.0f} };
 	int32_t debugScore_ = 0;
 	int32_t debugMiss_ = 0;
+	int32_t debugCombo_ = 0;
+	int32_t debugMaxCombo_ = 0;
 	
 };
