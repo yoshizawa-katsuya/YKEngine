@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "LevelDataLoader.h"
+#include "JudgeSystem.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -60,6 +61,16 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+
+	//ダミーの壁の初期化
+	dummyWall_=std::make_unique<DummyWall>();
+	dummyWall_->Initialize(modelPlayer_.get());
+
+	//UIの初期化
+	ui_ = std::make_unique<Ui>();
+	ui_->Initialize();
+
+
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
 	skyBoxWorldTransform_.Initialize();
@@ -80,11 +91,14 @@ void GameScene::Initialize() {
 	worldTransform2_.UpdateMatrix();
 	*/
 
+	// 難易度の設定
+	difficulty_ = sceneManager_->GetDifficulty();
 	CreateLevel();
 
 }
 
 void GameScene::Update() {
+	
 
 	//カメラの更新
 	camera_->Update();
@@ -95,6 +109,25 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//ダミーの壁の更新
+	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
+	dummyWall_->Update();
+
+    CheckCollision();
+
+	//UIの更新
+	ui_->Update();
+
+	switch (ui_->GetPauseMenu()) {
+		case Ui::PauseMenu::Retry:
+		sceneManager_->ChengeScene("GameScene");
+		break;
+
+		case Ui::PauseMenu::ToTitle:
+			sceneManager_->ChengeScene("TitleScene");
+			break;
+	}
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -165,6 +198,14 @@ void GameScene::Update() {
 
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("Debug")) {
+		ImGui::Text("Score : %d", debugScore_);
+		ImGui::Text("Miss  : %d", debugMiss_);
+
+		ImGui::TreePop();
+	}
+
 	//メインカメラの切り替え
 	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
 		isActiveDebugCamera_ = false;
@@ -182,7 +223,7 @@ void GameScene::Update() {
 	}
 		
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
-
+	ImGui::Text("Difficulty: %s", difficulty_ == 0 ? "EASY" : difficulty_ == 1 ? "NORMAL" : "HARD");
 	/*
 	if (ImGui::Button("BGMstop")) {
 		audio_->SoundStopWave(bgm1_);
@@ -199,7 +240,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 
 	//Spriteの背景描画前処理
-	//spritePlatform_->PreBackGroundDraw();
+	spritePlatform_->PreBackGroundDraw();
 
 	//sprite_->Draw();
 
@@ -220,6 +261,9 @@ void GameScene::Draw() {
 		wall->Draw();
 	}
 
+	//ダミーの壁の描画
+	dummyWall_->Draw(mainCamera_);
+
 	/*modelPlatform_->SkyBoxPreDraw();
 
 	skyBox_->CameraUpdate(mainCamera_);
@@ -232,7 +276,10 @@ void GameScene::Draw() {
 	objects_->Draw();
 	*/
 	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
+	spritePlatform_->PreDraw();
+
+	//UIの描画
+	ui_->Draw();
 
 	//ParticleManager::GetInstance()->Draw();
 
@@ -242,6 +289,41 @@ void GameScene::Finalize()
 {
 
 }
+
+void GameScene::CheckCollision()
+{	
+	float currentZ = dummyWall_->GetWorldTransform().translation_.z;
+
+	//判定ライン（例：z=0）
+	float judgeLine = 0.0f;
+
+	//ラインをまたいだ瞬間だけ判定
+	bool crossed = (prevWallZ_ > judgeLine && currentZ <= judgeLine);
+
+	if (!crossed) return;
+
+	auto result = JudgeSystem::Judge(
+		player_->GetState(), 
+		dummyWall_->GetState(), 
+		player_->GetWorldTransform(), 
+		dummyWall_->GetWorldTransform()
+	);
+
+	if(result==JudgeResult::Hit){
+		// 成功時の処理
+		player_->SetColorForDebug(debugPlayerColor[0]);
+		debugScore_++;
+	}
+	else if (result == JudgeResult::SuccessSquat) {
+		// しゃがみ成功（デバッグ用に何か追加しても可）
+	}
+	else if (result == JudgeResult::Miss) {
+		// ミス時の処理
+		player_->SetColorForDebug(debugPlayerColor[1]);
+		debugMiss_++;
+	}
+}
+
 
 void GameScene::CreateLevel()
 {
