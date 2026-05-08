@@ -37,8 +37,6 @@ private:
     void HandleLifeInput();
 	//ライフ減少
     void DecreaseLife();
-	//ライフUI更新
-    void UpdateLifeUI();
     //ポーズメニュー更新
 	void UpdatePauseMenu();
 
@@ -63,10 +61,6 @@ private:
     std::array<uint32_t, 10> numberTextures_;
     //桁
     std::array<int, kMaxDigits> digits_{};
-    //有ライフ
-    uint32_t lifeFullTex_ = 0;
-    //空ライフ
-	uint32_t lifeEmptyTex_ = 0;
 	//スコア
     int score_ = 0;
 	//表示スコア
