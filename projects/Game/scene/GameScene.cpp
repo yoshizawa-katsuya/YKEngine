@@ -114,10 +114,8 @@ void GameScene::Update() {
 	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
 	dummyWall_->Update();
 
-	for (const std::unique_ptr<Wall>& wall : walls_)
-	{
-		wall->Update();
-	}
+	//レーンの更新
+	lane_->Update();
 
     CheckCollision();
 
@@ -259,11 +257,8 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
-	//壁の描画
-	for (const std::unique_ptr<Wall>& wall : walls_)
-	{
-		wall->Draw(mainCamera_);
-	}
+	//レーンの描画
+	lane_->Draw(mainCamera_);
 
 	//ダミーの壁の描画
 	dummyWall_->Draw(mainCamera_);
@@ -333,11 +328,8 @@ void GameScene::CreateLevel()
 {
 	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");
 
-	for (const WallData& wallData : levelData.walls) {
-		//===== 壁の生成 =====
-		std::unique_ptr<Wall> wall = std::make_unique<Wall>();
-		wall->Initialize(wallData.Translate);
-		
-		walls_.push_back(std::move(wall));
-	}
+	lane_ = std::make_unique<Lane>();
+	lane_->Initialize(levelData.walls);
+
+	
 }

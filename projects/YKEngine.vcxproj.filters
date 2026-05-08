@@ -282,6 +282,9 @@
     <ClCompile Include="Game\objects\Wall.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Lane.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -578,6 +581,9 @@
       <Filter>ヘッダー ファイル\application\myGame</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\Wall.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Lane.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>

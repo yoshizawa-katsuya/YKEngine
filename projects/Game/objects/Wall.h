@@ -11,15 +11,29 @@ class YKEngine::Camera;
 class Wall
 {
 public:
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="translate">初期位置</param>
 	void Initialize(const YKEngine::Vector3& translate);
 
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="camera">カメラ</param>
 	void Draw(YKEngine::Camera* camera);
 
 	const YKEngine::WorldTransform& GetWorldTransform()const { return worldTransform_; }
 
-	PoseDir GetState()const { return state_; }
+	PoseDir GetState() const { return state_; }
+
+	void SetIsStart(bool isStart) { isStart_ = isStart; }
 
 private:
 	void UpdateColorForDebug();
