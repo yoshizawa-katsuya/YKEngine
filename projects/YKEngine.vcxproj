@@ -109,6 +109,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\CuboidObstacle.cpp" />
     <ClCompile Include="Game\objects\ClearUI.cpp" />
     <ClCompile Include="Game\objects\enemy\state\EnemyApproachState.cpp" />
     <ClCompile Include="Game\objects\enemy\state\EnemyDeadState.cpp" />
@@ -247,6 +248,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Game\objects\OperationGuide.cpp" />
     <ClCompile Include="Game\objects\PressA.cpp" />
     <ClCompile Include="Game\objects\collider\SphereCollider.cpp" />
+    <ClCompile Include="Game\objects\collider\OBBCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -415,6 +417,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\CuboidObstacle.h" />
     <ClInclude Include="Game\objects\collider\ColliderShapeType.h" />
     <ClInclude Include="Game\objects\ClearUI.h" />
     <ClInclude Include="Game\objects\enemy\state\EnemyApproachState.h" />
@@ -569,6 +572,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Game\objects\OperationGuide.h" />
     <ClInclude Include="Game\objects\PressA.h" />
     <ClInclude Include="Game\objects\collider\SphereCollider.h" />
+    <ClInclude Include="Game\objects\collider\OBBCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

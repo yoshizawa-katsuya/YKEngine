@@ -4,6 +4,7 @@
 #include "RootParams.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "manager/CollisionManager.h"
 
 using namespace YKEngine;
 
@@ -132,6 +133,16 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 		transform.UpdateMatrix();
 		//インスタンスオブジェクトにワールド変換を設定
 		instancingObjects_[key]->WorldTransformUpdate(transform);
+
+		if (key == "primitiveCube" && objectData.hasCollider)
+		{
+			//障害物の生成
+			std::unique_ptr<CuboidObstacle> cuboidObstacle = std::make_unique<CuboidObstacle>();
+			cuboidObstacle->Initialize(transform);
+			cuboidObstacles_.push_back(std::move(cuboidObstacle));
+
+			CollisionManager::GetInstance()->AddOBBCollider(cuboidObstacles_.back().get());
+		}
 	}
 }
 

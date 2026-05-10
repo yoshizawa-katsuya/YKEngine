@@ -2,6 +2,7 @@
 #include <map>
 #include "InstancingObjects.h"
 #include "LevelDataLoader.h"
+#include "CuboidObstacle.h"
 
 namespace YKEngine
 {
@@ -72,6 +73,9 @@ private:
 
 	//オブジェクト
 	std::map<std::string, std::unique_ptr<YKEngine::InstancingObjects>> instancingObjects_;
+
+	//直方体の障害物
+	std::vector<std::unique_ptr<CuboidObstacle>> cuboidObstacles_;
 
 	//昼ならtrue
 	bool isDayTime_;

@@ -1,6 +1,10 @@
 #pragma once
 #include "BaseCollider.h"
 
+/// <summary>
+/// 球のコライダークラス
+/// 中心座標と半径を持ち、球の衝突判定を行う。
+/// </summary>
 class SphereCollider : public BaseCollider
 {
 public:

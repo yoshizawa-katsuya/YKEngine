@@ -18,6 +18,7 @@ struct ObjectData
 	EulerTransform transform;
 	std::optional<uint32_t> waveNum = std::nullopt; // ウェーブ番号（オプション）
 	std::optional<float> speed = std::nullopt; // スピード（オプション）
+	bool hasCollider = false; // コライダーの有無
 };
 
 /// <summary>

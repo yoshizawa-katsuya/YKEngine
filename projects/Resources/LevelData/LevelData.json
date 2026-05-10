@@ -3458,7 +3458,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3481,7 +3482,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3504,7 +3506,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3527,7 +3530,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3550,7 +3554,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3573,7 +3578,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3596,7 +3602,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3619,7 +3626,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3642,7 +3650,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3665,7 +3674,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3688,7 +3698,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",
@@ -3711,7 +3722,8 @@
                 ]
             },
             "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_name": "primitiveCube",
+            "has_collider": true
         },
         {
             "type": "MESH",

@@ -79,6 +79,13 @@ void BaseEnemy::OnCollision(BaseCollider* other)
 		OnCollisionPlayerBullet(other);
 		
 	}
+	else if (other->GetTypeID() == CollisionTypeIdDef::kCuboidObstacle)
+	{
+		// 障害物に当たったら跳ね返る
+		worldTransform_.translation_ -= velocity_;
+		// 消滅
+		Disappear();
+	}
 }
 
 Vector3 BaseEnemy::GetWorldPosition() 

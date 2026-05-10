@@ -1,5 +1,6 @@
 #pragma once
 #include "SphereCollider.h"
+#include "OBBCollider.h"
 #include "BaseModel.h"
 #include "InstancingObjects.h"
 #include "GlobalVariables.h"
@@ -54,16 +55,28 @@ public:
 	void CheckAllCollisions();
 
 	/// <summary>
-	/// コライダーを登録する。
+	/// 球コライダーを登録する。
 	/// </summary>
 	/// <param name="collider">登録するコライダー</param>
 	void AddSphereCollider(SphereCollider* collider);
+
+	/// <summary>
+	/// OBBコライダーを登録する。
+	/// </summary>
+	/// <param name="collider">登録するコライダー</param>
+	void AddOBBCollider(OBBCollider* collider);
 
 	/// <summary>
 	/// 球コライダーを削除する。
 	/// </summary>
 	/// <param name="collider">削除するコライダー</param>
 	void RemoveSphereCollider(SphereCollider* collider);
+
+	/// <summary>
+	/// OBBコライダーを削除する。
+	/// </summary>
+	/// <param name="collider">削除するコライダー</param>
+	void RemoveOBBCollider(OBBCollider* collider);
 
 	//コンストラクタに渡すための鍵
 	class ConstructorKey {
@@ -86,9 +99,19 @@ private:
 	CollisionManager& operator=(CollisionManager&) = delete;
 
 	/// <summary>
-	/// コライダー2つの衝突判定と応答
+	/// 球コライダー同士の衝突判定と応答を行う。
 	/// </summary>
-	/// <param name="player">コライダーA</param>
+	void CheckSphereCollisions();
+
+	/// <summary>
+	/// 球コライダーとOBBコライダーの衝突判定と応答を行う。
+	/// </summary>
+	void CheckSphereOBBCollisions();
+
+	/// <summary>
+	/// 球コライダー2つの衝突判定と応答
+	/// </summary>
+	/// <param name="colliderA">コライダーA</param>
 	/// <param name="colliderB">コライダーB</param>
 	void CheckSphereColliderPair(SphereCollider* colliderA, SphereCollider* colliderB);
 
@@ -102,6 +125,9 @@ private:
 	//衝突判定を行う球コライダーのリスト
 	std::vector<SphereCollider*> sphereColliders_;
 
+	//衝突判定を行うOBBコライダーのリスト
+	std::vector<OBBCollider*> obbColliders_;
+
 	//コライダー表示フラグ
 	bool isDrawCollider_ = true;
 
@@ -114,6 +140,7 @@ private:
 		{CollisionTypeIdDef::kPlayer, CollisionTypeIdDef::kTackleEnemy},
 
 		{CollisionTypeIdDef::kEnemy, CollisionTypeIdDef::kPlayerBullet},
+		{CollisionTypeIdDef::kEnemy, CollisionTypeIdDef::kCuboidObstacle},
 
 		{CollisionTypeIdDef::kTackleEnemy, CollisionTypeIdDef::kPlayerBullet},
 

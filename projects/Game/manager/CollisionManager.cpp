@@ -70,13 +70,43 @@ void CollisionManager::Reset()
 {
 	//リストを空っぽにする
 	sphereColliders_.clear();
+	obbColliders_.clear();
 }
 
 void CollisionManager::CheckAllCollisions()
 {
+	//全ての衝突判定を行う
+	CheckSphereCollisions();
+	CheckSphereOBBCollisions();
+}
+
+void CollisionManager::AddSphereCollider(SphereCollider* collider)
+{
+	sphereColliders_.push_back(collider);
+}
+
+void CollisionManager::AddOBBCollider(OBBCollider* collider)
+{
+	obbColliders_.push_back(collider);
+}
+
+void CollisionManager::RemoveSphereCollider(SphereCollider* collider)
+{
+	//リストから削除
+	sphereColliders_.erase(std::remove(sphereColliders_.begin(), sphereColliders_.end(), collider), sphereColliders_.end());
+}
+
+void CollisionManager::RemoveOBBCollider(OBBCollider* collider)
+{
+	//リストから削除
+	obbColliders_.erase(std::remove(obbColliders_.begin(), obbColliders_.end(), collider), obbColliders_.end());
+}
+
+void CollisionManager::CheckSphereCollisions()
+{
 	//リスト内のペアを総当たり
 	std::vector<SphereCollider*>::iterator itrA = sphereColliders_.begin();
-	for (; itrA != sphereColliders_.end(); ++itrA) 
+	for (; itrA != sphereColliders_.end(); ++itrA)
 	{
 		SphereCollider* colliderA = *itrA;
 
@@ -94,15 +124,25 @@ void CollisionManager::CheckAllCollisions()
 	}
 }
 
-void CollisionManager::AddSphereCollider(SphereCollider* collider)
+void CollisionManager::CheckSphereOBBCollisions()
 {
-	sphereColliders_.push_back(collider);
-}
-
-void CollisionManager::RemoveSphereCollider(SphereCollider* collider)
-{
-	//リストから削除
-	sphereColliders_.erase(std::remove(sphereColliders_.begin(), sphereColliders_.end(), collider), sphereColliders_.end());
+	for (SphereCollider* sphereCollider : sphereColliders_)
+	{
+		for (OBBCollider* obbCollider : obbColliders_)
+		{
+			//衝突ペアでなければ抜ける
+			if (!IsCollisionPair(sphereCollider->GetTypeID(), obbCollider->GetTypeID()))
+			{
+				continue;
+			}
+			if (IsCollision(obbCollider->GetOBB(), Sphere{ sphereCollider->GetCenterPosition(), sphereCollider->GetRadius() }))
+			{
+				// 衝突時の処理
+				sphereCollider->OnCollision(obbCollider);
+				obbCollider->OnCollision(sphereCollider);
+			}
+		}
+	}
 }
 
 void CollisionManager::CheckSphereColliderPair(SphereCollider* colliderA, SphereCollider* colliderB)

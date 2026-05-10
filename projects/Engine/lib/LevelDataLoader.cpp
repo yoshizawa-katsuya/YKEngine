@@ -63,12 +63,7 @@ void LevelDataLoader::LevelDataLoad(const std::string& kDefaultBaseDirectory, co
 		else if (type.compare("PlayerSpawn") == 0) 
 		{
 			PlayerSpawnDataLoad(object);
-		}
-		//敵発生ポイント
-		/*else if (type.find("Enemy") != std::string::npos && type.find("Spawn") != std::string::npos)
-		{
-			EnemySpawnDataLoad(object, type);
-		}*/
+		}		
 
 		//曲線
 		else if (type.compare("CURVE") == 0)
@@ -102,6 +97,12 @@ void LevelDataLoader::ObjectDateLoad(const nlohmann::json& object)
 	{
 		//移動速度
 		objectData.speed = object["speed"].get<float>();
+	}
+
+	if (object.contains("has_collider"))
+	{
+		//コライダーの有無
+		objectData.hasCollider = object["has_collider"].get<bool>();
 	}
 
 	objectData.transform = TranformLoad(object["transform"]);

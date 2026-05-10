@@ -113,13 +113,9 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         if "file_name" in object:
             json_object["file_name"] = object["file_name"]
 
-        #カスタムプロパティ'collider'
-        if "collider" in object:
-            collider = dict()
-            collider["type"] = object["collider"]
-            collider["center"] = object["collider_center"].to_list()
-            collider["size"] = object["collider_size"].to_list()
-            json_object["collider"] = collider
+        #カスタムプロパティ'has_collider'
+        if "has_collider" in object:
+            json_object["has_collider"] = object["has_collider"]
 
         #1個分のjsonオブジェクトを親オブジェクトに登録
         data_parent.append(json_object)
