@@ -76,9 +76,15 @@ public:
 
 	void SetTexture(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 
+	// マスクテクスチャの設定
+	void SetMaskTexture(uint32_t maskTextureHandle) { maskTextureHandle_ = maskTextureHandle; }
+
 	void SetUVTransform(const EulerTransform& uvTransform) { uvTransform_ = uvTransform; }
 
 	void SetUVTranslate(const Vector3& translate) { uvTransform_.translation = translate; }
+
+	// progress
+	void SetProgress(float progress) { materialData_->progress = progress; }
 
 protected:
 
@@ -136,6 +142,9 @@ protected:
 	};
 
 	uint32_t textureHandle_ = 1;
+
+	// マスクテクスチャ
+	uint32_t maskTextureHandle_ = UINT32_MAX;
 
 	Vector2 size_ = { 1.0f, 1.0f };
 	Vector2 position_ = { 0.0f, 0.0f };

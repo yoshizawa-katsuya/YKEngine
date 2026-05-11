@@ -94,6 +94,7 @@ enum class SpriteRootParam
 	kMaterial = 0,
 	kTransformationMatrix = 1,
 	kTexture = 2,
+	kMaskTexture = 3,
 	kCount,
 };
 

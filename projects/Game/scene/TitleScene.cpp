@@ -27,7 +27,9 @@ void TitleScene::Initialize()
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	sprite_->SetPosition({ 100.0f, 100.0f });
 	*/
-
+	transitionSprite_.Initialize(TextureManager::GetInstance()->Load("./resources/uvChecker.png"));
+	transitionSprite_.SetMaskTexture(TextureManager::GetInstance()->Load("./resources/loadMask.png"));
+	transitionSprite_.SetProgress(1.0f);
 }
 
 void TitleScene::Update()
@@ -116,8 +118,8 @@ void TitleScene::Draw()
 {
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
-	//spritePlatform_->PreDraw();
-
+	spritePlatform_->PreDraw();
+	transitionSprite_.Draw();
 }
 
 void TitleScene::Finalize()

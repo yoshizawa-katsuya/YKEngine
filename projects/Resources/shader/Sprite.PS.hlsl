@@ -5,7 +5,15 @@ struct Material
 {
     float32_t4 color;
     int32_t enableLighting;
+
+    float shininess;
+    float enviromentCoefficient;
+    float padding;
+
     float32_t4x4 uvTransform;
+
+    float progress;
+    float3 padding2;
 };
 
 struct DirectionalLight
@@ -17,6 +25,7 @@ struct DirectionalLight
 
 ConstantBuffer<Material> gMaterial : register(b0);
 Texture2D<float32_t4> gTexture : register(t0);
+Texture2D<float32_t4> gMaskTexture : register(t1);
 SamplerState gSampler : register(s0);
 
 struct PixelShaderOutput
@@ -33,6 +42,12 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     //textureのα値が0のときにPixelを棄却
     if (textureColor.a <= 0.0)
+    {
+        discard;
+    }
+    float mask = gMaskTexture.Sample(gSampler, transformedUV.xy).r;
+
+    if (mask < gMaterial.progress)
     {
         discard;
     }

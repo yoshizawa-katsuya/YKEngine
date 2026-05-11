@@ -157,6 +157,9 @@ struct Material
 	//変数を新しく追加する場合paddingを忘れないように
 	float padding;
 	Matrix4x4 uvTransform;
+	float progress;					// 遷移の進行度。0.0f～1.0fの範囲で表す。遷移に使用する場合は、遷移開始時に0.0f、遷移終了時に1.0fになるようにする。
+	Vector3 padding2;
+	
 };
 
 /// <summary>

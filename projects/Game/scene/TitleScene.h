@@ -68,6 +68,6 @@ private:
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
 	
-	
+	YKEngine::Sprite transitionSprite_;
 };
 

@@ -11,6 +11,7 @@ void Sprite::Initialize(uint32_t textureHandle) {
 	//引数を受け取ってメンバ変数に記録する
 	spritePlatform_ = SpritePlatform::GetInstance();
 	textureHandle_ = textureHandle;
+	maskTextureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	CreateVertexData();
 
@@ -88,6 +89,7 @@ void Sprite::Draw()
 	spritePlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(SpriteRootParam::kTransformationMatrix), transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVの設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SpriteRootParam::kTexture), textureHandle_);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SpriteRootParam::kMaskTexture), maskTextureHandle_);
 	//描画
 	spritePlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
@@ -153,6 +155,7 @@ void Sprite::CreateMaterialData()
 	materialData_->color = {1.0f, 1.0f, 1.0f, 1.0f};
 	materialData_->uvTransform = MakeIdentity4x4();
 
+	materialData_->progress = 0.0f;
 }
 
 void Sprite::CreateTransformData()
