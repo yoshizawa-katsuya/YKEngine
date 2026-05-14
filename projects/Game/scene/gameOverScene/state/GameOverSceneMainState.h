@@ -7,6 +7,9 @@ namespace YKEngine
 	class Input;
 }
 
+/// <summary>
+/// ゲームオーバーシーンのメインの状態。
+/// </summary>
 class GameOverSceneMainState : public YKEngine::BaseState<GameOverSceneStateContext>
 {
 public:

@@ -2,6 +2,9 @@
 #include "BaseState.hpp"
 class EnemySpawnObjectStateContext;
 
+/// <summary>
+/// 敵スポーンオブジェクトの開始状態。
+/// </summary>
 class EnemySpawnObjectStartState : public YKEngine::BaseState<EnemySpawnObjectStateContext>
 {
 private:

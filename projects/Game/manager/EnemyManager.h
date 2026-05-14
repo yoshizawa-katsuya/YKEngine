@@ -7,8 +7,7 @@ class EnemyBulletManager;
 
 /// <summary>
 /// 敵を管理するクラス。
-/// 敵の生成、更新、描画、コリジョンマネージャーへの登録を行う。
-/// 
+/// 敵の生成、更新、描画、CollisionManagerへの登録を行う。
 /// </summary>
 class EnemyManager
 {

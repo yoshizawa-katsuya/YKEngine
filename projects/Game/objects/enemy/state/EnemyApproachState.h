@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class EnemyStateContext;
 
+/// <summary>
+/// 敵の接近状態。
+/// </summary>
 class EnemyApproachState : public YKEngine::BaseState<EnemyStateContext>
 {
 private:

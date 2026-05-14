@@ -1,5 +1,8 @@
 #pragma once
 
+/// <summary>
+/// StateからRailCameraにアクセスするためのクラス。
+/// </summary>
 class RailCameraStateContext
 {
 public:

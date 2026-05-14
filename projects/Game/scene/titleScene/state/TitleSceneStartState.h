@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class TitleSceneStateContext;
 
+/// <summary>
+/// タイトルシーンの開始状態。
+/// </summary>
 class TitleSceneStartState : public YKEngine::BaseState<TitleSceneStateContext>
 {
 private:

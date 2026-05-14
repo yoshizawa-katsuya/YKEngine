@@ -1,4 +1,8 @@
 #pragma once
+
+/// <summary>
+/// StateからTitleSceneにアクセスするためのクラス。
+/// </summary>
 class TitleSceneStateContext
 {
 public:

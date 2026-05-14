@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class DemoPlayerStateContext;
 
+/// <summary>
+/// デモプレイヤーの開始状態。
+/// </summary>
 class DemoPlayerStartState : public YKEngine::BaseState<DemoPlayerStateContext>
 {
 private:

@@ -2,6 +2,9 @@
 #include "BaseState.hpp"
 class RailCameraStateContext;
 
+/// <summary>
+/// レールカメラのゲームオーバーの状態。
+/// </summary>
 class RailCameraGameOverState : public YKEngine::BaseState<RailCameraStateContext>
 {
 private:

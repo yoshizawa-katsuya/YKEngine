@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class GameSceneStateContext;
 
+/// <summary>
+/// ゲームシーンのポーズ状態。
+/// </summary>
 class GameScenePauseState : public YKEngine::BaseState<GameSceneStateContext>
 {
 	/// <summary>

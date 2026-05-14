@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class EnemyStateContext;
 
+/// <summary>
+/// 敵の死亡状態クラス。
+/// </summary>
 class EnemyDeadState : public YKEngine::BaseState<EnemyStateContext>
 {
 private:

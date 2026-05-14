@@ -1,6 +1,9 @@
 #pragma once
 #include "Vector3.h"
 
+/// <summary>
+/// 各StateからEnemyクラスにアクセスするためのクラス。
+/// </summary>
 class EnemyStateContext
 {
 public:

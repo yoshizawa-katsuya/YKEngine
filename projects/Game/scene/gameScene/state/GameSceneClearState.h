@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class GameSceneStateContext;
 
+/// <summary>
+/// ゲームシーンのクリア状態。
+/// </summary>
 class GameSceneClearState : public YKEngine::BaseState<GameSceneStateContext>
 {
 private:

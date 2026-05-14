@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class ClearSceneStateContext;
 
+/// <summary>
+/// クリアシーンの終了状態。
+/// </summary>
 class ClearSceneEndState : public YKEngine::BaseState<ClearSceneStateContext>
 {
 private:

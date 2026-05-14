@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class PlayerStateContext;
 
+/// <summary>
+/// プレイヤーの開始部の状態。
+/// </summary>
 class PlayerStartState : public YKEngine::BaseState<PlayerStateContext>
 {
 private:

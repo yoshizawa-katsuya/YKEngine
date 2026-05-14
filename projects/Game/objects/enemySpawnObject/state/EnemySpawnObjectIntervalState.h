@@ -2,6 +2,9 @@
 #include "BaseState.hpp"
 class EnemySpawnObjectStateContext;
 
+/// <summary>
+/// 敵スポーンオブジェクトの中間状態クラス。
+/// </summary>
 class EnemySpawnObjectIntervalState : public YKEngine::BaseState<EnemySpawnObjectStateContext>
 {
 private:

@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class EnemyStateContext;
 
+/// <summary>
+/// 敵の離脱状態。
+/// </summary>
 class EnemyLeaveState : public YKEngine::BaseState<EnemyStateContext>
 {
 private:

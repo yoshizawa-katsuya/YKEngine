@@ -9,6 +9,9 @@ namespace YKEngine
 	class SceneManager;
 }
 
+/// <summary>
+/// ポーズ画面の管理クラス
+/// </summary>
 class Pause
 {
 public:

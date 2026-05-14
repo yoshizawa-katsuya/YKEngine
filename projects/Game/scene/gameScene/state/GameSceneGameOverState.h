@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class GameSceneStateContext;
 
+/// <summary>
+/// ゲームシーンのゲームオーバー状態。
+/// </summary>
 class GameSceneGameOverState : public YKEngine::BaseState<GameSceneStateContext>
 {
 private:

@@ -2,6 +2,9 @@
 #include "BaseState.hpp"
 class RailCameraStateContext;
 
+/// <summary>
+/// レールカメラのゲームクリアシーンの状態。
+/// </summary>
 class RailCameraClearSceneState : public YKEngine::BaseState<RailCameraStateContext>
 {
 private:

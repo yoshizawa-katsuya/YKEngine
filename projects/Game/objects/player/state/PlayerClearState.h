@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class PlayerStateContext;
 
+/// <summary>
+/// プレイヤーのゲームクリア状態。
+/// </summary>
 class PlayerClearState : public YKEngine::BaseState<PlayerStateContext>
 {
 	/// <summary>

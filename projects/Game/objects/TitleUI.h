@@ -7,6 +7,9 @@ namespace YKEngine
 	class Sprite;
 }
 
+/// <summary>
+/// タイトルシーンのUIクラス
+/// </summary>
 class TitleUI
 {
 public:

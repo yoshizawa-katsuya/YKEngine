@@ -1,4 +1,8 @@
 #pragma once
+
+/// <summary>
+/// StateからGameOverSceneにアクセスするためのクラス。
+/// </summary>
 class GameOverSceneStateContext
 {
 public:

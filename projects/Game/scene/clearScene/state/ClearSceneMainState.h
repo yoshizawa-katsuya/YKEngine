@@ -7,6 +7,9 @@ namespace YKEngine
 	class Input;
 }
 
+/// <summary>
+/// クリアシーンのメイン状態。
+/// </summary>
 class ClearSceneMainState : public YKEngine::BaseState<ClearSceneStateContext>
 {
 private:

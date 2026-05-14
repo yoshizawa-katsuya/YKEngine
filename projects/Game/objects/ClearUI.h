@@ -7,6 +7,9 @@ namespace YKEngine
 	class Sprite;
 }
 
+/// <summary>
+/// クリアシーンのUIクラス
+/// </summary>
 class ClearUI
 {
 public:

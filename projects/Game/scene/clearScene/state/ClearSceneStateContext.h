@@ -1,4 +1,8 @@
 #pragma once
+
+/// <summary>
+/// StateからClearSceneにアクセスするためのクラス。
+/// </summary>
 class ClearSceneStateContext
 {
 public:

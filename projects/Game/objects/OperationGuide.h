@@ -8,6 +8,9 @@ namespace YKEngine
 	class GlobalVariables;
 }
 
+/// <summary>
+/// 操作方法を表示するUIを管理するクラス
+/// </summary>
 class OperationGuide
 {
 public:

@@ -9,6 +9,9 @@ namespace YKEngine
 	class My3dObject;
 }
 
+/// <summary>
+/// ステージ上のオブジェクトを管理するクラス。
+/// </summary>
 class StageObjects
 {
 public:

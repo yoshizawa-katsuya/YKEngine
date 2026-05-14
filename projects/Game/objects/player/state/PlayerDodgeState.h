@@ -4,6 +4,9 @@
 #include "SRTAnimator.h"
 class PlayerStateContext;
 
+/// <summary>
+/// プレイヤーの回避状態。
+/// </summary>
 class PlayerDodgeState : public YKEngine::BaseState<PlayerStateContext>
 {
 private:

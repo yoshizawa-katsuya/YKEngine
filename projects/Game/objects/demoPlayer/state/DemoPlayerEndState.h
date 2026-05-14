@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class DemoPlayerStateContext;
 
+/// <summary>
+/// デモプレイヤーの終了状態。
+/// </summary>
 class DemoPlayerEndState : public YKEngine::BaseState<DemoPlayerStateContext>
 {
 private:

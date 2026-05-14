@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class GameSceneStateContext;
 
+/// <summary>
+/// ゲームシーンのタイトルへ戻る状態。
+/// </summary>
 class GameSceneTitleReturnState : public YKEngine::BaseState<GameSceneStateContext>
 {
 private:

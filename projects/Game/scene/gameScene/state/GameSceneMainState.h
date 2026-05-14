@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class GameSceneStateContext;
 
+/// <summary>
+/// ゲームシーンのメインの状態。
+/// </summary>
 class GameSceneMainState : public YKEngine::BaseState<GameSceneStateContext>
 {
 private:

@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class EnemyStateContext;
 
+/// <summary>
+/// 敵のメイン状態。
+/// </summary>
 class EnemyMainState : public YKEngine::BaseState<EnemyStateContext>
 {
 private:

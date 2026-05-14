@@ -2,6 +2,9 @@
 #include "BaseState.hpp"
 class RailCameraStateContext;
 
+/// <summary>
+/// レールカメラのメインの状態。
+/// </summary>
 class RailCameraMainState : public YKEngine::BaseState<RailCameraStateContext>
 {
 private:

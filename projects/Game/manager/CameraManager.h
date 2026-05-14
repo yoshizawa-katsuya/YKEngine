@@ -9,6 +9,9 @@ namespace YKEngine
 	class ModelPlatform;
 }
 
+/// <summary>
+/// レールカメラとデバッグカメラを管理する
+/// </summary>
 class CameraManager
 {
 public:

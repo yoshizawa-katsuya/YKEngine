@@ -9,6 +9,9 @@ enum class StagingType
 	kEye,		//目開閉
 };
 
+/// <summary>
+/// シーンチェンジの演出を管理するクラス。
+/// </summary>
 class SceneChangeStaging
 {
 public:

@@ -7,6 +7,9 @@ namespace YKEngine
 	class Input;
 }
 
+/// <summary>
+/// プレイヤーのメイン状態クラス。
+/// </summary>
 class PlayerMainState : public YKEngine::BaseState<PlayerStateContext>
 {
 private:

@@ -2,6 +2,9 @@
 #include <BaseState.hpp>
 class TitleSceneStateContext;
 
+/// <summary>
+/// タイトルシーンの終了状態。
+/// </summary>
 class TitleSceneEndState : public YKEngine::BaseState<TitleSceneStateContext>
 {
 private:

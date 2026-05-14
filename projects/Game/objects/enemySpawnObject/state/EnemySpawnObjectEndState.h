@@ -2,6 +2,9 @@
 #include "BaseState.hpp"
 class EnemySpawnObjectStateContext;
 
+/// <summary>
+/// 敵スポーンオブジェクトの終了状態。
+/// </summary>
 class EnemySpawnObjectEndState : public YKEngine::BaseState<EnemySpawnObjectStateContext>
 {
 private:
