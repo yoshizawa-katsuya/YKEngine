@@ -27,9 +27,17 @@ void TitleScene::Initialize()
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	sprite_->SetPosition({ 100.0f, 100.0f });
 	*/
-	transitionSprite_.Initialize(TextureManager::GetInstance()->Load("./resources/brickLoad.png"));
-	transitionSprite_.SetMaskTexture(TextureManager::GetInstance()->Load("./resources/brickMask2.png"));
-	transitionSprite_.SetProgress(progress_);
+	// 画面遷移の初期化
+	transition_ = std::make_unique<Transition>();
+	transition_->Initialize();
+
+	// タイトル画面の開始と同時にフェードアウトの画面遷移を開始
+	transition_->StartFadeOut(
+		TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+		TextureManager::GetInstance()->Load("./resources/brickMask.png"),
+		1.0f,
+		Transition::EasingType::EaseInSine
+	);
 }
 
 void TitleScene::Update()
@@ -42,10 +50,21 @@ void TitleScene::Update()
 	ImGui::Text("%s",state_ == State::START ? "Press Space Key" : state_ == State::OPTIONS ? "Left/right arrow keys Select Difficulty Press Space Key" : "Go To GameScene...");
 	ImGui::Text("State: %s", state_ == State::START ? "START" : state_ == State::OPTIONS ? "OPTIONS" : "EXIT");
 	ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
-	ImGui::SliderFloat("progress", &progress_, 0.0f, 1.0f);
 	ImGui::End();
 
 #endif // USE_IMGUI
+
+	// 画面遷移の更新
+	transition_->Update();
+
+	// 画面遷移が終わり、次のシーン名が設定されている場合はシーンを切り替える
+	if (transition_->IsFinished() &&
+		!nextSceneName_.empty()) {
+
+		sceneManager_->SetDifficulty(static_cast<int>(difficulty_));
+		sceneManager_->ChengeScene(nextSceneName_);
+	}
+
 	switch (state_)
 	{
 	case State::START:
@@ -54,8 +73,6 @@ void TitleScene::Update()
 			// START状態でスペースキーが押されたときの処理
 			// ステートをOPTIONSに変更
 			state_ = State::OPTIONS;
-			//シーン切り替え依頼
-			//sceneManager_->ChengeScene("GameScene");
 		}
 		break;
 	case State::OPTIONS:
@@ -106,29 +123,27 @@ void TitleScene::Update()
 
 		break;
 	case State::EXIT:
-		// 終了処理
-		 // 0 → 1へ進行
-		transitionT_ += 1.0f / duration_;
-
-		// clamp
-		transitionT_ = std::clamp(transitionT_, 0.0f, 1.0f);
-
-		// EaseOutQuint
-		float t = 1.0f - powf(1.0f - transitionT_, 5.0f);
-
-		// progress反映
-		progress_ = 1.0f - t;
-
 		// 終了
-		if (transitionT_ >= 1.0f)
-		{
-			sceneManager_->SetDifficulty(static_cast<int>(difficulty_));
-			sceneManager_->ChengeScene("GameScene");
+		// 画面遷移を開始するときは、isStartedTransition_がfalseのときだけ開始する
+		if (!isStartedTransition_) {
+
+			// 画面遷移を開始したことを記録
+			isStartedTransition_ = true;
+
+			// 次のシーン名を設定
+			nextSceneName_ = "GameScene";
+
+			// 画面遷移を開始
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
 		}
 
 		break;
 	}
-	transitionSprite_.SetProgress(progress_);
 }
 
 void TitleScene::Draw()
@@ -136,7 +151,8 @@ void TitleScene::Draw()
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
-	transitionSprite_.Draw();
+	// 画面遷移の描画
+	transition_->Draw();
 }
 
 void TitleScene::Finalize()
