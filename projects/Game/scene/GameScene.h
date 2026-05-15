@@ -20,8 +20,7 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 #include "DummyWall.h"
-#include "Lane.h"
-
+#include "LaneManager.h"
 #include "Ui.h"
 
 /// <summary>
@@ -116,7 +115,8 @@ private:
 	//ダミーのカベ
 	std::unique_ptr<DummyWall> dummyWall_;
 
-	std::unique_ptr<Lane> lane_;
+	//レーン管理
+	std::unique_ptr<LaneManager> laneManager_;
 
 	//判定
 	bool isJudged_ = false;

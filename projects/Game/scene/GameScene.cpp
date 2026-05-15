@@ -117,7 +117,7 @@ void GameScene::Update() {
 	dummyWall_->Update();
 
 	//レーンの更新
-	lane_->Update();
+	laneManager_->Update();
 
 	//衝突判定
 	CheckWallCollision();
@@ -265,7 +265,7 @@ void GameScene::Draw() {
 	player_->Draw(mainCamera_);
 
 	//レーンの描画
-	lane_->Draw(mainCamera_);
+	laneManager_->Draw(mainCamera_);
 
 	//ダミーの壁の描画
 	dummyWall_->Draw(mainCamera_);
@@ -335,42 +335,46 @@ void GameScene::CheckCollision()
 
 void GameScene::CheckWallCollision()
 {
-	const std::vector<std::unique_ptr<Wall>>& walls = lane_->GetWalls();
-
-	for (const std::unique_ptr<Wall>& wall : walls) 
+	//各レーンの壁を取得して判定
+	for (uint32_t i = 0; i < static_cast<uint32_t>(LaneType::kCount); i++)
 	{
-		//壁が衝突済みか、判定ラインに到達していない場合はスキップ
-		if (wall->GetIsCollision() || !wall->GetIsLineJudged())
+		const std::vector<std::unique_ptr<Wall>>& walls = laneManager_->GetWalls(static_cast<LaneType>(i));
+
+		for (const std::unique_ptr<Wall>& wall : walls)
 		{
-			continue;
-		}
+			//壁が衝突済みか、判定ラインに到達していない場合はスキップ
+			if (wall->GetIsCollision() || !wall->GetIsLineJudged())
+			{
+				continue;
+			}
 
-		auto result = JudgeSystem::Judge(
-			player_->GetState(),
-			wall->GetState(),
-			player_->GetWorldTransform(),
-			wall->GetWorldTransform()
-		);
+			auto result = JudgeSystem::Judge(
+				player_->GetState(),
+				wall->GetState(),
+				player_->GetWorldTransform(),
+				wall->GetWorldTransform()
+			);
 
-		if (result == JudgeResult::Hit) {
-			// 成功時の処理
-			player_->SetColorForDebug(debugPlayerColor[0]);
-			debugScore_++;
-			debugCombo_++;
-			debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
-		}
-		else if (result == JudgeResult::SuccessSquat) {
-			// しゃがみ成功（デバッグ用に何か追加しても可）
-		}
-		else if (result == JudgeResult::Miss) {
-			// ミス時の処理
-			player_->SetColorForDebug(debugPlayerColor[1]);
-			debugMiss_++;
-			debugCombo_ = 0;
-		}
+			if (result == JudgeResult::Hit) {
+				// 成功時の処理
+				player_->SetColorForDebug(debugPlayerColor[0]);
+				debugScore_++;
+				debugCombo_++;
+				debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
+			}
+			else if (result == JudgeResult::SuccessSquat) {
+				// しゃがみ成功（デバッグ用に何か追加しても可）
+			}
+			else if (result == JudgeResult::Miss) {
+				// ミス時の処理
+				player_->SetColorForDebug(debugPlayerColor[1]);
+				debugMiss_++;
+				debugCombo_ = 0;
+			}
 
-		wall->SetIsCollision(true); // 衝突済みに設定
+			wall->SetIsCollision(true); // 衝突済みに設定
 
+		}
 	}
 }
 
@@ -379,8 +383,9 @@ void GameScene::CreateLevel()
 {
 	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");
 
-	lane_ = std::make_unique<Lane>();
-	lane_->Initialize(levelData.walls);
+	//レーンの初期化
+	laneManager_ = std::make_unique<LaneManager>();
+	laneManager_->Initialize(levelData.walls);
 
 	
 }

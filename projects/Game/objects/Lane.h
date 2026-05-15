@@ -13,8 +13,8 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="wallDatas">壁のデータ</param>
-	void Initialize(const std::vector<YKEngine::WallData>& wallDatas);
+	/// <param name="isStart">流れ始めるかどうか</param>
+	void Initialize(bool* isStart);
 
 	/// <summary>
 	/// 更新
@@ -27,15 +27,27 @@ public:
 	/// <param name="camera">カメラ</param>
 	void Draw(YKEngine::Camera* camera);
 
+	/// <summary>
+	/// 壁を追加する
+	/// </summary>
+	/// <param name="wallData">壁のデータ</param>
+	void AddWall(const YKEngine::WallData& wallData);
+
 	// 壁を取得する
 	const std::vector<std::unique_ptr<Wall>>& GetWalls() const { return walls_; }
 
+	void SetRotate(const YKEngine::Vector3& rotate) { worldTransform_.rotation_ = rotate; }
+
 private:
+
+	//ワールド変換
+	YKEngine::WorldTransform worldTransform_;
 
 	//壁
 	std::vector<std::unique_ptr<Wall>> walls_;
 
-	bool isStart_ = false;
+	//流れ始めるかどうかのフラグのポインタ
+	bool* isStart_ = nullptr;
 
 };
 

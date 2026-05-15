@@ -135,14 +135,42 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 			}
 		}
 
-		else if (type.compare("Wall") == 0)
+		else if (type.compare("Lane") == 0)
 		{
-			//要素追加
-			WallData& wallData = levelData.walls.emplace_back();
-			nlohmann::json& transform = object["transform"];
-			wallData.Translate.x = -static_cast<float>(transform["translation"][0]);
-			wallData.Translate.y = static_cast<float>(transform["translation"][2]);
-			wallData.Translate.z = -static_cast<float>(transform["translation"][1]);
+			//レーンの種別を取得
+			std::string laneName = object["name"].get<std::string>();
+			LaneType laneType{};
+			if (laneName == "CenterLane")
+			{
+				laneType = LaneType::kCenter;
+			}
+			else if (laneName == "LeftLane")
+			{
+				laneType = LaneType::kLeft;
+			}
+			else if (laneName == "RightLane")
+			{
+				laneType = LaneType::kRight;
+			}
+			else
+			{
+				assert(0);
+			}
+			
+			if (object.contains("children"))
+			{
+				//子要素走査
+				for (const nlohmann::json& child : object["children"])
+				{
+					//要素追加
+					WallData& wallData = levelData.walls.emplace_back();
+					const nlohmann::json& transform = child["transform"];
+					wallData.Translate.x = -static_cast<float>(transform["translation"][0]);
+					wallData.Translate.y = static_cast<float>(transform["translation"][2]);
+					wallData.Translate.z = -static_cast<float>(transform["translation"][1]);
+					wallData.laneType = laneType;
+				}
+			}
 		}
 
 		//TODO: オブジェクト走査を再帰関数にまとめ、再帰関数で枝を走査する
