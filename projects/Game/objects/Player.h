@@ -51,4 +51,3 @@ private:
 
 	float kAngle_;
 };
-

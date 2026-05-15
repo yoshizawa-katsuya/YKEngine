@@ -423,10 +423,13 @@ void Ui::UpdateFrameGlow() {
 		break;
 
 	case JudgeType::Perfect:
-
+		/*
 		hue =
 			42.0f +
 			sinf(frameGlowTimer_ * 0.04f) * 12.0f;
+		*/
+		hue =
+			fmodf(frameGlowTimer_ * 2.0f, 360.0f);
 
 		break;
 
