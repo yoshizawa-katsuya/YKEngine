@@ -7,6 +7,7 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Sprite.h"
+#include "Transition.h"
 
 /// <summary>
 /// タイトル画面のクラス。
@@ -68,14 +69,13 @@ private:
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
 	
-	YKEngine::Sprite transitionSprite_;
+	// 画面遷移のクラス
+	std::unique_ptr<Transition> transition_;
 
-	float progress_ = 1.0f; // トランジションの進行度
+	// 画面遷移が開始されたかどうかのフラグ
+	bool isStartedTransition_ = false;
 
-	// トランジションのタイマー
-	float transitionT_ = 0.0f;
+	std::string nextSceneName_; // 次のシーンの名前
 
-	// トランジションのフレーム数
-	float duration_ = 120.0f;
 };
 

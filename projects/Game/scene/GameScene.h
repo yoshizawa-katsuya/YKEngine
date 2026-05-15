@@ -22,6 +22,7 @@
 #include "DummyWall.h"
 #include "LaneManager.h"
 #include "Ui.h"
+#include "Transition.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -144,14 +145,10 @@ private:
 	uint32_t difficulty_ = 0;
 
 	// 遷移演出
-	YKEngine::Sprite transitionSprite_;
+	std::unique_ptr<Transition> transition_;
 
-	float transitionTimer_ = 0.0f;
-	float transitionDuration_ = 2.0f;
-
-	float progress_ = 0.0f;
-	bool isTransition_ = true;
-	
+	// 次のシーン名
+	std::string nextSceneName_;
 
 	//デバッグ用
 	YKEngine::Vector4 debugPlayerColor[2] = { {1.0f,0.0f,1.0f,1.0f},{0.0f,1.0f,1.0f,1.0f} };

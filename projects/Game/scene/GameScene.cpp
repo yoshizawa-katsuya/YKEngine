@@ -92,15 +92,19 @@ void GameScene::Initialize() {
 	worldTransform2_.translation_.x = 1.0f;
 	worldTransform2_.UpdateMatrix();
 	*/
-	transitionSprite_.Initialize(TextureManager::GetInstance()->Load("./resources/brickLoad.png"));
+	// 遷移演出
+	transition_ = std::make_unique<Transition>();
 
-	transitionSprite_.SetMaskTexture(TextureManager::GetInstance()->Load("./resources/brickMask.png"));
+	// 遷移演出の初期化
+	transition_->Initialize();
 
-	progress_ = 0.0f;
-	transitionTimer_ = 0.0f;
-	isTransition_ = true;
-
-	transitionSprite_.SetProgress(progress_);
+	// ゲーム画面に切り替わったと同時にフェードアウトの画面遷移を開始
+	transition_->StartFadeOut(
+		TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+		TextureManager::GetInstance()->Load("./resources/brickMask.png"),
+		1.0f,
+		Transition::EasingType::EaseInSine
+	);
 
 	// 難易度の設定
 	difficulty_ = sceneManager_->GetDifficulty();
@@ -117,27 +121,13 @@ void GameScene::Update() {
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
 	}
-	// 画面遷移
-	if (isTransition_) {
+	// 画面遷移の更新
+	transition_->Update();
+	// 画面遷移が終わり、次のシーン名が設定されている場合はシーンを切り替える
+	if (transition_->IsFinished() &&
+		!nextSceneName_.empty()) {
 
-		transitionTimer_ += 1.0f / 60.0f;
-
-		float t = transitionTimer_ / transitionDuration_;
-
-		t = std::clamp(t, 0.0f, 1.0f);
-
-		// easeInSine
-		float eased = 1.0f - cosf((t * 3.14159265f) / 2.0f);
-
-		// 1 → 0
-		progress_ = eased;
-
-		transitionSprite_.SetProgress(progress_);
-
-		if (t >= 1.0f) {
-			isTransition_ = false;
-			progress_ = 1.0f;
-		}
+		sceneManager_->ChengeScene(nextSceneName_);
 	}
 
 	//プレイヤーの更新
@@ -160,11 +150,25 @@ void GameScene::Update() {
 
 	switch (ui_->GetPauseMenu()) {
 		case Ui::PauseMenu::Retry:
-		sceneManager_->ChengeScene("GameScene");
+			// リトライが選択された場合、ゲームシーンに遷移する
+			nextSceneName_ = "GameScene";
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
 		break;
 
 		case Ui::PauseMenu::ToTitle:
-			sceneManager_->ChengeScene("TitleScene");
+			// タイトルに戻るが選択された場合、タイトルシーンに遷移する
+			nextSceneName_ = "TitleScene";
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
 			break;
 	}
 
@@ -187,7 +191,13 @@ void GameScene::Update() {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
+		nextSceneName_ = "TitleScene";
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
 	}
 
 #ifdef USE_IMGUI
@@ -319,7 +329,7 @@ void GameScene::Draw() {
 	ui_->Draw();
 
 	// 遷移演出の描画
-	transitionSprite_.Draw();
+	transition_->Draw();
 
 	//ParticleManager::GetInstance()->Draw();
 
