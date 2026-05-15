@@ -58,6 +58,7 @@ struct WallData
 {
 	Vector3 translate;
 	PlayerDirection direction;
+	PlayerPose pose;
 };
 
 /// <summary>
