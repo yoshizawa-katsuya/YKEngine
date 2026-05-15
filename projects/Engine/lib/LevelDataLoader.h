@@ -49,6 +49,11 @@ struct SplineData
 	std::vector<Vector3> controlPoints;
 };
 
+struct WallData
+{
+	Vector3 Translate;
+};
+
 /// <summary>
 /// レベルデータ。
 /// </summary>
@@ -68,6 +73,9 @@ struct LevelData
 
 	//スプライン曲線
 	std::vector<SplineData> splines;
+
+	//壁データ
+	std::vector<WallData> walls;
 };
 
 /// <summary>

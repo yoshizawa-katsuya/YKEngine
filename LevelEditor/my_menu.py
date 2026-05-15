@@ -3,7 +3,11 @@ from .stretch_vertex import MYADDON_OT_stretch_vertex
 from .create_ico_sphere import MYADDON_OT_create_ico_sphere
 from .export_scene import MYADDON_OT_export_scene
 from .spawn import MYADDON_OT_spawn_create_enemy_symbol
+from .spawn import MYADDON_OT_spawn_create_enemy02_symbol
 from .spawn import MYADDON_OT_spawn_create_player_symbol
+from .spawn import MYADDON_OT_spawn_create_tackle_enemy_symbol
+from .spawn import MYADDON_OT_spawn_create_tackle_enemy02_symbol
+from .spawn import MYADDON_OT_spawn_create_wall_symbol
 
 #トップバーの拡張メニュー
 class TOPBAR_MT_my_menu(bpy.types.Menu):
@@ -32,6 +36,18 @@ class TOPBAR_MT_my_menu(bpy.types.Menu):
         
         self.layout.operator(MYADDON_OT_spawn_create_enemy_symbol.bl_idname,
                              text=MYADDON_OT_spawn_create_enemy_symbol.bl_label)
+        
+        self.layout.operator(MYADDON_OT_spawn_create_enemy02_symbol.bl_idname,
+                             text=MYADDON_OT_spawn_create_enemy02_symbol.bl_label)
+        
+        self.layout.operator(MYADDON_OT_spawn_create_tackle_enemy_symbol.bl_idname,
+                             text=MYADDON_OT_spawn_create_tackle_enemy_symbol.bl_label)
+
+        self.layout.operator(MYADDON_OT_spawn_create_tackle_enemy02_symbol.bl_idname,
+                             text=MYADDON_OT_spawn_create_tackle_enemy02_symbol.bl_label)
+
+        self.layout.operator(MYADDON_OT_spawn_create_wall_symbol.bl_idname,
+                             text=MYADDON_OT_spawn_create_wall_symbol.bl_label)
 
         self.layout.operator("wm.url_open_preset",text="Manual", icon="HELP")
 

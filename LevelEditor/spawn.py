@@ -11,8 +11,13 @@ class SpawnNames():
 
     names = {}
     #names["キー"] = (プロトタイプのオブジェクト名、量産時のオブジェクト名、リソースファイル名)
-    names["Enemy"] = ("PrototypeEnemySpawn", "EnemySpawn", "enemy/enemy.obj")
-    names["Player"] = ("PrototypePlayerSpawn", "PlayerSpawn", "player/player.obj")
+    names["Player"] = ("PrototypePlayerSpawn", "PlayerSpawn", "player/Player.obj")
+    names["Enemy"] = ("PrototypeEnemySpawn", "EnemySpawn", "enemy/Enemy.obj")
+    names["Enemy02"] = ("PrototypeEnemy02Spawn", "Enemy02Spawn", "enemy/Enemy02.obj")
+    names["TackleEnemy"] = ("PrototypeTackleEnemySpawn", "TackleEnemySpawn", "tackleEnemy/TackleEnemy.obj")
+    names["TackleEnemy02"] = ("PrototypeTackleEnemy02Spawn", "TackleEnemy02Spawn", "tackleEnemy/TackleEnemy02.obj")
+    names["Wall"] = ("PrototypeWall", "Wall", "wall/wall.obj")
+
 
 
 #オペレータ 出現ポイントのシンボルを読み込む
@@ -20,9 +25,6 @@ class MYADDON_OT_spawn_import_symbol(bpy.types.Operator):
     bl_idname = "myaddon.myaddon_ot_spawn_import_symbol"
     bl_label = "出現ポイントシンボルImport"
     bl_description = "出現ポイントのシンボルをImportします"
-
-    prototype_object_name = "ProttypePlayerSpawn"
-    object_name = "PlayerSpawn"
 
     def load_obj(self, spawn_type):
         print("出現ポイントのシンボルをImportします")
@@ -58,10 +60,18 @@ class MYADDON_OT_spawn_import_symbol(bpy.types.Operator):
         return {'FINISHED'}
     
     def execute(self, context):
-        #Enemyオブジェクト読み込み
-        self.load_obj("Enemy")
         #Playerオブジェクト読み込み
         self.load_obj("Player")
+        #Enemyオブジェクト読み込み
+        self.load_obj("Enemy")
+        #Enemy02オブジェクト読み込み
+        self.load_obj("Enemy02")
+        #TackleEnemyオブジェクト読み込み
+        self.load_obj("TackleEnemy")
+        #TackleEnemy02オブジェクト読み込み
+        self.load_obj("TackleEnemy02")
+        #Wallオブジェクト読み込み
+        self.load_obj("Wall")
 
         return {'FINISHED'}
     
@@ -122,5 +132,53 @@ class MYADDON_OT_spawn_create_enemy_symbol(bpy.types.Operator):
     def execute(self, context):
 
         bpy.ops.myaddon.myaddon_ot_spawn_create_symbol('EXEC_DEFAULT', spawn_type = "Enemy")
+
+        return {'FINISHED'}
+    
+class MYADDON_OT_spawn_create_enemy02_symbol(bpy.types.Operator):
+
+    bl_idname = "myaddon.myaddon_ot_spawn_create_enemy02_symbol"
+    bl_label = "敵02出現ポイントシンボルの作成"
+    bl_description = "敵02出現ポイントのシンボルを作成します"
+
+    def execute(self, context):
+
+        bpy.ops.myaddon.myaddon_ot_spawn_create_symbol('EXEC_DEFAULT', spawn_type = "Enemy02")
+
+        return {'FINISHED'}
+    
+class MYADDON_OT_spawn_create_tackle_enemy_symbol(bpy.types.Operator):
+
+    bl_idname = "myaddon.myaddon_ot_spawn_create_tackle_enemy_symbol"
+    bl_label = "タックル型の敵出現ポイントシンボルの作成"
+    bl_description = "タックル型の敵出現ポイントのシンボルを作成します"
+
+    def execute(self, context):
+
+        bpy.ops.myaddon.myaddon_ot_spawn_create_symbol('EXEC_DEFAULT', spawn_type = "TackleEnemy")
+
+        return {'FINISHED'}
+    
+class MYADDON_OT_spawn_create_tackle_enemy02_symbol(bpy.types.Operator):
+
+    bl_idname = "myaddon.myaddon_ot_spawn_create_tackle_enemy02_symbol"
+    bl_label = "タックル型の敵02出現ポイントシンボルの作成"
+    bl_description = "タックル型の敵02出現ポイントのシンボルを作成します"
+
+    def execute(self, context):
+
+        bpy.ops.myaddon.myaddon_ot_spawn_create_symbol('EXEC_DEFAULT', spawn_type = "TackleEnemy02")
+
+        return {'FINISHED'}
+    
+class MYADDON_OT_spawn_create_wall_symbol(bpy.types.Operator):
+
+    bl_idname = "myaddon.myaddon_ot_spawn_create_wall_symbol"
+    bl_label = "壁出現ポイントシンボルの作成"
+    bl_description = "壁出現ポイントのシンボルを作成します"
+
+    def execute(self, context):
+
+        bpy.ops.myaddon.myaddon_ot_spawn_create_symbol('EXEC_DEFAULT', spawn_type = "Wall")
 
         return {'FINISHED'}

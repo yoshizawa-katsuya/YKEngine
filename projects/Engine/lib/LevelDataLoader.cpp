@@ -59,7 +59,8 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 		std::string type = object["type"].get<std::string>();
 
 		//MESH
-		if (type.compare("MESH") == 0) {
+		if (type.compare("MESH") == 0) 
+		{
 			//要素追加
 			ObjectData& objectData = levelData.objects.emplace_back();
 
@@ -82,7 +83,8 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 			//TODO: コライダーのパラメータ読み込み
 		}
 		//自キャラ発生ポイント
-		else if (type.compare("PlayerSpawn") == 0) {
+		else if (type.compare("PlayerSpawn") == 0)
+		{
 			//要素追加
 			PlayerSpawnData& playerSpawnData = levelData.playerSpawns.emplace_back();
 
@@ -94,7 +96,8 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 			//TODO: コライダーのパラメータ読み込み
 		}
 		//敵発生ポイント
-		else if (type.compare("EnemySpawn") == 0) {
+		else if (type.compare("EnemySpawn") == 0) 
+		{
 			//要素追加
 			EnemySpawnData& enemySpawnData = levelData.enemySpawns.emplace_back();
 			//トランスフォームのパラメータ読み込み
@@ -132,6 +135,15 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 			}
 		}
 
+		else if (type.compare("Wall") == 0)
+		{
+			//要素追加
+			WallData& wallData = levelData.walls.emplace_back();
+			nlohmann::json& transform = object["transform"];
+			wallData.Translate.x = -static_cast<float>(transform["translation"][0]);
+			wallData.Translate.y = static_cast<float>(transform["translation"][2]);
+			wallData.Translate.z = -static_cast<float>(transform["translation"][1]);
+		}
 
 		//TODO: オブジェクト走査を再帰関数にまとめ、再帰関数で枝を走査する
 		if (object.contains("children")) {

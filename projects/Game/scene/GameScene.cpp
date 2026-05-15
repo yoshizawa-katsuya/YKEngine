@@ -1,8 +1,12 @@
+#define NOMINMAX
 #include "GameScene.h"
 #include "dx12.h"
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "LevelDataLoader.h"
+#include "JudgeSystem.h"
+#include <algorithm>
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -11,7 +15,6 @@
 using namespace YKEngine;
 
 GameScene::~GameScene() {
-	//Finalize();
 }
 
 void GameScene::Initialize() {
@@ -35,12 +38,8 @@ void GameScene::Initialize() {
 	mainCamera_ = camera_.get();
 
 	//モデルを描画する際カメラの設定は必須
-	//modelPlatform_->SetDirectionalLight(directionalLight_.get());
-	//modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
-	//modelPlatform_->SetSpotLight(spotLight_.get());
 
-	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
@@ -64,6 +63,16 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
 
+
+	//ダミーの壁の初期化
+	dummyWall_=std::make_unique<DummyWall>();
+	dummyWall_->Initialize(modelPlayer_.get());
+
+	//UIの初期化
+	ui_ = std::make_unique<Ui>();
+	ui_->Initialize();
+
+
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
 	skyBoxWorldTransform_.Initialize();
@@ -86,9 +95,12 @@ void GameScene::Initialize() {
 
 	// 難易度の設定
 	difficulty_ = sceneManager_->GetDifficulty();
+	CreateLevel();
+
 }
 
 void GameScene::Update() {
+	
 
 	//カメラの更新
 	camera_->Update();
@@ -99,6 +111,31 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//ダミーの壁の更新
+	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
+	dummyWall_->Update();
+
+	//レーンの更新
+	lane_->Update();
+
+	//衝突判定
+	CheckWallCollision();
+
+    CheckCollision();
+
+	//UIの更新
+	ui_->Update();
+
+	switch (ui_->GetPauseMenu()) {
+		case Ui::PauseMenu::Retry:
+		sceneManager_->ChengeScene("GameScene");
+		break;
+
+		case Ui::PauseMenu::ToTitle:
+			sceneManager_->ChengeScene("TitleScene");
+			break;
+	}
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -169,6 +206,16 @@ void GameScene::Update() {
 
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("Debug")) {
+		ImGui::Text("Score : %d", debugScore_);
+		ImGui::Text("Miss  : %d", debugMiss_);
+		ImGui::Text("Combo  : %d", debugCombo_);
+		ImGui::Text("MaxCombo  : %d", debugMaxCombo_);
+
+		ImGui::TreePop();
+	}
+
 	//メインカメラの切り替え
 	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
 		isActiveDebugCamera_ = false;
@@ -203,7 +250,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 
 	//Spriteの背景描画前処理
-	//spritePlatform_->PreBackGroundDraw();
+	spritePlatform_->PreBackGroundDraw();
 
 	//sprite_->Draw();
 
@@ -217,6 +264,12 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
 
+	//レーンの描画
+	lane_->Draw(mainCamera_);
+
+	//ダミーの壁の描画
+	dummyWall_->Draw(mainCamera_);
+
 	/*modelPlatform_->SkyBoxPreDraw();
 
 	skyBox_->CameraUpdate(mainCamera_);
@@ -229,7 +282,10 @@ void GameScene::Draw() {
 	objects_->Draw();
 	*/
 	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
+	spritePlatform_->PreDraw();
+
+	//UIの描画
+	ui_->Draw();
 
 	//ParticleManager::GetInstance()->Draw();
 
@@ -238,4 +294,93 @@ void GameScene::Draw() {
 void GameScene::Finalize()
 {
 
+}
+
+void GameScene::CheckCollision()
+{	
+	float currentZ = dummyWall_->GetWorldTransform().translation_.z;
+
+	//判定ライン（例：z=0）
+	float judgeLine = 0.0f;
+
+	//ラインをまたいだ瞬間だけ判定
+	bool crossed = (prevWallZ_ > judgeLine && currentZ <= judgeLine);
+
+	if (!crossed) return;
+
+	auto result = JudgeSystem::Judge(
+		player_->GetState(), 
+		dummyWall_->GetState(), 
+		player_->GetWorldTransform(), 
+		dummyWall_->GetWorldTransform()
+	);
+
+	if(result==JudgeResult::Hit){
+		// 成功時の処理
+		player_->SetColorForDebug(debugPlayerColor[0]);
+		debugScore_++;
+		debugCombo_++;
+		debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
+	}
+	else if (result == JudgeResult::SuccessSquat) {
+		// しゃがみ成功（デバッグ用に何か追加しても可）
+	}
+	else if (result == JudgeResult::Miss) {
+		// ミス時の処理
+		player_->SetColorForDebug(debugPlayerColor[1]);
+		debugMiss_++;
+		debugCombo_ = 0;
+	}
+}
+
+void GameScene::CheckWallCollision()
+{
+	const std::vector<std::unique_ptr<Wall>>& walls = lane_->GetWalls();
+
+	for (const std::unique_ptr<Wall>& wall : walls) 
+	{
+		//壁が衝突済みか、判定ラインに到達していない場合はスキップ
+		if (wall->GetIsCollision() || !wall->GetIsLineJudged())
+		{
+			continue;
+		}
+
+		auto result = JudgeSystem::Judge(
+			player_->GetState(),
+			wall->GetState(),
+			player_->GetWorldTransform(),
+			wall->GetWorldTransform()
+		);
+
+		if (result == JudgeResult::Hit) {
+			// 成功時の処理
+			player_->SetColorForDebug(debugPlayerColor[0]);
+			debugScore_++;
+			debugCombo_++;
+			debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
+		}
+		else if (result == JudgeResult::SuccessSquat) {
+			// しゃがみ成功（デバッグ用に何か追加しても可）
+		}
+		else if (result == JudgeResult::Miss) {
+			// ミス時の処理
+			player_->SetColorForDebug(debugPlayerColor[1]);
+			debugMiss_++;
+			debugCombo_ = 0;
+		}
+
+		wall->SetIsCollision(true); // 衝突済みに設定
+
+	}
+}
+
+
+void GameScene::CreateLevel()
+{
+	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");
+
+	lane_ = std::make_unique<Lane>();
+	lane_->Initialize(levelData.walls);
+
+	
 }

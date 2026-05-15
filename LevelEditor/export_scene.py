@@ -91,7 +91,7 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
                     points.append([co.x, co.y, co.z])
             json_object["control_point"] = points
 
-        #カスタムプロパティ
+        #カスタムプロパティ'speed'
         if "speed" in object:
             json_object["speed"] = object["speed"]
 

@@ -1,3 +1,4 @@
+
 #pragma once
 #include <cstdlib>
 #include <memory>
@@ -18,6 +19,10 @@
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
+#include "DummyWall.h"
+#include "Lane.h"
+
+#include "Ui.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -53,6 +58,21 @@ public:
 	void Finalize() override;
 
 private:
+
+	/// <summary>
+	/// 衝突判定。
+	/// </summary>
+	void CheckCollision();
+
+	/// <summary>
+	/// 壁との衝突判定。
+	/// </summary>
+	void CheckWallCollision();
+
+	/// <summary>
+	/// レベルの生成。
+	/// </summary>
+	void CreateLevel();
 
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
@@ -93,6 +113,18 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 
+	//ダミーのカベ
+	std::unique_ptr<DummyWall> dummyWall_;
+
+	std::unique_ptr<Lane> lane_;
+
+	//判定
+	bool isJudged_ = false;
+	float prevWallZ_ = 0.0f;
+
+	//UI
+	std::unique_ptr<Ui>ui_;
+
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;
 
@@ -110,5 +142,13 @@ private:
 
 	// 難易度
 	uint32_t difficulty_ = 0;
+	
+
+	//デバッグ用
+	YKEngine::Vector4 debugPlayerColor[2] = { {1.0f,0.0f,1.0f,1.0f},{0.0f,1.0f,1.0f,1.0f} };
+	int32_t debugScore_ = 0;
+	int32_t debugMiss_ = 0;
+	int32_t debugCombo_ = 0;
+	int32_t debugMaxCombo_ = 0;
 	
 };
