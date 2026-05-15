@@ -186,7 +186,7 @@ void Ui::Debug() {
 		ImGui::End();
 	}
 
-	// 画面枠(frameSprite)の位置とサイズを操作
+	// 画面枠の位置とサイズを操作
 	if (frameSprite_) {
 		ImGui::Begin("Frame Sprite");
 		ImVec2 pos = { frameSprite_->GetPosition().x, frameSprite_->GetPosition().y };
