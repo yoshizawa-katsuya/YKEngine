@@ -19,7 +19,7 @@ void Wall::Initialize(const WallData& wallData, bool* isStart, WorldTransform* p
 	worldTransform_.translation_.z = wallData.translate.z;
 
 	//初期状態を設定
-    state_ = { PlayerPose::A, wallData.direction };
+    state_ = { wallData.pose, wallData.direction };
 }
 
 void Wall::Update() 
