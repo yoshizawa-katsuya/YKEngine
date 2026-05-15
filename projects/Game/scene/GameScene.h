@@ -142,6 +142,15 @@ private:
 
 	// 難易度
 	uint32_t difficulty_ = 0;
+
+	// 遷移演出
+	YKEngine::Sprite transitionSprite_;
+
+	float transitionTimer_ = 0.0f;
+	float transitionDuration_ = 2.0f;
+
+	float progress_ = 0.0f;
+	bool isTransition_ = true;
 	
 
 	//デバッグ用

@@ -92,6 +92,15 @@ void GameScene::Initialize() {
 	worldTransform2_.translation_.x = 1.0f;
 	worldTransform2_.UpdateMatrix();
 	*/
+	transitionSprite_.Initialize(TextureManager::GetInstance()->Load("./resources/brickLoad.png"));
+
+	transitionSprite_.SetMaskTexture(TextureManager::GetInstance()->Load("./resources/brickMask.png"));
+
+	progress_ = 0.0f;
+	transitionTimer_ = 0.0f;
+	isTransition_ = true;
+
+	transitionSprite_.SetProgress(progress_);
 
 	// 難易度の設定
 	difficulty_ = sceneManager_->GetDifficulty();
@@ -107,6 +116,28 @@ void GameScene::Update() {
 
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
+	}
+	// 画面遷移
+	if (isTransition_) {
+
+		transitionTimer_ += 1.0f / 60.0f;
+
+		float t = transitionTimer_ / transitionDuration_;
+
+		t = std::clamp(t, 0.0f, 1.0f);
+
+		// easeInSine
+		float eased = 1.0f - cosf((t * 3.14159265f) / 2.0f);
+
+		// 1 → 0
+		progress_ = eased;
+
+		transitionSprite_.SetProgress(progress_);
+
+		if (t >= 1.0f) {
+			isTransition_ = false;
+			progress_ = 1.0f;
+		}
 	}
 
 	//プレイヤーの更新
@@ -286,6 +317,9 @@ void GameScene::Draw() {
 
 	//UIの描画
 	ui_->Draw();
+
+	// 遷移演出の描画
+	transitionSprite_.Draw();
 
 	//ParticleManager::GetInstance()->Draw();
 
