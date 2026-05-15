@@ -27,8 +27,8 @@ void TitleScene::Initialize()
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	sprite_->SetPosition({ 100.0f, 100.0f });
 	*/
-	transitionSprite_.Initialize(TextureManager::GetInstance()->Load("./resources/load.png"));
-	transitionSprite_.SetMaskTexture(TextureManager::GetInstance()->Load("./resources/loadMask.png"));
+	transitionSprite_.Initialize(TextureManager::GetInstance()->Load("./resources/brickLoad.png"));
+	transitionSprite_.SetMaskTexture(TextureManager::GetInstance()->Load("./resources/brickMask2.png"));
 	transitionSprite_.SetProgress(progress_);
 }
 
