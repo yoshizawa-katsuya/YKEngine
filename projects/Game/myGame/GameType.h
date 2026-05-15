@@ -14,7 +14,9 @@ enum class PlayerDirection
 {
     Left = 0,
     Front = 1,
-    Right = 2
+    Right = 2,
+
+	Count   //使用する方向の数
 };
 
 // 共通構造体

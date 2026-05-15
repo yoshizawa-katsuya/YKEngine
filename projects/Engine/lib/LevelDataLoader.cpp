@@ -139,18 +139,18 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 		{
 			//レーンの種別を取得
 			std::string laneName = object["name"].get<std::string>();
-			LaneType laneType{};
+			PlayerDirection direction{};
 			if (laneName == "CenterLane")
 			{
-				laneType = LaneType::kCenter;
+				direction = PlayerDirection::Front;
 			}
 			else if (laneName == "LeftLane")
 			{
-				laneType = LaneType::kLeft;
+				direction = PlayerDirection::Left;
 			}
 			else if (laneName == "RightLane")
 			{
-				laneType = LaneType::kRight;
+				direction = PlayerDirection::Right;
 			}
 			else
 			{
@@ -165,10 +165,10 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 					//要素追加
 					WallData& wallData = levelData.walls.emplace_back();
 					const nlohmann::json& transform = child["transform"];
-					wallData.Translate.x = -static_cast<float>(transform["translation"][0]);
-					wallData.Translate.y = static_cast<float>(transform["translation"][2]);
-					wallData.Translate.z = -static_cast<float>(transform["translation"][1]);
-					wallData.laneType = laneType;
+					wallData.translate.x = -static_cast<float>(transform["translation"][0]);
+					wallData.translate.y = static_cast<float>(transform["translation"][2]);
+					wallData.translate.z = -static_cast<float>(transform["translation"][1]);
+					wallData.direction = direction;
 				}
 			}
 		}

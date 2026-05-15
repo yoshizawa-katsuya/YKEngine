@@ -336,9 +336,9 @@ void GameScene::CheckCollision()
 void GameScene::CheckWallCollision()
 {
 	//各レーンの壁を取得して判定
-	for (uint32_t i = 0; i < static_cast<uint32_t>(LaneType::kCount); i++)
+	for (uint32_t i = 0; i < static_cast<uint32_t>(PlayerDirection::Count); i++)
 	{
-		const std::vector<std::unique_ptr<Wall>>& walls = laneManager_->GetWalls(static_cast<LaneType>(i));
+		const std::vector<std::unique_ptr<Wall>>& walls = laneManager_->GetWalls(static_cast<PlayerDirection>(i));
 
 		for (const std::unique_ptr<Wall>& wall : walls)
 		{

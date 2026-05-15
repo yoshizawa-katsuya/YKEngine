@@ -29,7 +29,7 @@ public:
 	void Draw(YKEngine::Camera* camera);
 
 	// 壁を取得する
-	const std::vector<std::unique_ptr<Wall>>& GetWalls(YKEngine::LaneType laneType) const { return lanes_[static_cast<size_t>(laneType)]->GetWalls(); }
+	const std::vector<std::unique_ptr<Wall>>& GetWalls(PlayerDirection laneType) const { return lanes_[static_cast<size_t>(laneType)]->GetWalls(); }
 
 private:
 
@@ -38,7 +38,7 @@ private:
 private:
 
 	//レーン
-	std::array<std::unique_ptr<Lane>, static_cast<size_t>(YKEngine::LaneType::kCount)> lanes_;
+	std::array<std::unique_ptr<Lane>, static_cast<size_t>(PlayerDirection::Count)> lanes_;
 	
 	//流れ始めるかどうか
 	bool isStart_ = false;

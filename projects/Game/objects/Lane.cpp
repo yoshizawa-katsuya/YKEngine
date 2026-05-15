@@ -32,7 +32,7 @@ void Lane::AddWall(const YKEngine::WallData& wallData)
 {
 	//壁の生成
 	std::unique_ptr<Wall> wall = std::make_unique<Wall>();
-	wall->Initialize(wallData.Translate, isStart_, &worldTransform_);
+	wall->Initialize(wallData, isStart_, &worldTransform_);
 
 	walls_.push_back(std::move(wall));
 }
