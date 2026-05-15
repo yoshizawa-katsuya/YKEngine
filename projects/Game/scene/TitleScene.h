@@ -67,7 +67,7 @@ private:
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
-	
-	
+	//タイトルスプライト
+	std::unique_ptr<YKEngine::Sprite> titleSprite_;
 };
 
