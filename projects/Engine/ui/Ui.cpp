@@ -32,8 +32,8 @@ void Ui::Initialize() {
 	//ポーズUIスプライト生成
 	pauseUiSprite_ = std::make_unique<YKEngine::Sprite>();
 	pauseUiSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pause.png"));
-	pauseUiSprite_->SetPosition({ 1130.0f, 55.0f });
-	pauseUiSprite_->SetSize({ 400.0f, 70.0f });
+	pauseUiSprite_->SetPosition({ 1130.0f, 70.0f });
+	pauseUiSprite_->SetSize({ 300.0f, 70.0f });
 	pauseUiSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	//ポーズ画面スプライト生成
 	pauseSprite_ = std::make_unique<YKEngine::Sprite>();
@@ -62,6 +62,18 @@ void Ui::Initialize() {
 	perfectSprite_ = std::make_unique<YKEngine::Sprite>();
 	perfectSprite_->Initialize(perfectTexture_);
 	perfectSprite_->SetAnchorPoint({ 0.5f,0.5f });
+
+	//画面枠テクスチャ
+	uint32_t frameTexture =
+		YKEngine::TextureManager::GetInstance()->Load("Resources/ui/framebar.png");
+
+	frameSprite_ = std::make_unique<YKEngine::Sprite>();
+	frameSprite_->Initialize(frameTexture);
+	frameSprite_->SetPosition({ 640.0f,360.0f });
+	frameSprite_->SetSize({ 1280.0f,720.0f });
+	frameSprite_->SetAnchorPoint({ 0.5f,0.5f });
+	frameSprite_->SetColor({ 1,1,1,0 });
+
 }
 //更新
 void Ui::Update() {
@@ -79,6 +91,8 @@ void Ui::Update() {
 	HandleJudgeInput();
 	//ジャッジエフェクト更新
 	UpdateJudgeEffect();
+	//画面枠発光更新
+	UpdateFrameGlow();
 	//デバック
 	Debug();
 }
@@ -107,6 +121,10 @@ void Ui::Draw() {
 		if (sprite) {
 			sprite->Draw();
 		}
+	}
+	//画面枠描画
+	if (isFrameGlow_) {
+		frameSprite_->Draw();
 	}
 }
 //デバック
@@ -164,6 +182,20 @@ void Ui::Debug() {
 		float rotation = pauseSprite_->GetRotation();
 		if (ImGui::DragFloat("Rotation", &rotation, 1.0f, -360.0f, 360.0f)) {
 			pauseSprite_->SetRotation(rotation);
+		}
+		ImGui::End();
+	}
+
+	// 画面枠(frameSprite)の位置とサイズを操作
+	if (frameSprite_) {
+		ImGui::Begin("Frame Sprite");
+		ImVec2 pos = { frameSprite_->GetPosition().x, frameSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Position", (float*)&pos, 1.0f)) {
+			frameSprite_->SetPosition({ pos.x, pos.y });
+		}
+		ImVec2 scale = { frameSprite_->GetSize().x, frameSprite_->GetSize().y };
+		if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 2000.0f)) {
+			frameSprite_->SetSize({ scale.x, scale.y });
 		}
 		ImGui::End();
 	}
@@ -293,6 +325,8 @@ void Ui::StartJudgeEffect(JudgeType type) {
 	judgeScale_ = 0.3f;
 	judgeAlpha_ = 1.0f;
 	judgePos_ = { 640.0f,250.0f };
+	isFrameGlow_ = true;
+	frameGlowTimer_ = 0.0f;
 }
 //ジャッジエフェクト更新
 void Ui::UpdateJudgeEffect() {
@@ -328,6 +362,84 @@ void Ui::UpdateJudgeEffect() {
 		});
 	sprite->SetColor({ 1,1,1,judgeAlpha_ });
 }
+//HSVからRGBに変換
+YKEngine::Vector4 Ui::HSVToRGB(float h, float s, float v) {
+	float c = v * s;
+	float x = c * (1 - fabsf(fmodf(h / 60.0f, 2) - 1));
+	float m = v - c;
+
+	float r = 0;
+	float g = 0;
+	float b = 0;
+
+	if (h < 60) {
+		r = c; g = x; b = 0;
+	}
+	else if (h < 120) {
+		r = x; g = c; b = 0;
+	}
+	else if (h < 180) {
+		r = 0; g = c; b = x;
+	} else if (h < 240) {
+		r = 0; g = x; b = c;
+	} else if (h < 300) {
+		r = x; g = 0; b = c;
+	} else {
+		r = c; g = 0; b = x;
+	}
+
+	return {
+		r + m,
+		g + m,
+		b + m,
+		1.0f
+	};
+}
+//画面枠発光更新
+void Ui::UpdateFrameGlow() {
+
+	if (!isFrameGlow_) return;
+
+	frameGlowTimer_ += 1.0f;
+
+	float hue = 0.0f;
+
+	switch (judgeType_) {
+
+	case JudgeType::Good:
+
+		hue =
+			90.0f +
+			sinf(frameGlowTimer_ * 0.03f) * 40.0f;
+
+		break;
+
+	case JudgeType::Great:
+
+		hue =
+			180.0f +
+			sinf(frameGlowTimer_ * 0.03f) * 50.0f;
+
+		break;
+
+	case JudgeType::Perfect:
+
+		hue =
+			42.0f +
+			sinf(frameGlowTimer_ * 0.04f) * 12.0f;
+
+		break;
+
+	default:
+		return;
+	}
+
+	YKEngine::Vector4 color =
+		HSVToRGB(hue, 1.0f, 1.0f);
+
+	frameSprite_->SetColor(color);
+}
+
 //現在のジャッジエフェクトスプライト取得
 YKEngine::Sprite* Ui::GetCurrentJudgeSprite() {
 	switch (judgeType_) {

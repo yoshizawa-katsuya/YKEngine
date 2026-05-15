@@ -2,6 +2,7 @@
 #include "Sprite.h"
 #include "imgui.h"
 #include "Vector2.h"
+#include "Vector4.h"
 #include <array>
 #include <memory>
 
@@ -54,6 +55,10 @@ private:
     void StartJudgeEffect(JudgeType type);
 	//ジャッジエフェクト更新
     void UpdateJudgeEffect();
+	//画面枠発光更新
+    void UpdateFrameGlow();
+	//HSVからRGBに変換
+    YKEngine::Vector4 HSVToRGB(float h, float s, float v);
 	//現在のジャッジエフェクトスプライト取得
     YKEngine::Sprite* GetCurrentJudgeSprite();
 
@@ -80,6 +85,8 @@ private:
     std::unique_ptr<YKEngine::Sprite> goodSprite_;
     std::unique_ptr<YKEngine::Sprite> greatSprite_;
     std::unique_ptr<YKEngine::Sprite> perfectSprite_;
+    //画面枠スプライト
+    std::unique_ptr<YKEngine::Sprite>frameSprite_;
     //スコアテクスチャ
     std::array<uint32_t, 10> numberTextures_;
     //桁
@@ -108,6 +115,10 @@ private:
     float judgeScale_ = 0.0f;
 	//ジャッジエフェクトアルファ
     float judgeAlpha_ = 0.0f;
+	//画面枠発光用タイマー
+    float frameGlowTimer_ = 0.0f;
+	//画面枠発光フラグ
+    bool isFrameGlow_ = false;
 	//アニメーション中か
     bool isAnimating_ = false;
     //ポーズ表示フラグ
