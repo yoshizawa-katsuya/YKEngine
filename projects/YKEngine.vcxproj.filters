@@ -282,7 +282,10 @@
     <ClCompile Include="Game\objects\Wall.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Lane.cpp">
+    <ClCompile Include="Game\objects\Lane.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\LaneManager.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -583,7 +586,10 @@
     <ClInclude Include="Game\objects\Wall.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
-    <ClInclude Include="Lane.h">
+    <ClInclude Include="Game\objects\Lane.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\LaneManager.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>

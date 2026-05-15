@@ -18,4 +18,10 @@ namespace JsonKey
 		const std::string kShininess = "Shininess";	//マテリアルの光沢
 		const std::string kEnviromentCoefficient = "EnvironmentCoefficient";	//マテリアルの環境光の係数
 	}
+
+	namespace Lane
+	{
+		const std::string kGroupName = "Lane";
+		const std::string kLaneAngle = "LaneAngle";	//レーンの角度
+	}
 }

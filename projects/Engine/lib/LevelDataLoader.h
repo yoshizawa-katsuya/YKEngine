@@ -49,9 +49,26 @@ struct SplineData
 	std::vector<Vector3> controlPoints;
 };
 
+/// <summary>
+/// レーンの種別。
+/// </summary>
+enum class LaneType
+{
+	kCenter,
+	kLeft,
+	kRight,
+
+	kCount	//レーンの数
+};
+
+/// <summary>
+/// 壁のデータ。
+/// </summary>
+/// <param name="Translate">平行移動</param>
 struct WallData
 {
 	Vector3 Translate;
+	LaneType laneType;
 };
 
 /// <summary>

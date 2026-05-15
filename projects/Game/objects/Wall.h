@@ -16,7 +16,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="translate">初期位置</param>
-	void Initialize(const YKEngine::Vector3& translate);
+	void Initialize(const YKEngine::Vector3& translate, bool* isStart, YKEngine::WorldTransform* parent);
 
 	/// <summary>
 	/// 更新
@@ -38,8 +38,6 @@ public:
 
 	bool GetIsCollision() const { return isCollision_; }
 
-	void SetIsStart(bool isStart) { isStart_ = isStart; }
-
 	void SetIsCollision(bool isCollision) { isCollision_ = isCollision; }
 
 private:
@@ -52,7 +50,7 @@ private:
 
 	PoseDir state_;
 
-	bool isStart_ = false;
+	bool* isStart_ = nullptr;
 
 	//自機との衝突判定をとっていればtrue、これからならfalse
 	bool isCollision_ = false;

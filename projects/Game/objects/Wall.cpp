@@ -3,8 +3,11 @@
 
 using namespace YKEngine;
 
-void Wall::Initialize(const Vector3& translate)
+void Wall::Initialize(const Vector3& translate, bool* isStart, WorldTransform* parent)
 {
+	// 流れ始めるかどうかのフラグのポインタを受け取る
+	isStart_ = isStart;
+
 	//===== モデルの生成 =====
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
     object_ = std::make_unique<My3dObject>();
@@ -12,7 +15,8 @@ void Wall::Initialize(const Vector3& translate)
 
 	//初期位置の設定
     worldTransform_.Initialize();
-	worldTransform_.translation_ = translate;
+	worldTransform_.parent_ = parent;
+	worldTransform_.translation_.z = translate.z;
 
 	//初期状態を設定
     state_ = { PlayerPose::A,PlayerDirection::Front };
@@ -22,7 +26,7 @@ void Wall::Update()
 {
 
     // ===== 流す処理 =====
-    if (isStart_)
+    if (*isStart_)
     {
         worldTransform_.translation_.z -= 0.1f;
     }
