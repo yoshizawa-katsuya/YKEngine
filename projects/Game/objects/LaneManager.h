@@ -2,6 +2,11 @@
 #include "Lane.h"
 #include <array>
 
+namespace YKEngine
+{
+	class GlobalVariables;
+}
+
 class LaneManager
 {
 public:
@@ -28,10 +33,16 @@ public:
 
 private:
 
+	void UpdateLaneAngle();
+
+private:
+
 	//レーン
 	std::array<std::unique_ptr<Lane>, static_cast<size_t>(YKEngine::LaneType::kCount)> lanes_;
 	
 	//流れ始めるかどうか
 	bool isStart_ = false;
+
+	YKEngine::GlobalVariables* globalVariables_ = nullptr;
 };
 

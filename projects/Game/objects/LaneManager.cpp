@@ -1,4 +1,6 @@
 #include "LaneManager.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -8,6 +10,12 @@ using namespace YKEngine;
 
 void LaneManager::Initialize(const std::vector<WallData>& wallDatas)
 {
+	//GlovalVariablesに登録
+	globalVariables_ = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Lane::kGroupName;
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, JsonKey::Lane::kLaneAngle, 1.0f);
+
 	//レーンの生成
 	for (std::unique_ptr<Lane>& lane : lanes_)
 	{
@@ -15,8 +23,7 @@ void LaneManager::Initialize(const std::vector<WallData>& wallDatas)
 		lane->Initialize(&isStart_);
 	}
 	//レーンの回転を設定
-	lanes_[static_cast<size_t>(LaneType::kLeft)]->SetRotate({ 0.0f, -1.0f, 0.0f });
-	lanes_[static_cast<size_t>(LaneType::kRight)]->SetRotate({ 0.0f, 1.0f, 0.0f });
+	UpdateLaneAngle();
 
 	for (const WallData& wallData : wallDatas)
 	{
@@ -37,6 +44,12 @@ void LaneManager::Update()
 	ImGui::End();
 
 #endif // USE_IMGUI	
+
+#ifdef _DEBUG
+	//レーンの角度の更新
+	UpdateLaneAngle();
+#endif // _DEBUG
+
 	//レーンの更新
 	for (std::unique_ptr<Lane>& lane : lanes_)
 	{
@@ -51,4 +64,13 @@ void LaneManager::Draw(Camera* camera)
 	{
 		lane->Draw(camera);
 	}
+}
+
+void LaneManager::UpdateLaneAngle()
+{
+	//レーンの回転を設定
+	Vector3 rotate = {0.0f, globalVariables_->GetFloatValue(JsonKey::Lane::kGroupName, JsonKey::Lane::kLaneAngle), 0.0f};
+
+	lanes_[static_cast<size_t>(LaneType::kLeft)]->SetRotate(-rotate);
+	lanes_[static_cast<size_t>(LaneType::kRight)]->SetRotate(rotate);
 }
