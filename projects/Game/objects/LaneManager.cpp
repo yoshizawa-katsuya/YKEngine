@@ -28,9 +28,9 @@ void LaneManager::Initialize(const std::vector<WallData>& wallDatas)
 	for (const WallData& wallData : wallDatas)
 	{
 		//レーンの種別を取得
-		const LaneType laneType = wallData.laneType;
+		const PlayerDirection direction = wallData.direction;
 		//レーンに壁を追加
-		lanes_[static_cast<size_t>(laneType)]->AddWall(wallData);
+		lanes_[static_cast<size_t>(direction)]->AddWall(wallData);
 	}
 
 }
@@ -71,6 +71,6 @@ void LaneManager::UpdateLaneAngle()
 	//レーンの回転を設定
 	Vector3 rotate = {0.0f, globalVariables_->GetFloatValue(JsonKey::Lane::kGroupName, JsonKey::Lane::kLaneAngle), 0.0f};
 
-	lanes_[static_cast<size_t>(LaneType::kLeft)]->SetRotate(-rotate);
-	lanes_[static_cast<size_t>(LaneType::kRight)]->SetRotate(rotate);
+	lanes_[static_cast<size_t>(PlayerDirection::Left)]->SetRotate(-rotate);
+	lanes_[static_cast<size_t>(PlayerDirection::Right)]->SetRotate(rotate);
 }

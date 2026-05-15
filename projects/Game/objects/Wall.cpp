@@ -3,7 +3,7 @@
 
 using namespace YKEngine;
 
-void Wall::Initialize(const Vector3& translate, bool* isStart, WorldTransform* parent)
+void Wall::Initialize(const WallData& wallData, bool* isStart, WorldTransform* parent)
 {
 	// 流れ始めるかどうかのフラグのポインタを受け取る
 	isStart_ = isStart;
@@ -16,10 +16,10 @@ void Wall::Initialize(const Vector3& translate, bool* isStart, WorldTransform* p
 	//初期位置の設定
     worldTransform_.Initialize();
 	worldTransform_.parent_ = parent;
-	worldTransform_.translation_.z = translate.z;
+	worldTransform_.translation_.z = wallData.translate.z;
 
 	//初期状態を設定
-    state_ = { PlayerPose::A,PlayerDirection::Front };
+    state_ = { PlayerPose::A, wallData.direction };
 }
 
 void Wall::Update() 

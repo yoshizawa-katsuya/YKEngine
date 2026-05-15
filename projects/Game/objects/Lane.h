@@ -1,6 +1,5 @@
 #pragma once
 #include "Wall.h"
-#include "LevelDataLoader.h"
 
 /// <summary>
 /// レーンクラス

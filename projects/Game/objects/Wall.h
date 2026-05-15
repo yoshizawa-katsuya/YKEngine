@@ -2,6 +2,7 @@
 #include "My3dObject.h"
 #include "WorldTransform.h"
 #include "GameType.h"
+#include "LevelDataLoader.h"
 
 class YKEngine::Camera;
 
@@ -15,8 +16,10 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="translate">初期位置</param>
-	void Initialize(const YKEngine::Vector3& translate, bool* isStart, YKEngine::WorldTransform* parent);
+	/// <param name="wallData">壁のデータ</param>
+	/// <param name="isStart">流れ始めるかどうかのフラグのポインタ</param>
+	/// <param name="parent">親のワールド変換</param>
+	void Initialize(const YKEngine::WallData& wallData, bool* isStart, YKEngine::WorldTransform* parent);
 
 	/// <summary>
 	/// 更新
