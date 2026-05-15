@@ -47,16 +47,30 @@ PixelShaderOutput main(VertexShaderOutput input)
     }
     float mask = gMaskTexture.Sample(gSampler, transformedUV.xy).r;
 
-    if (mask < gMaterial.progress)
-    {
-        discard;
-    }
-    
+    // dissolve幅
+    float edge = 0.1f;
+
+   // progressを少し広げる
+    float threshold =
+    lerp(-edge, 1.0f + edge, gMaterial.progress);
+
+    float alpha =
+    smoothstep(
+        threshold - edge,
+        threshold + edge,
+        mask
+    );
+
     output.color = gMaterial.color * textureColor;
-    
-    if (output.color.a == 0.0)
+
+    // αを掛ける
+    output.color.a *= alpha;
+
+    // 完全透明なら捨てる
+    if (output.color.a <= 0.01f)
     {
         discard;
     }
+
     return output;
 }

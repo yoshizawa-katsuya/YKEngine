@@ -69,5 +69,13 @@ private:
 	YKEngine::ModelPlatform* modelPlatform_;
 	
 	YKEngine::Sprite transitionSprite_;
+
+	float progress_ = 1.0f; // トランジションの進行度
+
+	// トランジションのタイマー
+	float transitionT_ = 0.0f;
+
+	// トランジションのフレーム数
+	float duration_ = 120.0f;
 };
 

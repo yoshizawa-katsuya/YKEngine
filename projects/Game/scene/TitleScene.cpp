@@ -27,9 +27,9 @@ void TitleScene::Initialize()
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	sprite_->SetPosition({ 100.0f, 100.0f });
 	*/
-	transitionSprite_.Initialize(TextureManager::GetInstance()->Load("./resources/uvChecker.png"));
+	transitionSprite_.Initialize(TextureManager::GetInstance()->Load("./resources/load.png"));
 	transitionSprite_.SetMaskTexture(TextureManager::GetInstance()->Load("./resources/loadMask.png"));
-	transitionSprite_.SetProgress(1.0f);
+	transitionSprite_.SetProgress(progress_);
 }
 
 void TitleScene::Update()
@@ -42,6 +42,7 @@ void TitleScene::Update()
 	ImGui::Text("%s",state_ == State::START ? "Press Space Key" : state_ == State::OPTIONS ? "Left/right arrow keys Select Difficulty Press Space Key" : "Go To GameScene...");
 	ImGui::Text("State: %s", state_ == State::START ? "START" : state_ == State::OPTIONS ? "OPTIONS" : "EXIT");
 	ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
+	ImGui::SliderFloat("progress", &progress_, 0.0f, 1.0f);
 	ImGui::End();
 
 #endif // USE_IMGUI
@@ -106,12 +107,28 @@ void TitleScene::Update()
 		break;
 	case State::EXIT:
 		// 終了処理
-		// 難易度をシーンマネージャに渡す
-		sceneManager_->SetDifficulty(static_cast<int>(difficulty_));
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("GameScene");
+		 // 0 → 1へ進行
+		transitionT_ += 1.0f / duration_;
+
+		// clamp
+		transitionT_ = std::clamp(transitionT_, 0.0f, 1.0f);
+
+		// EaseOutQuint
+		float t = 1.0f - powf(1.0f - transitionT_, 5.0f);
+
+		// progress反映
+		progress_ = 1.0f - t;
+
+		// 終了
+		if (transitionT_ >= 1.0f)
+		{
+			sceneManager_->SetDifficulty(static_cast<int>(difficulty_));
+			sceneManager_->ChengeScene("GameScene");
+		}
+
 		break;
 	}
+	transitionSprite_.SetProgress(progress_);
 }
 
 void TitleScene::Draw()
