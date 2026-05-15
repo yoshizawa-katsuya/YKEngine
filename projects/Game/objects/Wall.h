@@ -51,9 +51,13 @@ private:
 
 	std::unique_ptr<YKEngine::My3dObject> object_;
 
+	//壁の状態
 	PoseDir state_;
 
 	bool* isStart_ = nullptr;
+
+	//壁の移動速度
+	float speed_ = 0.1f;
 
 	//自機との衝突判定をとっていればtrue、これからならfalse
 	bool isCollision_ = false;

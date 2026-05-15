@@ -24,4 +24,10 @@ namespace JsonKey
 		const std::string kGroupName = "Lane";
 		const std::string kLaneAngle = "LaneAngle";	//レーンの角度
 	}
+
+	namespace Wall
+	{
+		const std::string kGroupName = "Wall";
+		const std::string kSpeed = "Speed";	//壁の移動速度
+	}
 }

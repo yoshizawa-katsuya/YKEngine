@@ -12,9 +12,14 @@ void LaneManager::Initialize(const std::vector<WallData>& wallDatas)
 {
 	//GlovalVariablesに登録
 	globalVariables_ = GlobalVariables::GetInstance();
-	const std::string& groupName = JsonKey::Lane::kGroupName;
-	globalVariables_->CreateGroup(groupName);
-	globalVariables_->AddItem(groupName, JsonKey::Lane::kLaneAngle, 1.0f);
+	//レーンの情報を登録
+	const std::string& laneGroupName = JsonKey::Lane::kGroupName;
+	globalVariables_->CreateGroup(laneGroupName);
+	globalVariables_->AddItem(laneGroupName, JsonKey::Lane::kLaneAngle, 1.0f);
+	//壁の情報を登録
+	const std::string& wallGroupName = JsonKey::Wall::kGroupName;
+	globalVariables_->CreateGroup(wallGroupName);
+	globalVariables_->AddItem(wallGroupName, JsonKey::Wall::kSpeed, 0.1f);
 
 	//レーンの生成
 	for (std::unique_ptr<Lane>& lane : lanes_)

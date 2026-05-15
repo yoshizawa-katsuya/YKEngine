@@ -1,10 +1,16 @@
 #include "Wall.h"
 #include "ModelPlatform.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
 void Wall::Initialize(const WallData& wallData, bool* isStart, WorldTransform* parent)
 {
+	//GlovalVariablesから壁の移動速度を取得
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	speed_ = globalVariables->GetFloatValue(JsonKey::Wall::kGroupName, JsonKey::Wall::kSpeed);
+
 	// 流れ始めるかどうかのフラグのポインタを受け取る
 	isStart_ = isStart;
 
@@ -28,7 +34,7 @@ void Wall::Update()
     // ===== 流す処理 =====
     if (*isStart_)
     {
-        worldTransform_.translation_.z -= 0.1f;
+        worldTransform_.translation_.z -= speed_;
     }
 
     UpdateColorForDebug();
