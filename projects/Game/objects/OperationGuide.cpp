@@ -7,7 +7,7 @@
 
 using namespace YKEngine;
 
-void OperationGuide::Initialize()
+void OperationGuide::Initialize(bool* isDodge)
 {
 	input_ = Input::GetInstance();
 
@@ -25,33 +25,42 @@ void OperationGuide::Initialize()
 	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kReticleIconPosition, Vector2(600.0f, 200.0f));
 	globalVariables_->AddItem(groupName, JsonKey::OperationGuide::kStickMoveValue, 10.0f);
 
+	//描画は最初はしない
 	isDraw_ = false;
+	isDodge_ = isDodge;	//回避状態かどうかを示すフラグへのポインタを保存
+
 	TextureManager* textureManager = TextureManager::GetInstance();
 
 	//スプライトの生成
 	RTriggerSprite_ = std::make_unique<Sprite>();
-	RTriggerSprite_->Initialize(textureManager->Load("./Resources/RTrigger.png"));
+	RTriggerSprite_->Initialize(textureManager->Load("./Resources/operationGuide/RTrigger.png"));
+
+	RTriggerReactionSprite_ = std::make_unique<Sprite>();
+	RTriggerReactionSprite_->Initialize(textureManager->Load("./Resources/operationGuide/RTriggerReaction.png"));
 
 	LTriggerSprite_ = std::make_unique<Sprite>();
-	LTriggerSprite_->Initialize(textureManager->Load("./Resources/LTrigger.png"));
+	LTriggerSprite_->Initialize(textureManager->Load("./Resources/operationGuide/LTrigger.png"));
+
+	LTriggerReactionSprite_ = std::make_unique<Sprite>();
+	LTriggerReactionSprite_->Initialize(textureManager->Load("./Resources/operationGuide/LTriggerReaction.png"));
 
 	RStickSprite_ = std::make_unique<Sprite>();
-	RStickSprite_->Initialize(textureManager->Load("./Resources/RStick.png"));
+	RStickSprite_->Initialize(textureManager->Load("./Resources/operationGuide/RStick.png"));
 
 	LStickSprite_ = std::make_unique<Sprite>();
-	LStickSprite_->Initialize(textureManager->Load("./Resources/LStick.png"));
+	LStickSprite_->Initialize(textureManager->Load("./Resources/operationGuide/LStick.png"));
 
 	playerIconSprite_ = std::make_unique<Sprite>();
-	playerIconSprite_->Initialize(textureManager->Load("./Resources/playerIcon.png"));
+	playerIconSprite_->Initialize(textureManager->Load("./Resources/operationGuide/playerIcon.png"));
 
 	dodgeIconSprite_ = std::make_unique<Sprite>();
-	dodgeIconSprite_->Initialize(textureManager->Load("./Resources/dodgeIcon.png"));
+	dodgeIconSprite_->Initialize(textureManager->Load("./Resources/operationGuide/dodgeIcon.png"));
 
 	shotIconSprite_ = std::make_unique<Sprite>();
-	shotIconSprite_->Initialize(textureManager->Load("./Resources/shotIcon.png"));
+	shotIconSprite_->Initialize(textureManager->Load("./Resources/operationGuide/shotIcon.png"));
 
 	reticleIconSprite_ = std::make_unique<Sprite>();
-	reticleIconSprite_->Initialize(textureManager->Load("./Resources/reticleIcon.png"));
+	reticleIconSprite_->Initialize(textureManager->Load("./Resources/operationGuide/reticleIcon.png"));
 
 	SetUIPositions();
 }
@@ -67,6 +76,13 @@ void OperationGuide::Update()
 	//操作に応じてスティックのアイコンを移動させる
 	MoveStickIcon();
 	
+	//右トリガーを押しているか
+	isPushRTrigger_ = false;
+	if (input_->PushKey(DIK_SPACE) || input_->PushButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	{
+		isPushRTrigger_ = true;
+	}
+
 }
 
 void OperationGuide::Draw()
@@ -77,8 +93,24 @@ void OperationGuide::Draw()
 		return;
 	}
 	//操作説明HUDの描画
-	RTriggerSprite_->Draw();
-	LTriggerSprite_->Draw();
+	if (isPushRTrigger_ && !*isDodge_)	//右トリガーを押しているときは反応のスプライトを描画。回避中は射撃できないため、反応のスプライトを描画しない
+	{
+		RTriggerReactionSprite_->Draw();
+	}
+	else
+	{
+		RTriggerSprite_->Draw();
+	}
+
+	if (*isDodge_)	//回避状態のときは反応のスプライトを描画
+	{
+		LTriggerReactionSprite_->Draw();
+	}
+	else
+	{
+		LTriggerSprite_->Draw();
+	}
+
 	RStickSprite_->Draw();
 	LStickSprite_->Draw();
 
@@ -101,7 +133,9 @@ void OperationGuide::SetUIPositions()
 	globalVariables_ = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::OperationGuide::kGroupName;
 	RTriggerSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kRTriggerPosition));
+	RTriggerReactionSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kRTriggerPosition));
 	LTriggerSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kLTriggerPosition));
+	LTriggerReactionSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kLTriggerPosition));
 	RStickSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kRStickPosition));
 	LStickSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kLStickPosition));
 

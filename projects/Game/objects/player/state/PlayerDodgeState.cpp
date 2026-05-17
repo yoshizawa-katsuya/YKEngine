@@ -12,8 +12,12 @@ using namespace YKEngine;
 
 void PlayerDodgeState::OnEnter(PlayerStateContext* player)
 {
+	//回避状態に設定
+	player->SetIsDodge(true);
+	//補完係数のリセット
 	player->ResetT();
 
+	//回転量の設定。移動方向に応じて回転方向を変える
 	Vector3 move = player->GetMove();
 	if (move.x > 0.0f)
 	{
@@ -54,4 +58,9 @@ void PlayerDodgeState::OnUpdate(PlayerStateContext* player)
 	{
 		stateMachine_->ChangeState<PlayerGameOverState>();
 	}
+}
+
+void PlayerDodgeState::OnExit(PlayerStateContext* player)
+{
+	player->SetIsDodge(false);
 }

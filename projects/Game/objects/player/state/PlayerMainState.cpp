@@ -17,7 +17,7 @@ void PlayerMainState::OnUpdate(PlayerStateContext* player)
 {
 	player->UpdateMain();
 	
-	if ((input_->TriggerKey(DIK_J) || input_->TriggerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)) && player->IsMoving())
+	if ((input_->TriggerKey(DIK_Q) || input_->TriggerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)) && player->IsMoving())
 	{
 		stateMachine_->ChangeState<PlayerDodgeState>();
 	}

@@ -23,6 +23,12 @@ private:
 	/// <param name="player">プレイヤー</param>
 	void OnUpdate(PlayerStateContext* player) override;
 
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	/// <param name="player">プレイヤー</param>
+	void OnExit(PlayerStateContext* player) override;
+
 	// 回転量（ラジアン）
 	float rotateQuantity_ = std::numbers::pi_v<float> * 4.0f;
 

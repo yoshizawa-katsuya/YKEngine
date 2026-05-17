@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	void Initialize();
+	void Initialize(bool* isDodge);
 
 	/// <summary>
 	/// 更新。
@@ -53,7 +53,9 @@ private:
 	YKEngine::Input* input_;
 
 	std::unique_ptr<YKEngine::Sprite> RTriggerSprite_;	//右トリガーのスプライト
+	std::unique_ptr<YKEngine::Sprite> RTriggerReactionSprite_;	//右トリガーの反応のスプライト
 	std::unique_ptr<YKEngine::Sprite> LTriggerSprite_;	//左トリガーのスプライト
+	std::unique_ptr<YKEngine::Sprite> LTriggerReactionSprite_;	//左トリガーの反応のスプライト
 	std::unique_ptr<YKEngine::Sprite> RStickSprite_;	//右スティックのスプライト
 	std::unique_ptr<YKEngine::Sprite> LStickSprite_;	//左スティックのスプライト
 
@@ -61,5 +63,8 @@ private:
 	std::unique_ptr<YKEngine::Sprite> dodgeIconSprite_;	//回避アイコンのスプライト
 	std::unique_ptr<YKEngine::Sprite> shotIconSprite_;	//ショットアイコンのスプライト
 	std::unique_ptr<YKEngine::Sprite> reticleIconSprite_;	//照準アイコンのスプライト
+
+	bool isPushRTrigger_ = false;	//右トリガーを押しているか
+	bool* isDodge_;	//回避状態かどうかを示すフラグへのポインタ
 };
 

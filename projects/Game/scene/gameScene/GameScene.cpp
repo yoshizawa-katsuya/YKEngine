@@ -35,9 +35,6 @@ void GameScene::Initialize() {
 
 	dxCommon_->ResetDeltaTime();
 
-	operationGuide_ = std::make_unique<OperationGuide>();
-	operationGuide_->Initialize();
-
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
 	stageObjects_->Initialize();
@@ -62,6 +59,10 @@ void GameScene::Initialize() {
 
 	//ステージの生成
 	CreateLevel();
+
+	//操作ガイドの生成
+	operationGuide_ = std::make_unique<OperationGuide>();
+	operationGuide_->Initialize(player_->GetIsDodgePtr());
 
 	//カメラの生成
 	cameraManager_ = std::make_unique<CameraManager>();

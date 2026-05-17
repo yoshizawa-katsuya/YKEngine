@@ -68,6 +68,8 @@ public:
 
 	bool GetIsGameOverEnd() { return isGameOverEnd_; }
 
+	bool* GetIsDodgePtr() { return &isDodge_; }
+
 	void SetPlayerBulletManager(PlayerBulletManager* playerBulletManager) { playerBulletManager_ = playerBulletManager; }
 
 	void SetRailCamera(YKEngine::Camera* railCamera) { railCamera_ = railCamera; }
@@ -213,19 +215,25 @@ private:
 	/// <summary>
 	/// 移動量が0でないときにtrueを返す
 	/// </summary>
-	bool IsMoving() { return Length(move_) > 0.0f; }
+	bool IsMoving() override { return Length(move_) > 0.0f; }
 
 	bool GetIsGameClear() override { return isGameClear_; }
 
 	/// <summary>
 	/// 補完係数のリセット
 	/// </summary>
-	void ResetT() { t_ = 0.0f; }
+	void ResetT() override { t_ = 0.0f; }
+
+	/// <summary>
+	/// 回避状態かどうかを設定
+	/// </summary>
+	/// <param name="isDodge">回避状態ならtrue</param>
+	void SetIsDodge(bool isDodge) override { isDodge_ = isDodge; }
 
 	/// <summary>
 	/// 移動量の取得
 	/// </summary>
-	const YKEngine::Vector3& GetMove() { return move_; }
+	const YKEngine::Vector3& GetMove() override { return move_; }
 
 	static constexpr float DeltaTime_ = 1.0f / 60.0f; // デルタタイム（60FPS想定）
 
@@ -271,6 +279,8 @@ private:
 
 	//ゲームクリアしていたらtrue
 	bool isGameClear_ = false;
+
+	bool isDodge_ = false;	//回避中かどうか
 
 	//補完係数
 	float t_ = 0.0f;

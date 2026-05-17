@@ -84,6 +84,12 @@ public:
 	virtual const YKEngine::Vector3& GetMove() = 0;
 
 	/// <summary>
+	/// 回避状態かどうかを設定
+	/// </summary>
+	/// <param name="isDodge">回避状態ならtrue</param>
+	virtual void SetIsDodge(bool isDodge) = 0;
+
+	/// <summary>
 	/// 回避時の回転
 	/// </summary>
 	virtual void DodgeRotate(YKEngine::SRTAnimator* rotateAnime) = 0;

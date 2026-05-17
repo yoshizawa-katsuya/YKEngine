@@ -7,6 +7,7 @@ void EnemySpawnManager::Initialize()
 {
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");
 	model_ = ModelPlatform::GetInstance()->CreateSphere(textureHandle, "EnemySpawn");
+	model_->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
 
 }
 
