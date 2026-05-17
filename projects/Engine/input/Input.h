@@ -148,10 +148,28 @@ public:
 	bool ReleaseButton(uint32_t xinput);
 
 	/// <summary>
+	/// ゲームパッドの右トリガーを押しているかをチェック。
+	/// </summary>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
+	bool PushRT();
+
+	/// <summary>
 	/// ゲームパッドの右トリガーを押した瞬間をチェック。
 	/// </summary>
 	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerRT();
+	bool TriggerRT();
+
+	/// <summary>
+	/// ゲームパッドの左トリガーを押しているかをチェック。
+	/// </summary>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
+	bool PushLT();
+
+	/// <summary>
+	/// ゲームパッドの左トリガーを押した瞬間をチェック。
+	/// </summary>
+	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
+	bool TriggerLT();
 
 	/// <summary>
 	/// ゲームパッドのボタンを押しっぱなしにしているかチェック。
