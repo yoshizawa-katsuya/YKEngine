@@ -246,14 +246,24 @@ bool Input::ReleaseButton(uint32_t xinput)
 	return false;
 }
 
-bool Input::TrigerRT()
+bool YKEngine::Input::PushRT()
 {
-	if ((gamePadState_.Gamepad.bRightTrigger > 0) && !(preGamePadState_.Gamepad.bRightTrigger > 0))
-	{
-		return true;
-	}
+	return gamePadState_.Gamepad.bRightTrigger > 0;
+}
 
-	return false;
+bool Input::TriggerRT()
+{
+	return (gamePadState_.Gamepad.bRightTrigger > 0) && !(preGamePadState_.Gamepad.bRightTrigger > 0);
+}
+
+bool YKEngine::Input::PushLT()
+{
+	return gamePadState_.Gamepad.bLeftTrigger > 0;
+}
+
+bool YKEngine::Input::TriggerLT()
+{
+	return (gamePadState_.Gamepad.bLeftTrigger > 0) && !(preGamePadState_.Gamepad.bLeftTrigger > 0);
 }
 
 bool Input::HoldButton(uint32_t xinput)
