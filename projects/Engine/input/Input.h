@@ -194,13 +194,13 @@ public:
 	/// 左スティックを下に倒した瞬間をチェック。
 	/// </summary>
 	/// <returns>下に倒した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerLeftStickDown();
+	bool TriggerLeftStickDown();
 
 	/// <summary>
 	/// 左スティックを上に倒した瞬間をチェック。
 	/// </summary>
 	/// <returns>上に倒した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerLeftStickUp();
+	bool TriggerLeftStickUp();
 
 	/// <summary>
 	/// 右スティックのX方向の入力。-1.0f~1.0fの範囲。
