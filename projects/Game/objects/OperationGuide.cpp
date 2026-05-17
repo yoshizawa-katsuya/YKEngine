@@ -78,7 +78,7 @@ void OperationGuide::Update()
 	
 	//右トリガーを押しているか
 	isPushRTrigger_ = false;
-	if (input_->PushKey(DIK_SPACE) || input_->PushButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	if (input_->PushKey(DIK_SPACE) || input_->PushButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || input_->PushRT())
 	{
 		isPushRTrigger_ = true;
 	}

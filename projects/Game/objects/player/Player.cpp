@@ -489,7 +489,7 @@ void Player::Attack() {
 		return;
 	}
 	//弾発射処理
-	if (input_->PushKey(DIK_SPACE) || input_->PushButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
+	if (input_->PushKey(DIK_SPACE) || input_->PushButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || input_->PushRT())
 	{
 		//弾の方向
 		Vector3 bulletDirection = Normalize(direction_);

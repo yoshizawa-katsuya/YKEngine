@@ -52,7 +52,7 @@ void Pause::Update()
 
 	Input* input = Input::GetInstance();
 	//カーソルの移動
-	if (input->TriggerKey(DIK_W) || input->TriggerButton(XINPUT_GAMEPAD_DPAD_UP))
+	if (input->TriggerKey(DIK_W) || input->TriggerButton(XINPUT_GAMEPAD_DPAD_UP) || input->TrigerLeftStickUp())
 	{
 		cursorTarget_++;
 		if (cursorTarget_ >= static_cast<int32_t>(UIName::kCount))
@@ -60,7 +60,7 @@ void Pause::Update()
 			cursorTarget_ = 0;
 		}
 	}
-	else if (input->TriggerKey(DIK_S) || input->TriggerButton(XINPUT_GAMEPAD_DPAD_DOWN))
+	else if (input->TriggerKey(DIK_S) || input->TriggerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input->TrigerLeftStickDown())
 	{
 		cursorTarget_--;
 		if (cursorTarget_ < 0)

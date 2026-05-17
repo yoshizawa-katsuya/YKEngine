@@ -103,9 +103,7 @@ void GameScene::Update()
 	//ステートマシンの更新
 	stateMachine_->Update();
 
-	//操作説明の更新
-	operationGuide_->Update();
-
+	//光源の更新
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
@@ -244,6 +242,9 @@ void GameScene::UpdateMain()
 
 	//プレイヤーの更新
 	player_->Update();
+
+	//操作説明の更新
+	operationGuide_->Update();
 
 	//自機の弾の更新
 	playerBulletManager_->Update();
