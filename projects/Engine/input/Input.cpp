@@ -286,7 +286,7 @@ float Input::GetLeftStickY()
 	return static_cast<float>(gamePadState_.Gamepad.sThumbLY) / SHRT_MAX;
 }
 
-bool Input::TrigerLeftStickDown()
+bool Input::TriggerLeftStickDown()
 {
 	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) < 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) < 0.0f))
 	{
@@ -295,7 +295,7 @@ bool Input::TrigerLeftStickDown()
 	return false;
 }
 
-bool Input::TrigerLeftStickUp()
+bool Input::TriggerLeftStickUp()
 {
 	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) > 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) > 0.0f))
 	{
