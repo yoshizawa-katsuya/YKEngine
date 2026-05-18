@@ -47,8 +47,10 @@ private:
 	void UpdateColorForDebug();
 
 private:
+	//Transform変数
 	YKEngine::WorldTransform worldTransform_;
 
+	//3Dオブジェクト
 	std::unique_ptr<YKEngine::My3dObject> object_;
 
 	//壁の状態
