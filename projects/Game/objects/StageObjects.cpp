@@ -90,7 +90,7 @@ void StageObjects::DrawSkyBox(YKEngine::Camera* camera)
 void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& objectDatas)
 {
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
-	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");
+	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/gradation.png");
 
 	for (const ObjectData& objectData : objectDatas)
 	{
