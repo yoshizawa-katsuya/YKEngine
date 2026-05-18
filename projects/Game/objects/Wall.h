@@ -56,6 +56,9 @@ private:
 	//壁の状態
 	PoseDir state_;
 
+	//フェイント用のポーズ（オプション）
+	std::optional<PlayerPose> feintPose_;
+
 	bool* isStart_ = nullptr;
 
 	//壁の移動速度

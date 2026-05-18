@@ -198,6 +198,40 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 					{
 						assert(0);
 					}
+
+					if (child.contains("feint_pose"))
+					{
+						std::string feintPoseStr = child["feint_pose"].get<std::string>();
+						if (feintPoseStr == "A")
+						{
+							wallData.feintPose = PlayerPose::A;
+						}
+						else if (feintPoseStr == "B")
+						{
+							wallData.feintPose = PlayerPose::B;
+						}
+						else if (feintPoseStr == "C")
+						{
+							wallData.feintPose = PlayerPose::C;
+						}
+						else if (feintPoseStr == "D")
+						{
+							wallData.feintPose = PlayerPose::D;
+						}
+						else if (feintPoseStr == "Squat")
+						{
+							wallData.feintPose = PlayerPose::Squat;
+						}
+						else if (feintPoseStr == "Base")
+						{
+							wallData.feintPose = PlayerPose::Base;
+						}
+						else
+						{
+							assert(0);
+						}
+					}
+
 				}
 			}
 		}

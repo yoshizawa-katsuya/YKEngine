@@ -84,7 +84,8 @@
                             1.0
                         ]
                     },
-                    "pose": "A"
+                    "pose": "A",
+                    "feint_pose": "D"
                 },
                 {
                     "type": "Wall",
