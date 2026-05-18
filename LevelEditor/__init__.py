@@ -36,6 +36,8 @@ from .params import OBJECT_PT_params
 from .params import MYADDON_OT_add_wave_num
 from .params import MYADDON_OT_add_speed
 from .params import MYADDON_OT_add_has_collider
+from .params import MYADDON_OT_add_pose
+from .params import MYADDON_OT_add_feint_pose
 
 #Blenderに登録するクラスリスト
 classes = (
@@ -60,6 +62,8 @@ classes = (
     MYADDON_OT_add_wave_num,
     MYADDON_OT_add_speed,
     MYADDON_OT_add_has_collider,
+    MYADDON_OT_add_pose,
+    MYADDON_OT_add_feint_pose,
 )
 
 #メニュー項目描画

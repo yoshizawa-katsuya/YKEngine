@@ -169,7 +169,7 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 					wallData.translate.y = static_cast<float>(transform["translation"][2]);
 					wallData.translate.z = -static_cast<float>(transform["translation"][1]);
 					wallData.direction = direction;
-					std::string poseStr = child["file_name"].get<std::string>();
+					std::string poseStr = child["pose"].get<std::string>();
 					if (poseStr == "A")
 					{
 						wallData.pose = PlayerPose::A;

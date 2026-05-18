@@ -57,6 +57,35 @@ class MYADDON_OT_add_has_collider(bpy.types.Operator):
 
         return {"FINISHED"} 
 
+#オペレータ カスタムプロパティ['pose']追加
+class MYADDON_OT_add_pose(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_add_pose"
+    bl_label = "Pose 追加"
+    bl_description = "['pose']カスタムプロパティを追加します"
+    bl_options = {"REGISTER", "UNDO"}
+
+    def execute(self, context):
+
+        #['pose']カスタムプロパティを追加
+        context.object["pose"] = ""
+
+        return {"FINISHED"} 
+
+#オペレータ カスタムプロパティ['feint_pose']追加
+class MYADDON_OT_add_feint_pose(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_add_feint_pose"
+    bl_label = "FeintPose 追加"
+    bl_description = "['feint_pose']カスタムプロパティを追加します"
+    bl_options = {"REGISTER", "UNDO"}
+
+    def execute(self, context):
+
+        #['feint_pose']カスタムプロパティを追加
+        context.object["feint_pose"] = ""
+
+        return {"FINISHED"} 
+
+
 #パネル 待機時間
 class OBJECT_PT_params(bpy.types.Panel):
     """オブジェクトのファイルネームパネル"""
@@ -100,3 +129,19 @@ class OBJECT_PT_params(bpy.types.Panel):
         else:
             #プロパティがなければ、プロパティ追加ボタンを表示
             self.layout.operator(MYADDON_OT_add_has_collider.bl_idname)
+
+        #パネルに項目を追加
+        if "pose" in context.object:
+            #既にプロパティがあれば、プロパティを表示
+            self.layout.prop(context.object, '["pose"]', text="pose")
+        else:
+            #プロパティがなければ、プロパティ追加ボタンを表示
+            self.layout.operator(MYADDON_OT_add_pose.bl_idname)
+
+        #パネルに項目を追加
+        if "feint_pose" in context.object:
+            #既にプロパティがあれば、プロパティを表示
+            self.layout.prop(context.object, '["feint_pose"]', text="feint_pose")
+        else:
+            #プロパティがなければ、プロパティ追加ボタンを表示
+            self.layout.operator(MYADDON_OT_add_feint_pose.bl_idname)

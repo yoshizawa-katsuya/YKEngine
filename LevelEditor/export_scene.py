@@ -117,6 +117,14 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         if "has_collider" in object:
             json_object["has_collider"] = object["has_collider"]
 
+        #カスタムプロパティ'pose'
+        if "pose" in object:
+            json_object["pose"] = object["pose"]
+
+        #カスタムプロパティ'pose'
+        if "feint_pose" in object:
+            json_object["feint_pose"] = object["feint_pose"]
+
         #1個分のjsonオブジェクトを親オブジェクトに登録
         data_parent.append(json_object)
 
