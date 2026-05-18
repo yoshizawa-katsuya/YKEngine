@@ -38,10 +38,24 @@ class MYADDON_OT_add_speed(bpy.types.Operator):
 
     def execute(self, context):
 
-        #['wave_num']カスタムプロパティを追加
+        #['speed']カスタムプロパティを追加
         context.object["speed"] = 0.0
 
         return {"FINISHED"}  
+
+#オペレータ カスタムプロパティ['has_collider']追加
+class MYADDON_OT_add_has_collider(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_add_has_collider"
+    bl_label = "HasCollider 追加"
+    bl_description = "['has_collider']カスタムプロパティを追加します"
+    bl_options = {"REGISTER", "UNDO"}
+
+    def execute(self, context):
+
+        #['has_collider']カスタムプロパティを追加
+        context.object["has_collider"] = True
+
+        return {"FINISHED"} 
 
 #パネル 待機時間
 class OBJECT_PT_params(bpy.types.Panel):
@@ -78,3 +92,11 @@ class OBJECT_PT_params(bpy.types.Panel):
         else:
             #プロパティがなければ、プロパティ追加ボタンを表示
             self.layout.operator(MYADDON_OT_add_speed.bl_idname)
+
+        #パネルに項目を追加
+        if "has_collider" in context.object:
+            #既にプロパティがあれば、プロパティを表示
+            self.layout.prop(context.object, '["has_collider"]', text="has_collider")
+        else:
+            #プロパティがなければ、プロパティ追加ボタンを表示
+            self.layout.operator(MYADDON_OT_add_has_collider.bl_idname)

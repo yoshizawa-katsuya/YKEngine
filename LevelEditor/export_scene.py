@@ -61,7 +61,7 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         #Todo: その他情報をパック
         #オブジェクトのローカルトランスフォームから
         #平行移動、回転、スケールを抽出
-        trans, rot, scale = object.matrix_local.decompose()
+        trans, rot, scale = object.matrix_world.decompose()
         #回転を Quaternion から Euler (3軸での回転角)に変換
         rot = rot.to_euler()
         #ラジアンから度数法に変換
@@ -113,13 +113,9 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         if "file_name" in object:
             json_object["file_name"] = object["file_name"]
 
-        #カスタムプロパティ'collider'
-        if "collider" in object:
-            collider = dict()
-            collider["type"] = object["collider"]
-            collider["center"] = object["collider_center"].to_list()
-            collider["size"] = object["collider_size"].to_list()
-            json_object["collider"] = collider
+        #カスタムプロパティ'has_collider'
+        if "has_collider" in object:
+            json_object["has_collider"] = object["has_collider"]
 
         #1個分のjsonオブジェクトを親オブジェクトに登録
         data_parent.append(json_object)
