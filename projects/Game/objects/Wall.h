@@ -47,13 +47,22 @@ private:
 	void UpdateColorForDebug();
 
 private:
+	//Transform変数
 	YKEngine::WorldTransform worldTransform_;
 
+	//3Dオブジェクト
 	std::unique_ptr<YKEngine::My3dObject> object_;
 
+	//壁の状態
 	PoseDir state_;
 
+	//フェイント用のポーズ（オプション）
+	std::optional<PlayerPose> feintPose_;
+
 	bool* isStart_ = nullptr;
+
+	//壁の移動速度
+	float speed_ = 0.1f;
 
 	//自機との衝突判定をとっていればtrue、これからならfalse
 	bool isCollision_ = false;

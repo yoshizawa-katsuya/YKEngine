@@ -25,7 +25,9 @@ void Ui::Initialize() {
 	for (int i = 0; i < kMaxLife; i++) {
 		lifeSprites_[i] = std::make_unique<YKEngine::Sprite>();
 		lifeSprites_[i]->Initialize(lifeTexture);
-		lifeSprites_[i]->SetPosition({ 60.0f + i * 50.0f, 120.0f });
+		YKEngine::Vector2 pos = { 60.0f + i * 50.0f, 120.0f };
+
+		lifeSprites_[i]->SetPosition(pos);
 		lifeSprites_[i]->SetSize({ 40.0f, 40.0f });
 	}
 
@@ -93,6 +95,8 @@ void Ui::Update() {
 	UpdateJudgeEffect();
 	//画面枠発光更新
 	UpdateFrameGlow();
+
+	UpdateLifeBlink();
 	//デバック
 	Debug();
 }
@@ -272,9 +276,12 @@ void Ui::HandleLifeInput() {
 }
 //ライフ減少
 void Ui::DecreaseLife() {
-	if (life_ > 0) {
-		life_--;
-	}
+	if (life_ <= 0)return;
+
+	blinkLifeIndex_ = life_ - 1;
+
+	isLifeBlink_ = true;
+	lifeBlinkTimer_ = 0.0f;
 }
 //ポーズメニュー更新
 void Ui::UpdatePauseMenu() {
@@ -423,10 +430,9 @@ void Ui::UpdateFrameGlow() {
 		break;
 
 	case JudgeType::Perfect:
-
+	
 		hue =
-			42.0f +
-			sinf(frameGlowTimer_ * 0.04f) * 12.0f;
+			fmodf(frameGlowTimer_ * 2.0f, 360.0f);
 
 		break;
 
@@ -438,6 +444,40 @@ void Ui::UpdateFrameGlow() {
 		HSVToRGB(hue, 1.0f, 1.0f);
 
 	frameSprite_->SetColor(color);
+}
+//ライフ減少アニメーション更新
+void Ui::UpdateLifeBlink() {
+
+	if (!isLifeBlink_) return;
+
+	lifeBlinkTimer_ += 0.016f;
+
+	auto& sprite = lifeSprites_[blinkLifeIndex_];
+
+	float wave =
+		(sinf(lifeBlinkTimer_ * 18.0f) + 1.0f) * 0.5f;
+
+	//補間を滑らか
+	wave = wave * wave;
+
+	//Alpha補間
+	float alpha =
+		0.1f + wave * 0.9f;
+
+	//Alphaだけ変更
+	sprite->SetColor({
+		1,1,1,alpha
+		});
+
+	//終了
+	if (lifeBlinkTimer_ >= 0.5f) {
+
+		sprite->SetColor({ 1,1,1,1 });
+
+		life_--;
+
+		isLifeBlink_ = false;
+	}
 }
 
 //現在のジャッジエフェクトスプライト取得

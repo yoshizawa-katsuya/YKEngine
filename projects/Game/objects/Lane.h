@@ -41,6 +41,8 @@ private:
 
 	//ワールド変換
 	YKEngine::WorldTransform worldTransform_;
+	//3Dオブジェクト
+	std::unique_ptr<YKEngine::My3dObject> object_;
 
 	//壁
 	std::vector<std::unique_ptr<Wall>> walls_;

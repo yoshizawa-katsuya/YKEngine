@@ -1,10 +1,16 @@
 #include "Wall.h"
 #include "ModelPlatform.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
 using namespace YKEngine;
 
 void Wall::Initialize(const WallData& wallData, bool* isStart, WorldTransform* parent)
 {
+	//GlovalVariablesから壁の移動速度を取得
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	speed_ = globalVariables->GetFloatValue(JsonKey::Wall::kGroupName, JsonKey::Wall::kSpeed);
+
 	// 流れ始めるかどうかのフラグのポインタを受け取る
 	isStart_ = isStart;
 
@@ -19,7 +25,8 @@ void Wall::Initialize(const WallData& wallData, bool* isStart, WorldTransform* p
 	worldTransform_.translation_.z = wallData.translate.z;
 
 	//初期状態を設定
-    state_ = { PlayerPose::A, wallData.direction };
+    state_ = { wallData.pose, wallData.direction };
+	feintPose_ = wallData.feintPose;
 }
 
 void Wall::Update() 
@@ -28,7 +35,12 @@ void Wall::Update()
     // ===== 流す処理 =====
     if (*isStart_)
     {
-        worldTransform_.translation_.z -= 0.1f;
+        worldTransform_.translation_.z -= speed_;
+    }
+
+    if (worldTransform_.translation_.z <= 5.0f)
+    {
+		feintPose_ = std::nullopt; //フェイント用のポーズをリセット
     }
 
     UpdateColorForDebug();
@@ -56,5 +68,15 @@ void Wall::UpdateColorForDebug()
         {1,1,0,1}, // D
     };
 
-    object_->SetColor(kPoseColors[static_cast<int>(state_.pose)]);
+    if (feintPose_.has_value())
+    {
+        //フェイント用のポーズがある場合はフェイント用のポーズの色を設定
+        object_->SetColor(kPoseColors[static_cast<int>(feintPose_.value())]);
+    }
+    else
+    {
+        //ない場合は通常のポーズの色を設定
+        object_->SetColor(kPoseColors[static_cast<int>(state_.pose)]);
+    }
+
 }

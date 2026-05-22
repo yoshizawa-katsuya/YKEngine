@@ -1,5 +1,6 @@
 #pragma once
 #include "My3dObject.h"
+#include "Skin3dObject.h"
 #include "WorldTransform.h"
 #include "SRTAnimator.h"
 #include "Animation.h"
@@ -45,6 +46,14 @@ private:
 
 	void UpdateColorForDebug();
 
+	void PlayAnimation(const std::string& name);
+
+	/// <summary> ポーズの切り替わりを検知し、適切なアニメーションを開始する </summary>
+	void UpdateAnimationTrigger();
+
+	/// <summary> Returnモーションなどの時間経過による自動遷移を管理する </summary>
+	void UpdateAnimationTimers();
+
 	// 死亡開始関数
 	void StartDeathAnimation();
 
@@ -72,13 +81,20 @@ private:
 	//Transform変数を作る
 	YKEngine::WorldTransform worldTransform_;
 
-	std::unique_ptr<YKEngine::My3dObject> object_;
+	std::unique_ptr<YKEngine::Skin3dObject> object_;
+	std::map<std::string, std::unique_ptr<YKEngine::Animation>> animations_;
+	YKEngine::Animation* currentAnimation_ = nullptr;
+	std::string currentAnimationName_ = "";
 
 	YKEngine::Input* input_ = nullptr;
 
 	PlayerPose pose_;
-	PlayerDirection direction_;
+	PlayerPose prevPose_;
 
+	bool isReturnPhase_ = false;
+	float returnTimer_ = 0.0f;
+
+	PlayerDirection direction_;
 	float kAngle_;
 
 	// 死亡開始要求
