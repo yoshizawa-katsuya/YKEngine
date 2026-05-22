@@ -13,7 +13,7 @@ void Effect::Initialize()
 	//紙吹雪テクスチャ
 	uint32_t confettiTexture =
 		TextureManager::GetInstance()->Load(
-			"Resources/particle/confetti.png"
+			"Resources/particle/confetti11.png"
 		);
 
 	//板ポリモデル
@@ -28,6 +28,14 @@ void Effect::Initialize()
 	confettiEmitter_->Initialize(confettiTexture, model);
 
 	//発生位置(画面上部)
+	confettiEmitter_->SetIsRandomTranslate(true);
+
+	confettiEmitter_->SetRandTranslationMin({
+		-12.0f,0.0f,0.0f });
+
+	confettiEmitter_->SetRandTranslationMax({
+          12.0f,0.0f,0.0f });
+
 	confettiEmitter_->SetTranslation({ 0.0f, 8.0f, 0.0f });
 
 	//発生数
@@ -85,14 +93,14 @@ void Effect::Initialize()
 	confettiEmitter_->SetIsRandomScele(true);
 
 	confettiEmitter_->SetRandScaleMin({
-		0.02f,
-		0.008f,
+		0.003f,
+		0.001f,
 		0.001f
 		});
 
 	confettiEmitter_->SetRandScaleMax({
-		0.05f,
-		0.015f,
+		0.002f,
+		0.006f,
 		0.001f
 		});
 
@@ -109,7 +117,7 @@ void Effect::Initialize()
 	confettiEmitter_->SetIsUseBillboard(false);
 
 	//減速
-	confettiEmitter_->SetIsDownVelocity(true);
+	confettiEmitter_->SetIsDownVelocity(false);
 
 	//通常ブレンド
 	confettiEmitter_->SetDrawMode(
