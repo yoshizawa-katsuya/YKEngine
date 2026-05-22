@@ -76,9 +76,6 @@ public:
 	/// </summary>
 	void Run();
 
-	//終了フラグのチェック
-	virtual bool GetIsEndReqest() { return isEndReqest_; }
-
 protected:
 
 	ThreadPool* threadPool_ = nullptr;

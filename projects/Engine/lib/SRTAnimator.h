@@ -32,7 +32,7 @@ public:
 	//更新。経過時間を外部で管理する
 	Vector3 Update(float& elapsedTime);
 
-	bool GetIsEnd() { return isEnd_; }
+	bool GetIsEnd() const { return isEnd_; }
 
 	void SetEasingType(EasingType easingType) { easingType_ = easingType; }
 

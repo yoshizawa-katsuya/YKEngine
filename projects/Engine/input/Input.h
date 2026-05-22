@@ -148,10 +148,28 @@ public:
 	bool ReleaseButton(uint32_t xinput);
 
 	/// <summary>
+	/// ゲームパッドの右トリガーを押しているかをチェック。
+	/// </summary>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
+	bool PushRT();
+
+	/// <summary>
 	/// ゲームパッドの右トリガーを押した瞬間をチェック。
 	/// </summary>
 	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerRT();
+	bool TriggerRT();
+
+	/// <summary>
+	/// ゲームパッドの左トリガーを押しているかをチェック。
+	/// </summary>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
+	bool PushLT();
+
+	/// <summary>
+	/// ゲームパッドの左トリガーを押した瞬間をチェック。
+	/// </summary>
+	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
+	bool TriggerLT();
 
 	/// <summary>
 	/// ゲームパッドのボタンを押しっぱなしにしているかチェック。
@@ -176,13 +194,13 @@ public:
 	/// 左スティックを下に倒した瞬間をチェック。
 	/// </summary>
 	/// <returns>下に倒した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerLeftStickDown();
+	bool TriggerLeftStickDown();
 
 	/// <summary>
 	/// 左スティックを上に倒した瞬間をチェック。
 	/// </summary>
 	/// <returns>上に倒した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerLeftStickUp();
+	bool TriggerLeftStickUp();
 
 	/// <summary>
 	/// 右スティックのX方向の入力。-1.0f~1.0fの範囲。
