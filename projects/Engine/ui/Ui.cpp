@@ -445,59 +445,34 @@ void Ui::UpdateFrameGlow() {
 
 	frameSprite_->SetColor(color);
 }
-
+//ライフ減少アニメーション更新
 void Ui::UpdateLifeBlink() {
 
 	if (!isLifeBlink_) return;
-
-	if (lifeBlinkTimer_ < 0.08f) {
-		lifeBlinkScale_ = 1.3f;
-	}
 
 	lifeBlinkTimer_ += 0.016f;
 
 	auto& sprite = lifeSprites_[blinkLifeIndex_];
 
-	// 点滅
-	float blink =
-		sinf(lifeBlinkTimer_ * 55.0f);
+	float wave =
+		(sinf(lifeBlinkTimer_ * 18.0f) + 1.0f) * 0.5f;
 
+	//補間を滑らか
+	wave = wave * wave;
+
+	//Alpha補間
 	float alpha =
-		(blink > 0.0f) ? 1.0f : 0.15f;
+		0.1f + wave * 0.9f;
 
-	float t = lifeBlinkTimer_ / 0.5f;
-
-	lifeBlinkScale_ =
-		1.0f - t * 0.5f;
-
-	float offsetY =
-		sinf(t * 3.14f) * 12.0f;
-
-	sprite->SetSize({
-		40.0f * lifeBlinkScale_,
-		40.0f * lifeBlinkScale_
-		});
-
-	sprite->SetPosition({
-		60.0f + blinkLifeIndex_ * 50.0f,
-		120.0f - offsetY
-		});
-
+	//Alphaだけ変更
 	sprite->SetColor({
 		1,1,1,alpha
 		});
 
-	// 終了
+	//終了
 	if (lifeBlinkTimer_ >= 0.5f) {
 
 		sprite->SetColor({ 1,1,1,1 });
-
-		sprite->SetSize({ 40,40 });
-
-		sprite->SetPosition({
-			60.0f + blinkLifeIndex_ * 50.0f,
-			120.0f
-			});
 
 		life_--;
 
