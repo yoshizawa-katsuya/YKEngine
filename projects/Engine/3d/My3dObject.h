@@ -59,6 +59,12 @@ public:
 	virtual void Draw(uint32_t textureHandle);
 
 	/// <summary>
+	/// モデルの設定。
+	/// </summary>
+	/// <param name="model">モデル</param>
+	void SetModel(BaseModel* model) { model_ = model; }
+
+	/// <summary>
 	/// UV変換の設定。
 	/// マテリアルデータを生成する。
 	/// </summary>
