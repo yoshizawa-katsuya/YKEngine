@@ -59,7 +59,7 @@ private:
 	/// <summary>
 	/// アニメーションが終了したらtrueを返す
 	/// </summary>
-	bool IsEndAnimation() const override { return animator_->GetIsEnd(); }
+	bool IsEndAnimation() const override { return accessAnimator_->GetIsEnd(); }
 
 	/// <summary>
 	/// シーンが終わるときtrueを返す
@@ -83,7 +83,12 @@ private:
 	//ステートマシン
 	std::unique_ptr<YKEngine::StateMachine<DemoPlayerStateContext>> stateMachine_;
 
-	std::unique_ptr<YKEngine::SRTAnimator> animator_;
+	//接近アニメーション用のアニメーター
+	std::unique_ptr<YKEngine::SRTAnimator> accessAnimator_;
+	//往復アニメーション用のアニメーター
+	std::unique_ptr<YKEngine::SRTAnimator> pingPongAnimator_;
+	//往復アニメーションの開始地点とdemoPlayerの位置を補正するためのアニメーター
+	std::unique_ptr<YKEngine::SRTAnimator> correctionAnimator_;
 
 	// シーンが終了していたらtrue
 	bool isSceneEnd_ = false;

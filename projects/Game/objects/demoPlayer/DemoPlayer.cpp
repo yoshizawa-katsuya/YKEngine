@@ -24,8 +24,19 @@ void DemoPlayer::Initialize(WorldTransform* parent)
 	worldTransform_.parent_ = parent;
 	worldTransform_.translation_ = globalVariables_->GetVector3Value(groupName, JsonKey::DemoPlayer::kInitialPosition);
 
-	animator_ = std::make_unique<SRTAnimator>();
-	animator_->SetAnimation(worldTransform_.translation_, { 0.0f, 0.0f, 0.0f }, globalVariables_->GetFloatValue(groupName, JsonKey::DemoPlayer::kStartAnimeDuration));
+	//接近アニメーションのアニメーターを初期化
+	accessAnimator_ = std::make_unique<SRTAnimator>();
+	const Vector3 accessEnd = { 0.0f, 0.0f, 0.0f };
+	accessAnimator_->SetAnimation(worldTransform_.translation_, accessEnd, globalVariables_->GetFloatValue(groupName, JsonKey::DemoPlayer::kStartAnimeDuration));
+	//往復アニメーションのアニメーターを初期化
+	pingPongAnimator_ = std::make_unique<SRTAnimator>();
+	const Vector3 pingPongStart = { 0.0f, -1.0f, 0.0f };
+	pingPongAnimator_->SetAnimation(pingPongStart, { 0.0f, 1.0f, 0.0f }, 1.0f, true);
+	pingPongAnimator_->SetEasingType(EasingType::kEaseInSine);
+	//往復アニメーションの開始地点とdemoPlayerの位置を補正するためのアニメーターを初期化
+	correctionAnimator_ = std::make_unique<SRTAnimator>();
+	correctionAnimator_->SetAnimation(accessEnd, pingPongStart, 0.5f);
+	correctionAnimator_->SetEasingType(EasingType::kEaseOutSine);
 
 	//ステートマシンの初期化
 	stateMachine_ = std::make_unique<StateMachine<DemoPlayerStateContext>>();
@@ -53,16 +64,24 @@ void DemoPlayer::Draw(Camera* camera)
 
 void DemoPlayer::UpdateStart()
 {
-	worldTransform_.translation_ = animator_->Update();
+	worldTransform_.translation_ = accessAnimator_->Update();
 }
 
 void DemoPlayer::UpdateMain()
 {
+	if (correctionAnimator_->GetIsEnd())
+	{
+		worldTransform_.translation_ = pingPongAnimator_->Update();
+	}
+	else 
+	{
+		worldTransform_.translation_ = correctionAnimator_->Update();
+	}
 }
 
 void DemoPlayer::UpdateEnd()
 {
-	worldTransform_.translation_ = animator_->Update();
+	worldTransform_.translation_ = accessAnimator_->Update();
 }
 
 void DemoPlayer::AfterStartComplete()
@@ -74,5 +93,5 @@ void DemoPlayer::BeforeEnd()
 {
 	const float duration = globalVariables_->GetFloatValue(JsonKey::DemoPlayer::kGroupName, JsonKey::DemoPlayer::kEndAnimeDuration);
 	const Vector3 targetTranslate = globalVariables_->GetVector3Value(JsonKey::DemoPlayer::kGroupName, JsonKey::DemoPlayer::kEndAnimeTranslate);
-	animator_->SetAnimation(worldTransform_.translation_, targetTranslate, duration);
+	accessAnimator_->SetAnimation(worldTransform_.translation_, targetTranslate, duration);
 }
