@@ -34,9 +34,13 @@ void Player::Initialize(BaseModel* model) {
 		animations_[name] = std::move(anim);
 	}
 
+	startPosition_ = worldTransform_.translation_;
+	startRotation_ = worldTransform_.rotation_;
+	startScale_ = worldTransform_.scale_;
 	// 初期アニメーションを設定
 	PlayAnimation("Stay");
 }
+
 
 void Player::Update() {
 
@@ -70,9 +74,36 @@ void Player::Update() {
 
 #endif // USE_IMGUI	
 
-	prevPose_ = pose_;
-	ChangePose();
-	ChangeDirection();
+	switch (state_)
+	{
+	case PlayerState::Normal:
+		// 生きているとき
+		prevPose_ = pose_;
+
+		ChangePose();
+		ChangeDirection();
+
+		// 死亡開始
+		if (requestDeath_)
+		{
+			StartDeathAnimation();
+			requestDeath_ = false;
+		}
+
+		break;
+
+	case PlayerState::Dead:
+		// 死んでいるとき
+		PlayDeathAnimation();
+
+		break;
+
+	case PlayerState::DeadFinished:
+		// 死亡演出終了後（完全に吹っ飛んでしまった後など）
+		break;
+	}
+	
+
 
 	UpdateColorForDebug();
 
@@ -117,12 +148,10 @@ void Player::Reset()
 
 	// 死亡関連リセット
 	requestDeath_ = false;
-	isDead_ = false;
-	isDeathFinished_ = false;
+	state_ = PlayerState::Normal;
 
 	deathVelocity_ = {};
-	deathRotateVelocity_ = {};
-
+	
 	deathTimer_ = 0.0f;
 }
 
@@ -263,5 +292,84 @@ void Player::UpdateAnimationTimers() {
 	if (returnTimer_ <= 0.0f) {
 		isReturnPhase_ = false;
 		PlayAnimation("Stay");
+	}
+}
+
+void Player::StartDeathAnimation()
+{
+	state_ = PlayerState::Dead;
+
+	switch (deathVariation_)
+	{
+	case DeathVariation::Right:
+		// 右手前方向へ吹っ飛ばす
+		deathVelocity_ = kRightDeathVelocity;
+		deathRotateVelocity_ =
+		{
+			0.35f,
+			0.08f,
+			-0.15f
+		};
+		break;
+
+	case DeathVariation::Left:
+		// 左手前方向へ吹っ飛ばす
+		deathVelocity_ = kLeftDeathVelocity;
+		deathRotateVelocity_ =
+		{
+			0.35f,
+			-0.08f,
+			0.15f
+		};
+		break;
+	case DeathVariation::InFront:
+		// 正面方向へ吹っ飛ばす
+		deathVelocity_ = kFrontDeathVelocity;
+		deathRotateVelocity_ =
+		{
+			0.55f,
+			0.0f,
+			0.0f
+		};
+		break;
+	}
+	
+
+	deathTimer_ = 0.0f;
+}
+
+void Player::PlayDeathAnimation()
+{
+	// 死亡アニメーションの再生
+	deathTimer_ += 1.0f / 60.0f;
+
+	Vector3 dir = Normalize(deathVelocity_);
+
+	// 移動
+	worldTransform_.translation_.x += deathVelocity_.x;
+	worldTransform_.translation_.y += deathVelocity_.y;
+	worldTransform_.translation_.z += deathVelocity_.z;
+
+	// 回転
+	worldTransform_.rotation_.x += deathRotateVelocity_.x;
+	worldTransform_.rotation_.y = std::atan2(dir.x, dir.z);
+	worldTransform_.rotation_.y += deathRotateVelocity_.y;
+	worldTransform_.rotation_.z += deathRotateVelocity_.z;
+
+	// 重力
+	deathVelocity_.y -= 0.01f;
+
+	// 少し減速
+	deathVelocity_.x *= 0.99f;
+	deathVelocity_.z *= 0.99f;
+
+	deathRotateVelocity_.x *= 0.985f;
+	deathRotateVelocity_.y *= 0.985f;
+	deathRotateVelocity_.z *= 0.985f;
+
+	// 演出終了
+	if (worldTransform_.translation_.z < -75.0f)
+	{
+		//state_ = PlayerState::DeadFinished;
 	}
 }
