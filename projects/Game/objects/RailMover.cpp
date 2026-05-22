@@ -57,6 +57,9 @@ void RailMover::Update()
 
 #endif // USE_IMGUI
 
+	//速度を徐々に変化させる処理
+	speed_ = Lerp(speed_, targetSpeed_, 0.05f);
+
 	//曲線に沿って移動する処理
 	if (pointsDrawing_.size() > moveCount_) 
 	{
@@ -132,7 +135,7 @@ void RailMover::OnCollision(BaseCollider* other)
 	}
 	else if (SpeedEventTrigger* speedEvent = dynamic_cast<SpeedEventTrigger*>(other))
 	{
-		speed_ = speedEvent->GetSpeed();
+		targetSpeed_ = speedEvent->GetSpeed();
 	}
 	else if (RotateEventTrigger* rotateEvent = dynamic_cast<RotateEventTrigger*>(other))
 	{
