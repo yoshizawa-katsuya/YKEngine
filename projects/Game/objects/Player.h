@@ -28,7 +28,15 @@ public:
 
 	PoseDir GetState()const { return { pose_,direction_ }; }
 
+	void RequestDeath() { requestDeath_ = true; }
+
+	bool IsDead() const { return isDead_; }
+
+	bool IsDeathFinished() const { return isDeathFinished_; }
+
 	void SetColorForDebug(YKEngine::Vector4& color)const;
+
+	void Reset();
 
 private:
 

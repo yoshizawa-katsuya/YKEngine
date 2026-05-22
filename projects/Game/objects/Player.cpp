@@ -51,7 +51,18 @@ void Player::Update() {
 		int poseInt = static_cast<int>(pose_);
 		ImGui::DragInt("pose", &poseInt, 1.0f, 0, 5);
 		pose_ = static_cast<PlayerPose>(poseInt);
-
+		ImGui::SliderFloat3("RightDeathVelocity", &kRightDeathVelocity.x, -2.0f, 2.0f);
+		ImGui::SliderFloat3("LeftDeathVelocity", &kLeftDeathVelocity.x, -2.0f, 2.0f);
+		ImGui::SliderFloat3("FrontDeathVelocity", &kFrontDeathVelocity.x, -2.0f, 2.0f);
+		// deathVariationの切り替え
+		const char* variations[] = { "Right", "Left", "InFront" };
+		int variationIndex = static_cast<int>(deathVariation_);
+		if (ImGui::Combo("Death Variation", &variationIndex, variations, IM_ARRAYSIZE(variations))) {
+			deathVariation_ = static_cast<DeathVariation>(variationIndex);
+		}
+		
+		if (ImGui::Button("Death")) { RequestDeath(); }
+		if (ImGui::Button("Reset")) { Reset(); }
 		ImGui::TreePop();
 	}
 	ImGui::End();
@@ -93,10 +104,32 @@ void Player::SetColorForDebug(Vector4& color) const
 	object_->SetColor(color);
 }
 
+void Player::Reset()
+{
+	// Transform戻す
+	worldTransform_.translation_ = startPosition_;
+	worldTransform_.rotation_ = startRotation_;
+	worldTransform_.scale_ = startScale_;
+
+	// 状態戻す
+	pose_ = PlayerPose::Base;
+	direction_ = PlayerDirection::Front;
+
+	// 死亡関連リセット
+	requestDeath_ = false;
+	isDead_ = false;
+	isDeathFinished_ = false;
+
+	deathVelocity_ = {};
+	deathRotateVelocity_ = {};
+
+	deathTimer_ = 0.0f;
+}
+
 void Player::ChangePose()
 {
 	// ポーズ切り替え
-    // デフォルト
+	// デフォルト
 	pose_ = PlayerPose::Base;
 
 	// 押されたらポーズ変更
