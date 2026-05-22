@@ -23,6 +23,7 @@
 #include "LaneManager.h"
 #include "Ui.h"
 #include "Transition.h"
+#include "Effect.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -125,6 +126,8 @@ private:
 
 	//UI
 	std::unique_ptr<Ui>ui_;
+
+	std::unique_ptr<Effect> effect_;
 
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;

@@ -102,6 +102,14 @@ public:
 
 	void SetIsDownVelocity(bool isDownVelocity) { behavior_->isdownVelocity = isDownVelocity; }
 
+	void SetIsRandomRotationVelocity(bool isRandomRotationVelocity) { randomFlags_.rotationVelocity = isRandomRotationVelocity; }
+
+	void SetRandRotationVelocityMin(const Vector3& rotationVelocityMin) { rangeParams_.rotationVelocity.min = rotationVelocityMin; }
+
+	void SetRandRotationVelocityMax(const Vector3& rotationVelocityMax){rangeParams_.rotationVelocity.max = rotationVelocityMax;}
+
+	void SetDrawMode(ParticleDrawMode drawMode){behavior_->drawMode = drawMode;}
+
 	void SetCount(uint32_t count) { count_ = count; }
 
 	/// <summary>

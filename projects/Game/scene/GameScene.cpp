@@ -73,6 +73,9 @@ void GameScene::Initialize() {
 	ui_->Initialize();
 
 
+	effect_ = std::make_unique<Effect>();
+	effect_->Initialize();
+
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
 	skyBoxWorldTransform_.Initialize();
@@ -148,6 +151,8 @@ void GameScene::Update() {
 	//UIの更新
 	ui_->Update();
 
+	effect_->Update();
+
 	switch (ui_->GetPauseMenu()) {
 		case Ui::PauseMenu::Retry:
 			// リトライが選択された場合、ゲームシーンに遷移する
@@ -187,7 +192,7 @@ void GameScene::Update() {
 
 	//emitter_->Update();
 
-	//ParticleManager::GetInstance()->Update(mainCamera_);
+	ParticleManager::GetInstance()->Update(mainCamera_);
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
@@ -198,6 +203,10 @@ void GameScene::Update() {
 			2.0f,
 			Transition::EasingType::EaseOutQuint
 		);
+	}
+
+	if (input_->TriggerKey(DIK_R)) {
+		effect_->StartConfetti();
 	}
 
 #ifdef USE_IMGUI
@@ -272,7 +281,7 @@ void GameScene::Update() {
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
-		
+
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 	ImGui::Text("Difficulty: %s", difficulty_ == 0 ? "EASY" : difficulty_ == 1 ? "NORMAL" : "HARD");
 	/*
@@ -281,11 +290,9 @@ void GameScene::Update() {
 	}
 	*/
 	ImGui::End();
-		
+
 
 #endif // USE_IMGUI
-	
-
 }
 
 void GameScene::Draw() {
@@ -335,6 +342,7 @@ void GameScene::Draw() {
 	transition_->Draw();
 
 	//ParticleManager::GetInstance()->Draw();
+	ParticleManager::GetInstance()->Draw();
 
 }
 
