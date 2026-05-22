@@ -203,6 +203,18 @@ public:
 	bool TriggerLeftStickUp();
 
 	/// <summary>
+	/// 左スティックを左に倒した瞬間をチェック。
+	/// </summary>
+	/// <returns>左に倒した瞬間であればtrue。そうでなければfalse。</returns>
+	bool TriggerLeftStickLeft();
+
+	/// <summary>
+	/// 左スティックを右に倒した瞬間をチェック。
+	/// </summary>
+	/// <returns>右に倒した瞬間であればtrue。そうでなければfalse。</returns>
+	bool TriggerLeftStickRight();
+
+	/// <summary>
 	/// 右スティックのX方向の入力。-1.0f~1.0fの範囲。
 	/// </summary>
 	/// <returns>右スティックのX方向の入力値。</returns>

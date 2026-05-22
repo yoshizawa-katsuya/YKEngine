@@ -304,6 +304,24 @@ bool Input::TriggerLeftStickUp()
 	return false;
 }
 
+bool YKEngine::Input::TriggerLeftStickLeft()
+{
+	if (static_cast<float>(gamePadState_.Gamepad.sThumbLX) < 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLX) < 0.0f))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool YKEngine::Input::TriggerLeftStickRight()
+{
+	if (static_cast<float>(gamePadState_.Gamepad.sThumbLX) > 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLX) > 0.0f))
+	{
+		return true;
+	}
+	return false;
+}
+
 float Input::GetRightStickX()
 {
 	return static_cast<float>(gamePadState_.Gamepad.sThumbRX) / SHRT_MAX;
