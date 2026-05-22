@@ -166,6 +166,11 @@ public:
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void InstancingDraw(uint32_t numInstance, uint32_t textureHandle);
 
+	/// <summary>
+	/// 初期化完了まで待機する。
+	/// </summary>
+	void WaitUntilInitialized();
+
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
 	/// <summary>
@@ -290,6 +295,13 @@ protected:
 	uint32_t verticesNum_;
 	uint32_t indecesNum_;
 	uint32_t textureHandle_;
+
+	//Initializeの完了フラグ
+	bool initialized_ = false;
+
+	//Initializeの完了を待つための条件変数とミューテックス
+	std::mutex initMutex_;
+	std::condition_variable initCondition_;
 
 };
 
