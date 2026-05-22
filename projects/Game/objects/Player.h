@@ -30,9 +30,9 @@ public:
 
 	void RequestDeath() { requestDeath_ = true; }
 
-	bool IsDead() const { return isDead_; }
+	bool IsDead() const { return state_ == PlayerState::Dead; }
 
-	bool IsDeathFinished() const { return isDeathFinished_; }
+	bool IsDeathFinished() const { return state_ == PlayerState::DeadFinished; }
 
 	void SetColorForDebug(YKEngine::Vector4& color)const;
 
@@ -68,13 +68,14 @@ private:
 	};
 	DeathVariation deathVariation_ = DeathVariation::Right;
 
-	enum class DeathPhase
+	enum class PlayerState
 	{
-		FlyUp,
-		FlyDown,
-		Finished
+		Normal,
+		Dead,
+		DeadFinished
 	};
-	DeathPhase deathPhase_ = DeathPhase::FlyUp;
+
+	PlayerState state_ = PlayerState::Normal;
 
 private:
 
@@ -100,11 +101,7 @@ private:
 	// 死亡開始要求
 	bool requestDeath_ = false;
 
-	// 死亡中か
-	bool isDead_ = false;
-
-	// 演出終了
-	bool isDeathFinished_ = false;
+	
 
 	// 吹っ飛び速度
 	YKEngine::Vector3 deathVelocity_ = {};
@@ -116,7 +113,13 @@ private:
 	YKEngine::Vector3 kFrontDeathVelocity = { 0.0f, 0.08f, -0.85f };
 
 	// 回転速度
-	YKEngine::Vector3 deathRotateVelocity_ = {};
+	YKEngine::Vector3 // グルグル回転
+		deathRotateVelocity_ =
+	{
+		0.45f,
+		0.05f,
+		0.0f
+	};
 
 	// 演出タイマー
 	float deathTimer_ = 0.0f;
