@@ -25,7 +25,9 @@ void Ui::Initialize() {
 	for (int i = 0; i < kMaxLife; i++) {
 		lifeSprites_[i] = std::make_unique<YKEngine::Sprite>();
 		lifeSprites_[i]->Initialize(lifeTexture);
-		lifeSprites_[i]->SetPosition({ 60.0f + i * 50.0f, 120.0f });
+		YKEngine::Vector2 pos = { 60.0f + i * 50.0f, 120.0f };
+
+		lifeSprites_[i]->SetPosition(pos);
 		lifeSprites_[i]->SetSize({ 40.0f, 40.0f });
 	}
 
@@ -93,6 +95,8 @@ void Ui::Update() {
 	UpdateJudgeEffect();
 	//画面枠発光更新
 	UpdateFrameGlow();
+
+	UpdateLifeBlink();
 	//デバック
 	Debug();
 }
@@ -272,9 +276,12 @@ void Ui::HandleLifeInput() {
 }
 //ライフ減少
 void Ui::DecreaseLife() {
-	if (life_ > 0) {
-		life_--;
-	}
+	if (life_ <= 0)return;
+
+	blinkLifeIndex_ = life_ - 1;
+
+	isLifeBlink_ = true;
+	lifeBlinkTimer_ = 0.0f;
 }
 //ポーズメニュー更新
 void Ui::UpdatePauseMenu() {
@@ -423,11 +430,7 @@ void Ui::UpdateFrameGlow() {
 		break;
 
 	case JudgeType::Perfect:
-		/*
-		hue =
-			42.0f +
-			sinf(frameGlowTimer_ * 0.04f) * 12.0f;
-		*/
+	
 		hue =
 			fmodf(frameGlowTimer_ * 2.0f, 360.0f);
 
@@ -441,6 +444,65 @@ void Ui::UpdateFrameGlow() {
 		HSVToRGB(hue, 1.0f, 1.0f);
 
 	frameSprite_->SetColor(color);
+}
+
+void Ui::UpdateLifeBlink() {
+
+	if (!isLifeBlink_) return;
+
+	if (lifeBlinkTimer_ < 0.08f) {
+		lifeBlinkScale_ = 1.3f;
+	}
+
+	lifeBlinkTimer_ += 0.016f;
+
+	auto& sprite = lifeSprites_[blinkLifeIndex_];
+
+	// 点滅
+	float blink =
+		sinf(lifeBlinkTimer_ * 55.0f);
+
+	float alpha =
+		(blink > 0.0f) ? 1.0f : 0.15f;
+
+	float t = lifeBlinkTimer_ / 0.5f;
+
+	lifeBlinkScale_ =
+		1.0f - t * 0.5f;
+
+	float offsetY =
+		sinf(t * 3.14f) * 12.0f;
+
+	sprite->SetSize({
+		40.0f * lifeBlinkScale_,
+		40.0f * lifeBlinkScale_
+		});
+
+	sprite->SetPosition({
+		60.0f + blinkLifeIndex_ * 50.0f,
+		120.0f - offsetY
+		});
+
+	sprite->SetColor({
+		1,1,1,alpha
+		});
+
+	// 終了
+	if (lifeBlinkTimer_ >= 0.5f) {
+
+		sprite->SetColor({ 1,1,1,1 });
+
+		sprite->SetSize({ 40,40 });
+
+		sprite->SetPosition({
+			60.0f + blinkLifeIndex_ * 50.0f,
+			120.0f
+			});
+
+		life_--;
+
+		isLifeBlink_ = false;
+	}
 }
 
 //現在のジャッジエフェクトスプライト取得
