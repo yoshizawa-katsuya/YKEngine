@@ -9,7 +9,7 @@ using namespace YKEngine;
 
 void Player::Initialize(BaseModel* model) {
 
-	object_ = std::make_unique<My3dObject>();
+	object_ = std::make_unique<Skin3dObject>();
 	object_->Initialize(model);
 
 	input_ = Input::GetInstance();
@@ -20,6 +20,22 @@ void Player::Initialize(BaseModel* model) {
 	direction_ = PlayerDirection::Front;
 
 	kAngle_=std::numbers::pi_v<float>/4.0f;
+	
+	// 全てのアニメーションファイルを最初にメモリにロード（プリロード）
+	std::vector<std::string> animNames = {
+		"Stay", "Squat", "SquatReturn",
+		"PoseA", "PoseAReturn", "PoseB", "PoseBReturn",
+		"PoseC", "PoseCReturn", "PoseD", "PoseDReturn"
+	};
+
+	for (const auto& name : animNames) {
+		auto anim = std::make_unique<YKEngine::Animation>();
+		anim->LoadAnimationFile("./resources/playerAnimation", name + ".gltf");
+		animations_[name] = std::move(anim);
+	}
+
+	// 初期アニメーションを設定
+	PlayAnimation("Stay");
 }
 
 void Player::Update() {
@@ -43,10 +59,22 @@ void Player::Update() {
 
 #endif // USE_IMGUI	
 
+	prevPose_ = pose_;
 	ChangePose();
 	ChangeDirection();
 
 	UpdateColorForDebug();
+
+	UpdateAnimationTrigger();
+	UpdateAnimationTimers();
+
+	// 現在アクティブなアニメーションのみを更新・適用する
+	if (currentAnimation_) {
+		bool isLoop = (currentAnimationName_ == "Stay");
+
+		currentAnimation_->Update(isLoop);
+		object_->AnimationUpdate(currentAnimation_);
+	}
 
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
@@ -140,4 +168,67 @@ void Player::UpdateColorForDebug()
 	};
 
 	object_->SetColor(kPoseColors[static_cast<int>(pose_)]);
+}
+
+void Player::PlayAnimation(const std::string& name)
+{
+	// 無駄な重ねがけ（同じモーションの再トリガー）を防止
+	if (currentAnimationName_ == name) return;
+
+	auto it = animations_.find(name);
+	if (it != animations_.end()) {
+		currentAnimation_ = it->second.get();
+		currentAnimationName_ = name;
+
+		// 切り替えた瞬間にアニメーション時間を 0.0f に巻き戻す（頭出し）
+		currentAnimation_->SetAnimationTime(0.0f);
+
+		std::string animLog = "[Anim Switch] Activated -> " + name + "\n";
+		OutputDebugStringA(animLog.c_str());
+	}
+}
+
+void Player::UpdateAnimationTrigger() {
+	// ポーズが変わっていなければ何もしない
+	if (pose_ == prevPose_) return;
+
+	// Base状態から特定のキーが押された瞬間（各ポーズの開始）
+	if (prevPose_ == PlayerPose::Base) {
+		isReturnPhase_ = false; // 他のポーズへの割り込み時はReturnフラグを折る
+
+		if (pose_ == PlayerPose::Squat) PlayAnimation("Squat");
+		else if (pose_ == PlayerPose::A)     PlayAnimation("PoseA");
+		else if (pose_ == PlayerPose::B)     PlayAnimation("PoseB");
+		else if (pose_ == PlayerPose::C)     PlayAnimation("PoseC");
+		else if (pose_ == PlayerPose::D)     PlayAnimation("PoseD");
+	}
+	// キーが離されてBase状態（元の姿勢）に戻った瞬間（Returnモーションの開始）
+	else if (pose_ == PlayerPose::Base) {
+		isReturnPhase_ = true;
+
+		if (prevPose_ == PlayerPose::Squat) PlayAnimation("SquatReturn");
+		else if (prevPose_ == PlayerPose::A)     PlayAnimation("PoseAReturn");
+		else if (prevPose_ == PlayerPose::B)     PlayAnimation("PoseBReturn");
+		else if (prevPose_ == PlayerPose::C)     PlayAnimation("PoseCReturn");
+		else if (prevPose_ == PlayerPose::D)     PlayAnimation("PoseDReturn");
+
+		// 現在のアニメーションの正確な長さをタイマーに設定
+		if (currentAnimation_) {
+			returnTimer_ = currentAnimation_->GetDuration();
+		}
+	}
+}
+
+void Player::UpdateAnimationTimers() {
+	// Returnフェーズ中でなければ何もしない
+	if (!isReturnPhase_) return;
+
+	// 1フレーム分の時間を減算（1/60秒固定値。可変フレーム時はdeltaTime等を使用）
+	returnTimer_ -= (1.0f / 60.0f);
+
+	// モーション時間が終了したら通常待機（Stay）へ自動遷移
+	if (returnTimer_ <= 0.0f) {
+		isReturnPhase_ = false;
+		PlayAnimation("Stay");
+	}
 }

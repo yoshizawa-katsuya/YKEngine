@@ -44,7 +44,7 @@ void GameScene::Initialize() {
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
 	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
+	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/playerAnimation", "PoseA.gltf");
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
@@ -300,10 +300,7 @@ void GameScene::Draw() {
 	//環境マップを使う場合はコメントアウトを外す
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
 	
-	//modelPlatform_->SkinPreDraw();
 
-	//プレイヤーの描画
-	player_->Draw(mainCamera_);
 
 	//レーンの描画
 	laneManager_->Draw(mainCamera_);
@@ -322,6 +319,12 @@ void GameScene::Draw() {
 	objects_->CameraUpdate(mainCamera_);
 	objects_->Draw();
 	*/
+
+	modelPlatform_->SkinPreDraw();
+
+	//プレイヤーの描画
+	player_->Draw(mainCamera_);
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
