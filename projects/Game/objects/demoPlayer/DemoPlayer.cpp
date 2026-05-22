@@ -31,11 +31,11 @@ void DemoPlayer::Initialize(WorldTransform* parent)
 	//往復アニメーションのアニメーターを初期化
 	pingPongAnimator_ = std::make_unique<SRTAnimator>();
 	const Vector3 pingPongStart = { 0.0f, -1.0f, 0.0f };
-	pingPongAnimator_->SetAnimation(pingPongStart, { 0.0f, 1.0f, 0.0f }, 1.0f, true);
-	pingPongAnimator_->SetEasingType(EasingType::kEaseInSine);
+	pingPongAnimator_->SetAnimation(pingPongStart, { 0.0f, 1.0f, 0.0f }, 2.0f, true);
+	pingPongAnimator_->SetEasingType(EasingType::kEaseInOutSine);
 	//往復アニメーションの開始地点とdemoPlayerの位置を補正するためのアニメーターを初期化
 	correctionAnimator_ = std::make_unique<SRTAnimator>();
-	correctionAnimator_->SetAnimation(accessEnd, pingPongStart, 0.5f);
+	correctionAnimator_->SetAnimation(accessEnd, pingPongStart, 1.0f);
 	correctionAnimator_->SetEasingType(EasingType::kEaseOutSine);
 
 	//ステートマシンの初期化
