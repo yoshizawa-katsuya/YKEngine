@@ -27,6 +27,12 @@ void TitleScene::Initialize()
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	sprite_->SetPosition({ 100.0f, 100.0f });
 	*/
+
+	titleSprite_ = std::make_unique<YKEngine::Sprite>();
+	titleSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/title/title.png"));
+	titleSprite_->SetPosition({ 640.0f,320.0f });
+	titleSprite_->SetAnchorPoint({ 0.5f,0.5f });
+
 	// 画面遷移の初期化
 	transition_ = std::make_unique<Transition>();
 	transition_->Initialize();
@@ -45,12 +51,26 @@ void TitleScene::Update()
 
 #ifdef USE_IMGUI
 
-	ImGui::Begin("Window");
-	ImGui::Text("Title");
-	ImGui::Text("%s",state_ == State::START ? "Press Space Key" : state_ == State::OPTIONS ? "Left/right arrow keys Select Difficulty Press Space Key" : "Go To GameScene...");
-	ImGui::Text("State: %s", state_ == State::START ? "START" : state_ == State::OPTIONS ? "OPTIONS" : "EXIT");
-	ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
-	ImGui::End();
+    static float titlePos[2] = { 0.0f, 0.0f };
+    // 現在のスプライト位置を取得（初回のみ）
+    if (titlePos[0] == 0.0f && titlePos[1] == 0.0f && titleSprite_) {
+        auto pos = titleSprite_->GetPosition();
+        titlePos[0] = pos.x;
+        titlePos[1] = pos.y;
+    }
+
+    ImGui::Begin("Window");
+    ImGui::Text("Title");
+    ImGui::Text("%s",state_ == State::START ? "Press Space Key" : state_ == State::OPTIONS ? "Left/right arrow keys Select Difficulty Press Space Key" : "Go To GameScene...");
+    ImGui::Text("State: %s", state_ == State::START ? "START" : state_ == State::OPTIONS ? "OPTIONS" : "EXIT");
+    ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
+    ImGui::SliderFloat2("TitleSprite Position", titlePos, -640.0f, 640.0f, "%.1f");
+    ImGui::End();
+
+    // ImGuiで値が変更されたらスプライトの位置を更新
+    if (titleSprite_) {
+        titleSprite_->SetPosition({ titlePos[0], titlePos[1] });
+    }
 
 #endif // USE_IMGUI
 
@@ -144,6 +164,7 @@ void TitleScene::Update()
 
 		break;
 	}
+
 }
 
 void TitleScene::Draw()
@@ -151,6 +172,11 @@ void TitleScene::Draw()
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
+
+	//タイトルスプライトの描画
+	titleSprite_->Draw();
+
+
 	// 画面遷移の描画
 	transition_->Draw();
 }
