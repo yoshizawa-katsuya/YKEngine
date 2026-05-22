@@ -26,7 +26,7 @@ public:
 	/// <summary>
 	/// アニメーションを更新する。
 	/// </summary>
-	void Update();
+	void Update(bool isLoop);
 
 	/// <summary>
 	/// RootNodeのアニメーションを再生する。
@@ -54,6 +54,10 @@ public:
 	const std::map<std::string, NodeAnimation>& GetNodeAnimations() const { return nodeAnimations_; }
 
 	float GetAnimationTime() { return animationTime_; }
+
+	void SetAnimationTime(float time) { animationTime_ = time; }
+
+	float GetDuration() const { return duration_; }
 
 private:
 

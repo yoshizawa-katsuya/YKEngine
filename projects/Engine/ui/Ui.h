@@ -57,6 +57,8 @@ private:
     void UpdateJudgeEffect();
 	//画面枠発光更新
     void UpdateFrameGlow();
+
+    void UpdateLifeBlink();
 	//HSVからRGBに変換
     YKEngine::Vector4 HSVToRGB(float h, float s, float v);
 	//現在のジャッジエフェクトスプライト取得
@@ -93,6 +95,8 @@ private:
     std::array<int, kMaxDigits> digits_{};
 	//ジャッジエフェクト表示位置
     YKEngine::Vector2 judgePos_ = { 640.0f, 250.0f };
+
+    YKEngine::Vector2 lifeBlinkPos_ = { 0.0f,0.0f };
 	//スコア
     int score_ = 0;
 	//表示スコア
@@ -101,6 +105,8 @@ private:
     int targetScore_ = 0;
     //現在ライフ
     int life_ = kMaxLife;
+
+    int blinkLifeIndex_ = -1;
 	//ジャッジエフェクトテクスチャ
     uint32_t goodTexture_;
 	uint32_t greatTexture_;
@@ -117,6 +123,10 @@ private:
     float judgeAlpha_ = 0.0f;
 	//画面枠発光用タイマー
     float frameGlowTimer_ = 0.0f;
+
+    float lifeBlinkTimer_ = 0.0f;
+
+    float lifeBlinkScale_ = 1.0f;
 	//画面枠発光フラグ
     bool isFrameGlow_ = false;
 	//アニメーション中か
@@ -125,4 +135,7 @@ private:
     bool isShowPause_ = false;
 	//ジャッジエフェクト再生中フラグ
     bool isJudgePlaying_ = false;
+
+    bool isLifeBlink_ = false;
+
 };
