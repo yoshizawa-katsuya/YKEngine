@@ -45,6 +45,7 @@ void GameScene::Initialize() {
 
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/playerAnimation", "PoseA.gltf");
+	
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
@@ -66,7 +67,7 @@ void GameScene::Initialize() {
 
 	//ダミーの壁の初期化
 	dummyWall_=std::make_unique<DummyWall>();
-	dummyWall_->Initialize(modelPlayer_.get());
+	dummyWall_->Initialize(modelPlatform_->CreateRigidModel("./resources/player", "Player.obj").get());
 
 	//UIの初期化
 	ui_ = std::make_unique<Ui>();
