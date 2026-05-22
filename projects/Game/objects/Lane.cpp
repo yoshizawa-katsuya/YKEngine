@@ -1,4 +1,5 @@
 #include "Lane.h"
+#include "ModelPlatform.h"
 
 using namespace YKEngine;
 
@@ -8,11 +9,16 @@ void Lane::Initialize(bool* isStart)
 
 	worldTransform_.Initialize();
 
+	//===== モデルの生成 =====
+	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
+	object_ = std::make_unique<My3dObject>();
+	object_->Initialize(modelPlatform->CreateRigidModel("./resources/lane", "lane.obj").get());
 }
 
 void Lane::Update()
 {
 	worldTransform_.UpdateMatrix();
+	object_->WorldTransformUpdate(worldTransform_);
 	for (const std::unique_ptr<Wall>& wall : walls_)
 	{
 		wall->Update();
@@ -21,6 +27,8 @@ void Lane::Update()
 
 void Lane::Draw(YKEngine::Camera* camera)
 {
+	object_->CameraUpdate(camera);
+	object_->Draw();
 	//壁の描画
 	for (const std::unique_ptr<Wall>& wall : walls_)
 	{

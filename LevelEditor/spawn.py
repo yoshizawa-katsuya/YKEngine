@@ -19,7 +19,6 @@ class SpawnNames():
     names["Wall"] = ("PrototypeWall", "Wall", "wall/wall.obj")
 
 
-
 #オペレータ 出現ポイントのシンボルを読み込む
 class MYADDON_OT_spawn_import_symbol(bpy.types.Operator):
     bl_idname = "myaddon.myaddon_ot_spawn_import_symbol"
@@ -169,7 +168,7 @@ class MYADDON_OT_spawn_create_tackle_enemy02_symbol(bpy.types.Operator):
 
         bpy.ops.myaddon.myaddon_ot_spawn_create_symbol('EXEC_DEFAULT', spawn_type = "TackleEnemy02")
 
-        return {'FINISHED'}
+        return {'FINISHED'}    
     
 class MYADDON_OT_spawn_create_wall_symbol(bpy.types.Operator):
 
