@@ -135,14 +135,105 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 			}
 		}
 
-		else if (type.compare("Wall") == 0)
+		else if (type.compare("Lane") == 0)
 		{
-			//要素追加
-			WallData& wallData = levelData.walls.emplace_back();
-			nlohmann::json& transform = object["transform"];
-			wallData.Translate.x = -static_cast<float>(transform["translation"][0]);
-			wallData.Translate.y = static_cast<float>(transform["translation"][2]);
-			wallData.Translate.z = -static_cast<float>(transform["translation"][1]);
+			//レーンの種別を取得
+			std::string laneName = object["name"].get<std::string>();
+			PlayerDirection direction{};
+			if (laneName == "CenterLane")
+			{
+				direction = PlayerDirection::Front;
+			}
+			else if (laneName == "LeftLane")
+			{
+				direction = PlayerDirection::Left;
+			}
+			else if (laneName == "RightLane")
+			{
+				direction = PlayerDirection::Right;
+			}
+			else
+			{
+				assert(0);
+			}
+			
+			if (object.contains("children"))
+			{
+				//子要素走査
+				for (const nlohmann::json& child : object["children"])
+				{
+					//要素追加
+					WallData& wallData = levelData.walls.emplace_back();
+					const nlohmann::json& transform = child["transform"];
+					wallData.translate.x = -static_cast<float>(transform["translation"][0]);
+					wallData.translate.y = static_cast<float>(transform["translation"][2]);
+					wallData.translate.z = -static_cast<float>(transform["translation"][1]);
+					wallData.direction = direction;
+					std::string poseStr = child["pose"].get<std::string>();
+					if (poseStr == "A")
+					{
+						wallData.pose = PlayerPose::A;
+					}
+					else if (poseStr == "B")
+					{
+						wallData.pose = PlayerPose::B;
+					}
+					else if (poseStr == "C")
+					{
+						wallData.pose = PlayerPose::C;
+					}
+					else if (poseStr == "D")
+					{
+						wallData.pose = PlayerPose::D;
+					}
+					else if (poseStr == "Squat")
+					{
+						wallData.pose = PlayerPose::Squat;
+					}
+					else if (poseStr == "Base")
+					{
+						wallData.pose = PlayerPose::Base;
+					}
+					else
+					{
+						assert(0);
+					}
+
+					if (child.contains("feint_pose"))
+					{
+						std::string feintPoseStr = child["feint_pose"].get<std::string>();
+						if (feintPoseStr == "A")
+						{
+							wallData.feintPose = PlayerPose::A;
+						}
+						else if (feintPoseStr == "B")
+						{
+							wallData.feintPose = PlayerPose::B;
+						}
+						else if (feintPoseStr == "C")
+						{
+							wallData.feintPose = PlayerPose::C;
+						}
+						else if (feintPoseStr == "D")
+						{
+							wallData.feintPose = PlayerPose::D;
+						}
+						else if (feintPoseStr == "Squat")
+						{
+							wallData.feintPose = PlayerPose::Squat;
+						}
+						else if (feintPoseStr == "Base")
+						{
+							wallData.feintPose = PlayerPose::Base;
+						}
+						else
+						{
+							assert(0);
+						}
+					}
+
+				}
+			}
 		}
 
 		//TODO: オブジェクト走査を再帰関数にまとめ、再帰関数で枝を走査する

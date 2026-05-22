@@ -1,6 +1,7 @@
 #pragma once
 #include "Struct.h"
 #include "json.hpp"
+#include "GameType.h"
 
 namespace YKEngine
 {
@@ -49,9 +50,19 @@ struct SplineData
 	std::vector<Vector3> controlPoints;
 };
 
+/// <summary>
+/// 壁のデータ。
+/// </summary>
+/// <param name="Translate">平行移動</param>
+/// <param name="direction">どの方向から流れてくる壁か</param>
+/// <param name="pose">どのポーズの壁か</param>
+/// <param name="feintPose">フェイント用のポーズ（オプション）</param>
 struct WallData
 {
-	Vector3 Translate;
+	Vector3 translate;	//平行移動
+	PlayerDirection direction;	//どの方向から流れてくる壁か
+	PlayerPose pose;	//どのポーズの壁か
+	std::optional<PlayerPose> feintPose = std::nullopt; // フェイント用のポーズ（オプション）
 };
 
 /// <summary>

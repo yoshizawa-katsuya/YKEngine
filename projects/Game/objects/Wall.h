@@ -2,6 +2,7 @@
 #include "My3dObject.h"
 #include "WorldTransform.h"
 #include "GameType.h"
+#include "LevelDataLoader.h"
 
 class YKEngine::Camera;
 
@@ -15,8 +16,10 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="translate">初期位置</param>
-	void Initialize(const YKEngine::Vector3& translate);
+	/// <param name="wallData">壁のデータ</param>
+	/// <param name="isStart">流れ始めるかどうかのフラグのポインタ</param>
+	/// <param name="parent">親のワールド変換</param>
+	void Initialize(const YKEngine::WallData& wallData, bool* isStart, YKEngine::WorldTransform* parent);
 
 	/// <summary>
 	/// 更新
@@ -38,21 +41,28 @@ public:
 
 	bool GetIsCollision() const { return isCollision_; }
 
-	void SetIsStart(bool isStart) { isStart_ = isStart; }
-
 	void SetIsCollision(bool isCollision) { isCollision_ = isCollision; }
 
 private:
 	void UpdateColorForDebug();
 
 private:
+	//Transform変数
 	YKEngine::WorldTransform worldTransform_;
 
+	//3Dオブジェクト
 	std::unique_ptr<YKEngine::My3dObject> object_;
 
+	//壁の状態
 	PoseDir state_;
 
-	bool isStart_ = false;
+	//フェイント用のポーズ（オプション）
+	std::optional<PlayerPose> feintPose_;
+
+	bool* isStart_ = nullptr;
+
+	//壁の移動速度
+	float speed_ = 0.1f;
 
 	//自機との衝突判定をとっていればtrue、これからならfalse
 	bool isCollision_ = false;

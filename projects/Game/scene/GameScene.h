@@ -20,9 +20,9 @@
 #include "InstancingObjects.h"
 #include "RigidModel.h"
 #include "DummyWall.h"
-#include "Lane.h"
-
+#include "LaneManager.h"
 #include "Ui.h"
+#include "Transition.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -116,7 +116,8 @@ private:
 	//ダミーのカベ
 	std::unique_ptr<DummyWall> dummyWall_;
 
-	std::unique_ptr<Lane> lane_;
+	//レーン管理
+	std::unique_ptr<LaneManager> laneManager_;
 
 	//判定
 	bool isJudged_ = false;
@@ -142,7 +143,12 @@ private:
 
 	// 難易度
 	uint32_t difficulty_ = 0;
-	
+
+	// 遷移演出
+	std::unique_ptr<Transition> transition_;
+
+	// 次のシーン名
+	std::string nextSceneName_;
 
 	//デバッグ用
 	YKEngine::Vector4 debugPlayerColor[2] = { {1.0f,0.0f,1.0f,1.0f},{0.0f,1.0f,1.0f,1.0f} };

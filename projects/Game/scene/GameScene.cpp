@@ -44,7 +44,7 @@ void GameScene::Initialize() {
 	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
 
 	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
+	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/playerAnimation", "PoseA.gltf");
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
@@ -92,6 +92,19 @@ void GameScene::Initialize() {
 	worldTransform2_.translation_.x = 1.0f;
 	worldTransform2_.UpdateMatrix();
 	*/
+	// 遷移演出
+	transition_ = std::make_unique<Transition>();
+
+	// 遷移演出の初期化
+	transition_->Initialize();
+
+	// ゲーム画面に切り替わったと同時にフェードアウトの画面遷移を開始
+	transition_->StartFadeOut(
+		TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+		TextureManager::GetInstance()->Load("./resources/brickMask.png"),
+		1.0f,
+		Transition::EasingType::EaseInSine
+	);
 
 	// 難易度の設定
 	difficulty_ = sceneManager_->GetDifficulty();
@@ -108,6 +121,14 @@ void GameScene::Update() {
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
 	}
+	// 画面遷移の更新
+	transition_->Update();
+	// 画面遷移が終わり、次のシーン名が設定されている場合はシーンを切り替える
+	if (transition_->IsFinished() &&
+		!nextSceneName_.empty()) {
+
+		sceneManager_->ChengeScene(nextSceneName_);
+	}
 
 	//プレイヤーの更新
 	player_->Update();
@@ -117,7 +138,7 @@ void GameScene::Update() {
 	dummyWall_->Update();
 
 	//レーンの更新
-	lane_->Update();
+	laneManager_->Update();
 
 	//衝突判定
 	CheckWallCollision();
@@ -129,11 +150,25 @@ void GameScene::Update() {
 
 	switch (ui_->GetPauseMenu()) {
 		case Ui::PauseMenu::Retry:
-		sceneManager_->ChengeScene("GameScene");
+			// リトライが選択された場合、ゲームシーンに遷移する
+			nextSceneName_ = "GameScene";
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
 		break;
 
 		case Ui::PauseMenu::ToTitle:
-			sceneManager_->ChengeScene("TitleScene");
+			// タイトルに戻るが選択された場合、タイトルシーンに遷移する
+			nextSceneName_ = "TitleScene";
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
 			break;
 	}
 
@@ -156,7 +191,13 @@ void GameScene::Update() {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
+		nextSceneName_ = "TitleScene";
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
 	}
 
 #ifdef USE_IMGUI
@@ -259,13 +300,10 @@ void GameScene::Draw() {
 	//環境マップを使う場合はコメントアウトを外す
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
 	
-	//modelPlatform_->SkinPreDraw();
 
-	//プレイヤーの描画
-	player_->Draw(mainCamera_);
 
 	//レーンの描画
-	lane_->Draw(mainCamera_);
+	laneManager_->Draw(mainCamera_);
 
 	//ダミーの壁の描画
 	dummyWall_->Draw(mainCamera_);
@@ -281,11 +319,20 @@ void GameScene::Draw() {
 	objects_->CameraUpdate(mainCamera_);
 	objects_->Draw();
 	*/
+
+	modelPlatform_->SkinPreDraw();
+
+	//プレイヤーの描画
+	player_->Draw(mainCamera_);
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
 	//UIの描画
 	ui_->Draw();
+
+	// 遷移演出の描画
+	transition_->Draw();
 
 	//ParticleManager::GetInstance()->Draw();
 
@@ -335,42 +382,46 @@ void GameScene::CheckCollision()
 
 void GameScene::CheckWallCollision()
 {
-	const std::vector<std::unique_ptr<Wall>>& walls = lane_->GetWalls();
-
-	for (const std::unique_ptr<Wall>& wall : walls) 
+	//各レーンの壁を取得して判定
+	for (uint32_t i = 0; i < static_cast<uint32_t>(PlayerDirection::Count); i++)
 	{
-		//壁が衝突済みか、判定ラインに到達していない場合はスキップ
-		if (wall->GetIsCollision() || !wall->GetIsLineJudged())
+		const std::vector<std::unique_ptr<Wall>>& walls = laneManager_->GetWalls(static_cast<PlayerDirection>(i));
+
+		for (const std::unique_ptr<Wall>& wall : walls)
 		{
-			continue;
-		}
+			//壁が衝突済みか、判定ラインに到達していない場合はスキップ
+			if (wall->GetIsCollision() || !wall->GetIsLineJudged())
+			{
+				continue;
+			}
 
-		auto result = JudgeSystem::Judge(
-			player_->GetState(),
-			wall->GetState(),
-			player_->GetWorldTransform(),
-			wall->GetWorldTransform()
-		);
+			auto result = JudgeSystem::Judge(
+				player_->GetState(),
+				wall->GetState(),
+				player_->GetWorldTransform(),
+				wall->GetWorldTransform()
+			);
 
-		if (result == JudgeResult::Hit) {
-			// 成功時の処理
-			player_->SetColorForDebug(debugPlayerColor[0]);
-			debugScore_++;
-			debugCombo_++;
-			debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
-		}
-		else if (result == JudgeResult::SuccessSquat) {
-			// しゃがみ成功（デバッグ用に何か追加しても可）
-		}
-		else if (result == JudgeResult::Miss) {
-			// ミス時の処理
-			player_->SetColorForDebug(debugPlayerColor[1]);
-			debugMiss_++;
-			debugCombo_ = 0;
-		}
+			if (result == JudgeResult::Hit) {
+				// 成功時の処理
+				player_->SetColorForDebug(debugPlayerColor[0]);
+				debugScore_++;
+				debugCombo_++;
+				debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
+			}
+			else if (result == JudgeResult::SuccessSquat) {
+				// しゃがみ成功（デバッグ用に何か追加しても可）
+			}
+			else if (result == JudgeResult::Miss) {
+				// ミス時の処理
+				player_->SetColorForDebug(debugPlayerColor[1]);
+				debugMiss_++;
+				debugCombo_ = 0;
+			}
 
-		wall->SetIsCollision(true); // 衝突済みに設定
+			wall->SetIsCollision(true); // 衝突済みに設定
 
+		}
 	}
 }
 
@@ -379,8 +430,9 @@ void GameScene::CreateLevel()
 {
 	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");
 
-	lane_ = std::make_unique<Lane>();
-	lane_->Initialize(levelData.walls);
+	//レーンの初期化
+	laneManager_ = std::make_unique<LaneManager>();
+	laneManager_->Initialize(levelData.walls);
 
 	
 }

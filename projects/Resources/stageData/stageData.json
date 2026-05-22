@@ -44,12 +44,12 @@
             }
         },
         {
-            "type": "Wall",
-            "name": "Wall.001",
+            "type": "Lane",
+            "name": "CenterLane",
             "transform": {
                 "translation": [
                     0.0,
-                    -3.780844211578369,
+                    0.0,
                     0.0
                 ],
                 "rotation": [
@@ -62,15 +62,62 @@
                     1.0,
                     1.0
                 ]
-            }
+            },
+            "children": [
+                {
+                    "type": "Wall",
+                    "name": "Wall.001",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -11.565707206726074,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A",
+                    "feint_pose": "D"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.002",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -14.325398445129395,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "B"
+                }
+            ]
         },
         {
-            "type": "Wall",
-            "name": "Wall.002",
+            "type": "Lane",
+            "name": "LeftLane",
             "transform": {
                 "translation": [
+                    5.0,
                     0.0,
-                    -6.5405354499816895,
                     0.0
                 ],
                 "rotation": [
@@ -83,7 +130,120 @@
                     1.0,
                     1.0
                 ]
-            }
+            },
+            "children": [
+                {
+                    "type": "Wall",
+                    "name": "Wall.003",
+                    "transform": {
+                        "translation": [
+                            5.0,
+                            -23.814783096313477,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "C"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.005",
+                    "transform": {
+                        "translation": [
+                            5.0,
+                            -36.437557220458984,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "Base"
+                }
+            ]
+        },
+        {
+            "type": "Lane",
+            "name": "RightLane",
+            "transform": {
+                "translation": [
+                    -5.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "children": [
+                {
+                    "type": "Wall",
+                    "name": "Wall.004",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -32.1617317199707,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "D"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.006",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -29.10183334350586,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "Squat"
+                }
+            ]
         }
     ]
 }

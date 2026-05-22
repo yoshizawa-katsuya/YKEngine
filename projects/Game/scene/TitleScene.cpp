@@ -28,11 +28,22 @@ void TitleScene::Initialize()
 	sprite_->SetPosition({ 100.0f, 100.0f });
 	*/
 
-
 	titleSprite_ = std::make_unique<YKEngine::Sprite>();
 	titleSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/title/title.png"));
 	titleSprite_->SetPosition({ 640.0f,320.0f });
 	titleSprite_->SetAnchorPoint({ 0.5f,0.5f });
+
+	// 画面遷移の初期化
+	transition_ = std::make_unique<Transition>();
+	transition_->Initialize();
+
+	// タイトル画面の開始と同時にフェードアウトの画面遷移を開始
+	transition_->StartFadeOut(
+		TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+		TextureManager::GetInstance()->Load("./resources/brickMask.png"),
+		1.0f,
+		Transition::EasingType::EaseInSine
+	);
 }
 
 void TitleScene::Update()
@@ -62,6 +73,18 @@ void TitleScene::Update()
     }
 
 #endif // USE_IMGUI
+
+	// 画面遷移の更新
+	transition_->Update();
+
+	// 画面遷移が終わり、次のシーン名が設定されている場合はシーンを切り替える
+	if (transition_->IsFinished() &&
+		!nextSceneName_.empty()) {
+
+		sceneManager_->SetDifficulty(static_cast<int>(difficulty_));
+		sceneManager_->ChengeScene(nextSceneName_);
+	}
+
 	switch (state_)
 	{
 	case State::START:
@@ -70,8 +93,6 @@ void TitleScene::Update()
 			// START状態でスペースキーが押されたときの処理
 			// ステートをOPTIONSに変更
 			state_ = State::OPTIONS;
-			//シーン切り替え依頼
-			//sceneManager_->ChengeScene("GameScene");
 		}
 		break;
 	case State::OPTIONS:
@@ -122,11 +143,25 @@ void TitleScene::Update()
 
 		break;
 	case State::EXIT:
-		// 終了処理
-		// 難易度をシーンマネージャに渡す
-		sceneManager_->SetDifficulty(static_cast<int>(difficulty_));
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("GameScene");
+		// 終了
+		// 画面遷移を開始するときは、isStartedTransition_がfalseのときだけ開始する
+		if (!isStartedTransition_) {
+
+			// 画面遷移を開始したことを記録
+			isStartedTransition_ = true;
+
+			// 次のシーン名を設定
+			nextSceneName_ = "GameScene";
+
+			// 画面遷移を開始
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
+		}
+
 		break;
 	}
 
@@ -141,6 +176,9 @@ void TitleScene::Draw()
 	//タイトルスプライトの描画
 	titleSprite_->Draw();
 
+
+	// 画面遷移の描画
+	transition_->Draw();
 }
 
 void TitleScene::Finalize()

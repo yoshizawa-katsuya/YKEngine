@@ -16,8 +16,44 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 	Assimp::Importer importer;
 	std::string filePath = directoryPath + "/" + filename;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
+
+	std::string logMsg = "[Anim Load] Loading: " + filename + "\n";
+	OutputDebugStringA(logMsg.c_str());
+
 	assert(scene->mNumAnimations != 0);	//アニメーションがない
-	aiAnimation* animationAssimp = scene->mAnimations[0];	//最初のアニメーションだけ採用。もちろん複数対応することに越したことはない
+	// 1. 拡張子を抜いたターゲットのアニメーション名を作る (例: "Stay.gltf" -> "Stay")
+	std::string targetAnimName = filename;
+	size_t dotPos = targetAnimName.find_last_of('.');
+	if (dotPos != std::string::npos) {
+		targetAnimName = targetAnimName.substr(0, dotPos);
+	}
+
+	aiAnimation* animationAssimp = nullptr;
+
+	// 2. ファイル内にある全アニメーションをループして、名前が一致するものを探す
+	for (uint32_t i = 0; i < scene->mNumAnimations; ++i) {
+		std::string currentAnimName = scene->mAnimations[i]->mName.C_Str();
+
+		// 完全一致、またはBlender特有の "Armature|Stay" のような命名に対応するため部分一致で検索
+		if (currentAnimName.find(targetAnimName) != std::string::npos) {
+			animationAssimp = scene->mAnimations[i];
+
+			std::string foundLog = "  -> [Success] Match found: " + currentAnimName + "\n";
+			OutputDebugStringA(foundLog.c_str());
+			break;
+		}
+	}
+
+	// 3. 万が一見つからなかった場合の安全弁として、従来通り0番目を使う
+	if (!animationAssimp) {
+		animationAssimp = scene->mAnimations[0];
+		std::string failLog = "  -> [Warning] Target not found. Using default index 0: " + std::string(animationAssimp->mName.C_Str()) + "\n";
+		OutputDebugStringA(failLog.c_str());
+	}
+	
+	std::string nameLog = "  -> [Actual Anim Name in File]: " + std::string(animationAssimp->mName.C_Str()) + "\n";
+	OutputDebugStringA(nameLog.c_str());
+
 	duration_ = static_cast<float>(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);	//時間の単位を秒に変換
 
 	//assimpでは個々のNodeのAnimationをchannelと呼んでいるのでchannelを回してNodeAnimationの情報をとってくる
@@ -56,12 +92,20 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 
 }
 
-void Animation::Update()
+void Animation::Update(bool isLoop)
 {
+	animationTime_ += 1.0f / 60.0f; // 時刻を進める
 
-	animationTime_ += 1.0f / 60.0f;	//時刻を進める。1/60で固定してあるが、計測した時間を使って可変フレーム対応する方が望ましい
-	animationTime_ = std::fmod(animationTime_, duration_);	//最後まで行ったら最初からリピート再生。リピートしなくても別に良い
-
+	if (isLoop) {
+		// ループする場合は従来通り fmod
+		animationTime_ = std::fmod(animationTime_, duration_);
+	}
+	else {
+		// ループしない（固定ポーズやReturnなど）場合は、末尾で時間を止める（クランプ）
+		if (animationTime_ > duration_) {
+			animationTime_ = duration_;
+		}
+	}
 }
 
 Matrix4x4 Animation::Reproducing(BaseModel* model)

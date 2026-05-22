@@ -973,6 +973,21 @@ void PipelineManager::BuildSpriteRootParameters(std::vector<D3D12_ROOT_PARAMETER
 	textureParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;	//PixelShaderで使う
 	textureParam.DescriptorTable.pDescriptorRanges = &descriptorRange_;	//Tableの中身の配列を指定
 	textureParam.DescriptorTable.NumDescriptorRanges = 1;	//Tableで利用する数
+
+	//マスクテクスチャ
+	D3D12_ROOT_PARAMETER& maskTextureParam =
+		rootParameters[static_cast<size_t>(SpriteRootParam::kMaskTexture)];
+
+	maskTextureParam.ParameterType =
+		D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+
+	maskTextureParam.ShaderVisibility =
+		D3D12_SHADER_VISIBILITY_PIXEL;
+
+	maskTextureParam.DescriptorTable.pDescriptorRanges =
+		&descriptorMaskTexture_;
+
+	maskTextureParam.DescriptorTable.NumDescriptorRanges = 1;
 }
 
 void PipelineManager::BuildParticleRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)

@@ -14,7 +14,7 @@ class TOPBAR_MT_my_menu(bpy.types.Menu):
     #Blenderがクラスを識別するための固有の文字列
     bl_idname = "TOPBAR_MT_my_menu"
     #メニューのラベルとして表示される文字列
-    bl_label = "MyManu"
+    bl_label = "MyMenu"
     #著者表示用の文字列
     bl_description = "拡張メニュー by Katsuya Yoshizawa"
 
