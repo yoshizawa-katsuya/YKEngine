@@ -96,6 +96,12 @@ void TitleScene::Draw()
 
 	//ステージオブジェクトの描画
 	stageObjects_->InstancingDraw(mainCamera);
+
+	modelPlatform_->InstancingTriplanarPreDraw();
+
+	//トリプラナーマッピングを使用するインスタンシングオブジェクトの描画
+	stageObjects_->InstancingTriplanarDraw(mainCamera);
+
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す

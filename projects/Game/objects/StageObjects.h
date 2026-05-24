@@ -49,6 +49,11 @@ public:
 	void InstancingDraw(YKEngine::Camera* camera);
 
 	/// <summary>
+	/// トリプラナーマッピングを使用するインスタンシングオブジェクトの描画
+	/// </summary>
+	void InstancingTriplanarDraw(YKEngine::Camera* camera);
+
+	/// <summary>
 	/// スカイボックスのテクスチャハンドル取得
 	/// </summary>
 	/// <returns>テクスチャハンドル</returns>
@@ -76,6 +81,7 @@ private:
 
 	//オブジェクト
 	std::map<std::string, std::unique_ptr<YKEngine::InstancingObjects>> instancingObjects_;
+	std::map<std::string, std::unique_ptr<YKEngine::InstancingObjects>> instancingTriplanarObjects_;	//トリプラナーマッピングを使用するインスタンシングオブジェクト
 
 	//直方体の障害物
 	std::vector<std::unique_ptr<CuboidObstacle>> cuboidObstacles_;

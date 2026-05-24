@@ -90,7 +90,7 @@ void StageObjects::DrawSkyBox(YKEngine::Camera* camera)
 void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& objectDatas)
 {
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
-	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/gradation.png");
+	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/brick.png");
 
 	for (const ObjectData& objectData : objectDatas)
 	{
@@ -98,26 +98,31 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 		std::string key = objectData.fileName;
 
 		//インスタンスオブジェクトが存在しない場合は生成
-		if (!instancingObjects_.contains(key))
+		if (!instancingObjects_.contains(key) && !instancingTriplanarObjects_.contains(key))
 		{
-			instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
 			const std::string modelName = "decoreation";
 
 			//インスタンスオブジェクトの初期化
 			if (key == "primitiveCube")
 			{
+				instancingTriplanarObjects_.emplace(key, std::make_unique<InstancingObjects>());
+
 				BaseModel* model = modelPlatform->CreateCube(textureHandle, modelName).get();
 				model->SetEnvironmentCoefficient(0.5f);
-				instancingObjects_[key]->Initialize(model, 256);
+				instancingTriplanarObjects_[key]->Initialize(model, 256);
 			}
 			else if (key == "primitiveSphere")
 			{
+				instancingTriplanarObjects_.emplace(key, std::make_unique<InstancingObjects>());
+
 				BaseModel* model = modelPlatform->CreateSphere(textureHandle, modelName).get();
 				model->SetEnvironmentCoefficient(0.5f);
-				instancingObjects_[key]->Initialize(model, 128);
+				instancingTriplanarObjects_[key]->Initialize(model, 128);
 			}
 			else if (key == "Sun.obj")
 			{
+				instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
+
 				BaseModel* model = modelPlatform->CreateRigidModel(objectData.filePath, key).get();
 				//マテリアルの設定
 				model->SetShininess(10.0f);
@@ -132,7 +137,14 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 		transform.scale_ = objectData.transform.scale;
 		transform.UpdateMatrix();
 		//インスタンスオブジェクトにワールド変換を設定
-		instancingObjects_[key]->WorldTransformUpdate(transform);
+		if (instancingObjects_.contains(key))
+		{
+			instancingObjects_[key]->WorldTransformUpdate(transform);
+		}
+		else if (instancingTriplanarObjects_.contains(key))
+		{
+			instancingTriplanarObjects_[key]->WorldTransformUpdate(transform);
+		}
 
 		if (key == "primitiveCube" && objectData.hasCollider)
 		{
@@ -151,6 +163,17 @@ void StageObjects::InstancingDraw(YKEngine::Camera* camera)
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
 
 	for (const auto& [name, instancingObject] : instancingObjects_)
+	{
+		instancingObject->CameraUpdate(camera);
+		instancingObject->Draw();
+	}
+}
+
+void StageObjects::InstancingTriplanarDraw(YKEngine::Camera* camera)
+{
+	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), textureHandleSkyBox_);
+
+	for (const auto& [name, instancingObject] : instancingTriplanarObjects_)
 	{
 		instancingObject->CameraUpdate(camera);
 		instancingObject->Draw();
