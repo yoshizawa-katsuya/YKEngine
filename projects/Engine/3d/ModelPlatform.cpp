@@ -155,6 +155,15 @@ void ModelPlatform::InstancingPreDraw()
 
 }
 
+void YKEngine::ModelPlatform::InstancingTriplanarPreDraw()
+{
+
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kInstancingTriplanar);
+
+	CommonPreDraw(false);
+
+}
+
 void ModelPlatform::LinePreDraw()
 {
 

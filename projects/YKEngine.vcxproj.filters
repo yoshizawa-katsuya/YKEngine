@@ -734,6 +734,9 @@
     <FxCompile Include="Resources\shader\LuminanceBasedOutline.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shader\TriplanarObject3d.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">
