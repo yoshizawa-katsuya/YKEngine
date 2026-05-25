@@ -104,7 +104,7 @@ private:
 	YKEngine::SpotLight spotLight_;
 
 	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
-
+	std::shared_ptr<YKEngine::BaseModel> modelWall_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;
