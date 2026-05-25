@@ -68,6 +68,8 @@ private:
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
+	//タイトルスプライト
+	std::unique_ptr<YKEngine::Sprite> titleSprite_;
 	
 	// 画面遷移のクラス
 	std::unique_ptr<Transition> transition_;
@@ -76,6 +78,5 @@ private:
 	bool isStartedTransition_ = false;
 
 	std::string nextSceneName_; // 次のシーンの名前
-
 };
 

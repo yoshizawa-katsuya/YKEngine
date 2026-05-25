@@ -169,67 +169,15 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 					wallData.translate.y = static_cast<float>(transform["translation"][2]);
 					wallData.translate.z = -static_cast<float>(transform["translation"][1]);
 					wallData.direction = direction;
+					//ポーズの文字列をPlayerPoseに変換して格納
 					std::string poseStr = child["pose"].get<std::string>();
-					if (poseStr == "A")
-					{
-						wallData.pose = PlayerPose::A;
-					}
-					else if (poseStr == "B")
-					{
-						wallData.pose = PlayerPose::B;
-					}
-					else if (poseStr == "C")
-					{
-						wallData.pose = PlayerPose::C;
-					}
-					else if (poseStr == "D")
-					{
-						wallData.pose = PlayerPose::D;
-					}
-					else if (poseStr == "Squat")
-					{
-						wallData.pose = PlayerPose::Squat;
-					}
-					else if (poseStr == "Base")
-					{
-						wallData.pose = PlayerPose::Base;
-					}
-					else
-					{
-						assert(0);
-					}
+					const std::unordered_map<std::string, PlayerPose>& poseMap = GetPoseMap();
+					wallData.pose = poseMap.at(poseStr);
 
 					if (child.contains("feint_pose"))
 					{
 						std::string feintPoseStr = child["feint_pose"].get<std::string>();
-						if (feintPoseStr == "A")
-						{
-							wallData.feintPose = PlayerPose::A;
-						}
-						else if (feintPoseStr == "B")
-						{
-							wallData.feintPose = PlayerPose::B;
-						}
-						else if (feintPoseStr == "C")
-						{
-							wallData.feintPose = PlayerPose::C;
-						}
-						else if (feintPoseStr == "D")
-						{
-							wallData.feintPose = PlayerPose::D;
-						}
-						else if (feintPoseStr == "Squat")
-						{
-							wallData.feintPose = PlayerPose::Squat;
-						}
-						else if (feintPoseStr == "Base")
-						{
-							wallData.feintPose = PlayerPose::Base;
-						}
-						else
-						{
-							assert(0);
-						}
+						wallData.feintPose = poseMap.at(feintPoseStr);
 					}
 
 				}
@@ -264,6 +212,20 @@ EulerTransform TranformLoad(const nlohmann::json& transformData)
 	transform.scale.z = static_cast<float>(transformData["scaling"][1]);
 
 	return transform;
+}
+
+const std::unordered_map<std::string, PlayerPose>& GetPoseMap()
+{
+	static const std::unordered_map<std::string, PlayerPose> poseMap = {
+		{"Base", PlayerPose::Base},
+		{"Squat", PlayerPose::Squat},
+		{"A", PlayerPose::A},
+		{"B", PlayerPose::B},
+		{"C", PlayerPose::C},
+		{"D", PlayerPose::D}
+	};
+
+	return poseMap;
 }
 
 } // namespace YKEngine

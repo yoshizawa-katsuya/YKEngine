@@ -28,7 +28,15 @@ public:
 
 	PoseDir GetState()const { return { pose_,direction_ }; }
 
+	void RequestDeath() { requestDeath_ = true; }
+
+	bool IsDead() const { return state_ == PlayerState::Dead; }
+
+	bool IsDeathFinished() const { return state_ == PlayerState::DeadFinished; }
+
 	void SetColorForDebug(YKEngine::Vector4& color)const;
+
+	void Reset();
 
 private:
 
@@ -45,6 +53,29 @@ private:
 
 	/// <summary> Returnモーションなどの時間経過による自動遷移を管理する </summary>
 	void UpdateAnimationTimers();
+
+	// 死亡開始関数
+	void StartDeathAnimation();
+
+	// 死亡アニメーション
+	void PlayDeathAnimation();
+
+	enum class DeathVariation
+	{
+		Right,
+		Left,
+		InFront
+	};
+	DeathVariation deathVariation_ = DeathVariation::Right;
+
+	enum class PlayerState
+	{
+		Normal,
+		Dead,
+		DeadFinished
+	};
+
+	PlayerState state_ = PlayerState::Normal;
 
 private:
 
@@ -66,4 +97,36 @@ private:
 
 	PlayerDirection direction_;
 	float kAngle_;
+
+	// 死亡開始要求
+	bool requestDeath_ = false;
+
+	
+
+	// 吹っ飛び速度
+	YKEngine::Vector3 deathVelocity_ = {};
+
+	YKEngine::Vector3 kRightDeathVelocity = { 1.0f, 1.0f, -0.85f };
+
+	YKEngine::Vector3 kLeftDeathVelocity = { -1.0f, 1.0f, -0.85f };
+
+	YKEngine::Vector3 kFrontDeathVelocity = { 0.0f, 0.08f, -0.85f };
+
+	// 回転速度
+	YKEngine::Vector3 // グルグル回転
+		deathRotateVelocity_ =
+	{
+		0.45f,
+		0.05f,
+		0.0f
+	};
+
+	// 演出タイマー
+	float deathTimer_ = 0.0f;
+
+	// 開始位置・回転・スケール
+	YKEngine::Vector3 startPosition_;
+	YKEngine::Vector3 startRotation_;
+	YKEngine::Vector3 startScale_;
 };
+

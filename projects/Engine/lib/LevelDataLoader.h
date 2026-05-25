@@ -105,4 +105,10 @@ LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::str
 /// <returns>Transformデータ</returns>
 EulerTransform TranformLoad(const nlohmann::json& transformData);
 
+/// <summary>
+/// ポーズ名とPlayerPoseのマップを取得する。
+/// </summary>
+/// <returns></returns>
+const std::unordered_map<std::string, PlayerPose>& GetPoseMap();
+
 }	// namespace YKEngine
