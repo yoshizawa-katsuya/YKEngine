@@ -29,6 +29,9 @@ public:
     void Update();
     //描画
     void Draw();
+    //タイトル描画
+	void DrawTitle();
+
     //デバック
     void Debug();
     
@@ -59,6 +62,8 @@ private:
     void UpdateFrameGlow();
 	//ライフ点滅更新
     void UpdateLifeBlink();
+    //タイトルスペース更新
+    void UpdateTitleSpace();
 	//HSVからRGBに変換
     YKEngine::Vector4 HSVToRGB(float h, float s, float v);
 	//現在のジャッジエフェクトスプライト取得
@@ -75,6 +80,8 @@ private:
     static const int kMaxScore = 999999;
     //最大ライフ
     static const int kMaxLife = 3;
+    //タイトルスペース
+    std::unique_ptr<YKEngine::Sprite>titlePushSprite_;
     //スコアスプライト
     std::array<std::unique_ptr<YKEngine::Sprite>, kMaxDigits> scoreSprites_;
 	//ライフスプライト
@@ -127,6 +134,8 @@ private:
     float lifeBlinkTimer_ = 0.0f;
 	//ライフ点滅スケール
     float lifeBlinkScale_ = 1.0f;
+	//タイトルスペース点滅用タイマー
+    float titleSpaceBlinkTimer_ = 0.0f;
 	//画面枠発光フラグ
     bool isFrameGlow_ = false;
 	//アニメーション中か

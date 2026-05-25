@@ -13,7 +13,7 @@ void Effect::Initialize()
 	//紙吹雪テクスチャ
 	uint32_t confettiTexture =
 		TextureManager::GetInstance()->Load(
-			"Resources/particle/confetti11.png"
+			"Resources/particle/confetti12.png"
 		);
 
 	//板ポリモデル

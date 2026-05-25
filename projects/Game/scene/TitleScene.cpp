@@ -44,33 +44,39 @@ void TitleScene::Initialize()
 		1.0f,
 		Transition::EasingType::EaseInSine
 	);
+
+	//UI
+	ui_ = std::make_unique<Ui>();
+	ui_->Initialize();
+
 }
 
 void TitleScene::Update()
 {
-
+	//UIの更新
+	ui_->Update();
 #ifdef USE_IMGUI
 
-    static float titlePos[2] = { 0.0f, 0.0f };
-    // 現在のスプライト位置を取得（初回のみ）
-    if (titlePos[0] == 0.0f && titlePos[1] == 0.0f && titleSprite_) {
-        auto pos = titleSprite_->GetPosition();
-        titlePos[0] = pos.x;
-        titlePos[1] = pos.y;
-    }
+	static float titlePos[2] = { 0.0f, 0.0f };
+	// 現在のスプライト位置を取得（初回のみ）
+	if (titlePos[0] == 0.0f && titlePos[1] == 0.0f && titleSprite_) {
+		auto pos = titleSprite_->GetPosition();
+		titlePos[0] = pos.x;
+		titlePos[1] = pos.y;
+	}
 
-    ImGui::Begin("Window");
-    ImGui::Text("Title");
-    ImGui::Text("%s",state_ == State::START ? "Press Space Key" : state_ == State::OPTIONS ? "Left/right arrow keys Select Difficulty Press Space Key" : "Go To GameScene...");
-    ImGui::Text("State: %s", state_ == State::START ? "START" : state_ == State::OPTIONS ? "OPTIONS" : "EXIT");
-    ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
-    ImGui::SliderFloat2("TitleSprite Position", titlePos, -640.0f, 640.0f, "%.1f");
-    ImGui::End();
+	ImGui::Begin("Window");
+	ImGui::Text("Title");
+	ImGui::Text("%s", state_ == State::START ? "Press Space Key" : state_ == State::OPTIONS ? "Left/right arrow keys Select Difficulty Press Space Key" : "Go To GameScene...");
+	ImGui::Text("State: %s", state_ == State::START ? "START" : state_ == State::OPTIONS ? "OPTIONS" : "EXIT");
+	ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
+	ImGui::SliderFloat2("TitleSprite Position", titlePos, -640.0f, 640.0f, "%.1f");
+	ImGui::End();
 
-    // ImGuiで値が変更されたらスプライトの位置を更新
-    if (titleSprite_) {
-        titleSprite_->SetPosition({ titlePos[0], titlePos[1] });
-    }
+	// ImGuiで値が変更されたらスプライトの位置を更新
+	if (titleSprite_) {
+		titleSprite_->SetPosition({ titlePos[0], titlePos[1] });
+	}
 
 #endif // USE_IMGUI
 
@@ -110,8 +116,7 @@ void TitleScene::Update()
 				// 難易度をNORMALに変更
 				difficulty_ = Difficulty::NORMAL;
 			}
-		}
-		else if (difficulty_ == Difficulty::NORMAL) {
+		} else if (difficulty_ == Difficulty::NORMAL) {
 			if (input_->TriggerKey(DIK_SPACE)) {
 				// 難易度がNORMALのときスペースキーが押されたときの処理
 				// ステートをEXITに変更
@@ -127,8 +132,7 @@ void TitleScene::Update()
 				// 難易度をEASYに変更
 				difficulty_ = Difficulty::EASY;
 			}
-		}
-		else if (difficulty_ == Difficulty::HARD) {
+		} else if (difficulty_ == Difficulty::HARD) {
 			if (input_->TriggerKey(DIK_SPACE)) {
 				// 難易度がHARDのときスペースキーが押されたときの処理
 				// ステートをEXITに変更
@@ -179,9 +183,15 @@ void TitleScene::Draw()
 
 	// 画面遷移の描画
 	transition_->Draw();
-}
 
-void TitleScene::Finalize()
-{
+	if (state_ == State::START) {
+		//Uiの描画
+		ui_->DrawTitle();
+	}
 
-}
+	}
+
+	void TitleScene::Finalize()
+	{
+
+	}
