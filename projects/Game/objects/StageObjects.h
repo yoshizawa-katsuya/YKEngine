@@ -89,5 +89,9 @@ private:
 	//昼ならtrue
 	bool isDayTime_;
 
+	using InstancingObjectsFactory = std::function<void(StageObjects*, const YKEngine::ObjectData&, const std::string&)>;
+
+	const std::unordered_map<std::string, InstancingObjectsFactory>& GetInstancingObjectsFactoryMap() const;
+
 };
 

@@ -90,7 +90,6 @@ void StageObjects::DrawSkyBox(YKEngine::Camera* camera)
 void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& objectDatas)
 {
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
-	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/brick.png");
 
 	for (const ObjectData& objectData : objectDatas)
 	{
@@ -102,32 +101,21 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 		{
 			const std::string modelName = "decoreation";
 
-			//インスタンスオブジェクトの初期化
-			if (key == "primitiveCube")
-			{
-				instancingTriplanarObjects_.emplace(key, std::make_unique<InstancingObjects>());
+			const std::unordered_map<std::string, InstancingObjectsFactory>& factoryMap = GetInstancingObjectsFactoryMap();
 
-				BaseModel* model = modelPlatform->CreateCube(textureHandle, modelName).get();
-				model->SetEnvironmentCoefficient(0.5f);
-				instancingTriplanarObjects_[key]->Initialize(model, 256);
-			}
-			else if (key == "primitiveSphere")
+			if (factoryMap.contains(key))
 			{
-				instancingTriplanarObjects_.emplace(key, std::make_unique<InstancingObjects>());
-
-				BaseModel* model = modelPlatform->CreateSphere(textureHandle, modelName).get();
-				model->SetEnvironmentCoefficient(0.5f);
-				instancingTriplanarObjects_[key]->Initialize(model, 128);
+				factoryMap.at(key)(this, objectData, modelName);
 			}
-			else if (key == "Sun.obj")
+			else
 			{
+				//ファクトリマップに存在しない場合のデフォルトの処理（必要に応じて変更）
 				instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
-
 				BaseModel* model = modelPlatform->CreateRigidModel(objectData.filePath, key).get();
-				//マテリアルの設定
-				model->SetShininess(10.0f);
+				model->SetEnvironmentCoefficient(0.5f);
 				instancingObjects_[key]->Initialize(model, 128);
 			}
+
 		}
 		//ワールド変換の初期化
 		WorldTransform transform;
@@ -199,4 +187,39 @@ void StageObjects::LoadFromJson()
 	skyBoxModel_->SetColor(colorVec4);
 
 	groundModel_->SetEnvironmentCoefficient(globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient));
+}
+
+const std::unordered_map<std::string, StageObjects::InstancingObjectsFactory>& StageObjects::GetInstancingObjectsFactoryMap() const
+{
+	static const std::unordered_map<std::string, InstancingObjectsFactory> instancingObjectsFactoryMap = {
+		{"primitiveCube", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName) {
+			//インスタンシングオブジェクトの初期化
+			stageObjects->instancingTriplanarObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
+			uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/brick.png");
+			BaseModel* model = ModelPlatform::GetInstance()->CreateCube(textureHandle, modelName).get();
+			model->SetEnvironmentCoefficient(0.5f);
+			stageObjects->instancingTriplanarObjects_[objectData.fileName]->Initialize(model, 256);
+
+		}},
+		{"primitiveSphere", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName) {
+			//インスタンシングオブジェクトの初期化	
+			stageObjects->instancingTriplanarObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
+			uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/gradation.png");
+			BaseModel* model = ModelPlatform::GetInstance()->CreateSphere(textureHandle, modelName).get();
+			model->SetEnvironmentCoefficient(0.5f);
+			stageObjects->instancingTriplanarObjects_[objectData.fileName]->Initialize(model, 128);
+
+		}},
+		{"Sun.obj", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName) {
+			//インスタンシングオブジェクトの初期化
+			stageObjects->instancingObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
+			BaseModel* model = ModelPlatform::GetInstance()->CreateRigidModel(objectData.filePath, objectData.fileName).get();
+			//マテリアルの設定
+			model->SetShininess(10.0f);
+			stageObjects->instancingObjects_[objectData.fileName]->Initialize(model, 128);
+
+		}}
+	};
+
+	return instancingObjectsFactoryMap;
 }
