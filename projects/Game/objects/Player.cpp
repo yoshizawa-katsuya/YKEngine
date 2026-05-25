@@ -166,19 +166,19 @@ void Player::ChangePose()
 	{
 		pose_ = PlayerPose::Squat;
 	}
-	else if (input_->PushKey(DIK_1))
+	else if (input_->PushKey(DIK_W))
 	{
 		pose_ = PlayerPose::A;
 	}
-	else if (input_->PushKey(DIK_2))
+	else if (input_->PushKey(DIK_A))
 	{
 		pose_ = PlayerPose::B;
 	}
-	else if (input_->PushKey(DIK_3))
+	else if (input_->PushKey(DIK_S))
 	{
 		pose_ = PlayerPose::C;
 	}
-	else if (input_->PushKey(DIK_4))
+	else if (input_->PushKey(DIK_D))
 	{
 		pose_ = PlayerPose::D;
 	}
@@ -254,9 +254,10 @@ void Player::UpdateAnimationTrigger() {
 	// ポーズが変わっていなければ何もしない
 	if (pose_ == prevPose_) return;
 
-	// Base状態から特定のキーが押された瞬間（各ポーズの開始）
-	if (prevPose_ == PlayerPose::Base) {
-		isReturnPhase_ = false; // 他のポーズへの割り込み時はReturnフラグを折る
+	// 1. 新しいポーズが「Base以外」なら、迷わずそのポーズを再生する
+	//    (A→B への移動も、Base→A への移動もこれで解決します)
+	if (pose_ != PlayerPose::Base) {
+		isReturnPhase_ = false; // Return処理を中断
 
 		if (pose_ == PlayerPose::Squat) PlayAnimation("Squat");
 		else if (pose_ == PlayerPose::A)     PlayAnimation("PoseA");
@@ -264,17 +265,18 @@ void Player::UpdateAnimationTrigger() {
 		else if (pose_ == PlayerPose::C)     PlayAnimation("PoseC");
 		else if (pose_ == PlayerPose::D)     PlayAnimation("PoseD");
 	}
-	// キーが離されてBase状態（元の姿勢）に戻った瞬間（Returnモーションの開始）
+	// 2. 新しいポーズが「Base」なら、Return処理を開始する
 	else if (pose_ == PlayerPose::Base) {
 		isReturnPhase_ = true;
 
+		// 直前まで再生していたポーズに応じたReturnモーションを再生
 		if (prevPose_ == PlayerPose::Squat) PlayAnimation("SquatReturn");
 		else if (prevPose_ == PlayerPose::A)     PlayAnimation("PoseAReturn");
 		else if (prevPose_ == PlayerPose::B)     PlayAnimation("PoseBReturn");
 		else if (prevPose_ == PlayerPose::C)     PlayAnimation("PoseCReturn");
 		else if (prevPose_ == PlayerPose::D)     PlayAnimation("PoseDReturn");
 
-		// 現在のアニメーションの正確な長さをタイマーに設定
+		// モーションの長さをセット
 		if (currentAnimation_) {
 			returnTimer_ = currentAnimation_->GetDuration();
 		}
