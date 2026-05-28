@@ -214,11 +214,13 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 {
 
 	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
+	if (camera)
+	{
 		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
 		worldViewProjectionMatrix = Multiply(worldMatrix, viewProjectionMatrix);
 	}
-	else {
+	else
+	{
 		worldViewProjectionMatrix = worldMatrix;
 	}
 
