@@ -158,6 +158,51 @@ void Ui::DrawTitle() {
 	titlePushSprite_->Draw();
 }
 
+//スコア加算
+void Ui::AddScore(int value) {
+	score_ += value;
+	//スコア上限
+	if (score_ > kMaxScore) {
+		score_ = kMaxScore;
+	}
+
+	targetScore_ = score_;
+	isAnimating_ = true;
+}
+//ライフ減少
+void Ui::DecreaseLife() {
+	if (life_ <= 0)return;
+
+	blinkLifeIndex_ = life_ - 1;
+
+	isLifeBlink_ = true;
+	lifeBlinkTimer_ = 0.0f;
+}
+//ジャッジエフェクト開始
+void Ui::StartJudgeEffect(JudgeType type) {
+	judgeType_ = type;
+
+	isJudgePlaying_ = true;
+	judgeTimer_ = 0.0f;
+	judgeScale_ = 0.3f;
+	judgeAlpha_ = 1.0f;
+	judgePos_ = { 640.0f,250.0f };
+	isFrameGlow_ = true;
+	frameGlowTimer_ = 0.0f;
+}
+
+void Ui::AddGameScore(int value){
+	AddScore(value);
+}
+
+void Ui::DamageLife() {
+	DecreaseLife();
+}
+
+void Ui::PlayJudgeEffect(JudgeType type) {
+	StartJudgeEffect(type);
+}
+
 //デバック
 void Ui::Debug() {
 
@@ -259,25 +304,10 @@ Ui::PauseMenu Ui::GetPauseMenu() const {
 //入力処理
 void Ui::HandleInput() {
 
-	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_S)) {
-		AddScore(100);
-	}
 	//ポーズ画面表示仮
 	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_Q)) {
 		isShowPause_ = !isShowPause_;
 	}
-}
-
-//スコア加算
-void Ui::AddScore(int value) {
-	score_ += value;
-	//スコア上限
-	if (score_ > kMaxScore) {
-		score_ = kMaxScore;
-	}
-
-	targetScore_ = score_;
-	isAnimating_ = true;
 }
 
 //アニメーション更新
@@ -320,15 +350,6 @@ void Ui::HandleLifeInput() {
 		DecreaseLife();
 	}
 }
-//ライフ減少
-void Ui::DecreaseLife() {
-	if (life_ <= 0)return;
-
-	blinkLifeIndex_ = life_ - 1;
-
-	isLifeBlink_ = true;
-	lifeBlinkTimer_ = 0.0f;
-}
 //ポーズメニュー更新
 void Ui::UpdatePauseMenu() {
 
@@ -368,18 +389,6 @@ void Ui::HandleJudgeInput() {
 	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_7)) {
 		StartJudgeEffect(JudgeType::Perfect);
 	}
-}
-//ジャッジエフェクト開始
-void Ui::StartJudgeEffect(JudgeType type) {
-	judgeType_ = type;
-
-	isJudgePlaying_ = true;
-	judgeTimer_ = 0.0f;
-	judgeScale_ = 0.3f;
-	judgeAlpha_ = 1.0f;
-	judgePos_ = { 640.0f,250.0f };
-	isFrameGlow_ = true;
-	frameGlowTimer_ = 0.0f;
 }
 //ジャッジエフェクト更新
 void Ui::UpdateJudgeEffect() {

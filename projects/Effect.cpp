@@ -130,7 +130,7 @@ void Effect::Update()
 #ifdef _DEBUG
 
 	//SPACEで再生
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE))
+	if (Input::GetInstance()->TriggerKey(DIK_C))
 	{
 		StartConfetti();
 	}

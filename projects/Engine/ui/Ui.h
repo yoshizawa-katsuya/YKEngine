@@ -31,31 +31,39 @@ public:
     void Draw();
     //タイトル描画
 	void DrawTitle();
+    //スコア加算
+    void AddScore(int value);
+    //ライフ減少
+    void DecreaseLife();
+    //ジャッジエフェクト開始
+    void StartJudgeEffect(JudgeType type);
+
+    void AddGameScore(int value);
+
+    void DamageLife();
+
+    void PlayJudgeEffect(JudgeType type);
 
     //デバック
     void Debug();
     
 	//ポーズメニューの取得
     PauseMenu GetPauseMenu()const;
+    //ライフ取得
+    int GetLife()const { return life_; }
 private:
 	//スコア加算処理(仮実装)
     void HandleInput();
-	//スコア加算
-    void AddScore(int value);
 	//アニメーション更新
     void UpdateAnimation();
 	//桁の更新
     void UpdateDigits();
     //ライフ減少(仮実装)
     void HandleLifeInput();
-	//ライフ減少
-    void DecreaseLife();
     //ポーズメニュー更新
 	void UpdatePauseMenu();
 	//ジャッジエフェクト入力処理
     void HandleJudgeInput();
-	//ジャッジエフェクト開始
-    void StartJudgeEffect(JudgeType type);
 	//ジャッジエフェクト更新
     void UpdateJudgeEffect();
 	//画面枠発光更新
@@ -79,7 +87,7 @@ private:
     //最大スコア
     static const int kMaxScore = 999999;
     //最大ライフ
-    static const int kMaxLife = 3;
+    static const int kMaxLife = 5;
     //タイトルスプライト
     std::unique_ptr<YKEngine::Sprite> titleSprite_;
     //タイトルスペース

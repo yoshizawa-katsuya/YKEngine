@@ -399,7 +399,6 @@ void Player::StartDeathAnimation()
 		break;
 	}
 	
-
 	deathTimer_ = 0.0f;
 }
 

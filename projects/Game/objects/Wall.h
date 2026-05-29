@@ -73,4 +73,3 @@ private:
 	//自機との衝突判定をとっていればtrue、これからならfalse
 	bool isCollision_ = false;
 };
-

@@ -160,4 +160,3 @@ private:
 
 	int autoPoseIndex_ = 0;
 };
-

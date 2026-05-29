@@ -62,11 +62,6 @@ public:
 private:
 
 	/// <summary>
-	/// 衝突判定。
-	/// </summary>
-	void CheckCollision();
-
-	/// <summary>
 	/// 壁との衝突判定。
 	/// </summary>
 	void CheckWallCollision();
