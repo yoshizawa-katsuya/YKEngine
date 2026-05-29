@@ -191,6 +191,18 @@ void Ui::StartJudgeEffect(JudgeType type) {
 	frameGlowTimer_ = 0.0f;
 }
 
+void Ui::AddGameScore(int value){
+	AddScore(value);
+}
+
+void Ui::DamageLife() {
+	DecreaseLife();
+}
+
+void Ui::PlayJudgeEffect(JudgeType type) {
+	StartJudgeEffect(type);
+}
+
 //デバック
 void Ui::Debug() {
 
@@ -292,9 +304,6 @@ Ui::PauseMenu Ui::GetPauseMenu() const {
 //入力処理
 void Ui::HandleInput() {
 
-	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_S)) {
-		AddScore(100);
-	}
 	//ポーズ画面表示仮
 	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_Q)) {
 		isShowPause_ = !isShowPause_;

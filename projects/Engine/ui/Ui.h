@@ -49,6 +49,8 @@ public:
     
 	//ポーズメニューの取得
     PauseMenu GetPauseMenu()const;
+    //ライフ取得
+    int GetLife()const { return life_; }
 private:
 	//スコア加算処理(仮実装)
     void HandleInput();
@@ -85,7 +87,7 @@ private:
     //最大スコア
     static const int kMaxScore = 999999;
     //最大ライフ
-    static const int kMaxLife = 3;
+    static const int kMaxLife = 5;
     //タイトルスプライト
     std::unique_ptr<YKEngine::Sprite> titleSprite_;
     //タイトルスペース

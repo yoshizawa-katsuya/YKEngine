@@ -147,8 +147,6 @@ void GameScene::Update() {
 	//衝突判定
 	CheckWallCollision();
 
-    CheckCollision();
-
 	//UIの更新
 	ui_->Update();
 
@@ -204,10 +202,6 @@ void GameScene::Update() {
 			2.0f,
 			Transition::EasingType::EaseOutQuint
 		);
-	}
-
-	if (input_->TriggerKey(DIK_R)) {
-		effect_->StartConfetti();
 	}
 
 #ifdef USE_IMGUI
@@ -352,43 +346,6 @@ void GameScene::Finalize()
 
 }
 
-void GameScene::CheckCollision()
-{	
-	float currentZ = dummyWall_->GetWorldTransform().translation_.z;
-
-	//判定ライン（例：z=0）
-	float judgeLine = 0.0f;
-
-	//ラインをまたいだ瞬間だけ判定
-	bool crossed = (prevWallZ_ > judgeLine && currentZ <= judgeLine);
-
-	if (!crossed) return;
-
-	auto result = JudgeSystem::Judge(
-		player_->GetState(), 
-		dummyWall_->GetState(), 
-		player_->GetWorldTransform(), 
-		dummyWall_->GetWorldTransform()
-	);
-
-	if(result==JudgeResult::Hit){
-		// 成功時の処理
-		player_->SetColorForDebug(debugPlayerColor[0]);
-		debugScore_++;
-		debugCombo_++;
-		debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
-	}
-	else if (result == JudgeResult::SuccessSquat) {
-		// しゃがみ成功（デバッグ用に何か追加しても可）
-	}
-	else if (result == JudgeResult::Miss) {
-		// ミス時の処理
-		player_->SetColorForDebug(debugPlayerColor[1]);
-		debugMiss_++;
-		debugCombo_ = 0;
-	}
-}
-
 void GameScene::CheckWallCollision()
 {
 	//各レーンの壁を取得して判定
@@ -417,6 +374,10 @@ void GameScene::CheckWallCollision()
 				debugScore_++;
 				debugCombo_++;
 				debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
+
+				ui_->AddGameScore(100);
+
+				ui_->PlayJudgeEffect(Ui::JudgeType::Good);
 			}
 			else if (result == JudgeResult::SuccessSquat) {
 				// しゃがみ成功（デバッグ用に何か追加しても可）
@@ -426,9 +387,14 @@ void GameScene::CheckWallCollision()
 				player_->SetColorForDebug(debugPlayerColor[1]);
 				debugMiss_++;
 				debugCombo_ = 0;
+
+				ui_->DamageLife();
+				if (ui_->GetLife() <= 1) {
+					player_->RequestDeath();
+				}
 			}
 
-			wall->SetIsCollision(true); // 衝突済みに設定
+			wall->SetIsCollision(true); 
 
 		}
 	}
