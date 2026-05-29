@@ -25,7 +25,8 @@ void Player::Initialize(BaseModel* model) {
 	std::vector<std::string> animNames = {
 		"Stay", "Squat", "SquatReturn",
 		"PoseA", "PoseAReturn", "PoseB", "PoseBReturn",
-		"PoseC", "PoseCReturn", "PoseD", "PoseDReturn"
+		"PoseC", "PoseCReturn", "PoseD", "PoseDReturn",
+		"SadPose","Base"
 	};
 
 	for (const auto& name : animNames) {
@@ -114,7 +115,9 @@ void Player::Update() {
 		}
 		else {
     		ChangePose();
-    		ChangeDirection();
+			if (isDirectionControl_) {
+        		ChangeDirection();
+			}
 		}
 
 
@@ -188,6 +191,11 @@ void Player::Reset()
 	deathVelocity_ = {};
 	
 	deathTimer_ = 0.0f;
+}
+
+void Player::ChangeAnimation(const std::string& name)
+{
+	PlayAnimation(name);
 }
 
 void Player::ChangePose()
