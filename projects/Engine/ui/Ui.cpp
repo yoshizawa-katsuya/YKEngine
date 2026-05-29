@@ -6,6 +6,12 @@
 // 初期化
 void Ui::Initialize() {
 
+	//タイトルスプライト生成
+	titleSprite_ = std::make_unique<YKEngine::Sprite>();
+	titleSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/title/title.png"));
+	titleSprite_->SetPosition({ 640.0f,320.0f });
+	titleSprite_->SetAnchorPoint({ 0.5f,0.5f });
+
     //タイトルスペース生成
 	titlePushSprite_ = std::make_unique<YKEngine::Sprite>();
 	titlePushSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/title/space.png"));
@@ -75,12 +81,16 @@ void Ui::Initialize() {
 	uint32_t frameTexture =
 		YKEngine::TextureManager::GetInstance()->Load("Resources/ui/framebar.png");
 
+	//画面枠スプライト生成
 	frameSprite_ = std::make_unique<YKEngine::Sprite>();
 	frameSprite_->Initialize(frameTexture);
 	frameSprite_->SetPosition({ 640.0f,360.0f });
 	frameSprite_->SetSize({ 1280.0f,720.0f });
 	frameSprite_->SetAnchorPoint({ 0.5f,0.5f });
 	frameSprite_->SetColor({ 1,1,1,0 });
+
+	//難易度スプライト生成
+
 
 }
 //更新
@@ -142,7 +152,8 @@ void Ui::Draw() {
 }
 //タイトル描画
 void Ui::DrawTitle() {
-
+	//タイトル描画
+	titleSprite_->Draw();
 	//タイトルスペース描画
 	titlePushSprite_->Draw();
 }

@@ -138,7 +138,7 @@ void GameScene::Update() {
 
 	//ダミーの壁の更新
 	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
-	dummyWall_->Update();
+	//dummyWall_->Update();
 
 	//レーンの更新
 	laneManager_->Update();
@@ -313,7 +313,7 @@ void GameScene::Draw() {
 	laneManager_->Draw(mainCamera_);
 
 	//ダミーの壁の描画
-	dummyWall_->Draw(mainCamera_);
+	//dummyWall_->Draw(mainCamera_);
 
 	/*modelPlatform_->SkyBoxPreDraw();
 
