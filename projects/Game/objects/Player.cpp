@@ -37,6 +37,8 @@ void Player::Initialize(BaseModel* model) {
 	startPosition_ = worldTransform_.translation_;
 	startRotation_ = worldTransform_.rotation_;
 	startScale_ = worldTransform_.scale_;
+
+	hitStopTimer_ = kHitStopTime_;
 	// 初期アニメーションを設定
 	PlayAnimation("Stay");
 }
@@ -91,6 +93,17 @@ void Player::Update() {
 		}
 
 		break;
+	case PlayerState::HitImpact:
+
+		hitStopTimer_ -= 1.0f / 60.0f;
+
+		if (hitStopTimer_ <= 0.0f)
+		{
+			state_ = PlayerState::Dead;
+		}
+
+		break;
+
 
 	case PlayerState::Dead:
 		// 死んでいるとき
@@ -111,7 +124,7 @@ void Player::Update() {
 	UpdateAnimationTimers();
 
 	// 現在アクティブなアニメーションのみを更新・適用する
-	if (currentAnimation_) {
+	if (currentAnimation_ && state_ != PlayerState::HitImpact) {
 		bool isLoop = (currentAnimationName_ == "Stay");
 
 		currentAnimation_->Update(isLoop);
@@ -128,6 +141,17 @@ void Player::Draw(Camera* camera) {
 	object_->CameraUpdate(camera);
 	object_->Draw();
 
+}
+
+bool Player::ConsumeResetRequest()
+{
+	if (resetRequested_)
+	{
+		resetRequested_ = false;
+		return true;
+	}
+
+	return false;
 }
 
 void Player::SetColorForDebug(Vector4& color) const
@@ -153,6 +177,10 @@ void Player::Reset()
 	deathVelocity_ = {};
 	
 	deathTimer_ = 0.0f;
+
+	hitStopTimer_ = kHitStopTime_;
+
+	resetRequested_ = true;
 }
 
 void Player::ChangePose()
@@ -284,7 +312,7 @@ void Player::UpdateAnimationTrigger() {
 void Player::UpdateAnimationTimers() {
 	// Returnフェーズ中でなければ何もしない
 	if (!isReturnPhase_) return;
-
+	
 	// 1フレーム分の時間を減算（1/60秒固定値。可変フレーム時はdeltaTime等を使用）
 	returnTimer_ -= (1.0f / 60.0f);
 
@@ -297,7 +325,7 @@ void Player::UpdateAnimationTimers() {
 
 void Player::StartDeathAnimation()
 {
-	state_ = PlayerState::Dead;
+	state_ = PlayerState::HitImpact;
 
 	switch (deathVariation_)
 	{
