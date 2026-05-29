@@ -96,4 +96,3 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_;
 };
-
