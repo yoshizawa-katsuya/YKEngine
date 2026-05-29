@@ -408,19 +408,26 @@ void GameScene::CheckWallCollision()
 				wall->GetWorldTransform()
 			);
 
-			if (result == JudgeResult::Hit) {
+			if (result == JudgeResult::Hit ||
+				result == JudgeResult::SuccessSquat) {
 				// 成功時の処理
 				player_->SetColorForDebug(debugPlayerColor[0]);
 				debugScore_++;
 				debugCombo_++;
 				debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
 
-				ui_->AddGameScore(100);
-
-				ui_->PlayJudgeEffect(Ui::JudgeType::Good);
-			}
-			else if (result == JudgeResult::SuccessSquat) {
-				// しゃがみ成功
+				if (debugCombo_ >= 10) {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Perfect);
+					ui_->AddGameScore(1000);
+				}
+				else if (debugCombo_ >= 5) {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Great);
+					ui_->AddGameScore(500);
+				}
+				else {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Good);
+					ui_->AddGameScore(100);
+				}
 			}
 			else if (result == JudgeResult::Miss) {
 				// ミス時の処理
