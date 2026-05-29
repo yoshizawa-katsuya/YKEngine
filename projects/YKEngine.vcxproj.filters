@@ -291,9 +291,10 @@
     <ClCompile Include="Engine\2d\Transition.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CameraManager.cpp">
+    <ClCompile Include="Effect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\CameraManager.cpp">
     <ClCompile Include="Game\objects\WallModels.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
@@ -613,7 +614,7 @@
     <ClInclude Include="Effect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CameraManager.h">
+    <ClInclude Include="Engine\3d\CameraManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
