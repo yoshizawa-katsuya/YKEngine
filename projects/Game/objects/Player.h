@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Input.h"
 #include "GameType.h"
+#include "ParticleEmitter.h"
 class YKEngine::Camera;
 
 enum class DeathVariation
@@ -121,6 +122,21 @@ private:
 	// リセット要求
 	bool resetRequested_ = false;
 
+	// プレイヤーを表示するか
+	bool isVisible_ = true;
+
+	std::unique_ptr<YKEngine::ParticleEmitter> deathEmitter_;
+
+	std::unique_ptr<YKEngine::ParticleEmitter> ringEmitter_;
+
+	std::shared_ptr<YKEngine::BaseModel> particleModel_;
+
+	std::shared_ptr<YKEngine::BaseModel> ringParticleModel_;
+
+	uint32_t textureHandle;
+
+	uint32_t ringTextureHandle;
+
 	// 吹っ飛び速度
 	YKEngine::Vector3 deathVelocity_ = {};
 
@@ -128,7 +144,7 @@ private:
 
 	YKEngine::Vector3 kLeftDeathVelocity = { -1.0f, 1.0f, -0.85f };
 
-	YKEngine::Vector3 kFrontDeathVelocity = { 0.0f, 0.08f, -0.85f };
+	YKEngine::Vector3 kFrontDeathVelocity = { 0.0f, 0.5f, -1.6f };
 
 	// 回転速度
 	YKEngine::Vector3 // グルグル回転

@@ -499,11 +499,11 @@ void GameScene::GameOverAnimation()
 		float currentFov = camera_->GetFovY();
 		float targetFov = 0.5f;
 
-		currentFov += (targetFov - currentFov) * 0.15f;
+		currentFov += (targetFov - currentFov) * 0.60f;
 		camera_->SetFovY(currentFov);
 
 		// 横揺れ
-		cameraShakeTimer_ += deltaTime * 40.0f;
+		cameraShakeTimer_ += deltaTime * 80.0f;
 
 		Vector3 pos = camera_->GetTranslate();
 
