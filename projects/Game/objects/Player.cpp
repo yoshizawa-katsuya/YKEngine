@@ -79,9 +79,44 @@ void Player::Update() {
 	case PlayerState::Normal:
 		// 生きているとき
 		prevPose_ = pose_;
+		if (isAutoPoseDemo_) {
+			worldTransform_.rotation_.y += 0.02f;
+			autoPoseTimer_ += 1.0f / 60.0f;
 
-		ChangePose();
-		ChangeDirection();
+			// 5秒ごとに切り替え
+			if (autoPoseTimer_ >= 5.0f) {
+				autoPoseTimer_ = 0.0f;
+				autoPoseIndex_++;
+
+				if(autoPoseIndex_>3){
+					autoPoseIndex_ = 0;
+				}
+			}
+
+			switch (autoPoseIndex_) {
+
+			case 0:
+				pose_ = PlayerPose::A;
+				break;
+
+			case 1:
+				pose_ = PlayerPose::B;
+				break;
+
+			case 2:
+				pose_ = PlayerPose::C;
+				break;
+
+			case 3:
+				pose_ = PlayerPose::D;
+				break;
+			}
+		}
+		else {
+    		ChangePose();
+    		ChangeDirection();
+		}
+
 
 		// 死亡開始
 		if (requestDeath_)
