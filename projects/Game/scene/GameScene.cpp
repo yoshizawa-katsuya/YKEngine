@@ -442,7 +442,7 @@ void GameScene::CheckWallCollision()
 
 void GameScene::CreateLevel()
 {
-	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");
+	LevelData levelData = LevelDataLoad("./resources/stageData/", "easyStageData", ".json");
 
 	//レーンの初期化
 	laneManager_ = std::make_unique<LaneManager>();
