@@ -313,7 +313,7 @@ void GameScene::Update() {
 	}
 
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
-	ImGui::Text("Difficulty: %s", difficulty_ == 0 ? "EASY" : difficulty_ == 1 ? "NORMAL" : "HARD");
+	ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
 	// カメラのFOVの調整
 	float fov = camera_->GetFovY();
 	ImGui::SliderFloat("Camera FOV: %f", &fov, 0.0f, 1.0f);
@@ -442,7 +442,20 @@ void GameScene::CheckWallCollision()
 
 void GameScene::CreateLevel()
 {
-	LevelData levelData = LevelDataLoad("./resources/stageData/", "easyStageData", ".json");
+	// 難易度に応じたレベルデータの読み込み
+	LevelData levelData;
+	switch (difficulty_)
+	{
+	case Difficulty::EASY:
+		levelData = LevelDataLoad("./resources/stageData/", "easyStageData", ".json");
+		break;
+	case Difficulty::NORMAL:
+		levelData = LevelDataLoad("./resources/stageData/", "normalStageData", ".json");
+		break;
+	case Difficulty::HARD:
+		levelData = LevelDataLoad("./resources/stageData/", "hardStageData", ".json");
+		break;
+	}
 
 	//レーンの初期化
 	laneManager_ = std::make_unique<LaneManager>();

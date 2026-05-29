@@ -2,6 +2,7 @@
 #include "BaseScene.h"
 #include "AbstractSceneFactory.h"
 #include <memory>
+#include "Difficulty.h"
 
 namespace YKEngine
 {
@@ -51,14 +52,14 @@ public:
 	/// セッター
 	/// </summary>
 	// 難易度の設定
-	void SetDifficulty(uint32_t difficulty) { difficulty_ = difficulty; }
+	void SetDifficulty(Difficulty difficulty) { difficulty_ = difficulty; }
 
 
 	/// <summary>
 	/// ゲッター
 	/// </summary>
 	// 難易度の取得
-	uint32_t GetDifficulty() const { return difficulty_; }
+	Difficulty GetDifficulty() const { return difficulty_; }
 
 private:
 
@@ -77,7 +78,7 @@ private:
 	//シーンファクトリー(借りてくる)
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 
-	uint32_t difficulty_ = 0; // 難易度の変数
+	Difficulty difficulty_ = Difficulty::EASY; // 難易度の変数
 };
 
 }

@@ -88,7 +88,7 @@ void TitleScene::Update()
 	if (transition_->IsFinished() &&
 		!nextSceneName_.empty()) {
 
-		sceneManager_->SetDifficulty(static_cast<int>(difficulty_));
+		sceneManager_->SetDifficulty(difficulty_);
 		sceneManager_->ChengeScene(nextSceneName_);
 	}
 

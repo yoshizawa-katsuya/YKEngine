@@ -25,6 +25,7 @@
 #include "Transition.h"
 #include "CameraManager.h"
 #include "Effect.h"
+#include "Difficulty.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -146,7 +147,7 @@ private:
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	// 難易度
-	uint32_t difficulty_ = 0;
+	Difficulty difficulty_ = Difficulty::EASY;
 
 	// 遷移演出
 	std::unique_ptr<Transition> transition_;

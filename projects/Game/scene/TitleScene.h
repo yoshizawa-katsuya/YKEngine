@@ -11,6 +11,7 @@
 #include "Ui.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Difficulty.h"
 
 /// <summary>
 /// タイトル画面のクラス。
@@ -53,12 +54,7 @@ private:
 	};
 	State state_ = State::START; // デフォルトはSTART
 
-	// 難易度のenum
-	enum class Difficulty {
-		EASY,
-		NORMAL,
-		HARD
-	};
+	//難易度
 	Difficulty difficulty_ = Difficulty::EASY; // デフォルトはEASY
 
 private:
