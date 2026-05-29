@@ -6,6 +6,18 @@
 // 初期化
 void Ui::Initialize() {
 
+	//タイトルスプライト生成
+	titleSprite_ = std::make_unique<YKEngine::Sprite>();
+	titleSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/title/title.png"));
+	titleSprite_->SetPosition({ 640.0f,320.0f });
+	titleSprite_->SetAnchorPoint({ 0.5f,0.5f });
+
+    //タイトルスペース生成
+	titlePushSprite_ = std::make_unique<YKEngine::Sprite>();
+	titlePushSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/title/space.png"));
+	titlePushSprite_->SetPosition({ 640.0f, 500.0f });
+	titlePushSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	
 	//スコアテクスチャ読み込み
 	for (int i = 0; i < 10; i++) {
 		numberTextures_[i] =
@@ -69,12 +81,16 @@ void Ui::Initialize() {
 	uint32_t frameTexture =
 		YKEngine::TextureManager::GetInstance()->Load("Resources/ui/framebar.png");
 
+	//画面枠スプライト生成
 	frameSprite_ = std::make_unique<YKEngine::Sprite>();
 	frameSprite_->Initialize(frameTexture);
 	frameSprite_->SetPosition({ 640.0f,360.0f });
 	frameSprite_->SetSize({ 1280.0f,720.0f });
 	frameSprite_->SetAnchorPoint({ 0.5f,0.5f });
 	frameSprite_->SetColor({ 1,1,1,0 });
+
+	//難易度スプライト生成
+
 
 }
 //更新
@@ -95,13 +111,16 @@ void Ui::Update() {
 	UpdateJudgeEffect();
 	//画面枠発光更新
 	UpdateFrameGlow();
-
+	//ライフ更新
 	UpdateLifeBlink();
+	//タイトルスペース更新
+	UpdateTitleSpace();
 	//デバック
 	Debug();
 }
 //描画
 void Ui::Draw() {
+
 	//スコア描画
 	for (int i = 0; i < kMaxDigits; i++) {
 		scoreSprites_[i]->Draw();
@@ -131,6 +150,14 @@ void Ui::Draw() {
 		frameSprite_->Draw();
 	}
 }
+//タイトル描画
+void Ui::DrawTitle() {
+	//タイトル描画
+	titleSprite_->Draw();
+	//タイトルスペース描画
+	titlePushSprite_->Draw();
+}
+
 //デバック
 void Ui::Debug() {
 
@@ -153,6 +180,25 @@ void Ui::Debug() {
 		}
 		ImGui::End();
 	}
+
+    // タイトルスペースUI
+    if (titlePushSprite_) {
+        ImGui::Begin("Title Push Space Sprite");
+        ImVec2 pos = { titlePushSprite_->GetPosition().x, titlePushSprite_->GetPosition().y };
+        if (ImGui::DragFloat2("Position", (float*)&pos, 1.0f)) {
+            titlePushSprite_->SetPosition({ pos.x, pos.y });
+        }
+        ImVec2 scale = { titlePushSprite_->GetSize().x , titlePushSprite_->GetSize().y };
+        if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 10000.0)) {
+            titlePushSprite_->SetSize({ scale.x, scale.y });
+        }
+        float rotation = titlePushSprite_->GetRotation();
+        if (ImGui::DragFloat("Rotation", &rotation, 1.0f, -360.0f, 360.0f)) {
+            titlePushSprite_->SetRotation(rotation);
+        }
+        ImGui::End();
+    }
+
 	// ライフUI
 	ImGui::Begin("Life UI");
 	static ImVec2 lifePos = { 50.0f, 120.0f };
@@ -477,6 +523,21 @@ void Ui::UpdateLifeBlink() {
 		life_--;
 
 		isLifeBlink_ = false;
+	}
+}
+//タイトルスペース更新
+void Ui::UpdateTitleSpace() {
+
+	titleSpaceBlinkTimer_ += 0.016f; 
+
+	//サイン波でアルファ値変化
+	float wave = (sinf(titleSpaceBlinkTimer_ * 3.0f) + 1.0f) * 0.5f; 
+	float alpha = 0.1f + wave * 0.9f;
+
+	if (titlePushSprite_) {
+		auto color = titlePushSprite_->GetColor();
+		color.w = alpha;
+		titlePushSprite_->SetColor(color);
 	}
 }
 

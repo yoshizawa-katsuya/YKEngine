@@ -89,7 +89,6 @@ void ParticleEmitter::ApplyGlobalVariables()
 	behavior_->drawMode = static_cast<ParticleDrawMode>(globalVariables_->GetIntValue(name_, "behaviorBlendMode"));
 	color_ = globalVariables_->GetColorValue(name_, "color");
 
-
 }
 
 void ParticleEmitter::SetFrequency(float frequency)
