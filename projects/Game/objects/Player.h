@@ -38,6 +38,10 @@ public:
 
 	void Reset();
 
+	void SetAutoPoseDemo(bool enable) { isAutoPoseDemo_ = enable; }
+
+	void SetPositon(YKEngine::Vector3 pos) { worldTransform_.translation_ = pos; }
+
 private:
 
 	void ChangePose();
@@ -128,5 +132,12 @@ private:
 	YKEngine::Vector3 startPosition_;
 	YKEngine::Vector3 startRotation_;
 	YKEngine::Vector3 startScale_;
+
+	// タイトル用自動ポーズデモ
+	bool isAutoPoseDemo_ = false;
+
+	float autoPoseTimer_ = 0.0f;
+
+	int autoPoseIndex_ = 0;
 };
 

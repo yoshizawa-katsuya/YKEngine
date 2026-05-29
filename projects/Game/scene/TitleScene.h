@@ -8,6 +8,8 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 #include "Transition.h"
+#include "Camera.h"
+#include "Player.h"
 
 /// <summary>
 /// タイトル画面のクラス。
@@ -68,6 +70,13 @@ private:
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
+
+	YKEngine::Camera* mainCamera_ = nullptr;
+
+	//平行光源
+	YKEngine::DirectionalLight directionalLight_;
+
+	std::unique_ptr<YKEngine::Camera> camera_;
 	//タイトルスプライト
 	std::unique_ptr<YKEngine::Sprite> titleSprite_;
 	
@@ -78,5 +87,9 @@ private:
 	bool isStartedTransition_ = false;
 
 	std::string nextSceneName_; // 次のシーンの名前
+
+	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
+	//プレイヤー
+	std::unique_ptr<Player> player_;
 };
 

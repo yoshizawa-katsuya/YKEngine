@@ -44,10 +44,33 @@ void TitleScene::Initialize()
 		1.0f,
 		Transition::EasingType::EaseInSine
 	);
+
+	//カメラの生成
+	camera_ = std::make_unique<Camera>();
+	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
+	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+
+	//メインカメラの設定
+	mainCamera_ = camera_.get();
+	modelPlatform_->SetCamera(mainCamera_);
+
+	//モデルの生成
+	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/playerAnimation", "PoseA.gltf");
+
+	//プレイヤーの初期化
+	player_ = std::make_unique<Player>();
+	player_->Initialize(modelPlayer_.get());
+	player_->SetAutoPoseDemo(true);
+	player_->SetPositon(YKEngine::Vector3{-1.7f,-1.5f,-6.0f });
 }
 
 void TitleScene::Update()
 {
+	//カメラの更新
+	camera_->Update();
+
+	modelPlatform_->LightPreUpdate();
+	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 #ifdef USE_IMGUI
 
@@ -94,6 +117,7 @@ void TitleScene::Update()
 			// ステートをOPTIONSに変更
 			state_ = State::OPTIONS;
 		}
+		player_->Update();
 		break;
 	case State::OPTIONS:
 		//オプション画面の更新処理
@@ -169,6 +193,10 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+	modelPlatform_->SkinPreDraw();
+
+	//プレイヤーの描画
+	player_->Draw(mainCamera_);
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();
