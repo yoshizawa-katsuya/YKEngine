@@ -434,7 +434,6 @@ void GameScene::CheckWallCollision()
 	}
 }
 
-
 void GameScene::CreateLevel()
 {
 	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");

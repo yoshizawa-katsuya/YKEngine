@@ -158,6 +158,39 @@ void Ui::DrawTitle() {
 	titlePushSprite_->Draw();
 }
 
+//スコア加算
+void Ui::AddScore(int value) {
+	score_ += value;
+	//スコア上限
+	if (score_ > kMaxScore) {
+		score_ = kMaxScore;
+	}
+
+	targetScore_ = score_;
+	isAnimating_ = true;
+}
+//ライフ減少
+void Ui::DecreaseLife() {
+	if (life_ <= 0)return;
+
+	blinkLifeIndex_ = life_ - 1;
+
+	isLifeBlink_ = true;
+	lifeBlinkTimer_ = 0.0f;
+}
+//ジャッジエフェクト開始
+void Ui::StartJudgeEffect(JudgeType type) {
+	judgeType_ = type;
+
+	isJudgePlaying_ = true;
+	judgeTimer_ = 0.0f;
+	judgeScale_ = 0.3f;
+	judgeAlpha_ = 1.0f;
+	judgePos_ = { 640.0f,250.0f };
+	isFrameGlow_ = true;
+	frameGlowTimer_ = 0.0f;
+}
+
 //デバック
 void Ui::Debug() {
 
@@ -268,18 +301,6 @@ void Ui::HandleInput() {
 	}
 }
 
-//スコア加算
-void Ui::AddScore(int value) {
-	score_ += value;
-	//スコア上限
-	if (score_ > kMaxScore) {
-		score_ = kMaxScore;
-	}
-
-	targetScore_ = score_;
-	isAnimating_ = true;
-}
-
 //アニメーション更新
 void Ui::UpdateAnimation() {
 
@@ -320,15 +341,6 @@ void Ui::HandleLifeInput() {
 		DecreaseLife();
 	}
 }
-//ライフ減少
-void Ui::DecreaseLife() {
-	if (life_ <= 0)return;
-
-	blinkLifeIndex_ = life_ - 1;
-
-	isLifeBlink_ = true;
-	lifeBlinkTimer_ = 0.0f;
-}
 //ポーズメニュー更新
 void Ui::UpdatePauseMenu() {
 
@@ -368,18 +380,6 @@ void Ui::HandleJudgeInput() {
 	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_7)) {
 		StartJudgeEffect(JudgeType::Perfect);
 	}
-}
-//ジャッジエフェクト開始
-void Ui::StartJudgeEffect(JudgeType type) {
-	judgeType_ = type;
-
-	isJudgePlaying_ = true;
-	judgeTimer_ = 0.0f;
-	judgeScale_ = 0.3f;
-	judgeAlpha_ = 1.0f;
-	judgePos_ = { 640.0f,250.0f };
-	isFrameGlow_ = true;
-	frameGlowTimer_ = 0.0f;
 }
 //ジャッジエフェクト更新
 void Ui::UpdateJudgeEffect() {

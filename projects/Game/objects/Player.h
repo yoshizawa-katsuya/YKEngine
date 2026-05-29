@@ -129,4 +129,3 @@ private:
 	YKEngine::Vector3 startRotation_;
 	YKEngine::Vector3 startScale_;
 };
-
