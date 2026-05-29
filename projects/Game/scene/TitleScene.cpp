@@ -191,7 +191,11 @@ void TitleScene::Draw()
 		ui_->DrawTitle();
 	}
 
+	if (state_ == State::OPTIONS) {
+		//Uiの描画
+		ui_->DrawSelect();
 	}
+}
 
 	void TitleScene::Finalize()
 	{

@@ -31,17 +31,19 @@ public:
     void Draw();
     //タイトル描画
 	void DrawTitle();
+    //難易度選択描画
+    void DrawSelect();
     //スコア加算
     void AddScore(int value);
     //ライフ減少
     void DecreaseLife();
     //ジャッジエフェクト開始
     void StartJudgeEffect(JudgeType type);
-
+	//ゲームスコア加算
     void AddGameScore(int value);
-
+	//ライフ減少
     void DamageLife();
-
+	//ジャッジエフェクト再生
     void PlayJudgeEffect(JudgeType type);
 
     //デバック

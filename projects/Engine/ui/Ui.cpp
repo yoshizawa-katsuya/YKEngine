@@ -89,8 +89,22 @@ void Ui::Initialize() {
 	frameSprite_->SetAnchorPoint({ 0.5f,0.5f });
 	frameSprite_->SetColor({ 1,1,1,0 });
 
+	//難易度テクスチャ読み込み
+	easyTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/title/easy.png");
+	normalTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/title/normal.png");
+	hardTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/title/hard.png");
 	//難易度スプライト生成
+	easySprite_ = std::make_unique<YKEngine::Sprite>();
+	easySprite_->Initialize(easyTexture_);
+	easySprite_->SetPosition({ 640.0f, 400.0f });
 
+	normalSprite_ = std::make_unique<YKEngine::Sprite>();
+	normalSprite_->Initialize(normalTexture_);
+	normalSprite_->SetPosition({ 640.0f, 400.0f });
+
+	hardSprite_ = std::make_unique<YKEngine::Sprite>();
+	hardSprite_->Initialize(hardTexture_);
+	hardSprite_->SetPosition({ 640.0f, 400.0f });
 
 }
 //更新
@@ -157,7 +171,12 @@ void Ui::DrawTitle() {
 	//タイトルスペース描画
 	titlePushSprite_->Draw();
 }
-
+//難易度選択描画
+void Ui::DrawSelect() {
+	easySprite_->Draw();
+	normalSprite_->Draw();
+	hardSprite_->Draw();
+}
 //スコア加算
 void Ui::AddScore(int value) {
 	score_ += value;
@@ -234,7 +253,7 @@ void Ui::Debug() {
             titlePushSprite_->SetPosition({ pos.x, pos.y });
         }
         ImVec2 scale = { titlePushSprite_->GetSize().x , titlePushSprite_->GetSize().y };
-        if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 10000.0)) {
+        if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 10000.0f)) {
             titlePushSprite_->SetSize({ scale.x, scale.y });
         }
         float rotation = titlePushSprite_->GetRotation();
@@ -292,6 +311,43 @@ void Ui::Debug() {
 		if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 2000.0f)) {
 			frameSprite_->SetSize({ scale.x, scale.y });
 		}
+		ImGui::End();
+	}
+
+	// 難易度スプライトの位置とサイズを操作
+	if (easySprite_ && normalSprite_ && hardSprite_) {
+		ImGui::Begin("Difficulty Sprites");
+
+		// easy
+		ImVec2 easyPos = { easySprite_->GetPosition().x, easySprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Easy Position", (float*)&easyPos, 1.0f)) {
+			easySprite_->SetPosition({ easyPos.x, easyPos.y });
+		}
+		ImVec2 easySize = { easySprite_->GetSize().x, easySprite_->GetSize().y };
+		if (ImGui::DragFloat2("Easy Size", (float*)&easySize, 1.0f, 0.0f, 1000.0f)) {
+			easySprite_->SetSize({ easySize.x, easySize.y });
+		}
+
+		// normal
+		ImVec2 normalPos = { normalSprite_->GetPosition().x, normalSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Normal Position", (float*)&normalPos, 1.0f)) {
+			normalSprite_->SetPosition({ normalPos.x, normalPos.y });
+		}
+		ImVec2 normalSize = { normalSprite_->GetSize().x, normalSprite_->GetSize().y };
+		if (ImGui::DragFloat2("Normal Size", (float*)&normalSize, 1.0f, 0.0f, 1000.0f)) {
+			normalSprite_->SetSize({ normalSize.x, normalSize.y });
+		}
+
+		// hard
+		ImVec2 hardPos = { hardSprite_->GetPosition().x, hardSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Hard Position", (float*)&hardPos, 1.0f)) {
+			hardSprite_->SetPosition({ hardPos.x, hardPos.y });
+		}
+		ImVec2 hardSize = { hardSprite_->GetSize().x, hardSprite_->GetSize().y };
+		if (ImGui::DragFloat2("Hard Size", (float*)&hardSize, 1.0f, 0.0f, 1000.0f)) {
+			hardSprite_->SetSize({ hardSize.x, hardSize.y });
+		}
+
 		ImGui::End();
 	}
 #endif // USE_IMGUI
