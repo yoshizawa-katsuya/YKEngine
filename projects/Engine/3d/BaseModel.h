@@ -235,13 +235,15 @@ protected:
 	/// 頂点データ読み込み。
 	/// </summary>
 	/// <param name="mesh">Assimpのメッシュデータ</param>
-	void LoadVertexData(aiMesh* mesh);
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadVertexData(aiMesh* mesh, uint32_t vertexStartIndex);
 
 	/// <summary>
 	/// インデックスデータ読み込み。
 	/// </summary>
 	/// <param name="mesh">Assimpのメッシュデータ</param>
-	void LoadIndexData(aiMesh* mesh);
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadIndexData(aiMesh* mesh, uint32_t vertexStartIndex);
 
 	/// <summary>
 	/// メッシュデータ読み込み。

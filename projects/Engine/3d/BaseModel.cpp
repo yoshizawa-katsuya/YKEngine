@@ -222,7 +222,7 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
-		modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
+		//modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
 
 		LoadMeshData(mesh);
 
@@ -247,21 +247,23 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 	
 }
 
-void BaseModel::LoadVertexData(aiMesh* mesh)
+void BaseModel::LoadVertexData(aiMesh* mesh, uint32_t vertexStartIndex)
 {
-	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) 
+	modelData_->vertices.resize(modelData_->vertices.size() + mesh->mNumVertices);	//頂点数分のメモリを確保しておく
+
+	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex)
 	{
 		aiVector3D& position = mesh->mVertices[vertexIndex];
 		aiVector3D& normal = mesh->mNormals[vertexIndex];
 		aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
 		//右手系->左手系の変換
-		modelData_->vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
-		modelData_->vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
-		modelData_->vertices[vertexIndex].texcoord = { texcord.x, texcord.y };
+		modelData_->vertices[vertexStartIndex + vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
+		modelData_->vertices[vertexStartIndex + vertexIndex].normal = { -normal.x, normal.y, normal.z };
+		modelData_->vertices[vertexStartIndex + vertexIndex].texcoord = { texcord.x, texcord.y };
 	}
 }
 
-void BaseModel::LoadIndexData(aiMesh* mesh)
+void BaseModel::LoadIndexData(aiMesh* mesh, uint32_t vertexStartIndex)
 {
 	//面ごとに情報を読み込む
 	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) 
@@ -272,7 +274,7 @@ void BaseModel::LoadIndexData(aiMesh* mesh)
 		//面を構成する頂点インデックスを読み込む
 		for (uint32_t element = 0; element < face.mNumIndices; ++element) 
 		{
-			uint32_t vertexIndex = face.mIndices[element];
+			uint32_t vertexIndex = face.mIndices[element] + vertexStartIndex;
 			modelData_->indeces.push_back(vertexIndex);
 		}
 	}
@@ -280,9 +282,11 @@ void BaseModel::LoadIndexData(aiMesh* mesh)
 
 void BaseModel::LoadMeshData(aiMesh* mesh)
 {
-	LoadVertexData(mesh);
+	uint32_t vertexStartIndex = static_cast<uint32_t>(modelData_->vertices.size());	//頂点データの開始位置を記録しておく
 
-	LoadIndexData(mesh);
+	LoadVertexData(mesh, vertexStartIndex);
+
+	LoadIndexData(mesh, vertexStartIndex);
 
 }
 

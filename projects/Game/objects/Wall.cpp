@@ -53,12 +53,18 @@ void Wall::Update()
     {
         worldTransform_.translation_.z -= speed_;
     }
-
-    if (worldTransform_.translation_.z <= 5.0f)
+	const float kFeintPoseResetZ = 5.0f; //フェイント用のポーズをリセットするZ座標の閾値
+    if (worldTransform_.translation_.z <= kFeintPoseResetZ)
     {
 		feintPose_ = std::nullopt; //フェイント用のポーズをリセット
 		object_->Initialize(wallModels_->GetWallModel(state_.pose).get()); //通常のポーズのモデルを使用
     }
+
+	const float kDeadZoneZ = -1.0f; //壁が消えるZ座標の閾値
+    if (worldTransform_.translation_.z <= kDeadZoneZ)
+    {
+		isDead_ = true; //壁がプレイヤーを通り過ぎて消える位置に到達したと判断
+	}
 
     UpdateColorForDebug();
     worldTransform_.UpdateMatrix();

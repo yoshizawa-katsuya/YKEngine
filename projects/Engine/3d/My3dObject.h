@@ -95,6 +95,12 @@ public:
 	void SetColor(const Vector4& color);
 
 	/// <summary>
+	/// alpha値の設定。
+	/// </summary>
+	/// <param name="alpha">alpha値</param>
+	void SetAlpha(float alpha);
+
+	/// <summary>
 	/// 環境光係数の設定。
 	/// マテリアルデータを生成する。
 	/// </summary>

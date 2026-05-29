@@ -1,0 +1,798 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "LIGHT",
+            "name": "Light",
+            "transform": {
+                "translation": [
+                    4.076245307922363,
+                    1.0054539442062378,
+                    5.903861999511719
+                ],
+                "rotation": [
+                    37.26104736328125,
+                    3.1637091636657715,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    1.0,
+                    0.9999999403953552,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera",
+            "transform": {
+                "translation": [
+                    7.358891487121582,
+                    -6.925790786743164,
+                    4.958309173583984
+                ],
+                "rotation": [
+                    63.559295654296875,
+                    2.2983238068263745e-07,
+                    46.69194412231445
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "Lane",
+            "name": "CenterLane",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "children": [
+                {
+                    "type": "Wall",
+                    "name": "Wall.001",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -11.405442237854004,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.002",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -25.00653839111328,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "B"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.012",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -44.38935852050781,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.013",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -249.28732299804688,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "B"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.014",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -83.98961639404297,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "D"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.017",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -112.8857421875,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "B"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.019",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -135.90040588378906,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "Squat"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.020",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -145.76699829101562,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.021",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -155.59300231933594,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "C"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.022",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -175.2017822265625,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "D"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.023",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -165.02894592285156,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "B"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.027",
+                    "transform": {
+                        "translation": [
+                            0.0,
+                            -207.2574005126953,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                }
+            ]
+        },
+        {
+            "type": "Lane",
+            "name": "LeftLane",
+            "transform": {
+                "translation": [
+                    5.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "children": [
+                {
+                    "type": "Wall",
+                    "name": "Wall.003",
+                    "transform": {
+                        "translation": [
+                            5.0,
+                            -34.777244567871094,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "C"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.005",
+                    "transform": {
+                        "translation": [
+                            5.0,
+                            -55.23046112060547,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.015",
+                    "transform": {
+                        "translation": [
+                            5.0,
+                            -90.70508575439453,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "D"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.016",
+                    "transform": {
+                        "translation": [
+                            5.0,
+                            -105.93961334228516,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "B"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.028",
+                    "transform": {
+                        "translation": [
+                            5.0,
+                            -216.63722229003906,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.029",
+                    "transform": {
+                        "translation": [
+                            5.0,
+                            -219.51602172851562,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                }
+            ]
+        },
+        {
+            "type": "Lane",
+            "name": "RightLane",
+            "transform": {
+                "translation": [
+                    -5.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "children": [
+                {
+                    "type": "Wall",
+                    "name": "Wall.004",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -77.59075927734375,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "D"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.006",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -64.86963653564453,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "Squat"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.018",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -120.73501586914062,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "B"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.024",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -191.926025390625,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.025",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -194.47396850585938,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.026",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -197.17202758789062,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "A"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.030",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -232.4859619140625,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "C"
+                },
+                {
+                    "type": "Wall",
+                    "name": "Wall.031",
+                    "transform": {
+                        "translation": [
+                            -5.0,
+                            -235.59417724609375,
+                            0.0
+                        ],
+                        "rotation": [
+                            0.0,
+                            -0.0,
+                            0.0
+                        ],
+                        "scaling": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "pose": "C"
+                }
+            ]
+        },
+        {
+            "type": "Wall",
+            "name": "Wall.008",
+            "transform": {
+                "translation": [
+                    10.182757377624512,
+                    -200.043212890625,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pose": "A"
+        },
+        {
+            "type": "Wall",
+            "name": "Wall.009",
+            "transform": {
+                "translation": [
+                    11.390334129333496,
+                    -187.42044067382812,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pose": "C"
+        },
+        {
+            "type": "Wall",
+            "name": "Wall.007",
+            "transform": {
+                "translation": [
+                    10.504706382751465,
+                    -181.93202209472656,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pose": "B"
+        },
+        {
+            "type": "Wall",
+            "name": "Wall.010",
+            "transform": {
+                "translation": [
+                    10.813364028930664,
+                    -192.70748901367188,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pose": "Squat"
+        },
+        {
+            "type": "Wall",
+            "name": "Wall.011",
+            "transform": {
+                "translation": [
+                    11.701184272766113,
+                    -195.7673797607422,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pose": "D"
+        }
+    ]
+}
