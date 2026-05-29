@@ -42,6 +42,8 @@ enum class DrawMode
 
 	kBlendModeNormalinstancing,
 
+	kInstancingTriplanar,	//インスタンシングでトリプラナーを使用するモード
+
 	//オフスクリーンレンダリング
 	kOffScreenRendering,
 	kGrayScaleRendering,

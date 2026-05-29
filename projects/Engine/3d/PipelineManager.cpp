@@ -470,6 +470,23 @@ const std::unordered_map<DrawMode, PipelineManager::PipelineConfig> PipelineMana
 			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE
 		}
 	},
+
+	{
+		DrawMode::kInstancingTriplanar,
+		{
+			L"resources/shader/InstancingObject3d.VS.hlsl",
+			L"resources/shader/TriplanarObject3d.PS.hlsl",
+			L"",
+			RootParameterType::InstancingModel,
+			StaticSamplerType::Default,
+			InputLayoutType::Default,
+			BlendType::Normal,
+			RasterizerType::CullBack,
+			DepthType::EnableWrite,
+			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE
+		}
+	},
+
 	{
 		DrawMode::kSkyboxMode,
 		{
