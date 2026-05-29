@@ -5,6 +5,7 @@
 #include "LevelDataLoader.h"
 
 class YKEngine::Camera;
+class WallModels;
 
 /// <summary>
 /// 壁クラス
@@ -19,7 +20,8 @@ public:
 	/// <param name="wallData">壁のデータ</param>
 	/// <param name="isStart">流れ始めるかどうかのフラグのポインタ</param>
 	/// <param name="parent">親のワールド変換</param>
-	void Initialize(const YKEngine::WallData& wallData, bool* isStart, YKEngine::WorldTransform* parent);
+	/// <param name="wallModels">壁のモデル</param>
+	void Initialize(const YKEngine::WallData& wallData, bool* isStart, YKEngine::WorldTransform* parent, WallModels* wallModels);
 
 	/// <summary>
 	/// 更新
@@ -47,6 +49,10 @@ private:
 	void UpdateColorForDebug();
 
 private:
+
+	//壁のモデル
+	WallModels* wallModels_ = nullptr;
+
 	//Transform変数
 	YKEngine::WorldTransform worldTransform_;
 

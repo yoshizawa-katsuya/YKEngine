@@ -7,6 +7,14 @@
 #include "Input.h"
 #include "GameType.h"
 class YKEngine::Camera;
+
+enum class DeathVariation
+{
+	Right,
+	Left,
+	InFront
+};
+
 /// <summary>
 /// プレイヤークラス
 /// </summary>
@@ -28,15 +36,29 @@ public:
 
 	PoseDir GetState()const { return { pose_,direction_ }; }
 
+	float GetHitStopTimer() const { return hitStopTimer_; }
+
+	DeathVariation GetDeathVariation() const { return deathVariation_; }
+
 	void RequestDeath() { requestDeath_ = true; }
 
+	bool ConsumeResetRequest();
+
+	bool IsInHitImpact() const { return state_ == PlayerState::HitImpact; }
+
 	bool IsDead() const { return state_ == PlayerState::Dead; }
+
+	bool IsAlive() const { return state_ == PlayerState::Normal; }
 
 	bool IsDeathFinished() const { return state_ == PlayerState::DeadFinished; }
 
 	void SetColorForDebug(YKEngine::Vector4& color)const;
 
 	void Reset();
+
+	void SetAutoPoseDemo(bool enable) { isAutoPoseDemo_ = enable; }
+
+	void SetPositon(YKEngine::Vector3 pos) { worldTransform_.translation_ = pos; }
 
 private:
 
@@ -60,17 +82,12 @@ private:
 	// 死亡アニメーション
 	void PlayDeathAnimation();
 
-	enum class DeathVariation
-	{
-		Right,
-		Left,
-		InFront
-	};
 	DeathVariation deathVariation_ = DeathVariation::Right;
 
 	enum class PlayerState
 	{
 		Normal,
+		HitImpact,      // ←追加
 		Dead,
 		DeadFinished
 	};
@@ -101,7 +118,8 @@ private:
 	// 死亡開始要求
 	bool requestDeath_ = false;
 
-	
+	// リセット要求
+	bool resetRequested_ = false;
 
 	// 吹っ飛び速度
 	YKEngine::Vector3 deathVelocity_ = {};
@@ -128,4 +146,17 @@ private:
 	YKEngine::Vector3 startPosition_;
 	YKEngine::Vector3 startRotation_;
 	YKEngine::Vector3 startScale_;
+
+	// ヒットストップ時間
+	float hitStopTimer_ = 0.0f;
+
+	// ヒットストップ時間の長さ
+	const float kHitStopTime_ = 0.75f;
+
+	// タイトル用自動ポーズデモ
+	bool isAutoPoseDemo_ = false;
+
+	float autoPoseTimer_ = 0.0f;
+
+	int autoPoseIndex_ = 0;
 };

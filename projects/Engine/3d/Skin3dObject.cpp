@@ -142,6 +142,8 @@ int32_t Skin3dObject::CreateJoint(const Node& node, const std::optional<int32_t>
 void Skin3dObject::CreateSkinCluster()
 {
 
+	model_->WaitUntilInitialized();	//Modelの初期化が完了するまで待機。model_->GetVerticesNum()などを呼び出す前に、モデルの初期化が完了している必要があるため。
+
 	ModelPlatform* modelPlatform = model_->GetModelPlatform();
 	const ModelData& modelData = model_->GetModelData();
 	uint32_t verticesNum = model_->GetVerticesNum();

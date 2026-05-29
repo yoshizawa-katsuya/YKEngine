@@ -2,10 +2,11 @@
 #include "ModelPlatform.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "WallModels.h"
 
 using namespace YKEngine;
 
-void Wall::Initialize(const WallData& wallData, bool* isStart, WorldTransform* parent)
+void Wall::Initialize(const WallData& wallData, bool* isStart, WorldTransform* parent, WallModels* wallModels)
 {
 	//GlovalVariablesから壁の移動速度を取得
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -14,19 +15,34 @@ void Wall::Initialize(const WallData& wallData, bool* isStart, WorldTransform* p
 	// 流れ始めるかどうかのフラグのポインタを受け取る
 	isStart_ = isStart;
 
+	// 壁のモデルを受け取る
+	wallModels_ = wallModels;
+
+    //初期状態を設定
+    state_ = { wallData.pose, wallData.direction };
+    feintPose_ = wallData.feintPose;
+
 	//===== モデルの生成 =====
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
     object_ = std::make_unique<My3dObject>();
-    object_->Initialize(modelPlatform->CreateRigidModel("./resources/wall", "wall.obj").get());
+    if (feintPose_.has_value())
+    {
+        //フェイント用のポーズがある場合はフェイント用のポーズのモデルを使用
+        object_->Initialize(wallModels_->GetWallModel(feintPose_.value()).get());
+    }
+    else
+    {
+        //ない場合は通常のポーズのモデルを使用
+        object_->Initialize(wallModels_->GetWallModel(state_.pose).get());
+	}
+    
 
 	//初期位置の設定
     worldTransform_.Initialize();
 	worldTransform_.parent_ = parent;
 	worldTransform_.translation_.z = wallData.translate.z;
 
-	//初期状態を設定
-    state_ = { wallData.pose, wallData.direction };
-	feintPose_ = wallData.feintPose;
+	
 }
 
 void Wall::Update() 
@@ -41,6 +57,7 @@ void Wall::Update()
     if (worldTransform_.translation_.z <= 5.0f)
     {
 		feintPose_ = std::nullopt; //フェイント用のポーズをリセット
+		object_->Initialize(wallModels_->GetWallModel(state_.pose).get()); //通常のポーズのモデルを使用
     }
 
     UpdateColorForDebug();

@@ -35,6 +35,13 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 		CreateIndexData();
 		CreateMaterialData(color);
 		textureHandle_ = TextureManager::GetInstance()->Load(modelData_->material.textureFilePath);
+		{
+			//初期化完了フラグを立てる
+			std::lock_guard<std::mutex> lock(initMutex_);
+			initialized_ = true;
+		}
+		//初期化完了を通知
+		initCondition_.notify_all();
 	});
 
 	
@@ -90,6 +97,12 @@ void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
 
 	DrawCommonProcess(false, textureHandle, numInstance);
 
+}
+
+void YKEngine::BaseModel::WaitUntilInitialized()
+{
+	std::unique_lock<std::mutex> lock(initMutex_);
+	initCondition_.wait(lock, [this]() { return initialized_; });
 }
 
 void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)

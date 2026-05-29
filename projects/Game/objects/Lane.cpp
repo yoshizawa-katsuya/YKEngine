@@ -3,9 +3,13 @@
 
 using namespace YKEngine;
 
-void Lane::Initialize(bool* isStart)
+void Lane::Initialize(bool* isStart, WallModels* wallModels)
 {
+	// 流れ始めるかどうかのフラグのポインタを受け取る
 	isStart_ = isStart;
+
+	// 壁のモデルを受け取る
+	wallModels_ = wallModels;
 
 	worldTransform_.Initialize();
 
@@ -40,7 +44,7 @@ void Lane::AddWall(const YKEngine::WallData& wallData)
 {
 	//壁の生成
 	std::unique_ptr<Wall> wall = std::make_unique<Wall>();
-	wall->Initialize(wallData, isStart_, &worldTransform_);
+	wall->Initialize(wallData, isStart_, &worldTransform_, wallModels_);
 
 	walls_.push_back(std::move(wall));
 }

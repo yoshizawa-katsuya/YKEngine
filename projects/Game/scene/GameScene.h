@@ -23,6 +23,7 @@
 #include "LaneManager.h"
 #include "Ui.h"
 #include "Transition.h"
+#include "CameraManager.h"
 #include "Effect.h"
 
 /// <summary>
@@ -69,6 +70,11 @@ private:
 	/// レベルの生成。
 	/// </summary>
 	void CreateLevel();
+
+	/// <summary>
+	/// ゲームオーバー演出
+	/// </summary>
+	void GameOverAnimation();
 
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
@@ -155,4 +161,31 @@ private:
 	int32_t debugCombo_ = 0;
 	int32_t debugMaxCombo_ = 0;
 	
+	// ゲームオーバー演出用
+	// 通常時FOV
+	float normalFov_;
+
+	// 演出用FOV
+	float gameOverFov_ = 0.5f;
+
+	// 現在の補間速度
+	float fovLerpSpeed_ = 0.4f;
+
+	// 横揺れ
+	float cameraShakeTimer_ = 0.0f;
+	// 横揺れの強さ
+	float shakeStrength_ = 0.3f;
+
+	// 演出用カメラ
+	YKEngine::Vector3 gameOverCameraPos_ = { 0.0f, 3.6f, -10.0f };
+	YKEngine::Vector3 gameOverCameraTarget_ = { 0.0f, 0.0f, 0.0f };
+
+	std::unique_ptr<CameraManager> cameraManager_ = nullptr;
+
+	enum CameraMode {
+		Free,
+		GameOver,
+	};
+
+	CameraMode cameraMode_ = CameraMode::Free;
 };
