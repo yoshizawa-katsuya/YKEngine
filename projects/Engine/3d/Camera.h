@@ -46,6 +46,8 @@ public:
 
 	const Vector3& GetTranslate() const { return transform_.translation; }
 
+	const float GetFovY() const { return fovY_; }
+
 	//setter
 	void SetRotate(const Vector3& rotate) { transform_.rotation = rotate; }
 	void SetRotateX(float x) { transform_.rotation.x = x; }
@@ -53,6 +55,7 @@ public:
 	void SetRotateZ(float z) { transform_.rotation.z = z; }
 
 	void SetTranslate(const Vector3& translate) { transform_.translation = translate; }
+	void SetXTranslate(float x) { transform_.translation.x = x; }
 	void SetFovY(float fovY) { fovY_ = fovY; }
 	void SetAspectRatio(float aspectRatio) { aspectRatio_ = aspectRatio; }
 	void SetNearClip(float nearClip) { nearClip_ = nearClip; }
