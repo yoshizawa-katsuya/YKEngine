@@ -295,6 +295,8 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\CameraManager.cpp">
+       <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
     <ClCompile Include="Game\objects\WallModels.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
