@@ -29,6 +29,9 @@ public:
     void Update();
     //描画
     void Draw();
+    //タイトル描画
+	void DrawTitle();
+
     //デバック
     void Debug();
     
@@ -57,8 +60,10 @@ private:
     void UpdateJudgeEffect();
 	//画面枠発光更新
     void UpdateFrameGlow();
-
+	//ライフ点滅更新
     void UpdateLifeBlink();
+    //タイトルスペース更新
+    void UpdateTitleSpace();
 	//HSVからRGBに変換
     YKEngine::Vector4 HSVToRGB(float h, float s, float v);
 	//現在のジャッジエフェクトスプライト取得
@@ -75,6 +80,10 @@ private:
     static const int kMaxScore = 999999;
     //最大ライフ
     static const int kMaxLife = 3;
+    //タイトルスプライト
+    std::unique_ptr<YKEngine::Sprite> titleSprite_;
+    //タイトルスペース
+    std::unique_ptr<YKEngine::Sprite>titlePushSprite_;
     //スコアスプライト
     std::array<std::unique_ptr<YKEngine::Sprite>, kMaxDigits> scoreSprites_;
 	//ライフスプライト
@@ -89,13 +98,25 @@ private:
     std::unique_ptr<YKEngine::Sprite> perfectSprite_;
     //画面枠スプライト
     std::unique_ptr<YKEngine::Sprite>frameSprite_;
+    //難易度スプライト
+    std::unique_ptr<YKEngine::Sprite>easySprite_;
+    std::unique_ptr<YKEngine::Sprite>normalSprite_;
+    std::unique_ptr<YKEngine::Sprite>hardSprite_;
     //スコアテクスチャ
     std::array<uint32_t, 10> numberTextures_;
+    //ジャッジエフェクトテクスチャ
+    uint32_t goodTexture_;
+    uint32_t greatTexture_;
+    uint32_t perfectTexture_;
+    //難易度テクスチャ
+	uint32_t easyTexture_;
+	uint32_t normalTexture_;
+	uint32_t hardTexture_;
     //桁
     std::array<int, kMaxDigits> digits_{};
 	//ジャッジエフェクト表示位置
     YKEngine::Vector2 judgePos_ = { 640.0f, 250.0f };
-
+	//ライフ点滅表示位置
     YKEngine::Vector2 lifeBlinkPos_ = { 0.0f,0.0f };
 	//スコア
     int score_ = 0;
@@ -105,12 +126,8 @@ private:
     int targetScore_ = 0;
     //現在ライフ
     int life_ = kMaxLife;
-
+	//ライフ点滅用インデックス
     int blinkLifeIndex_ = -1;
-	//ジャッジエフェクトテクスチャ
-    uint32_t goodTexture_;
-	uint32_t greatTexture_;
-	uint32_t perfectTexture_;
     //ポーズ画面のスケール
     float pauseScale_ = 0.0f;
     //ホバー用タイマー
@@ -123,10 +140,12 @@ private:
     float judgeAlpha_ = 0.0f;
 	//画面枠発光用タイマー
     float frameGlowTimer_ = 0.0f;
-
+	//ライフ点滅用タイマー
     float lifeBlinkTimer_ = 0.0f;
-
+	//ライフ点滅スケール
     float lifeBlinkScale_ = 1.0f;
+	//タイトルスペース点滅用タイマー
+    float titleSpaceBlinkTimer_ = 0.0f;
 	//画面枠発光フラグ
     bool isFrameGlow_ = false;
 	//アニメーション中か
@@ -135,7 +154,7 @@ private:
     bool isShowPause_ = false;
 	//ジャッジエフェクト再生中フラグ
     bool isJudgePlaying_ = false;
-
+	//ライフ点滅フラグ
     bool isLifeBlink_ = false;
 
 };

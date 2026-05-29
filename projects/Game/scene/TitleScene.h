@@ -8,6 +8,7 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 #include "Transition.h"
+#include "Ui.h"
 #include "Camera.h"
 #include "Player.h"
 
@@ -82,6 +83,9 @@ private:
 	
 	// 画面遷移のクラス
 	std::unique_ptr<Transition> transition_;
+
+	//UI
+	std::unique_ptr<Ui>ui_;
 
 	// 画面遷移が開始されたかどうかのフラグ
 	bool isStartedTransition_ = false;

@@ -10,7 +10,7 @@ namespace YKEngine
 {
 
 /// <summary>
-/// パーティクル生成クラス。
+/// パーティクル生成クラス。ｆ
 /// パーティクルの発生数、発生頻度、ランダム化の有無、挙動などを管理する。
 /// GlobalVariablesクラスを通して、パーティクルエディターとしての役割も担う。
 /// パーティクルの実体はParticleManagerクラスが管理する。
@@ -101,6 +101,14 @@ public:
 	void SetIsUseBillboard(bool isUseBillboard) { behavior_->isUseBillboard = isUseBillboard; }
 
 	void SetIsDownVelocity(bool isDownVelocity) { behavior_->isdownVelocity = isDownVelocity; }
+
+	void SetIsRandomRotationVelocity(bool isRandomRotationVelocity) { randomFlags_.rotationVelocity = isRandomRotationVelocity; }
+
+	void SetRandRotationVelocityMin(const Vector3& rotationVelocityMin) { rangeParams_.rotationVelocity.min = rotationVelocityMin; }
+
+	void SetRandRotationVelocityMax(const Vector3& rotationVelocityMax){rangeParams_.rotationVelocity.max = rotationVelocityMax;}
+
+	void SetDrawMode(ParticleDrawMode drawMode){behavior_->drawMode = drawMode;}
 
 	void SetCount(uint32_t count) { count_ = count; }
 
