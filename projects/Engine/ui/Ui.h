@@ -45,10 +45,12 @@ public:
     void DamageLife();
 	//ジャッジエフェクト再生
     void PlayJudgeEffect(JudgeType type);
-
+	//画面枠発光停止
+    void StopFrameGlow();
     //デバック
     void Debug();
-    
+	//選択中の難易度設定
+    void SetSelectedDifficulty(int index);
 	//ポーズメニューの取得
     PauseMenu GetPauseMenu()const;
     //ライフ取得
@@ -138,6 +140,8 @@ private:
     int life_ = kMaxLife;
 	//ライフ点滅用インデックス
     int blinkLifeIndex_ = -1;
+	//選択中の難易度
+    int selectedDifficulty_ = 0;
     //ポーズ画面のスケール
     float pauseScale_ = 0.0f;
     //ホバー用タイマー
@@ -156,6 +160,8 @@ private:
     float lifeBlinkScale_ = 1.0f;
 	//タイトルスペース点滅用タイマー
     float titleSpaceBlinkTimer_ = 0.0f;
+	//難易度選択スケール用タイマー
+    float difficultyScaleTimer_ = 0.0f;
 	//画面枠発光フラグ
     bool isFrameGlow_ = false;
 	//アニメーション中か

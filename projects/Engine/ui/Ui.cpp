@@ -96,15 +96,18 @@ void Ui::Initialize() {
 	//難易度スプライト生成
 	easySprite_ = std::make_unique<YKEngine::Sprite>();
 	easySprite_->Initialize(easyTexture_);
-	easySprite_->SetPosition({ 640.0f, 400.0f });
+	easySprite_->SetPosition({ 640.0f, 130.0f });
+	easySprite_->SetAnchorPoint({ 0.5f,0.5f });
 
 	normalSprite_ = std::make_unique<YKEngine::Sprite>();
 	normalSprite_->Initialize(normalTexture_);
-	normalSprite_->SetPosition({ 640.0f, 400.0f });
+	normalSprite_->SetPosition({ 640.0f, 310.0f });
+	normalSprite_->SetAnchorPoint({ 0.5f,0.5f });
 
 	hardSprite_ = std::make_unique<YKEngine::Sprite>();
 	hardSprite_->Initialize(hardTexture_);
-	hardSprite_->SetPosition({ 640.0f, 400.0f });
+	hardSprite_->SetPosition({ 640.0f, 490.0f });
+	hardSprite_->SetAnchorPoint({ 0.5f,0.5f });
 
 }
 //更新
@@ -129,6 +132,8 @@ void Ui::Update() {
 	UpdateLifeBlink();
 	//タイトルスペース更新
 	UpdateTitleSpace();
+	//難易度選択のスケール更新
+	difficultyScaleTimer_ += 1.0f / 60.0f;
 	//デバック
 	Debug();
 }
@@ -173,6 +178,30 @@ void Ui::DrawTitle() {
 }
 //難易度選択描画
 void Ui::DrawSelect() {
+	float scale = 1.0f + std::sin(difficultyScaleTimer_ * 6.0f) * 0.1f;
+
+	//EASY
+	if (selectedDifficulty_ == 0) {
+		easySprite_->SetSize({ 512.0f * scale,128.0f * scale });
+	}
+	else {
+		easySprite_->SetSize({ 512.0f,128.0f });
+	}
+	//NORMAL
+	if (selectedDifficulty_ == 1) {
+		normalSprite_->SetSize({ 512.0f * scale,128.0f * scale });
+	}
+	else {
+		normalSprite_->SetSize({ 512.0f,128.0f });
+	}
+	//HARD
+	if (selectedDifficulty_ == 2) {
+		hardSprite_->SetSize({ 512.0f * scale,128.0f * scale });
+	}
+	else {
+		hardSprite_->SetSize({ 512.0f,128.0f });
+	}
+
 	easySprite_->Draw();
 	normalSprite_->Draw();
 	hardSprite_->Draw();
@@ -209,15 +238,23 @@ void Ui::StartJudgeEffect(JudgeType type) {
 	isFrameGlow_ = true;
 	frameGlowTimer_ = 0.0f;
 }
+//画面枠発光停止
+void Ui::StopFrameGlow() {
+	isFrameGlow_ = false;
 
+	if (frameSprite_) {
+		frameSprite_->SetColor({ 1,1,1,0 });
+	}
+}
+//ゲームスコア加算
 void Ui::AddGameScore(int value){
 	AddScore(value);
 }
-
+//ライフ減少
 void Ui::DamageLife() {
 	DecreaseLife();
 }
-
+//ジャッジエフェクト再生
 void Ui::PlayJudgeEffect(JudgeType type) {
 	StartJudgeEffect(type);
 }
@@ -605,7 +642,10 @@ void Ui::UpdateTitleSpace() {
 		titlePushSprite_->SetColor(color);
 	}
 }
-
+//難易度選択の設定
+void Ui::SetSelectedDifficulty(int index) {
+	selectedDifficulty_ = index;
+}
 //現在のジャッジエフェクトスプライト取得
 YKEngine::Sprite* Ui::GetCurrentJudgeSprite() {
 	switch (judgeType_) {

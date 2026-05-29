@@ -420,7 +420,7 @@ void GameScene::CheckWallCollision()
 				ui_->PlayJudgeEffect(Ui::JudgeType::Good);
 			}
 			else if (result == JudgeResult::SuccessSquat) {
-				// しゃがみ成功（デバッグ用に何か追加しても可）
+				// しゃがみ成功
 			}
 			else if (result == JudgeResult::Miss) {
 				// ミス時の処理
@@ -429,6 +429,8 @@ void GameScene::CheckWallCollision()
 				debugCombo_ = 0;
 
 				ui_->DamageLife();
+				ui_->StopFrameGlow();
+
 				if (ui_->GetLife() <= 1) {
 					player_->RequestDeath();
 				}

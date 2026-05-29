@@ -147,6 +147,8 @@ void TitleScene::Update()
 			}
 		}
 
+		ui_->SetSelectedDifficulty(static_cast<int>(difficulty_));
+
 		break;
 	case State::EXIT:
 		// 終了
