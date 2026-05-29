@@ -1,6 +1,7 @@
 #pragma once
 #include "Lane.h"
 #include <array>
+#include "WallModels.h"
 
 namespace YKEngine
 {
@@ -37,9 +38,12 @@ private:
 
 private:
 
+	//壁のモデル
+	std::unique_ptr<WallModels> wallModels_;
+
 	//レーン
 	std::array<std::unique_ptr<Lane>, static_cast<size_t>(PlayerDirection::Count)> lanes_;
-	
+
 	//流れ始めるかどうか
 	bool isStart_ = false;
 
