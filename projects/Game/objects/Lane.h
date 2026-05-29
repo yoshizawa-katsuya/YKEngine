@@ -1,6 +1,8 @@
 #pragma once
 #include "Wall.h"
 
+class WallModels;
+
 /// <summary>
 /// レーンクラス
 /// 壁が流れてくるレーンを管理する
@@ -13,7 +15,8 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="isStart">流れ始めるかどうか</param>
-	void Initialize(bool* isStart);
+	/// <param name="wallModels">壁のモデル</param>
+	void Initialize(bool* isStart, WallModels* wallModels);
 
 	/// <summary>
 	/// 更新
@@ -38,6 +41,9 @@ public:
 	void SetRotate(const YKEngine::Vector3& rotate) { worldTransform_.rotation_ = rotate; }
 
 private:
+
+	//壁のモデル
+	WallModels* wallModels_ = nullptr;
 
 	//ワールド変換
 	YKEngine::WorldTransform worldTransform_;

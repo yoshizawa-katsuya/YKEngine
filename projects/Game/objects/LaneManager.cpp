@@ -21,11 +21,15 @@ void LaneManager::Initialize(const std::vector<WallData>& wallDatas)
 	globalVariables_->CreateGroup(wallGroupName);
 	globalVariables_->AddItem(wallGroupName, JsonKey::Wall::kSpeed, 0.1f);
 
+	//壁のモデルの生成
+	wallModels_ = std::make_unique<WallModels>();
+	wallModels_->Initialize();
+
 	//レーンの生成
 	for (std::unique_ptr<Lane>& lane : lanes_)
 	{
 		lane = std::make_unique<Lane>();
-		lane->Initialize(&isStart_);
+		lane->Initialize(&isStart_, wallModels_.get());
 	}
 	//レーンの回転を設定
 	UpdateLaneAngle();
