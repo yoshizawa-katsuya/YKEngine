@@ -4,7 +4,7 @@
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
-
+#include "ModelPlatform.h"
 using namespace YKEngine;
 
 void Player::Initialize(BaseModel* model) {
@@ -19,8 +19,8 @@ void Player::Initialize(BaseModel* model) {
 	pose_ = PlayerPose::Base;
 	direction_ = PlayerDirection::Front;
 
-	kAngle_=std::numbers::pi_v<float>/4.0f;
-	
+	kAngle_ = std::numbers::pi_v<float> / 4.0f;
+
 	// 全てのアニメーションファイルを最初にメモリにロード（プリロード）
 	std::vector<std::string> animNames = {
 		"Stay", "Squat", "SquatReturn",
@@ -41,6 +41,75 @@ void Player::Initialize(BaseModel* model) {
 	hitStopTimer_ = kHitStopTime_;
 	// 初期アニメーションを設定
 	PlayAnimation("Stay");
+
+	textureHandle = TextureManager::GetInstance()->Load("resources/circle2.png");
+
+	ringTextureHandle = TextureManager::GetInstance()->Load("resources/ring.png");
+
+	particleModel_ = ModelPlatform::GetInstance()->CreatePlane(textureHandle);
+
+	ringParticleModel_ = ModelPlatform::GetInstance()->CreatePlane(ringTextureHandle);
+
+	// 死亡エフェクトのパーティクルを作成
+	deathEmitter_ = std::make_unique<ParticleEmitter>("PlayerDeathExplosion");
+	deathEmitter_->Initialize(textureHandle, particleModel_);
+
+	deathEmitter_->SetCount(80);
+
+	// オレンジに設定
+	deathEmitter_->SetColor({ 1.0f, 0.5f, 0.0f, 1.0f });
+
+	deathEmitter_->SetIsRandomVelocity(true);
+	deathEmitter_->SetRandVelocityMin({ -40.0f,-40.0f,-40.0f });
+	deathEmitter_->SetRandVelocityMax({ 40.0f,40.0f,40.0f });
+
+	deathEmitter_->SetIsRandomScele(true);
+	deathEmitter_->SetRandScaleMin({ 0.8f,0.8f,0.8f });
+	deathEmitter_->SetRandScaleMax({ 3.2f,3.2f,3.2f });
+
+	deathEmitter_->SetIsRandomLifeTime(true);
+	deathEmitter_->SetRandLifeTimeMin(0.5f);
+	deathEmitter_->SetRandLifeTimeMax(1.5f);
+
+	deathEmitter_->SetIsScaleToDisAppear(true);
+	deathEmitter_->SetIsTimeFadeOut(true);
+
+	deathEmitter_->SetDrawMode(ParticleDrawMode::kAddBlend);
+
+	// 死亡時のリングエフェクトを作成
+	ringEmitter_ = std::make_unique<ParticleEmitter>("PlayerDeathRing");
+	ringEmitter_->Initialize(ringTextureHandle, ringParticleModel_);
+
+	ringEmitter_->SetCount(6);
+
+	ringEmitter_->SetScale({ 0.2f,0.2f,0.2f });
+
+	// 回転ランダム化
+	ringEmitter_->SetIsRandomRotate(true);
+
+	ringEmitter_->SetRandRotateMin({ 0.0f,0.0f,0.0f });
+
+	ringEmitter_->SetRandRotateMax({ std::numbers::pi_v<float>,std::numbers::pi_v<float>,std::numbers::pi_v<float> });
+
+	// 少しサイズ揺らぎ
+	ringEmitter_->SetIsRandomScele(true);
+
+	ringEmitter_->SetRandScaleMin({ -20.0f,-20.0f,-20.0f });
+
+	ringEmitter_->SetRandScaleMax({ 20.0f,20.0f,20.0f });
+
+
+	ringEmitter_->SetIsScaleToAppear(true);
+
+	ringEmitter_->SetIsTimeFadeOut(true);
+
+	ringEmitter_->SetIsRandomVelocity(false);
+
+	ringEmitter_->SetIsUseBillboard(false);
+
+	ringEmitter_->SetDrawMode(ParticleDrawMode::kAddBlend);
+
+	ringEmitter_->SetColor({ 1,1,1,0.5f });
 }
 
 
@@ -66,7 +135,7 @@ void Player::Update() {
 		if (ImGui::Combo("Death Variation", &variationIndex, variations, IM_ARRAYSIZE(variations))) {
 			deathVariation_ = static_cast<DeathVariation>(variationIndex);
 		}
-		
+
 		if (ImGui::Button("Death")) { RequestDeath(); }
 		if (ImGui::Button("Reset")) { Reset(); }
 		ImGui::TreePop();
@@ -90,7 +159,7 @@ void Player::Update() {
 				autoPoseTimer_ = 0.0f;
 				autoPoseIndex_++;
 
-				if(autoPoseIndex_>3){
+				if (autoPoseIndex_ > 3) {
 					autoPoseIndex_ = 0;
 				}
 			}
@@ -115,8 +184,8 @@ void Player::Update() {
 			}
 		}
 		else {
-    		ChangePose();
-    		ChangeDirection();
+			ChangePose();
+			ChangeDirection();
 		}
 
 
@@ -150,7 +219,7 @@ void Player::Update() {
 		// 死亡演出終了後（完全に吹っ飛んでしまった後など）
 		break;
 	}
-	
+
 
 
 	UpdateColorForDebug();
@@ -172,7 +241,9 @@ void Player::Update() {
 }
 
 void Player::Draw(Camera* camera) {
-
+	if (!isVisible_) {
+		return;
+	}
 	object_->CameraUpdate(camera);
 	object_->Draw();
 
@@ -210,10 +281,12 @@ void Player::Reset()
 	state_ = PlayerState::Normal;
 
 	deathVelocity_ = {};
-	
+
 	deathTimer_ = 0.0f;
 
 	hitStopTimer_ = kHitStopTime_;
+
+	isVisible_ = true;
 
 	resetRequested_ = true;
 }
@@ -349,7 +422,7 @@ void Player::UpdateAnimationTrigger() {
 void Player::UpdateAnimationTimers() {
 	// Returnフェーズ中でなければ何もしない
 	if (!isReturnPhase_) return;
-	
+
 	// 1フレーム分の時間を減算（1/60秒固定値。可変フレーム時はdeltaTime等を使用）
 	returnTimer_ -= (1.0f / 60.0f);
 
@@ -431,9 +504,34 @@ void Player::PlayDeathAnimation()
 	deathRotateVelocity_.y *= 0.985f;
 	deathRotateVelocity_.z *= 0.985f;
 
-	// 演出終了
-	if (worldTransform_.translation_.z < -75.0f)
+	//----------------------------------------
+	// 2秒経過で終了
+	//----------------------------------------
+	if (deathTimer_ >= 2.0f)
 	{
-		//state_ = PlayerState::DeadFinished;
+		// 爆発位置
+		EulerTransform transform{};
+		transform.translation = worldTransform_.translation_;
+		transform.rotation = { 0,0,0 };
+		transform.scale = { 5,5,5 };
+
+		deathEmitter_->SetTransform(transform);
+
+		// 爆発
+		deathEmitter_->Emit();
+
+		EulerTransform ringTransform{};
+		ringTransform.translation = worldTransform_.translation_;
+		ringTransform.rotation = { 0,0,0 };
+		ringTransform.scale = { 50.0f,50.0f,50.0f };
+
+		ringEmitter_->SetTransform(ringTransform);
+
+		ringEmitter_->Emit();
+
+		// プレイヤー消滅
+		isVisible_ = false;
+
+		state_ = PlayerState::DeadFinished;
 	}
 }
