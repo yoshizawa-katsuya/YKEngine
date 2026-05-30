@@ -86,7 +86,7 @@ private:
 	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
 
 	//アニメーション
-	std::unique_ptr<Animation> animationPlayer_;
+	std::unique_ptr<YKEngine::Animation> animationPlayer_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;

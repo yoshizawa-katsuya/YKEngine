@@ -12,7 +12,7 @@ class Player
 {
 public:
 
-	void Initialize(YKEngine::BaseModel* model, Animation* animation);
+	void Initialize(YKEngine::BaseModel* model, YKEngine::Animation* animation);
 
 	void Update();
 
@@ -24,7 +24,7 @@ private:
 	YKEngine::WorldTransform worldTransform_;
 
 	std::unique_ptr<YKEngine::My3dObject> object_;
-	Animation* animation_;
+	YKEngine::Animation* animation_;
 
 	bool useAnimation_ = false;
 };

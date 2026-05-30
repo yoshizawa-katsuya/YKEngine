@@ -3,7 +3,6 @@
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
-#include "Rigid3dObject.h"
 #include "Skin3dObject.h"
 
 using namespace YKEngine;
