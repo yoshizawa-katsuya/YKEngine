@@ -122,6 +122,13 @@ void My3dObject::SetColor(const Vector4& color)
 	materialData_->color = color;
 }
 
+void YKEngine::My3dObject::SetAlpha(float alpha)
+{
+	CreateMaterialData();
+
+	materialData_->color.w = alpha;
+}
+
 void My3dObject::SetEnviromentCoefficient(float coefficient)
 {
 	

@@ -240,7 +240,7 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			modelData_->material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
-			
+			break;	//複数テクスチャがあっても最初の1つだけ読み込む
 		}
 		else {
 			modelData_->material.textureFilePath = "./resources/white.png";
