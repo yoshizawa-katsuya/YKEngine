@@ -4,6 +4,7 @@
 #include "RootParams.h"
 #include "SceneChangeStaging.h"
 #include "TitleSceneStartState.h"
+#include "manager/CollisionManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -13,6 +14,8 @@ using namespace YKEngine;
 
 TitleScene::~TitleScene()
 {
+	//衝突マネージャに登録されたコライダーを全て削除
+	CollisionManager::GetInstance()->Reset();
 }
 
 void TitleScene::Initialize()

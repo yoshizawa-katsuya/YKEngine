@@ -9,6 +9,7 @@
 #include "manager/EffectManager.h"
 #include "SceneChangeStaging.h"
 #include "ClearSceneStartState.h"
+#include "manager/CollisionManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -18,6 +19,8 @@ using namespace YKEngine;
 
 ClearScene::~ClearScene()
 {
+	//衝突マネージャに登録されたコライダーを全て削除
+	CollisionManager::GetInstance()->Reset();
 }
 
 void ClearScene::Initialize()
