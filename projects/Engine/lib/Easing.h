@@ -1,5 +1,8 @@
 #pragma once
 
+namespace YKEngine
+{
+
 /// <summary>
 /// イージングの種類
 /// https://easings.net/ja
@@ -9,11 +12,15 @@ enum class EasingType
 	kLinear,
 	kEaseInSine,
 	kEaseOutSine,
+	kEaseInOutSine,
 	kEaseInQuad,
 	kEaseOutQuad,
+	kEaseInOutQuad,
 	kEaseInCubic,
 	kEaseOutCubic,
+	kEaseInOutCubic,
 	kEaseInBack,
+	kEaseOutBack,
 	kEaseInOutBack,
 };
 
@@ -40,6 +47,13 @@ float EaseInSine(float x);
 float EaseOutSine(float x);
 
 /// <summary>
+/// EaseInOutSineイージングを適用する。
+/// </summary>
+/// <param name="x">0.0から1.0の範囲の値</param>
+/// <returns>イージングが適用された値</returns>
+float EaseInOutSine(float x);
+
+/// <summary>
 /// EaseInQuadイージングを適用する。
 /// </summary>
 /// <param name="x">0.0から1.0の範囲の値</param>
@@ -52,6 +66,13 @@ float EaseInQuad(float x);
 /// <param name="x">0.0から1.0の範囲の値</param>
 /// <returns>イージングが適用された値</returns>
 float EaseOutQuad(float x);
+
+/// <summary>
+/// EaseInOutQuadイージングを適用する。
+/// </summary>
+/// <param name="x">0.0から1.0の範囲の値</param>
+/// <returns>イージングが適用された値</returns>
+float EaseInOutQuad(float x);
 
 /// <summary>
 /// EaseInCubicイージングを適用する。
@@ -68,6 +89,13 @@ float EaseInCubic(float x);
 float EaseOutCubic(float x);
 
 /// <summary>
+/// EaseInOutCubicイージングを適用する。
+/// </summary>
+/// <param name="x">0.0から1.0の範囲の値</param>
+/// <returns>イージングが適用された値</returns>
+float EaseInOutCubic(float x);
+
+/// <summary>
 /// EaseInBackイージングを適用する。
 /// </summary>
 /// <param name="x">0.0から1.0の範囲の値</param>
@@ -80,3 +108,12 @@ float EaseInBack(float x);
 /// <param name="x">0.0から1.0の範囲の値</param>
 /// <returns>イージングが適用された値</returns>
 float EaseOutBack(float x);
+
+/// <summary>
+/// EaseInOutBackイージングを適用する。
+/// </summary>
+/// <param name="x">0.0から1.0の範囲の値</param>
+/// <returns>イージングが適用された値</returns>
+float EaseInOutBack(float x);
+
+} // namespace YKEngine

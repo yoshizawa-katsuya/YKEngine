@@ -5,6 +5,9 @@
 
 #pragma comment(lib,"xaudio2.lib")
 
+namespace YKEngine
+{
+
 /// <summary>
 /// オーディオ。
 /// XAudio2を使用。
@@ -93,3 +96,4 @@ private:
 
 };
 
+} // namespace YKEngine

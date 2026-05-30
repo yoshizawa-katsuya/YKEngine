@@ -2,6 +2,9 @@
 #include "SrvHeapManager.h"
 #include "DirectXCommon.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// ImGui管理クラス。
 /// ImGuiの初期化、描画を行う。
@@ -48,3 +51,4 @@ private:
 
 };
 
+} // namespace YKEngine

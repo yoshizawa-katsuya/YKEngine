@@ -2,6 +2,8 @@
 #include "SceneFactory.h"
 #include "OffscreenRenderer.h"
 
+using namespace YKEngine;
+
 void MyGame::Initialize()
 {
 

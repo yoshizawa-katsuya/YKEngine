@@ -4,6 +4,8 @@
 #include <math.h>
 #include <cmath>
 
+namespace YKEngine
+{
 //平行移動行列の作成
 Matrix3x3 MakeTranslateMatrix(Vector2 translate);
 
@@ -20,7 +22,7 @@ Matrix3x3 MakeViewportMatrix(float left, float top, float width, float height);
 Matrix3x3 Multiply(const Matrix3x3& matrix1, const Matrix3x3& matrix2);
 
 //座標変換
-Vector2 Transform(Vector2 vector, Matrix3x3 matrix);
+Vector2 Transform(Vector2 vector, const Matrix3x3& matrix);
 
 //回転行列の作成
 Matrix3x3 MakeRotateMatrix(float theta);
@@ -98,3 +100,5 @@ Matrix4x4 operator-(const Matrix4x4& m1, const Matrix4x4& m2);
 
 //行列の乗算
 Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);
+
+}	// namespace YKEngine

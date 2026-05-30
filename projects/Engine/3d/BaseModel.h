@@ -7,6 +7,9 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
+namespace YKEngine
+{
 class ModelPlatform;
 class Camera;
 class Animation;
@@ -163,6 +166,11 @@ public:
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void InstancingDraw(uint32_t numInstance, uint32_t textureHandle);
 
+	/// <summary>
+	/// 初期化完了まで待機する。
+	/// </summary>
+	void WaitUntilInitialized();
+
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
 	/// <summary>
@@ -184,14 +192,15 @@ public:
 
 	virtual void SetEnableLighting(bool enableLighting);
 
+	void SetShininess(float shininess);
+
 	virtual void SetEnvironmentCoefficient(float environmentCoefficient);
 
-	Material& GetMaterialDataAddress() { return *materialData_; }
+	const Material& GetMaterialData() const { return *materialData_; }
 
 	const Node& GetRootNode() const { return modelData_->rootNode; }
 
 	const ModelData& GetModelData() const { return *modelData_; }
-	ModelData& GetModelData() { return *modelData_; }
 
 	uint32_t GetVerticesNum() { return verticesNum_; }
 
@@ -226,13 +235,15 @@ protected:
 	/// 頂点データ読み込み。
 	/// </summary>
 	/// <param name="mesh">Assimpのメッシュデータ</param>
-	void LoadVertexData(aiMesh* mesh);
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadVertexData(aiMesh* mesh, uint32_t vertexStartIndex);
 
 	/// <summary>
 	/// インデックスデータ読み込み。
 	/// </summary>
 	/// <param name="mesh">Assimpのメッシュデータ</param>
-	void LoadIndexData(aiMesh* mesh);
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadIndexData(aiMesh* mesh, uint32_t vertexStartIndex);
 
 	/// <summary>
 	/// メッシュデータ読み込み。
@@ -287,5 +298,13 @@ protected:
 	uint32_t indecesNum_;
 	uint32_t textureHandle_;
 
+	//Initializeの完了フラグ
+	bool initialized_ = false;
+
+	//Initializeの完了を待つための条件変数とミューテックス
+	std::mutex initMutex_;
+	std::condition_variable initCondition_;
+
 };
 
+} // namespace YKEngine

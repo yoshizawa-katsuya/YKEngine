@@ -8,6 +8,8 @@
 #include "BaseModel.h"
 #include "Matrix.h"
 
+using namespace YKEngine;
+
 void Animation::LoadAnimationFile(const std::string& directoryPath, const std::string& filename)
 {
 
@@ -15,7 +17,7 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 	std::string filePath = directoryPath + "/" + filename;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
 	assert(scene->mNumAnimations != 0);	//アニメーションがない
-	aiAnimation* animationAssimp = scene->mAnimations[0];	//最初のアニメーションだけ採用。もちろん複数対応することに越したことはない
+	aiAnimation* animationAssimp = scene->mAnimations[0];	//最初のアニメーションだけ採用 TODO:複数対応する
 	duration_ = static_cast<float>(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);	//時間の単位を秒に変換
 
 	//assimpでは個々のNodeのAnimationをchannelと呼んでいるのでchannelを回してNodeAnimationの情報をとってくる

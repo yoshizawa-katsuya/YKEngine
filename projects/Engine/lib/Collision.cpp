@@ -4,6 +4,9 @@
 #include "Vector3.h"
 #include <algorithm>
 
+namespace YKEngine
+{
+
 bool CapsuleCollision(Vector2 capsuleA, Vector2 capsuleB, Vector2 CircleC, float radiusC, float radiusA) 
 {
 	float length;
@@ -587,3 +590,5 @@ bool IsCollision(const OBB& obb1, const OBB& obb2)
 	return true;
 
 }
+
+}	// namespace YKEngine

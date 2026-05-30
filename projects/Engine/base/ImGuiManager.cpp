@@ -6,6 +6,8 @@
 #include "imgui/imgui_impl_win32.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 ImGuiManager::~ImGuiManager()
 {
 	Finalize();

@@ -4,6 +4,8 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 
+using namespace YKEngine;
+
 D3DResourceLeakChecker::~D3DResourceLeakChecker()
 {
 	//リソースリークチェック

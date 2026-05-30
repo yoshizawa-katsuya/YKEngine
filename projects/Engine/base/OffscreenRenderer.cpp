@@ -1,18 +1,20 @@
 #include "OffscreenRenderer.h"
 #include "SrvHeapManager.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include "Matrix.h"
 #include "RootParams.h"
 
-OffscreenRenderer* OffscreenRenderer::instance_ = nullptr;
+using namespace YKEngine;
+
+std::unique_ptr<OffscreenRenderer> OffscreenRenderer::instance_ = nullptr;
 
 OffscreenRenderer* OffscreenRenderer::GetInstance()
 {
 	if (instance_ == nullptr)
 	{
-		instance_ = new OffscreenRenderer();
+		instance_ = std::make_unique<OffscreenRenderer>(ConstructorKey());
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
@@ -57,9 +59,8 @@ void OffscreenRenderer::Initialize(SrvHeapManager* srvHeapManager)
 
 void OffscreenRenderer::Finalize()
 {
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
 }
 
 void OffscreenRenderer::PreDrawRenderTexture()
@@ -84,7 +85,7 @@ void OffscreenRenderer::PreDrawRenderTexture()
 	commandList_->RSSetScissorRects(1, scissorRect_);	//Scirssorを設定
 }
 
-void OffscreenRenderer::PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
+void OffscreenRenderer::PostDrawRenderTexture(PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
 	if (!useOffscreenRender_) 
 	{

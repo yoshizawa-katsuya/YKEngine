@@ -11,7 +11,7 @@
 /// <summary>
 /// タイトル画面のクラス。
 /// </summary>
-class TitleScene : public BaseScene
+class TitleScene : public YKEngine::BaseScene
 {
 public:
 
@@ -43,13 +43,13 @@ public:
 private:
 
 	//デバイス
-	DirectXCommon* dxCommon_;
+	YKEngine::DirectXCommon* dxCommon_;
 
-	Audio* audio_;
-	Input* input_;
+	YKEngine::Audio* audio_;
+	YKEngine::Input* input_;
 
-	SpritePlatform* spritePlatform_;
-	ModelPlatform* modelPlatform_;
+	YKEngine::SpritePlatform* spritePlatform_;
+	YKEngine::ModelPlatform* modelPlatform_;
 	
 };
 

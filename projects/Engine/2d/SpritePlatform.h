@@ -1,6 +1,9 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
+
+namespace YKEngine
+{
 
 /// <summary>
 /// 2Dスプライト描画の基盤となるクラス。
@@ -22,7 +25,7 @@ public:
 	/// </summary>
 	/// <param name="dxCommon">DirectX共通クラス</param>
 	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
-	void Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer);
+	void Initialize(DirectXCommon* dxCommon, PipelineManager* primitiveDrawer);
 
 	/// <summary>
 	/// 背景描画前の共通設定。
@@ -45,7 +48,8 @@ private:
 
 	DirectXCommon* dxCommon_;
 
-	PrimitiveDrawer* primitiveDrawer_;
+	PipelineManager* primitiveDrawer_;
 
 };
 
+} // namespace YKEngine

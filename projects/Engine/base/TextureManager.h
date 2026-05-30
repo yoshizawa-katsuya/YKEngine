@@ -8,6 +8,9 @@
 #include "DirectXTex/DirectXTex.h"
 #include "SrvHeapManager.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// テクスチャ管理クラス。
 /// シングルトン。
@@ -81,6 +84,16 @@ public:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(
 		Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisiblr);
 
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class TextureManager;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit TextureManager(ConstructorKey key) {}
+
 private:
 
 	/// <summary>
@@ -98,13 +111,13 @@ private:
 	/// <returns>アップロード用バッファリソース</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(ID3D12Resource* textureResource, const DirectX::ScratchImage& mipImages);
 
-	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
-	static TextureManager* instance_;
+	// シングルトンインスタンス
+	static std::unique_ptr<TextureManager> instance_;
+	friend struct std::default_delete<TextureManager>;
 
-	TextureManager() = default;
 	~TextureManager() = default;
-	TextureManager(TextureManager&) = default;
-	TextureManager& operator=(TextureManager&) = default;
+	TextureManager(TextureManager&) = delete;
+	TextureManager& operator=(TextureManager&) = delete;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	SrvHeapManager* srvHeapManager_ = nullptr;
@@ -136,3 +149,5 @@ private:
 
 	std::mutex mutex_;
 };
+
+} // namespace YKEngine

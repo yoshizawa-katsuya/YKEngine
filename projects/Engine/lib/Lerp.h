@@ -1,6 +1,9 @@
 #pragma once
 #include "Struct.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 線形補完。
 /// </summary>
@@ -72,3 +75,5 @@ Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t);
 /// <param name="t">補完率(0.0~1.0)</param>
 /// <returns>補完結果</returns>
 float LeapShortAngle(float a, float b, float t);
+
+} // namespace YKEngine

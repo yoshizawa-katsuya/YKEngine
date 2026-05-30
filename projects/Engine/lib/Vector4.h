@@ -1,5 +1,8 @@
 #pragma once
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 4次元ベクトル
 /// </summary>
@@ -10,3 +13,5 @@ struct Vector4
 	float z;
 	float w;
 };
+
+}	// namespace YKEngine

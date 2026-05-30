@@ -2,6 +2,8 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 
+using namespace YKEngine;
+
 std::unique_ptr<BaseScene> SceneFactory::CreateScene(const std::string& sceneName)
 {
 	//次のシーンを生成

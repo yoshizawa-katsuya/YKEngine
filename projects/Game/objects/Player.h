@@ -1,10 +1,9 @@
 #pragma once
-#include "Rigid3dObject.h"
+#include "My3dObject.h"
 #include "WorldTransform.h"
 #include "SRTAnimator.h"
 #include "Animation.h"
-class Camera;
-class MapChipField;
+class YKEngine::Camera;
 
 /// <summary>
 /// プレイヤークラス
@@ -13,18 +12,18 @@ class Player
 {
 public:
 
-	void Initialize(BaseModel* model, Animation* animation);
+	void Initialize(YKEngine::BaseModel* model, Animation* animation);
 
 	void Update();
 
-	void Draw(Camera* camera);
+	void Draw(YKEngine::Camera* camera);
 
 private:
 
 	//Transform変数を作る
-	WorldTransform worldTransform_;
+	YKEngine::WorldTransform worldTransform_;
 
-	std::unique_ptr<Base3dObject> object_;
+	std::unique_ptr<YKEngine::My3dObject> object_;
 	Animation* animation_;
 
 	bool useAnimation_ = false;

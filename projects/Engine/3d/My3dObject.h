@@ -1,24 +1,27 @@
 #pragma once
 #include "BaseModel.h"
 
+namespace YKEngine
+{
+
 /// <summary>
-/// 3Dオブジェクトの基底クラス。
+/// 3Dオブジェクトのクラス。
 /// 3Dオブジェクトはモデルを持ち、ワールド変換行列を持つ。
 /// モデルは複数の3Dオブジェクトで共有できる。
 /// </summary>
-class Base3dObject
+class My3dObject
 {
 public:
 
 	/// <summary>
 	/// コンストラクタ。	
 	/// </summary>
-	Base3dObject();
+	My3dObject();
 
 	/// <summary>
 	/// デストラクタ。
 	/// </summary>
-	virtual ~Base3dObject() = 0;
+	virtual ~My3dObject() = default;
 
 	/// <summary>
 	/// 初期化。
@@ -56,6 +59,12 @@ public:
 	virtual void Draw(uint32_t textureHandle);
 
 	/// <summary>
+	/// モデルの設定。
+	/// </summary>
+	/// <param name="model">モデル</param>
+	void SetModel(BaseModel* model) { model_ = model; }
+
+	/// <summary>
 	/// UV変換の設定。
 	/// マテリアルデータを生成する。
 	/// </summary>
@@ -86,6 +95,12 @@ public:
 	void SetColor(const Vector4& color);
 
 	/// <summary>
+	/// alpha値の設定。
+	/// </summary>
+	/// <param name="alpha">alpha値</param>
+	void SetAlpha(float alpha);
+
+	/// <summary>
 	/// 環境光係数の設定。
 	/// マテリアルデータを生成する。
 	/// </summary>
@@ -93,7 +108,6 @@ public:
 	void SetEnviromentCoefficient(float coefficient);
 
 	const BaseModel& GetModel() const { return *model_; }
-	BaseModel& GetModel() { return *model_; }
 
 protected:
 
@@ -119,7 +133,6 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D12Resource> TransformationResource_;
 	//データを書き込む
 	TransformationMatrix* TransformationData_;
-	//Matrix4x4* WVPData_ = nullptr;
 
 	//マテリアル用のリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
@@ -130,3 +143,4 @@ protected:
 
 };
 
+} // namespace YKEngine

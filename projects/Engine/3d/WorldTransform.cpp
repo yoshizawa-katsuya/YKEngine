@@ -1,6 +1,8 @@
 #include "WorldTransform.h"
 #include "Matrix.h"
 
+using namespace YKEngine;
+
 void WorldTransform::Initialize()
 {
 	worldMatrix_ = MakeIdentity4x4();

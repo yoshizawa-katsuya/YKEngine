@@ -1,6 +1,9 @@
 #pragma once
 #include "Sprite.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// フェードクラス。
 /// 画面のフェードイン・フェードアウトを管理する。
@@ -24,7 +27,7 @@ public:
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	void Initialize();
+	void Initialize(const Vector4& color = { 0.0f, 0.0f, 0.0f, 1.0f });
 
 	/// <summary>
 	/// 更新。
@@ -54,6 +57,12 @@ public:
 	/// <returns>終了していればtrue、そうでなければfalse。</returns>
 	bool IsFinished();
 
+	/// <summary>
+	/// 色の設定
+	/// </summary>
+	/// <param name="color">色</param>
+	void SetColor(const Vector4& color) { sprite_->SetColor(color); }
+
 private:
 
 	std::unique_ptr<Sprite> sprite_; //フェード用スプライト
@@ -67,3 +76,5 @@ private:
 	float counter_ = 0.0f;
 
 };
+
+} // namespace YKEngine

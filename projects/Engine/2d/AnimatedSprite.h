@@ -1,6 +1,9 @@
 #pragma once
 #include "Sprite.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// アニメーションスプライトを扱うクラス。
 /// スプライトシートを使用してアニメーションを実装する。
@@ -128,3 +131,4 @@ private:
 	bool isReverse_ = false;
 };
 
+} // namespace YKEngine

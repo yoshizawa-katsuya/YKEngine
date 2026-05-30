@@ -3,20 +3,20 @@
 #include "TextureManager.h"
 #include <algorithm>
 
+using namespace YKEngine;
+
 Fade::~Fade()
 {
 }
 
-void Fade::Initialize() 
+void YKEngine::Fade::Initialize(const Vector4& color)
 {
-
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./resources/white.png");
 
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle);
-	sprite_->SetSize(Vector2(1280.0f, 720.0f));
-	sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
-
+	sprite_->SetSize(Vector2(WinApp::kClientWidth, WinApp::kClientHeight));
+	sprite_->SetColor(color);
 }
 
 void Fade::Update() 
@@ -36,7 +36,7 @@ void Fade::Update()
 			counter_ = duration_;
 		}
 		// 0.0fから1.0fの間で、経過時間がフェード持続時間に近づくほどアルファ値を小さくする
-		sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, std::clamp(1.0f - (counter_ / duration_), 0.0f, 1.0f)));
+		sprite_->SetAlpha(std::clamp(1.0f - (counter_ / duration_), 0.0f, 1.0f));
 
 
 		break;
@@ -49,7 +49,7 @@ void Fade::Update()
 			counter_ = duration_;
 		}
 		//0.0fから1.0fの間で、経過時間がフェード持続時間に近づくほどアルファ値を大きくする
-		sprite_->SetColor(Vector4(0.0f, 0.0f, 0.0f, std::clamp(counter_ / duration_, 0.0f, 1.0f)));
+		sprite_->SetAlpha(std::clamp(counter_ / duration_, 0.0f, 1.0f));
 
 		break;
 	default:

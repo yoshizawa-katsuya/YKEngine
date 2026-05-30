@@ -1,5 +1,8 @@
 #pragma once
 
+namespace YKEngine
+{
+
 //前方宣言
 class SceneManager;
 
@@ -43,3 +46,4 @@ protected:
 
 };
 
+} // namespace YKEngine

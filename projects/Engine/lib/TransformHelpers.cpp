@@ -4,6 +4,9 @@
 #include "Matrix.h"
 #include "numbers"
 
+namespace YKEngine
+{
+
 Vector3 TransformHelpers::FaceToVelocityDirection(const Vector3& rotate, const Vector3& velocity)
 {
 	if (Length(velocity) == 0.0f)
@@ -46,3 +49,5 @@ Vector3 TransformHelpers::NormalizeAngle(const Vector3& angle)
 		NormalizeAngle(angle.z)
 	};
 }
+
+}	// namespace YKEngine

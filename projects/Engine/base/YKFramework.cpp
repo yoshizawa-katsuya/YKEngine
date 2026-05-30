@@ -2,6 +2,8 @@
 #include "OffscreenRenderer.h"
 #include "Random.h"
 
+using namespace YKEngine;
+
 void YKFramework::Initialize()
 {
 	//スレッドプールの作成
@@ -43,7 +45,7 @@ void YKFramework::Initialize()
 	TextureManager::GetInstance()->Initialize(dxCommon_, srvHeapManager_.get());
 
 	//PSOの設定
-	primitiveDrawer_ = std::make_unique<PrimitiveDrawer>();
+	primitiveDrawer_ = std::make_unique<PipelineManager>();
 	primitiveDrawer_->Initialize(dxCommon_);
 
 	//スプライト共通部の初期化
@@ -88,7 +90,8 @@ void YKFramework::Finalize()
 void YKFramework::Update()
 {
 	//Windowsのメッセージ処理
-	if (winApp_->ProcessMessage()) {
+	if (winApp_->ProcessMessage()) 
+	{
 		//ゲームループを抜ける
 		isEndReqest_ = true;
 	}
@@ -137,7 +140,8 @@ void YKFramework::Run()
 		Update();
 		threadPool_->waitForCompletion();
 		//終了リクエストが来たら抜ける
-		if (GetIsEndReqest()) {
+		if (isEndReqest_) 
+		{
 			break;
 		}
 		//描画

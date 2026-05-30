@@ -4,7 +4,8 @@
 #include <wrl.h>
 #include <string>
 
-
+namespace YKEngine
+{
 
 /// <summary>
 /// ログ出力ユーティリティ
@@ -37,3 +38,5 @@ namespace StringUtility
 	/// <returns>変換後のstring</returns>
 	std::string ConvertString(const std::wstring& str);
 }
+
+} // namespace YKEngine

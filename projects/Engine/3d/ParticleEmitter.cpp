@@ -1,6 +1,8 @@
 #include "ParticleEmitter.h"
 #include "ParticleManager.h"
 
+using namespace YKEngine;
+
 ParticleEmitter::ParticleEmitter(const std::string& name)
 {
 

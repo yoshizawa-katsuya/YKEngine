@@ -1,6 +1,7 @@
 #include "ThreadPool.h"
 #include <cassert>
 
+using namespace YKEngine;
 
 ThreadPool* ThreadPool::GetInstance()
 {

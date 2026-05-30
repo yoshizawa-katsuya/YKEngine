@@ -1,19 +1,19 @@
-#include "Base3dObject.h"
+#include "My3dObject.h"
 #include "Matrix.h"
 #include "Camera.h"
 #include "Animation.h"
 #include "RootParams.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
-Base3dObject::Base3dObject()
+using namespace YKEngine;
+
+My3dObject::My3dObject()
 	: dxCommon_(DirectXCommon::GetInstance())
 {
 }
 
-Base3dObject::~Base3dObject()
-{
-}
-
-void Base3dObject::Initialize(BaseModel* model)
+void My3dObject::Initialize(BaseModel* model)
 {
 
 	assert(model);
@@ -28,20 +28,20 @@ void Base3dObject::Initialize(BaseModel* model)
 
 }
 
-void Base3dObject::WorldTransformUpdate(const WorldTransform& worldTransform)
+void My3dObject::WorldTransformUpdate(const WorldTransform& worldTransform)
 {
 
 	TransformationData_->World = worldTransform.worldMatrix_;
 
 }
 
-void Base3dObject::AnimationUpdate(Animation* animation)
+void My3dObject::AnimationUpdate(Animation* animation)
 {
 	//RootNodeの変換行列を取得してワールド行列に掛け合わせる
 	TransformationData_->World = Multiply(TransformationData_->World, animation->Reproducing(model_));
 }
 
-void Base3dObject::CameraUpdate(Camera* camera)
+void My3dObject::CameraUpdate(Camera* camera)
 {
 	//ワールド行列とビュー射影行列を掛け合わせてWVP行列を計算
 	Matrix4x4 worldViewProjectionMatrix;
@@ -57,7 +57,7 @@ void Base3dObject::CameraUpdate(Camera* camera)
 
 }
 
-void Base3dObject::Draw()
+void My3dObject::Draw()
 {
 	//Transform用のCBufferの場所を設定
 	SetTransformationBufferView();
@@ -74,7 +74,7 @@ void Base3dObject::Draw()
 
 }
 
-void Base3dObject::Draw(uint32_t textureHandle)
+void My3dObject::Draw(uint32_t textureHandle)
 {
 	//Transform用のCBufferの場所を設定
 	SetTransformationBufferView();
@@ -91,7 +91,7 @@ void Base3dObject::Draw(uint32_t textureHandle)
 
 }
 
-void Base3dObject::SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
+void My3dObject::SetUVTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
 {
 	CreateMaterialData();
 
@@ -99,7 +99,7 @@ void Base3dObject::SetUVTransform(const Vector3& scale, const Vector3& rotate, c
 	materialData_->uvTransform = uvTransformMatrix;
 }
 
-void Base3dObject::SetUVTransform(const EulerTransform& uvTransform)
+void My3dObject::SetUVTransform(const EulerTransform& uvTransform)
 {
 	
 	CreateMaterialData();
@@ -108,21 +108,28 @@ void Base3dObject::SetUVTransform(const EulerTransform& uvTransform)
 	materialData_->uvTransform = uvTransformMatrix;
 }
 
-void Base3dObject::SetEnableLighting(bool enableLighting)
+void My3dObject::SetEnableLighting(bool enableLighting)
 {
 	CreateMaterialData();
 
 	materialData_->enableLighting = enableLighting;
 }
 
-void Base3dObject::SetColor(const Vector4& color)
+void My3dObject::SetColor(const Vector4& color)
 {
 	CreateMaterialData();
 	
 	materialData_->color = color;
 }
 
-void Base3dObject::SetEnviromentCoefficient(float coefficient)
+void YKEngine::My3dObject::SetAlpha(float alpha)
+{
+	CreateMaterialData();
+
+	materialData_->color.w = alpha;
+}
+
+void My3dObject::SetEnviromentCoefficient(float coefficient)
 {
 	
 	CreateMaterialData();
@@ -130,7 +137,7 @@ void Base3dObject::SetEnviromentCoefficient(float coefficient)
 	materialData_->enviromentCoefficient = coefficient;
 }
 
-void Base3dObject::CreateMaterialData()
+void My3dObject::CreateMaterialData()
 {
 	//すでにマテリアルデータがあれば何もしない
 	if (materialData_)
@@ -151,12 +158,12 @@ void Base3dObject::CreateMaterialData()
 	materialData_->uvTransform = MakeIdentity4x4();
 }
 
-void Base3dObject::SetTransformationBufferView()
+void My3dObject::SetTransformationBufferView()
 {
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kTransformationMatrix), TransformationResource_->GetGPUVirtualAddress());
 }
 
-void Base3dObject::SetMaterialBufferView()
+void My3dObject::SetMaterialBufferView()
 {
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
 }

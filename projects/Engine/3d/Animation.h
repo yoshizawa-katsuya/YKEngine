@@ -2,6 +2,9 @@
 #include <map>
 #include <string>
 #include "Struct.h"
+
+namespace YKEngine
+{
 class BaseModel;
 
 /// <summary>
@@ -62,3 +65,4 @@ private:
 
 };
 
+} // namespace YKEngine

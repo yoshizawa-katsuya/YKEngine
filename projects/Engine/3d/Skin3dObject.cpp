@@ -4,6 +4,9 @@
 #include "Animation.h"
 #include "RootParams.h"
 
+
+using namespace YKEngine;
+
 Skin3dObject::~Skin3dObject()
 {
 	srvHeapManager_->Free(srvIndex_);	//srvHeapManagerに登録されているSkinClusterのSRVを解放
@@ -12,7 +15,7 @@ Skin3dObject::~Skin3dObject()
 void Skin3dObject::Initialize(BaseModel* model)
 {
 
-	Base3dObject::Initialize(model);
+	My3dObject::Initialize(model);
 
 	srvHeapManager_ = model_->GetModelPlatform()->GetSrvHeapManager();
 
@@ -24,12 +27,23 @@ void Skin3dObject::Initialize(BaseModel* model)
 
 void Skin3dObject::AnimationUpdate(Animation* animation)
 {
-
+	//アニメーションを適用
 	ApplyAnimation(animation);
 
+	//アニメーションを適用した後、スケルトンとスキンクラスターを更新
 	SkeletonUpdate();
-
 	SkinClusterUpdate();
+}
+
+void YKEngine::Skin3dObject::AnimationUpdate(Animation* animation, float animationTime)
+{
+	//アニメーションを適用
+	ApplyAnimation(animation, animationTime);
+
+	//アニメーションを適用した後、スケルトンとスキンクラスターを更新
+	SkeletonUpdate();
+	SkinClusterUpdate();
+
 }
 
 void Skin3dObject::Draw()
@@ -139,8 +153,10 @@ int32_t Skin3dObject::CreateJoint(const Node& node, const std::optional<int32_t>
 void Skin3dObject::CreateSkinCluster()
 {
 
+	model_->WaitUntilInitialized();	//Modelの初期化が完了するまで待機。model_->GetVerticesNum()などを呼び出す前に、モデルの初期化が完了している必要があるため。
+
 	ModelPlatform* modelPlatform = model_->GetModelPlatform();
-	ModelData& modelData = model_->GetModelData();
+	const ModelData& modelData = model_->GetModelData();
 	uint32_t verticesNum = model_->GetVerticesNum();
 
 	//palette用のResourceを確保
@@ -184,15 +200,19 @@ void Skin3dObject::CreateSkinCluster()
 	//ModelDataのSkinCluster情報を解析してInfluenceの中身を埋める
 	for (const auto& jointWeight : modelData.skinClusterData) {	//ModelのSkinClusterの情報を解析
 		auto it = skeleton_.jointMap.find(jointWeight.first);	//jointWeight.firstはjoint名なので、skeltonに対象となるjointが含まれているか判断
-		if (it == skeleton_.jointMap.end()) {	//そんな名前のJointは存在しない。なので次に回す
-			continue;
+		if (it == skeleton_.jointMap.end())
+		{	
+			continue;	//そんな名前のJointは存在しない。なので次に回す
 		}
 		//(*it).secondにはjointのindexが入っているので、外套のindexのinverseBindPoseMatrixを代入
 		skinCluster_.inverseBindPoseMatrices[(*it).second] = jointWeight.second.inverseBindPoseMatrix;
-		for (const auto& vertexWeight : jointWeight.second.vertexWeights) {
+		for (const auto& vertexWeight : jointWeight.second.vertexWeights) 
+		{
 			auto& currentInfluence = skinCluster_.mappedInfluence[vertexWeight.vertexIndex];	//該当のvertexIndex
-			for (uint32_t index = 0; index < kNumMaxInfluence; ++index) {	//空いているところに入れる
-				if (currentInfluence.weights[index] == 0.0f) {	//weight==0が空いている状態なので、その場所にweightとjointのindexを代入
+			for (uint32_t index = 0; index < kNumMaxInfluence; ++index)	//空いているところに入れる
+			{	
+				if (currentInfluence.weights[index] == 0.0f)	//weight==0が空いている状態なので、その場所にweightとjointのindexを代入
+				{	
 					currentInfluence.weights[index] = vertexWeight.weight;
 					currentInfluence.jointIndices[index] = (*it).second;
 					break;
@@ -213,6 +233,19 @@ void Skin3dObject::ApplyAnimation(Animation* animation)
 			joint.transform.rotation = animation->CalculateValue(nodeAnimation.rotate.keyframes, animation->GetAnimationTime());
 			joint.transform.scale = animation->CalculateValue(nodeAnimation.scale.keyframes, animation->GetAnimationTime());
 
+		}
+	}
+}
+
+void YKEngine::Skin3dObject::ApplyAnimation(Animation* animation, float animationTime)
+{
+	for (Joint& joint : skeleton_.joints) {
+		//対象のJointのAnimationがあれば、値の適用を行う。下記のif文はC++17から可能になった初期化付きif文。
+		if (auto it = animation->GetNodeAnimations().find(joint.name); it != animation->GetNodeAnimations().end()) {
+			const NodeAnimation& nodeAnimation = (*it).second;
+			joint.transform.translation = animation->CalculateValue(nodeAnimation.translate.keyframes, animationTime);
+			joint.transform.rotation = animation->CalculateValue(nodeAnimation.rotate.keyframes, animationTime);
+			joint.transform.scale = animation->CalculateValue(nodeAnimation.scale.keyframes, animationTime);
 		}
 	}
 }

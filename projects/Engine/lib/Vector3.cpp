@@ -1,6 +1,9 @@
 #include "Vector3.h"
 #include <optional>
 
+namespace YKEngine
+{
+
 Vector3 Add(const Vector3& v1, const Vector3& v2) 
 {
 
@@ -118,3 +121,5 @@ Vector3 operator/(const Vector3& v, float s) { return Multiply(1.0f / s, v); }
 Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
 
 Vector3 operator+(const Vector3& v) { return v; }
+
+}	// namespace YKEngine

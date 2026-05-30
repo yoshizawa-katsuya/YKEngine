@@ -4,27 +4,45 @@
 #include "RigidModel.h"
 #include "SkinModel.h"
 #include "RootParams.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
 
-ModelPlatform* ModelPlatform::instance_ = nullptr;
+using namespace YKEngine;
+
+std::unique_ptr<ModelPlatform> ModelPlatform::instance_ = nullptr;
 
 ModelPlatform* ModelPlatform::GetInstance()
 {
 	if (instance_ == nullptr)
 	{
-		instance_ = new ModelPlatform();
+		instance_ = std::make_unique<ModelPlatform>(ConstructorKey());
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void ModelPlatform::Finalize()
 {
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
 }
 
-void ModelPlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager)
+void ModelPlatform::Initialize(DirectXCommon* dxCommon, PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager)
 {
+	// jsonに登録
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	//カメラの初期値を登録
+	const std::string& cameraGroupName = JsonKey::Camera::kGroupName;
+	globalVariables->CreateGroup(cameraGroupName);
+	globalVariables->AddItem(cameraGroupName, JsonKey::Camera::kFovY, 45.0f * 3.141592654f / 180.0f);
+	globalVariables->AddItem(cameraGroupName, JsonKey::Camera::kNearClip, 0.1f);
+	globalVariables->AddItem(cameraGroupName, JsonKey::Camera::kFarClip, 500.0f);
+
+	//モデルの初期値を登録
+	const std::string& modelGroupName = JsonKey::Model::kGroupName;
+	globalVariables->CreateGroup(modelGroupName);
+	globalVariables->AddItem(modelGroupName, JsonKey::Model::kEnableLighting, true);
+	globalVariables->AddItem(modelGroupName, JsonKey::Model::kShininess, 40.0f);
+	globalVariables->AddItem(modelGroupName, JsonKey::Model::kEnviromentCoefficient, 0.0f);
 
 	//引数で受け取ってメンバ変数に記録する
 	dxCommon_ = dxCommon;
@@ -137,6 +155,15 @@ void ModelPlatform::InstancingPreDraw()
 
 }
 
+void YKEngine::ModelPlatform::InstancingTriplanarPreDraw()
+{
+
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), DrawMode::kInstancingTriplanar);
+
+	CommonPreDraw(false);
+
+}
+
 void ModelPlatform::LinePreDraw()
 {
 
@@ -187,11 +214,13 @@ void ModelPlatform::SphereDraw(const Matrix4x4& worldMatrix, Camera* camera)
 {
 
 	Matrix4x4 worldViewProjectionMatrix;
-	if (camera) {
+	if (camera)
+	{
 		const Matrix4x4& viewProjectionMatrix = camera->GetViewProjection();
 		worldViewProjectionMatrix = Multiply(worldMatrix, viewProjectionMatrix);
 	}
-	else {
+	else
+	{
 		worldViewProjectionMatrix = worldMatrix;
 	}
 
@@ -321,6 +350,11 @@ void ModelPlatform::SpotLightUpdate(const SpotLight& spotLight)
 	lightCount_->spot++;
 
 	return;
+}
+
+void YKEngine::ModelPlatform::SetDrawMode(DrawMode drawMode)
+{
+	primitiveDrawer_->SetPipelineSet(dxCommon_->GetCommandList(), drawMode);
 }
 
 void ModelPlatform::CommonPreDraw(bool isSkin)

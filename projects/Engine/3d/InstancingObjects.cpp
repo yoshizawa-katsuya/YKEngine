@@ -4,6 +4,8 @@
 #include "Matrix.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 InstancingObjects::InstancingObjects()
 	: dxCommon_(DirectXCommon::GetInstance())
 	, srvHeapManager_(ModelPlatform::GetInstance()->GetSrvHeapManager())

@@ -23,7 +23,7 @@
 /// ゲームシーン。
 /// ゲームのメイン処理を行う。
 /// </summary>
-class GameScene : public BaseScene
+class GameScene : public YKEngine::BaseScene
 {
 public:
 
@@ -55,37 +55,35 @@ public:
 private:
 
 	//デバイス
-	DirectXCommon* dxCommon_;
+	YKEngine::DirectXCommon* dxCommon_;
 
-	Audio* audio_;
-	Input* input_;
+	YKEngine::Audio* audio_;
+	YKEngine::Input* input_;
 
 	//LoopSoundData bgm1_;
 
-	SpritePlatform* spritePlatform_;
-	ModelPlatform* modelPlatform_;
+	YKEngine::SpritePlatform* spritePlatform_;
+	YKEngine::ModelPlatform* modelPlatform_;
 
-	Camera* mainCamera_ = nullptr;
+	YKEngine::Camera* mainCamera_ = nullptr;
 
 
-	std::unique_ptr<Camera> camera_;
-	std::unique_ptr<Camera> camera2_;
+	std::unique_ptr<YKEngine::Camera> camera_;
 
-	std::unique_ptr<DebugCamera> debugCamera_;
+	std::unique_ptr<YKEngine::DebugCamera> debugCamera_;
 
 	bool isActiveDebugCamera_ = false;
 
 	//平行光源
-	DirectionalLight directionalLight_;
+	YKEngine::DirectionalLight directionalLight_;
 
 	//点光源
-	PointLight pointLight_;
+	YKEngine::PointLight pointLight_;
 
 	//スポットライト
-	SpotLight spotLight_;
+	YKEngine::SpotLight spotLight_;
 
-	//モデル
-	std::shared_ptr<BaseModel> modelPlayer_;
+	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
 
 	//アニメーション
 	std::unique_ptr<Animation> animationPlayer_;

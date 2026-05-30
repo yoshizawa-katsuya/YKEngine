@@ -1,7 +1,8 @@
 #include "dx12.h"
 #include <cassert>
 
-
+namespace YKEngine
+{
 
 namespace Logger
 {
@@ -48,3 +49,5 @@ namespace StringUtility
 		return result;
 	}
 }
+
+} // namespace YKEngine
