@@ -27,12 +27,23 @@ void Skin3dObject::Initialize(BaseModel* model)
 
 void Skin3dObject::AnimationUpdate(Animation* animation)
 {
-
+	//アニメーションを適用
 	ApplyAnimation(animation);
 
+	//アニメーションを適用した後、スケルトンとスキンクラスターを更新
 	SkeletonUpdate();
-
 	SkinClusterUpdate();
+}
+
+void YKEngine::Skin3dObject::AnimationUpdate(Animation* animation, float animationTime)
+{
+	//アニメーションを適用
+	ApplyAnimation(animation, animationTime);
+
+	//アニメーションを適用した後、スケルトンとスキンクラスターを更新
+	SkeletonUpdate();
+	SkinClusterUpdate();
+
 }
 
 void Skin3dObject::Draw()
@@ -222,6 +233,19 @@ void Skin3dObject::ApplyAnimation(Animation* animation)
 			joint.transform.rotation = animation->CalculateValue(nodeAnimation.rotate.keyframes, animation->GetAnimationTime());
 			joint.transform.scale = animation->CalculateValue(nodeAnimation.scale.keyframes, animation->GetAnimationTime());
 
+		}
+	}
+}
+
+void YKEngine::Skin3dObject::ApplyAnimation(Animation* animation, float animationTime)
+{
+	for (Joint& joint : skeleton_.joints) {
+		//対象のJointのAnimationがあれば、値の適用を行う。下記のif文はC++17から可能になった初期化付きif文。
+		if (auto it = animation->GetNodeAnimations().find(joint.name); it != animation->GetNodeAnimations().end()) {
+			const NodeAnimation& nodeAnimation = (*it).second;
+			joint.transform.translation = animation->CalculateValue(nodeAnimation.translate.keyframes, animationTime);
+			joint.transform.rotation = animation->CalculateValue(nodeAnimation.rotate.keyframes, animationTime);
+			joint.transform.scale = animation->CalculateValue(nodeAnimation.scale.keyframes, animationTime);
 		}
 	}
 }

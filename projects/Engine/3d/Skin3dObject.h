@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// デストラクタ。
 	/// </summary>
-	~Skin3dObject();
+	~Skin3dObject() override;
 
 	/// <summary>
 	/// 初期化。
@@ -31,6 +31,13 @@ public:
 	/// </summary>
 	/// <param name="animation">アニメーション</param>
 	void AnimationUpdate(Animation* animation) override;
+
+	/// <summary>
+	/// アニメーションの適用と更新。
+	/// </summary>
+	/// <param name="animation">アニメーション</param>
+	/// <param name="animationTime">アニメーション時間</param>
+	void AnimationUpdate(Animation* animation, float animationTime);
 
 	/// <summary>
 	/// 描画。
@@ -81,6 +88,13 @@ private:
 	/// </summary>
 	/// <param name="animation">アニメーション</param>
 	void ApplyAnimation(Animation* animation);
+
+	/// <summary>
+	/// アニメーションの適用。
+	/// </summary>
+	/// <param name="animation">アニメーション</param>
+	/// <param name="animationTime">アニメーション時間</param>
+	void ApplyAnimation(Animation* animation, float animationTime);
 
 	/// <summary>
 	/// スケルトンの更新。
