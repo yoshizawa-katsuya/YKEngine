@@ -222,9 +222,9 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
-		//modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
+		uint32_t vertexStartIndex = static_cast<uint32_t>(modelData_->vertices.size());	//頂点データの開始位置を記録しておく
 
-		LoadMeshData(mesh);
+		LoadMeshData(mesh, vertexStartIndex);
 
 	}
 
@@ -280,9 +280,8 @@ void BaseModel::LoadIndexData(aiMesh* mesh, uint32_t vertexStartIndex)
 	}
 }
 
-void BaseModel::LoadMeshData(aiMesh* mesh)
+void BaseModel::LoadMeshData(aiMesh* mesh, uint32_t vertexStartIndex)
 {
-	uint32_t vertexStartIndex = static_cast<uint32_t>(modelData_->vertices.size());	//頂点データの開始位置を記録しておく
 
 	LoadVertexData(mesh, vertexStartIndex);
 

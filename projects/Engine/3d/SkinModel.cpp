@@ -60,15 +60,15 @@ void SkinModel::SetSkinCluster(const SkinCluster& skinCluster)
 
 }
 
-void SkinModel::LoadMeshData(aiMesh* mesh)
+void SkinModel::LoadMeshData(aiMesh* mesh, uint32_t vertexStartIndex)
 {
-	BaseModel::LoadMeshData(mesh);
+	BaseModel::LoadMeshData(mesh, vertexStartIndex);
 
-	LoadSkinCluster(mesh);
+	LoadSkinCluster(mesh, vertexStartIndex);
 
 }
 
-void SkinModel::LoadSkinCluster(aiMesh* mesh)
+void SkinModel::LoadSkinCluster(aiMesh* mesh, uint32_t vertexStartIndex)
 {
 
 	//SkinCluster構築用のデータを取得
@@ -88,7 +88,7 @@ void SkinModel::LoadSkinCluster(aiMesh* mesh)
 		jointWeightData.inverseBindPoseMatrix = Inverse(bindPoseMatrix);
 
 		for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; ++weightIndex) {
-			jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight, bone->mWeights[weightIndex].mVertexId });
+			jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight, bone->mWeights[weightIndex].mVertexId + vertexStartIndex});
 		}
 
 	}
