@@ -45,13 +45,15 @@ private:
 	/// メッシュデータを読み込む。
 	/// </summary>
 	/// <param name="mesh">Assimpのメッシュデータ</param>
-	void LoadMeshData(aiMesh* mesh) override;
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadMeshData(aiMesh* mesh, uint32_t vertexStartIndex) override;
 
 	/// <summary>
 	/// スキンクラスター作成用のデータを読み込む。
 	/// </summary>
 	/// <param name="mesh">assimpメッシュ</param>
-	void LoadSkinCluster(aiMesh* mesh);
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadSkinCluster(aiMesh* mesh, uint32_t vertexStartIndex);
 
 };
 
