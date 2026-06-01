@@ -185,12 +185,31 @@ void Player::Update() {
 			}
 		}
 		else {
-    		ChangePose();
+			if (isPoseControl_) {
+        		ChangePose();
+			}
+
 			if (isDirectionControl_) {
         		ChangeDirection();
 			}
 		}
+			
+		// ダメージを受けたときの点滅処理
+		if (isDamageFlash_)
+		{
+			damageFlashTimer_ -= 1.0f / 60.0f;
 
+			float t = damageFlashTimer_ * 80.0f;
+
+			flashAlpha_ = 0.2f + (std::sin(t) + 1.0f) * 0.4f;
+
+			if (damageFlashTimer_ <= 0.0f)
+			{
+				isDamageFlash_ = false;
+				flashAlpha_ = 1.0f;
+			}
+
+		}
 
 		// 死亡開始
 		if (requestDeath_)
@@ -223,9 +242,20 @@ void Player::Update() {
 		break;
 	}
 
-
-
 	UpdateColorForDebug();
+	if (state_ == PlayerState::Normal) {
+		Vector4 finalColor = debugColor_;
+		finalColor.w *= flashAlpha_;
+
+		object_->SetColor(finalColor);
+	}
+	else {
+		Vector4 finalColor = debugColor_;
+		finalColor.w *= 1.0f;
+
+		object_->SetColor(finalColor);
+	}
+
 
 	UpdateAnimationTrigger();
 	UpdateAnimationTimers();
@@ -297,6 +327,12 @@ void Player::Reset()
 void Player::ChangeAnimation(const std::string& name)
 {
 	PlayAnimation(name);
+}
+
+void Player::StartDamageReaction()
+{
+	isDamageFlash_ = true;
+	damageFlashTimer_ = kDamageFlashDuration_;
 }
 
 void Player::ChangePose()
@@ -372,8 +408,7 @@ void Player::UpdateColorForDebug()
 		{0,0,1,1}, // C
 		{1,1,0,1}, // D
 	};
-
-	object_->SetColor(kPoseColors[static_cast<int>(pose_)]);
+	debugColor_ = kPoseColors[static_cast<int>(pose_)];
 }
 
 void Player::PlayAnimation(const std::string& name)

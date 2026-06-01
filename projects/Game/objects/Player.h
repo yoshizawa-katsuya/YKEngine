@@ -65,7 +65,11 @@ public:
 
 	void SetDirectionControl(bool enable) { isDirectionControl_ = enable; }
 
+	void SetPoseControl(bool enable) { isPoseControl_ = enable; }
+
 	void ChangeAnimation(const std::string& name);
+
+	void StartDamageReaction();
 
 private:
 
@@ -115,6 +119,7 @@ private:
 
 	PlayerPose pose_;
 	PlayerPose prevPose_;
+	bool isPoseControl_ = true;
 
 	bool isReturnPhase_ = false;
 	float returnTimer_ = 0.0f;
@@ -175,6 +180,19 @@ private:
 
 	// ヒットストップ時間の長さ
 	const float kHitStopTime_ = 0.75f;
+
+	// ダメージフラッシュ中かどうか
+	bool isDamageFlash_ = false;
+
+	// ダメージフラッシュのタイマー
+	float damageFlashTimer_ = 0.0f;
+
+	// ダメージフラッシュの長さ
+	const float kDamageFlashDuration_ = 0.4f;
+
+	float flashAlpha_ = 1.0f;
+
+	YKEngine::Vector4 debugColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	// タイトル用自動ポーズデモ
 	bool isAutoPoseDemo_ = false;
