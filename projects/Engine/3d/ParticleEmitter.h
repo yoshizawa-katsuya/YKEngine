@@ -9,170 +9,174 @@
 namespace YKEngine
 {
 
-/// <summary>
-/// パーティクル生成クラス。ｆ
-/// パーティクルの発生数、発生頻度、ランダム化の有無、挙動などを管理する。
-/// GlobalVariablesクラスを通して、パーティクルエディターとしての役割も担う。
-/// パーティクルの実体はParticleManagerクラスが管理する。
-/// </summary>
-class ParticleEmitter
-{
-public:
-
 	/// <summary>
-	/// コンストラクタ
+	/// パーティクル生成クラス。ｆ
+	/// パーティクルの発生数、発生頻度、ランダム化の有無、挙動などを管理する。
+	/// GlobalVariablesクラスを通して、パーティクルエディターとしての役割も担う。
+	/// パーティクルの実体はParticleManagerクラスが管理する。
 	/// </summary>
-	/// <param name = 'name'>パーティクルグループの名前</param>
-	ParticleEmitter(const std::string& name);
+	class ParticleEmitter
+	{
+	public:
 
-	/// <summary>
-	/// 初期化。
-	/// </summary>
-	/// <param name="textureHandle">テクスチャハンドル</param>
-	/// <param name="model">モデル</param>
-	void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model);
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name = 'name'>パーティクルグループの名前</param>
+		ParticleEmitter(const std::string& name);
 
-	/// <summary>
-	/// 更新。
-	/// 時間経過で発生頻度に達したらパーティクルを発生させる。
-	/// </summary>
-	void Update();
+		/// <summary>
+		/// 初期化。
+		/// </summary>
+		/// <param name="textureHandle">テクスチャハンドル</param>
+		/// <param name="model">モデル</param>
+		void Initialize(uint32_t textureHandle, std::shared_ptr<BaseModel> model);
 
-	/// <summary>
-	/// パーティクルを発生させる。
-	/// </summary>
-	void Emit();
+		/// <summary>
+		/// 更新。
+		/// 時間経過で発生頻度に達したらパーティクルを発生させる。
+		/// </summary>
+		void Update();
 
-	/// <summary>
-	/// グローバル変数を適用する。
-	/// </summary>
-	void ApplyGlobalVariables();
+		/// <summary>
+		/// パーティクルを発生させる。
+		/// </summary>
+		void Emit();
 
-	void SetTransform(const EulerTransform& transform) { transform_ = transform; }
+		/// <summary>
+		/// グローバル変数を適用する。
+		/// </summary>
+		void ApplyGlobalVariables();
 
-	void SetTranslation(const Vector3& translation) { transform_.translation = translation; }
+		void SetTransform(const EulerTransform& transform) { transform_ = transform; }
 
-	void SetScale(const Vector3& scale) { transform_.scale = scale; }
+		void SetTranslation(const Vector3& translation) { transform_.translation = translation; }
 
-	void SetRandTranslationMin(const Vector3& translationMin) { rangeParams_.translate.min = translationMin; }
+		void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
-	void SetRandTranslationMax(const Vector3& translationMax) { rangeParams_.translate.max = translationMax; }
+		void SetRandTranslationMin(const Vector3& translationMin) { rangeParams_.translate.min = translationMin; }
 
-	void SetRandRotateMin(const Vector3& rotateMin) { rangeParams_.rotate.min = rotateMin; }
+		void SetRandTranslationMax(const Vector3& translationMax) { rangeParams_.translate.max = translationMax; }
 
-	void SetRandRotateMax(const Vector3& rotateMax) { rangeParams_.rotate.max = rotateMax; }
+		void SetRandRotateMin(const Vector3& rotateMin) { rangeParams_.rotate.min = rotateMin; }
 
-	void SetRandScaleMin(const Vector3& scaleMin) { rangeParams_.scale.min = scaleMin; }
+		void SetRandRotateMax(const Vector3& rotateMax) { rangeParams_.rotate.max = rotateMax; }
 
-	void SetRandScaleMax(const Vector3& scaleMax) { rangeParams_.scale.max = scaleMax; }
+		void SetRandScaleMin(const Vector3& scaleMin) { rangeParams_.scale.min = scaleMin; }
 
-	void SetRandVelocityMin(const Vector3& velocityMin) { rangeParams_.velocity.min = velocityMin; }
+		void SetRandScaleMax(const Vector3& scaleMax) { rangeParams_.scale.max = scaleMax; }
 
-	void SetRandVelocityMax(const Vector3& velocityMax) { rangeParams_.velocity.max = velocityMax; }
+		void SetRandVelocityMin(const Vector3& velocityMin) { rangeParams_.velocity.min = velocityMin; }
 
-	void SetRandLifeTimeMin(float lifeTimeMin) { rangeParams_.lifeTime.min = lifeTimeMin; }
+		void SetRandVelocityMax(const Vector3& velocityMax) { rangeParams_.velocity.max = velocityMax; }
 
-	void SetRandLifeTimeMax(float lifeTimeMax) { rangeParams_.lifeTime.max = lifeTimeMax; }
+		void SetRandLifeTimeMin(float lifeTimeMin) { rangeParams_.lifeTime.min = lifeTimeMin; }
 
-	void SetIsRandomColor(bool isRandomColor) { randomFlags_.color = isRandomColor; }
+		void SetRandLifeTimeMax(float lifeTimeMax) { rangeParams_.lifeTime.max = lifeTimeMax; }
 
-	void SetIsRandomTranslate(bool isRandomTranslate) { randomFlags_.translate = isRandomTranslate; }
+		void SetIsRandomColor(bool isRandomColor) { randomFlags_.color = isRandomColor; }
 
-	void SetIsRandomVelocity(bool isRandomVelocity) { randomFlags_.velocity = isRandomVelocity; }
+		void SetIsRandomTranslate(bool isRandomTranslate) { randomFlags_.translate = isRandomTranslate; }
 
-	void SetIsRandomRotate(bool isRandomRotate) { randomFlags_.rotate = isRandomRotate; }
+		void SetIsRandomVelocity(bool isRandomVelocity) { randomFlags_.velocity = isRandomVelocity; }
 
-	void SetIsRandomScele(bool isRandomScale) { randomFlags_.scale = isRandomScale; }
+		void SetIsRandomRotate(bool isRandomRotate) { randomFlags_.rotate = isRandomRotate; }
 
-	void SetIsRandomLifeTime(bool isRandomLifeTime) { randomFlags_.lifeTime = isRandomLifeTime; }
+		void SetIsRandomScele(bool isRandomScale) { randomFlags_.scale = isRandomScale; }
 
-	void SetIsFaceToVelocityDirection(bool isFaceToVelocityDirection) { behavior_->isFaceToVelocityDirection = isFaceToVelocityDirection; }
+		void SetIsRandomLifeTime(bool isRandomLifeTime) { randomFlags_.lifeTime = isRandomLifeTime; }
 
-	void SetIsConstantVelocity(bool isConstantVelocity) { behavior_->isConstantVelocity = isConstantVelocity; }
+		void SetIsFaceToVelocityDirection(bool isFaceToVelocityDirection) { behavior_->isFaceToVelocityDirection = isFaceToVelocityDirection; }
 
-	void SetEasingTypeForScale(EasingType easingType) { behavior_->easingTypeForScale = easingType; }
+		void SetIsConstantVelocity(bool isConstantVelocity) { behavior_->isConstantVelocity = isConstantVelocity; }
 
-	void SetSpeed(float speed) { behavior_->speed = speed; }
+		void SetEasingTypeForScale(EasingType easingType) { behavior_->easingTypeForScale = easingType; }
 
-	void SetIsScaleToDisAppear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }
+		void SetSpeed(float speed) { behavior_->speed = speed; }
 
-	void SetIsScaleToAppear(bool isScaleToAppear) { behavior_->isScaleToAppear = isScaleToAppear; }
+		void SetIsScaleToDisAppear(bool isScaleToDisappear) { behavior_->isScaleToDisappear = isScaleToDisappear; }
 
-	void SetIsUseBillboard(bool isUseBillboard) { behavior_->isUseBillboard = isUseBillboard; }
+		void SetIsScaleToAppear(bool isScaleToAppear) { behavior_->isScaleToAppear = isScaleToAppear; }
 
-	void SetIsDownVelocity(bool isDownVelocity) { behavior_->isdownVelocity = isDownVelocity; }
+		void SetIsUseBillboard(bool isUseBillboard) { behavior_->isUseBillboard = isUseBillboard; }
 
-	void SetIsRandomRotationVelocity(bool isRandomRotationVelocity) { randomFlags_.rotationVelocity = isRandomRotationVelocity; }
+		void SetIsDownVelocity(bool isDownVelocity) { behavior_->isdownVelocity = isDownVelocity; }
 
-	void SetRandRotationVelocityMin(const Vector3& rotationVelocityMin) { rangeParams_.rotationVelocity.min = rotationVelocityMin; }
+		void SetIsRandomRotationVelocity(bool isRandomRotationVelocity) { randomFlags_.rotationVelocity = isRandomRotationVelocity; }
 
-	void SetRandRotationVelocityMax(const Vector3& rotationVelocityMax){rangeParams_.rotationVelocity.max = rotationVelocityMax;}
+		void SetRandRotationVelocityMin(const Vector3& rotationVelocityMin) { rangeParams_.rotationVelocity.min = rotationVelocityMin; }
 
-	void SetDrawMode(ParticleDrawMode drawMode){behavior_->drawMode = drawMode;}
+		void SetRandRotationVelocityMax(const Vector3& rotationVelocityMax) { rangeParams_.rotationVelocity.max = rotationVelocityMax; }
 
-	void SetCount(uint32_t count) { count_ = count; }
+		void SetIsTimeFadeOut(bool isTimeFadeOut) { behavior_->isTimeFadeOut = isTimeFadeOut; }
 
-	/// <summary>
-	/// 発生頻度の設定。
-	/// タイマーをリセットする。
-	/// </summary>
-	/// <param name="frequency">発生頻度</param>
-	void SetFrequency(float frequency);
+		void SetDrawMode(ParticleDrawMode drawMode) { behavior_->drawMode = drawMode; }
 
-	const Vector3& GetTranslate() const { return transform_.translation; }
+		void SetCount(uint32_t count) { count_ = count; }
 
-	const Vector3& GetScele() const { return transform_.scale; }
+		void SetColor(const Color& color) { color_ = color; }
 
-	const Vector3& GetRandTranslateMin() const { return rangeParams_.translate.min; }
+		/// <summary>
+		/// 発生頻度の設定。
+		/// タイマーをリセットする。
+		/// </summary>
+		/// <param name="frequency">発生頻度</param>
+		void SetFrequency(float frequency);
 
-	const Vector3& GetRandTranslateMax() const { return rangeParams_.translate.max; }
+		const Vector3& GetTranslate() const { return transform_.translation; }
 
-	const Vector3& GetRandRotateMin() const { return rangeParams_.rotate.min; }
+		const Vector3& GetScele() const { return transform_.scale; }
 
-	const Vector3& GetRandRotateMax() const { return rangeParams_.rotate.max; }
+		const Vector3& GetRandTranslateMin() const { return rangeParams_.translate.min; }
 
-	const Vector3& GetRandScaleMin() const { return rangeParams_.scale.min; }
+		const Vector3& GetRandTranslateMax() const { return rangeParams_.translate.max; }
 
-	const Vector3& GetRandScaleMax() const { return rangeParams_.scale.max; }
+		const Vector3& GetRandRotateMin() const { return rangeParams_.rotate.min; }
 
-	float GetFrequency() const { return frequency_; }
+		const Vector3& GetRandRotateMax() const { return rangeParams_.rotate.max; }
 
-	uint32_t GetCount() const { return count_; }
+		const Vector3& GetRandScaleMin() const { return rangeParams_.scale.min; }
 
-	bool GetIsRandomColor() const { return randomFlags_.color; }
+		const Vector3& GetRandScaleMax() const { return rangeParams_.scale.max; }
 
-	bool GetIsRandomTranslate() const { return randomFlags_.translate; }
+		float GetFrequency() const { return frequency_; }
 
-	bool GetIsRandomVelocity() const { return randomFlags_.velocity; }
+		uint32_t GetCount() const { return count_; }
 
-	bool GetIsRandomRotate() const { return randomFlags_.rotate; }
+		bool GetIsRandomColor() const { return randomFlags_.color; }
 
-	bool GetIsRandomScele() const { return randomFlags_.scale; }
+		bool GetIsRandomTranslate() const { return randomFlags_.translate; }
 
-private:
+		bool GetIsRandomVelocity() const { return randomFlags_.velocity; }
 
-	/// <summary>
-	/// グローバル変数の初期化。
-	/// </summary>
-	void InitializeGlobalVariables();
+		bool GetIsRandomRotate() const { return randomFlags_.rotate; }
 
-	GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();	
+		bool GetIsRandomScele() const { return randomFlags_.scale; }
 
-	std::string name_;
-	EulerTransform transform_; //!< エミッタのTransform
-	uint32_t count_ = 3;	//!< 発生数
-	float frequency_ = 1.0f; //!<　発生頻度
-	float frequencyTime_; //!<頻度用時刻
-	const float kDeltaTime_ = 1.0f / 60.0f;
-	Color color_ = { 1.0f, 1.0f, 1.0f, 1.0f }; //!< 色
+	private:
 
-	ParticleRandomizationFlags randomFlags_;
+		/// <summary>
+		/// グローバル変数の初期化。
+		/// </summary>
+		void InitializeGlobalVariables();
 
-	std::shared_ptr<ParticleBehavior> behavior_;
+		GlobalVariables* globalVariables_ = GlobalVariables::GetInstance();
 
-	//ランダム化の上限下限を管理
-	EmitterRangeParams rangeParams_;
+		std::string name_;
+		EulerTransform transform_; //!< エミッタのTransform
+		uint32_t count_ = 3;	//!< 発生数
+		float frequency_ = 1.0f; //!<　発生頻度
+		float frequencyTime_; //!<頻度用時刻
+		const float kDeltaTime_ = 1.0f / 60.0f;
+		Color color_ = { 1.0f, 1.0f, 1.0f, 1.0f }; //!< 色
 
-};
+		ParticleRandomizationFlags randomFlags_;
+
+		std::shared_ptr<ParticleBehavior> behavior_;
+
+		//ランダム化の上限下限を管理
+		EmitterRangeParams rangeParams_;
+
+	};
 
 } // namespace YKEngine

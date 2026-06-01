@@ -66,6 +66,11 @@ public:
 	void InstancingPreDraw();
 
 	/// <summary>
+	/// インスタンシング描画前処理(トリプラナーマッピング用)。
+	/// </summary>
+	void InstancingTriplanarPreDraw();
+
+	/// <summary>
 	/// 線分描画前処理。
 	/// </summary>
 	void LinePreDraw();

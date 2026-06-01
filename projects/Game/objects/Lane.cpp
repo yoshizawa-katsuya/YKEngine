@@ -23,6 +23,13 @@ void Lane::Update()
 {
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
+
+	//壁の削除
+	walls_.erase(std::remove_if(walls_.begin(), walls_.end(),
+		[](const std::unique_ptr<Wall>& wall) { return wall->GetIsDead(); }),
+		walls_.end());
+
+	//壁の更新
 	for (const std::unique_ptr<Wall>& wall : walls_)
 	{
 		wall->Update();

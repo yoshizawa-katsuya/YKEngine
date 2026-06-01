@@ -120,7 +120,7 @@ void TitleScene::Update()
 				// ステートをEXITに変更
 				state_ = State::EXIT;
 			}
-			if (input_->TriggerKey(DIK_RIGHT)) {
+			if (input_->TriggerKey(DIK_DOWN)) {
 				// 難易度がEASYのとき右キーが押されたときの処理
 				// 難易度をNORMALに変更
 				difficulty_ = Difficulty::NORMAL;
@@ -131,12 +131,12 @@ void TitleScene::Update()
 				// ステートをEXITに変更
 				state_ = State::EXIT;
 			}
-			if (input_->TriggerKey(DIK_RIGHT)) {
+			if (input_->TriggerKey(DIK_DOWN)) {
 				// 難易度がNORMALのとき右キーが押されたときの処理
 				// 難易度をHARDに変更
 				difficulty_ = Difficulty::HARD;
 			}
-			if (input_->TriggerKey(DIK_LEFT)) {
+			if (input_->TriggerKey(DIK_UP)) {
 				// 難易度がNORMALのとき左キーが押されたときの処理
 				// 難易度をEASYに変更
 				difficulty_ = Difficulty::EASY;
@@ -147,12 +147,14 @@ void TitleScene::Update()
 				// ステートをEXITに変更
 				state_ = State::EXIT;
 			}
-			if (input_->TriggerKey(DIK_LEFT)) {
+			if (input_->TriggerKey(DIK_UP)) {
 				// 難易度がHARDのとき左キーが押されたときの処理
 				// 難易度をNORMALに変更
 				difficulty_ = Difficulty::NORMAL;
 			}
 		}
+
+		ui_->SetSelectedDifficulty(static_cast<int>(difficulty_));
 
 		break;
 	case State::EXIT:
@@ -199,7 +201,11 @@ void TitleScene::Draw()
 		ui_->DrawTitle();
 	}
 
+	if (state_ == State::OPTIONS) {
+		//Uiの描画
+		ui_->DrawSelect();
 	}
+}
 
 	void TitleScene::Finalize()
 	{

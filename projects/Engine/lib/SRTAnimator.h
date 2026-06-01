@@ -21,7 +21,8 @@ public:
 	/// <param name="startVector">開始ベクトル</param>
 	/// <param name="endVector">終了ベクトル</param>
 	/// <param name="duration">所要時間（秒）</param>
-	void SetAnimation(const Vector3& startVector, const Vector3& endVector, float duration);
+	/// <param name="isPingPong">往復アニメーションするかどうか</param>
+	void SetAnimation(const Vector3& startVector, const Vector3& endVector, float duration, bool isPingPong = false);
 
 	/// <summary>
 	/// 更新。経過時間を内部で管理する
@@ -38,6 +39,12 @@ public:
 
 private:
 
+	/// <summary>
+	/// 経過時間の更新。経過時間が所要時間を超えないようにする。
+	/// </summary>
+	/// <param name="elapsedTime">経過時間</param>
+	void UpdateElapsedTime(float& elapsedTime);
+
 	Vector3 startVector_;
 	Vector3 endVector_;
 
@@ -49,6 +56,9 @@ private:
 
 	//アニメーションが終わっていたらtrue
 	bool isEnd_;
+
+	//アニメーションを往復させるならtrue
+	bool isPingPong_ = false;
 
 	EasingType easingType_ = EasingType::kLinear;
 

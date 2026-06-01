@@ -31,31 +31,43 @@ public:
     void Draw();
     //タイトル描画
 	void DrawTitle();
-
+    //難易度選択描画
+    void DrawSelect();
+    //スコア加算
+    void AddScore(int value);
+    //ライフ減少
+    void DecreaseLife();
+    //ジャッジエフェクト開始
+    void StartJudgeEffect(JudgeType type);
+	//ゲームスコア加算
+    void AddGameScore(int value);
+	//ライフ減少
+    void DamageLife();
+	//ジャッジエフェクト再生
+    void PlayJudgeEffect(JudgeType type);
+	//画面枠発光停止
+    void StopFrameGlow();
     //デバック
     void Debug();
-    
+	//選択中の難易度設定
+    void SetSelectedDifficulty(int index);
 	//ポーズメニューの取得
     PauseMenu GetPauseMenu()const;
+    //ライフ取得
+    int GetLife()const { return life_; }
 private:
 	//スコア加算処理(仮実装)
     void HandleInput();
-	//スコア加算
-    void AddScore(int value);
 	//アニメーション更新
     void UpdateAnimation();
 	//桁の更新
     void UpdateDigits();
     //ライフ減少(仮実装)
     void HandleLifeInput();
-	//ライフ減少
-    void DecreaseLife();
     //ポーズメニュー更新
 	void UpdatePauseMenu();
 	//ジャッジエフェクト入力処理
     void HandleJudgeInput();
-	//ジャッジエフェクト開始
-    void StartJudgeEffect(JudgeType type);
 	//ジャッジエフェクト更新
     void UpdateJudgeEffect();
 	//画面枠発光更新
@@ -79,7 +91,7 @@ private:
     //最大スコア
     static const int kMaxScore = 999999;
     //最大ライフ
-    static const int kMaxLife = 3;
+    static const int kMaxLife = 5;
     //タイトルスプライト
     std::unique_ptr<YKEngine::Sprite> titleSprite_;
     //タイトルスペース
@@ -128,6 +140,8 @@ private:
     int life_ = kMaxLife;
 	//ライフ点滅用インデックス
     int blinkLifeIndex_ = -1;
+	//選択中の難易度
+    int selectedDifficulty_ = 0;
     //ポーズ画面のスケール
     float pauseScale_ = 0.0f;
     //ホバー用タイマー
@@ -146,6 +160,8 @@ private:
     float lifeBlinkScale_ = 1.0f;
 	//タイトルスペース点滅用タイマー
     float titleSpaceBlinkTimer_ = 0.0f;
+	//難易度選択スケール用タイマー
+    float difficultyScaleTimer_ = 0.0f;
 	//画面枠発光フラグ
     bool isFrameGlow_ = false;
 	//アニメーション中か

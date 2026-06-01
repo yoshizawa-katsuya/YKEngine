@@ -291,6 +291,12 @@
     <ClCompile Include="Engine\2d\Transition.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\CameraManager.cpp">
+       <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
     <ClCompile Include="Game\objects\WallModels.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
@@ -381,6 +387,9 @@
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shader\LuminanceBasedOutline.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shader\TriplanarObject3d.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
   </ItemGroup>
@@ -608,6 +617,9 @@
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\CameraManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

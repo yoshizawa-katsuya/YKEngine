@@ -189,15 +189,19 @@ void Skin3dObject::CreateSkinCluster()
 	//ModelDataのSkinCluster情報を解析してInfluenceの中身を埋める
 	for (const auto& jointWeight : modelData.skinClusterData) {	//ModelのSkinClusterの情報を解析
 		auto it = skeleton_.jointMap.find(jointWeight.first);	//jointWeight.firstはjoint名なので、skeltonに対象となるjointが含まれているか判断
-		if (it == skeleton_.jointMap.end()) {	//そんな名前のJointは存在しない。なので次に回す
-			continue;
+		if (it == skeleton_.jointMap.end())
+		{	
+			continue;	//そんな名前のJointは存在しない。なので次に回す
 		}
 		//(*it).secondにはjointのindexが入っているので、外套のindexのinverseBindPoseMatrixを代入
 		skinCluster_.inverseBindPoseMatrices[(*it).second] = jointWeight.second.inverseBindPoseMatrix;
-		for (const auto& vertexWeight : jointWeight.second.vertexWeights) {
+		for (const auto& vertexWeight : jointWeight.second.vertexWeights) 
+		{
 			auto& currentInfluence = skinCluster_.mappedInfluence[vertexWeight.vertexIndex];	//該当のvertexIndex
-			for (uint32_t index = 0; index < kNumMaxInfluence; ++index) {	//空いているところに入れる
-				if (currentInfluence.weights[index] == 0.0f) {	//weight==0が空いている状態なので、その場所にweightとjointのindexを代入
+			for (uint32_t index = 0; index < kNumMaxInfluence; ++index)	//空いているところに入れる
+			{	
+				if (currentInfluence.weights[index] == 0.0f)	//weight==0が空いている状態なので、その場所にweightとjointのindexを代入
+				{	
 					currentInfluence.weights[index] = vertexWeight.weight;
 					currentInfluence.jointIndices[index] = (*it).second;
 					break;

@@ -27,8 +27,10 @@ void GameScene::Initialize() {
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
-	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+	camera_->SetRotate({ 0.16f, 0.0f, 0.0f });
+	camera_->SetTranslate({ 0.0f, 3.6f, -10.0f });
+
+	normalFov_ = camera_->GetFovY();
 
 	//デバッグカメラの生成
 	debugCamera_ = std::make_unique<DebugCamera>();
@@ -36,6 +38,10 @@ void GameScene::Initialize() {
 
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
+
+	// カメラマネージャーの設定
+	cameraManager_ = std::make_unique<CameraManager>();
+	cameraManager_->Initialize(camera_.get());
 
 	//モデルを描画する際カメラの設定は必須
 	modelPlatform_->SetCamera(mainCamera_);
@@ -49,7 +55,7 @@ void GameScene::Initialize() {
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
-	
+
 	/*
 	//スプライトの生成
 	sprite_ = std::make_unique<Sprite>();
@@ -117,10 +123,21 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	
+
 
 	//カメラの更新
 	camera_->Update();
+	cameraManager_->Update();
+
+	switch (cameraMode_) {
+	case CameraMode::Free:
+		// 通常時はカメラマネージャーの更新のみ
+		break;
+	case CameraMode::GameOver:
+		// ゲームオーバー演出中はカメラをプレイヤーに固定
+		cameraManager_->LookAtTarget(player_->GetWorldTransform().translation_);
+		break;
+	}
 
 	if (isActiveDebugCamera_) {
 		debugCamera_->Update();
@@ -132,6 +149,24 @@ void GameScene::Update() {
 		!nextSceneName_.empty()) {
 
 		sceneManager_->ChengeScene(nextSceneName_);
+	}
+
+	// プレイヤーがリセットされた瞬間だけ
+	if (player_->ConsumeResetRequest())
+	{
+		cameraMode_ = CameraMode::Free;
+
+		camera_->SetRotate({ 0.16f, 0.0f, 0.0f });
+		camera_->SetTranslate({ 0.0f, 3.6f, -10.0f });
+
+		camera_->SetFovY(normalFov_);
+
+		cameraShakeTimer_ = 0.0f;
+	}
+
+	// ゲームオーバー演出
+	if (player_->IsInHitImpact() || player_->IsDead()) {
+		GameOverAnimation();
 	}
 
 	//プレイヤーの更新
@@ -147,35 +182,33 @@ void GameScene::Update() {
 	//衝突判定
 	CheckWallCollision();
 
-    CheckCollision();
-
 	//UIの更新
 	ui_->Update();
 
 	effect_->Update();
 
 	switch (ui_->GetPauseMenu()) {
-		case Ui::PauseMenu::Retry:
-			// リトライが選択された場合、ゲームシーンに遷移する
-			nextSceneName_ = "GameScene";
-			transition_->StartFadeIn(
-				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
-				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
-				2.0f,
-				Transition::EasingType::EaseOutQuint
-			);
+	case Ui::PauseMenu::Retry:
+		// リトライが選択された場合、ゲームシーンに遷移する
+		nextSceneName_ = "GameScene";
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
 		break;
 
-		case Ui::PauseMenu::ToTitle:
-			// タイトルに戻るが選択された場合、タイトルシーンに遷移する
-			nextSceneName_ = "TitleScene";
-			transition_->StartFadeIn(
-				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
-				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
-				2.0f,
-				Transition::EasingType::EaseOutQuint
-			);
-			break;
+	case Ui::PauseMenu::ToTitle:
+		// タイトルに戻るが選択された場合、タイトルシーンに遷移する
+		nextSceneName_ = "TitleScene";
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
+		break;
 	}
 
 	modelPlatform_->LightPreUpdate();
@@ -204,10 +237,6 @@ void GameScene::Update() {
 			2.0f,
 			Transition::EasingType::EaseOutQuint
 		);
-	}
-
-	if (input_->TriggerKey(DIK_R)) {
-		effect_->StartConfetti();
 	}
 
 #ifdef USE_IMGUI
@@ -285,6 +314,11 @@ void GameScene::Update() {
 
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 	ImGui::Text("Difficulty: %s", difficulty_ == 0 ? "EASY" : difficulty_ == 1 ? "NORMAL" : "HARD");
+	// カメラのFOVの調整
+	float fov = camera_->GetFovY();
+	ImGui::SliderFloat("Camera FOV: %f", &fov, 0.0f, 1.0f);
+	camera_->SetFovY(fov);
+	ImGui::SliderFloat("GameOver Shake: %f", &shakeStrength_, 0.0f, 1.0f);
 	/*
 	if (ImGui::Button("BGMstop")) {
 		audio_->SoundStopWave(bgm1_);
@@ -307,7 +341,7 @@ void GameScene::Draw() {
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
-	
+
 
 
 	//レーンの描画
@@ -352,43 +386,6 @@ void GameScene::Finalize()
 
 }
 
-void GameScene::CheckCollision()
-{	
-	float currentZ = dummyWall_->GetWorldTransform().translation_.z;
-
-	//判定ライン（例：z=0）
-	float judgeLine = 0.0f;
-
-	//ラインをまたいだ瞬間だけ判定
-	bool crossed = (prevWallZ_ > judgeLine && currentZ <= judgeLine);
-
-	if (!crossed) return;
-
-	auto result = JudgeSystem::Judge(
-		player_->GetState(), 
-		dummyWall_->GetState(), 
-		player_->GetWorldTransform(), 
-		dummyWall_->GetWorldTransform()
-	);
-
-	if(result==JudgeResult::Hit){
-		// 成功時の処理
-		player_->SetColorForDebug(debugPlayerColor[0]);
-		debugScore_++;
-		debugCombo_++;
-		debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
-	}
-	else if (result == JudgeResult::SuccessSquat) {
-		// しゃがみ成功（デバッグ用に何か追加しても可）
-	}
-	else if (result == JudgeResult::Miss) {
-		// ミス時の処理
-		player_->SetColorForDebug(debugPlayerColor[1]);
-		debugMiss_++;
-		debugCombo_ = 0;
-	}
-}
-
 void GameScene::CheckWallCollision()
 {
 	//各レーンの壁を取得して判定
@@ -411,37 +408,95 @@ void GameScene::CheckWallCollision()
 				wall->GetWorldTransform()
 			);
 
-			if (result == JudgeResult::Hit) {
+			if (result == JudgeResult::Hit ||
+				result == JudgeResult::SuccessSquat) {
 				// 成功時の処理
 				player_->SetColorForDebug(debugPlayerColor[0]);
 				debugScore_++;
 				debugCombo_++;
 				debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
-			}
-			else if (result == JudgeResult::SuccessSquat) {
-				// しゃがみ成功（デバッグ用に何か追加しても可）
+
+				if (debugCombo_ >= 10) {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Perfect);
+					ui_->AddGameScore(1000);
+				}
+				else if (debugCombo_ >= 5) {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Great);
+					ui_->AddGameScore(500);
+				}
+				else {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Good);
+					ui_->AddGameScore(100);
+				}
 			}
 			else if (result == JudgeResult::Miss) {
 				// ミス時の処理
 				player_->SetColorForDebug(debugPlayerColor[1]);
 				debugMiss_++;
 				debugCombo_ = 0;
+
+				ui_->DamageLife();
+				ui_->StopFrameGlow();
+
+				if (ui_->GetLife() <= 1) {
+					player_->RequestDeath();
+				}
 			}
 
-			wall->SetIsCollision(true); // 衝突済みに設定
+			wall->SetIsCollision(true); 
 
 		}
 	}
 }
 
-
 void GameScene::CreateLevel()
 {
-	LevelData levelData = LevelDataLoad("./resources/stageData/", "stageData", ".json");
+	LevelData levelData = LevelDataLoad("./resources/stageData/", "easyStageData", ".json");
 
 	//レーンの初期化
 	laneManager_ = std::make_unique<LaneManager>();
 	laneManager_->Initialize(levelData.walls);
 
-	
+}
+
+void GameScene::GameOverAnimation()
+{
+	const float deltaTime = 1.0f / 60.0f;
+
+	//----------------------------------------
+	// HitImpact中
+	//----------------------------------------
+	if (player_->IsInHitImpact())
+	{
+		// ズーム
+		float currentFov = camera_->GetFovY();
+		float targetFov = 0.5f;
+
+		currentFov += (targetFov - currentFov) * 0.60f;
+		camera_->SetFovY(currentFov);
+
+		// 横揺れ
+		cameraShakeTimer_ += deltaTime * 80.0f;
+
+		Vector3 pos = camera_->GetTranslate();
+
+		pos.x = std::sin(cameraShakeTimer_) * 0.15f;
+
+		camera_->SetTranslate(pos);
+	}
+
+	//----------------------------------------
+	// Dead中
+	//----------------------------------------
+	else if (player_->IsDead())
+	{
+		// FOV戻し
+		float currentFov = camera_->GetFovY();
+
+		currentFov += (normalFov_ - currentFov) * 0.05f;
+
+		camera_->SetFovY(normalFov_);
+
+		cameraMode_ = CameraMode::GameOver;
+	}
 }

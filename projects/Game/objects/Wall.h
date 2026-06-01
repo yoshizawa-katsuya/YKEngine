@@ -43,6 +43,8 @@ public:
 
 	bool GetIsCollision() const { return isCollision_; }
 
+	bool GetIsDead() const { return isDead_; }
+
 	void SetIsCollision(bool isCollision) { isCollision_ = isCollision; }
 
 private:
@@ -72,5 +74,6 @@ private:
 
 	//自機との衝突判定をとっていればtrue、これからならfalse
 	bool isCollision_ = false;
-};
 
+	bool isDead_ = false; //壁がプレイヤーを通り過ぎて消える位置に到達していればtrue、まだならfalse
+};
