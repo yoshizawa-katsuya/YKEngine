@@ -295,7 +295,7 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\CameraManager.cpp">
-       <Filter>ソース ファイル\application\objects</Filter>
+      <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Game\objects\WallModels.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
@@ -621,6 +621,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\CameraManager.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\Difficulty.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

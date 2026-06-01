@@ -348,6 +348,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\Difficulty.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Engine\3d\CameraManager.h" />
     <ClInclude Include="Engine\lib\BaseState.hpp" />

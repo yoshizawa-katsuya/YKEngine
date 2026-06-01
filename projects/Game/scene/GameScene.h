@@ -25,6 +25,7 @@
 #include "Transition.h"
 #include "CameraManager.h"
 #include "Effect.h"
+#include "Difficulty.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -147,7 +148,7 @@ private:
 	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	// 難易度
-	uint32_t difficulty_ = 0;
+	Difficulty difficulty_ = Difficulty::EASY;
 
 	// 遷移演出
 	std::unique_ptr<Transition> transition_;
@@ -177,6 +178,20 @@ private:
 	// 横揺れの強さ
 	float shakeStrength_ = 0.3f;
 
+	float damageShakeTimer_ = 0.0f;
+
+	// シェイク前の基準位置
+	YKEngine::Vector3 damageShakeBasePos_ = {};
+
+	// 爆発シェイク
+	float explosionShakeTimer_ = 0.0f;
+	float explosionShakeDuration_ = 2.0f;
+
+	Vector3 explosionShakeBasePos_ = {};
+
+	bool isExplosionShakeStarted_ = false;
+	bool isExplosionShakeFinished_ = false;
+
 	// 演出用カメラ
 	YKEngine::Vector3 gameOverCameraPos_ = { 0.0f, 3.6f, -10.0f };
 	YKEngine::Vector3 gameOverCameraTarget_ = { 0.0f, 0.0f, 0.0f };
@@ -189,4 +204,9 @@ private:
 	};
 
 	CameraMode cameraMode_ = CameraMode::Free;
+	//遷移開始済みか
+	bool isStartedTransition_ = false;
+
+	float deathFinishedTimer_ = 0.0f;
+	bool isDeathFinishedTimerStarted_ = false;
 };
