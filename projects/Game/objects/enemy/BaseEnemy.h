@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseCharacter.h"
+#include "SkinCharacter.h"
 #include "EnemySpawn.h"
 #include "EnemyStateContext.h"
 #include "StateMachine.hpp"
@@ -17,7 +17,7 @@ class EnemyBulletManager;
 /// 敵の基底クラス。
 /// 継承して使用する。
 /// </summary>
-class BaseEnemy : public BaseCharacter, protected EnemyStateContext
+class BaseEnemy : public SkinCharacter, protected EnemyStateContext
 {
 public:
 
@@ -30,10 +30,11 @@ public:
 	/// 初期化。
 	/// </summary>
 	/// <param name="model">モデル</param>
+	/// <param name="animation">アニメーション</param>
 	/// <param name="spawnData">出現データ</param>
 	/// <param name="viewPortMatrix">ビューポート行列</param>
 	/// <param name="railCamera">レールカメラ。画面内に入っているか判定するために使用。</param>
-	virtual void Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player);
+	virtual void Initialize(YKEngine::BaseModel* model, YKEngine::Animation* animation, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player);
 
 	/// <summary>
 	/// 更新。
@@ -227,6 +228,8 @@ protected:
 
 	float waitTime_ = 0.0f; // 待機時間
 
+	float animationTimer_ = 0.0f; // アニメーションタイマー
+
 	// 死亡部の情報
-	std::optional<DieInfo> dieInfo_; 
+	std::optional<DieInfo> dieInfo_;
 };

@@ -313,7 +313,7 @@ Node BaseModel::ReadNode(aiNode* node)
 	aiQuaternion rotate;
 	node->mTransformation.Decompose(scale, rotate, translate);	//assimpの行列からSRTを抽出する関数を利用
 	result.transform.scale = { scale.x, scale.y, scale.z };	//Scaleはそのまま
-	result.transform.rotation = { rotate.x, -rotate.y, -rotate.z, rotate.w };	//x軸を反転、さらに回転方向が逆なので軸を反転させる
+	result.transform.rotation = Normalize({ rotate.x, -rotate.y, -rotate.z, rotate.w });	//x軸を反転、さらに回転方向が逆なので軸を反転させる
 	result.transform.translation = { -translate.x, translate.y, translate.z };	//x軸を反転
 	result.localMatrix = MakeAffineMatrix(result.transform.scale, result.transform.rotation, result.transform.translation);
 

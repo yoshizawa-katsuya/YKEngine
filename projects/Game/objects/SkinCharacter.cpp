@@ -1,22 +1,24 @@
-#include "BaseCharacter.h"
+#include "SkinCharacter.h"
 
 using namespace YKEngine;
 
-void BaseCharacter::Initialize(BaseModel* model)
+void SkinCharacter::Initialize(BaseModel* model, Animation* animation)
 {
 	// NULLポインタチェック
 	assert(model);
 
 	SphereCollider::Initialize();
 
-	object_ = std::make_unique<My3dObject>();
+	object_ = std::make_unique<Skin3dObject>();
 	object_->Initialize(model);
 
 	characterWorldTransform_.Initialize();
 	characterWorldTransform_.parent_ = &worldTransform_;
+
+	animation_ = animation;
 }
 
-void BaseCharacter::Update()
+void SkinCharacter::Update()
 {
 	SphereCollider::Update();
 
@@ -24,7 +26,7 @@ void BaseCharacter::Update()
 	object_->WorldTransformUpdate(characterWorldTransform_);
 }
 
-void BaseCharacter::Draw(Camera* camera)
+void SkinCharacter::Draw(Camera * camera)
 {
 	object_->CameraUpdate(camera);
 	object_->Draw();

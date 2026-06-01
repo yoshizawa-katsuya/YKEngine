@@ -17,10 +17,20 @@ void EnemyManager::Initialize(Player* player, Camera* railCamera, EnemyBulletMan
 
 	// 敵モデルの読み込み
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
-	modelEnemyMap_[EnemyType::kShot01] = modelPlatform->CreateRigidModel("./Resources/enemy", "Enemy.obj");
-	modelEnemyMap_[EnemyType::kShot02] = modelPlatform->CreateRigidModel("./Resources/enemy", "Enemy02.obj");
-	modelEnemyMap_[EnemyType::kTackle01] = modelPlatform->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy.obj");
-	modelEnemyMap_[EnemyType::kTackle02] = modelPlatform->CreateRigidModel("./Resources/tackleEnemy", "TackleEnemy02.obj");
+	modelEnemyMap_[EnemyType::kShot01] = modelPlatform->CreateSkinModel("./Resources/enemy", "Enemy.gltf");
+	modelEnemyMap_[EnemyType::kShot02] = modelPlatform->CreateSkinModel("./Resources/enemy", "Enemy02.gltf");
+	modelEnemyMap_[EnemyType::kTackle01] = modelPlatform->CreateSkinModel("./Resources/tackleEnemy", "TackleEnemy.gltf");
+	modelEnemyMap_[EnemyType::kTackle02] = modelPlatform->CreateSkinModel("./Resources/tackleEnemy", "TackleEnemy02.gltf");
+
+	// 敵アニメーションの読み込み
+	animationEnemyMap_[EnemyType::kShot01] = std::make_unique<Animation>();
+	animationEnemyMap_[EnemyType::kShot01]->LoadAnimationFile("./Resources/enemy", "Enemy.gltf");
+	animationEnemyMap_[EnemyType::kShot02] = std::make_unique<Animation>();
+	animationEnemyMap_[EnemyType::kShot02]->LoadAnimationFile("./Resources/enemy", "Enemy02.gltf");
+	animationEnemyMap_[EnemyType::kTackle01] = std::make_unique<Animation>();
+	animationEnemyMap_[EnemyType::kTackle01]->LoadAnimationFile("./Resources/tackleEnemy", "TackleEnemy.gltf");
+	animationEnemyMap_[EnemyType::kTackle02] = std::make_unique<Animation>();
+	animationEnemyMap_[EnemyType::kTackle02]->LoadAnimationFile("./Resources/tackleEnemy", "TackleEnemy02.gltf");
 
 	//調整項目をjsonに登録
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -106,7 +116,7 @@ void EnemyManager::PopEnemy(const EnemySpawn& spawnData)
 	std::unique_ptr<BaseEnemy> enemy = it->second(this, spawnData);
 
 	// 敵の初期化
-	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), spawnData, railCamera_, player_);
+	enemy->Initialize(modelEnemyMap_[spawnData.type].get(), animationEnemyMap_[spawnData.type].get(), spawnData, railCamera_, player_);
 	enemy->SetEnemyBulletManager(enemyBulletManager_);
 
 	// 敵リストに追加

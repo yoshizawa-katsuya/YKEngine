@@ -21,14 +21,15 @@ BaseEnemy::~BaseEnemy()
 {
 }
 
-void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera* railCamera, Player* player)
+void BaseEnemy::Initialize(BaseModel* model, Animation* animation, const EnemySpawn& spawnData, Camera* railCamera, Player* player)
 {
-
-	BaseCharacter::Initialize(model);
+	
+	SkinCharacter::Initialize(model, animation);
 	SetColliderID();
 	player_ = player;
 	railCamera_ = railCamera;
 
+	//グローバル変数のインスタンスを取得
 	globalVariables_ = GlobalVariables::GetInstance();
 
 	//速さをレベルデータから取得
@@ -67,8 +68,13 @@ void BaseEnemy::Initialize(BaseModel* model, const EnemySpawn& spawnData, Camera
 void BaseEnemy::Update() {
 
 	stateMachine_->Update();
+	
+	// アニメーションタイマーの更新
+	animationTimer_ += 1.0f / 60.0f;
+	animationTimer_ = std::fmod(animationTimer_, animation_->GetDuration());
+	object_->AnimationUpdate(animation_, animationTimer_);
 
-	BaseCharacter::Update();
+	SkinCharacter::Update();
 }
 
 void BaseEnemy::OnCollision(BaseCollider* other)

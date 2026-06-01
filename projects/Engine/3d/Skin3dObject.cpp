@@ -3,7 +3,7 @@
 #include "ModelPlatform.h"
 #include "Animation.h"
 #include "RootParams.h"
-
+#include <iostream>
 
 using namespace YKEngine;
 
@@ -22,7 +22,7 @@ void Skin3dObject::Initialize(BaseModel* model)
 	CreateSkelton();
 
 	CreateSkinCluster();
-
+	
 }
 
 void Skin3dObject::AnimationUpdate(Animation* animation)

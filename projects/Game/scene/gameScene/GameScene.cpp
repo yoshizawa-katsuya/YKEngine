@@ -180,13 +180,15 @@ void GameScene::Draw()
 	//自機の弾の描画
 	playerBulletManager_->Draw(mainCamera);
 
-	// 敵の描画
-	enemyManager_->Draw(mainCamera);
-
 	// 弾描画
 	enemyBulletManager_->Draw(mainCamera);
 
 	stageObjects_->Draw(mainCamera);
+
+	modelPlatform_->SkinPreDraw();
+
+	// 敵の描画
+	enemyManager_->Draw(mainCamera);
 
 	//パーティクルの描画
 	ParticleManager::GetInstance()->Draw();

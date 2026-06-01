@@ -6,9 +6,9 @@
 
 using namespace YKEngine;
 
-void TackleEnemy01::Initialize(YKEngine::BaseModel* model, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player)
+void TackleEnemy01::Initialize(BaseModel* model, Animation* animation, const EnemySpawn& spawnData, YKEngine::Camera* railCamera, Player* player)
 {
-	BaseEnemy::Initialize(model, spawnData, railCamera, player);
+	BaseEnemy::Initialize(model, animation, spawnData, railCamera, player);
 
 	if (!spawnData.speed.has_value())
 	{

@@ -648,6 +648,9 @@
     <ClCompile Include="Game\objects\CuboidObstacle.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\SkinCharacter.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -1205,6 +1208,9 @@
       <Filter>ヘッダー ファイル\application\objects\collider</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\CuboidObstacle.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\SkinCharacter.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>

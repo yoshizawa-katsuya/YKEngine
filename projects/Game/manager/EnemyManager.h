@@ -2,6 +2,8 @@
 #include "BaseEnemy.h"
 #include "EnemySpawn.h"
 #include "EnemyParams.h"
+#include "Animation.h"
+
 class Player;
 class EnemyBulletManager;
 
@@ -49,6 +51,9 @@ private:
 
 	//敵のモデル
 	std::map<EnemyType, std::shared_ptr<YKEngine::BaseModel>> modelEnemyMap_;
+
+	//敵のアニメーション
+	std::unordered_map<EnemyType, std::unique_ptr<YKEngine::Animation>> animationEnemyMap_;
 
 	std::map<EnemyType, ShotEnemyParams> shotEnemyParamsMap_;
 

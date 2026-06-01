@@ -249,6 +249,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Game\objects\PressA.cpp" />
     <ClCompile Include="Game\objects\collider\SphereCollider.cpp" />
     <ClCompile Include="Game\objects\collider\OBBCollider.cpp" />
+    <ClCompile Include="Game\objects\SkinCharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -579,6 +580,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Game\objects\PressA.h" />
     <ClInclude Include="Game\objects\collider\SphereCollider.h" />
     <ClInclude Include="Game\objects\collider\OBBCollider.h" />
+    <ClInclude Include="Game\objects\SkinCharacter.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
