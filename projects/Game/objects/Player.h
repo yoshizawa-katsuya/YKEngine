@@ -188,7 +188,7 @@ private:
 	float damageFlashTimer_ = 0.0f;
 
 	// ダメージフラッシュの長さ
-	const float kDamageFlashDuration_ = 0.2f;
+	const float kDamageFlashDuration_ = 0.4f;
 
 	float flashAlpha_ = 1.0f;
 

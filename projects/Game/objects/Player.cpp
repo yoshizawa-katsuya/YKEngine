@@ -243,11 +243,18 @@ void Player::Update() {
 	}
 
 	UpdateColorForDebug();
+	if (state_ == PlayerState::Normal) {
+		Vector4 finalColor = debugColor_;
+		finalColor.w *= flashAlpha_;
 
-	Vector4 finalColor = debugColor_;
-	finalColor.w *= flashAlpha_;
+		object_->SetColor(finalColor);
+	}
+	else {
+		Vector4 finalColor = debugColor_;
+		finalColor.w *= 1.0f;
 
-	object_->SetColor(finalColor);
+		object_->SetColor(finalColor);
+	}
 
 
 	UpdateAnimationTrigger();
