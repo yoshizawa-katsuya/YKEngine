@@ -195,6 +195,37 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	player_->Update();
 
+	// 死亡演出終了検知
+	if (player_->IsDeathFinished())
+	{
+		if (!isDeathFinishedTimerStarted_)
+		{
+			isDeathFinishedTimerStarted_ = true;
+			deathFinishedTimer_ = 1.5f;
+		}
+	}
+
+	// エフェクト終了待ち
+	if (isDeathFinishedTimerStarted_)
+	{
+		deathFinishedTimer_ -= 1.0f / 60.0f;
+
+		if (deathFinishedTimer_ <= 0.0f &&
+			!isStartedTransition_)
+		{
+			isStartedTransition_ = true;
+
+			nextSceneName_ = "GameOverScene";
+
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
+		}
+	}
+
 	//ダミーの壁の更新
 	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
 	//dummyWall_->Update();

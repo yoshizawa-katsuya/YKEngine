@@ -9,6 +9,7 @@
 #include "Sprite.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Transition.h"
 
 /// <summary>
 /// ゲームオーバーシーンのクラス
@@ -57,5 +58,7 @@ private:
 	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+	//遷移演出
+	std::unique_ptr<Transition> transition_;
 };
 

@@ -202,4 +202,9 @@ private:
 	};
 
 	CameraMode cameraMode_ = CameraMode::Free;
+	//遷移開始済みか
+	bool isStartedTransition_ = false;
+
+	float deathFinishedTimer_ = 0.0f;
+	bool isDeathFinishedTimerStarted_ = false;
 };
