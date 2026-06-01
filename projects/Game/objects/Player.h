@@ -61,6 +61,8 @@ public:
 
 	void SetPositon(YKEngine::Vector3 pos) { worldTransform_.translation_ = pos; }
 
+	void StartDamageReaction();
+
 private:
 
 	void ChangePose();
@@ -168,6 +170,19 @@ private:
 
 	// ヒットストップ時間の長さ
 	const float kHitStopTime_ = 0.75f;
+
+	// ダメージフラッシュ中かどうか
+	bool isDamageFlash_ = false;
+
+	// ダメージフラッシュのタイマー
+	float damageFlashTimer_ = 0.0f;
+
+	// ダメージフラッシュの長さ
+	const float kDamageFlashDuration_ = 0.2f;
+
+	float flashAlpha_ = 1.0f;
+
+	YKEngine::Vector4 debugColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	// タイトル用自動ポーズデモ
 	bool isAutoPoseDemo_ = false;
