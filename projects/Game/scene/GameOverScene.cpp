@@ -35,6 +35,19 @@ void GameOverScene::Initialize()
 	player_->SetPositon(YKEngine::Vector3{ 0.0f,-2.3f,0.0f });
 	player_->SetRotate(YKEngine::Vector3{ 0.0f,92.5f,0.0f });
 	player_->ChangeAnimation("SadPose");
+	//遷移演出初期化
+	transition_ = std::make_unique<Transition>();
+
+	// 遷移演出の初期化
+	transition_->Initialize();
+
+	//画面に切り替わったと同時にフェードアウトの画面遷移を開始
+	transition_->StartFadeOut(
+		TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+		TextureManager::GetInstance()->Load("./resources/brickMask.png"),
+		1.0f,
+		Transition::EasingType::EaseInSine
+	);
 }
 
 void GameOverScene::Update()
@@ -48,18 +61,29 @@ void GameOverScene::Update()
 	//カメラの更新
 	camera_->Update();
 
+	transition_->Update();
+
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 	player_->Update();
+
 }
 
 void GameOverScene::Draw()
 {
+	//Spriteの背景描画前処理
+	spritePlatform_->PreBackGroundDraw();
+
 	modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+	//Spriteの描画前処理
+	spritePlatform_->PreDraw();
+
+	transition_->Draw();
 }
 
 void GameOverScene::Finalize()

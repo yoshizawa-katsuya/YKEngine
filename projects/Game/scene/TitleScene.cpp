@@ -74,19 +74,6 @@ void TitleScene::Update()
 
 	demoPLayer1_->Update();
 	demoPlayer2_->Update();
-#ifdef USE_IMGUI
-
-	static float titlePos[2] = { 0.0f, 0.0f };
-
-	ImGui::Begin("Window");
-	ImGui::Text("Title");
-	ImGui::Text("%s", state_ == State::START ? "Press Space Key" : state_ == State::OPTIONS ? "Left/right arrow keys Select Difficulty Press Space Key" : "Go To GameScene...");
-	ImGui::Text("State: %s", state_ == State::START ? "START" : state_ == State::OPTIONS ? "OPTIONS" : "EXIT");
-	ImGui::Text("Difficulty: %s", difficulty_ == Difficulty::EASY ? "EASY" : difficulty_ == Difficulty::NORMAL ? "NORMAL" : "HARD");
-	ImGui::SliderFloat2("TitleSprite Position", titlePos, -640.0f, 640.0f, "%.1f");
-	ImGui::End();
-
-#endif // USE_IMGUI
 
 	// 画面遷移の更新
 	transition_->Update();

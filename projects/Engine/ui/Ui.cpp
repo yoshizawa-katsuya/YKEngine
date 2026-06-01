@@ -408,7 +408,7 @@ void Ui::UpdateAnimation() {
 
 	if (isAnimating_) {
 		if (displayScore_ < targetScore_) {
-			displayScore_ += 10;
+			displayScore_ += 15;
 
 			if (displayScore_ > targetScore_) {
 				displayScore_ = targetScore_;
