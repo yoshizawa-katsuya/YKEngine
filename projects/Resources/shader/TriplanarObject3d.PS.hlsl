@@ -77,7 +77,7 @@ float4 TriplanarMapping(float32_t3 worldPosition, float32_t3 normal)
 {
     float scale = 0.1f; //テクスチャのスケール
     
-    float2 uvX = worldPosition.yz * scale;
+    float2 uvX = worldPosition.zy * scale;
     float2 uvY = worldPosition.xz * scale;
     float2 uvZ = worldPosition.xy * scale;
     
