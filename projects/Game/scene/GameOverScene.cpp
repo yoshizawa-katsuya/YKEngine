@@ -31,10 +31,11 @@ void GameOverScene::Initialize()
 	//プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(modelPlayer_.get());
+	player_->ChangeAnimation("SadPose");
 	player_->SetDirectionControl(false);
+	player_->SetPoseControl(false);
 	player_->SetPositon(YKEngine::Vector3{ 0.0f,-2.3f,0.0f });
 	player_->SetRotate(YKEngine::Vector3{ 0.0f,92.5f,0.0f });
-	player_->ChangeAnimation("SadPose");
 }
 
 void GameOverScene::Update()

@@ -185,7 +185,10 @@ void Player::Update() {
 			}
 		}
 		else {
-    		ChangePose();
+			if (isPoseControl_) {
+        		ChangePose();
+			}
+
 			if (isDirectionControl_) {
         		ChangeDirection();
 			}
