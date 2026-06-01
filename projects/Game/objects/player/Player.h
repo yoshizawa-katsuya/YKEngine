@@ -3,7 +3,7 @@
 #include "Animation.h"
 #include "Input.h"
 #include "Sprite.h"
-#include "BaseCharacter.h"
+#include "SkinCharacter.h"
 #include "ReticleController.h"
 #include "StateMachine.hpp"
 #include "PlayerStateContext.h"
@@ -18,10 +18,9 @@ namespace YKEngine
 /// <summary>
 /// プレイヤークラス。
 /// プレイヤーの移動、攻撃、チャージ、UI描画などを行う。
-/// BaseCharacterを継承。
 /// 位置はRailMoverを親に持つWorldTransformで管理。
 /// </summary>
-class Player : public BaseCharacter, private PlayerStateContext
+class Player : public SkinCharacter, private PlayerStateContext
 {
 public:
 
@@ -213,6 +212,11 @@ private:
 	void DamageReaction();
 
 	/// <summary>
+	/// アニメーションの更新。
+	/// </summary>
+	void UpdateAnimation();
+
+	/// <summary>
 	/// 移動量が0でないときにtrueを返す
 	/// </summary>
 	bool IsMoving() override { return Length(move_) > 0.0f; }
@@ -287,5 +291,8 @@ private:
 	
 	//グローバル変数管理クラスのインスタンスへのポインタ
 	YKEngine::GlobalVariables* globalVariables_ = nullptr;
+
+	//アニメーション
+	std::unique_ptr<YKEngine::Animation> animation_;
 };
 

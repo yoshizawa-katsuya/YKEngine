@@ -45,14 +45,19 @@ void Player::Initialize(WorldTransform* parent)
 	globalVariables_->AddItem(groupName, JsonKey::Player::kChargeBulletShotInterval, 0.5f);
 
 	//モデルとコライダーの初期化
-	BaseCharacter::Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
+	SkinCharacter::Initialize(ModelPlatform::GetInstance()->CreateSkinModel("./Resources/player", "Player.gltf").get());
+	animation_ = std::make_unique<Animation>();
+	animation_->LoadAnimationFile("./Resources/player/", "Player.gltf");
 	BaseCollider::SetTypeID(CollisionTypeIdDef::kPlayer);
+
+	//アニメーションの適用
+	object_->AnimationUpdate(animation_.get());
 
 	input_ = Input::GetInstance();
 
 	worldTransform_.parent_ = parent;
 	
-	BaseCharacter::Update();
+	SkinCharacter::Update();
 
 	//開始時のアニメーション設定
 	const float kAnimeDuration = globalVariables_->GetFloatValue(groupName, JsonKey::Player::kStartAnimeDuration);
@@ -166,7 +171,7 @@ void Player::GameOverRotate()
 	
 	worldTransform_.rotation_ = targetRotation;
 
-	BaseCharacter::Update();
+	SkinCharacter::Update();
 }
 
 void Player::HUDInitialize()
@@ -285,7 +290,7 @@ void Player::UpdateStart()
 {
 	characterWorldTransform_.scale_ = startAnime_->Update();
 	characterWorldTransform_.rotation_ = startRotateAnime_->Update();
-	BaseCharacter::Update();
+	SkinCharacter::Update();
 	
 	EffectManager* effectManager = EffectManager::GetInstance();
 
@@ -311,7 +316,10 @@ void Player::UpdateMain()
 	//回転
 	Rotate();
 
-	BaseCharacter::Update();
+	//アニメーションの更新
+	UpdateAnimation();
+
+	SkinCharacter::Update();
 
 	//照準オブジェクトの更新
 	ReticleUpdate();
@@ -337,7 +345,10 @@ void Player::UpdateDodge()
 	//回転
 	worldTransform_.rotation_ = LerpAngle(worldTransform_.rotation_, Vector3{ 0.0f, 0.0f, 0.0f }, globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kDodgeRotateLerpFactor));
 
-	BaseCharacter::Update();
+	//アニメーションの更新
+	UpdateAnimation();
+
+	SkinCharacter::Update();
 
 	//照準オブジェクトの更新
 	ReticleUpdate();
@@ -374,7 +385,7 @@ void Player::UpdateGameOver()
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, characterWorldTransform_.GetWorldPosition(), 100);
 	}
 
-	BaseCharacter::Update();
+	SkinCharacter::Update();
 }
 
 void Player::UpdateGameClear()
@@ -394,7 +405,10 @@ void Player::UpdateGameClear()
 	//前に進む
 	characterWorldTransform_.translation_.z += globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kSpeed);
 
-	BaseCharacter::Update();
+	//アニメーションの更新
+	UpdateAnimation();
+
+	SkinCharacter::Update();
 
 }
 
@@ -567,4 +581,10 @@ void Player::DamageReaction()
 	const float kMoveRange = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kDamageReactionMoveRange);
 
 	characterWorldTransform_.translation_ = Random::GetInstance()->GetVector3(-kMoveRange, kMoveRange);
+}
+
+void Player::UpdateAnimation()
+{
+	animation_->Update();
+	object_->AnimationUpdate(animation_.get());
 }

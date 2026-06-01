@@ -24,7 +24,8 @@ BaseEnemy::~BaseEnemy()
 void BaseEnemy::Initialize(BaseModel* model, Animation* animation, const EnemySpawn& spawnData, Camera* railCamera, Player* player)
 {
 	
-	SkinCharacter::Initialize(model, animation);
+	SkinCharacter::Initialize(model);
+	animation_ = animation;
 	SetColliderID();
 	player_ = player;
 	railCamera_ = railCamera;

@@ -114,12 +114,14 @@ void ClearScene::Draw()
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), stageObjects_->GetTextureHandleSkyBox());
-	
-	//デモ用プレイヤーの描画
-	demoPlayer_->Draw(mainCamera);
 
 	//地面の描画
 	stageObjects_->Draw(mainCamera);
+
+	modelPlatform_->SkinPreDraw();
+
+	//デモ用プレイヤーの描画
+	demoPlayer_->Draw(mainCamera);
 
 	modelPlatform_->LinePreDraw();
 

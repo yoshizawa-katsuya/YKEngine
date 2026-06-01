@@ -2,7 +2,7 @@
 
 using namespace YKEngine;
 
-void SkinCharacter::Initialize(BaseModel* model, Animation* animation)
+void SkinCharacter::Initialize(BaseModel* model)
 {
 	// NULLポインタチェック
 	assert(model);
@@ -14,8 +14,6 @@ void SkinCharacter::Initialize(BaseModel* model, Animation* animation)
 
 	characterWorldTransform_.Initialize();
 	characterWorldTransform_.parent_ = &worldTransform_;
-
-	animation_ = animation;
 }
 
 void SkinCharacter::Update()

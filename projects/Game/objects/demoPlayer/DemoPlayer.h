@@ -1,9 +1,10 @@
 #pragma once
 #include "WorldTransform.h"
-#include "My3dObject.h"
+#include "Skin3dObject.h"
 #include "SRTAnimator.h"
 #include "StateMachine.hpp"
 #include "DemoPlayerStateContext.h"
+#include "Animation.h"
 
 namespace YKEngine
 {
@@ -76,7 +77,11 @@ private:
 	/// </summary>
 	void BeforeEnd() override;
 
-	std::unique_ptr<YKEngine::My3dObject> object_;
+	// オブジェクト
+	std::unique_ptr<YKEngine::Skin3dObject> object_;
+	// アニメーション
+	std::unique_ptr<YKEngine::Animation> animation_;
+
 	//ワールド変換データ
 	YKEngine::WorldTransform worldTransform_;
 

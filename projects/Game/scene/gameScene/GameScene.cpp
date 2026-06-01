@@ -174,9 +174,6 @@ void GameScene::Draw()
 	//環境マップを使う場合はコメントアウトを外す
 	TextureManager::GetInstance()->SetEnvironmentMap(static_cast<size_t>(ModelRootParam::kEnvironmentMap), stageObjects_->GetTextureHandleSkyBox());
 
-	//プレイヤーの描画
-	player_->Draw(mainCamera);
-
 	//自機の弾の描画
 	playerBulletManager_->Draw(mainCamera);
 
@@ -185,7 +182,11 @@ void GameScene::Draw()
 
 	stageObjects_->Draw(mainCamera);
 
+	//スキンモデルの描画前処理
 	modelPlatform_->SkinPreDraw();
+
+	//プレイヤーの描画
+	player_->Draw(mainCamera);
 
 	// 敵の描画
 	enemyManager_->Draw(mainCamera);

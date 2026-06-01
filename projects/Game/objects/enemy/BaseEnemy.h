@@ -228,6 +228,7 @@ protected:
 
 	float waitTime_ = 0.0f; // 待機時間
 
+	YKEngine::Animation* animation_ = nullptr; // アニメーション
 	float animationTimer_ = 0.0f; // アニメーションタイマー
 
 	// 死亡部の情報

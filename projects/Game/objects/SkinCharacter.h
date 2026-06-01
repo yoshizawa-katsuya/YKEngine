@@ -19,7 +19,7 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="animation">アニメーション</param>
-	virtual void Initialize(YKEngine::BaseModel* model, YKEngine::Animation* animation);
+	virtual void Initialize(YKEngine::BaseModel* model);
 
 	/// <summary>
 	/// 更新
@@ -39,8 +39,6 @@ protected:
 	std::unique_ptr<YKEngine::Skin3dObject> object_;
 	//ワールド変換データ
 	YKEngine::WorldTransform characterWorldTransform_;
-
-	YKEngine::Animation* animation_ = nullptr;
 
 	//デスフラグ
 	bool isDead_ = false;

@@ -17,8 +17,11 @@ void DemoPlayer::Initialize(WorldTransform* parent)
 	globalVariables_->AddItem(groupName, JsonKey::DemoPlayer::kEndAnimeDuration, 2.0f);
 	globalVariables_->AddItem(groupName, JsonKey::DemoPlayer::kEndAnimeTranslate, Vector3{ 0.0f, 0.0f, 50.0f });
 
-	object_ = std::make_unique<My3dObject>();
-	object_->Initialize(ModelPlatform::GetInstance()->CreateRigidModel("./Resources/player", "Player.obj").get());
+	object_ = std::make_unique<Skin3dObject>();
+	object_->Initialize(ModelPlatform::GetInstance()->CreateSkinModel("./Resources/player", "Player.gltf").get());
+
+	animation_ = std::make_unique<Animation>();
+	animation_->LoadAnimationFile("./Resources/player/", "Player.gltf");
 
 	worldTransform_.Initialize();
 	worldTransform_.parent_ = parent;
@@ -49,6 +52,9 @@ void DemoPlayer::Initialize(WorldTransform* parent)
 
 void DemoPlayer::Update()
 {
+	animation_->Update();
+	object_->AnimationUpdate(animation_.get());
+
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
 
