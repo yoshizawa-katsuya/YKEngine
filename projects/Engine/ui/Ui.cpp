@@ -89,8 +89,25 @@ void Ui::Initialize() {
 	frameSprite_->SetAnchorPoint({ 0.5f,0.5f });
 	frameSprite_->SetColor({ 1,1,1,0 });
 
+	//難易度テクスチャ読み込み
+	easyTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/title/easy.png");
+	normalTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/title/normal.png");
+	hardTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/title/hard.png");
 	//難易度スプライト生成
+	easySprite_ = std::make_unique<YKEngine::Sprite>();
+	easySprite_->Initialize(easyTexture_);
+	easySprite_->SetPosition({ 640.0f, 130.0f });
+	easySprite_->SetAnchorPoint({ 0.5f,0.5f });
 
+	normalSprite_ = std::make_unique<YKEngine::Sprite>();
+	normalSprite_->Initialize(normalTexture_);
+	normalSprite_->SetPosition({ 640.0f, 310.0f });
+	normalSprite_->SetAnchorPoint({ 0.5f,0.5f });
+
+	hardSprite_ = std::make_unique<YKEngine::Sprite>();
+	hardSprite_->Initialize(hardTexture_);
+	hardSprite_->SetPosition({ 640.0f, 490.0f });
+	hardSprite_->SetAnchorPoint({ 0.5f,0.5f });
 
 }
 //更新
@@ -115,6 +132,8 @@ void Ui::Update() {
 	UpdateLifeBlink();
 	//タイトルスペース更新
 	UpdateTitleSpace();
+	//難易度選択のスケール更新
+	difficultyScaleTimer_ += 1.0f / 60.0f;
 	//デバック
 	Debug();
 }
@@ -157,7 +176,36 @@ void Ui::DrawTitle() {
 	//タイトルスペース描画
 	titlePushSprite_->Draw();
 }
+//難易度選択描画
+void Ui::DrawSelect() {
+	float scale = 1.0f + std::sin(difficultyScaleTimer_ * 6.0f) * 0.1f;
 
+	//EASY
+	if (selectedDifficulty_ == 0) {
+		easySprite_->SetSize({ 512.0f * scale,128.0f * scale });
+	}
+	else {
+		easySprite_->SetSize({ 512.0f,128.0f });
+	}
+	//NORMAL
+	if (selectedDifficulty_ == 1) {
+		normalSprite_->SetSize({ 512.0f * scale,128.0f * scale });
+	}
+	else {
+		normalSprite_->SetSize({ 512.0f,128.0f });
+	}
+	//HARD
+	if (selectedDifficulty_ == 2) {
+		hardSprite_->SetSize({ 512.0f * scale,128.0f * scale });
+	}
+	else {
+		hardSprite_->SetSize({ 512.0f,128.0f });
+	}
+
+	easySprite_->Draw();
+	normalSprite_->Draw();
+	hardSprite_->Draw();
+}
 //スコア加算
 void Ui::AddScore(int value) {
 	score_ += value;
@@ -190,15 +238,23 @@ void Ui::StartJudgeEffect(JudgeType type) {
 	isFrameGlow_ = true;
 	frameGlowTimer_ = 0.0f;
 }
+//画面枠発光停止
+void Ui::StopFrameGlow() {
+	isFrameGlow_ = false;
 
+	if (frameSprite_) {
+		frameSprite_->SetColor({ 1,1,1,0 });
+	}
+}
+//ゲームスコア加算
 void Ui::AddGameScore(int value){
 	AddScore(value);
 }
-
+//ライフ減少
 void Ui::DamageLife() {
 	DecreaseLife();
 }
-
+//ジャッジエフェクト再生
 void Ui::PlayJudgeEffect(JudgeType type) {
 	StartJudgeEffect(type);
 }
@@ -234,7 +290,7 @@ void Ui::Debug() {
             titlePushSprite_->SetPosition({ pos.x, pos.y });
         }
         ImVec2 scale = { titlePushSprite_->GetSize().x , titlePushSprite_->GetSize().y };
-        if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 10000.0)) {
+        if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 10000.0f)) {
             titlePushSprite_->SetSize({ scale.x, scale.y });
         }
         float rotation = titlePushSprite_->GetRotation();
@@ -294,6 +350,43 @@ void Ui::Debug() {
 		}
 		ImGui::End();
 	}
+
+	// 難易度スプライトの位置とサイズを操作
+	if (easySprite_ && normalSprite_ && hardSprite_) {
+		ImGui::Begin("Difficulty Sprites");
+
+		// easy
+		ImVec2 easyPos = { easySprite_->GetPosition().x, easySprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Easy Position", (float*)&easyPos, 1.0f)) {
+			easySprite_->SetPosition({ easyPos.x, easyPos.y });
+		}
+		ImVec2 easySize = { easySprite_->GetSize().x, easySprite_->GetSize().y };
+		if (ImGui::DragFloat2("Easy Size", (float*)&easySize, 1.0f, 0.0f, 1000.0f)) {
+			easySprite_->SetSize({ easySize.x, easySize.y });
+		}
+
+		// normal
+		ImVec2 normalPos = { normalSprite_->GetPosition().x, normalSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Normal Position", (float*)&normalPos, 1.0f)) {
+			normalSprite_->SetPosition({ normalPos.x, normalPos.y });
+		}
+		ImVec2 normalSize = { normalSprite_->GetSize().x, normalSprite_->GetSize().y };
+		if (ImGui::DragFloat2("Normal Size", (float*)&normalSize, 1.0f, 0.0f, 1000.0f)) {
+			normalSprite_->SetSize({ normalSize.x, normalSize.y });
+		}
+
+		// hard
+		ImVec2 hardPos = { hardSprite_->GetPosition().x, hardSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Hard Position", (float*)&hardPos, 1.0f)) {
+			hardSprite_->SetPosition({ hardPos.x, hardPos.y });
+		}
+		ImVec2 hardSize = { hardSprite_->GetSize().x, hardSprite_->GetSize().y };
+		if (ImGui::DragFloat2("Hard Size", (float*)&hardSize, 1.0f, 0.0f, 1000.0f)) {
+			hardSprite_->SetSize({ hardSize.x, hardSize.y });
+		}
+
+		ImGui::End();
+	}
 #endif // USE_IMGUI
 }
 //ポーズメニューの取得
@@ -315,7 +408,7 @@ void Ui::UpdateAnimation() {
 
 	if (isAnimating_) {
 		if (displayScore_ < targetScore_) {
-			displayScore_ += 10;
+			displayScore_ += 15;
 
 			if (displayScore_ > targetScore_) {
 				displayScore_ = targetScore_;
@@ -549,7 +642,10 @@ void Ui::UpdateTitleSpace() {
 		titlePushSprite_->SetColor(color);
 	}
 }
-
+//難易度選択の設定
+void Ui::SetSelectedDifficulty(int index) {
+	selectedDifficulty_ = index;
+}
 //現在のジャッジエフェクトスプライト取得
 YKEngine::Sprite* Ui::GetCurrentJudgeSprite() {
 	switch (judgeType_) {

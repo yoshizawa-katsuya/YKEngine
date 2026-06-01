@@ -162,15 +162,69 @@ void GameScene::Update() {
 		camera_->SetFovY(normalFov_);
 
 		cameraShakeTimer_ = 0.0f;
+
+		isExplosionShakeStarted_ = false;
+		isExplosionShakeFinished_ = false;
+		explosionShakeTimer_ = 0.0f;
+	}
+
+	// ダメージを受けた瞬間だけ
+	if (damageShakeTimer_ > 0.0f)
+	{
+		damageShakeTimer_ -= 1.0f / 60.0f;
+
+		Vector3 pos = damageShakeBasePos_;
+
+		pos.x += (rand() % 100 / 100.0f - 0.5f) * 0.32f;
+		pos.y += (rand() % 100 / 100.0f - 0.5f) * 0.05f;
+
+		camera_->SetTranslate(pos);
+
+		// 終了時に元へ戻す
+		if (damageShakeTimer_ <= 0.0f)
+		{
+			camera_->SetTranslate(damageShakeBasePos_);
+		}
 	}
 
 	// ゲームオーバー演出
-	if (player_->IsInHitImpact() || player_->IsDead()) {
+	if (player_->IsInHitImpact() || player_->IsDead() || player_->IsDeathFinished()) {
 		GameOverAnimation();
 	}
 
 	//プレイヤーの更新
 	player_->Update();
+
+	// 死亡演出終了検知
+	if (player_->IsDeathFinished())
+	{
+		if (!isDeathFinishedTimerStarted_)
+		{
+			isDeathFinishedTimerStarted_ = true;
+			deathFinishedTimer_ = 1.5f;
+		}
+	}
+
+	// エフェクト終了待ち
+	if (isDeathFinishedTimerStarted_)
+	{
+		deathFinishedTimer_ -= 1.0f / 60.0f;
+
+		if (deathFinishedTimer_ <= 0.0f &&
+			!isStartedTransition_)
+		{
+			isStartedTransition_ = true;
+
+			nextSceneName_ = "GameOverScene";
+
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
+		}
+	}
 
 	//ダミーの壁の更新
 	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
@@ -408,27 +462,39 @@ void GameScene::CheckWallCollision()
 				wall->GetWorldTransform()
 			);
 
-			if (result == JudgeResult::Hit) {
+			if (result == JudgeResult::Hit ||
+				result == JudgeResult::SuccessSquat) {
 				// 成功時の処理
 				player_->SetColorForDebug(debugPlayerColor[0]);
 				debugScore_++;
 				debugCombo_++;
 				debugMaxCombo_ = std::max(debugMaxCombo_, debugCombo_);
 
-				ui_->AddGameScore(100);
-
-				ui_->PlayJudgeEffect(Ui::JudgeType::Good);
-			}
-			else if (result == JudgeResult::SuccessSquat) {
-				// しゃがみ成功（デバッグ用に何か追加しても可）
+				if (debugCombo_ >= 10) {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Perfect);
+					ui_->AddGameScore(1000);
+				}
+				else if (debugCombo_ >= 5) {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Great);
+					ui_->AddGameScore(500);
+				}
+				else {
+					ui_->PlayJudgeEffect(Ui::JudgeType::Good);
+					ui_->AddGameScore(100);
+				}
 			}
 			else if (result == JudgeResult::Miss) {
 				// ミス時の処理
-				player_->SetColorForDebug(debugPlayerColor[1]);
+				//player_->SetColorForDebug(debugPlayerColor[1]);
+				player_->StartDamageReaction();
+				damageShakeTimer_ = 0.15f;
+				damageShakeBasePos_ = camera_->GetTranslate();
 				debugMiss_++;
 				debugCombo_ = 0;
 
 				ui_->DamageLife();
+				ui_->StopFrameGlow();
+
 				if (ui_->GetLife() <= 1) {
 					player_->RequestDeath();
 				}
@@ -502,5 +568,43 @@ void GameScene::GameOverAnimation()
 		camera_->SetFovY(normalFov_);
 
 		cameraMode_ = CameraMode::GameOver;
+
+		//cameraShakeTimer_ = 0.0f;
+	}
+	else if (player_->IsDeathFinished()) {
+		// カメラが揺れる
+		// 初回だけ
+		if (!isExplosionShakeStarted_ && !isExplosionShakeFinished_)
+		{
+			isExplosionShakeStarted_ = true;
+			explosionShakeTimer_ = explosionShakeDuration_;
+		}
+
+		// タイマー減少
+		explosionShakeTimer_ -= deltaTime;
+
+		float t = explosionShakeTimer_ / explosionShakeDuration_;
+		t = std::clamp(t, 0.0f, 1.0f);
+
+		float strength = 3.0f * t * t;
+
+		cameraShakeTimer_ += deltaTime * 45.0f;
+
+		Vector3 basePos = { 0.0f, 3.6f, -10.0f };
+		Vector3 pos = basePos;
+
+		pos.x += std::sin(cameraShakeTimer_) * strength;
+		pos.y += std::cos(cameraShakeTimer_ * 1.7f) * strength * 0.35f;
+
+		camera_->SetTranslate(pos);
+
+		// 終了
+		if (explosionShakeTimer_ <= 0.0f)
+		{
+			camera_->SetTranslate(basePos);
+
+			isExplosionShakeStarted_ = false;
+			isExplosionShakeFinished_ = true;
+		}
 	}
 }
