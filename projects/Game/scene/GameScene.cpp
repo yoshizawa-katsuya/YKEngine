@@ -62,7 +62,7 @@ void GameScene::Initialize() {
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	*/
 	backgroundSprite_ = std::make_unique<Sprite>();
-	backgroundSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/back2.png"));
+	backgroundSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/back.png"));
 
 	//パーティクルエミッターの生成
 	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
