@@ -61,6 +61,8 @@ void GameScene::Initialize() {
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	*/
+	backgroundSprite_ = std::make_unique<Sprite>();
+	backgroundSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/back2.png"));
 
 	//パーティクルエミッターの生成
 	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
@@ -335,6 +337,8 @@ void GameScene::Draw() {
 	//Spriteの背景描画前処理
 	spritePlatform_->PreBackGroundDraw();
 
+	//背景の描画
+	backgroundSprite_->Draw();
 	//sprite_->Draw();
 
 	//Modelの描画前処理
