@@ -67,7 +67,6 @@ void GameOverScene::Update()
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 	player_->Update();
-
 }
 
 void GameOverScene::Draw()
