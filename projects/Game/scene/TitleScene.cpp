@@ -51,10 +51,15 @@ void TitleScene::Initialize()
 	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/playerAnimation", "PoseA.gltf");
 
 	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
-	player_->SetAutoPoseDemo(true);
-	player_->SetPositon(YKEngine::Vector3{-1.7f,-1.5f,-6.0f });
+	demoPLayer1_ = std::make_unique<Player>();
+	demoPLayer1_->Initialize(modelPlayer_.get());
+	demoPLayer1_->SetAutoPoseDemo(true);
+	demoPLayer1_->SetPositon(YKEngine::Vector3{-1.7f,-1.5f,-6.0f });
+
+	demoPlayer2_ = std::make_unique<Player>();
+	demoPlayer2_->Initialize(modelPlayer_.get());
+	demoPlayer2_->SetAutoPoseDemo(true);
+	demoPlayer2_->SetPositon(YKEngine::Vector3{ 1.7f,-1.5f,-6.0f });
 }
 
 void TitleScene::Update()
@@ -67,6 +72,8 @@ void TitleScene::Update()
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
+	demoPLayer1_->Update();
+	demoPlayer2_->Update();
 #ifdef USE_IMGUI
 
 	static float titlePos[2] = { 0.0f, 0.0f };
@@ -101,7 +108,7 @@ void TitleScene::Update()
 			// ステートをOPTIONSに変更
 			state_ = State::OPTIONS;
 		}
-		player_->Update();
+
 		break;
 	case State::OPTIONS:
 		//オプション画面の更新処理
@@ -178,7 +185,8 @@ void TitleScene::Draw()
 	modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	demoPLayer1_->Draw(mainCamera_);
+	demoPlayer2_->Draw(mainCamera_);
 
 	//Spriteの描画準備。Spriteの描画に共通のグラフィックスコマンドを積む
 	spritePlatform_->PreDraw();

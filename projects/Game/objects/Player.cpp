@@ -26,7 +26,7 @@ void Player::Initialize(BaseModel* model) {
 		"Stay", "Squat", "SquatReturn",
 		"PoseA", "PoseAReturn", "PoseB", "PoseBReturn",
 		"PoseC", "PoseCReturn", "PoseD", "PoseDReturn",
-		"SadPose","Base"
+		"SadPose"
 	};
 
 	for (const auto& name : animNames) {
