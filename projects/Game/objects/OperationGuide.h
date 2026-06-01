@@ -59,11 +59,6 @@ private:
 	std::unique_ptr<YKEngine::Sprite> RStickSprite_;	//右スティックのスプライト
 	std::unique_ptr<YKEngine::Sprite> LStickSprite_;	//左スティックのスプライト
 
-	std::unique_ptr<YKEngine::Sprite> playerIconSprite_;	//プレイヤーアイコンのスプライト
-	std::unique_ptr<YKEngine::Sprite> dodgeIconSprite_;	//回避アイコンのスプライト
-	std::unique_ptr<YKEngine::Sprite> shotIconSprite_;	//ショットアイコンのスプライト
-	std::unique_ptr<YKEngine::Sprite> reticleIconSprite_;	//照準アイコンのスプライト
-
 	bool isPushRTrigger_ = false;	//右トリガーを押しているか
 	bool* isDodge_;	//回避状態かどうかを示すフラグへのポインタ
 };

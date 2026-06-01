@@ -50,18 +50,6 @@ void OperationGuide::Initialize(bool* isDodge)
 	LStickSprite_ = std::make_unique<Sprite>();
 	LStickSprite_->Initialize(textureManager->Load("./Resources/operationGuide/LStick.png"));
 
-	playerIconSprite_ = std::make_unique<Sprite>();
-	playerIconSprite_->Initialize(textureManager->Load("./Resources/operationGuide/playerIcon.png"));
-
-	dodgeIconSprite_ = std::make_unique<Sprite>();
-	dodgeIconSprite_->Initialize(textureManager->Load("./Resources/operationGuide/dodgeIcon.png"));
-
-	shotIconSprite_ = std::make_unique<Sprite>();
-	shotIconSprite_->Initialize(textureManager->Load("./Resources/operationGuide/shotIcon.png"));
-
-	reticleIconSprite_ = std::make_unique<Sprite>();
-	reticleIconSprite_->Initialize(textureManager->Load("./Resources/operationGuide/reticleIcon.png"));
-
 	SetUIPositions();
 }
 
@@ -114,12 +102,6 @@ void OperationGuide::Draw()
 	RStickSprite_->Draw();
 	LStickSprite_->Draw();
 
-	//アイコンの描画
-	playerIconSprite_->Draw();
-	dodgeIconSprite_->Draw();
-	shotIconSprite_->Draw();
-	reticleIconSprite_->Draw();
-
 }
 
 void OperationGuide::ExitStart()
@@ -139,10 +121,6 @@ void OperationGuide::SetUIPositions()
 	RStickSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kRStickPosition));
 	LStickSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kLStickPosition));
 
-	playerIconSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kPlayerIconPosition));
-	dodgeIconSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kDodgeIconPosition));
-	shotIconSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kShotIconPosition));
-	reticleIconSprite_->SetPosition(globalVariables_->GetVector2Value(groupName, JsonKey::OperationGuide::kReticleIconPosition));
 }
 
 void OperationGuide::MoveStickIcon()
