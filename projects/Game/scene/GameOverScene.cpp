@@ -50,6 +50,9 @@ void GameOverScene::Initialize()
 		1.0f,
 		Transition::EasingType::EaseInSine
 	);
+	//Ui
+	ui_ = std::make_unique<Ui>();
+	ui_->Initialize();
 }
 
 void GameOverScene::Update()
@@ -69,6 +72,8 @@ void GameOverScene::Update()
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 	player_->Update();
+	//Uiの更新
+	ui_->Update();
 }
 
 void GameOverScene::Draw()
@@ -85,6 +90,9 @@ void GameOverScene::Draw()
 	spritePlatform_->PreDraw();
 
 	transition_->Draw();
+
+	//UIの描画
+	ui_->DrawGameOver();
 }
 
 void GameOverScene::Finalize()

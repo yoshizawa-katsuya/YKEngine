@@ -33,6 +33,8 @@ public:
 	void DrawTitle();
     //難易度選択描画
     void DrawSelect();
+    //ゲームオーバー画面描画
+	void DrawGameOver();
     //スコア加算
     void AddScore(int value);
     //ライフ減少
@@ -114,6 +116,11 @@ private:
     std::unique_ptr<YKEngine::Sprite>easySprite_;
     std::unique_ptr<YKEngine::Sprite>normalSprite_;
     std::unique_ptr<YKEngine::Sprite>hardSprite_;
+	//リトライスプライト
+    std::unique_ptr<YKEngine::Sprite>retrySprite_;
+	//バックタイトルスプライト
+    std::unique_ptr<YKEngine::Sprite>backtitleSprite_;
+
     //スコアテクスチャ
     std::array<uint32_t, 10> numberTextures_;
     //ジャッジエフェクトテクスチャ
@@ -124,6 +131,11 @@ private:
 	uint32_t easyTexture_;
 	uint32_t normalTexture_;
 	uint32_t hardTexture_;
+    //リトライテクスチャ
+    uint32_t retryTexture_;
+	//バックタイトルテクスチャ
+    uint32_t titleTexture_;
+
     //桁
     std::array<int, kMaxDigits> digits_{};
 	//ジャッジエフェクト表示位置

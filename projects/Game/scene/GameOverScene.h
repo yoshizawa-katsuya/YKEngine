@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Transition.h"
+#include "Ui.h"
 
 /// <summary>
 /// ゲームオーバーシーンのクラス
@@ -60,5 +61,7 @@ private:
 	std::unique_ptr<Player> player_;
 	//遷移演出
 	std::unique_ptr<Transition> transition_;
+	//UI
+	std::unique_ptr<Ui>ui_;
 };
 

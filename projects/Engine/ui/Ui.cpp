@@ -109,6 +109,20 @@ void Ui::Initialize() {
 	hardSprite_->SetPosition({ 640.0f, 490.0f });
 	hardSprite_->SetAnchorPoint({ 0.5f,0.5f });
 
+	//リトライ・バックタイトルテクスチャ読み込み
+	retryTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/ui/retry.png");
+	titleTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/ui/backtitle.png");
+	//リトライスプライト生成
+	retrySprite_ = std::make_unique<YKEngine::Sprite>();
+	retrySprite_->Initialize(retryTexture_);
+	retrySprite_->SetPosition({ 380.0f, 550.0f });
+	retrySprite_->SetAnchorPoint({ 0.5f,0.5f });
+	//バックタイトルスプライト生成
+	backtitleSprite_ = std::make_unique<YKEngine::Sprite>();
+	backtitleSprite_->Initialize(titleTexture_);
+	backtitleSprite_->SetPosition({ 890.0f, 550.0f });
+	backtitleSprite_->SetAnchorPoint({ 0.5f,0.5f });
+
 }
 //更新
 void Ui::Update() {
@@ -205,6 +219,12 @@ void Ui::DrawSelect() {
 	easySprite_->Draw();
 	normalSprite_->Draw();
 	hardSprite_->Draw();
+}
+//ゲームオーバー画面描画
+void Ui::DrawGameOver() {
+	//リトライ・バックタイトル描画
+	retrySprite_->Draw();
+	backtitleSprite_->Draw();
 }
 //スコア加算
 void Ui::AddScore(int value) {
@@ -383,6 +403,43 @@ void Ui::Debug() {
 		ImVec2 hardSize = { hardSprite_->GetSize().x, hardSprite_->GetSize().y };
 		if (ImGui::DragFloat2("Hard Size", (float*)&hardSize, 1.0f, 0.0f, 1000.0f)) {
 			hardSprite_->SetSize({ hardSize.x, hardSize.y });
+		}
+
+		ImGui::End();
+	}
+
+	// ゲームオーバー用スプライト（リトライ / バックタイトル）の位置・サイズ・回転を操作
+	if (retrySprite_ || backtitleSprite_) {
+		ImGui::Begin("Game Over Sprites");
+
+		if (retrySprite_) {
+			ImVec2 pos = { retrySprite_->GetPosition().x, retrySprite_->GetPosition().y };
+			if (ImGui::DragFloat2("Retry Position", (float*)&pos, 1.0f)) {
+				retrySprite_->SetPosition({ pos.x, pos.y });
+			}
+			ImVec2 size = { retrySprite_->GetSize().x, retrySprite_->GetSize().y };
+			if (ImGui::DragFloat2("Retry Size", (float*)&size, 1.0f, 0.0f, 2000.0f)) {
+				retrySprite_->SetSize({ size.x, size.y });
+			}
+			float rot = retrySprite_->GetRotation();
+			if (ImGui::DragFloat("Retry Rotation", &rot, 1.0f, -360.0f, 360.0f)) {
+				retrySprite_->SetRotation(rot);
+			}
+		}
+
+		if (backtitleSprite_) {
+			ImVec2 pos = { backtitleSprite_->GetPosition().x, backtitleSprite_->GetPosition().y };
+			if (ImGui::DragFloat2("BackTitle Position", (float*)&pos, 1.0f)) {
+				backtitleSprite_->SetPosition({ pos.x, pos.y });
+			}
+			ImVec2 size = { backtitleSprite_->GetSize().x, backtitleSprite_->GetSize().y };
+			if (ImGui::DragFloat2("BackTitle Size", (float*)&size, 1.0f, 0.0f, 2000.0f)) {
+				backtitleSprite_->SetSize({ size.x, size.y });
+			}
+			float rot = backtitleSprite_->GetRotation();
+			if (ImGui::DragFloat("BackTitle Rotation", &rot, 1.0f, -360.0f, 360.0f)) {
+				backtitleSprite_->SetRotation(rot);
+			}
 		}
 
 		ImGui::End();
