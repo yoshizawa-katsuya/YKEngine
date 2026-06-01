@@ -65,6 +65,8 @@ public:
 
 	void SetDirectionControl(bool enable) { isDirectionControl_ = enable; }
 
+	void SetPoseControl(bool enable) { isPoseControl_ = enable; }
+
 	void ChangeAnimation(const std::string& name);
 
 private:
@@ -115,6 +117,7 @@ private:
 
 	PlayerPose pose_;
 	PlayerPose prevPose_;
+	bool isPoseControl_ = true;
 
 	bool isReturnPhase_ = false;
 	float returnTimer_ = 0.0f;
