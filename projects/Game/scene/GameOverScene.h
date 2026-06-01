@@ -7,6 +7,8 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Sprite.h"
+#include "Camera.h"
+#include "Player.h"
 
 /// <summary>
 /// ゲームオーバーシーンのクラス
@@ -46,5 +48,14 @@ private:
 	uint32_t textureHandle_;
 	//スプライト
 	std::unique_ptr<YKEngine::Sprite> sprite_;
+	// カメラ
+	YKEngine::Camera* mainCamera_ = nullptr;
+	std::unique_ptr<YKEngine::Camera> camera_;
+	//平行光源
+	YKEngine::DirectionalLight directionalLight_;
+
+	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
+	//プレイヤー
+	std::unique_ptr<Player> player_;
 };
 

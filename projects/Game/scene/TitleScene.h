@@ -94,5 +94,7 @@ private:
 
 	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
 	//プレイヤー
-	std::unique_ptr<Player> player_;
+	std::unique_ptr<Player> demoPLayer1_;
+	std::unique_ptr<Player> demoPlayer2_;
 };
+

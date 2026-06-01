@@ -25,7 +25,8 @@ void Player::Initialize(BaseModel* model) {
 	std::vector<std::string> animNames = {
 		"Stay", "Squat", "SquatReturn",
 		"PoseA", "PoseAReturn", "PoseB", "PoseBReturn",
-		"PoseC", "PoseCReturn", "PoseD", "PoseDReturn"
+		"PoseC", "PoseCReturn", "PoseD", "PoseDReturn",
+		"SadPose"
 	};
 
 	for (const auto& name : animNames) {
@@ -184,8 +185,10 @@ void Player::Update() {
 			}
 		}
 		else {
-			ChangePose();
-			ChangeDirection();
+    		ChangePose();
+			if (isDirectionControl_) {
+        		ChangeDirection();
+			}
 		}
 
 
@@ -289,6 +292,11 @@ void Player::Reset()
 	isVisible_ = true;
 
 	resetRequested_ = true;
+}
+
+void Player::ChangeAnimation(const std::string& name)
+{
+	PlayAnimation(name);
 }
 
 void Player::ChangePose()

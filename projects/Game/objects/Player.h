@@ -61,6 +61,12 @@ public:
 
 	void SetPositon(YKEngine::Vector3 pos) { worldTransform_.translation_ = pos; }
 
+	void SetRotate(YKEngine::Vector3 rot) { worldTransform_.rotation_ = rot; }
+
+	void SetDirectionControl(bool enable) { isDirectionControl_ = enable; }
+
+	void ChangeAnimation(const std::string& name);
+
 private:
 
 	void ChangePose();
@@ -115,6 +121,7 @@ private:
 
 	PlayerDirection direction_;
 	float kAngle_;
+	bool isDirectionControl_ = true;
 
 	// 死亡開始要求
 	bool requestDeath_ = false;
