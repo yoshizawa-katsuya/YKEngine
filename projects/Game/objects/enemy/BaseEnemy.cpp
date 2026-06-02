@@ -57,7 +57,12 @@ void BaseEnemy::Initialize(BaseModel* model, Animation* animation, const EnemySp
 	viewPortMatrix_ = &DirectXCommon::GetInstance()->GetViewPortMatrix();
 
 	waitTime_ = spawnData.waitTime;
-	worldTransform_.rotation_ = spawnData.rotation;
+	// プレイヤーの方向を向く
+	worldTransform_.UpdateMatrix();
+	Vector3 toPosition = player_->GetWorldPosition();
+	direction_ = toPosition - GetWorldPosition();
+	Vector3 targetRotation = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction_);
+	worldTransform_.rotation_ = targetRotation;
 
 	//ステートマシンの初期化と開始、最初のステートは接近ステートにする
 	stateMachine_ = std::make_unique<StateMachine<EnemyStateContext>>();
