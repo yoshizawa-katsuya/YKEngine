@@ -90,7 +90,7 @@ void RailMover::Update()
 			{
 				// 残りの距離が次のポイントまでの距離よりも長い場合、次のポイントに向かって移動
 				Vector3 normalizeDirection = Normalize(moveDirection);
-				// 残りの距離を考慮してカメラの位置を更新
+				// 残りの距離を考慮して位置を更新
 				worldTransform_.translation_ += normalizeDirection * remainingMoveDistance;
 				remainingMoveDistance = 0.0f;
 			}
