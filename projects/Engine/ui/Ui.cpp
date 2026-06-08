@@ -115,13 +115,19 @@ void Ui::Initialize() {
 	//リトライスプライト生成
 	retrySprite_ = std::make_unique<YKEngine::Sprite>();
 	retrySprite_->Initialize(retryTexture_);
-	retrySprite_->SetPosition({ 380.0f, 550.0f });
+	retrySprite_->SetPosition({ 380.0f, 600.0f });
 	retrySprite_->SetAnchorPoint({ 0.5f,0.5f });
 	//バックタイトルスプライト生成
 	backtitleSprite_ = std::make_unique<YKEngine::Sprite>();
 	backtitleSprite_->Initialize(titleTexture_);
-	backtitleSprite_->SetPosition({ 890.0f, 550.0f });
+	backtitleSprite_->SetPosition({ 890.0f, 600.0f });
 	backtitleSprite_->SetAnchorPoint({ 0.5f,0.5f });
+
+	//ゲームオーバーテクスチャ読み込み
+	gameoverTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/gameover/gameover.png");
+	//ゲームオーバースプライト生成
+	gameoverSprite_ = std::make_unique<YKEngine::Sprite>();
+	gameoverSprite_->Initialize(gameoverTexture_);
 
 }
 //更新
@@ -148,6 +154,8 @@ void Ui::Update() {
 	UpdateTitleSpace();
 	//難易度選択のスケール更新
 	difficultyScaleTimer_ += 1.0f / 60.0f;
+	//ゲームオーバー選択のスケール更新
+	gameOverScaleTimer_ += 1.0f / 60.0f;
 	//デバック
 	Debug();
 }
@@ -222,9 +230,23 @@ void Ui::DrawSelect() {
 }
 //ゲームオーバー画面描画
 void Ui::DrawGameOver() {
-	//リトライ・バックタイトル描画
+
+	float scale = 1.0f + std::sin(gameOverScaleTimer_ * 6.0f) * 0.1f;
+
+	if (gameOverSelect_ == 0) {
+		retrySprite_->SetSize({ 400.0f * scale,100.0f * scale });
+
+		backtitleSprite_->SetSize({ 320.0f,80.0f });
+	}
+	else {
+		retrySprite_->SetSize({ 320.0f,80.0f });
+
+		backtitleSprite_->SetSize({ 400.0f * scale,100.0f * scale });
+	}
+	//描画
 	retrySprite_->Draw();
 	backtitleSprite_->Draw();
+	gameoverSprite_->Draw();
 }
 //スコア加算
 void Ui::AddScore(int value) {
@@ -718,4 +740,8 @@ YKEngine::Sprite* Ui::GetCurrentJudgeSprite() {
 	default:
 		return nullptr;
 	}
+}
+
+void Ui::SetGameOverSelect(int index) {
+	gameOverSelect_ = index;
 }

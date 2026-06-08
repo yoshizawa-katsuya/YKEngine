@@ -53,6 +53,8 @@ public:
     void Debug();
 	//選択中の難易度設定
     void SetSelectedDifficulty(int index);
+
+    void SetGameOverSelect(int index);
 	//ポーズメニューの取得
     PauseMenu GetPauseMenu()const;
     //ライフ取得
@@ -120,7 +122,8 @@ private:
     std::unique_ptr<YKEngine::Sprite>retrySprite_;
 	//バックタイトルスプライト
     std::unique_ptr<YKEngine::Sprite>backtitleSprite_;
-
+    //ゲームオーバースプライト
+    std::unique_ptr<YKEngine::Sprite>gameoverSprite_;
     //スコアテクスチャ
     std::array<uint32_t, 10> numberTextures_;
     //ジャッジエフェクトテクスチャ
@@ -135,7 +138,8 @@ private:
     uint32_t retryTexture_;
 	//バックタイトルテクスチャ
     uint32_t titleTexture_;
-
+    //ゲームオーバーテクスチャ
+    uint32_t gameoverTexture_;
     //桁
     std::array<int, kMaxDigits> digits_{};
 	//ジャッジエフェクト表示位置
@@ -154,6 +158,8 @@ private:
     int blinkLifeIndex_ = -1;
 	//選択中の難易度
     int selectedDifficulty_ = 0;
+	//ゲームオーバー画面の選択肢
+    int gameOverSelect_ = 0;
     //ポーズ画面のスケール
     float pauseScale_ = 0.0f;
     //ホバー用タイマー
@@ -174,6 +180,8 @@ private:
     float titleSpaceBlinkTimer_ = 0.0f;
 	//難易度選択スケール用タイマー
     float difficultyScaleTimer_ = 0.0f;
+	//ゲームオーバー選択スケール用タイマー
+    float gameOverScaleTimer_ = 0.0f;
 	//画面枠発光フラグ
     bool isFrameGlow_ = false;
 	//アニメーション中か
@@ -184,5 +192,4 @@ private:
     bool isJudgePlaying_ = false;
 	//ライフ点滅フラグ
     bool isLifeBlink_ = false;
-
 };
