@@ -58,6 +58,7 @@ private:
 	uint32_t textureHandle_;
 	//スプライト
 	std::unique_ptr<YKEngine::Sprite> sprite_;
+	std::unique_ptr<YKEngine::Sprite> backgroundSprite_;
 	// カメラ
 	YKEngine::Camera* mainCamera_ = nullptr;
 	std::unique_ptr<YKEngine::Camera> camera_;
