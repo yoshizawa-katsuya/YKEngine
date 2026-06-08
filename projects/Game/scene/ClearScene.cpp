@@ -33,6 +33,9 @@ void ClearScene::Initialize()
 	clearSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	clearSprite_->SetPosition({ 640.0f, 360.0f });
 
+	backgroundSprite_ = std::make_unique<Sprite>();
+	backgroundSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/back.png"));
+
 	//遷移演出初期化
 	transition_ = std::make_unique<Transition>();
 
@@ -86,6 +89,8 @@ void ClearScene::Draw()
 {
 	//Spriteの背景描画前処理
 	spritePlatform_->PreBackGroundDraw();
+
+	backgroundSprite_->Draw();
 
 	modelPlatform_->SkinPreDraw();
 

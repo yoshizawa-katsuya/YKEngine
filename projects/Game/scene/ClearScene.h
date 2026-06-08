@@ -52,6 +52,8 @@ private:
 
 	//クリアの文字のスプライト
 	std::unique_ptr<YKEngine::Sprite> clearSprite_;
+	//背景のスプライト
+	std::unique_ptr<YKEngine::Sprite> backgroundSprite_;
 
 	// 次のシーン名
 	std::string nextSceneName_;
