@@ -16,7 +16,7 @@ void Lane::Initialize(bool* isStart, WallModels* wallModels)
 	//===== モデルの生成 =====
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
 	object_ = std::make_unique<My3dObject>();
-	object_->Initialize(modelPlatform->CreateRigidModel("./resources/lane", "lane.obj").get());
+	object_->Initialize(modelPlatform->CreateRigidModel("./resources/lane2", "lane2.obj").get());
 }
 
 void Lane::Update()

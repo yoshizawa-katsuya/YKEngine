@@ -10,13 +10,21 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Transition.h"
+#include "Ui.h"
+#include <string>
 
 /// <summary>
 /// ゲームオーバーシーンのクラス
 /// </summary>
 class GameOverScene : public YKEngine::BaseScene
 {
-	public:
+public:
+	enum class MenuState
+	{
+		Retry,
+		Title
+	};
+
 	/// <summary>
 	/// デストラクタ。
 	/// </summary>
@@ -39,6 +47,7 @@ class GameOverScene : public YKEngine::BaseScene
 	void Finalize() override;
 
 private:
+
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
 	YKEngine::Audio* audio_;
@@ -49,6 +58,7 @@ private:
 	uint32_t textureHandle_;
 	//スプライト
 	std::unique_ptr<YKEngine::Sprite> sprite_;
+	std::unique_ptr<YKEngine::Sprite> backgroundSprite_;
 	// カメラ
 	YKEngine::Camera* mainCamera_ = nullptr;
 	std::unique_ptr<YKEngine::Camera> camera_;
@@ -60,5 +70,12 @@ private:
 	std::unique_ptr<Player> player_;
 	//遷移演出
 	std::unique_ptr<Transition> transition_;
-};
+	//UI
+	std::unique_ptr<Ui>ui_;
 
+	std::string nextSceneName_;
+
+	MenuState menuState_ = MenuState::Retry;
+
+	bool isStartedTransition_ = false;
+};
