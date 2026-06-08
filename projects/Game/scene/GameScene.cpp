@@ -299,9 +299,16 @@ void GameScene::Update() {
 
 	ParticleManager::GetInstance()->Update(mainCamera_);
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	// ゲームクリアの条件を満たしているかチェック
+	if (laneManager_->GetIsEnd())
+	{
+		if (!nextSceneName_.empty())
+		{
+			// すでにシーン切り替えの依頼が出ている場合は何もしない
+			return;
+		}
 		//シーン切り替え依頼
-		nextSceneName_ = "TitleScene";
+		nextSceneName_ = "ClearScene";
 		transition_->StartFadeIn(
 			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
 			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),

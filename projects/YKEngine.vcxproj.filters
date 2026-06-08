@@ -303,6 +303,9 @@
     <ClCompile Include="Effect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Game\scene\ClearScene.cpp">
+      <Filter>ソース ファイル\application\scene</Filter>
+    </ClCompile>
     <ClCompile Include="Game\objects\Speaker.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
@@ -627,6 +630,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\Difficulty.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\ClearScene.h">
+      <Filter>ヘッダー ファイル\application\scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\Speaker.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>

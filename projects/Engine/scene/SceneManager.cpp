@@ -55,6 +55,10 @@ void YKEngine::SceneManager::DrawImGui()
 	if (ImGui::Button("GAMEOVER")) {
 		ChengeScene("GameOverScene");
 	}
+	ImGui::SameLine();
+	if (ImGui::Button("CLEAR")) {
+		ChengeScene("ClearScene");
+	}
 
 	ImGui::End();
 #endif

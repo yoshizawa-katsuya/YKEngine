@@ -2,6 +2,7 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "GameOverScene.h"
+#include "ClearScene.h"
 
 using namespace YKEngine;
 
@@ -18,6 +19,9 @@ std::unique_ptr<BaseScene> SceneFactory::CreateScene(const std::string& sceneNam
 	}
 	else if (sceneName == "GameOverScene") {
 		newScene = std::make_unique<GameOverScene>();
+	}
+	else if (sceneName == "ClearScene") {
+		newScene = std::make_unique<ClearScene>();
 	}
 
 	return newScene;
