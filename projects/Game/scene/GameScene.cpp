@@ -206,9 +206,40 @@ void GameScene::Update() {
 		GameOverAnimation();
 	}
 
+	//UIの更新
+	ui_->Update();
+
 	//プレイヤーの更新
 	player_->Update();
 
+	switch (ui_->GetPauseMenu()) {
+
+	case Ui::PauseMenu::Retry:
+		nextSceneName_ = "GameScene";
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
+		ui_->SetPauseMenu(Ui::PauseMenu::None);
+		return;
+
+	case Ui::PauseMenu::ToTitle:
+		nextSceneName_ = "TitleScene";
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
+		ui_->SetPauseMenu(Ui::PauseMenu::None);
+		return;
+	}
+
+	if (ui_->IsPaused()) {
+		return;
+	}
 	// 死亡演出終了検知
 	if (player_->IsDeathFinished())
 	{
@@ -250,42 +281,10 @@ void GameScene::Update() {
 	//衝突判定
 	CheckWallCollision();
 
-	//UIの更新
-	ui_->Update();
-
 	effect_->Update();
 
 	leftSpeaker_->Update();
 	rightSpeaker_->Update();
-
-	switch (ui_->GetPauseMenu()) {
-
-	case Ui::PauseMenu::Retry:
-		nextSceneName_ = "GameScene";
-		transition_->StartFadeIn(
-			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
-			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
-			2.0f,
-			Transition::EasingType::EaseOutQuint
-		);
-		ui_->SetPauseMenu(Ui::PauseMenu::None);
-		return;
-
-	case Ui::PauseMenu::ToTitle:
-		nextSceneName_ = "TitleScene";
-		transition_->StartFadeIn(
-			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
-			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
-			2.0f,
-			Transition::EasingType::EaseOutQuint
-		);
-		ui_->SetPauseMenu(Ui::PauseMenu::None);
-		return;
-	}
-
-	if (ui_->IsPaused()) {
-		return;
-	}
 
 	//プレイヤーの更新
 	player_->Update();

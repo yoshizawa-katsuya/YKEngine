@@ -122,7 +122,7 @@ private:
 	// ゲームに戻るスプライト
 	std::unique_ptr<YKEngine::Sprite> resumeSprite_;
 	// リトライスプライト
-	std::unique_ptr<YKEngine::Sprite> retrySprite_;
+	std::unique_ptr<YKEngine::Sprite> retryUISprite_;
 	// タイトルに戻るスプライト
 	std::unique_ptr<YKEngine::Sprite> toTitleSprite_;
 	//ジャッジエフェクトスプライト

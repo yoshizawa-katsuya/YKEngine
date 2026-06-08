@@ -69,11 +69,11 @@ void Ui::Initialize() {
 	resumeSprite_->SetSize({ 0.0f, 0.0f });
 	resumeSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	// リトライスプライト生成
-	retrySprite_ = std::make_unique<YKEngine::Sprite>();
-	retrySprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/retry.png"));
-	retrySprite_->SetPosition({ 640.0f, 400.0f });
-	retrySprite_->SetSize({ 0.0f, 0.0f });
-	retrySprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	retryUISprite_ = std::make_unique<YKEngine::Sprite>();
+	retryUISprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pauseRetry.png"));
+	retryUISprite_->SetPosition({ 640.0f, 400.0f });
+	retryUISprite_->SetSize({ 0.0f, 0.0f });
+	retryUISprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	// タイトルに戻るスプライト生成
 	toTitleSprite_ = std::make_unique<YKEngine::Sprite>();
 	toTitleSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/title.png"));
@@ -205,7 +205,7 @@ void Ui::Draw() {
 		pauseSprite_->Draw();
 		pausingSprite_->Draw();
 		resumeSprite_->Draw();
-		retrySprite_->Draw();
+		retryUISprite_->Draw();
 		toTitleSprite_->Draw();
 	}
 	//ジャッジエフェクト描画
@@ -432,18 +432,6 @@ void Ui::Debug() {
 		if (ImGui::DragFloat("Resume Rotation", &resumeRotation, 1.0f, -360.0f, 360.0f)) {
 			resumeSprite_->SetRotation(resumeRotation);
 		}
-		ImVec2 retryPos = { retrySprite_->GetPosition().x, retrySprite_->GetPosition().y };
-		if (ImGui::DragFloat2("Retry Position", (float*)&retryPos, 1.0f)) {
-			retrySprite_->SetPosition({ retryPos.x, retryPos.y });
-		}
-		ImVec2 retryScale = { retrySprite_->GetSize().x, retrySprite_->GetSize().y };
-		if (ImGui::DragFloat2("Retry Scale", (float*)&retryScale, 1.0f, 0.0f, 1000.0f)) {
-			retrySprite_->SetSize({ retryScale.x, retryScale.y });
-		}
-		float retryRotation = retrySprite_->GetRotation();
-		if (ImGui::DragFloat("Retry Rotation", &retryRotation, 1.0f, -360.0f, 360.0f)) {
-			retrySprite_->SetRotation(retryRotation);
-		}
 		ImVec2 toTitlePos = { toTitleSprite_->GetPosition().x, toTitleSprite_->GetPosition().y };
 		if (ImGui::DragFloat2("To Title Position", (float*)&toTitlePos, 1.0f)) {
 			toTitleSprite_->SetPosition({ toTitlePos.x, toTitlePos.y });
@@ -575,12 +563,10 @@ void Ui::HandleInput() {
 
 			case 1:
 				pauseMenu_ = PauseMenu::Retry;
-				isShowPause_ = false;
 				break;
 
 			case 2:
 				pauseMenu_ = PauseMenu::ToTitle;
-				isShowPause_ = false;
 				break;
 			}
 		}
@@ -688,7 +674,7 @@ void Ui::UpdatePauseMenu() {
 	// 全員通常状態
 	resumeSprite_->SetSize({resumeBaseSize.x * eased,resumeBaseSize.y * eased});
 
-	retrySprite_->SetSize({retryBaseSize.x * eased,retryBaseSize.y * eased});
+	retryUISprite_->SetSize({retryBaseSize.x * eased,retryBaseSize.y * eased});
 
 	toTitleSprite_->SetSize({titleBaseSize.x * eased,titleBaseSize.y * eased});
 
@@ -702,7 +688,7 @@ void Ui::UpdatePauseMenu() {
 		break;
 
 	case 1:
-		retrySprite_->SetSize({
+		retryUISprite_->SetSize({
 			retryBaseSize.x * eased * selectScale,
 			retryBaseSize.y * eased * selectScale
 			});
@@ -720,7 +706,7 @@ void Ui::UpdatePauseMenu() {
 
 	resumeSprite_->SetPosition(Lerp(center_, resumePos_, eased));
 
-	retrySprite_->SetPosition(Lerp(center_, retryPos_, eased));
+	retryUISprite_->SetPosition(Lerp(center_, retryPos_, eased));
 
 	toTitleSprite_->SetPosition(Lerp(center_, titlePos_, eased));
 }
