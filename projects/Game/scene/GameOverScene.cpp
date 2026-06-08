@@ -50,6 +50,9 @@ void GameOverScene::Initialize()
 		1.0f,
 		Transition::EasingType::EaseInSine
 	);
+	//Ui
+	ui_ = std::make_unique<Ui>();
+	ui_->Initialize();
 }
 
 void GameOverScene::Update()
@@ -65,10 +68,53 @@ void GameOverScene::Update()
 
 	transition_->Update();
 
+	// 画面遷移が終わり、次のシーン名が設定されている場合はシーンを切り替える
+	if (transition_->IsFinished() &&
+		!nextSceneName_.empty()) {
+
+		sceneManager_->ChengeScene(nextSceneName_);
+	}
+
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
 	player_->Update();
+
+	if (!isStartedTransition_) {
+		if (input_->TriggerKey(DIK_LEFT)) {
+			menuState_ = MenuState::Retry;
+		}
+		if (input_->TriggerKey(DIK_RIGHT)) {
+			menuState_ = MenuState::Title;
+		}
+	}
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+		isStartedTransition_ = true;
+
+		switch (menuState_) {
+		case MenuState::Retry:
+			nextSceneName_ = "GameScene";
+			break;
+		case MenuState::Title:
+			nextSceneName_ = "TitleScene";
+			break;
+		}
+
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
+	}
+
+	ui_->SetGameOverSelect(
+		menuState_ == MenuState::Retry ? 0 : 1
+	);
+
+	//Uiの更新
+	ui_->Update();
 }
 
 void GameOverScene::Draw()
@@ -85,6 +131,9 @@ void GameOverScene::Draw()
 	spritePlatform_->PreDraw();
 
 	transition_->Draw();
+
+	//UIの描画
+	ui_->DrawGameOver();
 }
 
 void GameOverScene::Finalize()
