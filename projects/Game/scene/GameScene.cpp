@@ -259,8 +259,8 @@ void GameScene::Update() {
 	rightSpeaker_->Update();
 
 	switch (ui_->GetPauseMenu()) {
+
 	case Ui::PauseMenu::Retry:
-		// リトライが選択された場合、ゲームシーンに遷移する
 		nextSceneName_ = "GameScene";
 		transition_->StartFadeIn(
 			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
@@ -268,10 +268,10 @@ void GameScene::Update() {
 			2.0f,
 			Transition::EasingType::EaseOutQuint
 		);
-		break;
+		ui_->SetPauseMenu(Ui::PauseMenu::None);
+		return;
 
 	case Ui::PauseMenu::ToTitle:
-		// タイトルに戻るが選択された場合、タイトルシーンに遷移する
 		nextSceneName_ = "TitleScene";
 		transition_->StartFadeIn(
 			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
@@ -279,8 +279,30 @@ void GameScene::Update() {
 			2.0f,
 			Transition::EasingType::EaseOutQuint
 		);
-		break;
+		ui_->SetPauseMenu(Ui::PauseMenu::None);
+		return;
 	}
+
+	if (ui_->IsPaused()) {
+		return;
+	}
+
+	//プレイヤーの更新
+	player_->Update();
+
+	//ダミーの壁の更新
+	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
+	//dummyWall_->Update();
+
+	//レーンの更新
+	laneManager_->Update();
+
+	//衝突判定
+	CheckWallCollision();
+
+	effect_->Update();
+
+	
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
