@@ -26,6 +26,7 @@
 #include "CameraManager.h"
 #include "Effect.h"
 #include "Difficulty.h"
+#include "Speaker.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -108,6 +109,7 @@ private:
 
 	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
 	std::shared_ptr<YKEngine::BaseModel> modelWall_;
+	std::shared_ptr<YKEngine::BaseModel>modelSpeaker_;
 
 	uint32_t textureHandle_;
 	uint32_t textureHandle2_;
@@ -122,6 +124,11 @@ private:
 
 	//レーン管理
 	std::unique_ptr<LaneManager> laneManager_;
+
+	std::unique_ptr<Speaker> leftSpeaker_;
+	std::unique_ptr<Speaker> rightSpeaker_;
+	YKEngine::Vector3 speakerPos[2] = { {-3.0f,5.0f,8.0f},{3.0f,5.0f,8.0f} };
+	YKEngine::Vector3 speakerRot[2] = { {-0.1f,-0.3f,0.0f},{-0.1f,0.3f,0.0f} };
 
 	//判定
 	bool isJudged_ = false;

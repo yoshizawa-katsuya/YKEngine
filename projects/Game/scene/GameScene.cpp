@@ -52,6 +52,7 @@ void GameScene::Initialize() {
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/playerAnimation", "PoseA.gltf");
 	modelWall_ = modelPlatform_->CreateRigidModel("./resources/walls", "SquatWall.obj");
+	modelSpeaker_ = modelPlatform_->CreateRigidModel("./resources/speaker", "speaker.obj");
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
@@ -84,6 +85,17 @@ void GameScene::Initialize() {
 
 	effect_ = std::make_unique<Effect>();
 	effect_->Initialize();
+
+	// スピーカーの初期化
+	leftSpeaker_ = std::make_unique<Speaker>();
+	leftSpeaker_->Initialize(modelSpeaker_.get());
+	leftSpeaker_->SetTraslation(speakerPos[0]);
+	leftSpeaker_->SetRotation(speakerRot[0]);
+
+	rightSpeaker_ = std::make_unique<Speaker>();
+	rightSpeaker_->Initialize(modelSpeaker_.get());
+	rightSpeaker_->SetTraslation(speakerPos[1]);
+	rightSpeaker_->SetRotation(speakerRot[1]);
 
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
@@ -242,6 +254,9 @@ void GameScene::Update() {
 	ui_->Update();
 
 	effect_->Update();
+
+	leftSpeaker_->Update();
+	rightSpeaker_->Update();
 
 	switch (ui_->GetPauseMenu()) {
 	case Ui::PauseMenu::Retry:
@@ -419,11 +434,15 @@ void GameScene::Draw() {
 	objects_->CameraUpdate(mainCamera_);
 	objects_->Draw();
 	*/
+	leftSpeaker_->Draw(mainCamera_);
+	rightSpeaker_->Draw(mainCamera_);
 
 	modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();

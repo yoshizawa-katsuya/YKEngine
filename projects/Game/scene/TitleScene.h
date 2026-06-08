@@ -70,6 +70,8 @@ private:
 
 	YKEngine::Camera* mainCamera_ = nullptr;
 
+	std::unique_ptr<YKEngine::Sprite> backgroundSprite_;
+
 	//平行光源
 	YKEngine::DirectionalLight directionalLight_;
 
