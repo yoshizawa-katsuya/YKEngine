@@ -40,6 +40,9 @@ public:
 
 	void SetRotate(const YKEngine::Vector3& rotate) { worldTransform_.rotation_ = rotate; }
 
+	//壁が一つもないか
+	bool isEmpty() const { return walls_.empty(); }
+
 private:
 
 	//壁のモデル

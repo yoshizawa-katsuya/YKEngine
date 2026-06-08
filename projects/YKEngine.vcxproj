@@ -109,6 +109,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\scene\ClearScene.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Engine\3d\CameraManager.cpp" />
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
@@ -348,6 +349,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\scene\ClearScene.h" />
     <ClInclude Include="Game\objects\Difficulty.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Engine\3d\CameraManager.h" />

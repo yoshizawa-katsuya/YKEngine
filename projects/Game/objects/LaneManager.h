@@ -32,6 +32,13 @@ public:
 	// 壁を取得する
 	const std::vector<std::unique_ptr<Wall>>& GetWalls(PlayerDirection laneType) const { return lanes_[static_cast<size_t>(laneType)]->GetWalls(); }
 
+	/// <summary>
+	/// レーンの最後の壁がプレイヤーを通り過ぎていたらtrue、まだならfalseを更新する
+	/// </summary>
+	void CheckIsEnd();
+
+	bool GetIsEnd() const { return isEnd_; }
+
 private:
 
 	void UpdateLaneAngle();
@@ -45,7 +52,9 @@ private:
 	std::array<std::unique_ptr<Lane>, static_cast<size_t>(PlayerDirection::Count)> lanes_;
 
 	//流れ始めるかどうか
-	bool isStart_ = false;
+	bool isStart_ = true;
+
+	bool isEnd_ = false; //レーンの最後の壁がプレイヤーを通り過ぎていたらtrue、まだならfalse
 
 	YKEngine::GlobalVariables* globalVariables_ = nullptr;
 };

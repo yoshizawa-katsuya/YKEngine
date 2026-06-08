@@ -64,6 +64,8 @@ void LaneManager::Update()
 	{
 		lane->Update();
 	}
+
+	CheckIsEnd();
 }
 
 void LaneManager::Draw(Camera* camera)
@@ -73,6 +75,20 @@ void LaneManager::Draw(Camera* camera)
 	{
 		lane->Draw(camera);
 	}
+}
+
+void LaneManager::CheckIsEnd()
+{
+	for (std::unique_ptr<Lane>& lane : lanes_)
+	{
+		//レーンの最後の壁がプレイヤーを通り過ぎていない場合はfalseを返す
+		if (!lane->isEmpty())
+		{
+			isEnd_ = false;
+			return;
+		}
+	}
+	isEnd_ = true;
 }
 
 void LaneManager::UpdateLaneAngle()
