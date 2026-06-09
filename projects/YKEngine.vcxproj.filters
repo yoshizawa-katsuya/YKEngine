@@ -306,6 +306,9 @@
     <ClCompile Include="Game\scene\ClearScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\Speaker.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -630,6 +633,9 @@
     </ClInclude>
     <ClInclude Include="Game\scene\ClearScene.h">
       <Filter>ヘッダー ファイル\application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\Speaker.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

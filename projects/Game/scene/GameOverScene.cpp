@@ -26,6 +26,9 @@ void GameOverScene::Initialize()
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
 	modelPlatform_->SetCamera(mainCamera_);
+	// 背景スプライトの生成
+	backgroundSprite_ = std::make_unique<Sprite>();
+	backgroundSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/gameoverBack.png"));
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/playerAnimation", "SadPose.gltf");
 	//プレイヤーの初期化
@@ -124,6 +127,11 @@ void GameOverScene::Draw()
 {
 	//Spriteの背景描画前処理
 	spritePlatform_->PreBackGroundDraw();
+
+	//背景の描画
+	backgroundSprite_->Draw();
+
+	modelPlatform_->SkinPreDraw();
 
 	modelPlatform_->SkinPreDraw();
 

@@ -62,6 +62,9 @@ private:
 	std::unique_ptr<YKEngine::Sprite> clearSprite_;
 	//ui
 	std::unique_ptr<Ui> ui_;
+	//背景のスプライト
+	std::unique_ptr<YKEngine::Sprite> backgroundSprite_;
+
 	// 次のシーン名
 	std::string nextSceneName_;
 	//遷移演出

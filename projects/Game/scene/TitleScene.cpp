@@ -33,6 +33,9 @@ void TitleScene::Initialize()
 		Transition::EasingType::EaseInSine
 	);
 
+	backgroundSprite_ = std::make_unique<Sprite>();
+	backgroundSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/back.png"));
+
 	//UI
 	ui_ = std::make_unique<Ui>();
 	ui_->Initialize();
@@ -171,6 +174,11 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+	//Spriteの背景描画前処理
+	spritePlatform_->PreBackGroundDraw();
+
+	//背景の描画
+	backgroundSprite_->Draw();
 	modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画

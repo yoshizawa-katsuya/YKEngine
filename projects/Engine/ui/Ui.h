@@ -11,10 +11,14 @@ class Ui
 public:
 	//ポーズメニューの種類
     enum class PauseMenu {
-        None,
+        Resume,
         Retry,
-        ToTitle
+        ToTitle,
+        None
     };
+
+    int pauseSelectIndex_ = 0;
+    float pauseSelectAnimTimer_ = 0.0f;
 	//ジャッジエフェクトの種類
     enum class JudgeType {
         None,
@@ -63,6 +67,11 @@ public:
     PauseMenu GetPauseMenu()const;
     //ライフ取得
     int GetLife()const { return life_; }
+	//ポーズ中かどうか
+    bool IsPaused() const { return isShowPause_; }
+
+	void SetPauseMenu(PauseMenu menu) { pauseMenu_ = menu; }
+
 private:
 	//スコア加算処理(仮実装)
     void HandleInput();
@@ -108,10 +117,20 @@ private:
     std::array<std::unique_ptr<YKEngine::Sprite>, kMaxDigits> scoreSprites_;
 	//ライフスプライト
 	std::array<std::unique_ptr<YKEngine::Sprite>, kMaxLife> lifeSprites_;
+    //操作説明スプライト
+    std::unique_ptr<YKEngine::Sprite> ctrlSprite_;
     //ポーズUIスプライト
 	std::unique_ptr<YKEngine::Sprite> pauseUiSprite_;
     //ポーズ画面スプライト
 	std::unique_ptr<YKEngine::Sprite> pauseSprite_;
+    // ポーズ中スプライト
+	std::unique_ptr<YKEngine::Sprite> pausingSprite_;
+	// ゲームに戻るスプライト
+	std::unique_ptr<YKEngine::Sprite> resumeSprite_;
+	// リトライスプライト
+	std::unique_ptr<YKEngine::Sprite> retryUISprite_;
+	// タイトルに戻るスプライト
+	std::unique_ptr<YKEngine::Sprite> toTitleSprite_;
 	//ジャッジエフェクトスプライト
     std::unique_ptr<YKEngine::Sprite> goodSprite_;
     std::unique_ptr<YKEngine::Sprite> greatSprite_;
@@ -150,6 +169,12 @@ private:
     uint32_t gameclearTexture_;
     //桁
     std::array<int, kMaxDigits> digits_{};
+    const YKEngine::Vector2 center_ = { 640.0f, 360.0f };
+
+    const YKEngine::Vector2 pausingPos_ = { 640.0f, 120.0f };
+    const YKEngine::Vector2 resumePos_ = { 640.0f, 250.0f };
+    const YKEngine::Vector2 retryPos_ = { 640.0f, 380.0f };
+    const YKEngine::Vector2 titlePos_ = { 640.0f, 510.0f };
 	//ジャッジエフェクト表示位置
     YKEngine::Vector2 judgePos_ = { 640.0f, 250.0f };
 	//ライフ点滅表示位置

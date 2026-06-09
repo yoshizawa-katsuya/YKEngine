@@ -52,6 +52,7 @@ void GameScene::Initialize() {
 	//モデルの生成
 	modelPlayer_ = modelPlatform_->CreateSkinModel("./resources/playerAnimation", "PoseA.gltf");
 	modelWall_ = modelPlatform_->CreateRigidModel("./resources/walls", "SquatWall.obj");
+	modelSpeaker_ = modelPlatform_->CreateRigidModel("./resources/speaker", "speaker.obj");
 	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
 	//modelPlayer_->SetEnableLighting(false);
 	//modelPlayer_ = std::make_unique<RigidModel>();
@@ -61,6 +62,8 @@ void GameScene::Initialize() {
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle_, spritePlatform_);
 	*/
+	backgroundSprite_ = std::make_unique<Sprite>();
+	backgroundSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/back.png"));
 
 	//パーティクルエミッターの生成
 	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
@@ -82,6 +85,17 @@ void GameScene::Initialize() {
 
 	effect_ = std::make_unique<Effect>();
 	effect_->Initialize();
+
+	// スピーカーの初期化
+	leftSpeaker_ = std::make_unique<Speaker>();
+	leftSpeaker_->Initialize(modelSpeaker_.get());
+	leftSpeaker_->SetTraslation(speakerPos[0]);
+	leftSpeaker_->SetRotation(speakerRot[0]);
+
+	rightSpeaker_ = std::make_unique<Speaker>();
+	rightSpeaker_->Initialize(modelSpeaker_.get());
+	rightSpeaker_->SetTraslation(speakerPos[1]);
+	rightSpeaker_->SetRotation(speakerRot[1]);
 
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
@@ -192,9 +206,37 @@ void GameScene::Update() {
 		GameOverAnimation();
 	}
 
-	//プレイヤーの更新
-	player_->Update();
+	//UIの更新
+	ui_->Update();
 
+	switch (ui_->GetPauseMenu()) {
+
+	case Ui::PauseMenu::Retry:
+		nextSceneName_ = "GameScene";
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
+		ui_->SetPauseMenu(Ui::PauseMenu::None);
+		return;
+
+	case Ui::PauseMenu::ToTitle:
+		nextSceneName_ = "TitleScene";
+		transition_->StartFadeIn(
+			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+			2.0f,
+			Transition::EasingType::EaseOutQuint
+		);
+		ui_->SetPauseMenu(Ui::PauseMenu::None);
+		return;
+	}
+
+	if (ui_->IsPaused()) {
+		return;
+	}
 	// 死亡演出終了検知
 	if (player_->IsDeathFinished())
 	{
@@ -226,6 +268,12 @@ void GameScene::Update() {
 		}
 	}
 
+	leftSpeaker_->Update();
+	rightSpeaker_->Update();
+
+	//プレイヤーの更新
+	player_->Update();
+
 	//ダミーの壁の更新
 	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
 	//dummyWall_->Update();
@@ -236,34 +284,9 @@ void GameScene::Update() {
 	//衝突判定
 	CheckWallCollision();
 
-	//UIの更新
-	ui_->Update();
-
 	effect_->Update();
 
-	switch (ui_->GetPauseMenu()) {
-	case Ui::PauseMenu::Retry:
-		// リトライが選択された場合、ゲームシーンに遷移する
-		nextSceneName_ = "GameScene";
-		transition_->StartFadeIn(
-			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
-			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
-			2.0f,
-			Transition::EasingType::EaseOutQuint
-		);
-		break;
-
-	case Ui::PauseMenu::ToTitle:
-		// タイトルに戻るが選択された場合、タイトルシーンに遷移する
-		nextSceneName_ = "TitleScene";
-		transition_->StartFadeIn(
-			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
-			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
-			2.0f,
-			Transition::EasingType::EaseOutQuint
-		);
-		break;
-	}
+	
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -396,6 +419,8 @@ void GameScene::Draw() {
 	//Spriteの背景描画前処理
 	spritePlatform_->PreBackGroundDraw();
 
+	//背景の描画
+	backgroundSprite_->Draw();
 	//sprite_->Draw();
 
 	//Modelの描画前処理
@@ -422,11 +447,15 @@ void GameScene::Draw() {
 	objects_->CameraUpdate(mainCamera_);
 	objects_->Draw();
 	*/
+	leftSpeaker_->Draw(mainCamera_);
+	rightSpeaker_->Draw(mainCamera_);
 
 	modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
 	player_->Draw(mainCamera_);
+
+
 
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
