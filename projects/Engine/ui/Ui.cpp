@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "Input.h"
 #include <algorithm>
+#include <Lerp.h>
 
 // 初期化
 void Ui::Initialize() {
@@ -55,10 +56,34 @@ void Ui::Initialize() {
 	pauseUiSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	//ポーズ画面スプライト生成
 	pauseSprite_ = std::make_unique<YKEngine::Sprite>();
-	pauseSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/white.png"));
+	pauseSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pauseMenu.png"));
 	pauseSprite_->SetPosition({ 640.0f, 360.0f });
 	pauseSprite_->SetSize({ 0.0f, 0.0f });
 	pauseSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	// ポーズ中スプライト生成
+	pausingSprite_ = std::make_unique<YKEngine::Sprite>();
+	pausingSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pauseText.png"));
+	pausingSprite_->SetPosition({ 640.0f, 200.0f });
+	pausingSprite_->SetSize({ 0.0f, 0.0f });
+	pausingSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	// ゲームに戻るスプライト生成
+	resumeSprite_ = std::make_unique<YKEngine::Sprite>();
+	resumeSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/resume.png"));
+	resumeSprite_->SetPosition({ 640.0f, 300.0f });
+	resumeSprite_->SetSize({ 0.0f, 0.0f });
+	resumeSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	// リトライスプライト生成
+	retryUISprite_ = std::make_unique<YKEngine::Sprite>();
+	retryUISprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pauseRetry.png"));
+	retryUISprite_->SetPosition({ 640.0f, 400.0f });
+	retryUISprite_->SetSize({ 0.0f, 0.0f });
+	retryUISprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	// タイトルに戻るスプライト生成
+	toTitleSprite_ = std::make_unique<YKEngine::Sprite>();
+	toTitleSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/title.png"));
+	toTitleSprite_->SetPosition({ 640.0f, 500.0f });
+	toTitleSprite_->SetSize({ 0.0f, 0.0f });
+	toTitleSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	//ジャッジエフェクトテクスチャ読み込み
 	goodTexture_ =
 		YKEngine::TextureManager::GetInstance()->Load("Resources/ui/good.png");
@@ -185,6 +210,10 @@ void Ui::Draw() {
 	//ポーズ画面描画
 	if (pauseScale_ > 0.01f) {
 		pauseSprite_->Draw();
+		pausingSprite_->Draw();
+		resumeSprite_->Draw();
+		retryUISprite_->Draw();
+		toTitleSprite_->Draw();
 	}
 	//ジャッジエフェクト描画
 	if (isJudgePlaying_) {
@@ -371,6 +400,9 @@ void Ui::Debug() {
 	//ポーズ画面
 	if (pauseSprite_) {
 		ImGui::Begin("Pause Sprite");
+		ImGui::Text("PauseMenu = %d", (int)pauseMenu_);
+		ImGui::Text("PauseIndex = %d", pauseSelectIndex_);
+		ImGui::Text("IsShowPause = %d", isShowPause_);
 		ImVec2 pos = { pauseSprite_->GetPosition().x, pauseSprite_->GetPosition().y };
 		if (ImGui::DragFloat2("Position", (float*)&pos, 1.0f)) {
 			pauseSprite_->SetPosition({ pos.x, pos.y });
@@ -382,6 +414,42 @@ void Ui::Debug() {
 		float rotation = pauseSprite_->GetRotation();
 		if (ImGui::DragFloat("Rotation", &rotation, 1.0f, -360.0f, 360.0f)) {
 			pauseSprite_->SetRotation(rotation);
+		}
+		ImVec2 pausingPos = { pausingSprite_->GetPosition().x, pausingSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Pausing Position", (float*)&pausingPos, 1.0f)) {
+			pausingSprite_->SetPosition({ pausingPos.x, pausingPos.y });
+		}
+		ImVec2 pausingScale = { pausingSprite_->GetSize().x, pausingSprite_->GetSize().y };
+		if (ImGui::DragFloat2("Pausing Scale", (float*)&pausingScale, 1.0f, 0.0f, 1000.0f)) {
+			pausingSprite_->SetSize({ pausingScale.x, pausingScale.y });
+		}
+		float pausingRotation = pausingSprite_->GetRotation();
+		if (ImGui::DragFloat("Pausing Rotation", &pausingRotation, 1.0f, -360.0f, 360.0f)) {
+			pausingSprite_->SetRotation(pausingRotation);
+		}
+		ImVec2 resumePos = { resumeSprite_->GetPosition().x, resumeSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Resume Position", (float*)&resumePos, 1.0f)) {
+			resumeSprite_->SetPosition({ resumePos.x, resumePos.y });
+		}
+		ImVec2 resumeScale = { resumeSprite_->GetSize().x, resumeSprite_->GetSize().y };
+		if (ImGui::DragFloat2("Resume Scale", (float*)&resumeScale, 1.0f, 0.0f, 1000.0f)) {
+			resumeSprite_->SetSize({ resumeScale.x, resumeScale.y });
+		}
+		float resumeRotation = resumeSprite_->GetRotation();
+		if (ImGui::DragFloat("Resume Rotation", &resumeRotation, 1.0f, -360.0f, 360.0f)) {
+			resumeSprite_->SetRotation(resumeRotation);
+		}
+		ImVec2 toTitlePos = { toTitleSprite_->GetPosition().x, toTitleSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("To Title Position", (float*)&toTitlePos, 1.0f)) {
+			toTitleSprite_->SetPosition({ toTitlePos.x, toTitlePos.y });
+		}
+		ImVec2 toTitleScale = { toTitleSprite_->GetSize().x, toTitleSprite_->GetSize().y };
+		if (ImGui::DragFloat2("To Title Scale", (float*)&toTitleScale, 1.0f, 0.0f, 1000.0f)) {
+			toTitleSprite_->SetSize({ toTitleScale.x, toTitleScale.y });
+		}
+		float toTitleRotation = toTitleSprite_->GetRotation();
+		if (ImGui::DragFloat("To Title Rotation", &toTitleRotation, 1.0f, -360.0f, 360.0f)) {
+			toTitleSprite_->SetRotation(toTitleRotation);
 		}
 		ImGui::End();
 	}
@@ -486,6 +554,29 @@ void Ui::HandleInput() {
 	//ポーズ画面表示仮
 	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_Q)) {
 		isShowPause_ = !isShowPause_;
+		if (isShowPause_) {
+			pauseMenu_ = PauseMenu::None;
+		}
+	}
+	if (isShowPause_) {
+		if (YKEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+
+			switch (pauseSelectIndex_) {
+
+			case 0:
+				pauseMenu_ = PauseMenu::Resume;
+				isShowPause_ = false;
+				break;
+
+			case 1:
+				pauseMenu_ = PauseMenu::Retry;
+				break;
+
+			case 2:
+				pauseMenu_ = PauseMenu::ToTitle;
+				break;
+			}
+		}
 	}
 }
 
@@ -531,18 +622,43 @@ void Ui::HandleLifeInput() {
 }
 //ポーズメニュー更新
 void Ui::UpdatePauseMenu() {
+	if (isShowPause_) {
+		if (pauseSelectIndex_ < 0 || pauseSelectIndex_ > 2) {
+			assert(false);
+		}
+		if (YKEngine::Input::GetInstance()->TriggerKey(DIK_UP)) {
+			pauseSelectIndex_--;
+
+			if (pauseSelectIndex_ < 0) {
+				pauseSelectIndex_ = 2;
+			}
+		}
+
+		if (YKEngine::Input::GetInstance()->TriggerKey(DIK_DOWN)) {
+			pauseSelectIndex_++;
+
+			if (pauseSelectIndex_ > 2) {
+				pauseSelectIndex_ = 0;
+			}
+		}
+		
+	}
+	pauseSelectAnimTimer_ += 1.0f / 60.0f;
+
+	float offsetX = sinf(pauseSelectAnimTimer_ * 4.0f) * 8.0f;
+	float selectScale = 1.0f +sinf(pauseSelectAnimTimer_ * 5.0f) * 0.08f;
 
 	const float speed = 0.1f;
 
 	if (isShowPause_) {
 		pauseScale_ += speed;
 
-		if (YKEngine::Input::GetInstance()->TriggerKey(DIK_R)) {
+		/*if (YKEngine::Input::GetInstance()->TriggerKey(DIK_R)) {
 			pauseMenu_ = PauseMenu::Retry;
 		}
 		if (YKEngine::Input::GetInstance()->TriggerKey(DIK_T)) {
 			pauseMenu_ = PauseMenu::ToTitle;
-		}
+		}*/
 
 	} else {
 		pauseScale_ -= speed;
@@ -552,11 +668,56 @@ void Ui::UpdatePauseMenu() {
 
 	float eased = pauseScale_ * pauseScale_;
 
-	float baseW = 640.0f;
-	float baseH = 360.0f;
+	float baseW = 400.0f;
+	float baseH = 640.0f;
 
 	pauseSprite_->SetSize({ baseW * eased, baseH * eased });
+	pausingSprite_->SetSize({ 256.0f * eased, 65.0f * eased });
+
+	YKEngine::Vector2 resumeBaseSize = { 288.0f,49.0f };
+	YKEngine::Vector2 retryBaseSize = { 192.0f,49.0f };
+	YKEngine::Vector2 titleBaseSize = { 336.0f,49.0f };
+
+	// 全員通常状態
+	resumeSprite_->SetSize({resumeBaseSize.x * eased,resumeBaseSize.y * eased});
+
+	retryUISprite_->SetSize({retryBaseSize.x * eased,retryBaseSize.y * eased});
+
+	toTitleSprite_->SetSize({titleBaseSize.x * eased,titleBaseSize.y * eased});
+
+	switch (pauseSelectIndex_) {
+
+	case 0:
+		resumeSprite_->SetSize({
+			resumeBaseSize.x * eased * selectScale,
+			resumeBaseSize.y * eased * selectScale
+			});
+		break;
+
+	case 1:
+		retryUISprite_->SetSize({
+			retryBaseSize.x * eased * selectScale,
+			retryBaseSize.y * eased * selectScale
+			});
+		break;
+
+	case 2:
+		toTitleSprite_->SetSize({
+			titleBaseSize.x * eased * selectScale,
+			titleBaseSize.y * eased * selectScale
+			});
+		break;
+	}
+
+	pausingSprite_->SetPosition(Lerp(center_, pausingPos_, eased));
+
+	resumeSprite_->SetPosition(Lerp(center_, resumePos_, eased));
+
+	retryUISprite_->SetPosition(Lerp(center_, retryPos_, eased));
+
+	toTitleSprite_->SetPosition(Lerp(center_, titlePos_, eased));
 }
+
 //ジャッジエフェクト入力処理
 void Ui::HandleJudgeInput() {
 	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_5)) {
