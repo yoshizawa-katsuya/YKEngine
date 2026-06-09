@@ -13,12 +13,12 @@ void Ui::Initialize() {
 	titleSprite_->SetPosition({ 640.0f,320.0f });
 	titleSprite_->SetAnchorPoint({ 0.5f,0.5f });
 
-    //タイトルスペース生成
+	//タイトルスペース生成
 	titlePushSprite_ = std::make_unique<YKEngine::Sprite>();
 	titlePushSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/title/space.png"));
 	titlePushSprite_->SetPosition({ 640.0f, 500.0f });
 	titlePushSprite_->SetAnchorPoint({ 0.5f, 0.5f });
-	
+
 	//スコアテクスチャ読み込み
 	for (int i = 0; i < 10; i++) {
 		numberTextures_[i] =
@@ -170,12 +170,8 @@ void Ui::Update() {
 	UpdateAnimation();
 	//桁更新
 	UpdateDigits();
-	//ライフ減少処理
-	HandleLifeInput();
 	//ポーズメニュー更新
 	UpdatePauseMenu();
-	//ジャッジエフェクト入力処理
-	HandleJudgeInput();
 	//ジャッジエフェクト更新
 	UpdateJudgeEffect();
 	//画面枠発光更新
@@ -244,22 +240,19 @@ void Ui::DrawSelect() {
 	//EASY
 	if (selectedDifficulty_ == 0) {
 		easySprite_->SetSize({ 512.0f * scale,128.0f * scale });
-	}
-	else {
+	} else {
 		easySprite_->SetSize({ 512.0f,128.0f });
 	}
 	//NORMAL
 	if (selectedDifficulty_ == 1) {
 		normalSprite_->SetSize({ 512.0f * scale,128.0f * scale });
-	}
-	else {
+	} else {
 		normalSprite_->SetSize({ 512.0f,128.0f });
 	}
 	//HARD
 	if (selectedDifficulty_ == 2) {
 		hardSprite_->SetSize({ 512.0f * scale,128.0f * scale });
-	}
-	else {
+	} else {
 		hardSprite_->SetSize({ 512.0f,128.0f });
 	}
 
@@ -276,8 +269,7 @@ void Ui::DrawGameOver() {
 		retrySprite_->SetSize({ 400.0f * scale,100.0f * scale });
 
 		backtitleSprite_->SetSize({ 320.0f,80.0f });
-	}
-	else {
+	} else {
 		retrySprite_->SetSize({ 320.0f,80.0f });
 
 		backtitleSprite_->SetSize({ 400.0f * scale,100.0f * scale });
@@ -348,7 +340,7 @@ void Ui::StopFrameGlow() {
 	}
 }
 //ゲームスコア加算
-void Ui::AddGameScore(int value){
+void Ui::AddGameScore(int value) {
 	AddScore(value);
 }
 //ライフ減少
@@ -383,23 +375,23 @@ void Ui::Debug() {
 		ImGui::End();
 	}
 
-    // タイトルスペースUI
-    if (titlePushSprite_) {
-        ImGui::Begin("Title Push Space Sprite");
-        ImVec2 pos = { titlePushSprite_->GetPosition().x, titlePushSprite_->GetPosition().y };
-        if (ImGui::DragFloat2("Position", (float*)&pos, 1.0f)) {
-            titlePushSprite_->SetPosition({ pos.x, pos.y });
-        }
-        ImVec2 scale = { titlePushSprite_->GetSize().x , titlePushSprite_->GetSize().y };
-        if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 10000.0f)) {
-            titlePushSprite_->SetSize({ scale.x, scale.y });
-        }
-        float rotation = titlePushSprite_->GetRotation();
-        if (ImGui::DragFloat("Rotation", &rotation, 1.0f, -360.0f, 360.0f)) {
-            titlePushSprite_->SetRotation(rotation);
-        }
-        ImGui::End();
-    }
+	// タイトルスペースUI
+	if (titlePushSprite_) {
+		ImGui::Begin("Title Push Space Sprite");
+		ImVec2 pos = { titlePushSprite_->GetPosition().x, titlePushSprite_->GetPosition().y };
+		if (ImGui::DragFloat2("Position", (float*)&pos, 1.0f)) {
+			titlePushSprite_->SetPosition({ pos.x, pos.y });
+		}
+		ImVec2 scale = { titlePushSprite_->GetSize().x , titlePushSprite_->GetSize().y };
+		if (ImGui::DragFloat2("Scale", (float*)&scale, 1.0f, 0.0f, 10000.0f)) {
+			titlePushSprite_->SetSize({ scale.x, scale.y });
+		}
+		float rotation = titlePushSprite_->GetRotation();
+		if (ImGui::DragFloat("Rotation", &rotation, 1.0f, -360.0f, 360.0f)) {
+			titlePushSprite_->SetRotation(rotation);
+		}
+		ImGui::End();
+	}
 
 	// ライフUI
 	ImGui::Begin("Life UI");
@@ -637,12 +629,6 @@ void Ui::UpdateDigits() {
 		scoreSprites_[i]->SetTexture(numberTextures_[digits_[i]]);
 	}
 }
-//ライフ減少(仮実装)
-void Ui::HandleLifeInput() {
-	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_L)) {
-		DecreaseLife();
-	}
-}
 //ポーズメニュー更新
 void Ui::UpdatePauseMenu() {
 	if (isShowPause_) {
@@ -664,12 +650,12 @@ void Ui::UpdatePauseMenu() {
 				pauseSelectIndex_ = 0;
 			}
 		}
-		
+
 	}
 	pauseSelectAnimTimer_ += 1.0f / 60.0f;
 
 	float offsetX = sinf(pauseSelectAnimTimer_ * 4.0f) * 8.0f;
-	float selectScale = 1.0f +sinf(pauseSelectAnimTimer_ * 5.0f) * 0.08f;
+	float selectScale = 1.0f + sinf(pauseSelectAnimTimer_ * 5.0f) * 0.08f;
 
 	const float speed = 0.1f;
 
@@ -702,11 +688,11 @@ void Ui::UpdatePauseMenu() {
 	YKEngine::Vector2 titleBaseSize = { 336.0f,49.0f };
 
 	// 全員通常状態
-	resumeSprite_->SetSize({resumeBaseSize.x * eased,resumeBaseSize.y * eased});
+	resumeSprite_->SetSize({ resumeBaseSize.x * eased,resumeBaseSize.y * eased });
 
-	retryUISprite_->SetSize({retryBaseSize.x * eased,retryBaseSize.y * eased});
+	retryUISprite_->SetSize({ retryBaseSize.x * eased,retryBaseSize.y * eased });
 
-	toTitleSprite_->SetSize({titleBaseSize.x * eased,titleBaseSize.y * eased});
+	toTitleSprite_->SetSize({ titleBaseSize.x * eased,titleBaseSize.y * eased });
 
 	switch (pauseSelectIndex_) {
 
@@ -739,19 +725,6 @@ void Ui::UpdatePauseMenu() {
 	retryUISprite_->SetPosition(Lerp(center_, retryPos_, eased));
 
 	toTitleSprite_->SetPosition(Lerp(center_, titlePos_, eased));
-}
-
-//ジャッジエフェクト入力処理
-void Ui::HandleJudgeInput() {
-	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_5)) {
-		StartJudgeEffect(JudgeType::Good);
-	}
-	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_6)) {
-		StartJudgeEffect(JudgeType::Great);
-	}
-	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_7)) {
-		StartJudgeEffect(JudgeType::Perfect);
-	}
 }
 //ジャッジエフェクト更新
 void Ui::UpdateJudgeEffect() {
@@ -799,11 +772,9 @@ YKEngine::Vector4 Ui::HSVToRGB(float h, float s, float v) {
 
 	if (h < 60) {
 		r = c; g = x; b = 0;
-	}
-	else if (h < 120) {
+	} else if (h < 120) {
 		r = x; g = c; b = 0;
-	}
-	else if (h < 180) {
+	} else if (h < 180) {
 		r = 0; g = c; b = x;
 	} else if (h < 240) {
 		r = 0; g = x; b = c;
@@ -848,7 +819,7 @@ void Ui::UpdateFrameGlow() {
 		break;
 
 	case JudgeType::Perfect:
-	
+
 		hue =
 			fmodf(frameGlowTimer_ * 2.0f, 360.0f);
 
@@ -900,10 +871,10 @@ void Ui::UpdateLifeBlink() {
 //タイトルスペース更新
 void Ui::UpdateTitleSpace() {
 
-	titleSpaceBlinkTimer_ += 0.016f; 
+	titleSpaceBlinkTimer_ += 0.016f;
 
 	//サイン波でアルファ値変化
-	float wave = (sinf(titleSpaceBlinkTimer_ * 3.0f) + 1.0f) * 0.5f; 
+	float wave = (sinf(titleSpaceBlinkTimer_ * 3.0f) + 1.0f) * 0.5f;
 	float alpha = 0.1f + wave * 0.9f;
 
 	if (titlePushSprite_) {

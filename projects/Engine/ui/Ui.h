@@ -79,12 +79,8 @@ private:
     void UpdateAnimation();
 	//桁の更新
     void UpdateDigits();
-    //ライフ減少(仮実装)
-    void HandleLifeInput();
     //ポーズメニュー更新
 	void UpdatePauseMenu();
-	//ジャッジエフェクト入力処理
-    void HandleJudgeInput();
 	//ジャッジエフェクト更新
     void UpdateJudgeEffect();
 	//画面枠発光更新
