@@ -104,6 +104,8 @@ private:
     std::array<std::unique_ptr<YKEngine::Sprite>, kMaxDigits> scoreSprites_;
 	//ライフスプライト
 	std::array<std::unique_ptr<YKEngine::Sprite>, kMaxLife> lifeSprites_;
+    //操作説明スプライト
+    std::unique_ptr<YKEngine::Sprite> ctrlSprite_;
     //ポーズUIスプライト
 	std::unique_ptr<YKEngine::Sprite> pauseUiSprite_;
     //ポーズ画面スプライト

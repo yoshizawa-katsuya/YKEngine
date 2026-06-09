@@ -43,6 +43,10 @@ void Ui::Initialize() {
 		lifeSprites_[i]->SetSize({ 40.0f, 40.0f });
 	}
 
+	//操作説明スプライト生成
+	ctrlSprite_ = std::make_unique<YKEngine::Sprite>();
+	ctrlSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/ctrl.png"));
+
 	//ポーズUIスプライト生成
 	pauseUiSprite_ = std::make_unique<YKEngine::Sprite>();
 	pauseUiSprite_->Initialize(YKEngine::TextureManager::GetInstance()->Load("Resources/ui/pause.png"));
@@ -171,6 +175,9 @@ void Ui::Draw() {
 	for (int i = 0; i < life_; i++) {
 		lifeSprites_[i]->Draw();
 	}
+
+	//操作説明描画
+	ctrlSprite_->Draw();
 
 	//ポーズUI描画
 	pauseUiSprite_->Draw();
