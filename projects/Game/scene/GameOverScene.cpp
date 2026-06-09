@@ -92,13 +92,16 @@ void GameOverScene::Update()
 		}
 	}
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (!isStartedTransition_ &&
+		input_->TriggerKey(DIK_SPACE))
+	{
 		isStartedTransition_ = true;
 
 		switch (menuState_) {
 		case MenuState::Retry:
 			nextSceneName_ = "GameScene";
 			break;
+
 		case MenuState::Title:
 			nextSceneName_ = "TitleScene";
 			break;
@@ -138,10 +141,13 @@ void GameOverScene::Draw()
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
-	transition_->Draw();
+	// 遷移中でなければUI描画
+	if (!isStartedTransition_)
+	{
+		ui_->DrawGameOver();
+	}
 
-	//UIの描画
-	ui_->DrawGameOver();
+	transition_->Draw();
 }
 
 void GameOverScene::Finalize()

@@ -7,10 +7,18 @@
 #include "SpritePlatform.h"
 #include "Camera.h"
 #include "Transition.h"
+#include "Ui.h"
+#include <string>
 
 class ClearScene : public YKEngine::BaseScene
 {
 public:
+	enum class MenuState
+	{
+		Retry,
+		Title
+	};
+
 	/// <summary>
 	/// デストラクタ。
 	/// </summary>
@@ -52,6 +60,8 @@ private:
 
 	//クリアの文字のスプライト
 	std::unique_ptr<YKEngine::Sprite> clearSprite_;
+	//ui
+	std::unique_ptr<Ui> ui_;
 	//背景のスプライト
 	std::unique_ptr<YKEngine::Sprite> backgroundSprite_;
 
@@ -59,5 +69,9 @@ private:
 	std::string nextSceneName_;
 	//遷移演出
 	std::unique_ptr<Transition> transition_;
+
+	MenuState menuState_ = MenuState::Retry;
+
+	bool isStartedTransition_ = false;
 };
 
