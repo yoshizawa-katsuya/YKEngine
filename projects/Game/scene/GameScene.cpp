@@ -209,9 +209,6 @@ void GameScene::Update() {
 	//UIの更新
 	ui_->Update();
 
-	//プレイヤーの更新
-	player_->Update();
-
 	switch (ui_->GetPauseMenu()) {
 
 	case Ui::PauseMenu::Retry:
@@ -270,18 +267,6 @@ void GameScene::Update() {
 			);
 		}
 	}
-
-	//ダミーの壁の更新
-	prevWallZ_ = dummyWall_->GetWorldTransform().translation_.z;
-	//dummyWall_->Update();
-
-	//レーンの更新
-	laneManager_->Update();
-
-	//衝突判定
-	CheckWallCollision();
-
-	effect_->Update();
 
 	leftSpeaker_->Update();
 	rightSpeaker_->Update();
