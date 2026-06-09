@@ -122,13 +122,16 @@ void Ui::Initialize() {
 	backtitleSprite_->Initialize(titleTexture_);
 	backtitleSprite_->SetPosition({ 890.0f, 600.0f });
 	backtitleSprite_->SetAnchorPoint({ 0.5f,0.5f });
-
 	//ゲームオーバーテクスチャ読み込み
 	gameoverTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/gameover/gameover.png");
 	//ゲームオーバースプライト生成
 	gameoverSprite_ = std::make_unique<YKEngine::Sprite>();
 	gameoverSprite_->Initialize(gameoverTexture_);
-
+	//ゲームクリアテクスチャ読み込み
+	gameclearTexture_ = YKEngine::TextureManager::GetInstance()->Load("Resources/gameclear/gameclear.png");
+	//ゲームクリアスプライト生成
+	gameclearSprite_ = std::make_unique<YKEngine::Sprite>();
+	gameclearSprite_->Initialize(gameclearTexture_);
 }
 //更新
 void Ui::Update() {
@@ -155,7 +158,7 @@ void Ui::Update() {
 	//難易度選択のスケール更新
 	difficultyScaleTimer_ += 1.0f / 60.0f;
 	//ゲームオーバー選択のスケール更新
-	gameOverScaleTimer_ += 1.0f / 60.0f;
+	ScaleTimer_ += 1.0f / 60.0f;
 	//デバック
 	Debug();
 }
@@ -231,7 +234,7 @@ void Ui::DrawSelect() {
 //ゲームオーバー画面描画
 void Ui::DrawGameOver() {
 
-	float scale = 1.0f + std::sin(gameOverScaleTimer_ * 6.0f) * 0.1f;
+	float scale = 1.0f + std::sin(ScaleTimer_ * 6.0f) * 0.1f;
 
 	if (gameOverSelect_ == 0) {
 		retrySprite_->SetSize({ 400.0f * scale,100.0f * scale });
@@ -248,6 +251,26 @@ void Ui::DrawGameOver() {
 	backtitleSprite_->Draw();
 	gameoverSprite_->Draw();
 }
+//ゲームクリア画面描画
+void Ui::DrawGameClear() {
+	float scale = 1.0f + std::sin(ScaleTimer_ * 6.0f) * 0.1f;
+
+	if (gameClearSelect_ == 0) {
+		retrySprite_->SetSize({ 400.0f * scale,100.0f * scale });
+
+		backtitleSprite_->SetSize({ 320.0f,80.0f });
+	} else {
+		retrySprite_->SetSize({ 320.0f,80.0f });
+
+		backtitleSprite_->SetSize({ 400.0f * scale,100.0f * scale });
+	}
+
+	//描画
+	retrySprite_->Draw();
+	backtitleSprite_->Draw();
+	gameclearSprite_->Draw();
+}
+
 //スコア加算
 void Ui::AddScore(int value) {
 	score_ += value;
@@ -741,7 +764,11 @@ YKEngine::Sprite* Ui::GetCurrentJudgeSprite() {
 		return nullptr;
 	}
 }
-
+//ゲームオーバー選択の設定
 void Ui::SetGameOverSelect(int index) {
 	gameOverSelect_ = index;
+}
+//ゲームクリア選択の設定
+void Ui::SetGameClearSelect(int index) {
+	gameClearSelect_ = index;
 }

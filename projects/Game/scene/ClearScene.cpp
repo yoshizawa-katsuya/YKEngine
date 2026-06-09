@@ -46,6 +46,10 @@ void ClearScene::Initialize()
 		1.0f,
 		Transition::EasingType::EaseInSine
 	);
+
+	//Ui
+	ui_ = std::make_unique<Ui>();
+	ui_->Initialize();
 }
 
 void ClearScene::Update()
@@ -70,9 +74,30 @@ void ClearScene::Update()
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//シーン切り替え依頼
-		nextSceneName_ = "TitleScene";
+	if (!isStartedTransition_) {
+		if (input_->TriggerKey(DIK_LEFT)) {
+			menuState_ = MenuState::Retry;
+		}
+		if (input_->TriggerKey(DIK_RIGHT)) {
+			menuState_ = MenuState::Title;
+		}
+	}
+
+	if (!isStartedTransition_ &&
+		input_->TriggerKey(DIK_SPACE))
+	{
+		isStartedTransition_ = true;
+
+		switch (menuState_) {
+		case MenuState::Retry:
+			nextSceneName_ = "GameScene";
+			break;
+
+		case MenuState::Title:
+			nextSceneName_ = "TitleScene";
+			break;
+		}
+
 		transition_->StartFadeIn(
 			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
 			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
@@ -80,6 +105,13 @@ void ClearScene::Update()
 			Transition::EasingType::EaseOutQuint
 		);
 	}
+
+	ui_->SetGameClearSelect(
+		menuState_ == MenuState::Retry ? 0 : 1
+	);
+
+	//Uiの更新
+	ui_->Update();
 }
 
 void ClearScene::Draw()
@@ -92,7 +124,11 @@ void ClearScene::Draw()
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
-	clearSprite_->Draw();
+	// 遷移中でなければUI描画
+	if (!isStartedTransition_)
+	{
+		ui_->DrawGameClear();
+	}
 
 	transition_->Draw();
 }

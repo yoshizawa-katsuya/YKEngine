@@ -35,6 +35,8 @@ public:
     void DrawSelect();
     //ゲームオーバー画面描画
 	void DrawGameOver();
+    //ゲームクリア画面描画
+	void DrawGameClear();
     //スコア加算
     void AddScore(int value);
     //ライフ減少
@@ -53,8 +55,10 @@ public:
     void Debug();
 	//選択中の難易度設定
     void SetSelectedDifficulty(int index);
-
+	//ゲームオーバー画面の選択肢設定
     void SetGameOverSelect(int index);
+	//ゲームクリア画面の選択肢設定
+	void SetGameClearSelect(int index);
 	//ポーズメニューの取得
     PauseMenu GetPauseMenu()const;
     //ライフ取得
@@ -124,6 +128,8 @@ private:
     std::unique_ptr<YKEngine::Sprite>backtitleSprite_;
     //ゲームオーバースプライト
     std::unique_ptr<YKEngine::Sprite>gameoverSprite_;
+	//ゲームクリアスプライト
+    std::unique_ptr<YKEngine::Sprite>gameclearSprite_;
     //スコアテクスチャ
     std::array<uint32_t, 10> numberTextures_;
     //ジャッジエフェクトテクスチャ
@@ -140,6 +146,8 @@ private:
     uint32_t titleTexture_;
     //ゲームオーバーテクスチャ
     uint32_t gameoverTexture_;
+    //ゲームクリアテクスチャ
+    uint32_t gameclearTexture_;
     //桁
     std::array<int, kMaxDigits> digits_{};
 	//ジャッジエフェクト表示位置
@@ -160,6 +168,8 @@ private:
     int selectedDifficulty_ = 0;
 	//ゲームオーバー画面の選択肢
     int gameOverSelect_ = 0;
+	//ゲームクリア画面の選択肢
+	int gameClearSelect_ = 0;
     //ポーズ画面のスケール
     float pauseScale_ = 0.0f;
     //ホバー用タイマー
@@ -180,8 +190,8 @@ private:
     float titleSpaceBlinkTimer_ = 0.0f;
 	//難易度選択スケール用タイマー
     float difficultyScaleTimer_ = 0.0f;
-	//ゲームオーバー選択スケール用タイマー
-    float gameOverScaleTimer_ = 0.0f;
+	//ゲームクリア・オーバー選択スケール用タイマー
+    float ScaleTimer_ = 0.0f;
 	//画面枠発光フラグ
     bool isFrameGlow_ = false;
 	//アニメーション中か
