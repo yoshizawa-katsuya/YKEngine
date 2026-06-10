@@ -214,6 +214,7 @@ void GameScene::Update() {
 	switch (ui_->GetPauseMenu()) {
 
 	case Ui::PauseMenu::Retry:
+		Audio::GetInstance()->SoundStopWave(BGMData_);
 		nextSceneName_ = "GameScene";
 		transition_->StartFadeIn(
 			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
@@ -225,6 +226,7 @@ void GameScene::Update() {
 		return;
 
 	case Ui::PauseMenu::ToTitle:
+		Audio::GetInstance()->SoundStopWave(BGMData_);
 		nextSceneName_ = "TitleScene";
 		transition_->StartFadeIn(
 			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
