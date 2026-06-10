@@ -15,6 +15,7 @@
 using namespace YKEngine;
 
 GameScene::~GameScene() {
+	Audio::GetInstance()->SoundStopWave(BGMData_);
 }
 
 void GameScene::Initialize() {
