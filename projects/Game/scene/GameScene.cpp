@@ -135,6 +135,7 @@ void GameScene::Initialize() {
 	CreateLevel();
 	BGMData_ = audio_->LoopSoundLoadWave("./resources/sound/BGM.mp3");
 	Audio::GetInstance()->SoundLoopPlayWave(BGMData_);
+	successSoundData_ = audio_->SoundLoadWave("./resources/sound/success.mp3");
 }
 
 void GameScene::Update() {
@@ -307,22 +308,30 @@ void GameScene::Update() {
 	ParticleManager::GetInstance()->Update(mainCamera_);
 
 	// ゲームクリアの条件を満たしているかチェック
-	if (laneManager_->GetIsEnd())
+	if (laneManager_->GetIsEnd() && !isClear_)
 	{
-		if (!nextSceneName_.empty())
+		isClear_ = true;
+		clearTimer_ = kClearWaitTime;
+	}
+	if (isClear_)
+	{
+		clearTimer_ -= 1.0f / 60.0f;
+
+		if (clearTimer_ <= 0.0f &&
+			nextSceneName_.empty())
 		{
-			// すでにシーン切り替えの依頼が出ている場合は何もしない
-			return;
+			Audio::GetInstance()->SoundStopWave(BGMData_);
+			nextSceneName_ = "ClearScene";
+
+			transition_->StartFadeIn(
+				TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
+				TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
+				2.0f,
+				Transition::EasingType::EaseOutQuint
+			);
 		}
-		Audio::GetInstance()->SoundStopWave(BGMData_);
-		//シーン切り替え依頼
-		nextSceneName_ = "ClearScene";
-		transition_->StartFadeIn(
-			TextureManager::GetInstance()->Load("./resources/brickLoad.png"),
-			TextureManager::GetInstance()->Load("./resources/brickMask2.png"),
-			2.0f,
-			Transition::EasingType::EaseOutQuint
-		);
+
+		return;
 	}
 
 #ifdef USE_IMGUI
@@ -503,6 +512,7 @@ void GameScene::CheckWallCollision()
 			if (result == JudgeResult::Hit ||
 				result == JudgeResult::SuccessSquat) {
 				// 成功時の処理
+				Audio::GetInstance()->SoundPlayWave(successSoundData_,0.5f);
 				player_->SetColorForDebug(debugPlayerColor[0]);
 				debugScore_++;
 				debugCombo_++;

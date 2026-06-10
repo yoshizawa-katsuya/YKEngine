@@ -218,4 +218,10 @@ private:
 	bool isDeathFinishedTimerStarted_ = false;
 
 	YKEngine::LoopSoundData BGMData_;
+	YKEngine::SoundData successSoundData_;
+
+	bool isClear_ = false;
+	float clearTimer_ = 0.0f;
+
+	static constexpr float kClearWaitTime = 2.0f;
 };
