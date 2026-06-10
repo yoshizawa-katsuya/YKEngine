@@ -133,12 +133,13 @@ void GameScene::Initialize() {
 	// 難易度の設定
 	difficulty_ = sceneManager_->GetDifficulty();
 	CreateLevel();
-
+	BGMData_ = audio_->LoopSoundLoadWave("./resources/sound/BGM.mp3");
+	Audio::GetInstance()->SoundLoopPlayWave(BGMData_);
 }
 
 void GameScene::Update() {
 
-
+	
 	//カメラの更新
 	camera_->Update();
 	cameraManager_->Update();
@@ -243,7 +244,7 @@ void GameScene::Update() {
 		if (!isDeathFinishedTimerStarted_)
 		{
 			isDeathFinishedTimerStarted_ = true;
-			deathFinishedTimer_ = 1.5f;
+			deathFinishedTimer_ = 4.0f;
 		}
 	}
 
@@ -313,6 +314,7 @@ void GameScene::Update() {
 			// すでにシーン切り替えの依頼が出ている場合は何もしない
 			return;
 		}
+		Audio::GetInstance()->SoundStopWave(BGMData_);
 		//シーン切り替え依頼
 		nextSceneName_ = "ClearScene";
 		transition_->StartFadeIn(
@@ -567,6 +569,7 @@ void GameScene::CreateLevel()
 
 void GameScene::GameOverAnimation()
 {
+	Audio::GetInstance()->SoundStopWave(BGMData_);
 	const float deltaTime = 1.0f / 60.0f;
 
 	//----------------------------------------

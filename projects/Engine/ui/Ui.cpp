@@ -161,6 +161,10 @@ void Ui::Initialize() {
 	//ゲームクリアスプライト生成
 	gameclearSprite_ = std::make_unique<YKEngine::Sprite>();
 	gameclearSprite_->Initialize(gameclearTexture_);
+	// 音声
+	pongSE_ = YKEngine::Audio::GetInstance()->SoundLoadWave("./resources/sound/pon.mp3");
+	decideSE_ = YKEngine::Audio::GetInstance()->SoundLoadWave("./resources/sound/popi.mp3");
+
 }
 //更新
 void Ui::Update() {
@@ -569,13 +573,14 @@ void Ui::HandleInput() {
 	//ポーズ画面表示仮
 	if (YKEngine::Input::GetInstance()->TriggerKey(DIK_Q)) {
 		isShowPause_ = !isShowPause_;
+		YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 		if (isShowPause_) {
 			pauseMenu_ = PauseMenu::None;
 		}
 	}
 	if (isShowPause_) {
 		if (YKEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-
+			YKEngine::Audio::GetInstance()->SoundPlayWave(decideSE_, 0.8f);
 			switch (pauseSelectIndex_) {
 
 			case 0:
@@ -637,7 +642,7 @@ void Ui::UpdatePauseMenu() {
 		}
 		if (YKEngine::Input::GetInstance()->TriggerKey(DIK_UP)) {
 			pauseSelectIndex_--;
-
+			YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 			if (pauseSelectIndex_ < 0) {
 				pauseSelectIndex_ = 2;
 			}
@@ -645,7 +650,7 @@ void Ui::UpdatePauseMenu() {
 
 		if (YKEngine::Input::GetInstance()->TriggerKey(DIK_DOWN)) {
 			pauseSelectIndex_++;
-
+			YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 			if (pauseSelectIndex_ > 2) {
 				pauseSelectIndex_ = 0;
 			}

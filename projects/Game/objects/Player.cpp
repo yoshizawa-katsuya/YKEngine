@@ -111,6 +111,10 @@ void Player::Initialize(BaseModel* model) {
 	ringEmitter_->SetDrawMode(ParticleDrawMode::kAddBlend);
 
 	ringEmitter_->SetColor({ 1,1,1,0.5f });
+
+	hitSE_ = Audio::GetInstance()->SoundLoadWave("./resources/sound/hit.mp3");
+	awaySE_ = Audio::GetInstance()->SoundLoadWave("./resources/sound/away.mp3");
+	explosionSE_ = Audio::GetInstance()->SoundLoadWave("./resources/sound/explosion.mp3");
 }
 
 
@@ -220,11 +224,12 @@ void Player::Update() {
 
 		break;
 	case PlayerState::HitImpact:
-
+		
 		hitStopTimer_ -= 1.0f / 60.0f;
 
 		if (hitStopTimer_ <= 0.0f)
 		{
+			Audio::GetInstance()->SoundPlayWave(awaySE_, 1.0f);
 			state_ = PlayerState::Dead;
 		}
 
@@ -333,6 +338,8 @@ void Player::StartDamageReaction()
 {
 	isDamageFlash_ = true;
 	damageFlashTimer_ = kDamageFlashDuration_;
+
+	Audio::GetInstance()->SoundPlayWave(hitSE_, 0.8f);
 }
 
 void Player::ChangePose()
@@ -478,6 +485,7 @@ void Player::UpdateAnimationTimers() {
 
 void Player::StartDeathAnimation()
 {
+	
 	state_ = PlayerState::HitImpact;
 
 	switch (deathVariation_)
@@ -552,6 +560,7 @@ void Player::PlayDeathAnimation()
 	//----------------------------------------
 	if (deathTimer_ >= 2.0f)
 	{
+		Audio::GetInstance()->SoundPlayWave(explosionSE_, 1.0f);
 		// 爆発位置
 		EulerTransform transform{};
 		transform.translation = worldTransform_.translation_;

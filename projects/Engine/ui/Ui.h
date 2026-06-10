@@ -5,7 +5,7 @@
 #include "Vector4.h"
 #include <array>
 #include <memory>
-
+#include "Audio.h"
 class Ui
 {
 public:
@@ -223,4 +223,8 @@ private:
     bool isJudgePlaying_ = false;
 	//ライフ点滅フラグ
     bool isLifeBlink_ = false;
+
+    //音声用
+	YKEngine::SoundData pongSE_;
+	YKEngine::SoundData decideSE_;
 };

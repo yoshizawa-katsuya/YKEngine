@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "GameType.h"
 #include "ParticleEmitter.h"
+#include "Audio.h"
 class YKEngine::Camera;
 
 enum class DeathVariation
@@ -200,4 +201,9 @@ private:
 	float autoPoseTimer_ = 0.0f;
 
 	int autoPoseIndex_ = 0;
+
+	// 音再生用
+	YKEngine::SoundData hitSE_;
+	YKEngine::SoundData awaySE_;
+	YKEngine::SoundData explosionSE_;
 };

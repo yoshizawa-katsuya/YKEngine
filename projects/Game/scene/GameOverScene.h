@@ -12,6 +12,7 @@
 #include "Transition.h"
 #include "Ui.h"
 #include <string>
+#include "Audio.h"
 
 /// <summary>
 /// ゲームオーバーシーンのクラス
@@ -78,4 +79,8 @@ private:
 	MenuState menuState_ = MenuState::Retry;
 
 	bool isStartedTransition_ = false;
+
+	//音声用
+	YKEngine::SoundData pongSE_;
+	YKEngine::SoundData decideSE_;
 };

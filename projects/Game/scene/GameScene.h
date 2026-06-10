@@ -216,4 +216,6 @@ private:
 
 	float deathFinishedTimer_ = 0.0f;
 	bool isDeathFinishedTimerStarted_ = false;
+
+	YKEngine::LoopSoundData BGMData_;
 };

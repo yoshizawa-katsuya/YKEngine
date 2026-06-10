@@ -56,6 +56,10 @@ void GameOverScene::Initialize()
 	//Ui
 	ui_ = std::make_unique<Ui>();
 	ui_->Initialize();
+
+	// 音声
+	pongSE_ = YKEngine::Audio::GetInstance()->SoundLoadWave("./resources/sound/pon.mp3");
+	decideSE_ = YKEngine::Audio::GetInstance()->SoundLoadWave("./resources/sound/popi.mp3");
 }
 
 void GameOverScene::Update()
@@ -85,9 +89,11 @@ void GameOverScene::Update()
 
 	if (!isStartedTransition_) {
 		if (input_->TriggerKey(DIK_LEFT)) {
+			YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 			menuState_ = MenuState::Retry;
 		}
 		if (input_->TriggerKey(DIK_RIGHT)) {
+			YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 			menuState_ = MenuState::Title;
 		}
 	}
@@ -95,6 +101,7 @@ void GameOverScene::Update()
 	if (!isStartedTransition_ &&
 		input_->TriggerKey(DIK_SPACE))
 	{
+		YKEngine::Audio::GetInstance()->SoundPlayWave(decideSE_, 0.8f);
 		isStartedTransition_ = true;
 
 		switch (menuState_) {

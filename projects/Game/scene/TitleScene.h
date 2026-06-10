@@ -94,5 +94,9 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> demoPLayer1_;
 	std::unique_ptr<Player> demoPlayer2_;
+
+	//音声用
+	YKEngine::SoundData pongSE_;
+	YKEngine::SoundData decideSE_;
 };
 

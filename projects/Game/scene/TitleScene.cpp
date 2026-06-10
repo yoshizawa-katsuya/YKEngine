@@ -63,6 +63,10 @@ void TitleScene::Initialize()
 	demoPlayer2_->Initialize(modelPlayer_.get());
 	demoPlayer2_->SetAutoPoseDemo(true);
 	demoPlayer2_->SetPositon(YKEngine::Vector3{ 1.7f,-1.5f,-6.0f });
+
+	// 音声
+	pongSE_ = YKEngine::Audio::GetInstance()->SoundLoadWave("./resources/sound/pon.mp3");
+	decideSE_ = YKEngine::Audio::GetInstance()->SoundLoadWave("./resources/sound/popi.mp3");
 }
 
 void TitleScene::Update()
@@ -95,6 +99,7 @@ void TitleScene::Update()
 		//スタート画面の更新処理
 		if (input_->TriggerKey(DIK_SPACE)) {
 			// START状態でスペースキーが押されたときの処理
+			YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 			// ステートをOPTIONSに変更
 			state_ = State::OPTIONS;
 		}
@@ -108,38 +113,45 @@ void TitleScene::Update()
 			if (input_->TriggerKey(DIK_SPACE)) {
 				// 難易度がEASYのときスペースキーが押されたときの処理
 				// ステートをEXITに変更
+				YKEngine::Audio::GetInstance()->SoundPlayWave(decideSE_, 0.8f);
 				state_ = State::EXIT;
 			}
 			if (input_->TriggerKey(DIK_DOWN)) {
-				// 難易度がEASYのとき右キーが押されたときの処理
+				// 難易度がEASYのとき下キーが押されたときの処理
 				// 難易度をNORMALに変更
+				YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 				difficulty_ = Difficulty::NORMAL;
 			}
 		} else if (difficulty_ == Difficulty::NORMAL) {
 			if (input_->TriggerKey(DIK_SPACE)) {
 				// 難易度がNORMALのときスペースキーが押されたときの処理
 				// ステートをEXITに変更
+				YKEngine::Audio::GetInstance()->SoundPlayWave(decideSE_, 0.8f);
 				state_ = State::EXIT;
 			}
 			if (input_->TriggerKey(DIK_DOWN)) {
-				// 難易度がNORMALのとき右キーが押されたときの処理
+				// 難易度がNORMALのとき下キーが押されたときの処理
 				// 難易度をHARDに変更
+				YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 				difficulty_ = Difficulty::HARD;
 			}
 			if (input_->TriggerKey(DIK_UP)) {
-				// 難易度がNORMALのとき左キーが押されたときの処理
+				// 難易度がNORMALのとき上キーが押されたときの処理
 				// 難易度をEASYに変更
+				YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 				difficulty_ = Difficulty::EASY;
 			}
 		} else if (difficulty_ == Difficulty::HARD) {
 			if (input_->TriggerKey(DIK_SPACE)) {
 				// 難易度がHARDのときスペースキーが押されたときの処理
 				// ステートをEXITに変更
+				YKEngine::Audio::GetInstance()->SoundPlayWave(decideSE_, 0.8f);
 				state_ = State::EXIT;
 			}
 			if (input_->TriggerKey(DIK_UP)) {
-				// 難易度がHARDのとき左キーが押されたときの処理
+				// 難易度がHARDのとき上キーが押されたときの処理
 				// 難易度をNORMALに変更
+				YKEngine::Audio::GetInstance()->SoundPlayWave(pongSE_, 0.8f);
 				difficulty_ = Difficulty::NORMAL;
 			}
 		}
