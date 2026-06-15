@@ -1,5 +1,8 @@
 #pragma once
 
+namespace YKEngine
+{
+
 /// <summary>
 /// リソースリークチェッカー。
 /// Direct3Dのリソースが解放されずに残っている場合、デストラクタでアサートを発生させる。
@@ -14,3 +17,5 @@ public:
 	~D3DResourceLeakChecker();
 
 };
+
+} // namespace YKEngine

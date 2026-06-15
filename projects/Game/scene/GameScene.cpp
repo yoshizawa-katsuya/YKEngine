@@ -8,6 +8,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 GameScene::~GameScene() {
 	//Finalize();
 	audio_->SoundStopWave(bgm1_);
@@ -27,11 +29,8 @@ void GameScene::Initialize() {
 	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
 
 	//デバッグカメラの生成
-	camera2_ = std::make_unique<Camera>();
-	camera2_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera2_->SetTranslate({ 0.0f, 0.0f, -10.0f });
 	debugCamera_ = std::make_unique<DebugCamera>();
-	debugCamera_->Initialize(camera2_.get(), input_);
+	debugCamera_->Initialize();
 
 	//メインカメラの設定
 	mainCamera_ = camera_.get();
@@ -132,8 +131,13 @@ void GameScene::Update() {
 
 	ImGui::Begin("Window");
 	if (ImGui::TreeNode("camera")) {
-		ImGui::DragFloat3("translate", &camera_->GetTranslate().x, 0.01f);
-		ImGui::DragFloat3("rotate", &camera_->GetRotate().x, 0.01f);
+		Vector3 translate = camera_->GetTranslate();
+		ImGui::DragFloat3("translate", &translate.x, 0.01f);
+		camera_->SetTranslate(translate);
+
+		Vector3 rotate = camera_->GetRotate();
+		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+		camera_->SetRotate(rotate);
 		//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
 
 		ImGui::TreePop();
@@ -180,7 +184,7 @@ void GameScene::Update() {
 	if (ImGui::RadioButton("DebugCamera", isActiveDebugCamera_)) {
 		isActiveDebugCamera_ = true;
 
-		mainCamera_ = camera2_.get();
+		mainCamera_ = debugCamera_->GetCamera();
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}

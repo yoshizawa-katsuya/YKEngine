@@ -114,7 +114,7 @@
     <ClCompile Include="Engine\3d\BaseModel.cpp">
       <Filter>ソース ファイル\engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\PrimitiveDrawer.cpp">
+    <ClCompile Include="Engine\3d\PipelineManager.cpp">
       <Filter>ソース ファイル\engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\TextureManager.cpp">
@@ -204,10 +204,7 @@
     <ClCompile Include="Engine\3d\SkinModel.cpp">
       <Filter>ソース ファイル\engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Base3dObject.cpp">
-      <Filter>ソース ファイル\engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Rigid3dObject.cpp">
+    <ClCompile Include="Engine\3d\My3dObject.cpp">
       <Filter>ソース ファイル\engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\Skin3dObject.cpp">
@@ -347,6 +344,9 @@
     <FxCompile Include="Resources\shader\LuminanceBasedOutline.PS.hlsl">
       <Filter>リソース ファイル\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shader\TriplanarObject3d.PS.hlsl">
+      <Filter>リソース ファイル\shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h">
@@ -361,7 +361,7 @@
     <ClInclude Include="Engine\3d\BaseModel.h">
       <Filter>ヘッダー ファイル\engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\PrimitiveDrawer.h">
+    <ClInclude Include="Engine\3d\PipelineManager.h">
       <Filter>ヘッダー ファイル\engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -460,10 +460,7 @@
     <ClInclude Include="Engine\3d\SkinModel.h">
       <Filter>ヘッダー ファイル\engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Base3dObject.h">
-      <Filter>ヘッダー ファイル\engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Rigid3dObject.h">
+    <ClInclude Include="Engine\3d\My3dObject.h">
       <Filter>ヘッダー ファイル\engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\Skin3dObject.h">
@@ -533,6 +530,15 @@
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
     <ClInclude Include="Engine\lib\RootParams.h">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\BaseState.hpp">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\StateMachine.hpp">
+      <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
   </ItemGroup>

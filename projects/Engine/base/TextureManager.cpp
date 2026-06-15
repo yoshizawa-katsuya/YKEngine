@@ -5,22 +5,23 @@
 #include "DirectXTex/d3dx12.h"
 #include "RootParams.h"
 
-TextureManager* TextureManager::instance_ = nullptr;
+using namespace YKEngine;
+
+std::unique_ptr<TextureManager> TextureManager::instance_ = nullptr;
 
 TextureManager* TextureManager::GetInstance()
 {
 	if (instance_ == nullptr)
 	{
-		instance_ = new TextureManager();
+		instance_ = std::make_unique<TextureManager>(ConstructorKey());
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void TextureManager::Finalize()
 {
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
 }
 
 void TextureManager::Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager) 

@@ -1,5 +1,8 @@
 #pragma once
-#include "Base3dObject.h"
+#include "My3dObject.h"
+
+namespace YKEngine
+{
 
 /// <summary>
 /// スキンモデルを扱うクラス。
@@ -8,14 +11,14 @@
 /// スキニングアニメーションをサポートしており、ボーンとジョイントの管理も行う。
 /// ボーンとジョイントのデバッグ描画機能も備えている。
 /// </summary>
-class Skin3dObject : public Base3dObject
+class Skin3dObject : public My3dObject
 {
 public:
 
 	/// <summary>
 	/// デストラクタ。
 	/// </summary>
-	~Skin3dObject();
+	~Skin3dObject() override;
 
 	/// <summary>
 	/// 初期化。
@@ -28,6 +31,13 @@ public:
 	/// </summary>
 	/// <param name="animation">アニメーション</param>
 	void AnimationUpdate(Animation* animation) override;
+
+	/// <summary>
+	/// アニメーションの適用と更新。
+	/// </summary>
+	/// <param name="animation">アニメーション</param>
+	/// <param name="animationTime">アニメーション時間</param>
+	void AnimationUpdate(Animation* animation, float animationTime);
 
 	/// <summary>
 	/// 描画。
@@ -80,6 +90,13 @@ private:
 	void ApplyAnimation(Animation* animation);
 
 	/// <summary>
+	/// アニメーションの適用。
+	/// </summary>
+	/// <param name="animation">アニメーション</param>
+	/// <param name="animationTime">アニメーション時間</param>
+	void ApplyAnimation(Animation* animation, float animationTime);
+
+	/// <summary>
 	/// スケルトンの更新。
 	/// </summary>
 	void SkeletonUpdate();
@@ -89,11 +106,24 @@ private:
 	/// </summary>
 	void SkinClusterUpdate();
 
+	/// <summary>
+	/// 描画処理共通部分。
+	/// </summary>
+	void DrawCommonProcess();
+
+	/// <summary>
+	/// マテリアル用のCBufferの場所を設定.
+	/// </summary>
+	void SetMaterialBufferView() override;
+
 	Skeleton skeleton_;
 
 	SkinCluster skinCluster_;
 
 	uint32_t srvIndex_;
 
+	SrvHeapManager* srvHeapManager_ = nullptr;
+
 };
 
+} // namespace YKEngine

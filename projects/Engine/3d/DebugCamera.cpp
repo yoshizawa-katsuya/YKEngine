@@ -3,11 +3,16 @@
 #include "Input.h"
 #include "Matrix.h"
 
-void DebugCamera::Initialize(Camera* camera, Input* input)
-{
+using namespace YKEngine;
 
-	camera_ = camera;
-	input_ = input;
+void DebugCamera::Initialize()
+{
+	//カメラ生成
+	camera_ = std::make_unique<Camera>();
+	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
+	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+
+	input_ = Input::GetInstance();
 
 	matRot_ = MakeIdentity4x4();
 

@@ -1,13 +1,17 @@
 #pragma once
-#include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
 #include <cstdint>
 #include "Vector4.h"
 #include <vector>
 #include "Struct.h"
+#include <memory>
+
+namespace YKEngine
+{
+
 class SrvHeapManager;
-class PrimitiveDrawer;
+class PipelineManager;
 class DirectXCommon;
 enum class DrawMode;
 
@@ -66,7 +70,7 @@ public:
 	/// </summary>
 	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
 	/// <param name="srvHeapManager">SRVヒープマネージャー</param>
-	void PostDrawRenderTexture(PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
+	void PostDrawRenderTexture(PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager);
 
 	/// <summary>
 	/// アウトラインマテリアルデータの更新。
@@ -77,7 +81,7 @@ public:
 	void SetMaskTexture(uint32_t texturehandle) { maskTextureHandle_ = texturehandle; }
 
 	bool* GetUseOffscreenRenderPtr() { return &useOffscreenRender_; }
-	bool GetUseOffscreenRender() { return useOffscreenRender_; }
+	bool GetUseOffscreenRender() const { return useOffscreenRender_; }
 
 	/// <summary>
 	/// オフスクリーンレンダリングを使用するかどうかを設定。
@@ -89,12 +93,22 @@ public:
 	//レンダーテクスチャの種類を設定
 	void SetRenderTextureType(RenderTextureType type) { renderTextureType_ = type; }
 
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class OffscreenRenderer;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit OffscreenRenderer(ConstructorKey key) {}
+
 private:
 
-	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
-	static OffscreenRenderer* instance_;
+	// シングルトンインスタンス
+	static std::unique_ptr<OffscreenRenderer> instance_;
+	friend struct std::default_delete<OffscreenRenderer>;
 
-	OffscreenRenderer() = default;
 	~OffscreenRenderer() = default;
 	OffscreenRenderer(OffscreenRenderer&) = delete;
 	const OffscreenRenderer& operator=(OffscreenRenderer&) = delete;
@@ -175,3 +189,4 @@ private:
 	bool useOffscreenRender_ = false;
 };
 
+} // namespace YKEngine

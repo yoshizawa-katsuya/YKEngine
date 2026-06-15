@@ -4,6 +4,8 @@
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
+using namespace YKEngine;
+
 Input* Input::GetInstance()
 {
 	static Input instance;
@@ -60,7 +62,7 @@ void Input::Update()
 	mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState_);
 
 	//ゲームパッドの更新
-	GamePadUpdate();
+	isConnected_ = GamePadUpdate();
 
 }
 
@@ -244,14 +246,24 @@ bool Input::ReleaseButton(uint32_t xinput)
 	return false;
 }
 
-bool Input::TrigerRT()
+bool YKEngine::Input::PushRT()
 {
-	if ((gamePadState_.Gamepad.bRightTrigger > 0) && !(preGamePadState_.Gamepad.bRightTrigger > 0))
-	{
-		return true;
-	}
+	return gamePadState_.Gamepad.bRightTrigger > 0;
+}
 
-	return false;
+bool Input::TriggerRT()
+{
+	return (gamePadState_.Gamepad.bRightTrigger > 0) && !(preGamePadState_.Gamepad.bRightTrigger > 0);
+}
+
+bool YKEngine::Input::PushLT()
+{
+	return gamePadState_.Gamepad.bLeftTrigger > 0;
+}
+
+bool YKEngine::Input::TriggerLT()
+{
+	return (gamePadState_.Gamepad.bLeftTrigger > 0) && !(preGamePadState_.Gamepad.bLeftTrigger > 0);
 }
 
 bool Input::HoldButton(uint32_t xinput)
@@ -274,7 +286,7 @@ float Input::GetLeftStickY()
 	return static_cast<float>(gamePadState_.Gamepad.sThumbLY) / SHRT_MAX;
 }
 
-bool Input::TrigerLeftStickDown()
+bool Input::TriggerLeftStickDown()
 {
 	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) < 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) < 0.0f))
 	{
@@ -283,9 +295,27 @@ bool Input::TrigerLeftStickDown()
 	return false;
 }
 
-bool Input::TrigerLeftStickUp()
+bool Input::TriggerLeftStickUp()
 {
 	if (static_cast<float>(gamePadState_.Gamepad.sThumbLY) > 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLY) > 0.0f))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool YKEngine::Input::TriggerLeftStickLeft()
+{
+	if (static_cast<float>(gamePadState_.Gamepad.sThumbLX) < 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLX) < 0.0f))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool YKEngine::Input::TriggerLeftStickRight()
+{
+	if (static_cast<float>(gamePadState_.Gamepad.sThumbLX) > 0.0f && !(static_cast<float>(preGamePadState_.Gamepad.sThumbLX) > 0.0f))
 	{
 		return true;
 	}

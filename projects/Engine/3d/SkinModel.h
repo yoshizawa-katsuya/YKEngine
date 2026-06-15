@@ -1,6 +1,9 @@
 #pragma once
 #include "BaseModel.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// スキンメッシュを持つモデル。
 /// スキンクラスターを持つ。
@@ -39,17 +42,19 @@ public:
 private:
 
 	/// <summary>
-	/// モデルファイル読み込み。
+	/// メッシュデータを読み込む。
 	/// </summary>
-	/// <param name="directoryPath">ディレクトリパス</param>
-	/// <param name="filename">ファイル名</param>
-	void LoadModelFile(const std::string& directoryPath, const std::string& filename) override;
+	/// <param name="mesh">Assimpのメッシュデータ</param>
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadMeshData(aiMesh* mesh, uint32_t vertexStartIndex) override;
 
 	/// <summary>
 	/// スキンクラスター作成用のデータを読み込む。
 	/// </summary>
 	/// <param name="mesh">assimpメッシュ</param>
-	void LoadSkinCluster(aiMesh* mesh);
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadSkinCluster(aiMesh* mesh, uint32_t vertexStartIndex);
 
 };
 
+} // namespace YKEngine

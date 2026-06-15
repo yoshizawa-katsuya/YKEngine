@@ -1,12 +1,14 @@
 #include "SpritePlatform.h"
 
+using namespace YKEngine;
+
 SpritePlatform* SpritePlatform::GetInstance()
 {
 	static SpritePlatform instance;
 	return &instance;
 }
 
-void SpritePlatform::Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer)
+void SpritePlatform::Initialize(DirectXCommon* dxCommon, PipelineManager* primitiveDrawer)
 {
 
 	//引数で受け取ってメンバ変数に記録する

@@ -11,6 +11,10 @@
 
 #include "WinApp.h"
 #include "DirectXTex/DirectXTex.h"
+#include "Struct.h"
+
+namespace YKEngine
+{
 
 /// <summary>
 /// DirectX共通機能。
@@ -134,15 +138,27 @@ public:
 
 	D3D12_VIEWPORT* GetViewport() { return &viewport_; }
 
+	const Matrix4x4& GetViewPortMatrix() const { return viewPortMatrix_; }
+
 	D3D12_RECT* GetScissorRect() { return &scissorRect_; }
 
 	ID3D12Resource* GetDepthStencilResource() const { return depthStencilResource_.Get(); }
 
-private:
-	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
-	static DirectXCommon* instance_;
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class DirectXCommon;
+	};
 
-	DirectXCommon() = default;
+	//PassKeyを受け取るコンストラクタ
+	explicit DirectXCommon(ConstructorKey key) {}
+
+private:
+	// シングルトンインスタンス
+	static std::unique_ptr<DirectXCommon> instance_;
+	friend struct std::default_delete<DirectXCommon>;
+
 	~DirectXCommon() = default;
 	DirectXCommon(DirectXCommon&) = delete;
 	const DirectXCommon& operator=(DirectXCommon&) = delete;
@@ -265,6 +281,7 @@ private:
 	uint32_t descriptorSizeDSV_;
 
 	D3D12_VIEWPORT viewport_{};
+	Matrix4x4 viewPortMatrix_;
 
 	D3D12_RECT scissorRect_{};
 
@@ -279,3 +296,4 @@ private:
 	bool* useOffscreenRender_;
 };
 
+} // namespace YKEngine

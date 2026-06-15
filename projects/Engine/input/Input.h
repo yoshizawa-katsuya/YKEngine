@@ -8,7 +8,8 @@
 #include "WinApp.h"
 #include "Struct.h"
 
-using namespace Microsoft::WRL;
+namespace YKEngine
+{
 
 /// <summary>
 /// 入力クラス。
@@ -147,10 +148,28 @@ public:
 	bool ReleaseButton(uint32_t xinput);
 
 	/// <summary>
+	/// ゲームパッドの右トリガーを押しているかをチェック。
+	/// </summary>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
+	bool PushRT();
+
+	/// <summary>
 	/// ゲームパッドの右トリガーを押した瞬間をチェック。
 	/// </summary>
 	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerRT();
+	bool TriggerRT();
+
+	/// <summary>
+	/// ゲームパッドの左トリガーを押しているかをチェック。
+	/// </summary>
+	/// <returns>押されていればtrue。そうでなければfalse。</returns>
+	bool PushLT();
+
+	/// <summary>
+	/// ゲームパッドの左トリガーを押した瞬間をチェック。
+	/// </summary>
+	/// <returns>押した瞬間であればtrue。そうでなければfalse。</returns>
+	bool TriggerLT();
 
 	/// <summary>
 	/// ゲームパッドのボタンを押しっぱなしにしているかチェック。
@@ -175,13 +194,25 @@ public:
 	/// 左スティックを下に倒した瞬間をチェック。
 	/// </summary>
 	/// <returns>下に倒した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerLeftStickDown();
+	bool TriggerLeftStickDown();
 
 	/// <summary>
 	/// 左スティックを上に倒した瞬間をチェック。
 	/// </summary>
 	/// <returns>上に倒した瞬間であればtrue。そうでなければfalse。</returns>
-	bool TrigerLeftStickUp();
+	bool TriggerLeftStickUp();
+
+	/// <summary>
+	/// 左スティックを左に倒した瞬間をチェック。
+	/// </summary>
+	/// <returns>左に倒した瞬間であればtrue。そうでなければfalse。</returns>
+	bool TriggerLeftStickLeft();
+
+	/// <summary>
+	/// 左スティックを右に倒した瞬間をチェック。
+	/// </summary>
+	/// <returns>右に倒した瞬間であればtrue。そうでなければfalse。</returns>
+	bool TriggerLeftStickRight();
 
 	/// <summary>
 	/// 右スティックのX方向の入力。-1.0f~1.0fの範囲。
@@ -194,6 +225,12 @@ public:
 	/// </summary>
 	/// <returns>右スティックのY方向の入力値。</returns>
 	float GetRightStickY();
+
+	/// <summary>
+	/// ゲームパッドが接続されているかどうか。
+	/// </summary>
+	/// <returns>接続されていればtrue。そうでなければfalse。</returns>
+	bool IsConnected() { return isConnected_; }
 
 private:
 
@@ -230,9 +267,9 @@ private:
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;
 
-	ComPtr<IDirectInputDevice8> keyboard_;
-	ComPtr<IDirectInputDevice8> mouse_;
-	ComPtr<IDirectInput8> directInput_ = nullptr;
+	Microsoft::WRL::ComPtr<IDirectInputDevice8> keyboard_;
+	Microsoft::WRL::ComPtr<IDirectInputDevice8> mouse_;
+	Microsoft::WRL::ComPtr<IDirectInput8> directInput_ = nullptr;
 	//全キーの入力情報
 	BYTE key_[256] = {};
 	//前回の全キーの入力情報
@@ -245,5 +282,9 @@ private:
 	XINPUT_STATE gamePadState_;
 	XINPUT_STATE preGamePadState_;
 
+	// ゲームパッドが接続されているかどうか
+	bool isConnected_ = false;
+
 };
 
+} // namespace YKEngine

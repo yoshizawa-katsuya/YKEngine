@@ -5,6 +5,9 @@
 #include <condition_variable>
 #include <atomic>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 複数のスレッドでタスクを並列に実行するためのクラス。
 /// タスクの追加、完了待機が可能。
@@ -34,7 +37,7 @@ public:
 	/// タスクをキューに追加する。
     /// </summary>
 	/// <param name="task">実行するタスク(関数オブジェクト)</param>
-    void enqueueTask(std::function<void()> task);
+    void enqueueTask(const std::function<void()>& task);
 
     /// <summary>
 	/// 可変引数を持つ関数をタスクとしてキューに追加する。
@@ -84,3 +87,5 @@ inline void ThreadPool::enqueueTask(F&& f, Args && ...args)
     }
     condition_.notify_one();
 }
+
+} // namespace YKEngine

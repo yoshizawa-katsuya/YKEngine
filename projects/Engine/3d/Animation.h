@@ -2,6 +2,9 @@
 #include <map>
 #include <string>
 #include "Struct.h"
+
+namespace YKEngine
+{
 class BaseModel;
 
 /// <summary>
@@ -50,7 +53,9 @@ public:
 
 	const std::map<std::string, NodeAnimation>& GetNodeAnimations() const { return nodeAnimations_; }
 
-	float GetAnimationTime() { return animationTime_; }
+	float GetDuration() const { return duration_; }	//アニメーション全体の尺を取得
+
+	float GetAnimationTime() { return animationTime_; }	//再生中の時刻を取得
 
 private:
 
@@ -62,3 +67,4 @@ private:
 
 };
 
+} // namespace YKEngine

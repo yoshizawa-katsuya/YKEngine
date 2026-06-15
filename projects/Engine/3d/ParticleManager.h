@@ -1,12 +1,15 @@
 #pragma once
 #include "SrvHeapManager.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include "Struct.h"
 #include "Camera.h"
-#include <random>
 #include "ParticleTypes.h"
 #include "BaseModel.h"
 #include "Color.h"
+
+namespace YKEngine
+{
+class Random;
 
 /// <summary>
 /// パーティクル管理クラス。
@@ -36,7 +39,7 @@ public:
 	/// <param name="dxCommon">DirectX共通クラス</param>
 	/// <param name="srvHeapManager">SRVヒープマネージャー</param>
 	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
-	void Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PrimitiveDrawer* primitiveDrawer);
+	void Initialize(DirectXCommon* dxCommon, SrvHeapManager* srvHeapManager, PipelineManager* primitiveDrawer);
 
 	/// <summary>
 	/// パーティクルの更新。
@@ -57,7 +60,7 @@ public:
 	/// <param name="textureHandle">パーティクルのテクスチャハンドル</param>
 	/// <param name="model">パーティクルのモデル</param>
 	/// <param name="behavior">パーティクルの挙動</param>
-	void CreateParticleGroup(const std::string name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
+	void CreateParticleGroup(const std::string& name, uint32_t textureHandle, std::shared_ptr<BaseModel> model, std::shared_ptr<ParticleBehavior> behavior);
 
 	/// <summary>
 	/// パーティクルの発生。
@@ -68,14 +71,14 @@ public:
 	/// <param name="randomFlags">ランダム化フラグ</param>
 	/// <param name="color">パーティクルの色</param>
 	/// <param name="rangeParams">エミッター範囲パラメータ</param>
-	void Emit(const std::string name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
+	void Emit(const std::string& name, const EulerTransform& transform, uint32_t count, const ParticleRandomizationFlags& randomFlags,
 		const Color& color, const EmitterRangeParams& rangeParams);
 
 	/// <summary>
 	/// パーティクルを削除。
 	/// </summary>
 	/// <param name="name">パーティクルグループの名前</param>
-	void ClearParticles(const std::string name);
+	void ClearParticles(const std::string& name);
 
 	/// <summary>
 	/// 全てのパーティクルを削除。
@@ -84,18 +87,27 @@ public:
 
 	void SetUseAccelerationField(bool useAccelerationField) { useAccelerationField_ = useAccelerationField; }
 
-	bool& GetUseAccelerationField() { return useAccelerationField_; }
 	bool GetUseAccelerationField() const { return useAccelerationField_; }
+
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class ParticleManager;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit ParticleManager(ConstructorKey key) {}
 
 private:
 
 	// シングルトンインスタンス
-	static ParticleManager* instance_;
+	static std::unique_ptr<ParticleManager> instance_;
+	friend struct std::default_delete<ParticleManager>;
 
-	ParticleManager() = default;
 	~ParticleManager() = default;
-	ParticleManager(ParticleManager&) = default;
-	ParticleManager& operator=(ParticleManager&) = default;
+	ParticleManager(ParticleManager&) = delete;
+	ParticleManager& operator=(ParticleManager&) = delete;
 
 	Particle MakeNewParticle(const EulerTransform& transform, const ParticleRandomizationFlags& randomFlags,
 		const Color& color, const EmitterRangeParams& rangeParams, const ParticleBehavior& behavior);
@@ -112,7 +124,8 @@ private:
 	/// <param name="numInstance">現在のインスタンス数</param>
 	/// <param name="instancingData">インスタンシング用データ</param>
 	/// <param name="behavior">パーティクルの挙動</param>
-	struct ParticleGroup {
+	struct ParticleGroup 
+	{
 		std::shared_ptr<BaseModel> model;
 		uint32_t textureHandle;
 		std::list<Particle> particles;
@@ -126,7 +139,7 @@ private:
 
 	DirectXCommon* dxCommon_;
 	SrvHeapManager* srvHeapManager_;
-	PrimitiveDrawer* primitiveDrawer_;
+	PipelineManager* primitiveDrawer_;
 
 	const float kDeltaTime_ = 1.0f / 60.0f;
 
@@ -139,7 +152,7 @@ private:
 	};
 
 	//乱数生成エンジンへのポインタ
-	std::mt19937* randomEngine_;
+	Random* random_ = nullptr;
 
 	std::unordered_map<std::string, ParticleGroup> particleGroups_;
 
@@ -148,3 +161,4 @@ private:
 	
 };
 
+} // namespace YKEngine

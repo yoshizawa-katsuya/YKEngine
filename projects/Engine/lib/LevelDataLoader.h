@@ -2,6 +2,9 @@
 #include "Struct.h"
 #include "json.hpp"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// オブジェクトの生成データ。
 /// </summary>
@@ -74,11 +77,13 @@ struct LevelData
 /// <param name="fileName">レベルデータファイル名</param>
 /// <param name="kExtension">レベルデータファイル拡張子</param>
 /// <returns>レベルデータ</returns>
-LevelData* LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
+LevelData LevelDataLoad(const std::string& kDefaultBaseDirectory, const std::string& fileName, const std::string& kExtension);
 
 /// <summary>
 /// Transformのロード。
 /// </summary>
 /// <param name="transformData">TransformのJSONデータ</param>
 /// <returns>Transformデータ</returns>
-EulerTransform TranformLoad(nlohmann::json& transformData);
+EulerTransform TranformLoad(const nlohmann::json& transformData);
+
+}	// namespace YKEngine

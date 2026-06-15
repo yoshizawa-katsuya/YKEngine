@@ -6,6 +6,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+using namespace YKEngine;
+
 GlobalVariables* GlobalVariables::GetInstance()
 {
 	static GlobalVariables instance;
@@ -22,8 +24,8 @@ void GlobalVariables::Update() {
 	}
 	
 
-	for (std::map<std::string, Group>::iterator itGroup = datas_.begin();
-		itGroup != datas_.end(); ++itGroup) {
+	for (std::map<std::string, Group>::iterator itGroup = dates_.begin();
+		itGroup != dates_.end(); ++itGroup) {
 
 		//グループ名を取得
 		const std::string& groupName = itGroup->first;
@@ -56,6 +58,13 @@ void GlobalVariables::Update() {
 			{
 				float* ptr = std::get_if<float>(&item);
 				ImGui::DragFloat(itemName.c_str(), ptr, 0.01f);
+			}
+
+			//Vector2型の値を保持していれば
+			else if (std::holds_alternative<Vector2>(item))
+			{
+				Vector2* ptr = std::get_if<Vector2>(&item);
+				ImGui::DragFloat2(itemName.c_str(), reinterpret_cast<float*>(ptr), 0.01f);
 			}
 
 			//Vector3型の値を保持していれば
@@ -110,146 +119,88 @@ void GlobalVariables::CreateGroup(const std::string& groupName)
 {
 
 	//指定名のオブジェクトがなければ追加する
-	datas_[groupName];
+	dates_[groupName];
 
 }
 
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, int32_t value)
 {
-
-	//グループの参照を取得
-	Group& group = datas_[groupName];
-	//新しい項目のデータを設定
-	Item newItem{};
-	newItem = value;
-	//設定した項目をstd::mapに追加
-	group[key] = newItem;
-
+	SetValueInternal(groupName, key, value);
 }
 
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, float value) 
 {
-
-	// グループの参照を取得
-	Group& group = datas_[groupName];
-	// 新しい項目のデータを設定
-	Item newItem{};
-	newItem = value;
-	// 設定した項目をstd::mapに追加
-	group[key] = newItem;
+	SetValueInternal(groupName, key, value);
 }
 
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector3& value) 
 {
+	SetValueInternal(groupName, key, value);
+}
 
-	// グループの参照を取得
-	Group& group = datas_[groupName];
-	// 新しい項目のデータを設定
-	Item newItem{};
-	newItem = value;
-	// 設定した項目をstd::mapに追加
-	group[key] = newItem;
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector2& value)
+{
+	SetValueInternal(groupName, key, value);
 }
 
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Vector4& value)
 {
-	// グループの参照を取得
-	Group& group = datas_[groupName];
-	// 新しい項目のデータを設定
-	Item newItem{};
-	newItem = value;
-	// 設定した項目をstd::mapに追加
-	group[key] = newItem;
+	SetValueInternal(groupName, key, value);
 }
 
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Color& value)
 {
-	// グループの参照を取得
-	Group& group = datas_[groupName];
-	// 新しい項目のデータを設定
-	Item newItem{};
-	newItem = value;
-	// 設定した項目をstd::mapに追加
-	group[key] = newItem;
+	SetValueInternal(groupName, key, value);
 }
 
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, bool value) 
 {
-
-	// グループの参照を取得
-	Group& group = datas_[groupName];
-	// 新しい項目のデータを設定
-	Item newItem{};
-	newItem = value;
-	// 設定した項目をstd::mapに追加
-	group[key] = newItem;
-
+	SetValueInternal(groupName, key, value);
 }
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value)
 {
-	//項目が未登録の場合のみ追加
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) 
-	{
-		SetValue(groupName, key, value);
-	}
-
+	AddItemInternal(groupName, key, value);
 }
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) 
 {
-	//項目が未登録の場合のみ追加
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) 
-	{
-		SetValue(groupName, key, value);
-	}
+	AddItemInternal(groupName, key, value);
 }
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value) 
 {
-	//項目が未登録の場合のみ追加
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end())
-	{
-		SetValue(groupName, key, value);
-	}
+	AddItemInternal(groupName, key, value);
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector2& value)
+{
+	AddItemInternal(groupName, key, value);
 }
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector4& value)
 {
-	//項目が未登録の場合のみ追加
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end())
-	{
-		SetValue(groupName, key, value);
-	}
+	AddItemInternal(groupName, key, value);
 }
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Color& value)
 {
-	//項目が未登録の場合のみ追加
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) 
-	{
-		SetValue(groupName, key, value);
-	}
+	AddItemInternal(groupName, key, value);
 }
 
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, bool value)
 {
-	//項目が未登録の場合のみ追加
-	if (datas_.find(groupName)->second.find(key) == datas_.find(groupName)->second.end()) 
-	{
-		SetValue(groupName, key, value);
-	}
-
+	AddItemInternal(groupName, key, value);
 }
 
 void GlobalVariables::SaveFile(const std::string& groupName)
 {
 
 	//グループを検索
-	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+	std::map<std::string, Group>::iterator itGroup = dates_.find(groupName);
 
 	//未登録チェック
-	assert(itGroup != datas_.end());
+	assert(itGroup != dates_.end());
 
 	json root;
 
@@ -457,78 +408,79 @@ void GlobalVariables::LoadFile(const std::string& groupName)
 
 int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const 
 {
-
-	assert(datas_.find(groupName) != datas_.end());
-
-	//グループの参照を取得
-	const Group& group = datas_.at(groupName);
-
-	assert(group.find(key) != group.end());
-
-	return std::get<int32_t>(group.at(key));
-
+	Item outValue;
+	GetValueInternal(groupName, key, outValue);
+	return std::get<int32_t>(outValue);
 }
 
 float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) const 
 {
-
-	assert(datas_.find(groupName) != datas_.end());
-
-	// グループの参照を取得
-	const Group& group = datas_.at(groupName);
-
-	assert(group.find(key) != group.end());
-
-	return std::get<float>(group.at(key));
+	Item outValue;
+	GetValueInternal(groupName, key, outValue);
+	return std::get<float>(outValue);
 }
 
 Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) const
 {
+	Item outValue;
+	GetValueInternal(groupName, key, outValue);
+	return std::get<Vector3>(outValue);
+}
 
-	assert(datas_.find(groupName) != datas_.end());
-
-	// グループの参照を取得
-	const Group& group = datas_.at(groupName);
-
-	assert(group.find(key) != group.end());
-
-	return std::get<Vector3>(group.at(key));
+Vector2 GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key) const
+{
+	Item outValue;
+	GetValueInternal(groupName, key, outValue);
+	return std::get<Vector2>(outValue);
 }
 
 Vector4 GlobalVariables::GetVector4Value(const std::string& groupName, const std::string& key) const
 {
-	assert(datas_.find(groupName) != datas_.end());
-
-	// グループの参照を取得
-	const Group& group = datas_.at(groupName);
-
-	assert(group.find(key) != group.end());
-
-	return std::get<Vector4>(group.at(key));
+	Item outValue;
+	GetValueInternal(groupName, key, outValue);
+	return std::get<Vector4>(outValue);
 }
 
 Color GlobalVariables::GetColorValue(const std::string& groupName, const std::string& key) const
 {
-	assert(datas_.find(groupName) != datas_.end());
-
-	// グループの参照を取得
-	const Group& group = datas_.at(groupName);
-
-	assert(group.find(key) != group.end());
-
-	return std::get<Color>(group.at(key));
+	Item outValue;
+	GetValueInternal(groupName, key, outValue);
+	return std::get<Color>(outValue);
 }
 
 bool GlobalVariables::GetBoolValue(const std::string& groupName, const std::string& key) const
 {
-	
-	assert(datas_.find(groupName) != datas_.end());
+	Item outValue;
+	GetValueInternal(groupName, key, outValue);
+	return std::get<bool>(outValue);
+}
 
+void GlobalVariables::SetValueInternal(const std::string& groupName, const std::string& key, const Item& value)
+{
 	// グループの参照を取得
-	const Group& group = datas_.at(groupName);
+	Group& group = dates_[groupName];
+	// 設定した項目をstd::mapに追加
+	group[key] = value;
+
+}
+
+void GlobalVariables::AddItemInternal(const std::string& groupName, const std::string& key, const Item& value)
+{
+	// 項目が未登録の場合のみ追加
+	if (dates_.find(groupName)->second.find(key) == dates_.find(groupName)->second.end())
+	{
+		SetValueInternal(groupName, key, value);
+	}
+}
+
+void GlobalVariables::GetValueInternal(const std::string& groupName, const std::string& key, Item& outValue) const
+{
+	assert(dates_.find(groupName) != dates_.end());
+	// グループの参照を取得
+	const Group& group = dates_.at(groupName);
 
 	assert(group.find(key) != group.end());
 
-	return std::get<bool>(group.at(key));
-
+	// 指定した項目の値を取得
+	outValue = group.at(key);
 }

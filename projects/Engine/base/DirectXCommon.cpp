@@ -4,6 +4,7 @@
 #include <dx12.h>
 #include <thread>
 #include "OffscreenRenderer.h"
+#include "Matrix.h"
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -11,16 +12,17 @@
 #pragma comment(lib,"dxcompiler.lib")
 
 using namespace Microsoft::WRL;
+using namespace YKEngine;
 
-DirectXCommon* DirectXCommon::instance_ = nullptr;
+std::unique_ptr<DirectXCommon> DirectXCommon::instance_ = nullptr;
 
 DirectXCommon* DirectXCommon::GetInstance()
 {
 	if (instance_ == nullptr) 
 	{
-		instance_ = new DirectXCommon();
+		instance_ = std::make_unique<DirectXCommon>(ConstructorKey());
 	}
-	return instance_;
+	return instance_.get();
 }
 
 void DirectXCommon::Finalize()
@@ -28,9 +30,8 @@ void DirectXCommon::Finalize()
 	//Fence用のイベントを閉じる
 	CloseHandle(fenceEvent_);
 
-	//インスタンスを破棄
-	delete instance_;
-	instance_ = nullptr;
+	//リソースリークチェックのため、明示的にインスタンスを破棄する
+	instance_.reset();
 }
 
 void DirectXCommon::Initialize(WinApp* winApp)
@@ -332,6 +333,14 @@ void DirectXCommon::CreateViewport()
 	viewport_.MinDepth = 0.0f;
 	viewport_.MaxDepth = 1.0f;
 
+	viewPortMatrix_ = MakeViewportMatrix(
+		0.0f,
+		0.0f,
+		static_cast<float>(WinApp::kClientWidth),
+		static_cast<float>(WinApp::kClientHeight),
+		0.0f,
+		1.0f
+	);
 }
 
 void DirectXCommon::CreateScissorRect()

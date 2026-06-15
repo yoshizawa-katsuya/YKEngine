@@ -8,6 +8,8 @@
 #include "BaseModel.h"
 #include "Matrix.h"
 
+using namespace YKEngine;
+
 void Animation::LoadAnimationFile(const std::string& directoryPath, const std::string& filename)
 {
 
@@ -15,7 +17,7 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 	std::string filePath = directoryPath + "/" + filename;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
 	assert(scene->mNumAnimations != 0);	//アニメーションがない
-	aiAnimation* animationAssimp = scene->mAnimations[0];	//最初のアニメーションだけ採用。もちろん複数対応することに越したことはない
+	aiAnimation* animationAssimp = scene->mAnimations[0];	//最初のアニメーションだけ採用 TODO:複数対応する
 	duration_ = static_cast<float>(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);	//時間の単位を秒に変換
 
 	//assimpでは個々のNodeのAnimationをchannelと呼んでいるのでchannelを回してNodeAnimationの情報をとってくる
@@ -32,7 +34,8 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 			nodeAnimation.translate.keyframes.push_back(keyframe);
 		}
 
-		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) {
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) 
+		{
 			aiQuatKey& keyAssimp = nodeAnimationAssimp->mRotationKeys[keyIndex];
 			KeyframeQuaternion keyframe;
 			keyframe.time = static_cast<float>(keyAssimp.mTime / animationAssimp->mTicksPerSecond);	//ここも秒に変換
@@ -40,7 +43,8 @@ void Animation::LoadAnimationFile(const std::string& directoryPath, const std::s
 			nodeAnimation.rotate.keyframes.push_back(keyframe);
 		}
 
-		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex) {
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex)
+		{
 			aiVectorKey& keyAssimp = nodeAnimationAssimp->mScalingKeys[keyIndex];
 			KeyframeVector3 keyframe;
 			keyframe.time = static_cast<float>(keyAssimp.mTime / animationAssimp->mTicksPerSecond);	//ここも秒に変換

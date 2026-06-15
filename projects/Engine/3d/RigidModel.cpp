@@ -2,6 +2,8 @@
 #include "ModelPlatform.h"
 #include <numbers>
 
+using namespace YKEngine;
+
 RigidModel::~RigidModel()
 {
 }
@@ -15,13 +17,16 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 	//円周率
 	const float pi = std::numbers::pi_v<float>;
 
+	//頂点数
+	const uint32_t kVertexCount = kSubdivision * kSubdivision * 4;
+
 	//VertexResourceを生成
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * (kSubdivision * kSubdivision * 4));
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kVertexCount);
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * (kSubdivision * kSubdivision * 4));
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kVertexCount);
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
@@ -89,15 +94,18 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 		}
 	}
 
-	modelData_->vertices.resize(kSubdivision * kSubdivision * 4);
+	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * (kSubdivision * kSubdivision * 6));
+	//頂点Index数
+	const uint32_t kIndexCount = kSubdivision * kSubdivision * 6;
+
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kIndexCount);
 
 	//リソースの先頭のアドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * (kSubdivision * kSubdivision * 6);
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kIndexCount;
 	//インデックスはuint32_tとする
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
@@ -125,7 +133,7 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 		}
 	}
 
-	modelData_->indeces.resize(kSubdivision * kSubdivision * 6);
+	modelData_->indeces.resize(kIndexCount);
 	SetIndecesNum();
 
 	CreateMaterialData();
@@ -142,25 +150,31 @@ void RigidModel::CreateCube(uint32_t textureHandle)
 	//箱の面の個数
 	const uint32_t kBoxSurfaceCount = 6;
 
+	//頂点数
+	const uint32_t kVertexCount = kBoxSurfaceCount * 4;
+
 	//VertexResourceを生成
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kBoxSurfaceCount * 4);
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kVertexCount);
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kBoxSurfaceCount * 4);
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kVertexCount);
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kBoxSurfaceCount * 6);
+	//頂点Index数
+	const uint32_t kIndexCount = kBoxSurfaceCount * 6;
+
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kIndexCount);
 
 	//リソースの先頭のアドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kBoxSurfaceCount * 6;
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kIndexCount;
 	//インデックスはuint32_tとする
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
@@ -244,10 +258,10 @@ void RigidModel::CreateCube(uint32_t textureHandle)
 	indexData_[34] = 21;
 	indexData_[35] = 23;
 
-	modelData_->vertices.resize(kBoxSurfaceCount * 4);
+	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	modelData_->indeces.resize(kBoxSurfaceCount * 6);
+	modelData_->indeces.resize(kIndexCount);
 	SetIndecesNum();
 
 	CreateMaterialData();
@@ -260,13 +274,16 @@ void RigidModel::CreatePlane(uint32_t textureHandle)
 
 	modelData_ = std::make_unique<ModelData>();
 
+	//頂点数
+	const uint32_t kVertexCount = 4;
+
 	//VertexResourceを生成
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * 4);
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kVertexCount);
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * 4);
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kVertexCount);
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
@@ -278,14 +295,17 @@ void RigidModel::CreatePlane(uint32_t textureHandle)
 	vertexData_[2] = { .position = {1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {0.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
 	vertexData_[3] = { .position = {-1.0f, -1.0f, 0.0f, 1.0f}, .texcoord = {1.0f, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右下
 
-	modelData_->vertices.resize(4);
+	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
+	//頂点Index数
+	const uint32_t kIndexCount = 6;
+
 	//IndexResources作成
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * 6);
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kIndexCount);
 
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
-	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * 6);
+	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * kIndexCount);
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
@@ -297,7 +317,7 @@ void RigidModel::CreatePlane(uint32_t textureHandle)
 	indexData_[4] = 1;	//右上
 	indexData_[5] = 3;	//右下
 
-	modelData_->indeces.resize(6);
+	modelData_->indeces.resize(kIndexCount);
 	SetIndecesNum();
 
 	CreateMaterialData();
@@ -319,25 +339,31 @@ void RigidModel::CreateRing(uint32_t textureHandle)
 	//一欠けらごとの円周
 	const float radianPerDivide = 2.0f * std::numbers::pi_v<float> / static_cast<float>(kRingDivide);
 
+	//頂点数
+	const uint32_t kVertexCount = kRingDivide * 4;
+
 	//VertexResourceを生成
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kRingDivide * 4);
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kVertexCount);
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kRingDivide * 4);
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kVertexCount);
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kRingDivide * 6);
+	//頂点Index数
+	const uint32_t kIndexCount = kRingDivide * 6;
+
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kIndexCount);
 
 	//リソースの先頭のアドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kRingDivide * 6;
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kIndexCount;
 	//インデックスはuint32_tとする
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
@@ -369,10 +395,10 @@ void RigidModel::CreateRing(uint32_t textureHandle)
 
 	}
 
-	modelData_->vertices.resize(kRingDivide * 4);
+	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	modelData_->indeces.resize(kRingDivide * 6);
+	modelData_->indeces.resize(kIndexCount);
 	SetIndecesNum();
 
 	CreateMaterialData();
@@ -395,25 +421,31 @@ void RigidModel::CreateCylinder(uint32_t textureHandle)
 	//一欠けらごとの円周
 	const float radianPerDivide = 2.0f * std::numbers::pi_v<float> / static_cast<float>(kCylinderDivide);
 
+	//頂点数
+	const uint32_t kVertexCount = kCylinderDivide * 4;
+
 	//VertexResourceを生成
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kCylinderDivide * 4);
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kVertexCount);
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kCylinderDivide * 4);
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kVertexCount);
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kCylinderDivide * 6);
+	//頂点Index数
+	const uint32_t kIndexCount = kCylinderDivide * 6;
+
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kIndexCount);
 
 	//リソースの先頭のアドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kCylinderDivide * 6;
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kIndexCount;
 	//インデックスはuint32_tとする
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
@@ -445,10 +477,10 @@ void RigidModel::CreateCylinder(uint32_t textureHandle)
 
 	}
 
-	modelData_->vertices.resize(kCylinderDivide * 4);
+	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	modelData_->indeces.resize(kCylinderDivide * 6);
+	modelData_->indeces.resize(kIndexCount);
 	SetIndecesNum();
 
 	CreateMaterialData();
@@ -463,25 +495,31 @@ void RigidModel::CreateSkyBox(uint32_t textureHandle)
 	//箱の面の個数
 	const uint32_t kBoxSurfaceCount = 6;
 
+	//頂点数
+	const uint32_t kVertexCount = kBoxSurfaceCount * 4;
+
 	//VertexResourceを生成	TODO: texcordとnormalは使わないのでVertexDataではなくVector4を使うように変更する
-	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kBoxSurfaceCount * 4);
+	vertexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * kVertexCount);
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kBoxSurfaceCount * 4);
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * kVertexCount);
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kBoxSurfaceCount * 6);
+	//頂点Index数
+	const uint32_t kIndexCount = kBoxSurfaceCount * 6;
+
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * kIndexCount);
 
 	//リソースの先頭のアドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kBoxSurfaceCount * 6;
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * kIndexCount;
 	//インデックスはuint32_tとする
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
@@ -565,10 +603,10 @@ void RigidModel::CreateSkyBox(uint32_t textureHandle)
 	indexData_[34] = 21;
 	indexData_[35] = 23;
 
-	modelData_->vertices.resize(kBoxSurfaceCount * 4);
+	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	modelData_->indeces.resize(kBoxSurfaceCount * 6);
+	modelData_->indeces.resize(kIndexCount);
 	SetIndecesNum();
 
 	CreateMaterialData();

@@ -1,7 +1,11 @@
 #include "Matrix.h"
 #include <algorithm>
 
-Matrix3x3 MakeTranslateMatrix(Vector2 translate) {
+namespace YKEngine
+{
+
+Matrix3x3 MakeTranslateMatrix(Vector2 translate)
+{
 	Matrix3x3 matrix;
 
 	matrix.m[0][0] = 1;
@@ -17,7 +21,8 @@ Matrix3x3 MakeTranslateMatrix(Vector2 translate) {
 	return matrix;
 }
 
-Matrix3x3 Invarse(Matrix3x3 matrix) {
+Matrix3x3 Invarse(const Matrix3x3& matrix)
+{
 	Matrix3x3 invarse;
 	float A_1 = 1 / (matrix.m[0][0] * matrix.m[1][1] * matrix.m[2][2] + matrix.m[0][1] * matrix.m[1][2] * matrix.m[2][0] + matrix.m[0][2] * matrix.m[1][0] * matrix.m[2][1]
 		- matrix.m[0][2] * matrix.m[1][1] * matrix.m[2][0] - matrix.m[0][1] * matrix.m[1][0] * matrix.m[2][2] - matrix.m[0][0] * matrix.m[1][2] * matrix.m[2][1]);
@@ -35,7 +40,8 @@ Matrix3x3 Invarse(Matrix3x3 matrix) {
 	return invarse;
 }
 
-Matrix3x3 MakeOrthographicMatrix(float left, float top, float right, float bottom) {
+Matrix3x3 MakeOrthographicMatrix(float left, float top, float right, float bottom)
+{
 	Matrix3x3 matrix;
 
 	matrix.m[0][0] = 2 / (right - left);
@@ -51,7 +57,8 @@ Matrix3x3 MakeOrthographicMatrix(float left, float top, float right, float botto
 	return matrix;
 }
 
-Matrix3x3 MakeViewportMatrix(float left, float top, float wigth, float height) {
+Matrix3x3 MakeViewportMatrix(float left, float top, float wigth, float height)
+{
 	Matrix3x3 matrix;
 
 	matrix.m[0][0] = wigth / 2;
@@ -69,7 +76,8 @@ Matrix3x3 MakeViewportMatrix(float left, float top, float wigth, float height) {
 
 }
 
-Matrix3x3 Multiply(Matrix3x3 matrix1, Matrix3x3 matrix2) {
+Matrix3x3 Multiply(const Matrix3x3& matrix1, const Matrix3x3& matrix2)
+{
 	Matrix3x3 matrix;
 
 	matrix.m[0][0] = matrix1.m[0][0] * matrix2.m[0][0] + matrix1.m[0][1] * matrix2.m[1][0] + matrix1.m[0][2] * matrix2.m[2][0];
@@ -85,7 +93,8 @@ Matrix3x3 Multiply(Matrix3x3 matrix1, Matrix3x3 matrix2) {
 	return matrix;
 }
 
-Vector2 Transform(Vector2 vector, Matrix3x3 matrix) {
+Vector2 Transform(Vector2 vector, const Matrix3x3& matrix)
+{
 	Vector2 result;
 	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + 1.0f * matrix.m[2][0];
 	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + 1.0f * matrix.m[2][1];
@@ -97,7 +106,8 @@ Vector2 Transform(Vector2 vector, Matrix3x3 matrix) {
 	return result;
 }
 
-Matrix3x3 MakeRotateMatrix(float theta) {
+Matrix3x3 MakeRotateMatrix(float theta) 
+{
 	Matrix3x3 Anser;
 
 	Anser.m[0][0] = cosf(theta);
@@ -113,7 +123,8 @@ Matrix3x3 MakeRotateMatrix(float theta) {
 	return Anser;
 }
 
-Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
+Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) 
+{
 
 	Matrix4x4 matrix;
 
@@ -141,7 +152,8 @@ Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
 
 }
 
-Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2)
+{
 
 	Matrix4x4 matrix;
 
@@ -169,7 +181,8 @@ Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
 
 }
 
-Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2)
+{
 
 	Matrix4x4 matrix;
 
@@ -197,7 +210,8 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 
 }
 
-Matrix4x4 Inverse(const Matrix4x4& m) {
+Matrix4x4 Inverse(const Matrix4x4& m) 
+{
 
 	Matrix4x4 inverse;
 	float A_1 = 1 / ((m.m[0][0] * m.m[1][1] * m.m[2][2] * m.m[3][3]) + (m.m[0][0] * m.m[1][2] * m.m[2][3] * m.m[3][1]) + (m.m[0][0] * m.m[1][3] * m.m[2][1] * m.m[3][2])
@@ -250,7 +264,8 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 
 }
 
-Matrix4x4 Transpose(const Matrix4x4& m) {
+Matrix4x4 Transpose(const Matrix4x4& m) 
+{
 
 	Matrix4x4 matrix;
 
@@ -277,7 +292,8 @@ Matrix4x4 Transpose(const Matrix4x4& m) {
 	return matrix;
 }
 
-Matrix4x4 MakeIdentity4x4() {
+Matrix4x4 MakeIdentity4x4()
+{
 
 	Matrix4x4 matrix = { 0 };
 
@@ -290,7 +306,8 @@ Matrix4x4 MakeIdentity4x4() {
 
 }
 
-Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
+Matrix4x4 MakeTranslateMatrix(const Vector3& translate)
+{
 
 	Matrix4x4 m = { 0 };
 
@@ -307,7 +324,8 @@ Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 
 }
 
-Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
+Matrix4x4 MakeScaleMatrix(const Vector3& scale)
+{
 
 	Matrix4x4 m = { 0 };
 
@@ -320,7 +338,8 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 
 }
 
-Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) 
+{
 
 	Vector3 result;
 
@@ -356,7 +375,8 @@ Matrix4x4 MakeRotateMatrix(const Vector3& rotate)
 
 }
 
-Matrix4x4 MakeRotateXMatrix(float radian) {
+Matrix4x4 MakeRotateXMatrix(float radian)
+{
 
 	Matrix4x4 m = { 0 };
 
@@ -372,7 +392,8 @@ Matrix4x4 MakeRotateXMatrix(float radian) {
 
 }
 
-Matrix4x4 MakeRotateYMatrix(float radian) {
+Matrix4x4 MakeRotateYMatrix(float radian) 
+{
 
 	Matrix4x4 m = { 0 };
 
@@ -388,7 +409,8 @@ Matrix4x4 MakeRotateYMatrix(float radian) {
 
 }
 
-Matrix4x4 MakeRotateZMatrix(float radian) {
+Matrix4x4 MakeRotateZMatrix(float radian) 
+{
 
 	Matrix4x4 m = { 0 };
 
@@ -404,7 +426,7 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 
 }
 
-Matrix4x4 MakeRotateMatrix(Quaternion q)
+Matrix4x4 MakeRotateMatrix(const Quaternion& q)
 {
 
 	Quaternion nq = Normalize(q);
@@ -444,7 +466,8 @@ Matrix4x4 MakeRotateMatrix(Quaternion q)
 	return matrix;
 }
 
-Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
+Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate)
+{
 
 	Matrix4x4 m;
 
@@ -482,7 +505,8 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Quaternion& rotate, const
 
 }
 
-Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
+Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip)
+{
 
 	Matrix4x4 m = { 0 };
 
@@ -496,7 +520,8 @@ Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip
 
 }
 
-Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip) {
+Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip)
+{
 
 	Matrix4x4 m = { 0 };
 
@@ -513,7 +538,8 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 }
 
-Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
+Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth)
+{
 
 	Matrix4x4 m = { 0 };
 
@@ -530,7 +556,8 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 
 }
 
-bool IsCollision(const AABB& aabb, const Vector3& point) {
+bool IsCollision(const AABB& aabb, const Vector3& point)
+{
 
 	Vector3 closestPoint{ std::clamp(point.x, aabb.min.x, aabb.max.x),
 						  std::clamp(point.y, aabb.min.y, aabb.max.y),
@@ -551,3 +578,5 @@ Matrix4x4 operator+(const Matrix4x4& m1, const Matrix4x4& m2) { return Add(m1, m
 Matrix4x4 operator-(const Matrix4x4& m1, const Matrix4x4& m2) { return Subtract(m1, m2); }
 
 Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2) { return Multiply(m1, m2); }
+
+}	// namespace YKEngine

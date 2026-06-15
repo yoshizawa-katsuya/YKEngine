@@ -9,7 +9,7 @@
 #include "SpritePlatform.h"
 #include "BaseModel.h"
 #include "ModelPlatform.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include "ParticleManager.h"
 #include "Input.h"
 #include "dx12.h"
@@ -21,11 +21,14 @@
 #include <dxcapi.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
-class OffscreenRenderer;
 
 #ifdef  USE_IMGUI
 #include "ImGuiManager.h"
 #endif //  USE_IMGUI
+
+namespace YKEngine
+{
+class OffscreenRenderer;
 
 /// <summary>
 /// フレームワーククラス。
@@ -73,9 +76,6 @@ public:
 	/// </summary>
 	void Run();
 
-	//終了フラグのチェック
-	virtual bool GetIsEndReqest() { return isEndReqest_; }
-
 protected:
 
 	ThreadPool* threadPool_ = nullptr;
@@ -84,7 +84,7 @@ protected:
 	Audio* audio_ = nullptr;
 	std::unique_ptr<SrvHeapManager> srvHeapManager_;
 	Input* input_ = nullptr;
-	std::unique_ptr<PrimitiveDrawer> primitiveDrawer_;
+	std::unique_ptr<PipelineManager> primitiveDrawer_;
 	SpritePlatform* spritePlatform_ = nullptr;
 	ModelPlatform* modelPlatform_ = nullptr;
 	OffscreenRenderer* offscreenRenderer_ = nullptr;
@@ -104,3 +104,4 @@ protected:
 
 };
 
+} // namespace YKEngine

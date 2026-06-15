@@ -1,5 +1,8 @@
 #include "MyMath.h"
 
+namespace YKEngine
+{
+
 Vector3 ClosestPoint(const Vector3& point, const Segment& segment)
 {
 
@@ -17,3 +20,5 @@ Vector3 ClosestPoint(const Vector3& point, const Segment& segment)
 	return cp;
 
 }
+
+}	//namespcae YKEngine

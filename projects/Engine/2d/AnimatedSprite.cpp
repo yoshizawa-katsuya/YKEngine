@@ -1,12 +1,13 @@
 #include "AnimatedSprite.h"
 
+using namespace YKEngine;
+
 void AnimatedSprite::Initialize(uint32_t textureHandle, int32_t horizontalDivisionNum, int32_t verticalDivisionNum)
 {
 	CommonInitialize(textureHandle, horizontalDivisionNum, verticalDivisionNum);
 	horizontalIndex_ = 0;
 	verticalIndex_ = 0;
-	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
-	uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
+	UpdateUV();
 
 	isReverse_ = false;
 	
@@ -43,8 +44,7 @@ void AnimatedSprite::InitializeReverseAnimation(uint32_t textureHandle, uint32_t
 	CommonInitialize(textureHandle, horizontalDivisionNum, verticalDivisionNum);
 	horizontalIndex_ = horizontalDivisionNum_ - 1;
 	verticalIndex_ = verticalDivisionNum_ - 1;
-	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
-	uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
+	UpdateUV();
 
 	isReverse_ = true;
 }
@@ -53,8 +53,7 @@ void AnimatedSprite::Reset()
 {
 	horizontalIndex_ = 0;
 	verticalIndex_ = 0;
-	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
-	uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
+	UpdateUV();
 
 	isReverse_ = false;
 	isEnd_ = false;
@@ -64,8 +63,7 @@ void AnimatedSprite::ResetReverseAnimation()
 {
 	horizontalIndex_ = horizontalDivisionNum_ - 1;
 	verticalIndex_ = verticalDivisionNum_ - 1;
-	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
-	uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
+	UpdateUV();
 
 	isReverse_ = true;
 	isEnd_ = false;
@@ -113,12 +111,12 @@ void AnimatedSprite::LoopUpdate()
 		{
 			verticalIndex_ = 0;
 		}
-		uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
 
 	}
 
+	UpdateUV();
+
 	//横方向に進める
-	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
 	horizontalIndex_++;
 	
 }
@@ -164,12 +162,12 @@ void AnimatedSprite::ReverseLoopUpdate()
 		{
 			verticalIndex_ = verticalDivisionNum_ - 1;
 		}
-		uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
 
 	}
 
+	UpdateUV();
+
 	//横方向に進める
-	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
 	horizontalIndex_--;
 }
 
@@ -189,4 +187,10 @@ void AnimatedSprite::ReverseNoLoopUpdate()
 
 	ReverseLoopUpdate();
 
+}
+
+void AnimatedSprite::UpdateUV()
+{
+	uvTransform_.translation.x = horizontalMovingDistance_ * horizontalIndex_;
+	uvTransform_.translation.y = verticalMovingDistance_ * verticalIndex_;
 }

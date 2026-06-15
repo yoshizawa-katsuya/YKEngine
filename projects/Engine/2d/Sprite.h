@@ -5,6 +5,9 @@
 #include <wrl.h>
 #include "Struct.h"
 #include "TextureManager.h"
+
+namespace YKEngine
+{
 class SpritePlatform;
 
 /// <summary>
@@ -27,64 +30,55 @@ public:
 	/// </summary>
 	void Draw();
 
-	const Vector2& GetSize() const { return size_; }
-	Vector2& GetSize() { return size_; }
+	Vector2 GetSize() const { return size_; }
 
-	Vector2& GetPosition() { return position_; }
-	const Vector2& GetPosition() const { return position_; }
+	Vector2 GetPosition() const { return position_; }
 
-	float& GetRotation() { return rotation_; }
 	float GetRotation() const { return rotation_; }
 
-	Vector4& GetColor() { return materialData_->color; }
 	const Vector4& GetColor() const { return materialData_->color; }
 
-	Vector2& GetAnchorPoint() { return anchorPoint_; }
-	const Vector2& GetAnchorPoint() const { return anchorPoint_; }
+	Vector2 GetAnchorPoint() const { return anchorPoint_; }
 
-	bool& GetIsFlipX() { return isFlipX_; }
 	bool GetIsFlipX() const { return isFlipX_; }
 
-	bool& GetIsFlipY() { return isFlipY_; }
 	bool GetIsFlipY() const { return isFlipY_; }
 
-	Vector2& GetTextureLeftTop() { return textureLeftTop_; }
-	const Vector2& GetTextureLeftTop() const { return textureLeftTop_; }
+	Vector2 GetTextureLeftTop() const { return textureLeftTop_; }
 
-	Vector2& GetTextureSize() { return textureSize_; }
-	const Vector2& GetTextureSize() const { return textureSize_; }
+	Vector2 GetTextureSize() const { return textureSize_; }
 
-	EulerTransform& GetTransform() { return transform_; }
 	const EulerTransform& GetTransform() const { return transform_; }
 
-	EulerTransform& GetUVTransform() { return uvTransform_; }
 	const EulerTransform& GetUVTransform() const { return uvTransform_; }
 
-	void SetSize(const Vector2& size) { size_ = size; }
+	uint32_t GetTeture() { return textureHandle_; }
 
-	void SetPosition(const Vector2& position) { position_ = position; }
+	void SetSize(Vector2 size) { size_ = size; }
+
+	void SetPosition(Vector2 position) { position_ = position; }
 
 	void SetRotation(float rotation) { rotation_ = rotation; }
 
 	void SetColor(const Vector4& color) { materialData_->color = color; }
 
-	void SetAnchorPoint(const Vector2& anchorPoint) { anchorPoint_ = anchorPoint; }
+	void SetAlpha(float alpha) { materialData_->color.w = alpha; }
+
+	void SetAnchorPoint(Vector2 anchorPoint) { anchorPoint_ = anchorPoint; }
 
 	void SetIsFlipX(bool IsFlipX) { isFlipX_ = IsFlipX; }
 
 	void SetIsFlipY(bool IsFlipY) { isFlipY_ = IsFlipY; }
 
-	void SetTextureLeftTop(const Vector2& textureLeftTop) { textureLeftTop_ = textureLeftTop; }
+	void SetTextureLeftTop(Vector2 textureLeftTop) { textureLeftTop_ = textureLeftTop; }
 
-	void SetTextureSize(const Vector2& textureSize) { textureSize_ = textureSize; }
+	void SetTextureSize(Vector2 textureSize) { textureSize_ = textureSize; }
 
 	void SetTexture(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 
 	void SetUVTransform(const EulerTransform& uvTransform) { uvTransform_ = uvTransform; }
 
 	void SetUVTranslate(const Vector3& translate) { uvTransform_.translation = translate; }
-
-	uint32_t GetTeture() { return textureHandle_; }
 
 protected:
 
@@ -160,3 +154,4 @@ protected:
 
 };
 
+} // namespace YKEngine

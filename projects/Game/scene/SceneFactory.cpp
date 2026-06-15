@@ -2,16 +2,18 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 
-BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
+using namespace YKEngine;
+
+std::unique_ptr<BaseScene> SceneFactory::CreateScene(const std::string& sceneName)
 {
 	//次のシーンを生成
-	BaseScene* newScene = nullptr;
+	std::unique_ptr<BaseScene> newScene = nullptr;
 
 	if (sceneName == "TitleScene") {
-		newScene = new TitleScene();
+		newScene = std::make_unique<TitleScene>();
 	}
 	else if (sceneName == "GameScene") {
-		newScene = new GameScene();
+		newScene = std::make_unique<GameScene>();
 	}
 
 	return newScene;

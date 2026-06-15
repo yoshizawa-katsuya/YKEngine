@@ -1,5 +1,8 @@
 #pragma once
 
+namespace YKEngine
+{
+
 /// <summary>
 /// 2次元ベクトル
 /// </summary>
@@ -55,3 +58,5 @@ Vector2 operator-(const Vector2& v);
 
 //単項プラス
 Vector2 operator+(const Vector2& v);
+
+}	// namespace YKEngine

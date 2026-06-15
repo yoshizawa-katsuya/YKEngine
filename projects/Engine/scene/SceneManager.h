@@ -3,6 +3,9 @@
 #include "AbstractSceneFactory.h"
 #include <memory>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// シーンの管理クラス。
 /// シーンの更新、描画、切り替えを行う。
@@ -41,13 +44,21 @@ public:
 
 private:
 
+
+	/// <summary>
+	/// シーンの切り替え処理。
+	/// </summary>
+	void ChangeSceneProcess();
+
 	//今のシーン(実行中シーン)
 	std::unique_ptr<BaseScene> scene_;
 
 	//次のシーン
-	BaseScene* nextScene_ = nullptr;
+	std::unique_ptr<BaseScene> nextScene_;
 
 	//シーンファクトリー(借りてくる)
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 
 };
+
+}

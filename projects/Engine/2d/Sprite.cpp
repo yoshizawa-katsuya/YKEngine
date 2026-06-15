@@ -4,6 +4,8 @@
 #include "SpritePlatform.h"
 #include "RootParams.h"
 
+using namespace YKEngine;
+
 void Sprite::Initialize(uint32_t textureHandle) {
 
 	//引数を受け取ってメンバ変数に記録する
@@ -149,7 +151,6 @@ void Sprite::CreateMaterialData()
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//白を書き込む
 	materialData_->color = {1.0f, 1.0f, 1.0f, 1.0f};
-	materialData_->enableLighting = false;
 	materialData_->uvTransform = MakeIdentity4x4();
 
 }

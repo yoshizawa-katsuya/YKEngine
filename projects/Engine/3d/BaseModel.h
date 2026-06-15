@@ -7,6 +7,9 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
+namespace YKEngine
+{
 class ModelPlatform;
 class Camera;
 class Animation;
@@ -16,7 +19,8 @@ class Animation;
 /// </summary>
 /// <param name="weight">ウェイト値</param>
 /// <param name="vertexIndex">頂点インデックス</param>
-struct VertexWeightData {
+struct VertexWeightData 
+{
 	float weight;
 	uint32_t vertexIndex;
 };
@@ -26,7 +30,8 @@ struct VertexWeightData {
 /// </summary>
 /// <param name="inverseBindPoseMatrix">逆バインドポーズ行列</param>
 /// <param name="vertexWeights">頂点ウェイト情報の配列</param>
-struct JointWeightData {
+struct JointWeightData 
+{
 	Matrix4x4 inverseBindPoseMatrix;
 	std::vector<VertexWeightData> vertexWeights;
 };
@@ -47,7 +52,8 @@ struct MaterialData
 /// <param name="localMatrix">ノードのローカル変換行列</param>
 /// <param name="name">ノードの名前</param>
 /// <param name="children">子ノードの配列</param>
-struct Node {
+struct Node
+{
 	QuaternionTransform transform;
 	Matrix4x4 localMatrix;
 	std::string name;
@@ -62,7 +68,8 @@ struct Node {
 /// <param name="indeces">インデックスデータの配列</param>
 /// <param name="material">マテリアル情報</param>
 /// <param name="rootNode">ルートノード情報</param>
-struct ModelData {
+struct ModelData
+{
 	std::map<std::string, JointWeightData> skinClusterData;
 	std::vector<VertexData> vertices;
 	std::vector<uint32_t> indeces;
@@ -159,6 +166,11 @@ public:
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	virtual void InstancingDraw(uint32_t numInstance, uint32_t textureHandle);
 
+	/// <summary>
+	/// 初期化完了まで待機する。
+	/// </summary>
+	void WaitUntilInitialized();
+
 	virtual void SetSkinCluster(const SkinCluster& skinCluster);
 
 	/// <summary>
@@ -180,14 +192,15 @@ public:
 
 	virtual void SetEnableLighting(bool enableLighting);
 
+	void SetShininess(float shininess);
+
 	virtual void SetEnvironmentCoefficient(float environmentCoefficient);
 
-	Material& GetMaterialDataAddress() { return *materialData_; }
+	const Material& GetMaterialData() const { return *materialData_; }
 
 	const Node& GetRootNode() const { return modelData_->rootNode; }
 
 	const ModelData& GetModelData() const { return *modelData_; }
-	ModelData& GetModelData() { return *modelData_; }
 
 	uint32_t GetVerticesNum() { return verticesNum_; }
 
@@ -216,19 +229,28 @@ protected:
 	/// </summary>
 	/// <param name="directoryPath">モデルファイルのディレクトリパス</param>
 	/// <param name="filename">モデルファイル名</param>
-	virtual void LoadModelFile(const std::string& directoryPath, const std::string& filename);
+	void LoadModelFile(const std::string& directoryPath, const std::string& filename);
 
 	/// <summary>
 	/// 頂点データ読み込み。
 	/// </summary>
 	/// <param name="mesh">Assimpのメッシュデータ</param>
-	void LoadVertexData(aiMesh* mesh);
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadVertexData(aiMesh* mesh, uint32_t vertexStartIndex);
 
 	/// <summary>
 	/// インデックスデータ読み込み。
 	/// </summary>
 	/// <param name="mesh">Assimpのメッシュデータ</param>
-	void LoadIndexData(aiMesh* mesh);
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	void LoadIndexData(aiMesh* mesh, uint32_t vertexStartIndex);
+
+	/// <summary>
+	/// メッシュデータ読み込み。
+	/// </summary>
+	/// <param name="mesh">Assimpのメッシュデータ</param>
+	/// <param name="vertexStartIndex">頂点データの開始位置</param>
+	virtual void LoadMeshData(aiMesh* mesh, uint32_t vertexStartIndex);
 
 	/// <summary>
 	/// 頂点数設定。
@@ -247,6 +269,11 @@ protected:
 	/// <returns>ノード情報</returns>
 	Node ReadNode(aiNode* node);
 	
+	/// <summary>
+	/// 描画共通処理。
+	/// </summary>
+	void DrawCommonProcess(bool usedMaterial, uint32_t textureHandle, uint32_t numInstance = 1);
+
 	ModelPlatform* modelPlatform_ = nullptr;
 
 	std::unique_ptr<ModelData> modelData_;
@@ -272,5 +299,13 @@ protected:
 	uint32_t indecesNum_;
 	uint32_t textureHandle_;
 
+	//Initializeの完了フラグ
+	bool initialized_ = false;
+
+	//Initializeの完了を待つための条件変数とミューテックス
+	std::mutex initMutex_;
+	std::condition_variable initCondition_;
+
 };
 
+} // namespace YKEngine

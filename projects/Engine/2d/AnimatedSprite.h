@@ -1,6 +1,9 @@
 #pragma once
 #include "Sprite.h"
 
+namespace YKEngine
+{
+
 /// <summary>
 /// アニメーションスプライトを扱うクラス。
 /// スプライトシートを使用してアニメーションを実装する。
@@ -95,6 +98,11 @@ private:
 	/// </summary>
 	void ReverseNoLoopUpdate();
 
+	/// <summary>
+	/// UV座標を更新する。
+	/// </summary>
+	void UpdateUV();
+
 	//分割数
 	int32_t horizontalDivisionNum_ = 1;
 	int32_t verticalDivisionNum_ = 1;
@@ -123,3 +131,4 @@ private:
 	bool isReverse_ = false;
 };
 
+} // namespace YKEngine

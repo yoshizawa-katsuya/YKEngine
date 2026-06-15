@@ -3,12 +3,15 @@
 #include <cmath>
 #include "TransformHelpers.h"
 
-float Lerp(const float& p0, const float& p1, float t)
+namespace YKEngine
+{
+
+float Lerp(float p0, float p1, float t)
 {
 	return (1 - t) * p0 + t * p1;
 }
 
-Vector2 Lerp(const Vector2& p0, const Vector2& p1, float t)
+Vector2 Lerp(Vector2 p0, Vector2 p1, float t) 
 {
 
 	Vector2 anser;
@@ -90,3 +93,5 @@ float LeapShortAngle(float a, float b, float t)
 
 	return a + diff * t;
 }
+
+} // namespace YKEngine

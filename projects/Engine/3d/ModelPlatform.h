@@ -1,12 +1,15 @@
 #pragma once
 #include "DirectXCommon.h"
-#include "PrimitiveDrawer.h"
+#include "PipelineManager.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include <array>
 #include "SrvHeapManager.h"
 #include "BaseModel.h"
+
+namespace YKEngine
+{
 class Camera;
 
 /// <summary>
@@ -35,7 +38,7 @@ public:
 	/// <param name="dxCommon">DirectX共通クラス</param>
 	/// <param name="primitiveDrawer">プリミティブ描画クラス</param>
 	/// <param name="srvHeapManager">SRVヒープマネージャー</param>
-	void Initialize(DirectXCommon* dxCommon, PrimitiveDrawer* primitiveDrawer, SrvHeapManager* srvHeapManager);
+	void Initialize(DirectXCommon* dxCommon, PipelineManager* primitiveDrawer, SrvHeapManager* srvHeapManager);
 
 	/// <summary>
 	/// フレーム終了処理。
@@ -61,6 +64,11 @@ public:
 	/// インスタンシング描画前処理。
 	/// </summary>
 	void InstancingPreDraw();
+
+	/// <summary>
+	/// インスタンシング描画前処理(トリプラナーマッピング用)。
+	/// </summary>
+	void InstancingTriplanarPreDraw();
 
 	/// <summary>
 	/// 線分描画前処理。
@@ -184,6 +192,18 @@ public:
 
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
+	void SetDrawMode(DrawMode drawMode);
+
+	//コンストラクタに渡すための鍵
+	class ConstructorKey {
+	private:
+		ConstructorKey() = default;
+		friend class ModelPlatform;
+	};
+
+	//PassKeyを受け取るコンストラクタ
+	explicit ModelPlatform(ConstructorKey key) {}
+
 private:
 
 	/// <summary>
@@ -206,19 +226,28 @@ private:
 		float padding;
 	};
 
-	// シングルトンインスタンス。リソースリークチェックのため明示的破棄用にポインタで保持。
-	static ModelPlatform* instance_;
+	/// <summary>
+	/// 描画前処理共通。
+	/// </summary>
+	void CommonPreDraw(bool isSkin);
 
-	ModelPlatform() = default;
+	template<class T, class F>
+	std::shared_ptr<BaseModel> CreateModelCommon(const std::string& name, F createFunc);
+	
+
+	// シングルトンインスタンス
+	static std::unique_ptr<ModelPlatform> instance_;
+	friend struct std::default_delete<ModelPlatform>;
+
 	~ModelPlatform() = default;
-	ModelPlatform(ModelPlatform&) = default;
-	ModelPlatform& operator=(ModelPlatform&) = default;
+	ModelPlatform(ModelPlatform&) = delete;
+	ModelPlatform& operator=(ModelPlatform&) = delete;
 
 	DirectXCommon* dxCommon_;
 
 	SrvHeapManager* srvHeapManager_;
 
-	PrimitiveDrawer* primitiveDrawer_;
+	PipelineManager* primitiveDrawer_;
 
 	std::unordered_map<std::string, std::shared_ptr<BaseModel>> models_;
 
@@ -269,3 +298,22 @@ private:
 	
 };
 
+template<class T, class F>
+inline std::shared_ptr<BaseModel> ModelPlatform::CreateModelCommon(const std::string& name, F createFunc)
+{
+	// すでに同じ名前のモデルがあればそれを返す
+	if (models_.contains(name)) {
+		return models_[name];
+	}
+
+	// モデル生成
+	std::shared_ptr<T> model = std::make_shared<T>();
+
+	// 生成処理（ラムダで受ける）
+	createFunc(model.get());
+
+	models_[name] = model;
+	return model;
+}
+
+} // namespace YKEngine

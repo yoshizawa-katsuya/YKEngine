@@ -3,6 +3,9 @@
 #include <mutex>
 #include <queue>
 
+namespace YKEngine
+{
+
 /// <summary>
 /// SRVヒープ管理クラス。
 /// SRVヒープの生成、SRVの生成、SRVヒープの管理を行う。
@@ -86,21 +89,21 @@ public:
 
 	ID3D12DescriptorHeap* GetDescriptorHeap() { return descriptorHeap_.Get(); }
 
-	uint32_t GetDescriptorSize() { return descriptorSize_; }
+	uint32_t GetDescriptorSize() const { return descriptorSize_; }
 
 	/// <summary>
 	/// SRVの指定番号のCPUデスクリプタハンドルを取得
 	/// </summary>
 	/// <param name="index">SRVのインデックス</param>
 	/// <returns>CPUデスクリプタハンドル</returns>
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index) const;
 
 	/// <summary>
 	/// SRVの指定番号のGPUデスクリプタハンドルを取得
 	/// </summary>
 	/// <param name="index">SRVのインデックス</param>
 	/// <returns>GPUデスクリプタハンドル</returns>
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index) const;
 
 	// 最大SRV数
 	static const uint32_t kMaxSrvDescriptors_ = 512;
@@ -123,3 +126,5 @@ private:
 
 	std::mutex mutex_;
 };
+
+} // namespace YKEngine

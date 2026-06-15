@@ -10,6 +10,10 @@
 #include "Struct.h"
 #include "ThreadPool.h"
 #include "RootParams.h"
+#include "GlobalVariables.h"
+#include "JsonKeys.h"
+
+using namespace YKEngine;
 
 BaseModel::BaseModel()
 	: modelPlatform_(ModelPlatform::GetInstance())
@@ -31,6 +35,13 @@ void BaseModel::CreateModel(const std::string& directoryPath, const std::string&
 		CreateIndexData();
 		CreateMaterialData(color);
 		textureHandle_ = TextureManager::GetInstance()->Load(modelData_->material.textureFilePath);
+		{
+			//初期化完了フラグを立てる
+			std::lock_guard<std::mutex> lock(initMutex_);
+			initialized_ = true;
+		}
+		//初期化完了を通知
+		initCondition_.notify_all();
 	});
 
 	
@@ -60,84 +71,38 @@ void BaseModel::CreateSkyBox(uint32_t textureHandle)
 {
 }
 
-void BaseModel::Draw(bool usedMaterial) {
+void BaseModel::Draw(bool usedMaterial)
+{
 	
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	if (!usedMaterial) 
-	{
-		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
-
-	}
-	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle_);
-
-	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
-
+	DrawCommonProcess(usedMaterial, textureHandle_);
 
 }
 
 void BaseModel::Draw(uint32_t textureHandle, bool usedMaterial)
 {
 
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	if (!usedMaterial)
-	{
-		//マテリアルのCBufferの場所を設定
-		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
-
-	}
-	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
-
-	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
+	DrawCommonProcess(usedMaterial, textureHandle);
 
 }
 
 void BaseModel::InstancingDraw(uint32_t numInstance)
 {
 
-	if (numInstance == 0)
-	{
-		return; // インスタンス数が0の場合は描画しない
-	}
+	DrawCommonProcess(false, textureHandle_, numInstance);
 
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
-
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
-	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle_);
-
-	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }
 
 void BaseModel::InstancingDraw(uint32_t numInstance, uint32_t textureHandle)
 {
 
-	if (numInstance == 0)
-	{
-		return; // インスタンス数が0の場合は描画しない
-	}
+	DrawCommonProcess(false, textureHandle, numInstance);
 
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
+}
 
-	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	//マテリアルのCBufferの場所を設定
-	modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
-	//テクスチャハンドルを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
-
-	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
+void YKEngine::BaseModel::WaitUntilInitialized()
+{
+	std::unique_lock<std::mutex> lock(initMutex_);
+	initCondition_.wait(lock, [this]() { return initialized_; });
 }
 
 void BaseModel::SetSkinCluster(const SkinCluster& skinCluster)
@@ -174,6 +139,12 @@ void BaseModel::SetEnableLighting(bool enableLighting)
 {
 	ThreadPool::GetInstance()->waitForCompletion();
 	materialData_->enableLighting = enableLighting;
+}
+
+void YKEngine::BaseModel::SetShininess(float shininess)
+{
+	ThreadPool::GetInstance()->waitForCompletion();
+	materialData_->shininess = shininess;
 }
 
 void BaseModel::SetEnvironmentCoefficient(float environmentCoefficient)
@@ -219,6 +190,8 @@ void BaseModel::CreateIndexData()
 
 void BaseModel::CreateMaterialData(const Vector4& color)
 {
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::Model::kGroupName;
 
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(Material));
@@ -227,9 +200,9 @@ void BaseModel::CreateMaterialData(const Vector4& color)
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//白を書き込む
 	materialData_->color = color;
-	materialData_->enableLighting = true;
-	materialData_->shininess = 40.0f;
-	materialData_->enviromentCoefficient = 0.0f;	//環境光の係数は0.0fにしておく
+	materialData_->enableLighting = globalVariables->GetBoolValue(groupName, JsonKey::Model::kEnableLighting);
+	materialData_->shininess = globalVariables->GetFloatValue(groupName, JsonKey::Model::kShininess);
+	materialData_->enviromentCoefficient = globalVariables->GetFloatValue(groupName, JsonKey::Model::kEnviromentCoefficient);
 	materialData_->uvTransform = MakeIdentity4x4();
 	
 }
@@ -249,11 +222,9 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());	//法線がないメッシュは今回は非対応
 		assert(mesh->HasTextureCoords(0));	//TexcoordがないMeshは今回は非対応
-		modelData_->vertices.resize(mesh->mNumVertices);	//最初に頂点数分のメモリを確保しておく
+		uint32_t vertexStartIndex = static_cast<uint32_t>(modelData_->vertices.size());	//頂点データの開始位置を記録しておく
 
-		LoadVertexData(mesh);
-
-		LoadIndexData(mesh);
+		LoadMeshData(mesh, vertexStartIndex);
 
 	}
 
@@ -265,7 +236,7 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			modelData_->material.textureFilePath = directoryPath + "/" + textureFilePath.C_Str();
-			
+			break;	//複数テクスチャがあっても最初の1つだけ読み込む
 		}
 		else {
 			modelData_->material.textureFilePath = "./resources/white.png";
@@ -276,21 +247,23 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 	
 }
 
-void BaseModel::LoadVertexData(aiMesh* mesh)
+void BaseModel::LoadVertexData(aiMesh* mesh, uint32_t vertexStartIndex)
 {
-	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) 
+	modelData_->vertices.resize(modelData_->vertices.size() + mesh->mNumVertices);	//頂点数分のメモリを確保しておく
+
+	for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex)
 	{
 		aiVector3D& position = mesh->mVertices[vertexIndex];
 		aiVector3D& normal = mesh->mNormals[vertexIndex];
 		aiVector3D& texcord = mesh->mTextureCoords[0][vertexIndex];
 		//右手系->左手系の変換
-		modelData_->vertices[vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
-		modelData_->vertices[vertexIndex].normal = { -normal.x, normal.y, normal.z };
-		modelData_->vertices[vertexIndex].texcoord = { texcord.x, texcord.y };
+		modelData_->vertices[vertexStartIndex + vertexIndex].position = { -position.x, position.y, position.z, 1.0f };
+		modelData_->vertices[vertexStartIndex + vertexIndex].normal = { -normal.x, normal.y, normal.z };
+		modelData_->vertices[vertexStartIndex + vertexIndex].texcoord = { texcord.x, texcord.y };
 	}
 }
 
-void BaseModel::LoadIndexData(aiMesh* mesh)
+void BaseModel::LoadIndexData(aiMesh* mesh, uint32_t vertexStartIndex)
 {
 	//面ごとに情報を読み込む
 	for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) 
@@ -301,10 +274,19 @@ void BaseModel::LoadIndexData(aiMesh* mesh)
 		//面を構成する頂点インデックスを読み込む
 		for (uint32_t element = 0; element < face.mNumIndices; ++element) 
 		{
-			uint32_t vertexIndex = face.mIndices[element];
+			uint32_t vertexIndex = face.mIndices[element] + vertexStartIndex;
 			modelData_->indeces.push_back(vertexIndex);
 		}
 	}
+}
+
+void BaseModel::LoadMeshData(aiMesh* mesh, uint32_t vertexStartIndex)
+{
+
+	LoadVertexData(mesh, vertexStartIndex);
+
+	LoadIndexData(mesh, vertexStartIndex);
+
 }
 
 void BaseModel::SetVerticesNum()
@@ -340,4 +322,28 @@ Node BaseModel::ReadNode(aiNode* node)
 	}
 
 	return result;
+}
+
+void BaseModel::DrawCommonProcess(bool usedMaterial, uint32_t textureHandle, uint32_t numInstance)
+{
+
+	if (numInstance == 0)
+	{
+		return; // インスタンス数が0の場合は描画しない
+	}
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);	//VBVを設定
+
+	modelPlatform_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);	//IBVを設定
+	if (!usedMaterial)
+	{
+		//マテリアルのCBufferの場所を設定
+		modelPlatform_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(ModelRootParam::kMaterial), materialResource_->GetGPUVirtualAddress());
+	}
+
+	//テクスチャハンドルを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
+
+	//描画1(DrawCall/ドローコール)。
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
 }

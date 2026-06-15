@@ -10,6 +10,8 @@
 #pragma comment(lib, "mfreadwrite.lib")
 #pragma comment(lib, "mfuuid.lib")
 
+using namespace YKEngine;
+
 Audio* Audio::GetInstance()
 {
 	static Audio instance;
@@ -20,7 +22,6 @@ void Audio::Finalize()
 {
 	//MFの終了
 	MFShutdown();
-
 }
 
 void Audio::Initialize()
@@ -187,19 +188,16 @@ void Audio::SoundStopWave(const LoopSoundData& loopSoundData)
 void Audio::SoundUnload(SoundData* soundData)
 {
 
-	//バッファのメモリを解放
-	delete[] soundData->buffer.data();
-
-	/*soundData->buffer = 0;
-	soundData->bufferSize = 0;*/
 	soundData->wfex = {};
 
 }
 
 void Audio::SoundUnload(LoopSoundData* loopSoundData)
 {
-
-	delete loopSoundData->pSourceVoice;
+	loopSoundData->pSourceVoice->Stop(0);
+	loopSoundData->pSourceVoice->FlushSourceBuffers();
+	loopSoundData->pSourceVoice->DestroyVoice();
+	loopSoundData->pSourceVoice = nullptr;
 
 	SoundUnload(&loopSoundData->soundData);
 

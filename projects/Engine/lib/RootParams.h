@@ -1,5 +1,8 @@
 #pragma once
 
+namespace YKEngine
+{
+
 //ポストエフェクト用ルートパラメータ
 enum class PostEffectRootParam
 {
@@ -101,3 +104,5 @@ enum class ParticleRootParam
 	kTexture = 2,
 	kCount,
 };
+
+} // namespace YKEngine
