@@ -32,7 +32,8 @@ void My3dObject::WorldTransformUpdate(const WorldTransform& worldTransform)
 {
 
 	TransformationData_->World = worldTransform.worldMatrix_;
-
+	//ワールド行列の逆行列の転置行列を計算
+	TransformationData_->WorldInverseTranspose = Transpose(Inverse(TransformationData_->World));
 }
 
 void My3dObject::AnimationUpdate(Animation* animation)
@@ -52,8 +53,6 @@ void My3dObject::CameraUpdate(Camera* camera)
 		worldViewProjectionMatrix = TransformationData_->World;
 	}
 	TransformationData_->WVP = worldViewProjectionMatrix;
-	//ワールド行列の逆行列の転置行列を計算
-	TransformationData_->WorldInverseTranspose = Transpose(Inverse(TransformationData_->World));
 
 }
 
