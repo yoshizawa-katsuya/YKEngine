@@ -60,8 +60,8 @@ private:
 	YKEngine::Audio* audio_;
 	YKEngine::Input* input_;
 
-	LoopSoundData bgm1_;
-	SoundData se1_;
+	YKEngine::LoopSoundData bgm1_;
+	YKEngine::SoundData se1_;
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
