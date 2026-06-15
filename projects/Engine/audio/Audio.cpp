@@ -20,6 +20,14 @@ Audio* Audio::GetInstance()
 
 void Audio::Finalize()
 {
+	//再生中のSourceVoiceをすべて停止して破棄
+	for (IXAudio2SourceVoice* voice : playingVoices_) 
+	{
+		voice->Stop();
+		voice->DestroyVoice();
+	}
+	playingVoices_.clear();
+
 	//MFの終了
 	MFShutdown();
 }
@@ -34,6 +42,29 @@ void Audio::Initialize()
 
 	//MFの初期化
 	MFStartup(MF_VERSION);
+}
+
+void YKEngine::Audio::Update()
+{
+	//再生中のSourceVoiceの状態を確認
+	for (std::list<IXAudio2SourceVoice*>::iterator it = playingVoices_.begin(); it != playingVoices_.end(); )
+	{
+		XAUDIO2_VOICE_STATE state;
+		(*it)->GetState(&state);
+
+		//再生が終了している場合
+		if (state.BuffersQueued == 0) 
+		{
+			//SourceVoiceを破棄
+			(*it)->DestroyVoice();
+			//リストから削除
+			it = playingVoices_.erase(it);
+		}
+		else 
+		{
+			++it;
+		}
+	}
 }
 
 SoundData Audio::SoundLoadWave(const std::string& fileName)
@@ -150,6 +181,9 @@ void Audio::SoundPlayWave(const SoundData& soundData, float volume)
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
 	result = pSourceVoice->SetVolume(volume);
 	result = pSourceVoice->Start();
+
+	//再生中のSourceVoiceのリストに追加
+	playingVoices_.push_back(pSourceVoice);
 
 }
 

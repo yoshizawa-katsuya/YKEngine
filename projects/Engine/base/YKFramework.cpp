@@ -103,7 +103,8 @@ void YKFramework::Update()
 
 #endif // USE_IMGUI
 
-	
+	//オーディオの更新
+	audio_->Update();
 
 	//入力の更新
 	input_->Update();

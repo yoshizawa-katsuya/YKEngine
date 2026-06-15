@@ -30,6 +30,11 @@ public:
 	/// 初期化処理。
 	/// </summary>
 	void Initialize();
+	
+	/// <summary>
+	/// 更新。
+	/// </summary>
+	void Update();
 
 	/// <summary>
 	/// 音声読み込み。
@@ -93,6 +98,9 @@ private:
 
 	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
 	IXAudio2MasteringVoice* masterVoice_;
+
+	//再生中のSourceVoiceのリスト
+	std::list<IXAudio2SourceVoice*> playingVoices_;
 
 };
 
