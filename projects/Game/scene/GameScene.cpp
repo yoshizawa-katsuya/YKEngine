@@ -86,7 +86,7 @@ void GameScene::Initialize() {
 	*/
 
 	bgm1_ = audio_->LoopSoundLoadWave("./Resources/sound/gameScene.wav");
-	se1_ = audio_->SoundLoadWave("./Resources/sound/HitSE1.wav");
+	se1_ = audio_->SoundLoadWave("./Resources/sound/HitSE3.wav");
 
 }
 
