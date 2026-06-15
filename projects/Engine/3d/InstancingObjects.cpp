@@ -42,6 +42,7 @@ void InstancingObjects::PreUpdate()
 void InstancingObjects::WorldTransformUpdate(const WorldTransform& worldTransform)
 {
 	instancingData_[numInstance_].World = worldTransform.worldMatrix_;
+	instancingData_[numInstance_].WorldInverseTranspose = Transpose(Inverse(instancingData_[numInstance_].World));
 	numInstance_++;
 
 	return;
@@ -54,7 +55,6 @@ void InstancingObjects::CameraUpdate(Camera* camera)
 	for (uint32_t index = 0; index < numInstance_; ++index) 
 	{
 		instancingData_[index].WVP = Multiply(instancingData_[index].World, camera->GetViewProjection());
-		instancingData_[index].WorldInverseTranspose = Transpose(Inverse(instancingData_[index].World));
 	}
 
 }
