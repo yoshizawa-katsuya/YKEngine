@@ -12,10 +12,10 @@ enum class BGMType
 
 enum class SEType
 {
-	kPlayerShot,
-	kPlayerDamage,
-	kEnemyDamage,
-	kEnemyDeath,
+	kShot01,
+	kDamage01,
+	kDamage02,
+	kDeath01,
 };
 
 /// <summary>
@@ -48,6 +48,12 @@ public:
 	void PlayBGM(BGMType bgmType);
 
 	/// <summary>
+	/// SE再生。
+	/// </summary>
+	/// <param name="seType">SEの種類</param>
+	void PlaySE(SEType seType);
+
+	/// <summary>
 	/// BGM停止。
 	/// </summary>
 	/// <param name="bgmType">BGMの種類</param>
@@ -74,6 +80,9 @@ private:
 
 	// BGMデータ
 	std::unordered_map<BGMType, BGMData> bgmDatas_;
+
+	// SEデータ
+	std::unordered_map<SEType, SEData> seDatas_;
 
 	YKEngine::Audio* audio_;
 

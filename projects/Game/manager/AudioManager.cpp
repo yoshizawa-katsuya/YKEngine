@@ -21,6 +21,7 @@ void AudioManager::Initialize()
 {
 	audio_ = Audio::GetInstance();
 
+	// BGMのファイルパスを設定
 	std::unordered_map<BGMType, std::string> bgmFilePaths
 	{
 		{BGMType::kTitle, "./Resources/BGM/title.mp3"},
@@ -29,6 +30,7 @@ void AudioManager::Initialize()
 		{BGMType::kClear, "./Resources/BGM/clear.mp3"}
 	};
 
+	// BGMデータをロード
 	for (const std::pair<BGMType, std::string>& bgmFilePath : bgmFilePaths)
 	{
 		BGMData& bgmData = bgmDatas_[bgmFilePath.first];
@@ -36,6 +38,21 @@ void AudioManager::Initialize()
 		bgmData.volume = 0.5f;
 	}
 
+	// SEのファイルパスを設定
+	std::unordered_map<SEType, std::string> seFilePaths
+	{
+		{SEType::kShot01, "./Resources/SE/shot01.mp3"},
+		{SEType::kDamage01, "./Resources/SE/damage01.mp3"},
+		{SEType::kDamage02, "./Resources/SE/damage02.mp3"},
+		{SEType::kDeath01, "./Resources/SE/death01.mp3"}
+	};
+
+	for (const std::pair<SEType, std::string>& seFilePath : seFilePaths)
+	{
+		SEData& seData = seDatas_[seFilePath.first];
+		seData.soundData = audio_->SoundLoadWave(seFilePath.second);
+		seData.volume = 0.8f;
+	}
 }
 
 void AudioManager::PlayBGM(BGMType bgmType)
@@ -48,6 +65,12 @@ void AudioManager::PlayBGM(BGMType bgmType)
 	//指定されたBGMを再生
 	const BGMData& bgmData = bgmDatas_[bgmType];
 	audio_->SoundLoopPlayWave(bgmData.loopSoundData, bgmData.volume);
+}
+
+void AudioManager::PlaySE(SEType seType)
+{
+	const SEData& seData = seDatas_[seType];
+	audio_->SoundPlayWave(seData.soundData, seData.volume);
 }
 
 void AudioManager::StopBGM(BGMType bgmType)

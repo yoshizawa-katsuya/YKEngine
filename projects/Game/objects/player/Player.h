@@ -9,6 +9,7 @@
 #include "PlayerStateContext.h"
 class BaseEnemy;
 class PlayerBulletManager;
+class AudioManager;
 
 namespace YKEngine
 {
@@ -243,6 +244,9 @@ private:
 
 	//キーボード入力
 	YKEngine::Input* input_ = nullptr;
+
+	//オーディオマネージャー
+	AudioManager* audioManager_ = nullptr;
 
 	//ステートマシン
 	std::unique_ptr<YKEngine::StateMachine<PlayerStateContext>> stateMachine_;

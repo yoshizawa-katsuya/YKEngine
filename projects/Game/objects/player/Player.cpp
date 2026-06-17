@@ -12,6 +12,7 @@
 #include "JsonKeys.h"
 #include "PlayerStartState.h"
 #include "manager/CollisionManager.h"
+#include "manager/AudioManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -21,6 +22,9 @@ using namespace YKEngine;
 
 void Player::Initialize(WorldTransform* parent)
 {
+	//オーディオ管理クラスの取得
+	audioManager_ = AudioManager::GetInstance();
+
 	//グローバル変数の登録
 	globalVariables_ = GlobalVariables::GetInstance();
 	const std::string& groupName = JsonKey::Player::kGroupName;
@@ -120,6 +124,9 @@ void Player::OnCollision(BaseCollider* other)
 
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.GetWorldPosition(), 10);
+
+		//ダメージSE再生
+		audioManager_->PlaySE(SEType::kDamage01);
 
 		if (hitPoint_ > 0)
 		{
@@ -516,6 +523,9 @@ void Player::Attack() {
 			//チャージ最大なら強力な弾を撃つ
 			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), bulletDirection, PlayerBulletType::kCharge, lockOnTarget);
 			
+			//チャージ弾の発射SE再生
+			audioManager_->PlaySE(SEType::kShot01);
+
 			//チャージ弾の発射間隔
 			shotIntervalTimer_ = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kChargeBulletShotInterval);
 
@@ -524,7 +534,11 @@ void Player::Attack() {
 			return;
 		}
 
+		//通常弾の発射
 		playerBulletManager_->AddPlayerBullet(GetWorldPosition(), bulletDirection, PlayerBulletType::kNormal, lockOnTarget);
+
+		//通常弾の発射SE再生
+		audioManager_->PlaySE(SEType::kShot01);
 
 		//通常弾の発射間隔
 		shotIntervalTimer_ = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kNormalBulletShotInterval);

@@ -14,6 +14,7 @@
 #include "EnemyApproachState.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
@@ -369,6 +370,8 @@ void BaseEnemy::OnCollisionPlayerBullet(BaseCollider* other)
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.GetWorldPosition(), 10);
 
+	AudioManager::GetInstance()->PlaySE(SEType::kDamage02);
+
 	if (hitPoint_ > 0) 
 	{
 		return;
@@ -387,6 +390,9 @@ void BaseEnemy::Disappear()
 	{
 		// エフェクト生成
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyEnd01, worldTransform_.GetWorldPosition(), 50);
+		// SE再生
+		AudioManager::GetInstance()->PlaySE(SEType::kDeath01);
+
 	}
 	
 }
