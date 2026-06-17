@@ -3,6 +3,7 @@
 class EffectManager;
 class SceneChangeStaging;
 class CollisionManager;
+class AudioManager;
 
 /// <summary>
 /// ゲームのメインクラス。
@@ -41,5 +42,7 @@ private:
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;
 
 	CollisionManager* collisionManager_ = nullptr;
+
+	AudioManager* audioManager_ = nullptr;
 };
 

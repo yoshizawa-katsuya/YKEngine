@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "SceneChangeStaging.h"
 #include "GameOverSceneStartState.h"
+#include "manager/AudioManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -14,6 +15,8 @@ using namespace YKEngine;
 
 GameOverScene::~GameOverScene()
 {
+	//BGMの停止
+	audioManager_->StopBGM(BGMType::kGameOver);
 }
 
 void GameOverScene::Initialize()
@@ -22,6 +25,11 @@ void GameOverScene::Initialize()
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+
+	//オーディオマネージャの取得
+	audioManager_ = AudioManager::GetInstance();
+	//BGMの再生
+	audioManager_->PlayBGM(BGMType::kGameOver);
 
 	//スプライトの生成
 	spriteBackGround_ = std::make_unique<Sprite>();

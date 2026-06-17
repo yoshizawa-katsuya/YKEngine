@@ -16,6 +16,7 @@
 #include "TitleSceneStateContext.h"
 #include "TitleUI.h"
 class SceneChangeStaging;
+class AudioManager;
 
 /// <summary>
 /// タイトル画面のクラス。
@@ -80,6 +81,9 @@ private:
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
 	
+	//オーディオマネージャー
+	AudioManager* audioManager_;
+
 	//平行光源
 	YKEngine::DirectionalLight directionalLight_;
 

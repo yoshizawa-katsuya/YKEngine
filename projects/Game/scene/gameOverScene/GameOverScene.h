@@ -4,6 +4,7 @@
 #include "GameOverSceneStateContext.h"
 #include "StateMachine.hpp"
 class SceneChangeStaging;
+class AudioManager;
 
 namespace YKEngine
 {
@@ -76,5 +77,7 @@ private:
 	//ステートマシン
 	std::unique_ptr<YKEngine::StateMachine<GameOverSceneStateContext>> stateMachine_;
 
+	//オーディオマネージャー
+	AudioManager* audioManager_;
 };
 

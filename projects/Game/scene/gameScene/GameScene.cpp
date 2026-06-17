@@ -12,6 +12,7 @@
 #include "SceneChangeStaging.h"
 #include "GameSceneStartState.h"
 #include "JsonKeys.h"
+#include "manager/AudioManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -23,6 +24,8 @@ GameScene::~GameScene()
 {
 	//衝突マネージャに登録されたコライダーを全て削除
 	collisionManager_->Reset();
+	//BGMの停止
+	audioManager_->StopBGM(BGMType::kGame);
 }
 
 void GameScene::Initialize() {
@@ -34,6 +37,11 @@ void GameScene::Initialize() {
 	modelPlatform_ = ModelPlatform::GetInstance();
 
 	dxCommon_->ResetDeltaTime();
+
+	//オーディオマネージャの取得
+	audioManager_ = AudioManager::GetInstance();
+	//BGMの再生
+	audioManager_->PlayBGM(BGMType::kGame);
 
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();

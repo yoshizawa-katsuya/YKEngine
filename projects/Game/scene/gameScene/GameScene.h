@@ -29,6 +29,7 @@
 #include "Pause.h"
 #include "OperationGuide.h"
 class SceneChangeStaging;
+class AudioManager;
 
 /// <summary>
 /// ゲームシーン。
@@ -170,6 +171,9 @@ private:
 
 	//衝突マネージャー
 	CollisionManager* collisionManager_;
+
+	//オーディオマネージャー
+	AudioManager* audioManager_;
 
 	std::unique_ptr<EnemySpawnManager> enemySpawnManager_;
 

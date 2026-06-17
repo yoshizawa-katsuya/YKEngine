@@ -4,6 +4,7 @@
 #include "manager/EffectManager.h"
 #include "SceneChangeStaging.h"
 #include "manager/CollisionManager.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
@@ -16,6 +17,10 @@ void MyGame::Initialize()
 	//エフェクト管理クラスの生成
 	effectManager_ = EffectManager::GetInstance();
 	effectManager_->Initialize();
+
+	//オーディオ管理クラスの生成
+	audioManager_ = AudioManager::GetInstance();
+	audioManager_->Initialize();
 
 	//シーンチェンジ演出クラスの生成
 	sceneChangeStaging_ = SceneChangeStaging::GetInstance();

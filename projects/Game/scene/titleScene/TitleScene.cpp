@@ -5,6 +5,7 @@
 #include "SceneChangeStaging.h"
 #include "TitleSceneStartState.h"
 #include "manager/CollisionManager.h"
+#include "manager/AudioManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -16,6 +17,8 @@ TitleScene::~TitleScene()
 {
 	//衝突マネージャに登録されたコライダーを全て削除
 	CollisionManager::GetInstance()->Reset();
+	//BGMの停止
+	audioManager_->StopBGM(BGMType::kTitle);
 }
 
 void TitleScene::Initialize()
@@ -26,6 +29,11 @@ void TitleScene::Initialize()
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+
+	//オーディオマネージャの取得
+	audioManager_ = AudioManager::GetInstance();
+	//BGMの再生
+	audioManager_->PlayBGM(BGMType::kTitle);
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);

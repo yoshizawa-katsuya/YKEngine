@@ -1,8 +1,6 @@
 #pragma once
 #include <memory>
 #include "ParticleEmitter.h"
-class YKEngine::ModelPlatform;
-class YKEngine::BaseModel;
 
 enum class EffectType
 {

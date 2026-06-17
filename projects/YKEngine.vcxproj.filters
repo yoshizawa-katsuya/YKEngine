@@ -651,6 +651,9 @@
     <ClCompile Include="Game\objects\SkinCharacter.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\manager\AudioManager.cpp">
+      <Filter>ソース ファイル\application\manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -1212,6 +1215,9 @@
     </ClInclude>
     <ClInclude Include="Game\objects\SkinCharacter.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\manager\AudioManager.h">
+      <Filter>ヘッダー ファイル\application\manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

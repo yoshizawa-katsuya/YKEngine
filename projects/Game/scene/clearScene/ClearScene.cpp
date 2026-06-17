@@ -10,6 +10,7 @@
 #include "SceneChangeStaging.h"
 #include "ClearSceneStartState.h"
 #include "manager/CollisionManager.h"
+#include "manager/AudioManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -21,6 +22,8 @@ ClearScene::~ClearScene()
 {
 	//衝突マネージャに登録されたコライダーを全て削除
 	CollisionManager::GetInstance()->Reset();
+	//BGMの停止
+	audioManager_->StopBGM(BGMType::kClear);
 }
 
 void ClearScene::Initialize()
@@ -28,6 +31,11 @@ void ClearScene::Initialize()
 	dxCommon_ = DirectXCommon::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+
+	//オーディオマネージャの取得
+	audioManager_ = AudioManager::GetInstance();
+	//BGMの再生
+	audioManager_->PlayBGM(BGMType::kClear);
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);

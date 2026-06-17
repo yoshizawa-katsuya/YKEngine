@@ -10,6 +10,7 @@
 #include "ClearSceneStateContext.h"
 #include "ClearUI.h"
 class SceneChangeStaging;
+class AudioManager;
 
 /// <summary>
 /// クリア画面を管理するクラス。
@@ -81,6 +82,9 @@ private:
 	std::unique_ptr<ClearUI> clearUI_;
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
+
+	//オーディオマネージャー
+	AudioManager* audioManager_;
 
 	//ステージオブジェクト
 	std::unique_ptr<StageObjects> stageObjects_;
