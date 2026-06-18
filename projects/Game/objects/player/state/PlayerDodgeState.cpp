@@ -4,14 +4,17 @@
 #include "PlayerClearState.h"
 #include "PlayerGameOverState.h"
 #include "PlayerMainState.h"
-#include "Lerp.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
 void PlayerDodgeState::OnEnter(PlayerStateContext* player)
 {
+	//回避SE再生
+	AudioManager::GetInstance()->PlaySE(SEType::kDodge01);
+
 	//回避状態に設定
 	player->SetIsDodge(true);
 	//補完係数のリセット

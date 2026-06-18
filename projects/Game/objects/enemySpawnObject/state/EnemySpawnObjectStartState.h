@@ -10,6 +10,12 @@ class EnemySpawnObjectStartState : public YKEngine::BaseState<EnemySpawnObjectSt
 private:
 
 	/// <summary>
+	/// 開始処理
+	/// </summary>
+	/// <param name="enemySpawnObject">敵スポーンオブジェクト</param>
+	void OnEnter(EnemySpawnObjectStateContext* enemySpawnObject) override;
+
+	/// <summary>
 	/// 更新処理
 	/// </summary>
 	/// <param name="enemySpawnObject">敵スポーンオブジェクト</param>

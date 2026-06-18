@@ -10,6 +10,12 @@ class PlayerStartState : public YKEngine::BaseState<PlayerStateContext>
 private:
 
 	/// <summary>
+	/// 開始処理
+	/// </summary>
+	/// <param name="player">プレイヤー</param>
+	void OnEnter(PlayerStateContext* player) override;
+
+	/// <summary>
 	/// 更新処理
 	/// </summary>
 	/// <param name="player">プレイヤー</param>

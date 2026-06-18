@@ -3,6 +3,7 @@
 #include "Easing.h"
 #include "manager/EnemyManager.h"
 #include "EnemySpawnObjectStartState.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
@@ -103,6 +104,9 @@ void EnemySpawnObject::UpdateWaveEnd()
 
 void EnemySpawnObject::SpawnEnemies()
 {
+	//敵出現SEを流す
+	AudioManager::GetInstance()->PlaySE(SEType::kAppear02);
+
 	for (const EnemySpawn& spawnData : spawnDatas_)
 	{
 		//敵生成

@@ -12,10 +12,21 @@ enum class BGMType
 
 enum class SEType
 {
-	kShot01,
-	kDamage01,
-	kDamage02,
-	kDeath01,
+	kShot01,	// プレイヤーのショットSE
+	kShot02,	// プレイヤーのチャージショットSE
+	kShot03,	// 敵のショットSE
+	kDamage01,	// プレイヤーのダメージSE
+	kDamage02,	// 敵のダメージSE
+	kDeath01,	// 敵の死亡SE
+	kStart01,	// プレイヤーのスタートSE
+	kStart02,	// 敵のスタートSE
+	kAppear01,	// プレイヤーの出現SE
+	kAppear02,	// 敵の出現SE
+	kAppear03,	// クリアシーンでの出現SE
+	kDodge01,	// 回避SE
+	kDecision01,	//決定SE
+	kMenu01,	//メニューSE
+	kCursorMove01,	//カーソル移動SE
 };
 
 /// <summary>
@@ -66,12 +77,22 @@ private:
 	AudioManager(AudioManager&) = delete;
 	const AudioManager& operator=(AudioManager&) = delete;
 
+	/// <summary>
+	/// BGMデータ。
+	/// </summary>
+	/// <param name="loopSoundData">ループ音声データ</param>
+	/// <param name="volume">音量</param>
 	struct BGMData
 	{
 		YKEngine::LoopSoundData loopSoundData;
 		float volume;
 	};
 
+	/// <summary>
+	/// SEデータ
+	/// </summary>
+	/// <param name="soundData">音声データ</param>
+	/// <param name="volume">音量</param>
 	struct SEData
 	{
 		YKEngine::SoundData soundData;

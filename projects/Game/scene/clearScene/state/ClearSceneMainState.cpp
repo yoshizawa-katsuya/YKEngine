@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "StateMachine.hpp"
 #include "ClearSceneEndState.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
@@ -17,5 +18,11 @@ void ClearSceneMainState::OnUpdate(ClearSceneStateContext* clearScene)
 	{
 		stateMachine_->ChangeState<ClearSceneEndState>();
 	}
+}
+
+void ClearSceneMainState::OnExit(ClearSceneStateContext* clearScene)
+{
+	//決定SEを流す
+	AudioManager::GetInstance()->PlaySE(SEType::kDecision01);
 }
 

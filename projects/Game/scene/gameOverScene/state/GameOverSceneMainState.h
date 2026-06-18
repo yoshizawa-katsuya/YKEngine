@@ -27,6 +27,12 @@ private:
 	/// <param name="gameOverScene">ゲームオーバーシーン</param>
 	void OnUpdate(GameOverSceneStateContext* gameOverScene) override;
 
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	/// <param name="gameOverScene">ゲームオーバーシーン</param>
+	void OnExit(GameOverSceneStateContext* gameOverScene) override;
+
 	YKEngine::Input* input_;
 };
 

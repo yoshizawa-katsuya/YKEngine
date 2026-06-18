@@ -370,6 +370,7 @@ void BaseEnemy::OnCollisionPlayerBullet(BaseCollider* other)
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.GetWorldPosition(), 10);
 
+	// ダメージSEを流す
 	AudioManager::GetInstance()->PlaySE(SEType::kDamage02);
 
 	if (hitPoint_ > 0) 

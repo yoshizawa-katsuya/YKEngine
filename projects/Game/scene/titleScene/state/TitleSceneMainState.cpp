@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "StateMachine.hpp"
 #include "TitleSceneEndState.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
@@ -16,4 +17,10 @@ void TitleSceneMainState::OnUpdate(TitleSceneStateContext* titleScene)
 	{
 		stateMachine_->ChangeState<TitleSceneEndState>();
 	}
+}
+
+void TitleSceneMainState::OnExit(TitleSceneStateContext* titleScene)
+{
+	//決定SEを流す
+	AudioManager::GetInstance()->PlaySE(SEType::kDecision01);
 }

@@ -26,6 +26,12 @@ private:
 	/// <param name="clearScene">クリアシーン</param>
 	void OnUpdate(ClearSceneStateContext* clearScene) override;
 
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	/// <param name="clearScene">クリアシーン</param>
+	void OnExit(ClearSceneStateContext* clearScene) override;
+
 	YKEngine::Input* input_ = nullptr;
 };
 

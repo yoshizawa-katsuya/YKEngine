@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "StateMachine.hpp"
 #include "GameOverSceneEndState.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
@@ -16,4 +17,10 @@ void GameOverSceneMainState::OnUpdate(GameOverSceneStateContext* gameOverScene)
 	{
 		stateMachine_->ChangeState<GameOverSceneEndState>();
 	}
+}
+
+void GameOverSceneMainState::OnExit(GameOverSceneStateContext* gameOverScene)
+{
+	//決定SEを流す
+	AudioManager::GetInstance()->PlaySE(SEType::kDecision01);
 }

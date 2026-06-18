@@ -378,7 +378,7 @@ struct SoundData
 /// ループ音声データ
 /// </summary>
 /// <param name="soundData">音声データ</param>
-/// param name="pSourceVoice">ソースボイス</param>
+/// <param name="pSourceVoice">ソースボイス</param>
 struct LoopSoundData
 {
 	SoundData soundData;

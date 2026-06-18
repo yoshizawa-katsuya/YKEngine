@@ -390,6 +390,9 @@ void Player::UpdateGameOver()
 		isGameOverEnd_ = true;
 		characterWorldTransform_.scale_ = { 0.0f, 0.0f, 0.0f };
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, characterWorldTransform_.GetWorldPosition(), 100);
+
+		//死亡SE再生
+		audioManager_->PlaySE(SEType::kDeath01);
 	}
 
 	SkinCharacter::Update();
@@ -524,7 +527,7 @@ void Player::Attack() {
 			playerBulletManager_->AddPlayerBullet(GetWorldPosition(), bulletDirection, PlayerBulletType::kCharge, lockOnTarget);
 			
 			//チャージ弾の発射SE再生
-			audioManager_->PlaySE(SEType::kShot01);
+			audioManager_->PlaySE(SEType::kShot02);
 
 			//チャージ弾の発射間隔
 			shotIntervalTimer_ = globalVariables_->GetFloatValue(JsonKey::Player::kGroupName, JsonKey::Player::kChargeBulletShotInterval);

@@ -5,6 +5,7 @@
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
 #include "Input.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
@@ -54,6 +55,9 @@ void Pause::Update()
 	//カーソルの移動
 	if (input->TriggerKey(DIK_W) || input->TriggerButton(XINPUT_GAMEPAD_DPAD_UP) || input->TriggerLeftStickUp())
 	{
+		//カーソル移動SEを流す
+		AudioManager::GetInstance()->PlaySE(SEType::kCursorMove01);
+
 		cursorTarget_++;
 		if (cursorTarget_ >= static_cast<int32_t>(UIName::kCount))
 		{
@@ -62,6 +66,9 @@ void Pause::Update()
 	}
 	else if (input->TriggerKey(DIK_S) || input->TriggerButton(XINPUT_GAMEPAD_DPAD_DOWN) || input->TriggerLeftStickDown())
 	{
+		//カーソル移動SEを流す
+		AudioManager::GetInstance()->PlaySE(SEType::kCursorMove01);
+
 		cursorTarget_--;
 		if (cursorTarget_ < 0)
 		{
@@ -72,6 +79,9 @@ void Pause::Update()
 
 	if (input->TriggerKey(DIK_SPACE) || input->TriggerButton(XINPUT_GAMEPAD_A))
 	{
+		//決定SEを流す
+		AudioManager::GetInstance()->PlaySE(SEType::kDecision01);
+
 		switch (static_cast<UIName>(cursorTarget_))
 		{
 		case UIName::kReturnToTitle:
@@ -91,6 +101,8 @@ void Pause::Update()
 	{
 		//ポーズ解除
 		isPause_ = false;
+		//決定SEを流す
+		AudioManager::GetInstance()->PlaySE(SEType::kDecision01);
 	}
 }
 
@@ -114,7 +126,11 @@ void Pause::SetIsPause(bool isPause)
 	isPause_ = isPause;
 	if (isPause_)
 	{
+		//カーソルの初期位置を「続ける」に設定
 		cursorTarget_ = static_cast<int32_t>(UIName::kContinue);
+
+		//メニューSEを流す
+		AudioManager::GetInstance()->PlaySE(SEType::kMenu01);
 	}
 }
 

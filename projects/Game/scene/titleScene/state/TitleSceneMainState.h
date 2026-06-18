@@ -27,6 +27,12 @@ private:
 	/// <param name="titleScene">タイトルシーン</param>
 	void OnUpdate(TitleSceneStateContext* titleScene) override;
 
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	/// <param name="titleScene">タイトルシーン</param>
+	void OnExit(TitleSceneStateContext* titleScene) override;
+
 	YKEngine::Input* input_;
 };
 

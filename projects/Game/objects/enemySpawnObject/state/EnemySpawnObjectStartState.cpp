@@ -2,6 +2,13 @@
 #include "EnemySpawnObjectStateContext.h"
 #include "EnemySpawnObjectIntervalState.h"
 #include "StateMachine.hpp"
+#include "manager/AudioManager.h"
+
+void EnemySpawnObjectStartState::OnEnter(EnemySpawnObjectStateContext* enemySpawnObject)
+{
+	// 敵出現開始SEを流す
+	AudioManager::GetInstance()->PlaySE(SEType::kStart02);
+}
 
 void EnemySpawnObjectStartState::OnUpdate(EnemySpawnObjectStateContext* enemySpawnObject)
 {

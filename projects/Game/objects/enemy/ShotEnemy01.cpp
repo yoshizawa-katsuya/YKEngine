@@ -1,5 +1,6 @@
 #include "ShotEnemy01.h"
 #include "manager/EnemyBulletManager.h"
+#include "manager/AudioManager.h"
 
 using namespace YKEngine;
 
@@ -31,10 +32,13 @@ void ShotEnemy01::UpdateMain()
 
 void ShotEnemy01::Fire() 
 {
+	// 発射SEを流す
+	AudioManager::GetInstance()->PlaySE(SEType::kShot03);
+
 	//弾の速度を計算
 	Vector3 velocity = Normalize(direction_);
 	velocity = Multiply(params_.bulletSpeed, velocity);
-
+	
 	// 弾を生成し、初期化
 	enemyBulletManager_->AddEnemyBullet(GetWorldPosition(), velocity, player_, params_.bulletSpeed, params_.bulletType);
 
