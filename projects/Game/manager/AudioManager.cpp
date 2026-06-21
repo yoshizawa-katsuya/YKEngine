@@ -47,6 +47,7 @@ void AudioManager::Initialize()
 		{SEType::kDamage01, "./Resources/SE/damage01.mp3"},
 		{SEType::kDamage02, "./Resources/SE/damage02.mp3"},
 		{SEType::kDeath01, "./Resources/SE/death01.mp3"},
+		{SEType::kDeath02, "./Resources/SE/death02.mp3"},
 		{SEType::kStart01, "./Resources/SE/start01.mp3"},
 		{SEType::kStart02, "./Resources/SE/start02.mp3"},
 		{SEType::kAppear01, "./Resources/SE/appear01.wav"},

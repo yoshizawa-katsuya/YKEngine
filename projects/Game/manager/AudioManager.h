@@ -17,7 +17,8 @@ enum class SEType
 	kShot03,	// 敵のショットSE
 	kDamage01,	// プレイヤーのダメージSE
 	kDamage02,	// 敵のダメージSE
-	kDeath01,	// 敵の死亡SE
+	kDeath01,	// 死亡SE
+	kDeath02,	// 自機の死亡演出SE
 	kStart01,	// プレイヤーのスタートSE
 	kStart02,	// 敵のスタートSE
 	kAppear01,	// プレイヤーの出現SE
