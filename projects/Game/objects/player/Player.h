@@ -14,6 +14,7 @@ class AudioManager;
 namespace YKEngine
 {
 	class GlobalVariables;
+	class ThreadPool;
 }
 
 /// <summary>
@@ -244,6 +245,8 @@ private:
 
 	//キーボード入力
 	YKEngine::Input* input_ = nullptr;
+
+	YKEngine::ThreadPool* threadPool_ = nullptr;
 
 	//オーディオマネージャー
 	AudioManager* audioManager_ = nullptr;

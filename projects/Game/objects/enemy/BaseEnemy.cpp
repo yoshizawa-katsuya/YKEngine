@@ -15,6 +15,7 @@
 #include "GlobalVariables.h"
 #include "JsonKeys.h"
 #include "manager/AudioManager.h"
+#include "ThreadPool.h"
 
 using namespace YKEngine;
 
@@ -24,7 +25,9 @@ BaseEnemy::~BaseEnemy()
 
 void BaseEnemy::Initialize(BaseModel* model, Animation* animation, const EnemySpawn& spawnData, Camera* railCamera, Player* player)
 {
-	
+	//スレッドプールのインスタンスを取得
+	threadPool_ = ThreadPool::GetInstance();
+
 	SkinCharacter::Initialize(model);
 	animation_ = animation;
 	SetColliderID();
@@ -76,10 +79,13 @@ void BaseEnemy::Update() {
 
 	stateMachine_->Update();
 	
-	// アニメーションタイマーの更新
-	animationTimer_ += 1.0f / 60.0f;
-	animationTimer_ = std::fmod(animationTimer_, animation_->GetDuration());
-	object_->AnimationUpdate(animation_, animationTimer_);
+	threadPool_->enqueueTask([this]()
+		{
+			// アニメーションタイマーの更新
+			animationTimer_ += 1.0f / 60.0f;
+			animationTimer_ = std::fmod(animationTimer_, animation_->GetDuration());
+			object_->AnimationUpdate(animation_, animationTimer_);
+		});
 
 	SkinCharacter::Update();
 }

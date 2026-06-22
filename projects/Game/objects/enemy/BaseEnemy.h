@@ -8,6 +8,7 @@
 namespace YKEngine
 {
 	class GlobalVariables;
+	class ThreadPool;
 }
 
 class Player;
@@ -179,6 +180,8 @@ protected:
 	Player* player_ = nullptr;
 	//敵の弾マネージャー
 	EnemyBulletManager* enemyBulletManager_ = nullptr;
+
+	YKEngine::ThreadPool* threadPool_ = nullptr; // スレッドプール
 
 	YKEngine::GlobalVariables* globalVariables_ = nullptr;
 

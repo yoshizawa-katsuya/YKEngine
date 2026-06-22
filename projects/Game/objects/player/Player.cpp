@@ -13,6 +13,7 @@
 #include "PlayerStartState.h"
 #include "manager/CollisionManager.h"
 #include "manager/AudioManager.h"
+#include "ThreadPool.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -22,6 +23,8 @@ using namespace YKEngine;
 
 void Player::Initialize(WorldTransform* parent)
 {
+	//スレッドプールのインスタンスを取得
+	threadPool_ = ThreadPool::GetInstance();
 	//オーディオ管理クラスの取得
 	audioManager_ = AudioManager::GetInstance();
 
@@ -602,6 +605,9 @@ void Player::DamageReaction()
 
 void Player::UpdateAnimation()
 {
-	animation_->Update();
-	object_->AnimationUpdate(animation_.get());
+	threadPool_->enqueueTask([this]() {
+		animation_->Update();
+		object_->AnimationUpdate(animation_.get());
+		});
+	
 }
