@@ -3,11 +3,7 @@
 #include "InstancingObjects.h"
 #include "LevelDataLoader.h"
 #include "CuboidObstacle.h"
-
-namespace YKEngine
-{
-	class My3dObject;
-}
+#include "My3dObject.h"
 
 /// <summary>
 /// ステージ上のオブジェクトを管理するクラス。

@@ -109,6 +109,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\GameOverUI.cpp" />
     <ClCompile Include="Game\manager\AudioManager.cpp" />
     <ClCompile Include="Game\objects\CuboidObstacle.cpp" />
     <ClCompile Include="Game\objects\ClearUI.cpp" />
@@ -425,6 +426,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\GameOverUI.h" />
     <ClInclude Include="Game\manager\AudioManager.h" />
     <ClInclude Include="Game\objects\CuboidObstacle.h" />
     <ClInclude Include="Game\objects\collider\ColliderShapeType.h" />

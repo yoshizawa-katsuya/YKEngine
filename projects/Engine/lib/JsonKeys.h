@@ -164,6 +164,16 @@ namespace JsonKey
 		}
 	}
 
+	namespace GameOver
+	{
+		namespace UI
+		{
+			const std::string kGroupName = "GameOverUI";
+			const std::string kGameOverPosition = "GameOverPosition";
+			const std::string kPressAPosition = "PressAPosition";
+		}
+	}
+
 	namespace StageObjects
 	{
 		const std::string kGroupName = "StageObjects";

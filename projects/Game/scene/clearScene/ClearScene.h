@@ -76,6 +76,7 @@ private:
 	//平行光源
 	YKEngine::DirectionalLight directionalLight_;
 
+	//カメラマネージャー
 	std::unique_ptr<CameraManager> cameraManager_;
 
 	//クリア画面のUI

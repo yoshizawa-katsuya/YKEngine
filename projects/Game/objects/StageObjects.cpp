@@ -1,6 +1,5 @@
 #include "StageObjects.h"
 #include "ModelPlatform.h"
-#include "My3dObject.h"
 #include "RootParams.h"
 #include "GlobalVariables.h"
 #include "JsonKeys.h"

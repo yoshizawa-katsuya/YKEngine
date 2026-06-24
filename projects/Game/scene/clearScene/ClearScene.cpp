@@ -37,9 +37,11 @@ void ClearScene::Initialize()
 	//BGMの再生
 	audioManager_->PlayBGM(BGMType::kClear);
 
+	//光源の設定
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 
+	//クリア画面のUIの生成
 	clearUI_ = std::make_unique<ClearUI>();
 	clearUI_->Initialize();
 

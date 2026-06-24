@@ -3,6 +3,11 @@
 #include "AnimatedSprite.h"
 #include "GameOverSceneStateContext.h"
 #include "StateMachine.hpp"
+#include "GameOverUI.h"
+#include "manager/CameraManager.h"
+#include "StageObjects.h"
+#include "RailMover.h"
+#include "DirectionalLight.h"
 class SceneChangeStaging;
 class AudioManager;
 
@@ -53,6 +58,11 @@ private:
 	void UpdateEnd() override;
 
 	/// <summary>
+	/// レベルの生成。
+	/// </summary>
+	void CreateLevel();
+
+	/// <summary>
 	/// シーン遷移演出が終了していたらtrueを返す。
 	/// </summary>
 	bool IsSceneStagingEnd() const override;
@@ -70,9 +80,20 @@ private:
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
 
-	std::unique_ptr<YKEngine::Sprite> spriteBackGround_;
+	//平行光源
+	YKEngine::DirectionalLight directionalLight_;
+
+	std::unique_ptr<CameraManager> cameraManager_;//カメラマネージャー
+
+	std::unique_ptr<GameOverUI> gameOverUI_;//ゲームオーバーシーンのUI
 
 	SceneChangeStaging* sceneChangeStaging_ = nullptr;//シーンチェンジ演出
+
+	//ステージオブジェクト
+	std::unique_ptr<StageObjects> stageObjects_;
+
+	//レールムーバー
+	std::unique_ptr<RailMover> railMover_;
 
 	//ステートマシン
 	std::unique_ptr<YKEngine::StateMachine<GameOverSceneStateContext>> stateMachine_;
