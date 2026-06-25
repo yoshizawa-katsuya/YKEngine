@@ -180,7 +180,9 @@ namespace JsonKey
 
 		const std::string kNightSkyBoxColor = "NightSkyBoxColor";
 		const std::string kDayTimeSkyBoxColor = "DayTimeSkyBoxColor";
+		const std::string kGameOverSkyBoxColor = "GameOverSkyBoxColor";
 		const std::string kGroundEnvironmentCoefficient = "GroundEnvironmentCoefficient";
+		const std::string kGameOverGroundEnvironmentCoefficient = "GameOverGroundEnvironmentCoefficient";
 
 	}
 

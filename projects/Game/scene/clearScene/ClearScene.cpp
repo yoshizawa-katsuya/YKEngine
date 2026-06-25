@@ -47,7 +47,7 @@ void ClearScene::Initialize()
 
 	//ステージオブジェクトの生成
 	stageObjects_ = std::make_unique<StageObjects>();
-	stageObjects_->Initialize(true);
+	stageObjects_->Initialize(StageType::kClear);
 
 	CreateLevel();
 

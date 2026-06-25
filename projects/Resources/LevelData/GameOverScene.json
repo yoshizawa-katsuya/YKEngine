@@ -177,29 +177,6 @@
         },
         {
             "type": "MESH",
-            "name": "円錐.004",
-            "transform": {
-                "translation": [
-                    -242.98086547851562,
-                    -10.015945434570312,
-                    31.183029174804688
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -3.2570199966430664
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_path": "./resources/sun",
-            "file_name": "Sun.obj"
-        },
-        {
-            "type": "MESH",
             "name": "立方体.001",
             "transform": {
                 "translation": [

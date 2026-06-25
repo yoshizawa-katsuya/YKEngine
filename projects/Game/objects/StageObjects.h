@@ -5,6 +5,13 @@
 #include "CuboidObstacle.h"
 #include "My3dObject.h"
 
+enum class StageType
+{
+	kDefault,
+	kClear,
+	kGameOver,
+};
+
 /// <summary>
 /// ステージ上のオブジェクトを管理するクラス。
 /// </summary>
@@ -15,8 +22,8 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="isDayTime">昼ならtrue</param>
-	void Initialize(bool isDayTime = false);
+	/// <param name="stageType">ステージの種類</param>
+	void Initialize(StageType stageType = StageType::kDefault);
 
 	/// <summary>
 	/// 更新
@@ -83,9 +90,9 @@ private:
 	std::vector<std::unique_ptr<CuboidObstacle>> cuboidObstacles_;
 
 	//昼ならtrue
-	bool isDayTime_;
+	StageType stageType_ = StageType::kDefault;
 
-	using InstancingObjectsFactory = std::function<void(StageObjects*, const YKEngine::ObjectData&, const std::string&)>;
+	using InstancingObjectsFactory = std::function<void(StageObjects*, const YKEngine::ObjectData&, const std::string&, StageType)>;
 
 	const std::unordered_map<std::string, InstancingObjectsFactory>& GetInstancingObjectsFactoryMap() const;
 

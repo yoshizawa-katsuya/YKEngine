@@ -7,11 +7,12 @@
 
 using namespace YKEngine;
 
-void StageObjects::Initialize(bool isDayTime)
+void StageObjects::Initialize(StageType stageType)
 {
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
 
-	isDayTime_ = isDayTime;
+	//ステージタイプの設定
+	stageType_ = stageType;
 
 	//グローバル変数に登録
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -19,20 +20,34 @@ void StageObjects::Initialize(bool isDayTime)
 	globalVariables->CreateGroup(groupName);
 	globalVariables->AddItem(groupName, JsonKey::StageObjects::kNightSkyBoxColor, Color(0.5f, 0.5f, 0.5f, 1.0f));
 	globalVariables->AddItem(groupName, JsonKey::StageObjects::kDayTimeSkyBoxColor, Color(1.0f, 1.0f, 1.0f, 1.0f));
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGameOverSkyBoxColor, Color(0.5f, 0.5f, 0.5f, 1.0f));
 	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient, 0.5f);
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGameOverGroundEnvironmentCoefficient, 0.05f);
 
+	//ステージタイプごとの初期化処理をマップで管理
+	const std::unordered_map<StageType, std::function<void()>> stageTypeInitializationMap = {
+		{ 
+			StageType::kDefault, [this, modelPlatform]() { 
+				textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/night.dds");
+				skyBoxModel_ = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "Default"); 
+			}
+		},
+		{ 
+			StageType::kClear, [this, modelPlatform]() {
+				textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/daytime.dds");
+				skyBoxModel_ = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "Clear");
+			} 
+		},
+		{ 
+			StageType::kGameOver, [this, modelPlatform]() { 
+				textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/night.dds");
+				skyBoxModel_ = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "GameOver");
+			} 
+		},
+	};
 
 	//テクスチャの読み込み、スカイボックスモデルの生成
-	if (isDayTime_)
-	{
-		textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/daytime.dds");
-		skyBoxModel_ = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "DayTime");
-	}
-	else
-	{
-		textureHandleSkyBox_ = TextureManager::GetInstance()->Load("./Resources/skyBox/night.dds");
-		skyBoxModel_ = modelPlatform->CreateSkyBox(textureHandleSkyBox_, "Night");
-	}	
+	stageTypeInitializationMap.at(stageType_)();
 
 	//スカイボックスの生成
 	skyBox_ = std::make_unique<My3dObject>();
@@ -104,7 +119,7 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 
 			if (factoryMap.contains(key))
 			{
-				factoryMap.at(key)(this, objectData, modelName);
+				factoryMap.at(key)(this, objectData, modelName, stageType_);
 			}
 			else
 			{
@@ -174,42 +189,82 @@ void StageObjects::LoadFromJson()
 	const std::string& groupName = JsonKey::StageObjects::kGroupName;
 
 	Color color;
-	if (isDayTime_)
-	{
-		color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kDayTimeSkyBoxColor);
-	}
-	else
-	{
-		color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kNightSkyBoxColor);
-	}
+
+	const std::unordered_map<StageType, std::function<void()>> stageTypeColorMap = {
+		{ 
+			StageType::kDefault, [this, globalVariables, groupName, &color]() {
+				color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kNightSkyBoxColor);
+			} 
+		},
+		{ 
+			StageType::kClear, [this, globalVariables, groupName, &color]() {
+				color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kDayTimeSkyBoxColor);
+			} 
+		},
+		{ 
+			StageType::kGameOver, [this, globalVariables, groupName, &color]() {
+				color = globalVariables->GetColorValue(groupName, JsonKey::StageObjects::kGameOverSkyBoxColor);
+			} 
+		}
+	};
+
+	stageTypeColorMap.at(stageType_)();
+
 	Vector4 colorVec4 = Vector4(color.r, color.g, color.b, color.a);
 	skyBoxModel_->SetColor(colorVec4);
 
-	groundModel_->SetEnvironmentCoefficient(globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient));
+	//地面の環境光係数を設定
+	if (stageType_ == StageType::kGameOver)
+	{
+		//ゲームオーバー時の環境光係数を設定
+		groundModel_->SetEnvironmentCoefficient(globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGameOverGroundEnvironmentCoefficient));
+	}
+	else
+	{
+		//通常時の環境光係数を設定
+		groundModel_->SetEnvironmentCoefficient(globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient));
+	}
 }
 
 const std::unordered_map<std::string, StageObjects::InstancingObjectsFactory>& StageObjects::GetInstancingObjectsFactoryMap() const
 {
 	static const std::unordered_map<std::string, InstancingObjectsFactory> instancingObjectsFactoryMap = {
-		{"primitiveCube", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName) {
+		{"primitiveCube", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName, StageType stageType) {
 			//インスタンシングオブジェクトの初期化
 			stageObjects->instancingTriplanarObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
 			uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/brick.png");
 			BaseModel* model = ModelPlatform::GetInstance()->CreateCube(textureHandle, modelName).get();
-			model->SetEnvironmentCoefficient(0.5f);
+			//TODO:GlobalVariablesから環境光係数を取得するように変更する
+			//環境光係数の設定
+			if (stageType == StageType::kGameOver)
+			{
+				model->SetEnvironmentCoefficient(0.05f);
+			}
+			else
+			{
+				model->SetEnvironmentCoefficient(0.5f);
+			}
 			stageObjects->instancingTriplanarObjects_[objectData.fileName]->Initialize(model, 256);
 
 		}},
-		{"primitiveSphere", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName) {
+		{"primitiveSphere", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName, StageType stageType) {
 			//インスタンシングオブジェクトの初期化	
 			stageObjects->instancingTriplanarObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
 			uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/gradation.png");
 			BaseModel* model = ModelPlatform::GetInstance()->CreateSphere(textureHandle, modelName).get();
-			model->SetEnvironmentCoefficient(0.5f);
+			//環境光係数の設定
+			if (stageType == StageType::kGameOver)
+			{
+				model->SetEnvironmentCoefficient(0.05f);
+			}
+			else
+			{
+				model->SetEnvironmentCoefficient(0.5f);
+			}
 			stageObjects->instancingTriplanarObjects_[objectData.fileName]->Initialize(model, 128);
 
 		}},
-		{"Sun.obj", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName) {
+		{"Sun.obj", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName, StageType stageType) {
 			//インスタンシングオブジェクトの初期化
 			stageObjects->instancingObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
 			BaseModel* model = ModelPlatform::GetInstance()->CreateRigidModel(objectData.filePath, objectData.fileName).get();
