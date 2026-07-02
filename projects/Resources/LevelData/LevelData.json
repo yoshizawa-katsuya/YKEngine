@@ -4881,7 +4881,7 @@
                 ],
                 "rotation": [
                     0.0,
-                    45.0,
+                    -0.0,
                     0.0
                 ],
                 "scaling": [
@@ -4890,8 +4890,8 @@
                     14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -4949,18 +4949,18 @@
                     150.4927520751953
                 ],
                 "rotation": [
-                    -3.4789511573762866e-06,
-                    45.0,
-                    -50.808265686035156
+                    0.0,
+                    0.0,
+                    -50.80825424194336
                 ],
                 "scaling": [
-                    14.131836891174316,
+                    14.131837844848633,
                     19.662586212158203,
-                    14.131837844848633
+                    14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -4972,9 +4972,9 @@
                     150.4927520751953
                 ],
                 "rotation": [
-                    -1.033061607813579e-06,
-                    44.999996185302734,
-                    44.99830627441406
+                    0.0,
+                    -0.0,
+                    44.998313903808594
                 ],
                 "scaling": [
                     14.131837844848633,
@@ -4982,8 +4982,8 @@
                     14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -5041,18 +5041,18 @@
                     150.4927520751953
                 ],
                 "rotation": [
-                    1.8611526684253477e-06,
-                    45.00000762939453,
-                    16.322723388671875
+                    0.0,
+                    -0.0,
+                    16.322715759277344
                 ],
                 "scaling": [
                     14.131836891174316,
                     19.662588119506836,
-                    14.131837844848633
+                    14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -5065,7 +5065,7 @@
                 ],
                 "rotation": [
                     0.0,
-                    45.0,
+                    -0.0,
                     0.0
                 ],
                 "scaling": [
@@ -5074,8 +5074,8 @@
                     43.22426223754883
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -5133,8 +5133,8 @@
                     150.4927520751953
                 ],
                 "rotation": [
-                    4.370474471215857e-07,
-                    45.0,
+                    0.0,
+                    0.0,
                     -8.479470252990723
                 ],
                 "scaling": [
@@ -5143,8 +5143,8 @@
                     14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -5156,8 +5156,8 @@
                     150.4927520751953
                 ],
                 "rotation": [
-                    5.199274255573982e-07,
-                    44.999996185302734,
+                    0.0,
+                    0.0,
                     -36.94643020629883
                 ],
                 "scaling": [
@@ -5166,8 +5166,8 @@
                     14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -5225,18 +5225,18 @@
                     150.49276733398438
                 ],
                 "rotation": [
-                    -2.67246434759727e-07,
-                    45.000003814697266,
-                    23.514293670654297
+                    0.0,
+                    -0.0,
+                    23.514284133911133
                 ],
                 "scaling": [
                     14.131836891174316,
                     19.662586212158203,
-                    14.131837844848633
+                    14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -5248,18 +5248,18 @@
                     150.49276733398438
                 ],
                 "rotation": [
-                    4.4175467905915866e-07,
-                    45.0,
-                    7.003317832946777
+                    0.0,
+                    -0.0,
+                    7.003317356109619
                 ],
                 "scaling": [
                     14.131836891174316,
                     19.662586212158203,
-                    14.131837844848633
+                    14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -5317,18 +5317,18 @@
                     150.49276733398438
                 ],
                 "rotation": [
-                    -7.135744226616225e-07,
-                    45.00000762939453,
-                    -17.700740814208984
+                    0.0,
+                    0.0,
+                    -17.70073890686035
                 ],
                 "scaling": [
                     14.131837844848633,
                     19.662586212158203,
-                    14.131837844848633
+                    14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",
@@ -5340,9 +5340,9 @@
                     150.49276733398438
                 ],
                 "rotation": [
-                    -6.572849997610319e-07,
-                    45.00000762939453,
-                    -31.728893280029297
+                    0.0,
+                    0.0,
+                    -31.7288761138916
                 ],
                 "scaling": [
                     14.131836891174316,
@@ -5350,8 +5350,8 @@
                     14.131836891174316
                 ]
             },
-            "file_path": "./resources/",
-            "file_name": "primitiveCube"
+            "file_path": "./Resources/roof",
+            "file_name": "gableRoof.obj"
         },
         {
             "type": "MESH",

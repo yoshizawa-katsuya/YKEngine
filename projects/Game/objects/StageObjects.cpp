@@ -272,6 +272,14 @@ const std::unordered_map<std::string, StageObjects::InstancingObjectsFactory>& S
 			model->SetShininess(10.0f);
 			stageObjects->instancingObjects_[objectData.fileName]->Initialize(model, 128);
 
+		}},
+		{"gableRoof.obj", [](StageObjects* stageObjects, const ObjectData& objectData, const std::string& modelName, StageType stageType) {
+			//インスタンシングオブジェクトの初期化
+			stageObjects->instancingTriplanarObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
+			BaseModel* model = ModelPlatform::GetInstance()->CreateRigidModel(objectData.filePath, objectData.fileName).get();
+			//マテリアルの設定
+			model->SetEnvironmentCoefficient(0.5f);
+			stageObjects->instancingTriplanarObjects_[objectData.fileName]->Initialize(model, 128);
 		}}
 	};
 
