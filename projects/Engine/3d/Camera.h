@@ -28,7 +28,7 @@ public:
 	/// <summary>
 	/// ConstantBufferにカメラの情報をセットする。
 	/// </summary>
-	void SetCameraReaource(uint32_t rootParamIndex);
+	void SetCameraResource(uint32_t rootParamIndex);
 
 	/// <summary>
 	/// ビルボード行列の作成。
