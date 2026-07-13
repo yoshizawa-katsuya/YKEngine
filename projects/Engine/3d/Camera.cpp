@@ -40,7 +40,7 @@ void Camera::Update()
 	viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);
 }
 
-void Camera::SetCameraReaource(uint32_t rootParamIndex)
+void Camera::SetCameraResource(uint32_t rootParamIndex)
 {
 
 	cameraForGPUData_->worldPosition = transform_.translation;
