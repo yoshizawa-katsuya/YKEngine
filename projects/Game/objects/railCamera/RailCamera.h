@@ -87,7 +87,7 @@ private:
 	/// <summary>
 	/// 補完係数t_をリセット
 	/// </summary>
-	void ReaetT() override { t_ = 0.0f; }
+	void ResetT() override { t_ = 0.0f; }
 
 	/// <summary>
 	/// 補完係数t_を取得

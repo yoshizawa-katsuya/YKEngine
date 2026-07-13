@@ -5,7 +5,7 @@
 
 void RailCameraStartState::OnEnter(RailCameraStateContext* railCamera)
 {
-	railCamera->ReaetT();
+	railCamera->ResetT();
 }
 
 void RailCameraStartState::OnUpdate(RailCameraStateContext* railCamera)

@@ -40,7 +40,7 @@ public:
 	/// <summary>
 	/// 補完係数t_をリセット
 	/// </summary>
-	virtual void ReaetT() = 0;
+	virtual void ResetT() = 0;
 
 	/// <summary>
 	/// クリアシーンステートに入る際の処理

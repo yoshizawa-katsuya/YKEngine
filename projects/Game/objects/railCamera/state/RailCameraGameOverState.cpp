@@ -3,7 +3,7 @@
 
 void RailCameraGameOverState::OnEnter(RailCameraStateContext* railCamera)
 {
-	railCamera->ReaetT();
+	railCamera->ResetT();
 }
 
 void RailCameraGameOverState::OnUpdate(RailCameraStateContext* railCamera)
