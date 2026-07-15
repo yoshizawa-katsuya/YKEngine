@@ -23,6 +23,11 @@ void StageObjects::Initialize(StageType stageType)
 	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGameOverSkyBoxColor, Color(0.5f, 0.5f, 0.5f, 1.0f));
 	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGroundEnvironmentCoefficient, 0.5f);
 	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGameOverGroundEnvironmentCoefficient, 0.05f);
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kEnvironmentCoefficient, 0.5f);
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGameOverEnvironmentCoefficient, 0.05f);
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGroundAlpha, 0.5f);
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kGroundScale, Vector3(100.0f, 1.0f, 100.0f));
+	globalVariables->AddItem(groupName, JsonKey::StageObjects::kSkyBoxScale, 1000.0f);
 
 	//ステージタイプごとの初期化処理をマップで管理
 	const std::unordered_map<StageType, std::function<void()>> stageTypeInitializationMap = {
@@ -54,21 +59,21 @@ void StageObjects::Initialize(StageType stageType)
 	skyBox_->Initialize(skyBoxModel_.get());
 	WorldTransform skyBoxTransform;
 	skyBoxTransform.Initialize();
-	const float kSkyBoxScale = 1000.0f;
+	const float kSkyBoxScale = globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kSkyBoxScale);
 	skyBoxTransform.scale_ = { kSkyBoxScale, kSkyBoxScale, kSkyBoxScale };
 	skyBoxTransform.UpdateMatrix();
 	skyBox_->WorldTransformUpdate(skyBoxTransform);
 
 	//地面モデルの生成
 	groundModel_ = modelPlatform->CreateRigidModel("./Resources/ground", "Ground.obj");
-	groundModel_->SetAlpha(0.5f);
+	groundModel_->SetAlpha(globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGroundAlpha));
 
 	//地面の生成
 	ground_ = std::make_unique<My3dObject>();
 	ground_->Initialize(groundModel_.get());
 	WorldTransform groundTransform;
 	groundTransform.Initialize();
-	groundTransform.scale_ = { 100.0f, 1.0f, 100.0f };
+	groundTransform.scale_ = globalVariables->GetVector3Value(groupName, JsonKey::StageObjects::kGroundScale);
 	groundTransform.UpdateMatrix();
 	ground_->WorldTransformUpdate(groundTransform);
 
@@ -126,7 +131,7 @@ void StageObjects::GetInstancingObject(const std::vector<YKEngine::ObjectData>& 
 				//ファクトリマップに存在しない場合のデフォルトの処理（必要に応じて変更）
 				instancingObjects_.emplace(key, std::make_unique<InstancingObjects>());
 				BaseModel* model = modelPlatform->CreateRigidModel(objectData.filePath, key).get();
-				model->SetEnvironmentCoefficient(0.5f);
+				model->SetEnvironmentCoefficient(GetEnvironmentCoefficient());
 				instancingObjects_[key]->Initialize(model, 128);
 			}
 
@@ -226,6 +231,19 @@ void StageObjects::LoadFromJson()
 	}
 }
 
+float StageObjects::GetEnvironmentCoefficient() const
+{
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const std::string& groupName = JsonKey::StageObjects::kGroupName;
+	//ステージタイプに応じて環境光係数を取得
+	if (stageType_ == StageType::kGameOver)
+	{
+		return globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kGameOverEnvironmentCoefficient);
+	}
+	
+	return globalVariables->GetFloatValue(groupName, JsonKey::StageObjects::kEnvironmentCoefficient);
+}
+
 const std::unordered_map<std::string, StageObjects::InstancingObjectsFactory>& StageObjects::GetInstancingObjectsFactoryMap() const
 {
 	static const std::unordered_map<std::string, InstancingObjectsFactory> instancingObjectsFactoryMap = {
@@ -234,16 +252,9 @@ const std::unordered_map<std::string, StageObjects::InstancingObjectsFactory>& S
 			stageObjects->instancingTriplanarObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
 			uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/brick.png");
 			BaseModel* model = ModelPlatform::GetInstance()->CreateCube(textureHandle, modelName).get();
-			//TODO:GlobalVariablesから環境光係数を取得するように変更する
-			//環境光係数の設定
-			if (stageType == StageType::kGameOver)
-			{
-				model->SetEnvironmentCoefficient(0.05f);
-			}
-			else
-			{
-				model->SetEnvironmentCoefficient(0.5f);
-			}
+			//マテリアルの設定
+			model->SetEnvironmentCoefficient(stageObjects->GetEnvironmentCoefficient());
+			//TODO:インスタンシングのmaxInstanceCountをオブジェクトの数に応じて変更する
 			stageObjects->instancingTriplanarObjects_[objectData.fileName]->Initialize(model, 256);
 
 		}},
@@ -252,15 +263,8 @@ const std::unordered_map<std::string, StageObjects::InstancingObjectsFactory>& S
 			stageObjects->instancingTriplanarObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
 			uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/gradation.png");
 			BaseModel* model = ModelPlatform::GetInstance()->CreateSphere(textureHandle, modelName).get();
-			//環境光係数の設定
-			if (stageType == StageType::kGameOver)
-			{
-				model->SetEnvironmentCoefficient(0.05f);
-			}
-			else
-			{
-				model->SetEnvironmentCoefficient(0.5f);
-			}
+			//マテリアルの設定
+			model->SetEnvironmentCoefficient(stageObjects->GetEnvironmentCoefficient());
 			stageObjects->instancingTriplanarObjects_[objectData.fileName]->Initialize(model, 128);
 
 		}},
@@ -278,7 +282,7 @@ const std::unordered_map<std::string, StageObjects::InstancingObjectsFactory>& S
 			stageObjects->instancingTriplanarObjects_.emplace(objectData.fileName, std::make_unique<InstancingObjects>());
 			BaseModel* model = ModelPlatform::GetInstance()->CreateRigidModel(objectData.filePath, objectData.fileName).get();
 			//マテリアルの設定
-			model->SetEnvironmentCoefficient(0.5f);
+			model->SetEnvironmentCoefficient(stageObjects->GetEnvironmentCoefficient());
 			stageObjects->instancingTriplanarObjects_[objectData.fileName]->Initialize(model, 128);
 		}}
 	};

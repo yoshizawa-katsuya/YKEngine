@@ -69,6 +69,12 @@ private:
 	///</summary>
 	void LoadFromJson();
 
+	/// <summary>
+	/// 環境光係数の取得
+	/// </summary>
+	/// <returns>環境光係数</returns>
+	float GetEnvironmentCoefficient() const;
+
 	//テクスチャハンドル
 	uint32_t textureHandleSkyBox_;
 

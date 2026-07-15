@@ -183,6 +183,11 @@ namespace JsonKey
 		const std::string kGameOverSkyBoxColor = "GameOverSkyBoxColor";
 		const std::string kGroundEnvironmentCoefficient = "GroundEnvironmentCoefficient";
 		const std::string kGameOverGroundEnvironmentCoefficient = "GameOverGroundEnvironmentCoefficient";
+		const std::string kEnvironmentCoefficient = "EnvironmentCoefficient";	//環境光係数
+		const std::string kGameOverEnvironmentCoefficient = "GameOverEnvironmentCoefficient";	//ゲームオーバー時の環境光係数
+		const std::string kGroundAlpha = "GroundAlpha";	//地面のアルファ値
+		const std::string kGroundScale = "GroundScale";	//地面のスケール
+		const std::string kSkyBoxScale = "SkyBoxScale";	//スカイボックスのスケール
 
 	}
 

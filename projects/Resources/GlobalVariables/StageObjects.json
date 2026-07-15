@@ -6,6 +6,9 @@
             1.0,
             1.0
         ],
+        "EnvironmentCoefficient": 0.5,
+        "GameOverEnvironmentCoefficient": 0.05000000074505806,
+        "GameOverGroundEnvironmentCoefficient": 0.05000000074505806,
         "GameOverSkyBoxColor": [
             0.044117629528045654,
             0.044117629528045654,
