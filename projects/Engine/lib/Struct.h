@@ -145,7 +145,7 @@ struct OBB
 /// <param name="color">色</param>
 /// <param name="enableLighting">ライティングを有効にするか</param>
 /// <param name="shininess">光沢度</param>
-/// <param name="enviromentCoefficient">環境光の係数</param>
+/// <param name="environmentCoefficient">環境光の係数</param>
 /// <param name="padding">パディング</param>
 /// <param name="uvTransform">UV変換行列</param>
 struct Material 
@@ -153,7 +153,7 @@ struct Material
 	Vector4 color;
 	bool enableLighting;
 	float shininess;				//光沢度
-	float enviromentCoefficient;	//環境光の係数
+	float environmentCoefficient;	//環境光の係数
 	//変数を新しく追加する場合paddingを忘れないように
 	float padding;
 	Matrix4x4 uvTransform;
