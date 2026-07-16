@@ -435,7 +435,7 @@ void Player::AfterStartComplete()
 	characterWorldTransform_.scale_ = { 1.0f, 1.0f, 1.0f };
 	characterWorldTransform_.rotation_ = { 0.0f, 0.0f, 0.0f };
 
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerStart03, GetWorldPosition(), 100);
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerStart03, GetWorldPosition());
 	
 	for (int i = 0; i < maxHitPoint_; i++)
 	{

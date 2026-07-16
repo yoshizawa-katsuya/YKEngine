@@ -232,7 +232,7 @@ void BaseEnemy::UpdateDead()
 	Rotate();
 
 	// エフェクト生成
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyBrowAway01, GetWorldPosition(), 10);
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyBrowAway01, GetWorldPosition());
 }
 
 bool BaseEnemy::IsLeave()
@@ -396,7 +396,7 @@ void BaseEnemy::Disappear()
 	if (isDead_)
 	{
 		// エフェクト生成
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyEnd01, worldTransform_.GetWorldPosition(), 50);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyEnd01, worldTransform_.GetWorldPosition());
 		// SE再生
 		AudioManager::GetInstance()->PlaySE(SEType::kDeath01);
 

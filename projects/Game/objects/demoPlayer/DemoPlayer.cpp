@@ -92,7 +92,7 @@ void DemoPlayer::UpdateEnd()
 
 void DemoPlayer::AfterStartComplete()
 {
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyEnd01, worldTransform_.GetWorldPosition(), 100);
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kDemoPlayer01, worldTransform_.GetWorldPosition());
 }
 
 void DemoPlayer::BeforeEnd()

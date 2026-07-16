@@ -10,7 +10,8 @@ enum class EffectType
 	kPlayerStart02,	//カラフルな四角
 	kPlayerStart03,	//高速。黄色い球
 	kPlayerEnd01,	//高速。黒い球
-	kEnemyEnd01,	//高速。カラフルな球
+	kDemoPlayer01,	//高速。白い球
+	kEnemyEnd01,	//高速。白い球
 	kPlayerBulletTrac01, //弾丸の軌跡エフェクト
 	kPlayerBulletTrac02, //弾丸の軌跡エフェクト
 	kConfetti01,	//紙吹雪エフェクト1。カラフルな四角板
@@ -101,6 +102,7 @@ private:
 		{{EffectType::kPlayerStart02}, {"PlayerStartEffect02", "./Resources/white.png", "primitiveCube"}},
 		{{EffectType::kPlayerStart03}, {"PlayerStartEffect03", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kPlayerEnd01}, {"PlayerEndEffect01", "./Resources/circle2.png", "primitivePlane"}},
+		{{EffectType::kDemoPlayer01}, {"DemoPlayerEffect01", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kEnemyEnd01}, {"EnemyEndEffect01", "./Resources/circle2.png", "primitivePlane"}},
 		{{EffectType::kPlayerBulletTrac01}, {"PlayerBulletTrac01", "./Resources/white.png", "primitiveCube"}},
 		{{EffectType::kPlayerBulletTrac02}, {"PlayerBulletTrac02", "./Resources/circle2.png", "primitivePlane"}},
