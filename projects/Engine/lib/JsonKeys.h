@@ -105,6 +105,8 @@ namespace JsonKey
 
 		const std::string kNormalBulletShotInterval = "NormalBulletShotInterval";	//通常弾の発射間隔
 		const std::string kChargeBulletShotInterval = "ChargeBulletShotInterval";	//チャージ弾の発射間隔
+
+		const std::string kMaxHitPoint = "MaxHitPoint";	//最大体力
 	}
 
 	namespace DemoPlayer

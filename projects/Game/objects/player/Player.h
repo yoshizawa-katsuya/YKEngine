@@ -271,8 +271,8 @@ private:
 	YKEngine::Vector3 move_{};		//移動量
 	YKEngine::Vector3 direction_{};	//方向
 
-	const int kMaxHitPoint_ = 5; // 最大ヒットポイント
-	int hitPoint_ = kMaxHitPoint_; // プレイヤーのヒットポイント
+	int maxHitPoint_; // 最大ヒットポイント
+	int hitPoint_; // プレイヤーのヒットポイント
 
 	std::vector<std::unique_ptr<YKEngine::Sprite>> heartSprites_; // ヒットポイントのスプライト
 	std::vector<std::unique_ptr<YKEngine::Sprite>> heartEmptySprites_; // ヒットポイントがないときのスプライト

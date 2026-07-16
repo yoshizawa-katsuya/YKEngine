@@ -50,6 +50,11 @@ void Player::Initialize(WorldTransform* parent)
 	globalVariables_->AddItem(groupName, JsonKey::Player::kRotateLerpFactor, 0.1f);
 	globalVariables_->AddItem(groupName, JsonKey::Player::kNormalBulletShotInterval, 0.2f);
 	globalVariables_->AddItem(groupName, JsonKey::Player::kChargeBulletShotInterval, 0.5f);
+	globalVariables_->AddItem(groupName, JsonKey::Player::kMaxHitPoint, 5);
+
+	//体力の初期化
+	maxHitPoint_ = globalVariables_->GetIntValue(groupName, JsonKey::Player::kMaxHitPoint);
+	hitPoint_ = maxHitPoint_;
 
 	//モデルとコライダーの初期化
 	SkinCharacter::Initialize(ModelPlatform::GetInstance()->CreateSkinModel("./Resources/player", "Player.gltf").get());
@@ -145,7 +150,7 @@ void Player::DrawUI()
 	reticleController_->Draw();
 
 	//HPの表示
-	for (int i = 0; i < kMaxHitPoint_; i++)
+	for (int i = 0; i < maxHitPoint_; i++)
 	{
 		if (i < hitPoint_)
 		{
@@ -196,14 +201,14 @@ void Player::HUDInitialize()
 	uint32_t heartTextureHandle = TextureManager::GetInstance()->Load("./Resources/heart.png");
 	uint32_t heartEmptyTexturehandle = TextureManager::GetInstance()->Load("./Resources/heartFrame.png");
 
-	heartSprites_.resize(kMaxHitPoint_);
-	heartEmptySprites_.resize(kMaxHitPoint_);
+	heartSprites_.resize(maxHitPoint_);
+	heartEmptySprites_.resize(maxHitPoint_);
 
 	Vector2 heartPosition = globalVariables_->GetVector2Value(groupName, JsonKey::Player::kHeartPosition);
 	Vector2 heartSize = globalVariables_->GetVector2Value(groupName, JsonKey::Player::kHeartSize);
 	float heartSpacing = globalVariables_->GetFloatValue(groupName, JsonKey::Player::kHeartSpacing);
 
-	for (int i = 0; i < kMaxHitPoint_; i++)
+	for (int i = 0; i < maxHitPoint_; i++)
 	{
 		heartSprites_[i] = std::make_unique<Sprite>();
 		heartSprites_[i]->Initialize(heartTextureHandle);
@@ -432,7 +437,7 @@ void Player::AfterStartComplete()
 
 	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerStart03, GetWorldPosition(), 100);
 	
-	for (int i = 0; i < kMaxHitPoint_; i++)
+	for (int i = 0; i < maxHitPoint_; i++)
 	{
 		heartSprites_[i]->SetAlpha(1.0f); //表示する
 
@@ -490,7 +495,7 @@ void Player::HeartUpdate()
 	Vector2 heartSize = globalVariables_->GetVector2Value(groupName, JsonKey::Player::kHeartSize);
 	float heartSpacing = globalVariables_->GetFloatValue(groupName, JsonKey::Player::kHeartSpacing);
 
-	for (int i = 0; i < kMaxHitPoint_; i++)
+	for (int i = 0; i < maxHitPoint_; i++)
 	{
 		heartSprites_[i]->SetPosition(Vector2(heartPosition.x + i * heartSpacing, heartPosition.y)); //位置を設定
 		heartSprites_[i]->SetSize(heartSize); //サイズを設定
