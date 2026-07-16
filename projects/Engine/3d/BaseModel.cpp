@@ -150,7 +150,7 @@ void YKEngine::BaseModel::SetShininess(float shininess)
 void BaseModel::SetEnvironmentCoefficient(float environmentCoefficient)
 {
 	ThreadPool::GetInstance()->waitForCompletion();
-	materialData_->enviromentCoefficient = environmentCoefficient;
+	materialData_->environmentCoefficient = environmentCoefficient;
 }
 
 void BaseModel::CreateVertexData()
@@ -202,7 +202,7 @@ void BaseModel::CreateMaterialData(const Vector4& color)
 	materialData_->color = color;
 	materialData_->enableLighting = globalVariables->GetBoolValue(groupName, JsonKey::Model::kEnableLighting);
 	materialData_->shininess = globalVariables->GetFloatValue(groupName, JsonKey::Model::kShininess);
-	materialData_->enviromentCoefficient = globalVariables->GetFloatValue(groupName, JsonKey::Model::kEnviromentCoefficient);
+	materialData_->environmentCoefficient = globalVariables->GetFloatValue(groupName, JsonKey::Model::kEnviromentCoefficient);
 	materialData_->uvTransform = MakeIdentity4x4();
 	
 }

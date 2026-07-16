@@ -133,7 +133,7 @@ void My3dObject::SetEnviromentCoefficient(float coefficient)
 	
 	CreateMaterialData();
 
-	materialData_->enviromentCoefficient = coefficient;
+	materialData_->environmentCoefficient = coefficient;
 }
 
 void My3dObject::CreateMaterialData()
@@ -153,7 +153,7 @@ void My3dObject::CreateMaterialData()
 	materialData_->color = {1.0f, 1.0f, 1.0f, 1.0f};
 	materialData_->enableLighting = true;
 	materialData_->shininess = 40.0f;
-	materialData_->enviromentCoefficient = 0.0f; // 環境光の係数を0に設定
+	materialData_->environmentCoefficient = 0.0f; // 環境光の係数を0に設定
 	materialData_->uvTransform = MakeIdentity4x4();
 }
 

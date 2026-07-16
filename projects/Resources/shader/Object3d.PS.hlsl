@@ -5,7 +5,7 @@ struct Material
     float32_t4 color;
     bool enableLighting;
     float32_t shininess;
-    float32_t enviromentCoefficient; //環境マップの影響度
+    float32_t environmentCoefficient; //環境マップの影響度
     float32_t4x4 uvTransform;
     
 };
@@ -167,14 +167,14 @@ PixelShaderOutput main(VertexShaderOutput input)
         output.color = gMaterial.color * textureColor;
     }
     
-    if (gMaterial.enviromentCoefficient != 0.0f)
+    if (gMaterial.environmentCoefficient != 0.0f)
     {
         //環境マップの適用
         float32_t3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
         float32_t3 reflectedVector = reflect(cameraToPosition, nomalizedNormal);
         float32_t4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
         
-        output.color.rgb += environmentColor.rgb * gMaterial.enviromentCoefficient;
+        output.color.rgb += environmentColor.rgb * gMaterial.environmentCoefficient;
     }
     
     
