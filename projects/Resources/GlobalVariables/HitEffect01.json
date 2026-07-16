@@ -1,7 +1,7 @@
 {
     "HitEffect01": {
-        "bahaviorEasingTypeForScale": 7,
-        "bahaviorIsSceleToDisappear": true,
+        "behaviorEasingTypeForScale": 7,
+        "behaviorIsScaleToDisappear": true,
         "behaviorBlendMode": 0,
         "behaviorDistance": 1.0,
         "behaviorIsConstantVelocity": false,

@@ -1,7 +1,7 @@
 {
     "ConfettiEffect01": {
-        "bahaviorEasingTypeForScale": 0,
-        "bahaviorIsSceleToDisappear": false,
+        "behaviorEasingTypeForScale": 0,
+        "behaviorIsScaleToDisappear": false,
         "behaviorBlendMode": 2,
         "behaviorDistance": 1.0,
         "behaviorIsConstantVelocity": false,
