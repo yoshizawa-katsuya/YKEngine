@@ -77,9 +77,9 @@ void ParticleEmitter::ApplyGlobalVariables()
 	behavior_->isFaceToVelocityDirection = globalVariables_->GetBoolValue(name_, "behaviorIsFaceToVelocityDirection");
 	behavior_->isConstantVelocity = globalVariables_->GetBoolValue(name_, "behaviorIsConstantVelocity");
 	behavior_->speed = globalVariables_->GetFloatValue(name_, "behaviorSpeed");
-	behavior_->isScaleToDisappear = globalVariables_->GetBoolValue(name_, "bahaviorIsSceleToDisappear");
+	behavior_->isScaleToDisappear = globalVariables_->GetBoolValue(name_, "behaviorIsScaleToDisappear");
 	behavior_->isScaleToAppear = globalVariables_->GetBoolValue(name_, "behaviorIsScaleToAppear");
-	behavior_->easingTypeForScale = static_cast<EasingType>(globalVariables_->GetIntValue(name_, "bahaviorEasingTypeForScale"));
+	behavior_->easingTypeForScale = static_cast<EasingType>(globalVariables_->GetIntValue(name_, "behaviorEasingTypeForScale"));
 	behavior_->isUseBillboard = globalVariables_->GetBoolValue(name_, "behaviorIsUseBillboard");
 	behavior_->isdownVelocity = globalVariables_->GetBoolValue(name_, "behaviorIsDownVelocity");
 	behavior_->isfixedDistance = globalVariables_->GetBoolValue(name_, "behaviorIsFixedDistance");
@@ -134,9 +134,9 @@ void ParticleEmitter::InitializeGlobalVariables()
 	globalVariables_->AddItem(name_, "behaviorIsFaceToVelocityDirection", behavior_->isFaceToVelocityDirection);
 	globalVariables_->AddItem(name_, "behaviorIsConstantVelocity", behavior_->isConstantVelocity);
 	globalVariables_->AddItem(name_, "behaviorSpeed", behavior_->speed);
-	globalVariables_->AddItem(name_, "bahaviorIsSceleToDisappear", behavior_->isScaleToDisappear);
+	globalVariables_->AddItem(name_, "behaviorIsScaleToDisappear", behavior_->isScaleToDisappear);
 	globalVariables_->AddItem(name_, "behaviorIsScaleToAppear", behavior_->isScaleToAppear);
-	globalVariables_->AddItem(name_, "bahaviorEasingTypeForScale", static_cast<int32_t>(behavior_->easingTypeForScale));
+	globalVariables_->AddItem(name_, "behaviorEasingTypeForScale", static_cast<int32_t>(behavior_->easingTypeForScale));
 	globalVariables_->AddItem(name_, "behaviorIsUseBillboard", behavior_->isUseBillboard);
 	globalVariables_->AddItem(name_, "behaviorIsDownVelocity", behavior_->isdownVelocity);
 	globalVariables_->AddItem(name_, "behaviorIsFixedDistance", behavior_->isfixedDistance);
