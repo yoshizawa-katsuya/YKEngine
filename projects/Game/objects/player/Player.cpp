@@ -131,7 +131,7 @@ void Player::OnCollision(BaseCollider* other)
 		DamageReactionInitialize();
 
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.GetWorldPosition(), 10);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.GetWorldPosition());
 
 		//ダメージSE再生
 		audioManager_->PlaySE(SEType::kDamage01);
@@ -389,7 +389,7 @@ void Player::UpdateGameOver()
 
 	characterWorldTransform_.translation_ = random->GetVector3(-kMoveRange, kMoveRange);
 
-	EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, characterWorldTransform_.GetWorldPosition(), 2);
+	EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerEnd01, characterWorldTransform_.GetWorldPosition());
 
 	gameOverTimer_ += DeltaTime_;
 
@@ -397,7 +397,7 @@ void Player::UpdateGameOver()
 	{
 		isGameOverEnd_ = true;
 		characterWorldTransform_.scale_ = { 0.0f, 0.0f, 0.0f };
-		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, characterWorldTransform_.GetWorldPosition(), 100);
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kPlayerEnd02, characterWorldTransform_.GetWorldPosition());
 
 		//死亡SE再生
 		audioManager_->PlaySE(SEType::kDeath01);

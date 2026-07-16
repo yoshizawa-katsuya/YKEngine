@@ -1,5 +1,5 @@
 {
-    "PlayerEndEffect01": {
+    "PlayerEndEffect02": {
         "behaviorEasingTypeForScale": 0,
         "behaviorIsScaleToDisappear": true,
         "behaviorBlendMode": 1,
@@ -19,7 +19,7 @@
             0.0,
             1.0
         ],
-        "count": 2,
+        "count": 100,
         "frequency": 0.5,
         "randomFlagsColor": false,
         "randomFlagsLifeTime": true,
