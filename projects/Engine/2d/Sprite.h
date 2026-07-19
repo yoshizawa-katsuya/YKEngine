@@ -52,7 +52,7 @@ public:
 
 	const EulerTransform& GetUVTransform() const { return uvTransform_; }
 
-	uint32_t GetTeture() { return textureHandle_; }
+	uint32_t GetTexture() { return textureHandle_; }
 
 	void SetSize(Vector2 size) { size_ = size; }
 

@@ -25,7 +25,7 @@ void SkinModel::Draw(bool usedMaterial)
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SkinModelRootParam::kTexture), textureHandle_);
 
 	//描画1(DrawCall/ドローコール)。	
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indicesNum_, 1, 0, 0, 0);
 }
 
 void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
@@ -42,7 +42,7 @@ void SkinModel::Draw(uint32_t textureHandle, bool usedMaterial)
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(SkinModelRootParam::kTexture), textureHandle);
 
 	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, 1, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indicesNum_, 1, 0, 0, 0);
 
 }
 

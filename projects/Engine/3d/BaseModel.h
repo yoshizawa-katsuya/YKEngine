@@ -65,14 +65,14 @@ struct Node
 /// </summary>
 /// <param name="skinClusterData">スキンクラスター情報のマップ</param>
 /// <param name="vertices">頂点データの配列</param>
-/// <param name="indeces">インデックスデータの配列</param>
+/// <param name="indices">インデックスデータの配列</param>
 /// <param name="material">マテリアル情報</param>
 /// <param name="rootNode">ルートノード情報</param>
 struct ModelData
 {
 	std::map<std::string, JointWeightData> skinClusterData;
 	std::vector<VertexData> vertices;
-	std::vector<uint32_t> indeces;
+	std::vector<uint32_t> indices;
 	MaterialData material;
 	Node rootNode;
 };
@@ -260,7 +260,7 @@ protected:
 	/// <summary>
 	/// インデックス数設定。
 	/// </summary>
-	void SetIndecesNum();
+	void SetIndicesNum();
 
 	/// <summary>
 	/// ノード読み込み。
@@ -296,7 +296,7 @@ protected:
 	Material* materialData_ = nullptr;
 
 	uint32_t verticesNum_;
-	uint32_t indecesNum_;
+	uint32_t indicesNum_;
 	uint32_t textureHandle_;
 
 	//Initializeの完了フラグ
