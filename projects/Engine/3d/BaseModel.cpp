@@ -177,15 +177,15 @@ void BaseModel::CreateVertexData()
 void BaseModel::CreateIndexData()
 {
 
-	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData_->indeces.size());
+	indexResource_ = modelPlatform_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData_->indices.size());
 
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
-	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * modelData_->indeces.size());
+	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * modelData_->indices.size());
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
-	std::memcpy(indexData_, modelData_->indeces.data(), sizeof(uint32_t) * modelData_->indeces.size());
-	SetIndecesNum();
+	std::memcpy(indexData_, modelData_->indices.data(), sizeof(uint32_t) * modelData_->indices.size());
+	SetIndicesNum();
 }
 
 void BaseModel::CreateMaterialData(const Vector4& color)
@@ -275,7 +275,7 @@ void BaseModel::LoadIndexData(aiMesh* mesh, uint32_t vertexStartIndex)
 		for (uint32_t element = 0; element < face.mNumIndices; ++element) 
 		{
 			uint32_t vertexIndex = face.mIndices[element] + vertexStartIndex;
-			modelData_->indeces.push_back(vertexIndex);
+			modelData_->indices.push_back(vertexIndex);
 		}
 	}
 }
@@ -295,10 +295,10 @@ void BaseModel::SetVerticesNum()
 	modelData_->vertices.clear();
 }
 
-void BaseModel::SetIndecesNum()
+void BaseModel::SetIndicesNum()
 {
-	indecesNum_ = static_cast<uint32_t>(modelData_->indeces.size());
-	modelData_->indeces.clear();
+	indicesNum_ = static_cast<uint32_t>(modelData_->indices.size());
+	modelData_->indices.clear();
 }
 
 Node BaseModel::ReadNode(aiNode* node)
@@ -345,5 +345,5 @@ void BaseModel::DrawCommonProcess(bool usedMaterial, uint32_t textureHandle, uin
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(static_cast<uint32_t>(ModelRootParam::kTexture), textureHandle);
 
 	//描画1(DrawCall/ドローコール)。
-	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indecesNum_, numInstance, 0, 0, 0);
+	modelPlatform_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(indicesNum_, numInstance, 0, 0, 0);
 }

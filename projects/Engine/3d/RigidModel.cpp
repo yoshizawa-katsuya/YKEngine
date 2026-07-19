@@ -133,8 +133,8 @@ void RigidModel::CreateSphere(uint32_t textureHandle)
 		}
 	}
 
-	modelData_->indeces.resize(kIndexCount);
-	SetIndecesNum();
+	modelData_->indices.resize(kIndexCount);
+	SetIndicesNum();
 
 	CreateMaterialData();
 
@@ -261,8 +261,8 @@ void RigidModel::CreateCube(uint32_t textureHandle)
 	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	modelData_->indeces.resize(kIndexCount);
-	SetIndecesNum();
+	modelData_->indices.resize(kIndexCount);
+	SetIndicesNum();
 
 	CreateMaterialData();
 
@@ -317,8 +317,8 @@ void RigidModel::CreatePlane(uint32_t textureHandle)
 	indexData_[4] = 1;	//右上
 	indexData_[5] = 3;	//右下
 
-	modelData_->indeces.resize(kIndexCount);
-	SetIndecesNum();
+	modelData_->indices.resize(kIndexCount);
+	SetIndicesNum();
 
 	CreateMaterialData();
 
@@ -372,7 +372,7 @@ void RigidModel::CreateRing(uint32_t textureHandle)
 	for (uint32_t index = 0; index < kRingDivide; ++index)
 	{
 		uint32_t vertexIndex = index * 4;
-		uint32_t indecesIndex = index * 6;
+		uint32_t indicesIndex = index * 6;
 
 		float sin = std::sin(index * radianPerDivide);
 		float cos = std::cos(index * radianPerDivide);
@@ -386,20 +386,20 @@ void RigidModel::CreateRing(uint32_t textureHandle)
 		vertexData_[vertexIndex + 2] = { .position = {-sin * kInnerRadius, cos * kInnerRadius, 0.0f, 1.0f}, .texcoord = {u, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//左下
 		vertexData_[vertexIndex + 3] = { .position = {-sinNext * kInnerRadius, cosNext * kInnerRadius, 0.0f, 1.0f}, .texcoord = {uNext, 1.0f}, .normal = {0.0f, 0.0f, 1.0f} };	//右下
 
-		indexData_[indecesIndex] = vertexIndex;
-		indexData_[indecesIndex + 1] = vertexIndex + 1;
-		indexData_[indecesIndex + 2] = vertexIndex + 2;
-		indexData_[indecesIndex + 3] = vertexIndex + 1;
-		indexData_[indecesIndex + 4] = vertexIndex + 3;
-		indexData_[indecesIndex + 5] = vertexIndex + 2;
+		indexData_[indicesIndex] = vertexIndex;
+		indexData_[indicesIndex + 1] = vertexIndex + 1;
+		indexData_[indicesIndex + 2] = vertexIndex + 2;
+		indexData_[indicesIndex + 3] = vertexIndex + 1;
+		indexData_[indicesIndex + 4] = vertexIndex + 3;
+		indexData_[indicesIndex + 5] = vertexIndex + 2;
 
 	}
 
 	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	modelData_->indeces.resize(kIndexCount);
-	SetIndecesNum();
+	modelData_->indices.resize(kIndexCount);
+	SetIndicesNum();
 
 	CreateMaterialData();
 
@@ -454,7 +454,7 @@ void RigidModel::CreateCylinder(uint32_t textureHandle)
 	for (uint32_t index = 0; index < kCylinderDivide; ++index)
 	{
 		uint32_t vertexIndex = index * 4;
-		uint32_t indecesIndex = index * 6;
+		uint32_t indicesIndex = index * 6;
 
 		float sin = std::sin(index * radianPerDivide);
 		float cos = std::cos(index * radianPerDivide);
@@ -468,20 +468,20 @@ void RigidModel::CreateCylinder(uint32_t textureHandle)
 		vertexData_[vertexIndex + 2] = { .position = {-sin * kBottomRadius, 0.0f, cos * kBottomRadius, 1.0f}, .texcoord = {u, 1.0f}, .normal = {-sin, 0.0f, cos} };	//左下
 		vertexData_[vertexIndex + 3] = { .position = {-sinNext * kBottomRadius, 0.0f, cosNext * kBottomRadius, 1.0f}, .texcoord = {uNext, 1.0f}, .normal = {-sinNext, 0.0f, cosNext} };	//右下
 
-		indexData_[indecesIndex] = vertexIndex;
-		indexData_[indecesIndex + 1] = vertexIndex + 1;
-		indexData_[indecesIndex + 2] = vertexIndex + 2;
-		indexData_[indecesIndex + 3] = vertexIndex + 1;
-		indexData_[indecesIndex + 4] = vertexIndex + 3;
-		indexData_[indecesIndex + 5] = vertexIndex + 2;
+		indexData_[indicesIndex] = vertexIndex;
+		indexData_[indicesIndex + 1] = vertexIndex + 1;
+		indexData_[indicesIndex + 2] = vertexIndex + 2;
+		indexData_[indicesIndex + 3] = vertexIndex + 1;
+		indexData_[indicesIndex + 4] = vertexIndex + 3;
+		indexData_[indicesIndex + 5] = vertexIndex + 2;
 
 	}
 
 	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	modelData_->indeces.resize(kIndexCount);
-	SetIndecesNum();
+	modelData_->indices.resize(kIndexCount);
+	SetIndicesNum();
 
 	CreateMaterialData();
 
@@ -606,8 +606,8 @@ void RigidModel::CreateSkyBox(uint32_t textureHandle)
 	modelData_->vertices.resize(kVertexCount);
 	SetVerticesNum();
 
-	modelData_->indeces.resize(kIndexCount);
-	SetIndecesNum();
+	modelData_->indices.resize(kIndexCount);
+	SetIndicesNum();
 
 	CreateMaterialData();
 
