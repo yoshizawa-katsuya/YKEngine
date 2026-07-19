@@ -13,7 +13,7 @@ void Pause::Initialize()
 {
 	//テクスチャの読み込み
 	TextureManager* textureManager = TextureManager::GetInstance();
-	uint32_t backGroundTetureHandle = textureManager->Load("./Resources/pause/backGround.png");
+	uint32_t backGroundTextureHandle = textureManager->Load("./Resources/pause/backGround.png");
 	uint32_t cursorTextureHandle = textureManager->Load("./Resources/pause/cursor.png");
 	std::unordered_map<UIName, uint32_t> UITextureHandles;
 	UITextureHandles[UIName::kReturnToTitle] = textureManager->Load("./Resources/pause/returnToTitle.png");
@@ -21,7 +21,7 @@ void Pause::Initialize()
 
 	//スプライトの生成
 	backgroundSprite_ = std::make_unique<Sprite>();
-	backgroundSprite_->Initialize(backGroundTetureHandle);
+	backgroundSprite_->Initialize(backGroundTextureHandle);
 	cursorSprite_ = std::make_unique<Sprite>();
 	cursorSprite_->Initialize(cursorTextureHandle);
 
