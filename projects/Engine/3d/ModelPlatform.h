@@ -218,12 +218,15 @@ private:
 	/// <summary>
 	/// 光源数構造体。
 	/// </summary>
+	/// <param name="directional">平行光源の数</param>
+	/// <param name="point">点光源の数</param>
+	/// <param name="spot">スポット光源の数</param>
 	struct LightCount
 	{
-		uint32_t directional;
-		uint32_t point;
-		uint32_t spot;
-		float padding;
+		uint32_t directional;	// 平行光源の数
+		uint32_t point;			// 点光源の数
+		uint32_t spot;			// スポット光源の数
+		float padding;			// パディング（16バイトアラインメントのため）
 	};
 
 	/// <summary>

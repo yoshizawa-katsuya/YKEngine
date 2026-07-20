@@ -192,7 +192,7 @@ void ModelPlatform::LineDraw(const Matrix4x4& worldMatrix1, const Matrix4x4& wor
 	LineWVPDatas_[lineIndex_]->WVP2 = worldViewProjectionMatrix2;
 
 	//wvp用のCBufferの場所を設定
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(DebudLineRootParam::kWVP), LineWVPResources_[lineIndex_]->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(static_cast<size_t>(DebugLineRootParam::kWVP), LineWVPResources_[lineIndex_]->GetGPUVirtualAddress());
 	
 	//描画1(DrawCall/ドローコール)。
 	dxCommon_->GetCommandList()->DrawInstanced(1, 1, 0, 0);
@@ -321,9 +321,10 @@ std::shared_ptr<BaseModel> ModelPlatform::CreateSkyBox(uint32_t textureHandle, c
 
 void ModelPlatform::LightPreUpdate()
 {
-	lightCount_->directional = 0;
-	lightCount_->point = 0;
-	lightCount_->spot = 0;
+	const uint32_t resetLightCount = 0;
+	lightCount_->directional = resetLightCount;
+	lightCount_->point = resetLightCount;
+	lightCount_->spot = resetLightCount;
 }
 
 void ModelPlatform::DirectionalLightUpdate(const DirectionalLight& directionalLight)

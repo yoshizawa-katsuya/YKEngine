@@ -239,7 +239,8 @@ void BaseModel::LoadModelFile(const std::string& directoryPath, const std::strin
 			break;	//複数テクスチャがあっても最初の1つだけ読み込む
 		}
 		else {
-			modelData_->material.textureFilePath = "./resources/white.png";
+			const std::string textureFilePath = "./resources/white.png";
+			modelData_->material.textureFilePath = textureFilePath;
 		}
 	}
 
