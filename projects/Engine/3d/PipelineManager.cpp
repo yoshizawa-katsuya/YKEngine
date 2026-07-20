@@ -1102,10 +1102,10 @@ void PipelineManager::BuildPostEffectRootParameters(std::vector<D3D12_ROOT_PARAM
 
 void PipelineManager::BuildLineRootParameters(std::vector<D3D12_ROOT_PARAMETER>& rootParameters)
 {
-	rootParameters.resize(static_cast<size_t>(DebudLineRootParam::kCount));
+	rootParameters.resize(static_cast<size_t>(DebugLineRootParam::kCount));
 
 	//WVP
-	D3D12_ROOT_PARAMETER& wvpParam = rootParameters[static_cast<size_t>(DebudLineRootParam::kWVP)];
+	D3D12_ROOT_PARAMETER& wvpParam = rootParameters[static_cast<size_t>(DebugLineRootParam::kWVP)];
 	wvpParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;	//CBVを使う
 	wvpParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;	//VSとGSで使う
 	wvpParam.Descriptor.ShaderRegister = 0;	//レジスタ番号0を使う

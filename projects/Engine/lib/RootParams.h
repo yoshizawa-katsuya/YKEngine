@@ -43,7 +43,7 @@ enum class DebugSphereRootParam
 };
 
 //デバッグ線用ルートパラメータ
-enum class DebudLineRootParam
+enum class DebugLineRootParam
 {
 	kWVP = 0,
 	kCount,
