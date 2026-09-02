@@ -12,8 +12,7 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Sprite.h"
-#include "LeftPlayer.h"
-#include "RightPlayer.h"
+#include "PlayerManager.h"
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
@@ -61,8 +60,6 @@ private:
 	YKEngine::Audio* audio_;
 	YKEngine::Input* input_;
 
-	//LoopSoundData bgm1_;
-
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
 
@@ -78,36 +75,8 @@ private:
 	//平行光源
 	YKEngine::DirectionalLight directionalLight_;
 
-	//点光源
-	YKEngine::PointLight pointLight_;
+	//プレイヤー管理クラス
+	std::unique_ptr<PlayerManager> playerManager_;
 
-	//スポットライト
-	YKEngine::SpotLight spotLight_;
-
-	std::shared_ptr<YKEngine::BaseModel> modelPlayer_;
-
-
-	uint32_t textureHandle_;
-	uint32_t textureHandle2_;
-	//std::unique_ptr<Sprite> sprite_;
-
-	//プレイヤー
-	std::unique_ptr<LeftPlayer> leftPlayer_;
-	std::unique_ptr<RightPlayer> rightPlayer_;
-
-	//std::unique_ptr<Rigid3dObject> skyBox_;
-	//WorldTransform skyBoxWorldTransform_;
-
-	/*
-	std::unique_ptr<InstancingObjects> objects_;
-
-	WorldTransform worldTransform1_;
-	WorldTransform worldTransform2_;
-	*/
-
-	//パーティクル
-	//std::unique_ptr<ParticleEmitter> emitter_;
-	//std::unique_ptr<AccelerationField> field_;
-	//Vector4 color_ = {1.0f, 1.0f, 1.0f, 1.0f};
 	
 };

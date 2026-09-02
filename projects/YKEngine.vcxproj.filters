@@ -261,8 +261,11 @@
     <ClCompile Include="Game\objects\BasePlayer.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\PlayerManager.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
     <ClCompile Include="Game\objects\RightPlayer.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -550,8 +553,11 @@
     <ClInclude Include="Game\objects\BasePlayer.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
+    <ClInclude Include="Game\objects\PlayerManager.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
     <ClInclude Include="Game\objects\RightPlayer.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

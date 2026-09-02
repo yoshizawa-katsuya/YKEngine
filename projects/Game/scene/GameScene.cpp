@@ -11,7 +11,7 @@
 using namespace YKEngine;
 
 GameScene::~GameScene() {
-	//Finalize();
+
 }
 
 void GameScene::Initialize() {
@@ -35,57 +35,12 @@ void GameScene::Initialize() {
 	mainCamera_ = camera_.get();
 
 	//モデルを描画する際カメラの設定は必須
-	//modelPlatform_->SetDirectionalLight(directionalLight_.get());
-	//modelPlatform_->SetPointLight(pointLight_.get());
 	modelPlatform_->SetCamera(mainCamera_);
-	//modelPlatform_->SetSpotLight(spotLight_.get());
-
-	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
-	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
-
-	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
-	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
-	//modelPlayer_->SetEnableLighting(false);
-	//modelPlayer_ = std::make_unique<RigidModel>();
 	
-	/*
-	//スプライトの生成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(textureHandle_, spritePlatform_);
-	*/
-
-	//パーティクルエミッターの生成
-	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
-	//emitter_->Initialize(textureHandle2, modelPlayer_, true);
-
-	//プレイヤーの初期化
-	leftPlayer_ = std::make_unique<LeftPlayer>();
-	leftPlayer_->Initialize(modelPlayer_.get());
+	//プレイヤー管理クラスの生成
+	playerManager_ = std::make_unique<PlayerManager>();
+	playerManager_->Initialize();
 	
-	rightPlayer_ = std::make_unique<RightPlayer>();
-	rightPlayer_->Initialize(modelPlayer_.get());
-
-	/*skyBox_ = std::make_unique<Rigid3dObject>();
-	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
-	skyBoxWorldTransform_.Initialize();
-	skyBoxWorldTransform_.scale_ = { 50.0f, 50.0f, 50.0f };
-	skyBoxWorldTransform_.UpdateMatrix();
-	skyBox_->WorldTransformUpdate(skyBoxWorldTransform_);*/
-
-	/*
-	objects_ = std::make_unique<InstancingObjects>();
-	objects_->Initialize(modelPlayer_.get(), 10);
-
-	worldTransform1_.Initialize();
-	worldTransform1_.translation_.x = -1.0f;
-	worldTransform1_.UpdateMatrix();
-
-	worldTransform2_.Initialize();
-	worldTransform2_.translation_.x = 1.0f;
-	worldTransform2_.UpdateMatrix();
-	*/
 
 }
 
@@ -94,32 +49,20 @@ void GameScene::Update() {
 	//カメラの更新
 	camera_->Update();
 
-	if (isActiveDebugCamera_) {
+	if (isActiveDebugCamera_)
+	{
 		debugCamera_->Update();
 	}
 
 	//プレイヤーの更新
-	leftPlayer_->Update();
-	rightPlayer_->Update();
+	playerManager_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
-	/*modelPlatform_->PointLightUpdate(pointLight_);
-	modelPlatform_->SpotLightUpdate(spotLight_);*/
+	
 
-	/*
-	objects_->PreUpdate();
-	worldTransform1_.translation_.x += 0.01f;
-	worldTransform1_.UpdateMatrix();
-	objects_->WorldTransformUpdate(worldTransform1_);
-	objects_->WorldTransformUpdate(worldTransform2_);
-	*/
-
-	//emitter_->Update();
-
-	//ParticleManager::GetInstance()->Update(mainCamera_);
-
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE)) 
+	{
 		//シーン切り替え依頼
 		sceneManager_->ChengeScene("TitleScene");
 	}
@@ -136,7 +79,6 @@ void GameScene::Update() {
 		Vector3 rotate = camera_->GetRotate();
 		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
 		camera_->SetRotate(rotate);
-		//ImGui::DragFloat3("scale", &cameratransform.scale.x, 0.01f);
 
 		ImGui::TreePop();
 	}
@@ -149,28 +91,6 @@ void GameScene::Update() {
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("PointLight")) {
-		ImGui::ColorEdit4("color", &pointLight_.color.x);
-		ImGui::DragFloat3("position", &pointLight_.position.x, 0.01f);
-		ImGui::DragFloat("intensity", &pointLight_.intensity, 0.01f);
-		ImGui::DragFloat("radius", &pointLight_.radius, 0.01f);
-		ImGui::DragFloat("decay", &pointLight_.decay, 0.01f);
-
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("SpotLight")) {
-		ImGui::ColorEdit4("color", &spotLight_.color.x);
-		ImGui::DragFloat3("position", &spotLight_.position.x, 0.01f);
-		ImGui::DragFloat("intensity", &spotLight_.intensity, 0.01f);
-		ImGui::DragFloat3("direction", &spotLight_.direction.x, 0.01f);
-		ImGui::DragFloat("distance", &spotLight_.distance, 0.01f);
-		ImGui::DragFloat("decay", &spotLight_.decay, 0.01f);
-		ImGui::DragFloat("cosAngle", &spotLight_.cosAngle, 0.01f);
-		ImGui::DragFloat("cosFalloffStart", &spotLight_.cosFalloffStart, 0.01f);
-
-		ImGui::TreePop();
-	}
 	//メインカメラの切り替え
 	if (ImGui::RadioButton("gameCamera", !isActiveDebugCamera_)) {
 		isActiveDebugCamera_ = false;
@@ -189,11 +109,7 @@ void GameScene::Update() {
 		
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 
-	/*
-	if (ImGui::Button("BGMstop")) {
-		audio_->SoundStopWave(bgm1_);
-	}
-	*/
+	
 	ImGui::End();
 		
 
@@ -204,21 +120,13 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 
-	//Spriteの背景描画前処理
-	//spritePlatform_->PreBackGroundDraw();
-
-	//sprite_->Draw();
-
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
-	
-	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	leftPlayer_->Draw(mainCamera_);
-	rightPlayer_->Draw(mainCamera_);
+	playerManager_->Draw(mainCamera_);
 
 	/*modelPlatform_->SkyBoxPreDraw();
 
