@@ -15,6 +15,11 @@ void PlayerManager::Initialize()
 
 	rightPlayer_ = std::make_unique<RightPlayer>();
 	rightPlayer_->Initialize(modelPlayer.get());
+
+	// プレイヤー同士の参照を設定
+	leftPlayer_->SetOtherPlayerWorldTransform(rightPlayer_->GetWorldTransform());
+	rightPlayer_->SetOtherPlayerWorldTransform(leftPlayer_->GetWorldTransform());
+
 }
 
 void PlayerManager::Update()

@@ -1,4 +1,5 @@
 #include "BasePlayer.h"
+#include "TransformHelpers.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -39,6 +40,8 @@ void BasePlayer::Update()
 
 	Move();
 
+	Rotate();
+
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
 
@@ -50,4 +53,13 @@ void BasePlayer::Draw(Camera* camera)
 	object_->CameraUpdate(camera);
 	object_->Draw();
 
+}
+
+void BasePlayer::Rotate()
+{
+	// 自分ではない方の自機を向く
+	Vector3 direction = otherPlayerWorldTransform_->translation_ - worldTransform_.translation_;	// 自分ではない方の自機への方向ベクトル
+	Vector3 targetRotate = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction);	// 方向ベクトルから回転角を取得
+
+	worldTransform_.rotation_ = TransformHelpers::NormalizeAngle(targetRotate);
 }
