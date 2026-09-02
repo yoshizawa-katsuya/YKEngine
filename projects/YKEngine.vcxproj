@@ -109,6 +109,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\objects\BasePlayer.cpp" />
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
     <ClCompile Include="Engine\3d\My3dObject.cpp" />
     <ClCompile Include="Engine\3d\Animation.cpp" />
@@ -139,7 +140,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Engine\base\TextureManager.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
     <ClCompile Include="Engine\3d\PipelineManager.cpp" />
-    <ClCompile Include="Game\objects\Player.cpp" />
+    <ClCompile Include="Game\objects\LeftPlayer.cpp" />
     <ClCompile Include="Engine\3d\ModelPlatform.cpp" />
     <ClCompile Include="Engine\2d\SpritePlatform.cpp" />
     <ClCompile Include="Engine\3d\ParticleEmitter.cpp" />
@@ -163,6 +164,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Engine\base\OffscreenRenderer.cpp" />
     <ClCompile Include="Engine\lib\Random.cpp" />
     <ClCompile Include="Engine\lib\MyMath.cpp" />
+    <ClCompile Include="RightPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -337,6 +339,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\objects\BasePlayer.h" />
     <ClInclude Include="Engine\lib\BaseState.hpp" />
     <ClInclude Include="Engine\lib\Color.h" />
     <ClInclude Include="Engine\2d\AnimatedSprite.h" />
@@ -368,7 +371,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3d\PipelineManager.h" />
     <ClInclude Include="Game\scene\GameScene.h" />
-    <ClInclude Include="Game\objects\Player.h" />
+    <ClInclude Include="Game\objects\LeftPlayer.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\3d\ModelPlatform.h" />
     <ClInclude Include="Engine\2d\SpritePlatform.h" />
@@ -401,6 +404,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\lib\MyMath.h" />
     <ClInclude Include="Engine\lib\RootParams.h" />
     <ClInclude Include="Engine\lib\StateMachine.hpp" />
+    <ClInclude Include="RightPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

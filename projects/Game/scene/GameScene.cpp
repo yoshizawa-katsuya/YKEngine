@@ -61,8 +61,11 @@ void GameScene::Initialize() {
 	//emitter_->Initialize(textureHandle2, modelPlayer_, true);
 
 	//プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get());
+	leftPlayer_ = std::make_unique<LeftPlayer>();
+	leftPlayer_->Initialize(modelPlayer_.get());
+	
+	rightPlayer_ = std::make_unique<RightPlayer>();
+	rightPlayer_->Initialize(modelPlayer_.get());
 
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
@@ -96,7 +99,8 @@ void GameScene::Update() {
 	}
 
 	//プレイヤーの更新
-	player_->Update();
+	leftPlayer_->Update();
+	rightPlayer_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -213,7 +217,8 @@ void GameScene::Draw() {
 	//modelPlatform_->SkinPreDraw();
 
 	//プレイヤーの描画
-	player_->Draw(mainCamera_);
+	leftPlayer_->Draw(mainCamera_);
+	rightPlayer_->Draw(mainCamera_);
 
 	/*modelPlatform_->SkyBoxPreDraw();
 

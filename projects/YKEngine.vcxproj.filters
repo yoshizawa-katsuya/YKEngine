@@ -126,7 +126,7 @@
     <ClCompile Include="Game\scene\GameScene.cpp">
       <Filter>ソース ファイル\application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="Game\objects\Player.cpp">
+    <ClCompile Include="Game\objects\LeftPlayer.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\Input.cpp">
@@ -258,6 +258,12 @@
     <ClCompile Include="Engine\lib\MyMath.cpp">
       <Filter>ソース ファイル\engine\lib</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\BasePlayer.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="RightPlayer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -376,7 +382,7 @@
     <ClInclude Include="Engine\lib\Vector3.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
     </ClInclude>
-    <ClInclude Include="Game\objects\Player.h">
+    <ClInclude Include="Game\objects\LeftPlayer.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
     </ClInclude>
     <ClInclude Include="Game\scene\GameScene.h">
@@ -540,6 +546,12 @@
     </ClInclude>
     <ClInclude Include="Engine\lib\JsonKeys.h">
       <Filter>ヘッダー ファイル\engine\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\BasePlayer.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="RightPlayer.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

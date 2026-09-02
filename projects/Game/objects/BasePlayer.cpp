@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "BasePlayer.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -6,16 +6,20 @@
 
 using namespace YKEngine;
 
-void Player::Initialize(BaseModel* model) {
+void BasePlayer::Initialize(BaseModel* model)
+{
 
 	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(model);
 
 	worldTransform_.Initialize();
 
+	input_ = Input::GetInstance();
+
 }
 
-void Player::Update() {
+void BasePlayer::Update()
+{
 
 
 #ifdef USE_IMGUI
@@ -33,12 +37,15 @@ void Player::Update() {
 
 #endif // USE_IMGUI	
 
+	Move();
+
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
 
 }
 
-void Player::Draw(Camera* camera) {
+void BasePlayer::Draw(Camera* camera)
+{
 
 	object_->CameraUpdate(camera);
 	object_->Draw();

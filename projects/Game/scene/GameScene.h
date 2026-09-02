@@ -12,7 +12,8 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Sprite.h"
-#include "Player.h"
+#include "LeftPlayer.h"
+#include "RightPlayer.h"
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "ParticleEmitter.h"
@@ -91,7 +92,8 @@ private:
 	//std::unique_ptr<Sprite> sprite_;
 
 	//プレイヤー
-	std::unique_ptr<Player> player_;
+	std::unique_ptr<LeftPlayer> leftPlayer_;
+	std::unique_ptr<RightPlayer> rightPlayer_;
 
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;
