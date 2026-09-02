@@ -166,6 +166,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Engine\lib\Random.cpp" />
     <ClCompile Include="Engine\lib\MyMath.cpp" />
     <ClCompile Include="Game\objects\RightPlayer.cpp" />
+    <ClCompile Include="Game\objects\NormalEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -407,6 +408,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\lib\RootParams.h" />
     <ClInclude Include="Engine\lib\StateMachine.hpp" />
     <ClInclude Include="Game\objects\RightPlayer.h" />
+    <ClInclude Include="Game\objects\NormalEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

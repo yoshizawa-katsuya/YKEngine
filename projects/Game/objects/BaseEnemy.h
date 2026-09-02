@@ -4,7 +4,7 @@
 #include "Input.h"
 
 /// <summary>
-/// プレイヤークラス
+/// エネミークラス
 /// </summary>
 class BaseEnemy
 {
