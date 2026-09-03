@@ -1,23 +1,16 @@
 #pragma once
-#include <cstdlib>
 #include <memory>
-#include <map>
 #include "BaseScene.h"
 #include "Audio.h"
 #include "Input.h"
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
-#include "BaseModel.h"
 #include "DirectionalLight.h"
-#include "PointLight.h"
-#include "SpotLight.h"
 #include "Sprite.h"
 #include "PlayerManager.h"
 #include "Camera.h"
 #include "DebugCamera.h"
-#include "ParticleEmitter.h"
-#include "InstancingObjects.h"
-#include "RigidModel.h"
+#include "CollisionManager.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -78,5 +71,5 @@ private:
 	//プレイヤー管理クラス
 	std::unique_ptr<PlayerManager> playerManager_;
 
-	
+	CollisionManager* collisionManager_ = nullptr;
 };

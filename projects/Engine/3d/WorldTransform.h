@@ -30,6 +30,10 @@ struct WorldTransform
 	/// 行列の更新。
 	/// </summary>
 	void UpdateMatrix();
+	/// <summary>
+	/// ワールド座標の取得
+	/// </summary>
+	Vector3 GetWorldPosition();
 };
 
 } // namespace YKEngine

@@ -94,6 +94,12 @@
     <Filter Include="ヘッダー ファイル\application\scene">
       <UniqueIdentifier>{134ac728-9100-4706-ba82-1c2652abb654}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\application\objects\collider">
+      <UniqueIdentifier>{2a25c195-ed40-4170-8245-8772030bfbab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\application\objects\collider">
+      <UniqueIdentifier>{6e1d24c1-8690-4b61-bd87-0e1376edd6e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -269,6 +275,18 @@
     </ClCompile>
     <ClCompile Include="Game\objects\Laser.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\CollisionManager.cpp">
+      <Filter>ソース ファイル\application\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\collider\BaseCollider.cpp">
+      <Filter>ソース ファイル\application\objects\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\collider\OBBCollider.cpp">
+      <Filter>ソース ファイル\application\objects\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\collider\SphereCollider.cpp">
+      <Filter>ソース ファイル\application\objects\collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -564,6 +582,24 @@
     </ClInclude>
     <ClInclude Include="Game\objects\Laser.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\CollisionManager.h">
+      <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\BaseCollider.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\ColliderShapeType.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\CollisionTypeIdDef.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\OBBCollider.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\collider\SphereCollider.h">
+      <Filter>ヘッダー ファイル\application\objects\collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

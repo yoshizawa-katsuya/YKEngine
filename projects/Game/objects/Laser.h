@@ -1,8 +1,8 @@
 #pragma once
 #include "My3dObject.h"
-#include "WorldTransform.h"
+#include "collider/OBBCollider.h"
 
-class Laser
+class Laser : public OBBCollider
 {
 public:
 
@@ -40,9 +40,6 @@ private:
 	/// 長さを設定
 	/// </summary>
 	void UpdateLength();
-
-	//Transform変数を作る
-	YKEngine::WorldTransform worldTransform_;
 
 	//3Dオブジェクト
 	std::unique_ptr<YKEngine::My3dObject> object_;

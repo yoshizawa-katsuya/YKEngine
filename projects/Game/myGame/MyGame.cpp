@@ -1,6 +1,7 @@
 #include "MyGame.h"
 #include "SceneFactory.h"
 #include "OffscreenRenderer.h"
+#include "CollisionManager.h"
 
 using namespace YKEngine;
 
@@ -9,6 +10,10 @@ void MyGame::Initialize()
 
 	//基底クラスの初期化処理
 	YKFramework::Initialize();
+
+	//衝突マネージャの初期化
+	collisionManager_ = CollisionManager::GetInstance();
+	collisionManager_->Initialize();
 
 	//シーンファクトリを生成し、マネージャにセット
 	sceneFactory_ = std::make_unique<SceneFactory>();
@@ -21,6 +26,8 @@ void MyGame::Initialize()
 
 void MyGame::Finalize()
 {
+	//衝突マネージャの終了処理
+	collisionManager_->Finalize();
 
 	YKFramework::Finalize();
 
@@ -28,6 +35,8 @@ void MyGame::Finalize()
 
 void MyGame::Update()
 {
+	//衝突マネージャの更新
+	collisionManager_->Update();
 
 	YKFramework::Update();
 

@@ -1,12 +1,12 @@
 #pragma once
 #include "My3dObject.h"
-#include "WorldTransform.h"
 #include "Input.h"
+#include "collider/SphereCollider.h"
 
 /// <summary>
 /// プレイヤークラス
 /// </summary>
-class BasePlayer
+class BasePlayer : public SphereCollider
 {
 public:
 
@@ -53,9 +53,6 @@ protected:
 
 	//入力
 	YKEngine::Input* input_ = nullptr;
-
-	//Transform変数を作る
-	YKEngine::WorldTransform worldTransform_;
 
 	//3Dオブジェクト
 	std::unique_ptr<YKEngine::My3dObject> object_;

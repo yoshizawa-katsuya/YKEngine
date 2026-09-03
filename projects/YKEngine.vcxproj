@@ -127,6 +127,10 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\lib\dx12.cpp" />
+    <ClCompile Include="Game\objects\collider\BaseCollider.cpp" />
+    <ClCompile Include="Game\objects\collider\OBBCollider.cpp" />
+    <ClCompile Include="Game\objects\collider\SphereCollider.cpp" />
+    <ClCompile Include="Game\objects\CollisionManager.cpp" />
     <ClCompile Include="Game\scene\GameScene.cpp" />
     <ClCompile Include="Engine\input\Input.cpp" />
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
@@ -372,6 +376,12 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\base\TextureManager.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3d\PipelineManager.h" />
+    <ClInclude Include="Game\objects\collider\BaseCollider.h" />
+    <ClInclude Include="Game\objects\collider\ColliderShapeType.h" />
+    <ClInclude Include="Game\objects\collider\CollisionTypeIdDef.h" />
+    <ClInclude Include="Game\objects\collider\OBBCollider.h" />
+    <ClInclude Include="Game\objects\collider\SphereCollider.h" />
+    <ClInclude Include="Game\objects\CollisionManager.h" />
     <ClInclude Include="Game\scene\GameScene.h" />
     <ClInclude Include="Game\objects\LeftPlayer.h" />
     <ClInclude Include="Engine\input\Input.h" />

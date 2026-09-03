@@ -1,5 +1,6 @@
 #include "BasePlayer.h"
 #include "TransformHelpers.h"
+#include "CollisionManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -9,14 +10,23 @@ using namespace YKEngine;
 
 void BasePlayer::Initialize(BaseModel* model)
 {
+	// 球コライダーの初期化
+	SphereCollider::Initialize();
 
+	// 球コライダーの半径を設定
+	SetRadius(0.5f);
+
+	//オブジェクトの生成
 	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(model);
 
-	worldTransform_.Initialize();
-
 	input_ = Input::GetInstance();
 
+	//Colliderの種別IDをプレイヤーに設定
+	BaseCollider::SetTypeID(CollisionTypeIdDef::kPlayer);
+
+	//衝突マネージャーに登録
+	CollisionManager::GetInstance()->AddSphereCollider(this);
 }
 
 void BasePlayer::Update()
@@ -38,11 +48,14 @@ void BasePlayer::Update()
 
 #endif // USE_IMGUI	
 
+	// 移動
 	Move();
 
+	// 回転
 	Rotate();
 
-	worldTransform_.UpdateMatrix();
+	// ワールド変換行列の更新
+	SphereCollider::Update();
 	object_->WorldTransformUpdate(worldTransform_);
 
 }
@@ -58,7 +71,7 @@ void BasePlayer::Draw(Camera* camera)
 void BasePlayer::Rotate()
 {
 	// 自分ではない方の自機を向く
-	Vector3 direction = otherPlayerWorldTransform_->translation_ - worldTransform_.translation_;	// 自分ではない方の自機への方向ベクトル
+	Vector3 direction = otherPlayerWorldTransform_->GetWorldPosition() - worldTransform_.GetWorldPosition();	// 自分ではない方の自機への方向ベクトル
 	Vector3 targetRotate = TransformHelpers::FaceToVelocityDirection(worldTransform_.rotation_, direction);	// 方向ベクトルから回転角を取得
 
 	worldTransform_.rotation_ = TransformHelpers::NormalizeAngle(targetRotate);

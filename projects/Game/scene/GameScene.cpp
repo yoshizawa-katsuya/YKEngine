@@ -10,11 +10,14 @@
 
 using namespace YKEngine;
 
-GameScene::~GameScene() {
-
+GameScene::~GameScene() 
+{
+	//衝突マネージャーに登録されたコライダーを削除
+	collisionManager_->Reset();
 }
 
-void GameScene::Initialize() {
+void GameScene::Initialize()
+{
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -41,7 +44,8 @@ void GameScene::Initialize() {
 	playerManager_ = std::make_unique<PlayerManager>();
 	playerManager_->Initialize();
 	
-
+	//衝突マネージャーの取得
+	collisionManager_ = CollisionManager::GetInstance();
 }
 
 void GameScene::Update() {
@@ -60,6 +64,8 @@ void GameScene::Update() {
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
 	
+	//衝突判定
+	collisionManager_->CheckAllCollisions();
 
 	if (input_->TriggerKey(DIK_SPACE)) 
 	{
@@ -133,12 +139,15 @@ void GameScene::Draw() {
 	skyBox_->CameraUpdate(mainCamera_);
 	skyBox_->Draw();*/
 
-	/*
+	
 	modelPlatform_->InstancingPreDraw();
 
-	objects_->CameraUpdate(mainCamera_);
-	objects_->Draw();
-	*/
+	//コライダーの描画
+	collisionManager_->Draw(mainCamera_);
+
+	/*objects_->CameraUpdate(mainCamera_);
+	objects_->Draw();*/
+	
 	//Spriteの描画前処理
 	//spritePlatform_->PreDraw();
 
