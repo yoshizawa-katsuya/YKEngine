@@ -3,6 +3,7 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "NormalEnemy.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -67,6 +68,10 @@ void GameScene::Initialize() {
 	rightPlayer_ = std::make_unique<RightPlayer>();
 	rightPlayer_->Initialize(modelPlayer_.get());
 
+	enemy_ = std::make_unique<NormalEnemy>();
+	enemy_->Initialize(modelPlayer_.get());
+	enemy_->SetTargets(leftPlayer_.get(), rightPlayer_.get());
+
 	/*skyBox_ = std::make_unique<Rigid3dObject>();
 	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
 	skyBoxWorldTransform_.Initialize();
@@ -101,6 +106,8 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	leftPlayer_->Update();
 	rightPlayer_->Update();
+
+	enemy_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -219,6 +226,8 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	leftPlayer_->Draw(mainCamera_);
 	rightPlayer_->Draw(mainCamera_);
+
+	enemy_->Draw(mainCamera_);
 
 	/*modelPlatform_->SkyBoxPreDraw();
 

@@ -4,6 +4,8 @@
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
 
+#include <numbers>
+
 using namespace YKEngine;
 
 void BaseEnemy::Initialize(BaseModel* model)
@@ -12,13 +14,16 @@ void BaseEnemy::Initialize(BaseModel* model)
 	object_->Initialize(model);
 
 	worldTransform_.Initialize();
+
+	worldTransform_.translation_ = { 0.0f, 0.0f, 30.0f };
+	velocity_ = { 0.0f, 0.0f, -kMaxSpeed_ };
 }
 
 void BaseEnemy::Update()
 {
 #ifdef USE_IMGUI
 
-	ImGui::Begin("Player");
+	ImGui::Begin("Enemy");
 	if (ImGui::TreeNode("Model")) {
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
@@ -30,6 +35,10 @@ void BaseEnemy::Update()
 
 #endif // USE_IMGUI	
 
+	Move();
+
+	worldTransform_.translation_ += velocity_;
+
 	worldTransform_.UpdateMatrix();
 	object_->WorldTransformUpdate(worldTransform_);
 }
@@ -38,4 +47,34 @@ void BaseEnemy::Draw(Camera* camera)
 {
 	object_->CameraUpdate(camera);
 	object_->Draw();
+}
+
+bool BaseEnemy::IsWithinAngle(const YKEngine::Vector3& position, float angle)
+{
+	// ターゲットとの内積を計算
+	float dot = GetDotProduct(position);
+
+	// 角度の閾値を計算
+	float threshold = cosf(angle * (std::numbers::pi_v<float> / 180.0f));
+
+	if (dot >= threshold)
+	{
+		return true; // 角度内
+	}
+	return false; // 角度外
+}
+
+float BaseEnemy::GetDotProduct(const YKEngine::Vector3& position)
+{
+	// 速度を正規化
+	Vector3 direction = Normalize(velocity_);
+
+	// ターゲットの方向ベクトルを計算
+	Vector3 toTarget = position - worldTransform_.translation_;
+
+	// 正規化
+	toTarget = Normalize(toTarget);
+
+	// 2つのベクトルの内積を計算
+	return Dot(direction, toTarget);
 }

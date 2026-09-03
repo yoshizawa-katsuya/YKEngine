@@ -27,6 +27,12 @@ public:
 	/// <param name="camera">カメラ</param>
 	void Draw(YKEngine::Camera* camera);
 
+	/// <summary>
+	/// プレイヤーの位置を取得します。
+	/// </summary>
+	/// <returns>プレイヤーの位置（Vector3）</returns>
+	const YKEngine::Vector3 GetPosition() const { return worldTransform_.translation_; }
+
 protected:
 
 	/// <summary>

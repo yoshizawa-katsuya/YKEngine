@@ -19,6 +19,7 @@
 #include "ParticleEmitter.h"
 #include "InstancingObjects.h"
 #include "RigidModel.h"
+#include "BaseEnemy.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -94,6 +95,8 @@ private:
 	//プレイヤー
 	std::unique_ptr<LeftPlayer> leftPlayer_;
 	std::unique_ptr<RightPlayer> rightPlayer_;
+
+	std::unique_ptr<BaseEnemy> enemy_;
 
 	//std::unique_ptr<Rigid3dObject> skyBox_;
 	//WorldTransform skyBoxWorldTransform_;
