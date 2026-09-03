@@ -132,6 +132,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Engine\base\ImGuiManager.cpp" />
     <ClCompile Include="Engine\lib\LevelDataLoader.cpp" />
     <ClCompile Include="Engine\3d\InstancingObjects.cpp" />
+    <ClCompile Include="Game\objects\Laser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\lib\Matrix.cpp" />
     <ClCompile Include="Engine\lib\Vector3.cpp" />
@@ -407,6 +408,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Engine\lib\StateMachine.hpp" />
     <ClInclude Include="Game\objects\RightPlayer.h" />
     <ClInclude Include="Game\objects\PlayerManager.h" />
+    <ClInclude Include="Game\objects\Laser.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />

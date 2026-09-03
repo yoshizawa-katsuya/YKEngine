@@ -1,6 +1,7 @@
 #pragma once
 #include "LeftPlayer.h"
 #include "RightPlayer.h"
+#include "Laser.h"
 
 class PlayerManager
 {
@@ -17,5 +18,8 @@ private:
 	//プレイヤー
 	std::unique_ptr<LeftPlayer> leftPlayer_;
 	std::unique_ptr<RightPlayer> rightPlayer_;
+
+	//レーザー
+	std::unique_ptr<Laser> laser_;
 };
 
