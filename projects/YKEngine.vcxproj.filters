@@ -288,6 +288,12 @@
     <ClCompile Include="Game\objects\collider\SphereCollider.cpp">
       <Filter>ソース ファイル\application\objects\collider</Filter>
     </ClCompile>
+    <ClCompile Include="Game\objects\BaseEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\objects\NormalEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shader\Object3d.PS.hlsl">
@@ -600,6 +606,12 @@
     </ClInclude>
     <ClInclude Include="Game\objects\collider\SphereCollider.h">
       <Filter>ヘッダー ファイル\application\objects\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\BaseEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\objects\NormalEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

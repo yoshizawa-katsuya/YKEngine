@@ -39,6 +39,12 @@ public:
 	/// <returns>自機のワールド変換行列</returns>
 	YKEngine::WorldTransform* GetWorldTransform() { return &worldTransform_; }
 
+	/// <summary>
+	/// プレイヤーの位置を取得します。
+	/// </summary>
+	/// <returns>プレイヤーの位置（Vector3）</returns>
+	const YKEngine::Vector3 GetPosition() const { return worldTransform_.translation_; }
+
 protected:
 
 	/// <summary>
