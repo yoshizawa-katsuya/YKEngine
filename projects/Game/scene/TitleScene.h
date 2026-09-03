@@ -8,6 +8,13 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 
+
+// 色の定数
+constexpr YKEngine::Vector4 kColorPressKey = { 0.902f, 0.902f, 0.902f, 1.0f }; // #E6E6E6
+constexpr float kAlphaStable = 1.0f;
+constexpr float kAlphaFlickerMin = 0.3f;
+constexpr float kFlickerSpeed = 6.0f; // 点滅の速さ（大きいほど速い）
+
 /// <summary>
 /// タイトル画面のクラス。
 /// </summary>
@@ -50,6 +57,17 @@ private:
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
+	
+	std::unique_ptr<YKEngine::Sprite> titleLINKSprite_;
+	std::unique_ptr<YKEngine::Sprite> titleColonSprite_;
+	std::unique_ptr<YKEngine::Sprite> titleOVERSprite_;
+	YKEngine::Vector2 titlePos_;
+
+	std::unique_ptr<YKEngine::Sprite> startSprite_;
+	YKEngine::Vector2 startPos_;
+
+	float pressKeyTimer_ = 0.0f;           // 点滅用の経過時間
+
 	
 };
 
