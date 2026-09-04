@@ -49,57 +49,9 @@ void GameScene::Initialize()
 	collisionManager_ = CollisionManager::GetInstance();
 	//modelPlatform_->SetSpotLight(spotLight_.get());
 
-	//textureHandle_ = TextureManager::GetInstance()->Load("./resources/circle.png");
-	textureHandle_ = TextureManager::GetInstance()->Load("./resources/white.png");
-	textureHandle2_ = TextureManager::GetInstance()->Load("./resources/rostock_laage_airport_4k.dds");
-
-	//モデルの生成
-	modelPlayer_ = modelPlatform_->CreateRigidModel("./resources/Player", "Player.obj");
-	//modelPlayer_->SetUVTransform({ 10.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f });
-	//modelPlayer_->SetEnableLighting(false);
-	//modelPlayer_ = std::make_unique<RigidModel>();
-	
-	/*
-	//スプライトの生成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize(textureHandle_, spritePlatform_);
-	*/
-
-	//パーティクルエミッターの生成
-	//emitter_ = std::make_unique<ParticleEmitter>("Effect", 1, 1.5f);
-	//emitter_->Initialize(textureHandle2, modelPlayer_, true);
-
-	//プレイヤーの初期化
-	leftPlayer_ = std::make_unique<LeftPlayer>();
-	leftPlayer_->Initialize(modelPlayer_.get());
-	
-	rightPlayer_ = std::make_unique<RightPlayer>();
-	rightPlayer_->Initialize(modelPlayer_.get());
-
 	enemy_ = std::make_unique<NormalEnemy>();
-	enemy_->Initialize(modelPlayer_.get());
-	enemy_->SetTargets(leftPlayer_.get(), rightPlayer_.get());
-
-	/*skyBox_ = std::make_unique<Rigid3dObject>();
-	skyBox_->Initialize(modelPlatform_->CreateSkyBox(textureHandle2_).get());
-	skyBoxWorldTransform_.Initialize();
-	skyBoxWorldTransform_.scale_ = { 50.0f, 50.0f, 50.0f };
-	skyBoxWorldTransform_.UpdateMatrix();
-	skyBox_->WorldTransformUpdate(skyBoxWorldTransform_);*/
-
-	/*
-	objects_ = std::make_unique<InstancingObjects>();
-	objects_->Initialize(modelPlayer_.get(), 10);
-
-	worldTransform1_.Initialize();
-	worldTransform1_.translation_.x = -1.0f;
-	worldTransform1_.UpdateMatrix();
-
-	worldTransform2_.Initialize();
-	worldTransform2_.translation_.x = 1.0f;
-	worldTransform2_.UpdateMatrix();
-	*/
-
+	enemy_->Initialize();
+	enemy_->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
 }
 
 void GameScene::Update() {
@@ -192,25 +144,11 @@ void GameScene::Draw() {
 
 	enemy_->Draw(mainCamera_);
 
-	/*modelPlatform_->SkyBoxPreDraw();
-
-	skyBox_->CameraUpdate(mainCamera_);
-	skyBox_->Draw();*/
-
 	
 	modelPlatform_->InstancingPreDraw();
 
 	//コライダーの描画
 	collisionManager_->Draw(mainCamera_);
-
-	/*objects_->CameraUpdate(mainCamera_);
-	objects_->Draw();*/
-	
-	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
-
-	//ParticleManager::GetInstance()->Draw();
-
 }
 
 void GameScene::Finalize()

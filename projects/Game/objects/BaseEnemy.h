@@ -16,7 +16,7 @@ public:
 	/// 初期化。
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(YKEngine::BaseModel* model);
+	void Initialize();
 
 	/// <summary>
 	/// 更新。

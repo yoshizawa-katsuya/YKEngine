@@ -1,5 +1,7 @@
 #include "BaseEnemy.h"
 
+#include "ModelPlatform.h"
+
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
 #endif // USE_IMGUI
@@ -8,10 +10,14 @@
 
 using namespace YKEngine;
 
-void BaseEnemy::Initialize(BaseModel* model)
+void BaseEnemy::Initialize()
 {
+	//モデルの生成
+	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
+	std::shared_ptr<BaseModel> modelPlayer = modelPlatform->CreateRigidModel("./resources/Player", "Player.obj");
+
 	object_ = std::make_unique<My3dObject>();
-	object_->Initialize(model);
+	object_->Initialize(modelPlayer.get());
 
 	worldTransform_.Initialize();
 
