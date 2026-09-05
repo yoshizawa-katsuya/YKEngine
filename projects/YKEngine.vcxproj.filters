@@ -273,6 +273,12 @@
     <ClCompile Include="Game\objects\RightPlayer.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game\scene\GameOverScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\scene\GameClearScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Game\objects\Laser.cpp">
       <Filter>ソース ファイル\application\objects</Filter>
     </ClCompile>
@@ -585,6 +591,12 @@
     </ClInclude>
     <ClInclude Include="Game\objects\RightPlayer.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\scene\GameClearScene.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Game\objects\Laser.h">
       <Filter>ヘッダー ファイル\application\objects</Filter>

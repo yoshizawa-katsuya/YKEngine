@@ -109,6 +109,8 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\scene\GameClearScene.cpp" />
+    <ClCompile Include="Game\scene\GameOverScene.cpp" />
     <ClCompile Include="Game\objects\BaseEnemy.cpp" />
     <ClCompile Include="Game\objects\BasePlayer.cpp" />
     <ClCompile Include="Engine\2d\AnimatedSprite.cpp" />
@@ -347,6 +349,8 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\scene\GameClearScene.h" />
+    <ClInclude Include="Game\scene\GameOverScene.h" />
     <ClInclude Include="Game\objects\BaseEnemy.h" />
     <ClInclude Include="Game\objects\BasePlayer.h" />
     <ClInclude Include="Engine\lib\BaseState.hpp" />
