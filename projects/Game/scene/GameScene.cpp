@@ -3,6 +3,7 @@
 #include "ParticleManager.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "NormalEnemy.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -46,6 +47,11 @@ void GameScene::Initialize()
 	
 	//衝突マネージャーの取得
 	collisionManager_ = CollisionManager::GetInstance();
+	//modelPlatform_->SetSpotLight(spotLight_.get());
+
+	enemy_ = std::make_unique<NormalEnemy>();
+	enemy_->Initialize();
+	enemy_->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
 }
 
 void GameScene::Update() {
@@ -60,6 +66,8 @@ void GameScene::Update() {
 
 	//プレイヤーの更新
 	playerManager_->Update();
+
+	enemy_->Update();
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -134,25 +142,13 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	playerManager_->Draw(mainCamera_);
 
-	/*modelPlatform_->SkyBoxPreDraw();
-
-	skyBox_->CameraUpdate(mainCamera_);
-	skyBox_->Draw();*/
+	enemy_->Draw(mainCamera_);
 
 	
 	modelPlatform_->InstancingPreDraw();
 
 	//コライダーの描画
 	collisionManager_->Draw(mainCamera_);
-
-	/*objects_->CameraUpdate(mainCamera_);
-	objects_->Draw();*/
-	
-	//Spriteの描画前処理
-	//spritePlatform_->PreDraw();
-
-	//ParticleManager::GetInstance()->Draw();
-
 }
 
 void GameScene::Finalize()

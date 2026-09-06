@@ -13,6 +13,9 @@ public:
 
 	void Draw(YKEngine::Camera* camera);
 
+	const LeftPlayer* GetLeftPlayer() const { return leftPlayer_.get(); }
+	const RightPlayer* GetRightPlayer() const { return rightPlayer_.get(); }
+
 private:
 
 	//プレイヤー

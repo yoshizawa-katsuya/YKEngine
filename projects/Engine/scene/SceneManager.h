@@ -42,6 +42,10 @@ public:
 	/// <param name="sceneName">変更先シーン名</param>
 	void ChengeScene(const std::string& sceneName);
 
+	/// <summary>
+	/// imGuiの表示
+	/// </summary>
+	void DrawImGui();
 private:
 
 

@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "DebugCamera.h"
 #include "CollisionManager.h"
+#include "BaseEnemy.h"
 
 /// <summary>
 /// ゲームシーン。
@@ -72,4 +73,6 @@ private:
 	std::unique_ptr<PlayerManager> playerManager_;
 
 	CollisionManager* collisionManager_ = nullptr;
+
+	std::unique_ptr<BaseEnemy> enemy_;
 };
