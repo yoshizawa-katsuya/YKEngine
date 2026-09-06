@@ -1,4 +1,5 @@
 #include "BaseEnemy.h"
+#include "CollisionManager.h"
 
 #include "ModelPlatform.h"
 
@@ -12,6 +13,9 @@ using namespace YKEngine;
 
 void BaseEnemy::Initialize()
 {
+	// 球コライダーの初期化
+	SphereCollider::Initialize();
+
 	//モデルの生成
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
 	std::shared_ptr<BaseModel> modelPlayer = modelPlatform->CreateRigidModel("./resources/Player", "Player.obj");
@@ -19,10 +23,14 @@ void BaseEnemy::Initialize()
 	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(modelPlayer.get());
 
-	worldTransform_.Initialize();
-
 	worldTransform_.translation_ = { 0.0f, 0.0f, 30.0f };
 	velocity_ = { 0.0f, 0.0f, -kMaxSpeed_ };
+
+	//Colliderの種別IDをプレイヤーに設定
+	BaseCollider::SetTypeID(CollisionTypeIdDef::kEnemy);
+
+	//衝突マネージャーに登録
+	CollisionManager::GetInstance()->AddSphereCollider(this);
 }
 
 void BaseEnemy::Update()
@@ -45,7 +53,7 @@ void BaseEnemy::Update()
 
 	worldTransform_.translation_ += velocity_;
 
-	worldTransform_.UpdateMatrix();
+	SphereCollider::Update();
 	object_->WorldTransformUpdate(worldTransform_);
 }
 
@@ -83,4 +91,13 @@ float BaseEnemy::GetDotProduct(const YKEngine::Vector3& position)
 
 	// 2つのベクトルの内積を計算
 	return Dot(direction, toTarget);
+}
+
+void BaseEnemy::OnCollision(BaseCollider* other)
+{
+	if (other->GetTypeID() == CollisionTypeIdDef::kLaser)
+	{
+		// レーザーと衝突した場合の処理
+		isAlive_ = false; // 敵を死亡状態にする
+	}
 }

@@ -1,14 +1,14 @@
 #pragma once
 #include "My3dObject.h"
-#include "WorldTransform.h"
 #include "Input.h"
+#include "collider/SphereCollider.h"
 
 class BasePlayer;
 
 /// <summary>
 /// 基底エネミークラス
 /// </summary>
-class BaseEnemy
+class BaseEnemy : public SphereCollider
 {
 public:
 
@@ -50,6 +50,18 @@ public:
 	/// <returns>内積の値</returns>
 	float GetDotProduct(const YKEngine::Vector3& position);
 
+	/// <summary>
+	/// 衝突時の処理
+	/// </summary>
+	/// <param name="other">他のコライダー</param>
+	void OnCollision([[maybe_unused]] BaseCollider* other) override;
+	
+	/// <summary>
+	/// 敵が生存しているかどうかを取得する。
+	/// </summary>
+	/// <returns>生存している場合はtrue、死亡している場合はfalse</returns>
+	bool IsAlive() const { return isAlive_; }
+
 protected:
 
 	/// <summary>
@@ -58,9 +70,6 @@ protected:
 	virtual void Move() = 0;
 
 protected:
-
-	//Transform変数を作る
-	YKEngine::WorldTransform worldTransform_;
 
 	// 3Dオブジェクト
 	std::unique_ptr<YKEngine::My3dObject> object_;
@@ -73,4 +82,7 @@ protected:
 
 	// 速度
 	YKEngine::Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
+
+	//生存しているならtrue、死亡しているならfalse
+	bool isAlive_ = true;
 };

@@ -74,5 +74,6 @@ private:
 
 	CollisionManager* collisionManager_ = nullptr;
 
-	std::unique_ptr<BaseEnemy> enemy_;
+	//敵
+	std::vector<std::unique_ptr<BaseEnemy>> enemies_;
 };

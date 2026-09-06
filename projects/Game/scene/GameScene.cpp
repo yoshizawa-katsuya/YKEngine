@@ -49,9 +49,10 @@ void GameScene::Initialize()
 	collisionManager_ = CollisionManager::GetInstance();
 	//modelPlatform_->SetSpotLight(spotLight_.get());
 
-	enemy_ = std::make_unique<NormalEnemy>();
-	enemy_->Initialize();
-	enemy_->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
+	std::unique_ptr<BaseEnemy> enemy = std::make_unique<NormalEnemy>();
+	enemy->Initialize();
+	enemy->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
+	enemies_.push_back(std::move(enemy));
 }
 
 void GameScene::Update() {
@@ -67,7 +68,19 @@ void GameScene::Update() {
 	//プレイヤーの更新
 	playerManager_->Update();
 
-	enemy_->Update();
+	//敵が死亡していたらコライダーを削除して敵のインスタンスを破棄する
+	enemies_.erase(std::remove_if(enemies_.begin(), enemies_.end(),
+		[&](const std::unique_ptr<BaseEnemy>& enemy) {
+			if (!enemy->IsAlive()) {
+				collisionManager_->RemoveSphereCollider(enemy.get());
+				return true; // 削除する
+			}
+			return false; // 残す
+		}), enemies_.end());
+	//敵の更新
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemies_) {
+		enemy->Update();
+	}
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
@@ -142,7 +155,10 @@ void GameScene::Draw() {
 	//プレイヤーの描画
 	playerManager_->Draw(mainCamera_);
 
-	enemy_->Draw(mainCamera_);
+	//敵の描画
+	for (const std::unique_ptr<BaseEnemy>& enemy : enemies_) {
+		enemy->Draw(mainCamera_);
+	}
 
 	
 	modelPlatform_->InstancingPreDraw();
