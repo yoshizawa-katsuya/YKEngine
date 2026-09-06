@@ -41,11 +41,20 @@ private:
 	/// </summary>
 	void UpdateLength();
 
+	/// <summary>
+	/// エネルギー量を更新
+	/// </summary>
+	void UpdateEnergy();
+
 	//3Dオブジェクト
 	std::unique_ptr<YKEngine::My3dObject> object_;
 
 	//プレイヤーのTransform
 	YKEngine::WorldTransform* leftPlayerWorldTransform_ = nullptr;
 	YKEngine::WorldTransform* rightPlayerWorldTransform_ = nullptr;
+
+	float energy_ = 100.0f; // レーザーのエネルギー量
+	const float kMaxEnergy = 100.0f; // 最大エネルギー量
+	const float kEnergyConsumptionRate = 10.0f; // エネルギー消費の基準値
 };
 
