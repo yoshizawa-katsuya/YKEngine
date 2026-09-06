@@ -24,5 +24,7 @@ private:
 
 	//レーザー
 	std::unique_ptr<Laser> laser_;
+
+	int32_t hp_ = 5;
 };
 

@@ -1,6 +1,10 @@
 #include "PlayerManager.h"
 #include "ModelPlatform.h"
 
+#ifdef USE_IMGUI
+#include "imgui/imgui.h"
+#endif // USE_IMGUI
+
 using namespace YKEngine;
 
 void PlayerManager::Initialize()
@@ -11,10 +15,10 @@ void PlayerManager::Initialize()
 
 	//プレイヤーの初期化
 	leftPlayer_ = std::make_unique<LeftPlayer>();
-	leftPlayer_->Initialize(modelPlayer.get());
+	leftPlayer_->Initialize(modelPlayer.get(), &hp_);
 
 	rightPlayer_ = std::make_unique<RightPlayer>();
-	rightPlayer_->Initialize(modelPlayer.get());
+	rightPlayer_->Initialize(modelPlayer.get(), &hp_);
 
 	// プレイヤー同士の参照を設定
 	leftPlayer_->SetOtherPlayerWorldTransform(rightPlayer_->GetWorldTransform());
@@ -28,6 +32,14 @@ void PlayerManager::Initialize()
 
 void PlayerManager::Update()
 {
+#ifdef USE_IMGUI
+
+	ImGui::Begin("Player");
+	ImGui::Text("HP: %d", hp_);
+	ImGui::End();
+
+#endif // USE_IMGUI
+
 	//プレイヤーの更新
 	leftPlayer_->Update();
 	rightPlayer_->Update();

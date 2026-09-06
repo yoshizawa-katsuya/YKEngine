@@ -2,13 +2,9 @@
 #include "TransformHelpers.h"
 #include "CollisionManager.h"
 
-#ifdef USE_IMGUI
-#include "imgui/imgui.h"
-#endif // USE_IMGUI
-
 using namespace YKEngine;
 
-void BasePlayer::Initialize(BaseModel* model)
+void BasePlayer::Initialize(BaseModel* model, int32_t* hp)
 {
 	// 球コライダーの初期化
 	SphereCollider::Initialize();
@@ -19,6 +15,10 @@ void BasePlayer::Initialize(BaseModel* model)
 	//オブジェクトの生成
 	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(model);
+
+	//体力を設定
+	hp_ = hp;
+
 
 	input_ = Input::GetInstance();
 
@@ -31,22 +31,6 @@ void BasePlayer::Initialize(BaseModel* model)
 
 void BasePlayer::Update()
 {
-
-
-#ifdef USE_IMGUI
-
-	ImGui::Begin("Player");
-	if (ImGui::TreeNode("Model")) {
-		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
-		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
-		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
-
-		ImGui::TreePop();
-	}
-	ImGui::End();
-
-
-#endif // USE_IMGUI	
 
 	// 移動
 	Move();
@@ -66,6 +50,17 @@ void BasePlayer::Draw(Camera* camera)
 	object_->CameraUpdate(camera);
 	object_->Draw();
 
+}
+
+void BasePlayer::OnCollision(BaseCollider* other)
+{
+	if (other->GetTypeID() == CollisionTypeIdDef::kEnemy) {
+		// 敵と衝突した場合、体力を減らす
+		if (hp_ && *hp_ > 0) 
+		{
+			(*hp_)--;
+		}
+	}
 }
 
 void BasePlayer::Rotate()

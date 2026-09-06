@@ -14,7 +14,8 @@ public:
 	/// 初期化。
 	/// </summary>
 	/// <param name="model">モデル</param>
-	void Initialize(YKEngine::BaseModel* model);
+	/// <param name="hp">体力</param>
+	void Initialize(YKEngine::BaseModel* model, int32_t* hp);
 
 	/// <summary>
 	/// 更新。
@@ -45,6 +46,12 @@ public:
 	/// <returns>プレイヤーの位置（Vector3）</returns>
 	const YKEngine::Vector3 GetPosition() const { return worldTransform_.translation_; }
 
+	/// <summary>
+	/// 衝突時の処理
+	/// </summary>
+	/// <param name="other">衝突したコライダー</param>
+	void OnCollision([[maybe_unused]] BaseCollider* other) override;
+
 protected:
 
 	/// <summary>
@@ -65,5 +72,9 @@ protected:
 
 	//自分ではない方の自機のワールド変換行列を取得するためのポインタ
 	YKEngine::WorldTransform* otherPlayerWorldTransform_ = nullptr;
+
+	//プレイヤーの体力
+	int32_t* hp_ = nullptr;
+
 };
 

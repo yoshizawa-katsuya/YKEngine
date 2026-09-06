@@ -100,4 +100,9 @@ void BaseEnemy::OnCollision(BaseCollider* other)
 		// レーザーと衝突した場合の処理
 		isAlive_ = false; // 敵を死亡状態にする
 	}
+	else if (other->GetTypeID() == CollisionTypeIdDef::kPlayer)
+	{
+		// プレイヤーと衝突した場合の処理
+		isAlive_ = false; // 敵を死亡状態にする
+	}
 }
