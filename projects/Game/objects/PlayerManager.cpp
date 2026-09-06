@@ -11,14 +11,15 @@ void PlayerManager::Initialize()
 {
 	//モデルの生成
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
-	std::shared_ptr<BaseModel> modelPlayer = modelPlatform->CreateRigidModel("./resources/Player", "Player.obj");
+	std::shared_ptr<BaseModel> modelLeftPlayer = modelPlatform->CreateRigidModel("./resources/leftPlayer", "leftPlayer.obj");
+	std::shared_ptr<BaseModel> modelRightPlayer = modelPlatform->CreateRigidModel("./resources/rightPlayer", "rightPlayer.obj");
 
 	//プレイヤーの初期化
 	leftPlayer_ = std::make_unique<LeftPlayer>();
-	leftPlayer_->Initialize(modelPlayer.get(), &hp_);
+	leftPlayer_->Initialize(modelLeftPlayer.get(), &hp_);
 
 	rightPlayer_ = std::make_unique<RightPlayer>();
-	rightPlayer_->Initialize(modelPlayer.get(), &hp_);
+	rightPlayer_->Initialize(modelRightPlayer.get(), &hp_);
 
 	// プレイヤー同士の参照を設定
 	leftPlayer_->SetOtherPlayerWorldTransform(rightPlayer_->GetWorldTransform());
