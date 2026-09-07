@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "NormalEnemy.h"
+#include "SwiftEnemy.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -49,7 +50,7 @@ void GameScene::Initialize()
 	collisionManager_ = CollisionManager::GetInstance();
 	//modelPlatform_->SetSpotLight(spotLight_.get());
 
-	std::unique_ptr<BaseEnemy> enemy = std::make_unique<NormalEnemy>();
+	std::unique_ptr<BaseEnemy> enemy = std::make_unique<SwiftEnemy>();
 	enemy->Initialize();
 	enemy->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
 	enemies_.push_back(std::move(enemy));

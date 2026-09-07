@@ -36,11 +36,11 @@ public:
 	}
 
 	/// <summary>
-	/// 
+	/// ターゲットとの角度内にいるかどうかを取得する。
 	/// </summary>
 	/// <param name="position">ターゲットのワールド変換</param>
 	/// <param name="angle">角度(度数)</param>
-	/// <returns></returns>
+	/// <returns>角度内にいる場合はtrue、そうでない場合はfalse</returns>
 	bool IsWithinAngle(const YKEngine::Vector3& position, float angle);
 
 	/// <summary>
@@ -78,7 +78,7 @@ protected:
 	const BasePlayer* target2_ = nullptr;
 
 	// 最大速度
-	const float kMaxSpeed_ = 4.0f / 60.0f;
+	float maxSpeed_ = 4.0f / 60.0f;
 
 	// 速度
 	YKEngine::Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };

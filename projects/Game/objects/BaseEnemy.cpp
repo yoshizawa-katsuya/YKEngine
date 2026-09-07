@@ -24,7 +24,7 @@ void BaseEnemy::Initialize()
 	object_->Initialize(modelPlayer.get());
 
 	worldTransform_.translation_ = { 0.0f, 0.0f, 30.0f };
-	velocity_ = { 0.0f, 0.0f, -kMaxSpeed_ };
+	velocity_ = { 0.0f, 0.0f, -maxSpeed_ };
 
 	//Colliderの種別IDをプレイヤーに設定
 	BaseCollider::SetTypeID(CollisionTypeIdDef::kEnemy);
