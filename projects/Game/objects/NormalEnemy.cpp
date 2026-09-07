@@ -16,8 +16,7 @@ void NormalEnemy::Move()
 		velocity_ = RotateTowards(homingTarget_->GetPosition());
 	}
 
-	velocity_ = YKEngine::Normalize(velocity_);
-	velocity_ *= kMaxSpeed_;
+	velocity_ = YKEngine::Normalize(velocity_) * maxSpeed_;
 }
 
 void NormalEnemy::SearchTarget()
@@ -53,9 +52,7 @@ void NormalEnemy::SearchTarget()
 	}
 }
 
-YKEngine::Vector3 NormalEnemy::RotateTowards(
-	const YKEngine::Vector3& position,
-	float deltaTime)
+YKEngine::Vector3 NormalEnemy::RotateTowards(const YKEngine::Vector3& position, float deltaTime)
 {
 	YKEngine::Vector3 currentDirection = YKEngine::Normalize(velocity_);
 
@@ -94,17 +91,16 @@ YKEngine::Vector3 NormalEnemy::RotateTowards(
 	}
 
 	// 回転軸
-	YKEngine::Vector3 axis =
-		YKEngine::Cross(currentDirection, targetDirection);
+	YKEngine::Vector3 axis = YKEngine::Cross(currentDirection, targetDirection);
 
 	axis = YKEngine::Normalize(axis);
 
 	float cosAngle = cosf(maxHomingAngle);
 	float sinAngle = sinf(maxHomingAngle);
 
-	return currentDirection * cosAngle
-		+ YKEngine::Cross(axis, currentDirection) * sinAngle;
+	return currentDirection * cosAngle + YKEngine::Cross(axis, currentDirection) * sinAngle;
 }
+
 float NormalEnemy::GetHomingPower(float distance)
 {
 	float t = (distance - kHomingEndDistance_) / (kHomingStartDistance_ - kHomingEndDistance_);
