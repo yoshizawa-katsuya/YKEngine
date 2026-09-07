@@ -29,6 +29,9 @@ void PlayerManager::Initialize()
 	laser_ = std::make_unique<Laser>();
 	laser_->Initialize(leftPlayer_->GetWorldTransform(), rightPlayer_->GetWorldTransform());
 
+	//HUDの初期化
+	HUDInitialize();
+
 }
 
 void PlayerManager::Update()
@@ -49,7 +52,7 @@ void PlayerManager::Update()
 	laser_->Update();
 }
 
-void PlayerManager::Draw(YKEngine::Camera* camera)
+void PlayerManager::Draw(Camera* camera)
 {
 	//プレイヤーの描画
 	leftPlayer_->Draw(camera);
@@ -57,4 +60,47 @@ void PlayerManager::Draw(YKEngine::Camera* camera)
 
 	//レーザーの描画
 	laser_->Draw(camera);
+}
+
+void PlayerManager::DrawHUD()
+{
+	//HPの描画
+	for (int32_t i = 0; i < kMaxHp_; ++i) {
+		hpBackSprites_[i]->Draw();
+		if (i < hp_) 
+		{
+			hpSprites_[i]->Draw();
+		}
+	}
+}
+
+void PlayerManager::HUDInitialize()
+{
+	// テクスチャの読み込み
+	uint32_t hpTextureHandle = TextureManager::GetInstance()->Load("./resources/heart.png");
+	uint32_t hpBackTextureHandle = TextureManager::GetInstance()->Load("./resources/heartFrame.png");
+
+	hpSprites_.reserve(kMaxHp_);
+	hpBackSprites_.reserve(kMaxHp_);
+
+	Vector2 heartPosition = { 20.0f, 20.0f }; // ハートの初期位置
+	Vector2 heartSize = { 32.0f, 32.0f }; // ハートのサイズ
+	float heartSpacing = 10.0f; // ハートの間隔
+
+	for (int32_t i = 0; i < kMaxHp_; ++i) {
+		// 背景スプライトの作成
+		auto hpBackSprite = std::make_unique<Sprite>();
+		hpBackSprite->Initialize(hpBackTextureHandle);
+		hpBackSprite->SetPosition(heartPosition);
+		hpBackSprite->SetSize(heartSize);
+		hpBackSprites_.push_back(std::move(hpBackSprite));
+		// ハートスプライトの作成
+		auto hpSprite = std::make_unique<Sprite>();
+		hpSprite->Initialize(hpTextureHandle);
+		hpSprite->SetPosition(heartPosition);
+		hpSprite->SetSize(heartSize);
+		hpSprites_.push_back(std::move(hpSprite));
+		// 次のハートの位置を計算
+		heartPosition.x += heartSize.x + heartSpacing;
+	}
 }

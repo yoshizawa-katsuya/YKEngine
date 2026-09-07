@@ -165,6 +165,12 @@ void GameScene::Draw() {
 
 	//コライダーの描画
 	collisionManager_->Draw(mainCamera_);
+
+	//Spriteの描画前処理
+	spritePlatform_->PreDraw();
+
+	//HUDの描画
+	playerManager_->DrawHUD();
 }
 
 void GameScene::Finalize()
