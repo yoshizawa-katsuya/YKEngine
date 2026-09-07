@@ -6,6 +6,13 @@
 /// </summary>
 class NormalEnemy : public BaseEnemy
 {
+public:
+
+	/// <summary>
+	/// コンストラクタ。
+	/// </summary>
+	NormalEnemy() { hp_ = kMaxHp_; }
+
 private:
 
 	/// <summary>
@@ -13,6 +20,9 @@ private:
 	///	</summary>
 	void Move() override;
 
+	/// <summary>
+	/// ターゲットを探索する。
+	/// </summary>
 	void SearchTarget();
 
 	YKEngine::Vector3 RotateTowards(const YKEngine::Vector3& targetPosition, float deltaTime = 1.0f / 60.0f);
@@ -20,6 +30,8 @@ private:
 	float GetHomingPower(float distance);
 
 private:
+
+	const float kMaxHp_ = 10.0f;
 
     // 最大探索角度
 	const float kMaxSearchAngle_ = 30.0f;
@@ -39,6 +51,5 @@ private:
 	float kHomingStartDistance_ = 30.0f;
 	// ホーミング終了距離
 	float kHomingEndDistance_ = 5.0f;
-
 };
 

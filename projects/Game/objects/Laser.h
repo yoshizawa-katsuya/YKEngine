@@ -24,6 +24,12 @@ public:
 	/// <param name="camera">カメラ</param>
 	void Draw(YKEngine::Camera* camera);
 
+	/// <summary>
+	///	ダメージ量を取得する。
+	/// </summary>
+	/// <returns>ダメージ量</returns>
+	float GetDamage() const { return damage_; }
+
 private:
 
 	/// <summary>
@@ -56,5 +62,7 @@ private:
 	float energy_ = 100.0f; // レーザーのエネルギー量
 	const float kMaxEnergy = 100.0f; // 最大エネルギー量
 	const float kEnergyConsumptionRate = 10.0f; // エネルギー消費の基準値
+
+	float damage_ = 10.0f; // レーザーのダメージ量
 };
 

@@ -176,6 +176,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClCompile Include="Game\objects\PlayerManager.cpp" />
     <ClCompile Include="Game\objects\NormalEnemy.cpp" />
     <ClCompile Include="Game\objects\SwiftEnemy.cpp" />
+    <ClCompile Include="TankEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shader\5x5BoxFilter.PS.hlsl">
@@ -429,6 +430,7 @@ xcopy /Y /D "C:\Program Files (x86)\Windows Kits\10\Redist\D3D\x64\dxil.dll" "$(
     <ClInclude Include="Game\objects\Laser.h" />
     <ClInclude Include="Game\objects\NormalEnemy.h" />
     <ClInclude Include="Game\objects\SwiftEnemy.h" />
+    <ClInclude Include="TankEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\externals\imgui\LICENSE.txt" />
