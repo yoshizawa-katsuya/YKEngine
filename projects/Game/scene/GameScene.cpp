@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "NormalEnemy.h"
 #include "SwiftEnemy.h"
+#include "TankEnemy.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -50,7 +51,7 @@ void GameScene::Initialize()
 	collisionManager_ = CollisionManager::GetInstance();
 	//modelPlatform_->SetSpotLight(spotLight_.get());
 
-	std::unique_ptr<BaseEnemy> enemy = std::make_unique<SwiftEnemy>();
+	std::unique_ptr<BaseEnemy> enemy = std::make_unique<TankEnemy>();
 	enemy->Initialize();
 	enemy->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
 	enemies_.push_back(std::move(enemy));
