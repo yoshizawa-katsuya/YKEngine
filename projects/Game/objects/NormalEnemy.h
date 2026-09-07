@@ -31,7 +31,7 @@ private:
 
 private:
 
-	const float kMaxHp_ = 10.0f;
+	const float kMaxHp_ = 8.0f;
 
     // 最大探索角度
 	const float kMaxSearchAngle_ = 30.0f;

@@ -15,7 +15,7 @@ private:
 
 private:
 
-	const float kMaxHp_ = 20.0f;
+	const float kMaxHp_ = 10.0f;
 
 };
 
