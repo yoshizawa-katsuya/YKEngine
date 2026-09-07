@@ -48,6 +48,11 @@ public:
 
 private:
 
+	/// <summary>
+	/// レベルの生成。
+	/// </summary>
+	void CreateLevel();
+
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
 

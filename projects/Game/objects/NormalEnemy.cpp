@@ -1,6 +1,29 @@
 #include "NormalEnemy.h"
+#include "TransformHelpers.h"
 
 #include "BasePlayer.h"
+
+using namespace YKEngine;
+
+void NormalEnemy::Initialize(const YKEngine::EnemySpawnData& spawnData, const BasePlayer* target1, const BasePlayer* target2)
+{
+	BaseEnemy::Initialize(spawnData, target1, target2);
+
+	// ターゲットを探索する
+	float length1 = YKEngine::Length(worldTransform_.translation_ - target1_->GetPosition());
+	float length2 = YKEngine::Length(worldTransform_.translation_ - target2_->GetPosition());
+
+	if (length1 < length2)
+	{
+		homingTarget_ = target1_;
+	}
+	else
+	{
+		homingTarget_ = target2_;
+	}
+	Vector3 direction = homingTarget_->GetPosition() - worldTransform_.GetWorldPosition();	// 自分ではない方の自機への方向ベクトル
+	velocity_ = YKEngine::Normalize(direction) * maxSpeed_;
+}
 
 void NormalEnemy::Move()
 {

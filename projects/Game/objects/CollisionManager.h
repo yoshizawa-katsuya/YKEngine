@@ -135,6 +135,9 @@ private:
 	std::shared_ptr<YKEngine::BaseModel> model_;
 	std::unique_ptr<YKEngine::InstancingObjects> objects_;
 
+	std::shared_ptr<YKEngine::BaseModel> OBBModel_;
+	std::unique_ptr<YKEngine::InstancingObjects> OBBObjects_;
+
 	const std::set<std::pair<CollisionTypeIdDef, CollisionTypeIdDef>> kCollisionPairs_ = {
 		{ CollisionTypeIdDef::kPlayer, CollisionTypeIdDef::kEnemy },
 		{ CollisionTypeIdDef::kLaser, CollisionTypeIdDef::kEnemy },

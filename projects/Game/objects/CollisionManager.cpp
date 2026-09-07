@@ -25,10 +25,14 @@ void CollisionManager::Initialize()
 {
 	uint32_t textureHandle = TextureManager::GetInstance()->Load("./Resources/white.png");
 	model_ = ModelPlatform::GetInstance()->CreateSphere(textureHandle, "Collider");
-
+	
 	// コライダー描画用オブジェクトの初期化
 	objects_ = std::make_unique<InstancingObjects>();
 	objects_->Initialize(model_.get(), 255);
+
+	OBBModel_ = ModelPlatform::GetInstance()->CreateCube(textureHandle, "OBBCollider");
+	OBBObjects_ = std::make_unique<InstancingObjects>();
+	OBBObjects_->Initialize(OBBModel_.get(), 255);
 
 	// グループを追加
 	globalVariables_->CreateGroup(kGroupName_);
@@ -64,6 +68,18 @@ void CollisionManager::Draw(Camera* camera)
 	}
 	objects_->CameraUpdate(camera);
 	objects_->Draw();
+
+	OBBObjects_->PreUpdate();
+	for (BaseCollider* collider : obbColliders_)
+	{
+		// コライダーのワールドトランスフォームを取得
+		WorldTransform worldTransform = collider->GetWorldTransform();
+		// ワールドトランスフォームをインスタンシングオブジェクトに追加
+		OBBObjects_->WorldTransformUpdate(worldTransform);
+	}
+	OBBObjects_->CameraUpdate(camera);
+	OBBObjects_->Draw();
+
 }
 
 void CollisionManager::Reset()

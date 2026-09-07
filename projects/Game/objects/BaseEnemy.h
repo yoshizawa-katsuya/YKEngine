@@ -2,6 +2,7 @@
 #include "My3dObject.h"
 #include "Input.h"
 #include "collider/SphereCollider.h"
+#include "LevelDataLoader.h"
 
 class BasePlayer;
 
@@ -15,8 +16,10 @@ public:
 	/// <summary>
 	/// 初期化。
 	/// </summary>
-	/// <param name="model">モデル</param>
-	void Initialize();
+	/// <param name="spawnData">敵の生成データ</param>
+	/// <param name="target1">ターゲット1</param>
+	/// <param name="target2">ターゲット2</param>
+	virtual void Initialize(const YKEngine::EnemySpawnData& spawnData, const BasePlayer* target1, const BasePlayer* target2);
 
 	/// <summary>
 	/// 更新。

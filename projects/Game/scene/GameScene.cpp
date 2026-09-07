@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "NormalEnemy.h"
 #include "SwiftEnemy.h"
+#include "LevelDataLoader.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -30,7 +31,7 @@ void GameScene::Initialize()
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();
 	camera_->SetRotate({ 0.0f, 0.0f, 0.0f });
-	camera_->SetTranslate({ 0.0f, 0.0f, -10.0f });
+	camera_->SetTranslate({ 0.0f, 0.0f, -20.0f });
 
 	//デバッグカメラの生成
 	debugCamera_ = std::make_unique<DebugCamera>();
@@ -50,10 +51,13 @@ void GameScene::Initialize()
 	collisionManager_ = CollisionManager::GetInstance();
 	//modelPlatform_->SetSpotLight(spotLight_.get());
 
-	std::unique_ptr<BaseEnemy> enemy = std::make_unique<SwiftEnemy>();
+	//ステージの生成
+	CreateLevel();
+
+	/*std::unique_ptr<BaseEnemy> enemy = std::make_unique<SwiftEnemy>();
 	enemy->Initialize();
 	enemy->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
-	enemies_.push_back(std::move(enemy));
+	enemies_.push_back(std::move(enemy));*/
 }
 
 void GameScene::Update() {
@@ -177,4 +181,27 @@ void GameScene::Draw() {
 void GameScene::Finalize()
 {
 
+}
+
+void GameScene::CreateLevel()
+{
+	LevelData levelData = LevelDataLoad("./Resources/LevelData/", "Level1", ".json");
+
+	for (const EnemySpawnData& enemySpawn : levelData.enemySpawns) {
+		std::unique_ptr<BaseEnemy> enemy;
+		if (enemySpawn.type == "NormalEnemy") 
+		{
+			enemy = std::make_unique<NormalEnemy>();
+		}
+		else if (enemySpawn.type == "SwiftEnemy")
+		{
+			enemy = std::make_unique<SwiftEnemy>();
+		}
+		else 
+		{
+			assert(false && "Unknown enemy type");
+		}
+		enemy->Initialize(enemySpawn, playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
+		enemies_.push_back(std::move(enemy));
+	}
 }

@@ -11,7 +11,7 @@
 
 using namespace YKEngine;
 
-void BaseEnemy::Initialize()
+void BaseEnemy::Initialize(const EnemySpawnData& spawnData, const BasePlayer* target1, const BasePlayer* target2)
 {
 	// 球コライダーの初期化
 	SphereCollider::Initialize();
@@ -23,8 +23,12 @@ void BaseEnemy::Initialize()
 	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(modelPlayer.get());
 
-	worldTransform_.translation_ = { 0.0f, 0.0f, 30.0f };
+	//worldTransform_.translation_ = { 0.0f, 0.0f, 30.0f };
+	worldTransform_.translation_ = spawnData.transform.translation;
+	worldTransform_.UpdateMatrix();
 	velocity_ = { 0.0f, 0.0f, -maxSpeed_ };
+
+	SetTargets(target1, target2);
 
 	//Colliderの種別IDをプレイヤーに設定
 	BaseCollider::SetTypeID(CollisionTypeIdDef::kEnemy);
