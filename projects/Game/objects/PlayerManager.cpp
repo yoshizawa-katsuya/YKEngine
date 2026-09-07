@@ -72,6 +72,9 @@ void PlayerManager::DrawHUD()
 			hpSprites_[i]->Draw();
 		}
 	}
+
+	//レーザーのエネルギーゲージ描画
+	laser_->DrawHUD();
 }
 
 void PlayerManager::HUDInitialize()

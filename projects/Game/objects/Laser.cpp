@@ -35,6 +35,12 @@ void Laser::Initialize(WorldTransform* leftPlayerWorldTransform, WorldTransform*
 
 	//衝突マネージャーに登録
 	CollisionManager::GetInstance()->AddOBBCollider(this);
+
+	// エネルギーゲージのスプライトを初期化
+	uint32_t energyGaugeTextureHandle = TextureManager::GetInstance()->Load("./resources/energyGauge.png");
+	energyGaugeSprite_ = std::make_unique<Sprite>();
+	energyGaugeSprite_->Initialize(energyGaugeTextureHandle);
+	energyGaugeSprite_->SetPosition({ 20.0f, 60.0f });
 }
 
 void Laser::Update()
@@ -73,6 +79,12 @@ void Laser::Draw(YKEngine::Camera * camera)
 	//レーザーの描画
 	object_->CameraUpdate(camera);
 	object_->Draw();
+}
+
+void Laser::DrawHUD()
+{
+	// エネルギーゲージの描画
+	energyGaugeSprite_->Draw();
 }
 
 void Laser::Move()
@@ -116,4 +128,6 @@ void Laser::UpdateEnergy()
 	{
 		BaseCollider::SetTypeID(CollisionTypeIdDef::kLaser); // 衝突判定を有効化
 	}
+
+	energyGaugeSprite_->SetSize({ energy_ * 2.0f, 20.0f }); // エネルギーゲージのサイズを更新
 }

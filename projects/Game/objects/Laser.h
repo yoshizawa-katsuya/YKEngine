@@ -1,6 +1,7 @@
 #pragma once
 #include "My3dObject.h"
 #include "collider/OBBCollider.h"
+#include "Sprite.h"
 
 class Laser : public OBBCollider
 {
@@ -23,6 +24,11 @@ public:
 	/// </summary>
 	/// <param name="camera">カメラ</param>
 	void Draw(YKEngine::Camera* camera);
+
+	/// <summary>
+	/// HUDの描画
+	/// </summary>
+	void DrawHUD();
 
 private:
 
@@ -56,5 +62,8 @@ private:
 	float energy_ = 100.0f; // レーザーのエネルギー量
 	const float kMaxEnergy = 100.0f; // 最大エネルギー量
 	const float kEnergyConsumptionRate = 10.0f; // エネルギー消費の基準値
+
+	std::unique_ptr<YKEngine::Sprite> energyGaugeSprite_;	// エネルギーゲージのスプライト
+
 };
 
