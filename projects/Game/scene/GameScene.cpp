@@ -60,6 +60,24 @@ void GameScene::Initialize()
 	enemy->Initialize();
 	enemy->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
 	enemies_.push_back(std::move(enemy));*/
+
+	leftPlayerIcon_ = std::make_unique<Sprite>();
+	leftPlayerIcon_->Initialize(TextureManager::GetInstance()->Load("./resources/leftPlayerIcon.png"));
+	rightPlayerIcon_ = std::make_unique<Sprite>();
+	rightPlayerIcon_->Initialize(TextureManager::GetInstance()->Load("./resources/rightPlayerIcon.png"));
+	moveSprite_ = std::make_unique<Sprite>();
+	moveSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/move.png"));
+	wasdSprite_ = std::make_unique<Sprite>();
+	wasdSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/wasd.png"));
+	arrowKeySprite_ = std::make_unique<Sprite>();
+	arrowKeySprite_->Initialize(TextureManager::GetInstance()->Load("./resources/arrow_Key.png"));
+	leftPlayerIconPos_ = { 10.0f, 600.0f };
+	rightPlayerIconPos_ = { 800.0f, 600.0f };
+	moveSpritePos_ = { 10.0f, 500.0f };
+	wasdSpritePos_ = { 100.0f, 600.0f };
+	arrowKeySpritePos_ = { 900.0f, 600.0f };
+
+	sceneTransition_.Outro("./resources/white.png");
 }
 
 void GameScene::Update() {
@@ -71,6 +89,8 @@ void GameScene::Update() {
 	{
 		debugCamera_->Update();
 	}
+
+	sceneTransition_.Update();
 
 	ParticleManager::GetInstance()->Update(mainCamera_);
 
@@ -149,6 +169,13 @@ void GameScene::Update() {
 		modelPlatform_->SetCamera(mainCamera_);
 
 	}
+	
+	ImGui::DragFloat2("leftPlayerIconPos", &leftPlayerIconPos_.x, 0.1f);
+	ImGui::DragFloat2("rightPlayerIconPos", &rightPlayerIconPos_.x, 0.1f);
+	ImGui::DragFloat2("moveSpritePos", &moveSpritePos_.x, 0.1f);
+	ImGui::DragFloat2("wasdSpritePos", &wasdSpritePos_.x, 0.1f);
+	ImGui::DragFloat2("arrowKeySpritePos", &arrowKeySpritePos_.x, 0.1f);
+	
 		
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
 
@@ -189,6 +216,20 @@ void GameScene::Draw() {
 
 	//HUDの描画
 	playerManager_->DrawHUD();
+
+	//プレイヤーアイコンの描画
+	leftPlayerIcon_->SetPosition(leftPlayerIconPos_);
+	rightPlayerIcon_->SetPosition(rightPlayerIconPos_);
+	moveSprite_->SetPosition(moveSpritePos_);
+	wasdSprite_->SetPosition(wasdSpritePos_);
+	arrowKeySprite_->SetPosition(arrowKeySpritePos_);
+	leftPlayerIcon_->Draw();
+	rightPlayerIcon_->Draw();
+	moveSprite_->Draw();
+	wasdSprite_->Draw();
+	arrowKeySprite_->Draw();
+
+	sceneTransition_.Draw();
 }
 
 void GameScene::Finalize()
