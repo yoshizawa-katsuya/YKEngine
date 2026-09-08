@@ -29,6 +29,8 @@ public:
 	/// </summary>
 	void DrawHUD();
 
+	int32_t GetHp() const { return hp_; }
+
 	const LeftPlayer* GetLeftPlayer() const { return leftPlayer_.get(); }
 	const RightPlayer* GetRightPlayer() const { return rightPlayer_.get(); }
 

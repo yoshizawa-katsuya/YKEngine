@@ -81,4 +81,6 @@ private:
 
 	//敵
 	std::vector<std::unique_ptr<BaseEnemy>> enemies_;
+
+	float timer_ = 0.0f;
 };

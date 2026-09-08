@@ -2,6 +2,13 @@
 
 using namespace YKEngine;
 
+void LeftPlayer::Initialize(YKEngine::BaseModel* model, int32_t* hp)
+{
+	BasePlayer::Initialize(model, hp);
+
+	worldTransform_.translation_ = { -1.0f, 0.0f, 0.0f };	// 左側に配置
+}
+
 void LeftPlayer::Move()
 {
 	//キャラクターの移動ベクトル

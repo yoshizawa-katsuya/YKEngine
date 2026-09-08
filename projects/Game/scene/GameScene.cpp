@@ -74,6 +74,9 @@ void GameScene::Update() {
 
 	ParticleManager::GetInstance()->Update(mainCamera_);
 
+	//タイマーの更新
+	timer_ += 1.0f / 60.0f;
+
 	//プレイヤーの更新
 	playerManager_->Update();
 
@@ -97,10 +100,14 @@ void GameScene::Update() {
 	//衝突判定
 	collisionManager_->CheckAllCollisions();
 
-	if (input_->TriggerKey(DIK_SPACE)) 
+	//敵が全滅したか、タイマーが60秒を超えたらゲームクリアシーンに遷移する
+	if (enemies_.empty() || timer_ > 60.0f)  
 	{
-		//シーン切り替え依頼
-		sceneManager_->ChengeScene("TitleScene");
+		sceneManager_->ChengeScene("GameClearScene");
+	}
+	if (playerManager_->GetHp() <= 0)
+	{
+		sceneManager_->ChengeScene("GameOverScene");
 	}
 
 #ifdef USE_IMGUI
