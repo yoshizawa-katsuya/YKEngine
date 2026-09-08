@@ -38,6 +38,9 @@ void BasePlayer::Update()
 	// 回転
 	Rotate();
 
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -14.0f, 14.0f);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -7.9f, 7.9f);
+
 	// ワールド変換行列の更新
 	SphereCollider::Update();
 	object_->WorldTransformUpdate(worldTransform_);
