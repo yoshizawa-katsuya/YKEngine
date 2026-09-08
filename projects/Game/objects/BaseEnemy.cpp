@@ -1,6 +1,6 @@
 #include "BaseEnemy.h"
 #include "CollisionManager.h"
-
+#include "Laser.h"
 #include "ModelPlatform.h"
 
 #ifdef USE_IMGUI
@@ -102,7 +102,12 @@ void BaseEnemy::OnCollision(BaseCollider* other)
 	if (other->GetTypeID() == CollisionTypeIdDef::kLaser)
 	{
 		// レーザーと衝突した場合の処理
-		isAlive_ = false; // 敵を死亡状態にする
+		hp_ -= dynamic_cast<Laser*>(other)->GetDamage();
+
+		if (hp_ <= 0)
+		{
+			isAlive_ = false; // 敵を死亡状態にする
+		}
 	}
 	else if (other->GetTypeID() == CollisionTypeIdDef::kPlayer)
 	{

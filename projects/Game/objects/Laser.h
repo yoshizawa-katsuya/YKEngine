@@ -30,6 +30,12 @@ public:
 	/// </summary>
 	void DrawHUD();
 
+	/// <summary>
+	///	ダメージ量を取得する。
+	/// </summary>
+	/// <returns>ダメージ量</returns>
+	float GetDamage() const { return damage_; }
+
 private:
 
 	/// <summary>
@@ -65,5 +71,7 @@ private:
 
 	std::unique_ptr<YKEngine::Sprite> energyGaugeSprite_;	// エネルギーゲージのスプライト
 
+
+	float damage_ = 10.0f; // レーザーのダメージ量
 };
 

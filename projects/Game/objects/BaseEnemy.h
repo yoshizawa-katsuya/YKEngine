@@ -13,6 +13,8 @@ class BaseEnemy : public SphereCollider
 {
 public:
 
+	virtual ~BaseEnemy() = default;
+
 	/// <summary>
 	/// 初期化。
 	/// </summary>
@@ -82,6 +84,9 @@ protected:
 
 	// 最大速度
 	float maxSpeed_ = 4.0f / 60.0f;
+
+	// 体力
+	float hp_ = 10.0f;
 
 	// 速度
 	YKEngine::Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };

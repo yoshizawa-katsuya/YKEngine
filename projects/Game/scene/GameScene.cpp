@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "NormalEnemy.h"
 #include "SwiftEnemy.h"
+#include "TankEnemy.h"
 #include "LevelDataLoader.h"
 
 #ifdef USE_IMGUI
@@ -55,6 +56,7 @@ void GameScene::Initialize()
 	CreateLevel();
 
 	/*std::unique_ptr<BaseEnemy> enemy = std::make_unique<SwiftEnemy>();
+	std::unique_ptr<BaseEnemy> enemy = std::make_unique<TankEnemy>();
 	enemy->Initialize();
 	enemy->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
 	enemies_.push_back(std::move(enemy));*/
