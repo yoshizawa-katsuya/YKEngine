@@ -15,7 +15,7 @@ public:
     void Initialize(YKEngine::SpritePlatform* spritePlatform);
 
     // 画面遷移開始
-    void Start(const std::string& targetScene,const std::string& texturePath);
+    void Intro(const std::string& targetScene,const std::string& texturePath);
 
     // 
 	void Outro(const std::string& texturePath);

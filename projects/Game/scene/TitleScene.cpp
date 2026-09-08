@@ -95,6 +95,7 @@ void TitleScene::Initialize()
 	startSprite_->SetPosition(startPos_);
 	startSprite_->SetColor({ 0.9f, 0.9f, 0.9f, 1.0f });
 
+	sceneTransition_.Outro("./resources/white.png");
 }
 
 void TitleScene::Update()
@@ -465,7 +466,7 @@ void TitleScene::UpdatePlayerAnimation()
 
 		if (t >= 1.0f &&!sceneTransition_.IsTransitioning() && !sceneTransition_.IsFinished())
 		{
-			sceneTransition_.Start("GameScene","./resources/white.png");
+			sceneTransition_.Intro("GameScene","./resources/white.png");
 		}
 
 		break;

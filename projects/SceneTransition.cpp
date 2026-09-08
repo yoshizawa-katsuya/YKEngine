@@ -11,7 +11,7 @@ void SceneTransition::Initialize(YKEngine::SpritePlatform* spritePlatform)
     spritePlatform_ = spritePlatform;
 }
 
-void SceneTransition::Start(const std::string& targetScene,const std::string& texturePath)
+void SceneTransition::Intro(const std::string& targetScene,const std::string& texturePath)
 {
     targetScene_ = targetScene;
 
@@ -40,6 +40,10 @@ void SceneTransition::Outro(const std::string& texturePath)
 
     isTransitioning_ = true;
     isFinished_ = false;
+
+
+    transitionType_ = TransitionType::Outro;
+
 
     // テクスチャからスプライト生成
     transitionSprite_ = std::make_unique<YKEngine::Sprite>();
@@ -70,20 +74,42 @@ void SceneTransition::Update()
 
     float easedT = EaseOutCubic(t);
 
-    position_.x =
-        std::lerp(
-            -1280.0f,
-            0.0f,
-            easedT
-        );
+    switch (transitionType_)
+    {
+    case TransitionType::Intro:
+    {
+        // 左 → 中央
+        position_.x =
+            std::lerp(
+                -1280.0f,
+                0.0f,
+                easedT
+            );
+
+        break;
+    }
+
+    case TransitionType::Outro:
+    {
+        // 中央 → 右
+        position_.x =
+            std::lerp(
+                0.0f,
+                1280.0f,
+                easedT
+            );
+
+        break;
+    }
+    }
 
     transitionSprite_->SetPosition(position_);
 
-    // 遷移終了
     if (t >= 1.0f)
     {
         isTransitioning_ = false;
         isFinished_ = true;
+        transitionType_ = TransitionType::None;
     }
 }
 
