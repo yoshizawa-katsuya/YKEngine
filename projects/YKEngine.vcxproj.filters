@@ -300,7 +300,7 @@
     <ClCompile Include="Game\objects\NormalEnemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SceneTransition.cpp">
+    <ClCompile Include="Game\scene\SceneTransition.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -628,7 +628,7 @@
     <ClInclude Include="Game\objects\NormalEnemy.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SceneTransition.h">
+    <ClInclude Include="Game\scene\SceneTransition.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
