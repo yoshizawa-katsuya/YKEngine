@@ -1,0 +1,102 @@
+{
+    "PlayerBulletTrac02": {
+        "behaviorEasingTypeForScale": 0,
+        "behaviorIsScaleToDisappear": true,
+        "behaviorBlendMode": 0,
+        "behaviorDistance": 1.0,
+        "behaviorIsConstantVelocity": false,
+        "behaviorIsDownVelocity": false,
+        "behaviorIsFaceToVelocityDirection": false,
+        "behaviorIsFixedDistance": false,
+        "behaviorIsHeadCenter": false,
+        "behaviorIsScaleToAppear": false,
+        "behaviorIsTimeFadeOut": true,
+        "behaviorIsUseBillboard": true,
+        "behaviorSpeed": 1.0,
+        "color": [
+            1.0,
+            1.0,
+            0.08823531866073608,
+            1.0
+        ],
+        "count": 3,
+        "frequency": 1.0,
+        "randomFlagsColor": false,
+        "randomFlagsLifeTime": true,
+        "randomFlagsRotation": false,
+        "randomFlagsRotationVelocity": false,
+        "randomFlagsScale": false,
+        "randomFlagsSpeed": false,
+        "randomFlagsTranslation": false,
+        "randomFlagsVelocity": false,
+        "rangeParamsLifeTimeMax": 0.30000001192092896,
+        "rangeParamsLifeTimeMin": 0.30000001192092896,
+        "rangeParamsRotateMax": [
+            3.1415927410125732,
+            3.1415927410125732,
+            3.1415927410125732
+        ],
+        "rangeParamsRotateMin": [
+            -3.1415927410125732,
+            -3.1415927410125732,
+            -3.1415927410125732
+        ],
+        "rangeParamsRotationVelocityMax": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+        ],
+        "rangeParamsRotationVelocityMin": [
+            -0.10000000149011612,
+            -0.10000000149011612,
+            -0.10000000149011612
+        ],
+        "rangeParamsScaleMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsScaleMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsSpeedMax": 1.0,
+        "rangeParamsSpeedMin": 0.5,
+        "rangeParamsTranslateMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsTranslateMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsVelocityMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsVelocityMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            0.800000011920929,
+            0.800000011920929,
+            1.0
+        ],
+        "translation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}

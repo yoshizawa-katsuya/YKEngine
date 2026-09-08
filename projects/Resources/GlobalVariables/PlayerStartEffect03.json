@@ -1,0 +1,102 @@
+{
+    "PlayerStartEffect03": {
+        "behaviorEasingTypeForScale": 0,
+        "behaviorIsScaleToDisappear": false,
+        "behaviorBlendMode": 0,
+        "behaviorDistance": 1.0,
+        "behaviorIsConstantVelocity": true,
+        "behaviorIsDownVelocity": true,
+        "behaviorIsFaceToVelocityDirection": false,
+        "behaviorIsFixedDistance": false,
+        "behaviorIsHeadCenter": false,
+        "behaviorIsScaleToAppear": false,
+        "behaviorIsTimeFadeOut": true,
+        "behaviorIsUseBillboard": true,
+        "behaviorSpeed": 25.0,
+        "color": [
+            0.7745097875595093,
+            0.06454246491193771,
+            0.06454246491193771,
+            1.0
+        ],
+        "count": 100,
+        "frequency": 0.5,
+        "randomFlagsColor": false,
+        "randomFlagsLifeTime": true,
+        "randomFlagsRotation": false,
+        "randomFlagsRotationVelocity": false,
+        "randomFlagsScale": false,
+        "randomFlagsSpeed": false,
+        "randomFlagsTranslation": false,
+        "randomFlagsVelocity": true,
+        "rangeParamsLifeTimeMax": 1.5,
+        "rangeParamsLifeTimeMin": 1.0,
+        "rangeParamsRotateMax": [
+            3.1415927410125732,
+            3.1415927410125732,
+            3.1415927410125732
+        ],
+        "rangeParamsRotateMin": [
+            -3.1415927410125732,
+            -3.1415927410125732,
+            -3.1415927410125732
+        ],
+        "rangeParamsRotationVelocityMax": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+        ],
+        "rangeParamsRotationVelocityMin": [
+            -0.10000000149011612,
+            -0.10000000149011612,
+            -0.10000000149011612
+        ],
+        "rangeParamsScaleMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsScaleMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsSpeedMax": 1.0,
+        "rangeParamsSpeedMin": 0.5,
+        "rangeParamsTranslateMax": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "rangeParamsTranslateMin": [
+            -1.0,
+            -1.0,
+            -1.0
+        ],
+        "rangeParamsVelocityMax": [
+            5.0,
+            5.0,
+            5.0
+        ],
+        "rangeParamsVelocityMin": [
+            -5.0,
+            -5.0,
+            -5.0
+        ],
+        "rotation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            0.4000000059604645,
+            0.4000000059604645,
+            1.0
+        ],
+        "translation": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}

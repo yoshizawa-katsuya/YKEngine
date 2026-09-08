@@ -48,7 +48,7 @@
             "name": "EnemySpawn",
             "transform": {
                 "translation": [
-                    5.163071632385254,
+                    8.422066688537598,
                     0.0,
                     0.0
                 ],
@@ -69,7 +69,28 @@
             "name": "Enemy02Spawn",
             "transform": {
                 "translation": [
-                    -5.197556972503662,
+                    -8.503971099853516,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "TankEnemy",
+            "name": "Enemy02Spawn.001",
+            "transform": {
+                "translation": [
+                    -14.512779235839844,
                     0.0,
                     0.0
                 ],

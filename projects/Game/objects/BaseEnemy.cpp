@@ -2,6 +2,7 @@
 #include "CollisionManager.h"
 #include "Laser.h"
 #include "ModelPlatform.h"
+#include "EffectManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -103,6 +104,7 @@ void BaseEnemy::OnCollision(BaseCollider* other)
 	{
 		// レーザーと衝突した場合の処理
 		hp_ -= dynamic_cast<Laser*>(other)->GetDamage();
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
 
 		if (hp_ <= 0)
 		{

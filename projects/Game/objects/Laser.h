@@ -72,6 +72,6 @@ private:
 	std::unique_ptr<YKEngine::Sprite> energyGaugeSprite_;	// エネルギーゲージのスプライト
 
 
-	float damage_ = 10.0f; // レーザーのダメージ量
+	float damage_ = 1.0f; // レーザーのダメージ量
 };
 

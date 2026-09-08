@@ -1,6 +1,7 @@
 #pragma once
 #include "YKFramework.h"
 class CollisionManager;
+class EffectManager;
 
 /// <summary>
 /// ゲームのメインクラス。
@@ -34,6 +35,8 @@ public:
 	
 private:
 	
+	EffectManager* effectManager_ = nullptr;
+
 	CollisionManager* collisionManager_ = nullptr;
 
 };

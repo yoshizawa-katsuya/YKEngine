@@ -2,6 +2,7 @@
 #include "SceneFactory.h"
 #include "OffscreenRenderer.h"
 #include "CollisionManager.h"
+#include "EffectManager.h"
 
 using namespace YKEngine;
 
@@ -10,6 +11,10 @@ void MyGame::Initialize()
 
 	//基底クラスの初期化処理
 	YKFramework::Initialize();
+
+	//エフェクト管理クラスの生成
+	effectManager_ = EffectManager::GetInstance();
+	effectManager_->Initialize();
 
 	//衝突マネージャの初期化
 	collisionManager_ = CollisionManager::GetInstance();
@@ -35,6 +40,9 @@ void MyGame::Finalize()
 
 void MyGame::Update()
 {
+	//更新処理
+	effectManager_->Update();
+
 	//衝突マネージャの更新
 	collisionManager_->Update();
 

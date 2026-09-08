@@ -56,8 +56,6 @@ void Laser::Update()
 
 	UpdateEnergy();
 
-	damage_ = kEnergyConsumptionRate * worldTransform_.scale_.z * 1.0f / 60.0f; // ダメージ量を更新
-
 	// ワールド変換行列の更新
 	OBBCollider::Update();
 	object_->WorldTransformUpdate(worldTransform_);

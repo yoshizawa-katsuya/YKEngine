@@ -72,6 +72,8 @@ void GameScene::Update() {
 		debugCamera_->Update();
 	}
 
+	ParticleManager::GetInstance()->Update(mainCamera_);
+
 	//プレイヤーの更新
 	playerManager_->Update();
 
@@ -173,6 +175,8 @@ void GameScene::Draw() {
 	//コライダーの描画
 	collisionManager_->Draw(mainCamera_);
 
+	ParticleManager::GetInstance()->Draw();
+
 	//Spriteの描画前処理
 	spritePlatform_->PreDraw();
 
@@ -198,6 +202,10 @@ void GameScene::CreateLevel()
 		else if (enemySpawn.type == "SwiftEnemy")
 		{
 			enemy = std::make_unique<SwiftEnemy>();
+		}
+		else if (enemySpawn.type == "TankEnemy")
+		{
+			enemy = std::make_unique<TankEnemy>();
 		}
 		else 
 		{
