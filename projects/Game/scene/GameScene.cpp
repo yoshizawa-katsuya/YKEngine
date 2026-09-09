@@ -79,12 +79,15 @@ void GameScene::Initialize()
 	wasdSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/wasd.png"));
 	arrowKeySprite_ = std::make_unique<Sprite>();
 	arrowKeySprite_->Initialize(TextureManager::GetInstance()->Load("./resources/arrow_Key.png"));
+	energyLabelSprite_ = std::make_unique<Sprite>();
+	energyLabelSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/energy.png"));
+	energyLabelSprite_->SetSize({ 80.0f,30.0f });
 	leftPlayerIconPos_ = { 10.0f, 600.0f };
 	rightPlayerIconPos_ = { 800.0f, 600.0f };
 	moveSpritePos_ = { 10.0f, 500.0f };
 	wasdSpritePos_ = { 100.0f, 600.0f };
 	arrowKeySpritePos_ = { 900.0f, 600.0f };
-
+	energyLabelSpritePos_ = { 75.0f, 56.0f };
 	sceneTransition_.Outro("./resources/white.png");
 }
 
@@ -183,6 +186,7 @@ void GameScene::Update() {
 	ImGui::DragFloat2("moveSpritePos", &moveSpritePos_.x, 0.1f);
 	ImGui::DragFloat2("wasdSpritePos", &wasdSpritePos_.x, 0.1f);
 	ImGui::DragFloat2("arrowKeySpritePos", &arrowKeySpritePos_.x, 0.1f);
+	ImGui::DragFloat2("energyLabelSpritePos", &energyLabelSpritePos_.x, 0.1f);
 	
 		
 	ImGui::Text("mousePositon x:%f y:%f", input_->GetMousePosition().x, input_->GetMousePosition().y);
@@ -231,11 +235,13 @@ void GameScene::Draw() {
 	moveSprite_->SetPosition(moveSpritePos_);
 	wasdSprite_->SetPosition(wasdSpritePos_);
 	arrowKeySprite_->SetPosition(arrowKeySpritePos_);
+	energyLabelSprite_->SetPosition(energyLabelSpritePos_);
 	leftPlayerIcon_->Draw();
 	rightPlayerIcon_->Draw();
 	moveSprite_->Draw();
 	wasdSprite_->Draw();
 	arrowKeySprite_->Draw();
+	energyLabelSprite_->Draw();
 
 	sceneTransition_.Draw();
 }

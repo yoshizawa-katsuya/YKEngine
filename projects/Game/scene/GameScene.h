@@ -97,10 +97,12 @@ private:
 	std::unique_ptr<YKEngine::Sprite> moveSprite_;
 	std::unique_ptr<YKEngine::Sprite> wasdSprite_;
 	std::unique_ptr<YKEngine::Sprite> arrowKeySprite_;
+	std::unique_ptr<YKEngine::Sprite> energyLabelSprite_;
 
 	YKEngine::Vector2 leftPlayerIconPos_;
 	YKEngine::Vector2 rightPlayerIconPos_;
 	YKEngine::Vector2 moveSpritePos_;
 	YKEngine::Vector2 wasdSpritePos_;
 	YKEngine::Vector2 arrowKeySpritePos_;
+	YKEngine::Vector2 energyLabelSpritePos_;
 };
