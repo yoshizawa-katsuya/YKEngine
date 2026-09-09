@@ -23,6 +23,8 @@ private:
 
 private:
 
+	const YKEngine::Vector4 kColor_ = { 0.0f, 1.0f, 0.0f, 1.0f };
+
 	const float kMaxHp_ = 10.0f;
 
 };

@@ -5,6 +5,8 @@ using namespace YKEngine;
 
 void TankEnemy::Initialize(const YKEngine::EnemySpawnData& spawnData, const BasePlayer* target1, const BasePlayer* target2)
 {
+	color_ = kColor_;
+
 	BaseEnemy::Initialize(spawnData, target1, target2);
 
 	

@@ -7,6 +7,8 @@ using namespace YKEngine;
 
 void NormalEnemy::Initialize(const YKEngine::EnemySpawnData& spawnData, const BasePlayer* target1, const BasePlayer* target2)
 {
+	color_ = kColor_;
+
 	BaseEnemy::Initialize(spawnData, target1, target2);
 
 	// ターゲットを探索する
@@ -23,6 +25,7 @@ void NormalEnemy::Initialize(const YKEngine::EnemySpawnData& spawnData, const Ba
 	}
 	Vector3 direction = homingTarget_->GetPosition() - worldTransform_.GetWorldPosition();	// 自分ではない方の自機への方向ベクトル
 	velocity_ = YKEngine::Normalize(direction) * maxSpeed_;
+
 }
 
 void NormalEnemy::Move()

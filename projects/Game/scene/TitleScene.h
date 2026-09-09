@@ -7,6 +7,9 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Sprite.h"
+#include "Laser.h"
+#include "Camera.h"
+#include "SceneTransition.h"
 class AudioManager;
 
 // 色の定数
@@ -54,10 +57,16 @@ private:
 
 	void UpdateTitleAnimation();
 
+	void UpdatePlayerAnimation();
+
+	void Rotate();
+
 	// イージング
 	float EaseOutCubic(float t);
 
 	float EaseInOutSine(float t);
+
+	float EaseOutQuint(float t);
 private:
 
 	//デバイス
@@ -72,6 +81,12 @@ private:
 	//オーディオマネージャー
 	AudioManager* audioManager_;
 
+
+
+	YKEngine::Camera* mainCamera_ = nullptr;
+
+	std::unique_ptr<YKEngine::Camera> camera_;
+	
 	std::unique_ptr<YKEngine::Sprite> titleLINKSprite_;
 	std::unique_ptr<YKEngine::Sprite> titleColonSprite_;
 	std::unique_ptr<YKEngine::Sprite> titleOVERSprite_;
@@ -80,6 +95,8 @@ private:
 
 	std::unique_ptr<YKEngine::Sprite> startSprite_;
 	YKEngine::Vector2 startPos_;
+
+	SceneTransition sceneTransition_;
 
 	float pressKeyTimer_ = 0.0f;           // 点滅用の経過時間
 
@@ -121,5 +138,44 @@ private:
 
 	// 最初の色変化だけ赤から始める
 	bool isFirstColorAnimation_ = true;
+
+	//==================================================
+	/// タイトル用ダミープレイヤー
+	//==================================================
+	YKEngine::WorldTransform leftPlayerTransform_;
+	YKEngine::WorldTransform rightPlayerTransform_;
+
+	YKEngine::Vector3 playerAnimationStartLeft_;
+	YKEngine::Vector3 playerAnimationStartRight_;
+
+	std::shared_ptr<YKEngine::BaseModel> leftPlayerModel_;
+	std::shared_ptr<YKEngine::BaseModel> rightPlayerModel_;
+
+	//3Dオブジェクト
+	std::unique_ptr<YKEngine::My3dObject> leftPlayerObject_;
+	std::unique_ptr<YKEngine::My3dObject> rightPlayerObject_;
+
+
+	enum class PlayerAnimationState
+	{
+		kEntering,	// 左から画面内へ
+		kIdle,		// 待機・編隊飛行
+		kLeaving,	// 右へ飛び去る
+	};
+
+	// プレイヤーのアニメーション状態
+	PlayerAnimationState playerAnimationState_ = PlayerAnimationState::kEntering;
+
+	// プレイヤーのアニメーションタイマー
+	float playerAnimationTimer_ = 0.0f;
+
+	// SPACEを押した後、シーン遷移可能になったか
+	bool isSceneChangeReady_ = false;
+
+	//平行光源
+	YKEngine::DirectionalLight directionalLight_;
+
+	//レーザー
+	std::unique_ptr<Laser> laser_;
 };
 
