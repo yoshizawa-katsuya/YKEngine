@@ -12,6 +12,7 @@
 #include "DebugCamera.h"
 #include "CollisionManager.h"
 #include "BaseEnemy.h"
+class AudioManager;
 
 /// <summary>
 /// ゲームシーン。
@@ -61,6 +62,9 @@ private:
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
+
+	//オーディオマネージャー
+	AudioManager* audioManager_;
 
 	YKEngine::Camera* mainCamera_ = nullptr;
 

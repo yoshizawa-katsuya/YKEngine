@@ -3,6 +3,7 @@
 #include "OffscreenRenderer.h"
 #include "CollisionManager.h"
 #include "EffectManager.h"
+#include "AudioManager.h"
 
 using namespace YKEngine;
 
@@ -15,6 +16,10 @@ void MyGame::Initialize()
 	//エフェクト管理クラスの生成
 	effectManager_ = EffectManager::GetInstance();
 	effectManager_->Initialize();
+
+	//オーディオ管理クラスの生成
+	audioManager_ = AudioManager::GetInstance();
+	audioManager_->Initialize();
 
 	//衝突マネージャの初期化
 	collisionManager_ = CollisionManager::GetInstance();

@@ -8,6 +8,8 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 #include "SceneManager.h"
+class AudioManager;
+
 class GameClearScene : public YKEngine::BaseScene
 {
 public:
@@ -56,6 +58,9 @@ private:
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
+
+	//オーディオマネージャー
+	AudioManager* audioManager_;
 
 	// 選択肢の種類
 	enum class SELECT

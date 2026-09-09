@@ -7,6 +7,7 @@
 #include "SwiftEnemy.h"
 #include "TankEnemy.h"
 #include "LevelDataLoader.h"
+#include "AudioManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -18,6 +19,8 @@ GameScene::~GameScene()
 {
 	//衝突マネージャーに登録されたコライダーを削除
 	collisionManager_->Reset();
+	//BGMの停止
+	audioManager_->StopBGM(BGMType::kGame);
 }
 
 void GameScene::Initialize()
@@ -28,6 +31,11 @@ void GameScene::Initialize()
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+
+	//オーディオマネージャの取得
+	audioManager_ = AudioManager::GetInstance();
+	//BGMの再生
+	audioManager_->PlayBGM(BGMType::kGame);
 
 	//カメラの生成
 	camera_ = std::make_unique<Camera>();

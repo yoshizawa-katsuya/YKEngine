@@ -1,4 +1,6 @@
 #include "GameClearScene.h"
+#include "AudioManager.h"
+
 #ifdef USE_IMGUI
 #include "imgui.h"
 #endif // USE_IMGUI
@@ -7,6 +9,8 @@
 using namespace YKEngine;
 
 GameClearScene::~GameClearScene() {
+	//BGMの停止
+	audioManager_->StopBGM(BGMType::kClear);
 }
 
 void GameClearScene::Initialize() {
@@ -16,6 +20,11 @@ void GameClearScene::Initialize() {
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+
+	//オーディオマネージャの取得
+	audioManager_ = AudioManager::GetInstance();
+	//BGMの再生
+	audioManager_->PlayBGM(BGMType::kClear);
 
 	// 状態初期化
 	select_ = SELECT::kRetry;

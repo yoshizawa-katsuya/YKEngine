@@ -2,6 +2,7 @@
 #include "YKFramework.h"
 class CollisionManager;
 class EffectManager;
+class AudioManager;
 
 /// <summary>
 /// ゲームのメインクラス。
@@ -39,5 +40,6 @@ private:
 
 	CollisionManager* collisionManager_ = nullptr;
 
+	AudioManager* audioManager_ = nullptr;
 };
 

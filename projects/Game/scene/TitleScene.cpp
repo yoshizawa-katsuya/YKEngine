@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
+#include "AudioManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -9,7 +10,8 @@ using namespace YKEngine;
 
 TitleScene::~TitleScene()
 {
-	//Finalize();
+	//BGMの停止
+	audioManager_->StopBGM(BGMType::kTitle);
 }
 
 void TitleScene::Initialize()
@@ -20,6 +22,11 @@ void TitleScene::Initialize()
 	input_ = Input::GetInstance();
 	spritePlatform_ = SpritePlatform::GetInstance();
 	modelPlatform_ = ModelPlatform::GetInstance();
+
+	//オーディオマネージャの取得
+	audioManager_ = AudioManager::GetInstance();
+	//BGMの再生
+	audioManager_->PlayBGM(BGMType::kTitle);
 	/*
 	textureHandle_ = TextureManager::GetInstance()->Load("./resources/Title.png");
 

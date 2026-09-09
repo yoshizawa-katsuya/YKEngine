@@ -8,6 +8,7 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 #include "SceneManager.h"
+class AudioManager;
 
 // ゲームオーバーシーン
 class GameOverScene : public YKEngine::BaseScene
@@ -62,6 +63,9 @@ private:
 
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
+
+	//オーディオマネージャー
+	AudioManager* audioManager_;
 
 	// 選択肢の種類
 	enum class SELECT

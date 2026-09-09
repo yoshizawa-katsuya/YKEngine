@@ -7,7 +7,7 @@
 #include "ModelPlatform.h"
 #include "SpritePlatform.h"
 #include "Sprite.h"
-
+class AudioManager;
 
 // 色の定数
 constexpr YKEngine::Vector4 kColorPressKey = { 0.902f, 0.902f, 0.902f, 1.0f }; // #E6E6E6
@@ -69,6 +69,9 @@ private:
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
 	
+	//オーディオマネージャー
+	AudioManager* audioManager_;
+
 	std::unique_ptr<YKEngine::Sprite> titleLINKSprite_;
 	std::unique_ptr<YKEngine::Sprite> titleColonSprite_;
 	std::unique_ptr<YKEngine::Sprite> titleOVERSprite_;
