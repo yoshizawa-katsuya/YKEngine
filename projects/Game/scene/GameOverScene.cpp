@@ -80,6 +80,7 @@ void GameOverScene::UpdateSelect()
 	bool pressedRight = input->TriggerKey(DIK_RIGHT);
 
 	if (pressedLeft || pressedRight) {
+		audioManager_->PlaySE(SEType::kCursorMove01);
 		// 選択肢は2つしかないので、左右どちらでもトグルでOK
 		if (select_ == SELECT::kRetry) {
 			select_ = SELECT::kTitle;
@@ -109,11 +110,13 @@ void GameOverScene::UpdateDecide()
 	case SELECT::kRetry:
 		// リトライ：ゲームプレイシーンへ
 		sceneManager_->ChengeScene("GameScene");
+		audioManager_->PlaySE(SEType::kDecision01);
 		break;
 
 	case SELECT::kTitle:
 		// タイトルシーンへ戻る
 		sceneManager_->ChengeScene("TitleScene");
+		audioManager_->PlaySE(SEType::kDecision01);
 		break;
 	}
 }

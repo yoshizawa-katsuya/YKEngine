@@ -3,6 +3,7 @@
 #include "Laser.h"
 #include "ModelPlatform.h"
 #include "EffectManager.h"
+#include "AudioManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -114,10 +115,13 @@ void BaseEnemy::OnCollision(BaseCollider* other)
 		// レーザーと衝突した場合の処理
 		hp_ -= dynamic_cast<Laser*>(other)->GetDamage();
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
+		AudioManager::GetInstance()->PlaySE(SEType::kDamage02);
 
 		if (hp_ <= 0)
 		{
 			isAlive_ = false; // 敵を死亡状態にする
+			EffectManager::GetInstance()->SpawnEffect(EffectType::kEnemyEnd01, worldTransform_.GetWorldPosition());
+			AudioManager::GetInstance()->PlaySE(SEType::kDeath01);
 		}
 	}
 	else if (other->GetTypeID() == CollisionTypeIdDef::kPlayer)
