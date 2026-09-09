@@ -172,5 +172,17 @@ private:
 
 	//レーザー
 	std::unique_ptr<Laser> laser_;
+
+	// 天球
+	std::shared_ptr<YKEngine::BaseModel> skySphereModel_;
+	std::unique_ptr<YKEngine::My3dObject> skySphereObject_;
+
+	YKEngine::WorldTransform skySphereTransform_;
+
+	// 背景
+	std::shared_ptr<YKEngine::BaseModel> backgroundModel_;
+	std::unique_ptr<YKEngine::My3dObject> backgroundObject_;
+
+	YKEngine::WorldTransform backgroundTransform_;
 };
 

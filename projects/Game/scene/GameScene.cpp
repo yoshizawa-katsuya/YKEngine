@@ -61,6 +61,7 @@ void GameScene::Initialize()
 	enemy->SetTargets(playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
 	enemies_.push_back(std::move(enemy));*/
 
+	// スプライトの生成
 	leftPlayerIcon_ = std::make_unique<Sprite>();
 	leftPlayerIcon_->Initialize(TextureManager::GetInstance()->Load("./resources/leftPlayerIcon.png"));
 	rightPlayerIcon_ = std::make_unique<Sprite>();
@@ -77,6 +78,20 @@ void GameScene::Initialize()
 	wasdSpritePos_ = { 100.0f, 600.0f };
 	arrowKeySpritePos_ = { 900.0f, 600.0f };
 
+	// 背景モデルの生成
+	skySphereModel_ = modelPlatform_->CreateRigidModel("./resources/Background", "background.obj");
+	skySphereObject_ = std::make_unique<My3dObject>();
+	skySphereObject_->Initialize(skySphereModel_.get());
+	skySphereTransform_.Initialize();
+	skySphereTransform_.scale_ = { 10.0f, 10.0f, 10.0f };
+
+	backgroundModel_ = modelPlatform_->CreateRigidModel("./resources/Background", "wireframe.obj");
+	backgroundObject_ = std::make_unique<My3dObject>();
+	backgroundObject_->Initialize(backgroundModel_.get());
+	backgroundObject_->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+	backgroundTransform_.Initialize();
+	backgroundTransform_.scale_ = { 1.0f, 1.0f, 1.0f };
+
 	sceneTransition_.Outro("./resources/white.png");
 }
 
@@ -88,6 +103,16 @@ void GameScene::Update() {
 	if (isActiveDebugCamera_)
 	{
 		debugCamera_->Update();
+	}
+
+	// 遷移演出が終わったらシーンを切り替える
+	if (sceneTransition_.ConsumeFinished())
+	{
+		sceneManager_->ChengeScene(
+			sceneTransition_.GetTargetScene()
+		);
+
+		return;
 	}
 
 	sceneTransition_.Update();
@@ -116,6 +141,18 @@ void GameScene::Update() {
 
 	modelPlatform_->LightPreUpdate();
 	modelPlatform_->DirectionalLightUpdate(directionalLight_);
+
+
+	skySphereTransform_.UpdateMatrix();
+
+	skySphereObject_->WorldTransformUpdate(skySphereTransform_);
+
+	backgroundTransform_.rotation_.x += 0.001f;
+	backgroundTransform_.rotation_.y += 0.001f;
+
+	backgroundTransform_.UpdateMatrix();
+
+	backgroundObject_->WorldTransformUpdate(backgroundTransform_);
 	
 	//衝突判定
 	collisionManager_->CheckAllCollisions();
@@ -123,11 +160,20 @@ void GameScene::Update() {
 	//敵が全滅したか、タイマーが60秒を超えたらゲームクリアシーンに遷移する
 	if (enemies_.empty() || timer_ > 60.0f)  
 	{
-		sceneManager_->ChengeScene("GameClearScene");
+		// 遷移演出開始
+		if (!sceneTransition_.IsTransitioning() && !sceneTransition_.IsFinished())
+		{
+			sceneTransition_.Intro("GameClearScene", "./resources/white.png");
+		}
+		//sceneManager_->ChengeScene("GameClearScene");
 	}
 	if (playerManager_->GetHp() <= 0)
 	{
-		sceneManager_->ChengeScene("GameOverScene");
+		if (!sceneTransition_.IsTransitioning() && !sceneTransition_.IsFinished())
+		{
+			sceneTransition_.Intro("GameOverScene", "./resources/white.png");
+		}
+		//sceneManager_->ChengeScene("GameOverScene");
 	}
 
 #ifdef USE_IMGUI
@@ -194,6 +240,12 @@ void GameScene::Draw() {
 	modelPlatform_->PreDraw();
 	//環境マップを使う場合はコメントアウトを外す
 	//TextureManager::GetInstance()->SetEnvironmentMap(textureHandle2_);
+	// 天球の描画
+	skySphereObject_->CameraUpdate(mainCamera_);
+	skySphereObject_->Draw();
+
+	backgroundObject_->CameraUpdate(mainCamera_);
+	backgroundObject_->Draw();
 
 	//プレイヤーの描画
 	playerManager_->Draw(mainCamera_);

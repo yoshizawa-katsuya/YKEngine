@@ -99,4 +99,16 @@ private:
 	YKEngine::Vector2 moveSpritePos_;
 	YKEngine::Vector2 wasdSpritePos_;
 	YKEngine::Vector2 arrowKeySpritePos_;
+
+	// 天球
+	std::shared_ptr<YKEngine::BaseModel> skySphereModel_;
+	std::unique_ptr<YKEngine::My3dObject> skySphereObject_;
+
+	YKEngine::WorldTransform skySphereTransform_;
+
+	// 背景
+	std::shared_ptr<YKEngine::BaseModel> backgroundModel_;
+	std::unique_ptr<YKEngine::My3dObject> backgroundObject_;
+
+	YKEngine::WorldTransform backgroundTransform_;
 };

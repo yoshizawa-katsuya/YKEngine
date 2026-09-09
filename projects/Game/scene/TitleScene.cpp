@@ -95,6 +95,19 @@ void TitleScene::Initialize()
 	startSprite_->SetPosition(startPos_);
 	startSprite_->SetColor({ 0.9f, 0.9f, 0.9f, 1.0f });
 
+	skySphereModel_ = modelPlatform_->CreateRigidModel("./resources/Background", "background.obj");
+	skySphereObject_ = std::make_unique<My3dObject>();
+	skySphereObject_->Initialize(skySphereModel_.get());
+	skySphereTransform_.Initialize();
+	skySphereTransform_.scale_ = { 10.0f, 10.0f, 10.0f };
+
+	backgroundModel_ = modelPlatform_->CreateRigidModel("./resources/Background", "wireframe.obj");
+	backgroundObject_ = std::make_unique<My3dObject>();
+	backgroundObject_->Initialize(backgroundModel_.get());
+	backgroundObject_->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+	backgroundTransform_.Initialize();
+	backgroundTransform_.scale_ = { 1.0f, 1.0f, 1.0f };
+
 	sceneTransition_.Outro("./resources/white.png");
 }
 
@@ -136,10 +149,20 @@ void TitleScene::Update()
 
 	leftPlayerTransform_.UpdateMatrix();
 	rightPlayerTransform_.UpdateMatrix();
-
+	
+	skySphereTransform_.UpdateMatrix();
 
 	leftPlayerObject_->WorldTransformUpdate(leftPlayerTransform_);
 	rightPlayerObject_->WorldTransformUpdate(rightPlayerTransform_);
+
+	skySphereObject_->WorldTransformUpdate(skySphereTransform_);
+
+	backgroundTransform_.rotation_.x += 0.001f;
+	backgroundTransform_.rotation_.y += 0.001f;
+
+	backgroundTransform_.UpdateMatrix();
+
+	backgroundObject_->WorldTransformUpdate(backgroundTransform_);
 
 	//レーザーの更新
 	laser_->Update();
@@ -180,10 +203,16 @@ void TitleScene::Draw()
 {
 	//Modelの描画前処理
 	modelPlatform_->PreDraw();
+	//天球の描画
+	skySphereObject_->CameraUpdate(mainCamera_);
+	backgroundObject_->CameraUpdate(mainCamera_);
 	leftPlayerObject_->CameraUpdate(mainCamera_);
 	rightPlayerObject_->CameraUpdate(mainCamera_);
+	skySphereObject_->Draw();
+	backgroundObject_->Draw();
 	leftPlayerObject_->Draw();
-	rightPlayerObject_->Draw();	
+	rightPlayerObject_->Draw();
+	
 	//レーザーの描画
 	laser_->Draw(mainCamera_);
 
