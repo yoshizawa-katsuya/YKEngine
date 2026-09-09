@@ -81,7 +81,7 @@ void WinApp::CreateGameWindow() {
 	//ウィンドウの生成
 	hwnd_ = CreateWindow(
 		wc_.lpszClassName,		//利用するクラス名	
-		L"LINK:OVER",			//タイトルバーの文字(何でも良い)
+		L"4028_LINK:OVER",			//タイトルバーの文字(何でも良い)
 		WS_OVERLAPPEDWINDOW,	//よく見るウィンドウスタイル
 		CW_USEDEFAULT,			//表示x座標(Windowsに任せる)
 		CW_USEDEFAULT,			//表示y座標(WindowsOSに任せる)
