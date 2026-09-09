@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "TransformHelpers.h"
 #include "AudioManager.h"
+#include "CollisionManager.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -11,6 +12,8 @@ using namespace YKEngine;
 
 TitleScene::~TitleScene()
 {
+	//衝突マネージャーに登録されたコライダーを削除
+	CollisionManager::GetInstance()->Reset();
 	//BGMの停止
 	audioManager_->StopBGM(BGMType::kTitle);
 }
