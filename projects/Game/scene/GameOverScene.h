@@ -8,6 +8,9 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 #include "SceneManager.h"
+#include "SceneTransition.h"
+#include "My3dObject.h"
+#include "Camera.h"
 class AudioManager;
 
 // ゲームオーバーシーン
@@ -54,6 +57,11 @@ private:
 	/// </summary>
 	void UpdateDecide();
 
+	/// <summary>
+	/// 選択中のスプライトの点滅
+	/// </summary>
+	void UpdateSelectSprite();
+
 private:
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
@@ -64,6 +72,9 @@ private:
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
 
+	YKEngine::Camera* mainCamera_ = nullptr;
+
+	std::unique_ptr<YKEngine::Camera> camera_;
 	//オーディオマネージャー
 	AudioManager* audioManager_;
 
@@ -79,5 +90,34 @@ private:
 
 	// 決定されたかどうか（演出用に決定後は入力を受け付けなくする）
 	bool isDecided_ = false;
+
+
+	SceneTransition sceneTransition_;
+
+	// 天球
+	std::shared_ptr<YKEngine::BaseModel> skySphereModel_;
+	std::unique_ptr<YKEngine::My3dObject> skySphereObject_;
+
+	YKEngine::WorldTransform skySphereTransform_;
+
+	std::unique_ptr<YKEngine::Sprite> linkLostSprite_;
+	YKEngine::Vector2 linkLostPos_;
+
+	std::unique_ptr<YKEngine::Sprite> retrySprite_;
+	YKEngine::Vector2 retryPos_;
+
+	std::unique_ptr<YKEngine::Sprite> titleSprite_;
+	YKEngine::Vector2 titlePos_;
+
+	float selectFlickerTimer_ = 0.0f;
+
+	// 点滅速度
+	static constexpr float kSelectFlickerSpeed = 5.0f;
+
+	// 選択中の最低アルファ
+	static constexpr float kSelectFlickerMinAlpha = 0.3f;
+
+	// 通常のアルファ
+	static constexpr float kSelectFlickerMaxAlpha = 1.0f;
 };
 

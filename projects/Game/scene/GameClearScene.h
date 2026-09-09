@@ -8,6 +8,11 @@
 #include "SpritePlatform.h"
 #include "Sprite.h"
 #include "SceneManager.h"
+#include "SceneTransition.h"
+#include "My3dObject.h"
+#include "Camera.h"
+#include "TitleScene.h"
+
 class AudioManager;
 
 class GameClearScene : public YKEngine::BaseScene
@@ -59,6 +64,10 @@ private:
 	YKEngine::SpritePlatform* spritePlatform_;
 	YKEngine::ModelPlatform* modelPlatform_;
 
+	YKEngine::Camera* mainCamera_ = nullptr;
+
+	std::unique_ptr<YKEngine::Camera> camera_;
+
 	//オーディオマネージャー
 	AudioManager* audioManager_;
 
@@ -74,5 +83,30 @@ private:
 
 	// 決定されたかどうか（演出用に決定後は入力を受け付けなくする）
 	bool isDecided_ = false;
+
+
+	SceneTransition sceneTransition_;
+
+	// 天球
+	std::shared_ptr<YKEngine::BaseModel> skySphereModel_;
+	std::unique_ptr<YKEngine::My3dObject> skySphereObject_;
+
+	YKEngine::WorldTransform skySphereTransform_;
+
+	// 背景
+	std::shared_ptr<YKEngine::BaseModel> backgroundModel_;
+	std::unique_ptr<YKEngine::My3dObject> backgroundObject_;
+
+	YKEngine::WorldTransform backgroundTransform_;
+
+	std::unique_ptr<YKEngine::Sprite> gameClearSprite_;
+	YKEngine::Vector2 gameClearPos_;
+
+	std::unique_ptr<YKEngine::Sprite> returnSprite_;
+	YKEngine::Vector2 returnPos_;
+
+
+	float pressKeyTimer_ = 0.0f;           // 点滅用の経過時間
+
 };
 
