@@ -59,12 +59,13 @@ YKEngine::Vector3 SwiftEnemy::RotateTowards(const YKEngine::Vector3& targetPosit
 
 	// 2つの方向ベクトルの内積を計算
 	float dot = YKEngine::Dot(currentDirection, targetDirection);
+	dot = std::clamp(dot, -1.0f, 1.0f);
 
 	// 内積から角度を計算（ラジアン）
 	float angle = acosf(dot);
 
 	// 角度が小さい場合は回転せずに現在の方向を返す
-	if (angle > 0.0001f)
+	if (angle < 0.0001f)
 	{
 		return targetDirection;
 	}
@@ -76,7 +77,7 @@ YKEngine::Vector3 SwiftEnemy::RotateTowards(const YKEngine::Vector3& targetPosit
 	}
 
 	// 1フレームで到達できない場合は、最大ホーミング角度分だけ回転する
-	YKEngine::Vector3 axis = YKEngine::Cross(currentDirection, targetDirection);
+	YKEngine::Vector3 axis = YKEngine::Normalize(YKEngine::Cross(currentDirection, targetDirection));
 
 	float cosAngle = cosf(kMaxHomingAngle_);
 	float sinAngle = sinf(kMaxHomingAngle_);
