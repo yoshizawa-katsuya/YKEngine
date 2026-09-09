@@ -1,6 +1,7 @@
 #include "BasePlayer.h"
 #include "TransformHelpers.h"
 #include "CollisionManager.h"
+#include "EffectManager.h"
 
 using namespace YKEngine;
 
@@ -58,6 +59,8 @@ void BasePlayer::Draw(Camera* camera)
 void BasePlayer::OnCollision(BaseCollider* other)
 {
 	if (other->GetTypeID() == CollisionTypeIdDef::kEnemy) {
+
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.translation_);
 		// 敵と衝突した場合、体力を減らす
 		if (hp_ && *hp_ > 0) 
 		{

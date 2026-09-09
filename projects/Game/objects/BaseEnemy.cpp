@@ -113,6 +113,8 @@ void BaseEnemy::OnCollision(BaseCollider* other)
 	}
 	else if (other->GetTypeID() == CollisionTypeIdDef::kPlayer)
 	{
+		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit01, worldTransform_.GetWorldPosition());
+
 		// プレイヤーと衝突した場合の処理
 		isAlive_ = false; // 敵を死亡状態にする
 	}
