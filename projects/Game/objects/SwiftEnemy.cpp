@@ -2,6 +2,13 @@
 
 #include "BasePlayer.h"
 
+void SwiftEnemy::Initialize(const YKEngine::EnemySpawnData& spawnData, const BasePlayer* target1, const BasePlayer* target2)
+{
+	color_ = kColor_;
+
+	BaseEnemy::Initialize(spawnData, target1, target2);
+}
+
 void SwiftEnemy::Move()
 {
 	maxSpeed_ = 10.0f / 60.0f;

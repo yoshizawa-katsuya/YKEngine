@@ -34,11 +34,12 @@ public:
 	/// <param name="camera">カメラ</param>
 	void Draw(YKEngine::Camera* camera);
 
-	void SetTargets(const BasePlayer* target1, const BasePlayer* target2)
-	{
-		target1_ = target1;
-		target2_ = target2;
-	}
+	/// <summary>
+	///	ターゲットを設定する。
+	/// </summary>
+	/// <param name="target1">ターゲット1</param>
+	/// <param name="target2">ターゲット2</param>
+	void SetTargets(const BasePlayer* target1, const BasePlayer* target2);
 
 	/// <summary>
 	/// ターゲットとの角度内にいるかどうかを取得する。
@@ -78,6 +79,8 @@ protected:
 
 	// 3Dオブジェクト
 	std::unique_ptr<YKEngine::My3dObject> object_;
+
+	YKEngine::Vector4 color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	const BasePlayer* target1_ = nullptr;
 	const BasePlayer* target2_ = nullptr;

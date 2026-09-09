@@ -19,7 +19,7 @@ void BaseEnemy::Initialize(const EnemySpawnData& spawnData, const BasePlayer* ta
 
 	//モデルの生成
 	ModelPlatform* modelPlatform = ModelPlatform::GetInstance();
-	std::shared_ptr<BaseModel> modelPlayer = modelPlatform->CreateRigidModel("./resources/Player", "Player.obj");
+	std::shared_ptr<BaseModel> modelPlayer = modelPlatform->CreateRigidModel("./resources/baseEnemy", "base_enemy.obj", color_);
 
 	object_ = std::make_unique<My3dObject>();
 	object_->Initialize(modelPlayer.get());
@@ -36,6 +36,8 @@ void BaseEnemy::Initialize(const EnemySpawnData& spawnData, const BasePlayer* ta
 
 	//衝突マネージャーに登録
 	CollisionManager::GetInstance()->AddSphereCollider(this);
+
+	object_->SetColor(color_);
 }
 
 void BaseEnemy::Update()
@@ -47,6 +49,7 @@ void BaseEnemy::Update()
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.01f);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
 		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f);
+		ImGui::DragFloat3("color", &color_.x, 0.01f);
 
 		ImGui::TreePop();
 	}
@@ -66,6 +69,12 @@ void BaseEnemy::Draw(Camera* camera)
 {
 	object_->CameraUpdate(camera);
 	object_->Draw();
+}
+
+void BaseEnemy::SetTargets(const BasePlayer* target1, const BasePlayer* target2)
+{
+	target1_ = target1;
+	target2_ = target2;
 }
 
 bool BaseEnemy::IsWithinAngle(const YKEngine::Vector3& position, float angle)

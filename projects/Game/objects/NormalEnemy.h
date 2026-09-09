@@ -39,6 +39,8 @@ private:
 
 private:
 
+	const YKEngine::Vector4 kColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 	const float kMaxHp_ = 8.0f;
 
     // 最大探索角度
