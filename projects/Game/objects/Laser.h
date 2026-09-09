@@ -70,7 +70,7 @@ private:
 	const float kEnergyConsumptionRate = 10.0f; // エネルギー消費の基準値
 
 	std::unique_ptr<YKEngine::Sprite> energyGaugeSprite_;	// エネルギーゲージのスプライト
-
+	std::unique_ptr<YKEngine::Sprite> energyGaugeBackSprite_;	// エネルギーゲージの背景スプライト
 
 	float damage_ = 1.0f; // レーザーのダメージ量
 };

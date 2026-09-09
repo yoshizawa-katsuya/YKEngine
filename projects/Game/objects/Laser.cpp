@@ -41,6 +41,12 @@ void Laser::Initialize(WorldTransform* leftPlayerWorldTransform, WorldTransform*
 	energyGaugeSprite_ = std::make_unique<Sprite>();
 	energyGaugeSprite_->Initialize(energyGaugeTextureHandle);
 	energyGaugeSprite_->SetPosition({ 20.0f, 60.0f });
+
+	uint32_t energyGaugeBackTextureHandle = TextureManager::GetInstance()->Load("./resources/energyGaugeBack.png");
+	energyGaugeBackSprite_ = std::make_unique<Sprite>();
+	energyGaugeBackSprite_->Initialize(energyGaugeBackTextureHandle);
+	energyGaugeBackSprite_->SetPosition({ 20.0f, 60.0f });
+	energyGaugeBackSprite_->SetSize({ kMaxEnergy * 2.0f, 20.0f }); // 背景スプライトのサイズを設定
 }
 
 void Laser::Update()
@@ -85,6 +91,7 @@ void Laser::Draw(YKEngine::Camera * camera)
 void Laser::DrawHUD()
 {
 	// エネルギーゲージの描画
+	energyGaugeBackSprite_->Draw();
 	energyGaugeSprite_->Draw();
 }
 
