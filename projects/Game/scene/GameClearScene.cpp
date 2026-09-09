@@ -78,5 +78,5 @@ void GameClearScene::UpdateDecide()
 	// タイトルシーンへ戻る
 	sceneManager_->ChengeScene("TitleScene");
 
-
+	audioManager_->PlaySE(SEType::kDecision01);
 }

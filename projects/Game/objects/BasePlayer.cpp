@@ -2,6 +2,7 @@
 #include "TransformHelpers.h"
 #include "CollisionManager.h"
 #include "EffectManager.h"
+#include "AudioManager.h"
 
 using namespace YKEngine;
 
@@ -61,6 +62,7 @@ void BasePlayer::OnCollision(BaseCollider* other)
 	if (other->GetTypeID() == CollisionTypeIdDef::kEnemy) {
 
 		EffectManager::GetInstance()->SpawnEffect(EffectType::kHit02, worldTransform_.translation_);
+		AudioManager::GetInstance()->PlaySE(SEType::kDamage01);
 		// 敵と衝突した場合、体力を減らす
 		if (hp_ && *hp_ > 0) 
 		{

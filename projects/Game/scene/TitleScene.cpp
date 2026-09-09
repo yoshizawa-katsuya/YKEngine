@@ -171,6 +171,8 @@ void TitleScene::Update()
 
 			playerAnimationState_ = PlayerAnimationState::kLeaving;
 			playerAnimationTimer_ = 0.0f;
+
+			audioManager_->PlaySE(SEType::kDecision01);
 		}
 	}
 
