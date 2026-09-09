@@ -29,7 +29,11 @@ void MyGame::Initialize()
 	sceneFactory_ = std::make_unique<SceneFactory>();
 	sceneManager_->SetSceneFactory(sceneFactory_.get());
 	//シーンマネージャに最初のシーンをセット
+#ifdef _DEBUG
 	sceneManager_->ChengeScene("GameScene");
+#else
+	sceneManager_->ChengeScene("TitleScene");
+#endif
 
 	
 }
