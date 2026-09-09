@@ -8,6 +8,7 @@
 #include "TankEnemy.h"
 #include "LevelDataLoader.h"
 #include "AudioManager.h"
+#include "TitleScene.h"
 
 #ifdef USE_IMGUI
 #include "imgui/imgui.h"
@@ -103,6 +104,19 @@ void GameScene::Initialize()
 	backgroundTransform_.Initialize();
 	backgroundTransform_.scale_ = { 1.0f, 1.0f, 1.0f };
 
+	tutorialSprite_ = std::make_unique<Sprite>();
+	tutorialSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/tutorial.png"));
+	backgroundSprite_ = std::make_unique<Sprite>();
+	backgroundSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/white.png"));
+	backgroundSprite_->SetSize({ 1280.0f, 720.0f });
+	backgroundSprite_->SetColor({ 0.1f, 0.1f, 0.1f, 0.6f });
+
+	startPos_ = { 197.0f, 541.0f };
+	startSprite_ = std::make_unique<YKEngine::Sprite>();
+	startSprite_->Initialize(TextureManager::GetInstance()->Load("./resources/Title/start.png"));
+	startSprite_->SetPosition(startPos_);
+	startSprite_->SetColor({ 0.9f, 0.9f, 0.9f, 1.0f });
+
 	energyLabelSpritePos_ = { 75.0f, 56.0f };
 	sceneTransition_.Outro("./resources/white.png");
 }
@@ -128,6 +142,13 @@ void GameScene::Update() {
 	}
 
 	sceneTransition_.Update();
+
+	// チュートリアル中
+	if (isTutorial_)
+	{
+		UpdateTutorial();
+		return;
+	}
 
 	ParticleManager::GetInstance()->Update(mainCamera_);
 
@@ -187,6 +208,16 @@ void GameScene::Update() {
 		}
 		//sceneManager_->ChengeScene("GameOverScene");
 	}
+
+	// 経過時間を加算
+	pressKeyTimer_ += 1.0f / 60.0f;
+
+	// sinカーブでアルファ値を0.3〜1.0の間で滑らかに往復させる
+	float t = sinf(pressKeyTimer_ * kFlickerSpeed);
+	float alpha = kAlphaFlickerMin + (kAlphaStable - kAlphaFlickerMin) * (t * 0.5f + 0.5f);
+
+	// 色はそのまま、アルファだけ変化させる
+	startSprite_->SetColor({ kColorPressKey.x, kColorPressKey.y, kColorPressKey.z, alpha });
 
 #ifdef USE_IMGUI
 
@@ -289,12 +320,29 @@ void GameScene::Draw() {
 	wasdSprite_->SetPosition(wasdSpritePos_);
 	arrowKeySprite_->SetPosition(arrowKeySpritePos_);
 	energyLabelSprite_->SetPosition(energyLabelSpritePos_);
-	leftPlayerIcon_->Draw();
+	/*leftPlayerIcon_->Draw();
 	rightPlayerIcon_->Draw();
 	moveSprite_->Draw();
 	wasdSprite_->Draw();
 	arrowKeySprite_->Draw();
-	energyLabelSprite_->Draw();
+	energyLabelSprite_->Draw();*/
+	// チュートリアル表示中はチュートリアルスプライトを描画
+	if (isTutorial_)
+	{
+		backgroundSprite_->Draw();
+		tutorialSprite_->Draw();
+		startSprite_->Draw();
+	}
+	else
+	{
+		// 通常時のHUD
+		leftPlayerIcon_->Draw();
+		rightPlayerIcon_->Draw();
+		moveSprite_->Draw();
+		wasdSprite_->Draw();
+		arrowKeySprite_->Draw();
+		energyLabelSprite_->Draw();
+	}
 
 	sceneTransition_.Draw();
 }
@@ -328,5 +376,41 @@ void GameScene::CreateLevel()
 		}
 		enemy->Initialize(enemySpawn, playerManager_->GetLeftPlayer(), playerManager_->GetRightPlayer());
 		enemies_.push_back(std::move(enemy));
+	}
+}
+
+void GameScene::UpdateTutorial()
+{
+	constexpr float deltaTime = 1.0f / 60.0f;
+
+	pressKeyTimer_ += deltaTime;
+
+	// PRESS SPACEを点滅
+	float t = sinf(pressKeyTimer_ * kFlickerSpeed);
+
+	float alpha =
+		kAlphaFlickerMin +
+		(kAlphaStable - kAlphaFlickerMin) *
+		(t * 0.5f + 0.5f);
+
+	startSprite_->SetColor({
+		kColorPressKey.x,
+		kColorPressKey.y,
+		kColorPressKey.z,
+		alpha
+		});
+
+	// SPACEでチュートリアル終了
+	if (input_->TriggerKey(DIK_SPACE))
+	{
+		isTutorial_ = false;
+		pressKeyTimer_ = 0.0f;
+
+		startSprite_->SetColor({
+			kColorPressKey.x,
+			kColorPressKey.y,
+			kColorPressKey.z,
+			1.0f
+			});
 	}
 }

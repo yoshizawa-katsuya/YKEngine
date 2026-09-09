@@ -54,6 +54,21 @@ private:
 	/// </summary>
 	void UpdateDecide();
 
+	//==================================================
+	// アニメーション用関数
+	//==================================================
+
+	void UpdatePlayerAnimation();
+
+	void Rotate();
+
+	// イージング
+	float EaseOutCubic(float t);
+
+	float EaseInOutSine(float t);
+
+	float EaseOutQuint(float t);
+
 private:
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
@@ -67,6 +82,7 @@ private:
 	YKEngine::Camera* mainCamera_ = nullptr;
 
 	std::unique_ptr<YKEngine::Camera> camera_;
+
 
 	//オーディオマネージャー
 	AudioManager* audioManager_;
@@ -108,5 +124,43 @@ private:
 
 	float pressKeyTimer_ = 0.0f;           // 点滅用の経過時間
 
+	/// <summary>
+	/// ダミープレイヤー
+	/// </summary>
+	YKEngine::WorldTransform leftPlayerTransform_;
+	YKEngine::WorldTransform rightPlayerTransform_;
+
+	YKEngine::Vector3 playerAnimationStartLeft_;
+	YKEngine::Vector3 playerAnimationStartRight_;
+
+	std::shared_ptr<YKEngine::BaseModel> leftPlayerModel_;
+	std::shared_ptr<YKEngine::BaseModel> rightPlayerModel_;
+
+	//3Dオブジェクト
+	std::unique_ptr<YKEngine::My3dObject> leftPlayerObject_;
+	std::unique_ptr<YKEngine::My3dObject> rightPlayerObject_;
+
+
+	enum class PlayerAnimationState
+	{
+		kEntering,	// 左から画面内へ
+		kIdle,		// 待機・編隊飛行
+		kLeaving,	// 右へ飛び去る
+	};
+
+	// プレイヤーのアニメーション状態
+	PlayerAnimationState playerAnimationState_ = PlayerAnimationState::kEntering;
+
+	// プレイヤーのアニメーションタイマー
+	float playerAnimationTimer_ = 0.0f;
+
+
+	//レーザー
+	std::unique_ptr<Laser> laser_;
+
+	//平行光源
+	YKEngine::DirectionalLight directionalLight_;
+
+	const float radius = 0.5f;
 };
 

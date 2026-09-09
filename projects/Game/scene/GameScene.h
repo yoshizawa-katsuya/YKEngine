@@ -55,6 +55,11 @@ private:
 	/// </summary>
 	void CreateLevel();
 
+	/// <summary>
+	/// チュートリアル
+	/// </summary>
+	void UpdateTutorial();
+
 	//デバイス
 	YKEngine::DirectXCommon* dxCommon_;
 
@@ -117,4 +122,16 @@ private:
 
 	YKEngine::WorldTransform backgroundTransform_;
 	YKEngine::Vector2 energyLabelSpritePos_;
+
+	// チュートリアルスプライト
+	std::unique_ptr < YKEngine::Sprite> tutorialSprite_;
+	std::unique_ptr < YKEngine::Sprite> backgroundSprite_;
+
+	std::unique_ptr<YKEngine::Sprite> startSprite_;
+	YKEngine::Vector2 startPos_;
+
+
+	float pressKeyTimer_ = 0.0f;           // 点滅用の経過時間
+
+	bool isTutorial_ = true;                 // チュートリアル表示中かどうか
 };
